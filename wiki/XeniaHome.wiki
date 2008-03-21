@@ -4,10 +4,12 @@ This site is in the initial stages of being setup and materials (documentation a
 
 The source documentation and code for this project lives at 
 
-version 1 <br>
+version 1
+ 
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackage
 
 version 2
+
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageV2
 
 version 2 - sqlite
@@ -15,4 +17,3 @@ http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageSqlite
 
 ObsKML (the default xml import/export format for a Xenia instance)
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML
-
