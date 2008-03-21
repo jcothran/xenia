@@ -2,7 +2,7 @@
 
 This site is in the initial stages of being setup and materials (documentation and code) will be ported over as time permits.
 
-The source documentation and code for this project lives at 
+The source documentation and code for this project currently lives at 
 
 version 1 
 
@@ -19,3 +19,8 @@ http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageSqlite
 ObsKML (the default xml import/export format for a Xenia instance)
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML
+
+Would recommend using the version 2 schema, I have listed the version 1 as a point of historical reference but am not developing any more against it.
+
+Would also recommend taking a look at the sqlite version which should hopefully be very compact and easy to set up.
+ 
