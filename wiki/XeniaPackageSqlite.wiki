@@ -12,7 +12,7 @@ _SQLite is a software library that implements a self-contained, serverless, zero
 
 _SQLite is the most widely deployed SQL database engine in the world. It is used in countless desktop computer applications as well as consumer electronic devices including cellphones, PDAs, and MP3 players. The source code for SQLite is in the public domain._
 
-This webpage describes the conversion of the [[XeniaPackageV2]['Xenia']] schema relational database and associated product/service scripts from its initial PostgreSQL version to a Sqlite one.
+This webpage describes the conversion of the XeniaPackageV2 schema relational database and associated product/service scripts from its initial PostgreSQL version to a Sqlite one.
 
 The initial motivation for developing a sqlite version of the Xenia schema was to support a microWFS service experiment being done by the Coastal Services Center's Data Transport Lab (CSC DTL) detailed at http://www.csc.noaa.gov/DTL/dtl_proj4_gmlsfp_wfs.html  The original perl scripts utilized by this project are available at ftp://www.csc.noaa.gov/pub/DTL/Proj4_WFS_GMLSFP_TimeSeries
 
@@ -26,47 +26,56 @@ The resulting Sqlite RDB based solution provides a much lower-complexity/profile
 
 From http://sqlite.org
 
-Well-Known Users of SQLite <br>
+Well-Known Users of SQLite
+
 http://www.sqlite.org/famous.html
 
-FAQ <br>
+FAQ
+
 http://www.sqlite.org/faq.html
 
-Appropriate Uses For SQLite <br>
+Appropriate Uses For SQLite
+
 http://www.sqlite.org/whentouse.html
 
-SQL Features That SQLite Does Not Implement <br>
+SQL Features That SQLite Does Not Implement
+
 http://www.sqlite.org/omitted.html
 
 === Other websites ===
 
-Tutorials <br>
-http://souptonuts.sourceforge.net/readme_sqlite_tutorial.html <br>
+==== Tutorials ====
+http://souptonuts.sourceforge.net/readme_sqlite_tutorial.html
+
 http://www.shokhirev.com/nikolai/abc/sql/sql.html
 
-Optimization <br>
-http://web.utk.edu/~jplyon/sqlite/SQLite_optimization_FAQ.html <br>
-http://article.gmane.org/gmane.comp.db.sqlite.general/35422 <br>
-http://www.sqlite.org/cvstrac/wiki?p=QueryPlans <br>
+==== Optimization ====
+http://web.utk.edu/~jplyon/sqlite/SQLite_optimization_FAQ.html
+
+http://article.gmane.org/gmane.comp.db.sqlite.general/35422
+
+http://www.sqlite.org/cvstrac/wiki?p=QueryPlans
+
 http://www.sqlite.org/optoverview.html
 
-Perl DBI and Sqlite <br>
-http://www.perl.com/pub/a/2003/09/03/perlcookbook.html <br>
+==== Perl DBI and Sqlite ====
+http://www.perl.com/pub/a/2003/09/03/perlcookbook.html
+
 http://search.cpan.org/~msergeant/DBD-SQLite-0.31/lib/DBD/SQLite.pm
 
-OGR Sqlite <br>
+==== OGR Sqlite ====
 http://www.gdal.org/ogr/drv_sqlite.html
 
-Spatial searches <br>
+==== Spatial searches ====
 http://www.mail-archive.com/sqlite-users@sqlite.org/msg27225.html   
 
-Performance review(unsure of article date) <br>
+==== Performance review(unsure of article date) ====
 http://theopensourcery.com/sqlite2.htm
 
-GUI db tools<br>
+====GUI db tools ====
 http://www.sqlite.org/cvstrac/wiki?p=ManagementTools
 
-Firefox add-on - Sqlite Manager <br>
+==== Firefox add-on - Sqlite Manager ====
 https://addons.mozilla.org/en-US/firefox/addon/5817
 
 = Setup =
@@ -79,9 +88,9 @@ You'll also need to install the perl DBI Sqlite package if not already installed
 
 = Source =
 
-The source SQL files to download for the Sqlite version of the Xenia schema are the [[http://www.carocoops.org/obskml/microwfs/db_xenia_v2_sqlite.sql][main schema]] , [[http://www.carocoops.org/obskml/microwfs/obs.sql][observation data dictionary lookups]] and [[http://www.carocoops.org/obskml/microwfs/display_order.sql][display order lookups]]
+The source SQL files to download for the Sqlite version of the Xenia schema are the [http://www.carocoops.org/obskml/microwfs/db_xenia_v2_sqlite.sql main schema] , [http://www.carocoops.org/obskml/microwfs/obs.sql observation data dictionary lookups] and [http://www.carocoops.org/obskml/microwfs/display_order.sql display order lookups]
 
-To setup a xenia schema database(like one we can use in a the further example [[http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageSqlite#MicroWFS][below]]) do the following commands in the directory where you would like the database file to reside(assuming the SQL source files also reside local to the same directory).
+To setup a xenia schema database(like one we can use in a the further example [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageSqlite#MicroWFS below]) do the following commands in the directory where you would like the database file to reside(assuming the SQL source files also reside local to the same directory).
 
 {{{
 /usr/bin/sqlite3-3.5.4.bin microwfs.db < db_xenia_v2_sqlite.sql
@@ -92,9 +101,9 @@ To setup a xenia schema database(like one we can use in a the further example [[
 Now the database is setup and you can run queries against it using the utility command line
 {{{
 /usr/bin/sqlite3-3.5.4.bin microwfs.db
-</verbatim>
+}}}
 or with SQL piped from a file
-<verbatim>
+{{{
 /usr/bin/sqlite3-3.5.4.bin microwfs.db < query.sql
 }}}
 
@@ -105,7 +114,7 @@ or with SQL piped from a file
    * converted row_id 'serial' to 'integer PRIMARY KEY'- removed earlier separate PRIMARY KEY sql statements
    * converted datatypes to simple varchar, timestamp
    * removed 'USING btree' from observation sql population 
-   * removed row_entry_date,row_update_date columns from ..._type tables
+   * removed row_entry_date,row_update_date columns from ...{{{_}}}type tables
    * remaining row_entry,row_update to just 'timestamp', remove 'not null' constraint
 
 ----
@@ -133,8 +142,9 @@ http://carocoops.org/obskml/microwfs/index_microwfs.html
 
 The scripts which enable this service are at http://carocoops.org/obskml/microwfs and run queries against the earlier example established xenia sqlite database detailed on this webpage
 
-[[http://www.carocoops.org/obskml/microwfs/microWFS.cgi][microWFS.cgi]] is the modified cgi script called by [[http://www.carocoops.org/obskml/microwfs/index_microwfs.html][index_microwfs.html]]<br>
-[[http://www.carocoops.org/obskml/microwfs/microWFSConf.xml][microWFSXonf.xml]] is the modified xml configuration support xml <br>
+[http://www.carocoops.org/obskml/microwfs/microWFS.cgi microWFS.cgi] is the modified cgi script called by [http://www.carocoops.org/obskml/microwfs/index_microwfs.html index_microwfs.html]
+
+[http://www.carocoops.org/obskml/microwfs/microWFSConf.xml microWFSXonf.xml] is the modified xml configuration support xml
 
 Note:
 
@@ -144,7 +154,7 @@ Note:
 
 == Earlier ObsKML based scripts ==
 
-The perl scripts earlier documented at http://www.gliffy.com/publish/1329032/ and http://carocoops.org/twiki_dmcc/bin/view/Main/ObsKMLGenerate for aggregating, visualizing,reformatting (CSV,shapefile,etc) and reservicing(oostethys,etc) ObsKML based data are applicable as before with the latest ObsKML generated from the Sqlite RDB [[http://carocoops.org/obskml/microwfs/xenia_sqlite_to_obskml.pl][perl script]] .
+The perl scripts earlier documented at http://www.gliffy.com/publish/1329032/ and http://carocoops.org/twiki_dmcc/bin/view/Main/ObsKMLGenerate for aggregating, visualizing,reformatting (CSV,shapefile,etc) and reservicing(oostethys,etc) ObsKML based data are applicable as before with the latest ObsKML generated from the Sqlite RDB [http://carocoops.org/obskml/microwfs/xenia_sqlite_to_obskml.pl perl script] .
 ----
 = Gotchas =
 
@@ -185,7 +195,7 @@ The solution was to just write the offending insert statements out to a sql file
 
 == Be sure to populate table m_type_display_order ==
 
-Be sure to [[http://www.carocoops.org/obskml/microwfs/display_order.sql][populate]] the lookup table m_type_display_order as mentioned in the setup steps, otherwise your hash population in the [[http://www.carocoops.org/obskml/microwfs/xenia_sqlite_to_obskml.pl][xenia_sqlite_to_obskml.pl]] script will only populate one variable per platform.
+Be sure to [http://www.carocoops.org/obskml/microwfs/display_order.sql populate] the lookup table m_type_display_order as mentioned in the setup steps, otherwise your hash population in the [http://www.carocoops.org/obskml/microwfs/xenia_sqlite_to_obskml.pl xenia_sqlite_to_obskml.pl] script will only populate one variable per platform.
 
 ----
 = Potential issues =
@@ -248,4 +258,3 @@ print "closest platform is $closest_platform_id at $shortest_distance units \n";
  
 ?>
 }}}
-
