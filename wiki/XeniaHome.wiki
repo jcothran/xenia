@@ -23,11 +23,11 @@ http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackage
 
 version 2
 
-http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageV2
+XeniaPackageV2
 
 version 2 - sqlite
 
-http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageSqlite
+XeniaPackageSqlite
 
 ObsKML (the default xml import/export format for a Xenia instance)
 
