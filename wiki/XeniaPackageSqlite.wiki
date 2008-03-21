@@ -4,6 +4,11 @@ http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageSqlite#Source
  
 
 A sample Sqlite database file (same structure as what I'd be providing dynamically populated later) can be copied from here http://carocoops.org/obskml/microwfs/microwfs.db (50 MB)
+
+Sqlite Manager - A simple Firefox add-on to view/query the database from Firefox
+
+https://addons.mozilla.org/en-US/firefox/addon/5817
+
 ----
 = Install Notes =
 
