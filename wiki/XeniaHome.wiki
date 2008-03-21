@@ -20,6 +20,12 @@ ObsKML (the default xml import/export format for a Xenia instance)
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML
 
+Powerpoint
+
+http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/XeniaPackage/XeniaPackage.ppt
+
+= Notes =
+
 Would recommend using the version 2 schema, I have listed the version 1 as a point of historical reference but am not developing any more against it.
 
 Would also recommend taking a look at the sqlite version which should hopefully be very compact and easy to set up.
