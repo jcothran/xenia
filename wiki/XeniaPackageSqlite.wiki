@@ -1,0 +1,5 @@
+Sqlite source SQL - earlier documentation
+
+http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageSqlite#Source
+ 
+A sample Sqlite database file (same structure as what I'd be providing dynamically populated later) can be copied from here http://carocoops.org/obskml/microwfs/microwfs.db (50 MB)
