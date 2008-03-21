@@ -19,6 +19,6 @@ Note in the above sql file there is the below commented SELECT statement which w
 [http://www.carocoops.org/obskml/microwfs/display_order.sql Display order lookups]
 
 ----
-= Schema Diagram =
+= Xenia Table Schema Diagram =
 
 http://xenia.googlecode.com/files/xenia_v2_marked.jpg
