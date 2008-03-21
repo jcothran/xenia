@@ -1,4 +1,4 @@
-Here's the link to the earlier Postgresql source SQL 
+Here's the link to the earlier Postgresql documentation
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageV2#Source
 
