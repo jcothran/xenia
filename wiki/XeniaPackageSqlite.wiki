@@ -190,9 +190,9 @@ sqlite also treats all fields like strings so I believe fields declared 'timesta
 == error handling ==
 
 With PostgreSQL, inserted rows which were duplicates rejected by the unique index did not stop the program from continuing.  Sqlite generated an error like below which I couldn't figure out how to continue from within the program (tried using 'eval' blocks, but still problems)
-<verbatim>
+{{{
 [root@nautilus microwfs]# DBD::SQLite::st execute failed: columns m_type_id, m_date, sensor_id are not unique(19) at dbdimp.c line 403 at obskml_to_xenia_sqlite.pl line 193.
-</verbatim>
+}}}
 
 The solution was to just write the offending insert statements out to a sql file and then pipe as a batch job against the sqlite like 'sqlite mytest.db < batched_inserts.sql'
 
