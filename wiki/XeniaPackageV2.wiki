@@ -8,4 +8,4 @@ http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageV2#Source
 ----
 = Schema Diagram =
 
-http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/XeniaPackageV2/xenia_v2_marked.bmp
+http://xenia.googlecode.com/files/xenia_v2_marked.jpg
