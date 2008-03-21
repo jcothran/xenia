@@ -126,8 +126,8 @@ or with SQL piped from a file
 
 the following cron jobs are called
 
-   * [[http://www.carocoops.org/obskml/microwfs/obskml_to_xenia_sqlite.pl][obskml_to_xenia_sqlite.pl]] called once an hour to load the latest ObsKML in-situ observations into a Xenia(sqlite) RDB
-   *  [[http://www.carocoops.org/obskml/microwfs/maintain.pl][maintain.pl]] once a day to delete observations older than 3 days and vacuum the database file(compact the database file).
+   * [http://www.carocoops.org/obskml/microwfs/obskml_to_xenia_sqlite.pl obskml_to_xenia_sqlite.pl] called once an hour to load the latest ObsKML in-situ observations into a Xenia(sqlite) RDB
+   *  [http://www.carocoops.org/obskml/microwfs/maintain.pl maintain.pl] once a day to delete observations older than 3 days and vacuum the database file(compact the database file).
 
 {{{
 0 * * * * cd /var/www/cgi-bin/microwfs; perl obskml_to_xenia_sqlite.pl http://carocoops.org/obskml/feeds/seacoos_all_latest.zip >/tmp/microwfs.log 2>&1
@@ -139,14 +139,15 @@ the following cron jobs are called
 
 Referencing again the microWFS service experiment being done by the Coastal Services Center's Data Transport Lab (CSC DTL) detailed at http://www.csc.noaa.gov/DTL/dtl_proj4_gmlsfp_wfs.html  The original perl scripts utilized by that project are available at ftp://www.csc.noaa.gov/pub/DTL/Proj4_WFS_GMLSFP_TimeSeries
 
-My CGI based microWFS instance is available at <br>
+My CGI based microWFS instance is available at
+
 http://carocoops.org/obskml/microwfs/index_microwfs.html
 
 The scripts which enable this service are at http://carocoops.org/obskml/microwfs and run queries against the earlier example established xenia sqlite database detailed on this webpage
 
 [http://www.carocoops.org/obskml/microwfs/microWFS.cgi microWFS.cgi] is the modified cgi script called by [http://www.carocoops.org/obskml/microwfs/index_microwfs.html index_microwfs.html]
 
-[http://www.carocoops.org/obskml/microwfs/microWFSConf.xml microWFSXonf.xml] is the modified xml configuration support xml
+[http://www.carocoops.org/obskml/microwfs/microWFSConf.xml microWFSConf.xml] is the modified xml configuration support xml
 
 Note:
 
