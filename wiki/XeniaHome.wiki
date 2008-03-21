@@ -1,5 +1,18 @@
 = Xenia Package Home Page =
 
+== Description ==
+I've been trying to reduce and simplify what we're doing in terms of data collection and sharing for ocean observations down to a single set of relational database tables and scripts.  The name I'm choosing for this effort is 'Xenia' which is a kind of coral found in many marine aquarium coral collections which waves through the water with many palms or hands.
+
+The general issue which we run into is that data is collected to a data 'logger' in tabular format and it involves a lot of manual work to get data from these individual sensor datalogger formats into a more standardized forms which can be more easily aggregated and used.
+
+The initial goal is to develop a good general relational table schema which we can push most all of our aggregated in situ observation data into and pull various products and web services from.  The secondary goal is the sharing of scripts which leverage this schema both to aggregate data and to provide output products and web services.
+
+Again the Xenia problem/product I'm trying to address is the common datalogger/filesystem which collects 10-20 obs per hour at 1 to 100 platforms (*say less than 100,000 records total/hour*) and tying that back into our system of systems(CAROCOOPS, SECOORA, IOOS, GEOSS) with a common relational database driven schema infrastructure to develop products up from.
+
+For high-volume data problems with *millions of records per hour(model outputs, hf radar, etc)*, this is not something which I think Xenia should address at this time except for possibly in terms of metadata tables describing these products.  High-volume data problems can continue being addressed as [[http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/OGR_example][file/directory based]], batch I/O processing bound problems with discussions more directed towards the organization of the data metadata files for *descriptive* (common visual legends for image overlay needs, common agreements on quality control application) and *archival* needs.
+
+== Links ==
+
 This site is in the initial stages of being setup and materials (documentation and code) will be ported over as time permits.
 
 The source documentation and code for this project currently lives at 
