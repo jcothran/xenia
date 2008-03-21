@@ -5,6 +5,12 @@ http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageV2#Source
 ----
 = Install Notes =
 
+Run the following sql in the following order against your database
+
+[http://www.carocoops.org/obskml/microwfs/obs.sql Observation data dictionary lookups]
+[http://www.carocoops.org/obskml/microwfs/obs.sql Observation data dictionary lookups]
+[http://www.carocoops.org/obskml/microwfs/obs.sql Observation data dictionary lookups]
+
 ----
 = Schema Diagram =
 
