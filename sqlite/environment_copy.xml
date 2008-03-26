@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<environment>
+
+<!-- 
+
+db_source is the database used in conjunction with the 'create' step to create the intermediate csv or sql files from
+
+db_target is the database used in conjuntion with the 'copy' step which populates from the given sql files
+
+db_source may also be used with the 'delete' step when transferring a time window of data from the source db to target db on a regular basis (recent db to archive db for example)
+
+-->
+
+<db_source>
+		<db_name>microwfs.db</db_name>
+</db_source>
+
+<db_target>
+		<db_name>microwfs_archive.db</db_name>
+</db_target>
+
+<path>
+<path_sqlite>/usr/bin/sqlite3-3.5.4.bin</path_sqlite>
+<path_tables>./copy_tables.xml</path_tables>
+
+<!-- the following 3 elements (dir_tmp_cpy_local,dir_tmp_cpy_host,dir_cpy) could contain the same directory value where everything is running on the same server.  The below example shows a shared tmp directory between two servers which is used for running a cpy file against a separate server database instance and the final dir_cpy is where the cpy files are archived. Remember that for remote database instances the filepaths are relative to the remote server. -->
+
+<dir_cpy>./archive/</dir_cpy>
+</path>
+
+</environment>

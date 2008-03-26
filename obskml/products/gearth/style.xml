@@ -1,0 +1,138 @@
+<styleList id="seacoos">
+<style id="dissolved_oxygen.mg_L-1">
+	<range_high>9</range_high>
+	<range_low>3</range_low>
+</style>
+<style id="dissolved_oxygen.percent_saturation">
+	<range_high>100</range_high>
+	<range_low>40</range_low>
+</style>
+<style id="water_temperature.celsius">
+	<range_high>35</range_high>
+	<range_low>5</range_low>
+</style>
+<style id="water_conductivity.mS_cm-1">
+	<range_high>100000</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="water_level.m(MLLW)">
+	<range_high>2</range_high>
+	<range_low>-2</range_low>
+</style>
+<style id="gage_height.ft">
+	<range_high>30</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="gage_height.m">
+	<range_high>10</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="discharge.ft_s-1">
+	<range_high>30</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="ph.units">
+	<range_high>9</range_high>
+	<range_low>5</range_low>
+</style>
+<style id="turbidity.ntu">
+	<range_high>9</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="discharge.cubic_ft_s-1">
+	<range_high>12000</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="current_speed.m_s-1">
+	<range_high>1</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="current_to_direction.degrees_true">
+	<range_high>360</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="significant_wave_height.m">
+	<range_high>3</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="significant_wave_from_direction.degrees_true">
+	<range_high>360</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="dominant_wave_period.s">
+	<range_high>15</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="wave_height.m">
+	<range_high>3</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="wave_period.s">
+	<range_high>15</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="swell_height.m">
+	<range_high>3</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="swell_period.s">
+	<range_high>15</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="swell_from_direction.degrees_true">
+	<range_high>360</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="air_temperature.celsius">
+	<range_high>40</range_high>
+	<range_low>-10</range_low>
+</style>
+<style id="air_pressure.millibar">
+	<range_high>1050</range_high>
+	<range_low>990</range_low>
+</style>
+<style id="dew_point.celsius">
+	<range_high>40</range_high>
+	<range_low>-10</range_low>
+</style>
+<style id="visibility.nautical_miles">
+	<range_high>10</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="wind_speed.m_s-1">
+	<range_high>30</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="wind_gust.m_s-1">
+	<range_high>30</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="wind_from_direction.degrees_true">
+	<range_high>360</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="stream_velocity.ft_s-1">
+	<range_high>2</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="salinity.psu">
+	<range_high>38</range_high>
+	<range_low>18</range_low>
+</style>
+<style id="salinity.mg_per_milliliter">
+	<range_high>38</range_high>
+	<range_low>18</range_low>
+</style>
+<style id="precipitation.millimeter">
+	<range_high>50</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="solar_radiation.millimoles_per_m^2">
+	<range_high>3000</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="relative_humidity.percent">
+	<range_high>100</range_high>
+	<range_low>0</range_low>
+</style>
+</styleList>
