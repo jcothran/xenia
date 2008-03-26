@@ -120,9 +120,9 @@ or with SQL piped from a file
    * remaining row_entry,row_update to just 'timestamp', remove 'not null' constraint
 
 ----
-= Scripts for database import/export, products/services =
+= Scripts for database import/export and replication
 
-== ObsKML to Xenia(Sqlite)==
+== Import - ObsKML to Xenia(Sqlite) ==
 
 the following cron jobs are called
 
@@ -134,6 +134,23 @@ the following cron jobs are called
 
 30 00 * * * cd /var/www/cgi-bin/microwfs; perl maintain.pl >/tmp/microwfs.log 2>&1
 }}}
+
+== Export - Xenia(Sqlite) to ObsKML ==
+
+see a
+
+== [XeniaPackageSqlite#Replication Replication] ==
+
+There is some original documentation regarding PostgreSQL replication at x
+
+These scripts have been repurposed with sqlite in mind and the source is available at y
+
+The upshot of the above development is that an hourly 'latest.sql' file is available at z (should be updated once an hour at a few minutes past the top of the hour) which should be downloadable by consuming/shadowing databases elsewhere(either sqlite or postgresql instances) and allow those databases to have a snapshot of hourly added table data which they can be used to populate those databases also.
+
+The above feed is all of the hourly observation which we are currently aggregating.  It provides a convenience in that shadow databases are able to skip the redundant aggregation steps of pulling in and processing multiple data feeds to the database and only get the final processed table data resultant of the various data feeds.  Ideally it would be good to have a redundant source of this 'latest.sql' feed. 
+
+----
+= Scripts for database products/services =
 
 == MicroWFS ==
 
