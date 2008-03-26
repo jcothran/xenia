@@ -120,7 +120,7 @@ or with SQL piped from a file
    * remaining row_entry,row_update to just 'timestamp', remove 'not null' constraint
 
 ----
-= Scripts for database import/export and replication
+= Scripts for database import/export and replication =
 
 == Import - ObsKML to Xenia(Sqlite) ==
 
