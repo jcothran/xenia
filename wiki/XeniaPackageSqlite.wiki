@@ -1,3 +1,5 @@
+#summary Sqlite version of Xenia relational database
+
 A sample Xenia sqlite database file (same structure as what I'd be providing dynamically populated later) can be copied from here http://carocoops.org/obskml/microwfs/microwfs.db (50 MB)
 
 Sqlite Manager - A simple Firefox add-on to view/query a sqlite database from Firefox
