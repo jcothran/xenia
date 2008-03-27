@@ -1,4 +1,20 @@
 #summary Development ideas or requests in regards to the Xenia database
 
-= Introduction =
+A listing of Xenia development ideas in no particular priority order
 
+= 1. Sqlite Xenia + Geoserver =
+
+Currently Geoserver (http://geoserver.com) can connect directly to several popular databases, but not Sqlite that I have seen documented.  Having this path would allow the usual array of formats/products available via Geoserver to also be available via a Sqlite Xenia db instance.
+
+Currently one path might be sqlite -> jdbc -> geoserver , but haven't had a chance to experiment or document this.
+
+sqlite -> jdbc http://www.ch-werner.de/javasqlite/
+
+jdbc -> geoserver http://jira.codehaus.org/browse/GEOT-241 
+
+= 2. Sqlite in-memory performance benchmarking = 
+
+
+
+
+= 3. =
