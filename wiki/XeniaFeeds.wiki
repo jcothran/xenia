@@ -8,7 +8,7 @@ Descriptions of various feed methods and feeds available to a Xenia database ins
 Currently there are three methods for feeding (or populating) your Xenia database with a population of organziations, platforms, sensors and observation measurements.
 
 ----
-=== Create a direct feeds ===
+=== Create direct feeds ===
 
 The first method is to create scripts which directly converts the raw data feed into SQL which you would populate your xenia instance with.  This is the most direct method, but I'd recommend the second method of creating an intermediate ObsKML file which could be shared as part of a community of shared feeds.
 ----
