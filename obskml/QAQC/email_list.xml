@@ -1,0 +1,20 @@
+<email_list id="1">
+<group id="1">
+	<!-- this is the hypoxia low DO notification list -->
+	<domain>inlet.geol.sc.edu</domain>
+	<sender>dan@inlet.geol.sc.edu</sender>
+	<user id="1">
+		<full_name>Dan Ramage</full_name>
+		<email>dan@inlet.geol.sc.edu</email>
+	</user>
+</group>
+<group id="2">
+	<!-- this is the observation missing,late or out of range list -->
+	<domain>nautilus.baruch.sc.edu</domain>
+	<sender>jcothran@asg.sc.edu</sender>
+	<user id="1">
+		<full_name>Jeremy Cothran</full_name>
+		<email>jcothran@asg.sc.edu</email>
+	</user>
+</group>
+</email_list>

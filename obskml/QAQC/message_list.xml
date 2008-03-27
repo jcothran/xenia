@@ -1,0 +1,168 @@
+<message_list id="1">
+<message id="1">
+	<importance>High</importance>
+	<subject>Alert: Dissolved Oxygen &lt; 4 mg/L at Springmaid Pier</subject>
+	<body>Alert: Dissolved Oxygen &lt; 4 mg/L at Springmaid Pier.
+Check the Longbay website for the latest conditions http://nautilus.baruch.sc.edu/longbay/realtime.php</body>
+</message>
+
+<message id="2">
+	<importance>High</importance>
+	<subject>Alert: Platform observed values missing,late or out of range</subject>
+	<body> 
+Alert: This is an automated email alert that the expected platform measurements shown at http://nautilus.baruch.sc.edu/processObsKML/nerrs/tes
+t_results.html are having problems with either:
+
+Delays in transmission(lagging - highlighted violet)
+
+Missing measurement values(missing, missing all - highlighted blue)
+
+Measurement values outside of a predefined test range(fail low, fail high - highlighted red)
+
+The above issues may need to be addressed and resolved by the instrumentation, telemetry or data management staff.
+</body>
+</message>
+
+<message id="3">
+        <importance>High</importance>
+        <subject>Alert: Platform observed values missing,late or out of range</subject>
+        <body>        
+Alert: This is an automated email alert that the expected platform measurements shown at http://www.carocoops.org/~dramage_prod/nerrs/test_results.html are having problems with either:
+
+Delays in transmission(lagging - highlighted violet)
+
+Missing measurement values(missing, missing all - highlighted blue)
+
+Measurement values outside of a predefined test range(fail low, fail high - highlighted red)
+
+The above issues may need to be addressed and resolved by the instrumentation, telemetry or data management staff.
+</body>
+</message>
+
+<message id="4">
+        <importance>High</importance>
+        <subject>Alert: Platform observed values missing,late or out of range</subject>
+        <body>
+Alert: This is an automated email alert that the expected platform measurements shown at http://www.carocoops.org/~dramage_prod/seacoos/test_results.html#Test_Profile_CaroCoopsBuoys are having problems with either:
+
+Delays in transmission(lagging - highlighted violet)
+
+Missing measurement values(missing, missing all - highlighted blue)
+
+Measurement values outside of a predefined test range(fail low, fail high - highlighted red)
+
+The above issues may need to be addressed and resolved by the instrumentation, telemetry or data management staff.
+</body>
+</message>
+
+<message id="5">
+        <importance>High</importance>
+        <subject>Alert: Platform observed values missing,late or out of range</subject>
+        <body>
+Alert: This is an automated email alert that the expected platform measurements shown at http://www.carocoops.org/~dramage_prod/seacoos/test_results.html#Test_Profile_CaroCoopsWLS are having problems with either:
+
+Delays in transmission(lagging - highlighted violet)
+
+Missing measurement values(missing, missing all - highlighted blue)
+
+Measurement values outside of a predefined test range(fail low, fail high - highlighted red)
+
+The above issues may need to be addressed and resolved by the instrumentation, telemetry or data management staff.
+</body>
+</message>
+<message id="6">
+        <importance>High</importance>
+        <subject>Alert: Platform observed values missing,late or out of range</subject>
+        <body>
+Alert: This is an automated email alert that the expected platform measurements shown at http://www.carocoops.org/~dramage_prod/seacoos/test_results.html#Test_Profile_CORMPBuoys are having problems with either:
+
+Delays in transmission(lagging - highlighted violet)
+
+Missing measurement values(missing, missing all - highlighted blue)
+
+Measurement values outside of a predefined test range(fail low, fail high - highlighted red)
+
+The above issues may need to be addressed and resolved by the instrumentation, telemetry or data management staff.
+</body>
+</message>
+
+<message id="7">
+        <importance>High</importance>
+        <subject>Alert: Platform observed values missing,late or out of range</subject>
+        <body>
+Alert: This is an automated email alert that the expected platform measurements shown at http://www.carocoops.org/~dramage_prod/usf/test_results.html#Test_Profile_1 are having problems with either:
+
+Delays in transmission(lagging - highlighted violet)
+
+Missing measurement values(missing, missing all - highlighted blue)
+
+Measurement values outside of a predefined test range(fail low, fail high - highlighted red)
+
+The above issues may need to be addressed and resolved by the instrumentation, telemetry or data management staff.
+</body>
+</message>
+
+<message id="8">
+        <importance>High</importance>
+        <subject>Alert: Platform observed values missing,late or out of range</subject>
+        <body>
+Alert: This is an automated email alert that the expected platform measurements shown at http://www.carocoops.org/~dramage_prod/usf/test_results.html#Test_Profile_2 are having problems with either:
+
+Delays in transmission(lagging - highlighted violet)
+
+Missing measurement values(missing, missing all - highlighted blue)
+
+Measurement values outside of a predefined test range(fail low, fail high - highlighted red)
+
+The above issues may need to be addressed and resolved by the instrumentation, telemetry or data management staff.
+</body>
+</message>
+
+<message id="9">
+        <importance>High</importance>
+        <subject>Alert: Platform observed values missing,late or out of range</subject>
+        <body>
+Alert: This is an automated email alert that the expected platform measurements shown at http://www.carocoops.org/~dramage_prod/usf/test_results.html#Test_Profile_3 are having problems with either:
+
+Delays in transmission(lagging - highlighted violet)
+
+Missing measurement values(missing, missing all - highlighted blue)
+
+Measurement values outside of a predefined test range(fail low, fail high - highlighted red)
+
+The above issues may need to be addressed and resolved by the instrumentation, telemetry or data management staff.
+</body>
+</message>
+
+<message id="10">
+        <importance>High</importance>
+        <subject>Alert: Platform observed values missing,late or out of range</subject>
+        <body>
+Alert: This is an automated email alert that the expected platform measurements shown at http://www.carocoops.org/~dramage_prod/skidaway/test_results.html#Test_Profile_Skidaway are having problems with either:
+
+Delays in transmission(lagging - highlighted violet)
+
+Missing measurement values(missing, missing all - highlighted blue)
+
+Measurement values outside of a predefined test range(fail low, fail high - highlighted red)
+
+The above issues may need to be addressed and resolved by the instrumentation, telemetry or data management staff.
+</body>
+</message>
+<message id="11">
+        <importance>High</importance>
+        <subject>Alert: Platform observed values missing,late or out of range</subject>
+        <body>
+Alert: This is an automated email alert that the expected platform measurements shown at http://www.carocoops.org/~dramage_prod/seacoos/test_results.html#Test_Profile_Seacoos are having problems with either:
+
+Delays in transmission(lagging - highlighted violet)
+
+Missing measurement values(missing, missing all - highlighted blue)
+
+Measurement values outside of a predefined test range(fail low, fail high - highlighted red)
+
+The above issues may need to be addressed and resolved by the instrumentation, telemetry or data management staff.
+</body>
+</message>
+
+</message_list>
