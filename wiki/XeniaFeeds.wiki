@@ -1,7 +1,7 @@
 #summary Descriptions of various feed methods and feeds available to a Xenia database instance.
 
 ----
-= Feed methods 
+= Feed methods =
 
 Currently there are three methods for feeding (or populating) your Xenia database with a population of organziations, platforms, sensors and observation measurements.
 
