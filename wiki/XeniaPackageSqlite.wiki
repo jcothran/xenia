@@ -151,6 +151,8 @@ This directory also contains the hourly .csv and .sql files of the represented t
 
 The above feed is all of the hourly observation which we are currently aggregating.  It provides a convenience in that shadow databases are able to skip the redundant aggregation steps of pulling in and processing multiple data feeds to the database and only get the final processed table data resultant of the various data feeds.  Ideally it would be good to have a redundant source of this 'latest.sql' feed. 
 
+To get a secondary sqlite instance going, simply copy the 'starter' database at http://xenia.googlecode.com/files/xenia.db and then hourly populate with the hourly refreshed 'latest.sql' at http://www.carocoops.org/obskml/feeds/xenia/archive/latest.sql 
+
 ----
 = Scripts for database products/services =
 
