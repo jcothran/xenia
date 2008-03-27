@@ -22,7 +22,11 @@ see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate
 
 see also Dan Ramage's library to create ObsKML using a set of function calls 
 
+ObsKML subroutine library
+
 http://code.google.com/p/xenia/source/browse/trunk/obskml/TelemetryToObsKML/obsKMLSubRoutines.lib
+
+Sample case demonstrating conversion of raw telemetry data to ObsKML using subroutine calls.
 
 http://code.google.com/p/xenia/source/browse/trunk/obskml/TelemetryToObsKML/BuoyTelemetryDataToObsKML.pl
 
