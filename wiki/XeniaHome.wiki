@@ -33,7 +33,7 @@ ObsKML (the default xml import/export format for a Xenia instance)
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML
 
-Powerpoint
+Powerpoint (this is an older powerpoint , some points/slides may need updating)
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/XeniaPackage/XeniaPackage.ppt
 ----
