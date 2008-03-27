@@ -1,22 +1,20 @@
-= XeniaFeeds =
-
-Descriptions of various feed methods and feeds available to a Xenia database instance.
+#summary Descriptions of various feed methods and feeds available to a Xenia database instance.
 
 ----
-== Feed methods ==
+= Feed methods 
 
 Currently there are three methods for feeding (or populating) your Xenia database with a population of organziations, platforms, sensors and observation measurements.
 
 ----
-=== Create direct feeds ===
+== Create direct feeds ==
 
 The first method is to create scripts which directly converts the raw data feed into SQL which you would populate your xenia instance with.  This is the most direct method, but I'd recommend the second method of creating an intermediate ObsKML file which could be shared as part of a community of shared feeds.
 ----
-=== Use an existing ObsKML feeds ===
+== Use an existing ObsKML feeds ==
 
 The second method is to utilize existing or add to the existing list of ObsKML (ObsKML is XML) feeds which might be utilized in a shared observations community.
 
-==== Creating an ObsKML feed ===
+=== Creating an ObsKML feed ==
 
 see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate
 
@@ -30,14 +28,14 @@ Sample case demonstrating conversion of raw telemetry data to ObsKML using subro
 
 http://code.google.com/p/xenia/source/browse/trunk/obskml/TelemetryToObsKML/BuoyTelemetryDataToObsKML.pl
 
-==== Feed list ====
+=== Feed list ===
 
 see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate#Sample_cases
 
 or the folders with file names like ..._metadata_latest.kmz at http://www.carocoops.org/obskml/feeds/
 
 ----
-=== Use an existing SQL feed ===
+== Use an existing SQL feed ==
 
 The third method is to consume just say the hourly output of an existing Xenia instance with SQL directly from the source database instance.  This allows data to be duplicated at  the database level without the need for reprocessing either the raw data or ObsKML source data feeds.
 
