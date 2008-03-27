@@ -75,10 +75,18 @@ http://tilecache.org
 
 http://www.opengeospatial.org/standards
 
+http://postgresql.org
+
+http://postgis.refractions.net
+
+http://sqlite.org
+
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
 
 ----
 = Related efforts = 
+
+http://ioos.noaa.gov/program/
 
 http://www.csc.noaa.gov/cir
 
@@ -86,6 +94,6 @@ http://www.obsregistry.org
 
 http://oostethys.org
 
-http://seacoos.org/Data%20Access%20and%20Mapping/cached-images
-
 http://weather.gov/carolinascoast
+
+http://seacoos.org/Data%20Access%20and%20Mapping/cached-images
