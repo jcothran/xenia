@@ -63,6 +63,21 @@ For notes on using *subversion* for this project, see the notes at http://code.g
 This is an earlier documentation [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaDesign webpage] to list some Xenia design considerations, benchmarks, and tips as related to the relational database schema.
 
 ----
+= Related tools = 
+
+http://mapserver.gis.umn.edu
+
+http://geoserver.org
+
+http://openlayers.org
+
+http://tilecache.org
+
+http://www.opengeospatial.org/standards
+
+http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
+
+----
 = Related efforts = 
 
 http://www.csc.noaa.gov/cir
@@ -74,5 +89,3 @@ http://oostethys.org
 http://seacoos.org/Data%20Access%20and%20Mapping/cached-images
 
 http://weather.gov/carolinascoast
-
-
