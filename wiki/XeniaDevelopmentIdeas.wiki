@@ -23,5 +23,3 @@ This would provide a path for existing, future Seacoos netCDF feeds to be availa
 = 4. Convert PostgreSQL 'top_of_hour' trigger to Sqlite = 
 
 This would allow the same observation labeling functionality given by the trigger described at http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageV2#d_top_of_hour_integer_d_report_h to the Xenia Sqlite version
-
-= 5. = 
