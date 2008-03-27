@@ -5,7 +5,7 @@ The below sections describe the basic 'flow' of *inputs* (see XeniaFeeds )into a
 
 A simple description of the general flow is:
 
-Raw data feeds -> ObsKML -> Xenia RDB -> ObsKML -> various products/formats, services
+*Raw data feeds -> ObsKML -> Xenia RDB -> ObsKML -> various products/formats, services*
 
 I'm using my in-house developed [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML ObsKML] as an intermediate XML staging format/layer between the relational database and other inputs/outputs.
 
