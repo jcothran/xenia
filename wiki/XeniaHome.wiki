@@ -1,6 +1,6 @@
 = Xenia Package Home Page =
 
-== Description ==
+== [XeniaHome#Description Description] ==
 I've been trying to reduce and simplify what we're doing in terms of data collection and sharing for ocean observations down to a single set of relational database tables and scripts.  The name I'm choosing for this effort is 'Xenia' which is a kind of coral found in many marine aquarium coral collections which waves through the water with many palms or hands.
 
 The general issue which we run into is that data is collected to a data 'logger' in tabular format and it involves a lot of manual work to get data from these individual sensor datalogger formats into a more standardized forms which can be more easily aggregated and used.
@@ -11,7 +11,7 @@ Again the Xenia problem/product I'm trying to address is the common datalogger/f
 
 For high-volume data problems(very homogenous, image/gridded type data) with *millions of records per hour(model outputs, hf radar, etc)*, this is not something which I think Xenia should address at this time except for possibly in terms of metadata tables describing these products.  High-volume data problems can continue being addressed as [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/OGR_example file/directory based], batch I/O processing bound problems with discussions more directed towards the organization of the data metadata files for *descriptive* (common visual legends for image overlay needs, common agreements on quality control application) and *archival* needs.
 ----
-== Links ==
+== [XeniaHome#Links Links] ==
 
 This site is in the initial stages of being setup and materials (documentation and code) will be ported over as time permits.
 
@@ -37,7 +37,7 @@ Powerpoint
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/XeniaPackage/XeniaPackage.ppt
 ----
-== Notes ==
+== [XeniaHome#Notes Notes] ==
 
 Would recommend using the version 2 schema, I have listed the version 1 as a point of historical reference but am not developing any more against it.
 
@@ -46,6 +46,6 @@ Would also recommend taking a look at the sqlite version which should hopefully 
 For notes on using subversion for this project, see the notes at http://code.google.com/p/rcoos/wiki/SubversionNotes which should apply the same for this project except that the project name is 'xenia' instead of 'rcoos'
 
 ----
-= Xenia Design =
+= [XeniaHome#Xenia_Design Xenia Design] =
 
 This is an earlier documentation [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaDesign webpage] to list some Xenia design considerations, benchmarks, and tips as related to the relational database schema.
