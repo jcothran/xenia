@@ -1,3 +1,28 @@
-#summary Description of various formats/products and services derived from a Xenia database intance
+#summary Description of various formats/products and services derived from a Xenia database instance
 
-= Introduction =
+= ObsKML derived = 
+
+Xenia uses ObsKML as a default XML import/export format.  The following products are derived via ObsKML which means that they are equally applicable to scripts which can supply ObsKML whether from a Xenia instance or otherwise. 
+
+== Google Earth and Maps ==
+
+see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate#Merging_and_styling_several_ObsK
+
+ObsKML can be merged and revisualized shown in the following image
+
+http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/ObsKMLGenerate/obskml_all_latest.jpg
+
+----
+= Xenia directly derived =
+
+The following products run directly against a Xenia instance.
+
+= Graphs =
+
+TBD
+
+= Quality Control = 
+
+TBD - Dan's documentation
+
+= 
