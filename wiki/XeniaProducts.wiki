@@ -24,5 +24,3 @@ TBD
 = Quality Control = 
 
 TBD - Dan's documentation
-
-= 
