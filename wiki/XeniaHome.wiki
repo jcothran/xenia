@@ -1,6 +1,6 @@
-= Xenia Package Home Page =
+#summary Xenia Package Home Page
 
-== [XeniaHome#Description Description] ==
+= [XeniaHome#Description Description] =
 I've been trying to reduce and simplify what we're doing in terms of data collection and sharing for ocean observations down to a single set of relational database tables and scripts.  The name I'm choosing for this effort is '*Xenia*' which is a kind of coral found in many marine aquarium coral collections which waves through the water with many palms or hands.
 
 The general issue which we run into is that data is collected to a data 'logger' in tabular format and it involves a lot of manual work to get data from these individual sensor datalogger formats into a more standardized forms which can be more easily aggregated and used.
@@ -11,7 +11,7 @@ Again the Xenia problem/product I'm trying to address is the common datalogger/f
 
 For high-volume data problems(very homogenous, image/gridded type data) with *millions of records per hour(model outputs, hf radar, etc)*, this is not something which I think Xenia should address at this time except for possibly in terms of metadata tables describing these products.  High-volume data problems can continue being addressed as [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/OGR_example file/directory based], batch I/O processing bound problems with discussions more directed towards the organization of the data metadata files for *descriptive* (common visual legends for image overlay needs, common agreements on quality control application) and *archival* needs.
 ----
-== [XeniaHome#Links Links] ==
+= [XeniaHome#Links Links] =
 
 This site is in the initial stages of being setup and materials (documentation and code) will be ported over as time permits.
 
@@ -48,7 +48,7 @@ XeniaProducts
 XeniaDevelopmentIdeas
 
 ----
-== [XeniaHome#Notes Notes] ==
+= [XeniaHome#Notes Notes] =
 
 Would recommend using the version 2 schema, I have listed the version 1 as a point of historical reference but am not developing any more against it.
 
