@@ -1,6 +1,6 @@
 = XeniaFlow =
 
-The below sections describe the basic 'flow' of *inputs* into a Xenia database instance and *outputs* derived from this database.
+The below sections describe the basic 'flow' of *inputs* (see XeniaFeeds )into a Xenia database instance(see XeniaSetup) and *outputs* (see XeniaProducts) derived from this database.
 
 
 A simple description of the general flow is:
