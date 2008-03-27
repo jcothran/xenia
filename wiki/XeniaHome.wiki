@@ -10,7 +10,7 @@ The initial goal is to develop a good general relational table schema which we c
 Again the Xenia problem/product I'm trying to address is the common datalogger/filesystem which collects 10-20 obs per hour at 1 to 1000 platforms (*say less than 100,000 records total/hour*) and tying that back into our system of systems(CAROCOOPS, SECOORA, IOOS, GEOSS) with a common relational database driven schema infrastructure to develop products up from.
 
 For high-volume data problems(very homogenous, image/gridded type data) with *millions of records per hour(model outputs, hf radar, etc)*, this is not something which I think Xenia should address at this time except for possibly in terms of metadata tables describing these products.  High-volume data problems can continue being addressed as [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/OGR_example file/directory based], batch I/O processing bound problems with discussions more directed towards the organization of the data metadata files for *descriptive* (common visual legends for image overlay needs, common agreements on quality control application) and *archival* needs.
-
+----
 == Links ==
 
 This site is in the initial stages of being setup and materials (documentation and code) will be ported over as time permits.
@@ -36,12 +36,16 @@ http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML
 Powerpoint
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/XeniaPackage/XeniaPackage.ppt
-
-= Notes =
+----
+== Notes ==
 
 Would recommend using the version 2 schema, I have listed the version 1 as a point of historical reference but am not developing any more against it.
 
 Would also recommend taking a look at the sqlite version which should hopefully be very compact and easy to set up.
-
  
 For notes on using subversion for this project, see the notes at http://code.google.com/p/rcoos/wiki/SubversionNotes which should apply the same for this project except that the project name is 'xenia' instead of 'rcoos'
+
+----
+= Xenia Design =
+
+This is an earlier documentation [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaDesign webpage] to list some Xenia design considerations, benchmarks, and tips as related to the relational database schema.
