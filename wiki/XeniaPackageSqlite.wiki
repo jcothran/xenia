@@ -124,6 +124,8 @@ or with SQL piped from a file
 ----
 = Scripts for database import/export and replication =
 
+see http://code.google.com/p/xenia/source/browse/trunk/sqlite
+
 == Import - ObsKML to Xenia(Sqlite) ==
 
 the following cron jobs are called
