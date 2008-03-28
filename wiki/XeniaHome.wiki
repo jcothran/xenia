@@ -61,7 +61,7 @@ A 'xenia' email *listserv archive* is at http://rcoos.org/pipermail/xenia_rcoos.
 
 To be added as a *project member* to this site send your *google account id* to jeremy.cothran 'at' gmail.com
 
-Would like to facilitate any additional ideas, discussion or code developments/branches at this site as it might be useful to others.
+Would like to facilitate any additional ideas, discussion or code developments/branches at this site as it might be useful to others as time and opportunity permit.
 
 ----
 = [XeniaHome#Xenia_Design Xenia Design] =
