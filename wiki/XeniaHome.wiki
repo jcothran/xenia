@@ -57,6 +57,8 @@ Would also recommend taking a look at the sqlite version which should hopefully 
 
 For notes on using *subversion* for this project, see the notes at http://code.google.com/p/rcoos/wiki/SubversionNotes which should apply the same for this project except that the project name is 'xenia' instead of 'rcoos'
 
+A 'xenia' email listserv archive is at http://rcoos.org/pipermail/xenia_rcoos.org  To be added to this listserv send your email to jeremy.cothran 'at' gmail.com
+
 ----
 = [XeniaHome#Xenia_Design Xenia Design] =
 
