@@ -52,4 +52,4 @@ http://code.google.com/p/xenia/source/browse/trunk/obskml/products/html_tables
 
 = MicroWFS = 
 
-see 
+see http://code.google.com/p/xenia/wiki/XeniaPackageSqlite#MicroWFS
