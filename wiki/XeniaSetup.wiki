@@ -2,9 +2,9 @@
 
 = Choose Database Version =
 
-To get a secondary sqlite instance going, simply copy the 'starter' database at http://xenia.googlecode.com/files/xenia.db and then hourly populate with the hourly refreshed 'latest.sql' at http://www.carocoops.org/obskml/feeds/xenia/archive/latest.sql
+To get a secondary sqlite (see XeniaPackageSqlite ) instance going, simply copy the 'starter' database at http://xenia.googlecode.com/files/xenia.db and then hourly populate with the hourly refreshed 'latest.sql' at http://www.carocoops.org/obskml/feeds/xenia/archive/latest.sql
 
-Getting a secondary postgresql instance going should be the same in regards to the ongoing population with the latest.sql file, but one will need to setup the initial postgresql instance using the documentation at http://code.google.com/p/xenia/wiki/XeniaPackageV2#Install_Notes
+Getting a secondary postgresql (see XeniaPackageV2 ) instance going should be the same in regards to the ongoing population with the latest.sql file, but one will need to setup the initial postgresql instance using the documentation at http://code.google.com/p/xenia/wiki/XeniaPackageV2#Install_Notes
 
 = Choose Feed Method and Feeds =
 
