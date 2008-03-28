@@ -50,9 +50,9 @@ XeniaDevelopmentIdeas
 ----
 = [XeniaHome#Notes Notes] =
 
-Would recommend using the version 2 schema, I have listed the version 1 as a point of historical reference but am not developing any more against it.
+Would recommend using the *version 2* schema, I have listed the version 1 as a point of historical reference but am not developing any more against it.
 
-Would also recommend taking a look at the sqlite version which should hopefully be very compact and easy to set up.
+Would also recommend taking a look at the *sqlite* version which should hopefully be very compact and easy to set up.
  
 
 For notes on using *subversion* for this project, see the notes at http://code.google.com/p/rcoos/wiki/SubversionNotes which should apply the same for this project except that the project name is 'xenia' instead of 'rcoos'
