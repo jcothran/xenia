@@ -41,3 +41,7 @@ Haven't gone through the Xenia specific steps to enable this type of service but
 = 8. conversion script - obskml to 'IOOS' XML encoding = 
 
 An IOOS program office http://ioos.noaa.gov/program effort is underway to define an initial XML encoding for observations which can be agreed upon and utilized to share data nationally.  A conversion script would help supply that feed type and support that effort.
+
+= 9. Xenia 'package' or build = 
+
+Same as the earlier idea at http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageImage this would be to have a 'build' version which might utilize some configuration xml files, but otherwise outputs/products/services are already setup to go with whatever data is imported into it.  Something like a knoppix/debian distribution that might live on an embedded device like a gumstix http://www.gumstix.com
