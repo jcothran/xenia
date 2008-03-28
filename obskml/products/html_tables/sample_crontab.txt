@@ -1,0 +1,6 @@
+#clear out old observation html tables
+15 * * * * cd /home/jcothran/nws/obs/jeremy/html_tables ; rm *.htm
+
+16 * * * * cd /home/jcothran/nws/obs/jeremy ; perl platform_no_data.pl
+
+18 * * * * cd /home/jcothran/nws/obs/jeremy ; perl obskml_to_html_table.pl http://sverdrup.marine.usf.edu/ms_tmp/obskml/sverdrup_obskml_latest.kmz > /tmp/obs_out.log 2>&1
