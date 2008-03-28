@@ -59,6 +59,8 @@ For notes on using *subversion* for this project, see the notes at http://code.g
 
 A 'xenia' email listserv archive is at http://rcoos.org/pipermail/xenia_rcoos.org  To be added to this listserv send your email to jeremy.cothran 'at' gmail.com
 
+To be added as a project member to this site send your google account id to jeremy.cothran 'at' gmail.com
+
 Would like to facilitate any additional ideas, discussion or code developments/branches at this site as it might be useful to others.
 
 ----
