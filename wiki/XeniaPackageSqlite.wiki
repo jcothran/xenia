@@ -160,7 +160,7 @@ To get a secondary sqlite instance going, simply copy the 'starter' database at 
 ----
 = Scripts for database products/services =
 
-== MicroWFS ==
+== [XeniaPackageSqlite#MicroWFS MicroWFS] ==
 
 Referencing again the microWFS service experiment being done by the Coastal Services Center's Data Transport Lab (CSC DTL) detailed at http://www.csc.noaa.gov/DTL/dtl_proj4_gmlsfp_wfs.html  The original perl scripts utilized by that project are available at ftp://www.csc.noaa.gov/pub/DTL/Proj4_WFS_GMLSFP_TimeSeries
 
