@@ -19,6 +19,10 @@ Note in the above sql file there is the below commented SELECT statement which w
 
 
 [http://www.carocoops.org/obskml/microwfs/display_order.sql Display order lookups]
+----
+= Source Code = 
+
+http://code.google.com/p/xenia/source/browse/trunk/postgresql
 
 ----
 = Xenia Table Schema Diagram =
