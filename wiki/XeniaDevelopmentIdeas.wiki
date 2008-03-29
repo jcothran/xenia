@@ -20,6 +20,12 @@ Sqlite allows the amount of memory utilized to be set via the 'PRAGMA default_ca
 
 This would provide a path for existing, future Seacoos netCDF feeds to be available via ObsKML/Xenia also.
 
+= 3.a conversion script - CarolinasCoast aggregation to obskml =
+
+Charlton Galvorino did some earlier aggregations of NWS, NDBC, USGS, etc to a hash and then to a Xenia db instance in getting the CarolinasCoast project going.  Instead of going to a hash, send this data to ObsKML making it available as part of a community of feeds.  
+
+If an 'IOOS' xml encoding is used at some future date by several federal backbone providers, that common xml encoding could also be used as a conversion source to obskml or just converted directly to sql for populating a xenia instance.
+
 = 4. Convert PostgreSQL 'top_of_hour' trigger to Sqlite = 
 
 This would allow the same observation labeling functionality given by the trigger described at http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageV2#d_top_of_hour_integer_d_report_h to the Xenia Sqlite version
