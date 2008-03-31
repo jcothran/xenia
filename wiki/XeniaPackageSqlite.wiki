@@ -76,11 +76,21 @@ http://www.mail-archive.com/sqlite-users@sqlite.org/msg27225.html
 ==== Performance review(unsure of article date) ====
 http://theopensourcery.com/sqlite2.htm
 
+#sqlite vs mysql performance
+
+http://confluence.slac.stanford.edu/display/IEPM/MySQL+vs+SQLite+performance+testing
+
 ====GUI db tools ====
 http://www.sqlite.org/cvstrac/wiki?p=ManagementTools
 
 ==== Firefox add-on - Sqlite Manager ====
 https://addons.mozilla.org/en-US/firefox/addon/5817
+
+==== Questions ====
+
+#sqlite schema/data dumping
+
+http://www.nabble.com/Dump-w-o-Schema-td14852144.html
 
 = Setup =
 
