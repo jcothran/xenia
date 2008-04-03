@@ -25,6 +25,6 @@ Note in the above sql file there is the below commented SELECT statement which w
 http://code.google.com/p/xenia/source/browse/trunk/postgresql
 
 ----
-= Xenia Table Schema Diagram =
+= [XeniaPackageV2#Xenia_Table_Schema_Diagram Xenia Table Schema Diagram] =
 
 http://xenia.googlecode.com/files/xenia_v2_marked.jpg
