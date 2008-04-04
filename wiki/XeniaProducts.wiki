@@ -44,7 +44,7 @@ http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastSetup
 
 = vector graphs (ADCP) =
 
-see ADCPProfilerNotes
+see [http://code.google.com/p/xenia/wiki/ADCPProfilerNotes ADCPProfilerNotes]
 
 = html table styling = 
 
