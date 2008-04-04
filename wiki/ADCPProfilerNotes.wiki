@@ -1,0 +1,18 @@
+#summary development notes regarding vector graphs (like ADCP instrumentation)
+
+copied from [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/AdcpProfilerNotes here]
+
+= Inserting ADCP data to Xenia database = 
+   * Inserting Adcp support data for Xenia tables - Since the platforms providing profiler data are limited in number the support data is entered manually.   
+   * Inserting profiler data - SeacoosAdcpXenia.pm and adcp_xenia_insert_sql.pl parse netcdf data and create sql insert statements for northward and eastward currents for xenia multi_obs table based on environment file.
+
+= Creating Vector Plots = 
+   * adcp_vector_plot.pl - Queries multi_obs table and creates data file for the vector plot. The data is broken into different files based on the magnitude of the current so that color coding exists in the output image file.
+   * adcp_gnuplot.lib - Includes syntax and commands for gnuplot to to create the vector plots from the data files.
+
+= Imagemap = 
+WMS queries are made against the xenia database to indicate adcp platform and imagemap information is specified in the html to link back to the adcp profiler plots.
+
+= Example output graph =
+
+http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/AdcpProfilerNotes/xenia_adcp_gnuplot_graph.jpg
