@@ -2,7 +2,9 @@
 
 copied from [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/AdcpProfilerNotes here]
 
-source code available [http://code.google.com/p/xenia/source/browse/trunk/postgresql/profiler here]
+earlier notes with a sample script for going from adcp source data into Xenia available [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageV2ADCP here]
+
+source code for creating vector plots (adcp) available [http://code.google.com/p/xenia/source/browse/trunk/postgresql/profiler here]
 
 = Inserting ADCP data to Xenia database = 
    * Inserting Adcp support data for Xenia tables - Since the platforms providing profiler data are limited in number the support data is entered manually.   
