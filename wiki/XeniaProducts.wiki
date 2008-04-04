@@ -20,7 +20,7 @@ http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/ObsKMLGenerate/obskml_all_late
 
 see http://trac.secoora.org/datamgmt/wiki/RangeTests
 
-= observation data availability and metrics =
+= data availability and metrics =
 
 http://trac.secoora.org/datamgmt/wiki/PercentageUptime
 
@@ -28,7 +28,7 @@ http://trac.secoora.org/datamgmt/wiki/PercentageUptime
 
 see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate#Convert_from_ObsKML_to_other_for
 
-= observation time-series graphs =
+= time-series graphs =
 
 TBD
 
@@ -42,7 +42,11 @@ The time-series graphs shown at http://weather.gov/carolinascoast are generated 
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastSetup
 
-= observation html table styling = 
+= vector graphs (ADCP) =
+
+see ADCPProfilerNotes
+
+= html table styling = 
 
 TBD
 
