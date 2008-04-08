@@ -10,6 +10,8 @@ see also XeniaPackageV2 and [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/M
 
 == Introduction ==
 
+*UPDATE: April 8, 2008* There is a geospatially enabled version of Sqilte labeled 'SQLiteGeo' available at http://www.gaia-gis.it/spatialite  Would recommend using this version of sqlite for its geospatial and shapefile support.
+
 from http://sqlite.org
 
 _SQLite is a software library that implements a self-contained, serverless, zero-configuration, transactional SQL database engine._
@@ -92,7 +94,7 @@ https://addons.mozilla.org/en-US/firefox/addon/5817
 
 http://www.nabble.com/Dump-w-o-Schema-td14852144.html
 ----
-= Geospatial enabling Sqlite =
+= [XeniaPackageSqlite#Geospatial_enabling_Sqlite Geospatial enabling Sqlite] =
 
 copied from http://www.gaia-gis.it/spatialite
 
@@ -267,6 +269,8 @@ Be sure to [http://www.carocoops.org/obskml/microwfs/display_order.sql populate]
 The sqlite database is geared for the individual user and process (as used in cell phones or embedded devices for example) and there may be concurrency issues which need to be addressed in relation to the type and load of potential concurrent queries against a singular file if the database is used in that manner.  Ideally this database would be used more in a backend server mode to produce pregenerated content than directly accessible by public query.  There is the potential to run the database 'in memory' which may speed up the response time to an adequate level also depending on the load and frequency of queries.
 
 == Spatial enabling ==
+
+*UPDATE: April 8, 2008* There is a geospatially enabled version of Sqilte labeled 'SQLiteGeo' available at http://www.gaia-gis.it/spatialite  Would recommend using this version of sqlite for its geospatial and shapefile support.
 
 Sqlite doesn't have spatial enablement by default, but here also it may not be needed for the limited amount of time window data contained using more bounding box type functionalities against latitude and longitude attribute fields.
 
