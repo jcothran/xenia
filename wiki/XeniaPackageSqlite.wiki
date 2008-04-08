@@ -94,7 +94,7 @@ https://addons.mozilla.org/en-US/firefox/addon/5817
 
 http://www.nabble.com/Dump-w-o-Schema-td14852144.html
 ----
-= [XeniaPackageSqlite#Geospatial_enabling_Sqlite Geospatial enabling Sqlite] =
+= [XeniaPackageSqlite#Geospatial_enabling_Sqlite Geospatial enabling Sqlite - SQLiteGeo] =
 
 copied from http://www.gaia-gis.it/spatialite
 
