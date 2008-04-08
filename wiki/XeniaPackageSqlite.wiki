@@ -92,6 +92,30 @@ https://addons.mozilla.org/en-US/firefox/addon/5817
 
 http://www.nabble.com/Dump-w-o-Schema-td14852144.html
 
+= Geospatial enabling Sqlite =
+
+copied from http://www.gaia-gis.it/spatialite
+
+SpatiaLite - VirtualShape
+Quick intro
+
+    * SQLite is a popular DBMS, simple, robust, easy to use and really lightweight
+    * each SQLite database is simply a file; you can freely copy it, compress it, send it on a LAN or WEB with no complication at all
+      They are also portables; the same database file will work on Windows, Linux, MacOs etc
+    * the SpatiaLite extension enables SQLite to support spatial data too [aka GEOMETRY], in a way conformant to OpenGis specifications
+          o supports standard WKT and WKB formats
+          o implements SQL spatial functions such as AsText(), GeomFromText(), Area(), PointN() and alike
+            Not all OpenGis functions are supported, but the main core is available
+          o supports importing and exporting from / to shapefiles
+          o supports coordinate reprojection via PROJ.4 and EPSG geodetic parameters dataset
+    * the VirtualShape extension enables SQLite to access shapefiles as VIRTUAL TABLEs
+          o you can then perform standard SQL queries on external shapefiles, with no need for importing or converting them
+    * both SpatiaLite and VirtualShape are distibuted in the form of shared libraries [DLLs on Windows]
+          o integration with standard sqlite3 front end is allowed via .load 'extension' or SELECT load_extension('extension') mechanism
+          o old versions of sqlite3 didn't support extensions; some up to date distribution disables them for security reasons
+          o so, if you wish, you can alternatively use SQLiteGeo, a derivative sqlite3 3.5.7 [same sources] slightly modified in order to automatically load both SpatiaLite and VirtualShape
+
+
 = Setup =
 
 The sqlite version which I downloaded and built the converted Xenia scripts for was the Linux version 3.5.4 at http://www.sqlite.org/sqlite3-3.5.4.bin.gz
