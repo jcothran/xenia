@@ -10,7 +10,7 @@ see also XeniaPackageV2 and [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/M
 
 == Introduction ==
 
-*UPDATE: April 8, 2008* There is a geospatially enabled version of Sqilte labeled 'SQLiteGeo' available at http://www.gaia-gis.it/spatialite  Would recommend using this version of sqlite for its geospatial and shapefile support.
+*UPDATE: April 8, 2008* There is a geospatially enabled version of Sqilte labeled *SQLiteGeo* available at http://www.gaia-gis.it/spatialite  Would recommend using this version of sqlite for its geospatial and shapefile support.
 
 from http://sqlite.org
 
@@ -115,7 +115,7 @@ Quick intro
     * both SpatiaLite and VirtualShape are distibuted in the form of shared libraries [DLLs on Windows]
           * integration with standard sqlite3 front end is allowed via .load 'extension' or SELECT load_extension('extension') mechanism
           * old versions of sqlite3 didn't support extensions; some up to date distribution disables them for security reasons
-          * so, if you wish, you can alternatively use SQLiteGeo, a derivative sqlite3 3.5.7 [same sources] slightly modified in order to automatically load both SpatiaLite and VirtualShape
+          * so, if you wish, you can alternatively use *SQLiteGeo*, a derivative sqlite3 3.5.7 [same sources] slightly modified in order to automatically load both SpatiaLite and VirtualShape
 
 ----
 = Setup =
@@ -270,7 +270,7 @@ The sqlite database is geared for the individual user and process (as used in ce
 
 == Spatial enabling ==
 
-*UPDATE: April 8, 2008* There is a geospatially enabled version of Sqilte labeled 'SQLiteGeo' available at http://www.gaia-gis.it/spatialite  Would recommend using this version of sqlite for its geospatial and shapefile support.
+*UPDATE: April 8, 2008* There is a geospatially enabled version of Sqilte labeled *SQLiteGeo* available at http://www.gaia-gis.it/spatialite  Would recommend using this version of sqlite for its geospatial and shapefile support.
 
 Sqlite doesn't have spatial enablement by default, but here also it may not be needed for the limited amount of time window data contained using more bounding box type functionalities against latitude and longitude attribute fields.
 
