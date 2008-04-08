@@ -53,6 +53,8 @@ http://www.sqlite.org/omitted.html
 ==== Tutorials ====
 http://souptonuts.sourceforge.net/readme_sqlite_tutorial.html
 
+Interestingly, sqlite does support an ATTACH command which allows query over multiple sqlite file databases(see http://souptonuts.sourceforge.net/readme_sqlite_tutorial.html  ) so maybe that would be a way of still having a 'file' archive that still is fairly sql accessible.
+
 http://www.shokhirev.com/nikolai/abc/sql/sql.html
 
 ==== Optimization ====
