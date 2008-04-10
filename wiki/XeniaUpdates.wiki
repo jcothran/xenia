@@ -2,4 +2,8 @@
 
 = SQLiteGeo (April 8, 2008) =
 
+There is a geospatially enabled version of Sqilte labeled SQLiteGeo available at http://www.gaia-gis.it/spatialite Would recommend using this version of sqlite for its geospatial and shapefile support.
+
 = monthly files replication script (April 10, 2008) =
+
+This perl script shows how I'm using my latest.sql hourly feed to create/populate a [http://carocoops.org/seacoos_data/sqlite monthly archive files].  The amount total amount of observation data currently collected is around 20 MB per day, so a month file should be around 20 MB*30 days = 600 MB
