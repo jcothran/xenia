@@ -47,6 +47,8 @@ XeniaProducts
 
 XeniaDevelopmentIdeas
 
+XeniaUpdates
+
 ----
 = [XeniaHome#Notes Notes] =
 
