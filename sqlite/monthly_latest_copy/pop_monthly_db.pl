@@ -8,6 +8,8 @@ use LWP::Simple;
 
 my $sqlite_path = '/usr/bin/sqlite3-3.5.4.bin';
 
+my $latest_db = 'latest.db';
+
 #latest sql feed
 my $source_url = 'http://carocoops.org/obskml/feeds/xenia/archive/latest.sql';
 getstore("$source_url",'./latest.sql') or die "Couldn't get $source_url \n";
@@ -35,7 +37,12 @@ if (!(-e "$db_name")) {
 }
 
 #print "process sql against file db\n";
+
+#populate monthly archival db
 `$sqlite_path $db_name < latest.sql`;
+
+#go ahead and populate latest.db also
+`$sqlite_path $latest_db < latest.sql`;
 
 exit 0;
 

@@ -1,0 +1,4 @@
+#populate sqlite monthly archive file db and latest db
+10 * * * * cd /usr2/home/data/seacoos/sqlite; perl pop_monthly_db.pl >/tmp/sqlite.log 2>&1
+30 00 * * * cd /usr2/home/data/seacoos/sqlite; perl maintain_latest_db.pl >/tmp/sqlite.log 2>&1
+
