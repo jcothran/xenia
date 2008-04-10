@@ -2,4 +2,4 @@
 
 = SQLiteGeo (April 8, 2008) =
 
-= monthly replication script (April 10, 2008) =
+= monthly files replication script (April 10, 2008) =
