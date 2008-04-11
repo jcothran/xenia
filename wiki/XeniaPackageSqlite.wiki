@@ -6,7 +6,7 @@ Sqlite Manager - A simple Firefox add-on to view/query a sqlite database from Fi
 
 https://addons.mozilla.org/en-US/firefox/addon/5817
 
-see also XeniaPackageV2 and [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML ObsKML] and [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes JCNotes]
+see also XeniaPackageV2 (database table schema diagram) and [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML ObsKML] and [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes JCNotes]
 
 == Introduction ==
 
