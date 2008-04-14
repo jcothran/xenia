@@ -3,7 +3,7 @@
 ----
 = Feed methods =
 
-Currently there are three methods for feeding (or populating) your Xenia database with a population of organziations, platforms, sensors and observation measurements.
+Currently there are three methods for feeding (or populating) your Xenia database with a population of organizations, platforms, sensors and observation measurements.
 
 ----
 == Create direct feeds ==
