@@ -1,0 +1,126 @@
+<unit_conversion_list>
+
+  <!-- below are the unit conversions, mainly going from si(metric) to en(english) units -->
+  <!-- be sure to include unit self (e.g., m_to_m) conversion reference which also acts as a data formatting statement -->
+
+  <unit_conversion id="percent_to_percent">
+    <conversion_formula>sprintf("%.1f",var1)</conversion_formula>
+    <units>%</units>
+  </unit_conversion>
+
+  <unit_conversion id="mb_to_mb">
+    <conversion_formula>sprintf("%.1f",var1)</conversion_formula>
+    <units>mb</units>
+  </unit_conversion>
+
+  <unit_conversion id="mb_to_inches_mercury">
+    <conversion_formula>sprintf("%.2f",var1*0.0295)</conversion_formula>
+    <units>inHg</units>   
+  </unit_conversion>
+
+  <unit_conversion id="celsius_to_celsius">
+    <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
+    <units>celcius</units>
+  </unit_conversion>
+
+  <unit_conversion id="celsius_to_fahrenheit">
+    <conversion_formula>sprintf("%.1f",var1*9/5+32)</conversion_formula>
+    <units>fahrenheit</units>
+  </unit_conversion>
+
+  <unit_conversion id="degrees_true_to_degrees_true">
+    <conversion_formula>sprintf("%d",var1)</conversion_formula>
+    <units>degrees_true</units>
+  </unit_conversion>
+
+  <unit_conversion id="m_s-1_to_m_s-1">
+    <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
+    <units>m_s-1</units>
+  </unit_conversion>
+
+  <unit_conversion id="mm_s-1_to_cm_s-1">
+    <conversion_formula>sprintf("%f",var1/10.0)</conversion_formula>
+    <units>cm_s-1</units>
+  </unit_conversion>
+
+  <unit_conversion id="m_s-1_to_knots">
+    <conversion_formula>sprintf("%.1f",var1*1.9438)</conversion_formula>
+    <units>knots</units>
+  </unit_conversion>
+
+  <unit_conversion id="m_s-1_to_mph">
+    <conversion_formula>sprintf("%.1f",var1*2.2369)</conversion_formula>
+    <units>mph</units>
+  </unit_conversion>
+
+  <unit_conversion id="millimeter_to_millimeter">
+    <conversion_formula>sprintf("%.1f",var1)</conversion_formula>
+    <units>mm</units>
+  </unit_conversion>
+
+  <unit_conversion id="millimeter_to_inch">
+    <conversion_formula>sprintf("%.2f",var1*0.039)</conversion_formula>
+    <units>in</units>
+  </unit_conversion>
+
+  <unit_conversion id="millimoles_per_m^2_to_millimoles_per_m^2">
+    <conversion_formula>sprintf("%.1f",var1)</conversion_formula>
+    <units>millimoles_per_m^2</units>
+  </unit_conversion>
+
+  <unit_conversion id="m_to_m">
+    <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
+    <units>m</units>
+  </unit_conversion>
+  
+  <unit_conversion id="m_to_f">
+    <conversion_formula>sprintf("%.2f",var1*3.28)</conversion_formula>
+    <units>ft</units>   
+  </unit_conversion>
+
+  <unit_conversion id="mS_cm-1_to_mS_cm-1">
+    <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
+    <units>mS_cm-1</units>   
+  </unit_conversion>
+
+  <unit_conversion id="psu_to_psu">
+    <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
+    <units>psu</units>   
+  </unit_conversion>
+
+  <unit_conversion id="mg_L-1_to_mg_L-1">
+    <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
+    <units>mg_L-1</units>   
+  </unit_conversion>
+
+  <unit_conversion id="units_to_units">
+    <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
+    <units></units>   
+  </unit_conversion>
+
+  <unit_conversion id="ppt_to_psu">
+    <conversion_formula>sprintf("%f",var1)</conversion_formula>
+    <units>psu</units>   
+  </unit_conversion>
+
+  <unit_conversion id="ntu_to_ntu">
+    <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
+    <units>ntu</units>   
+  </unit_conversion>
+
+  <unit_conversion id="degree_Celsius">
+    <conversion_formula></conversion_formula>
+    <units>celcius</units>   
+  </unit_conversion>
+  <unit_conversion id="m s-1">
+    <conversion_formula></conversion_formula>
+    <units>m_s-1</units>   
+  </unit_conversion>
+  <unit_conversion id="cm s-1">
+    <conversion_formula></conversion_formula>
+    <units>cm_s-1</units>   
+  </unit_conversion>
+
+
+
+</unit_conversion_list>
