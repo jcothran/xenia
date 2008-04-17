@@ -1,13 +1,22 @@
+####################################################################################################################
+#Revisions
+# Author: DWR
+# Date: 4/15/2008
+# Version: 1.1
+# Changes: Implemented use of module obsKMLSubRoutines.pm to replace the obsKMLSubRoutines.lib.
+####################################################################################################################
 #!/usr/bin/perl
 
-use constant MICROSOFT_PLATFORM => 0;
+use constant MICROSOFT_PLATFORM => 1;
 if( !MICROSOFT_PLATFORM )
 {
-  require "./obsKMLSubRoutines.lib";
+  use lib "./"; #DWR 4/15/2008 Instead of using the library, it is now a module, so we need to look in current dir.
+  #require "./obsKMLSubRoutines.lib";
 }
 else
 {
-  require ".\\obsKMLSubRoutines.lib";  
+  use lib ".\\"; #DWR 4/15/2008 Instead of using the library, it is now a module, so we need to look in current dir.
+  #require ".\\obsKMLSubRoutines.lib";  
 }
 
 
@@ -17,7 +26,7 @@ use strict;
 use DBI;
 use Config::IniFiles;
 use Getopt::Long;
-
+use obsKMLSubRoutines;
 
 my %CommandLineOptions;
 GetOptions( \%CommandLineOptions,
@@ -85,7 +94,9 @@ if (($currentFile =~ /Buoy8-/) || ($currentFile =~ /Buoy10-/) || ($currentFile =
 	print "$currentFile processed\n";
 
   my %PlatformIDHash;
-  LoadPlatformControlFile($strControlFile, \%PlatformIDHash, $buoy_id);
+  obsKMLSubRoutines::LoadPlatformControlFile($strControlFile, \%PlatformIDHash, $buoy_id);
+  my $XMLControlFile = XML::LibXML->new->parse_file("$strUnitsXMLFilename");
+
 
 =comment  #JTC 2008/03/12 commenting this section out since the reformatting of the initial file should be handled in an earlier step
 	#replace empty ADCP statement with appropriate number of empty fields
@@ -775,26 +786,26 @@ if (($currentFile =~ /Buoy8-/) || ($currentFile =~ /Buoy10-/) || ($currentFile =
     
     my %PlatformObsSettings;
     
-    GetPlatformData( \%PlatformIDHash, $buoy_id, \%PlatformObsSettings );
+    obsKMLSubRoutines::GetPlatformData( \%PlatformIDHash, $buoy_id, \%PlatformObsSettings );
     $strPlatformID = %PlatformObsSettings->{PlatformID};
     $rObsHash->{PlatformID}{$strPlatformID}{Latitude} = $buoy_lat;
     $rObsHash->{PlatformID}{$strPlatformID}{Longitude} = $buoy_long;
     $rObsHash->{PlatformID}{$strPlatformID}{PlatformURL} = %PlatformObsSettings->{PlatformURL};
     
     #( $strObsName, $strDate, $Value, $SensorSOrder, $rObsHash, $rPlatformControlFileInfo, $rPlatformObsSettings )
-    KMLAddObsHashEntry( 'water_pressure', $strDBDate, $pcat_pressure, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'water_depth', $strDBDate, ($pcat_pressure * 0.98), 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'water_conductivity', $strDBDate, $pcat_conductivity, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'water_temperature', $strDBDate, $pcat_temp, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'salinity', $strDBDate, $pcat_salinity, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'water_pressure', $strDBDate, $fcat_pressure, 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'water_depth', $strDBDate, ($fcat_pressure * 0.98), 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'water_conductivity', $strDBDate, $fcat_conductivity, 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'water_temperature', $strDBDate, $fcat_temp, 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'salinity', $strDBDate, $fcat_salinity, 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'water_pressure', $strDBDate, $pcat_pressure, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'water_depth', $strDBDate, ($pcat_pressure * 0.98), 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'water_conductivity', $strDBDate, $pcat_conductivity, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'water_temperature', $strDBDate, $pcat_temp, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'salinity', $strDBDate, $pcat_salinity, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'water_pressure', $strDBDate, $fcat_pressure, 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'water_depth', $strDBDate, ($fcat_pressure * 0.98), 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'water_conductivity', $strDBDate, $fcat_conductivity, 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'water_temperature', $strDBDate, $fcat_temp, 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'salinity', $strDBDate, $fcat_salinity, 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
 
 
-    KMLAddObsHashEntry( 'voltage', $strDBDate, $fcat_voltage, 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'voltage', $strDBDate, $fcat_voltage, 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
     my $chlorophyll = undef;
     if( $fcat_voltage ne 'NULL')
     {
@@ -829,61 +840,61 @@ if (($currentFile =~ /Buoy8-/) || ($currentFile =~ /Buoy10-/) || ($currentFile =
               $chlorophyll = 14.00*$fcat_voltage; #as of deployment 05/07/27
       }
     }
-    KMLAddObsHashEntry( 'chl_concentration', $strDBDate, $chlorophyll, 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'chl_concentration', $strDBDate, $chlorophyll, 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
 
     # The current_speed is natively mm_s-1 however we want to store it in cm_s-1, so we convert.
-    GetObsData( \%PlatformIDHash, 'current_speed', 1, \%PlatformObsSettings );
+    obsKMLSubRoutines::GetObsData( \%PlatformIDHash, 'current_speed', 1, \%PlatformObsSettings );
     my $strCurrentUnits = %PlatformObsSettings->{UoM};
-    my $ConvertedValue = MeasurementConvert($adcp_bin1_velocity, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
+    my $ConvertedValue = obsKMLSubRoutines::MeasurementConvert($adcp_bin1_velocity, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
     
-    KMLAddObsHashEntry( 'current_speed', $strDBDate, $ConvertedValue, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin1_direction, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_speed', $strDBDate, $ConvertedValue, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin1_direction, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
     
-    $ConvertedValue = MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
-    KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin2_velocity, 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin2_direction, 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    $ConvertedValue = obsKMLSubRoutines::MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin2_velocity, 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin2_direction, 2, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
     
-    $ConvertedValue = MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
-    KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin3_velocity, 3, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin3_direction, 3, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    $ConvertedValue = obsKMLSubRoutines::MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin3_velocity, 3, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin3_direction, 3, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
     
-    $ConvertedValue = MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
-    KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin4_velocity, 4, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin4_direction, 4, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    $ConvertedValue = obsKMLSubRoutines::MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin4_velocity, 4, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin4_direction, 4, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
     
-    $ConvertedValue = MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
-    KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin5_velocity, 5, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin5_direction, 5, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    $ConvertedValue = obsKMLSubRoutines::MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin5_velocity, 5, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin5_direction, 5, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
     
-    $ConvertedValue = MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
-    KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin6_velocity, 6, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin6_direction, 6, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    $ConvertedValue = obsKMLSubRoutines::MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin6_velocity, 6, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin6_direction, 6, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
     
-    $ConvertedValue = MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
-    KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin7_velocity, 7, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin7_direction, 7, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    $ConvertedValue = obsKMLSubRoutines::MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin7_velocity, 7, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin7_direction, 7, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
     
-    $ConvertedValue = MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
-    KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin8_velocity, 8, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin8_direction, 8, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    $ConvertedValue = obsKMLSubRoutines::MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin8_velocity, 8, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin8_direction, 8, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
     
-    $ConvertedValue = MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
-    KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin9_velocity, 9, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin9_direction, 9, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    $ConvertedValue = obsKMLSubRoutines::MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin9_velocity, 9, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin9_direction, 9, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
     
-    $ConvertedValue = MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
-    KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin10_velocity, 10, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin10_direction, 10, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    $ConvertedValue = obsKMLSubRoutines::MeasurementConvert($ConvertedValue, 'mm_s-1', $strCurrentUnits, $XMLControlFile );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_speed', $strDBDate, $adcp_bin10_velocity, 10, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'current_to_direction', $strDBDate, $adcp_bin10_direction, 10, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
 
     #Weather pack.
-    KMLAddObsHashEntry( 'wind_speed', $strDBDate, $wxpak_wind_speed, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'wind_from_direction', $strDBDate, $wxpak_wind_direction, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'wind_gust', $strDBDate, $wxpak_wind_gust, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'air_temperature', $strDBDate, $wxpak_air_temp, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'relative_humidity', $strDBDate, $wxpak_humidity, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'air_pressure', $strDBDate, $wxpak_air_pressure, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'solar_radiation', $strDBDate, $wxpak_solar, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'visibility', $strDBDate, $buoy_visibility, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'wind_speed', $strDBDate, $wxpak_wind_speed, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'wind_from_direction', $strDBDate, $wxpak_wind_direction, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'wind_gust', $strDBDate, $wxpak_wind_gust, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'air_temperature', $strDBDate, $wxpak_air_temp, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'relative_humidity', $strDBDate, $wxpak_humidity, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'air_pressure', $strDBDate, $wxpak_air_pressure, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'solar_radiation', $strDBDate, $wxpak_solar, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'visibility', $strDBDate, $buoy_visibility, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
 
     
     my $strXMLPath = ''; 
@@ -901,7 +912,7 @@ if (($currentFile =~ /Buoy8-/) || ($currentFile =~ /Buoy10-/) || ($currentFile =
       $strXMLPath = "$strKMLDir\\$strPlatformID-$strDate.xml"; 
     }
 
-    BuildKMLFile( \%ObsHash, $strXMLPath, $strControlFile );
+    obsKMLSubRoutines::BuildKMLFile( \%ObsHash, $strXMLPath, $strControlFile );
     	
 	}  #foreach $record (<BUOY_FILE) 
 
@@ -921,7 +932,7 @@ elsif (($currentFile =~ /WLS1/) || ($currentFile =~ /WLS2/) || ($currentFile =~ 
 	or die "Can't find file $currentPath$currentFile: $!\n";
 
   my %PlatformIDHash;
-  LoadPlatformControlFile($strControlFile, \%PlatformIDHash, $station_id);
+  obsKMLSubRoutines::LoadPlatformControlFile($strControlFile, \%PlatformIDHash, $station_id);
 
 	#the following code reads 0,1,many lines of buoy updates, ignoring lines starting with # and partial lines
 	foreach my $line_record (<BUOY_FILE>) {
@@ -1038,18 +1049,18 @@ elsif (($currentFile =~ /WLS1/) || ($currentFile =~ /WLS2/) || ($currentFile =~ 
 
     my %PlatformObsSettings;
 
-    GetPlatformData( \%PlatformIDHash, $station_id, \%PlatformObsSettings );
+    obsKMLSubRoutines::GetPlatformData( \%PlatformIDHash, $station_id, \%PlatformObsSettings );
     $strPlatformID = %PlatformObsSettings->{PlatformID};
-
-    KMLAddPlatformHashEntry( %PlatformObsSettings->{PlatformID}, %PlatformObsSettings->{PlatformURL}, '', '', $rObsHash );
+   
+    obsKMLSubRoutines::KMLAddPlatformHashEntry( %PlatformObsSettings->{PlatformID}, %PlatformObsSettings->{PlatformURL}, '', '', $rObsHash );
     #( $strObsName, $strDate, $Value, $SensorSOrder, $rObsHash, $rPlatformControlFileInfo, $rPlatformObsSettings )
-    KMLAddObsHashEntry( 'water_level', $strDBDate, $water_level, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'wind_speed', $strDBDate, $wind_speed, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'wind_from_direction', $strDBDate, $wind_direction, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'wind_gust', $strDBDate, $wind_gust, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'air_temperature', $strDBDate, $air_temperature, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'air_pressure', $strDBDate, $water_level, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
-    KMLAddObsHashEntry( 'water_temperature', $strDBDate, $water_temperature, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'water_level', $strDBDate, $water_level, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'wind_speed', $strDBDate, $wind_speed, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'wind_from_direction', $strDBDate, $wind_direction, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'wind_gust', $strDBDate, $wind_gust, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'air_temperature', $strDBDate, $air_temperature, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'air_pressure', $strDBDate, $air_pressure, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
+    obsKMLSubRoutines::KMLAddObsHashEntry( 'water_temperature', $strDBDate, $water_temperature, 1, $rObsHash, \%PlatformIDHash, \%PlatformObsSettings );
 
     my $strXMLPath = ''; 
     $strPlatformID =~ s/\./-/g; 
@@ -1066,7 +1077,7 @@ elsif (($currentFile =~ /WLS1/) || ($currentFile =~ /WLS2/) || ($currentFile =~ 
       $strXMLPath = "C:\\Documents and Settings\\dramage\\workspace\\TelemetryDataToObsKML\\$strPlatformID-$strDate.xml"; 
     }
 
-    BuildKMLFile( \%ObsHash, $strXMLPath, $strControlFile );
+    obsKMLSubRoutines::BuildKMLFile( \%ObsHash, $strXMLPath, $strControlFile );
 
   }
   
