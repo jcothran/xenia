@@ -7,7 +7,7 @@ use LWP::Simple;
 use constant MICROSOFT_PLATFORM => 0;
 use constant USE_DEBUG_PRINTS => 1;
 
-my $strEmail = 'dan@inlet.geol.sc.edu';
+my $strEmail = 'dan@inlet.geol.sc.edu (Dan Ramage)';
 #use $strRSSXML = "<?xml version="1.0" encoding="UTF-8"?>\n
 
 my %CommandLineOptions;
@@ -190,6 +190,7 @@ foreach my $File (@Files)
     my $strChannelDate;
     my $strRFCDate = $datetime;
     $strRFCDate =~ s/Z//;
+    $strRFCDate =~ s/T/ /;
     if( !MICROSOFT_PLATFORM )
     {
       #Convert the DB date into RFC822 as per the RSS spec.
@@ -207,9 +208,23 @@ foreach my $File (@Files)
     chomp( $strRFCDate );
     chomp( $strChannelDate );
     
-    $strRow = "<title>$platform_id latest observations</title>\n<link>$platform_url</link>\n<description>Latest observation data</description>\n<pubDate>$strChannelDate</pubDate>\n<webMaster>$strEmail</webMaster>\n";
+    $strRow = "<title>$platform_id latest observations</title>\n<description>Latest observation data</description>\n<pubDate>$strChannelDate</pubDate>\n<webMaster>$strEmail</webMaster>\n";
     print( $GeoRSSFile  $strRow );
     
+    #We must have a valid link to add the tag.
+    if( length( $platform_url ) > 0 )
+    {
+      $strRow = "<link>$platform_url</link>\n";
+    }
+    else
+    {
+      #We MUST have a link for the georss, so if the obsKML file didn't have one, we dummy something up for now.
+      $strRow = "<link>http://$platform_id</link>\n";
+    }
+    print( $GeoRSSFile  $strRow );
+  
+    #######################################################################################################################################
+    # The <item> children begin here.
     $strRow = '<item>';
     print( $GeoRSSFile  $strRow."\n" );
     
@@ -219,8 +234,17 @@ foreach my $File (@Files)
     $strRow = "<pubDate>$strRFCDate</pubDate>";
     print( $GeoRSSFile  $strRow."\n" );
     
-    $strRow = "<link>$platform_url</link>";
-    print( $GeoRSSFile  $strRow."\n" );
+    #We must have a valid link to add the tag.
+    if( length( $platform_url ) > 0 )
+    {
+      $strRow = "<link>$platform_url</link>\n";
+    }
+    else
+    {
+      #We MUST have a link for the georss, so if the obsKML file didn't have one, we dummy something up for now.
+      $strRow = "<link>http://$platform_id</link>\n";
+    }
+    print( $GeoRSSFile  $strRow );
     
     $strRow = "<author>$strEmail</author>";
     print( $GeoRSSFile  $strRow."\n" );
@@ -237,7 +261,8 @@ foreach my $File (@Files)
       my $observed_property = $parameter.".".$uom;
       my $data_url          = sprintf("%s",$observation->find('dataURL'));
       #Create the row. we use html table formatting to help present the data in a more readable fashion. 
-      $strDesc = $strDesc."<tr><td>$parameter:</td><td>$measurement</td><td>$uom</td><td>Depth</td><td>$depth </td></tr>\n";
+      #$strDesc = $strDesc."<tr><td>$parameter:</td><td>$measurement</td><td>$uom</td><td>Depth</td><td>$depth </td></tr>\n";
+      $strDesc = $strDesc."<tr><td>$parameter:</td><td>$measurement</td><td>$uom</td></tr>\n";
     } #obs
     #We use the ![CDATA]] directive to tell teh parser not to mess with the contents so we can take advantage of the HTML table
     #formatting.
