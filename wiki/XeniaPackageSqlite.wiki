@@ -187,17 +187,17 @@ There is some original documentation regarding PostgreSQL replication at http://
 
 These scripts have been repurposed with sqlite in mind and the source is available at http://code.google.com/p/xenia/source/browse/trunk/sqlite/replication
 
-The upshot of the above development is that an hourly 'latest.sql' file is available at http://www.carocoops.org/obskml/feeds/xenia/archive/latest.sql (should be updated once an hour at a few minutes past the top of the hour) which should be downloadable by consuming/shadowing databases elsewhere(either sqlite or postgresql instances) and allow those databases to have a snapshot of hourly added table data which they can be used to populate those databases also.
+The upshot of the above development is that an hourly 'latest.sql' file is available at http://carocoops.org/seacoos_data/sqlite/archive/latest.sql (should be updated once an hour at a few minutes past the top of the hour) which should be downloadable by consuming/shadowing databases elsewhere(either sqlite or postgresql instances) and allow those databases to have a snapshot of hourly added table data which they can be used to populate those databases also.
 
 This directory also contains the hourly .csv and .sql files of the represented tables for the past 24 hours.
 
 The above feed is all of the hourly observation which we are currently aggregating.  It provides a convenience in that shadow databases are able to skip the redundant aggregation steps of pulling in and processing multiple data feeds(see XeniaFeeds ) to the database and only get the final processed table data resultant of the various data feeds.  Ideally it would be good to have a redundant source of this 'latest.sql' feed. 
 
-To get a secondary sqlite instance going, copy the latest 'starter' database at http://carocoops.org/seacoos_data/sqlite/latest.db and then hourly populate with the hourly refreshed 'latest.sql' at http://www.carocoops.org/obskml/feeds/xenia/archive/latest.sql 
+To get a secondary sqlite instance going, copy the latest 'starter' database at http://carocoops.org/seacoos_data/sqlite/latest.db and then hourly populate with the hourly refreshed 'latest.sql' at http://carocoops.org/seacoos_data/sqlite/archive/latest.sql 
 
 = [XeniaPackageSqlite#monthly_latest_db_replication_script monthly/latest db replication script (April 10, 2008)] =
 
-This [http://code.google.com/p/xenia/source/browse/trunk/sqlite/monthly_latest_copy source code] shows how I'm using my [http://www.carocoops.org/obskml/feeds/xenia/archive/latest.sql latest.sql] hourly feed to create/populate [http://carocoops.org/seacoos_data/sqlite monthly archive file db's and a latest db].  The amount total amount of observation data currently collected is around 20 MB per day, so a month file should be around 20 MB*30 days = 600 MB
+This [http://code.google.com/p/xenia/source/browse/trunk/sqlite/archive source code] shows how I'm using my [http://carocoops.org/seacoos_data/sqlite/archive/latest.sql latest.sql] hourly feed to create/populate [http://carocoops.org/seacoos_data/sqlite monthly archive file db's and a latest db].  The amount total amount of observation data currently collected is around 20 MB per day, so a month file should be around 20 MB*30 days = 600 MB
 
 ----
 = Scripts for database products/services =
