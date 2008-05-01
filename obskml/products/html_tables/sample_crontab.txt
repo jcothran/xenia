@@ -4,3 +4,11 @@
 16 * * * * cd /home/jcothran/nws/obs/jeremy ; perl platform_no_data.pl
 
 18 * * * * cd /home/jcothran/nws/obs/jeremy ; perl obskml_to_html_table.pl http://sverdrup.marine.usf.edu/ms_tmp/obskml/sverdrup_obskml_latest.kmz > /tmp/obs_out.log 2>&1
+
+#######
+
+#create shapefile for latest html tables
+18 * * * * rm /usr2/home/data/seacoos/html_tables/html_tables.dbf; /usr2/local/gdal/gdal-1.2.6/bin/ogr2ogr -f "ESRI Shapefile" /usr2/home/data/seacoos/html_tables /usr2/home/data/seacoos/html_tables/html_tables.csv >> /tmp/obskml.log 2>&1
+19 * * * * /usr2/local/gdal/gdal-1.2.6/bin/ogr2ogr -f "ESRI Shapefile" /usr2/home/data/seacoos/html_tables /usr2/home/data/seacoos/html_tables/html_tables.vrt >> /tmp/obskml.log 2>&1
+20 * * * * cd /usr2/home/data/seacoos/html_tables ; zip -m html_tables_shapefile.zip html_tables_shapefile.* >> /tmp/obskml.log 2>&1
+

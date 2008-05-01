@@ -1,4 +1,4 @@
-#obskml_to_html_table.pl
+#obskml_to_html_table_shapefile.pl
 
 use strict;
 #use warnings;
@@ -7,6 +7,8 @@ use XML::LibXML;
 
 =comment
 #usage notes
+
+Created this variation for use with Openlayers and GetFeatureInfo requests for substituting html snippets back to the browser on the shapefile query
 
 Watch the server path specific literals, everything gets unzipped and worked on in $target_dir so you'll want to set that to some temporary folder area that gets periodically flushed.
 
@@ -95,6 +97,9 @@ my $gmt_time_difference;
 if ($isdst) { $gmt_time_difference = -4; }
 else { $gmt_time_difference = -5; }
 
+open (FILE_HTML,">./html_tables.csv");
+print FILE_HTML "longitude,latitude,html\n";
+
 #process ObsKML files
 
 foreach my $file (@files) {
@@ -103,6 +108,8 @@ foreach my $file (@files) {
 my $xp = XML::LibXML->new->parse_file($file);
 
 #print `date`;
+
+my $previous_placemark_id;
 
 foreach my $placemark ($xp->findnodes('//Placemark')) {
 	my $placemark_id = $placemark->getAttribute('id');
@@ -113,6 +120,10 @@ foreach my $placemark ($xp->findnodes('//Placemark')) {
 	$placemark_id = lc($placemark_id) ; 
 
 	print "$placemark_id\n";	
+
+	#the following line makes sure we're only getting the top listed (hopefully most recent) obs and not others for each platform
+	if ($placemark_id eq $previous_placemark_id) { next; }
+	$previous_placemark_id = $placemark_id;
 
 	my ($operator,$platform,$package) = split(/\./,$placemark_id);
 	
@@ -160,14 +171,8 @@ foreach my $placemark ($xp->findnodes('//Placemark')) {
         $platform_desc = sprintf("%s", $platform_desc); 
 
 	my $html_content = '';
-        $html_content .= <<"END_OF_FILE";
-    <a name="$placemark_id"></a>
-    <h3>
-      <a href="$platform_url" target=new onclick="">$platform_desc</a>
-    </h3>
-    <table cellpadding="2" cellspacing="2">
-      <caption>$datetime_label</caption>
-END_OF_FILE
+	$html_content .= "$longitude,$latitude,<a name=\"$placemark_id\"></a><h3><a href=\"$platform_url\" target=new onclick=\"\">$platform_desc</a></h3><table cellpadding=\"2\" cellspacing=\"2\"><caption>$datetime_label</caption>";
+
 #  <caption>Surface conditions as of 10:00 AM EASTERN on 2/19</caption>
 	
 foreach my $observation ($placemark->findnodes('Metadata/obsList/obs')) {
@@ -195,25 +200,21 @@ foreach my $observation ($placemark->findnodes('Metadata/obsList/obs')) {
 	if (($date_test >= $date_yesterday) && ($date_test <= $date_now)) { 
 
 	#print "html: $obs_label $measure_label \n";
-        $html_content .= <<"END_OF_FILE";
-      <tr>
-        <th scope="row">$obs_label</th>
-        <td>$measure_label</td>
-      </tr>
-END_OF_FILE
+        $html_content .= "<tr><th scope=\"row\">$obs_label</th><td>$measure_label</td></tr>";
 	
 	}
 
 } #foreach obs
 
-$html_content .= "    </table>";
+$html_content .= "</table>";
+$html_content .= "\n";
 
-open (FILE_HTML,">./html_tables/$placemark_id.htm");
 print FILE_HTML $html_content;
-close (FILE_HTML);
 
 } #foreach Placemark
 } #foreach file
+
+close (FILE_HTML);
 
 exit 0;
 
