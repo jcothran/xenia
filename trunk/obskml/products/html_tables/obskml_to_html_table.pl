@@ -13,7 +13,9 @@ Watch the server path specific literals, everything gets unzipped and worked on 
 ############
 #config
 
-my $temp_dir = '/var/tmp/ms_tmp';
+my $temp_dir = '/tmp/ms_tmp';
+
+#note this script assumes the folder './html_tables' for writing files out
 
 #load graph info (contains needed unit conversions) 
 my $xp_graph = XML::LibXML->new->parse_file('./graph.xml');
@@ -204,7 +206,7 @@ END_OF_FILE
 
 $html_content .= "    </table>";
 
-open (FILE_HTML,">html_tables/$placemark_id.htm");
+open (FILE_HTML,">./html_tables/$placemark_id.htm");
 print FILE_HTML $html_content;
 close (FILE_HTML);
 
