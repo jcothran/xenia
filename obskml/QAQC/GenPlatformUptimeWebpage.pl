@@ -12,12 +12,16 @@ use Getopt::Long;
 #of shell commands.
 ##############################################################################################################################
 #Revisions
+#Rev: 1.2.0.0
+#Author: DWR 
+#Changes: Added BODY background color tag for style.
 #Rev: 1.1.0.0
 #Author: DWR
 #Changes: Added command line option to pass optional style sheet in.
 ##############################################################################################################################
 use constant MICROSOFT_PLATFORM => 0;
 
+=comment
 use constant
 {
   RGB_DEFAULT           => 'FFFFFF',
@@ -26,6 +30,7 @@ use constant
   RGB_UNDER70TH         => 'FF0000',
   RGB_MISSING           => '4169e1',
 };
+=cut
 
 my $PLATFORMCSVFILE  = "PlatformUptimePercentages.csv";
 my $PLATFORMHTMLFILE = "PlatformUptimePercentages.html";
@@ -66,14 +71,14 @@ else
 }
             
 print( $PlatformPercentHTMLFile "<html>\n" );
-print( $PlatformPercentHTMLFile  "<BODY>\n" );
+print( $PlatformPercentHTMLFile  "<BODY id=\"RGB_BODY_BG\" >\n" );
 
 print( $PlatformPercentHTMLFile "<link href=\"$strStyleSheet\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\" />\n" );
 my $iTestProfileNdx = 0;
 #my @ReportIntervals;
 
 print( $PlatformPercentHTMLFile "<table border=\"1\">\n" );
-print( $PlatformPercentHTMLFile "<CAPTION><H2>Sensor Reporting Percentage</H2></CAPTION>\n" );
+#print( $PlatformPercentHTMLFile "<CAPTION><H2>Sensor Reporting Percentage</H2></CAPTION>\n" );
 foreach my $strLine (<$PlatformPercentCSVFile>) 
 {
 	my @Columns = split(/,/,$strLine);
