@@ -130,7 +130,7 @@ You'll also need to install the perl DBI Sqlite package if not already installed
 
 = Source =
 
-The source SQL files to download for the Sqlite version of the Xenia schema are the [http://www.carocoops.org/obskml/microwfs/db_xenia_v2_sqlite.sql main schema] , [http://www.carocoops.org/obskml/microwfs/obs.sql observation data dictionary lookups] and [http://www.carocoops.org/obskml/microwfs/display_order.sql display order lookups]
+The source SQL files to download for the Sqlite version of the Xenia schema are the [http://www.carocoops.org/obskml/microwfs/db_xenia_v3_sqlite.sql main schema] , [http://www.carocoops.org/obskml/microwfs/obs.sql observation data dictionary lookups] and [http://www.carocoops.org/obskml/microwfs/display_order.sql display order lookups]
 
 To setup a xenia schema database(like one we can use in a the further example [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageSqlite#MicroWFS below]) do the following commands in the directory where you would like the database file to reside(assuming the SQL source files also reside local to the same directory).
 
