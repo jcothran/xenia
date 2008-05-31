@@ -10,7 +10,7 @@ This [http://code.google.com/p/xenia/source/browse/trunk/sqlite/monthly_latest_c
 
 = sqlite version 3 (May 31, 2008) =
 
-Simplified the sqlite schema by removing tables which have been unutilized thus far (quality_control, collection) and adding a 'metadata' table which provides a simple xml file lookup mechanism associated with various table row_id's.  On the pro-side this means that platform, sensor, qc, etc configs can change independently of the basic RDB schema, on the con side I'll be depending on a limited set of xml schema conventions and hardcoding to these various schemas(as opposed to hardtabling I guess).
+Simplified the sqlite schema [http://www.carocoops.org/obskml/microwfs/db_xenia_v3_sqlite.sql main schema] by removing tables which have been unutilized thus far (quality_control, collection) and adding a 'metadata' table which provides a simple xml file lookup mechanism associated with various table row_id's.  On the pro-side this means that platform, sensor, qc, etc configs can change independently of the basic RDB schema, on the con side I'll be depending on a limited set of xml schema conventions and hardcoding to these various schemas(as opposed to hardtabling I guess).
 
 The metadata table is just a simple file pointer to supporting descriptive xml files of certain useful xml schema conventions.  The same metadata_id could appear on several rows as a way of providing an archival trail of changes to the same type file using the fields 'begin_date' and 'end_date' to determine the effective date range and 'active' to determine the latest (and only) active metadata record.  By this way, the database reference integrity is preserved while allowing simpler files and their attributes to change over time.
 
