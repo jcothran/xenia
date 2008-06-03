@@ -66,6 +66,12 @@ http://www.sqlite.org/cvstrac/wiki?p=QueryPlans
 
 http://www.sqlite.org/optoverview.html
 
+http://www.sqlite.org/cvstrac/wiki?p=PerformanceTuning
+
+==== Virtual tables ====
+
+http://www.ddj.com/database/202802959
+
 ==== Perl DBI and Sqlite ====
 http://www.perl.com/pub/a/2003/09/03/perlcookbook.html
 
