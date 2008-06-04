@@ -1,3 +1,17 @@
+#######################################################################################################
+#Revisions
+#Rev: 1.1.0.0
+#Author: DWR
+#Date: 6/4/2008
+#Sub: KMLAddPlacemarkSimple
+#Changes: Added call to KMLAddDescription to add in the observation HTML table into a description tag.
+#         Also added the creation of the <name> tag to properly name our placemark.
+#Sub: KMLAddObsList
+#Changes: Added building the observation HTML table string while building the metadata.
+#Sub: KMLAddDescription
+#Changes: Added subroutine.
+#######################################################################################################
+
 package obsKMLSubRoutines; 
 
 use strict;
@@ -495,7 +509,12 @@ sub KMLAddPlacemarkSimple  #( $XMLDoc, $ParentTag, $strPlatformID, $Date, $rObsH
   # for the specific platform and date.
   my $rObsForPlatformDate = $hObsList->{PlatformID}{$strPlatformID}{TimeStamp}{$Date};
   my $strPlatformURL = $hObsList->{PlatformID}{$strPlatformID}{PlatformURL};
-  KMLAddObsList( $Doc, $Metadata, $strPlatformURL, $rObsForPlatformDate );
+  #DWR v1.1.0.0
+  #Added the string strDesc to be populated while building the obs list. This will contain an html table that Google Earth
+  #can display of the obs/values when we click on a point.
+  my $strDesc;
+  KMLAddObsList( $Doc, $Metadata, $strPlatformURL, $rObsForPlatformDate, \$strDesc );
+  #print( "KMLAddPlacemarkSimple::Desc: $strDesc\n");
 
   $Placemark->appendChild( $Metadata ); 
   
@@ -504,6 +523,9 @@ sub KMLAddPlacemarkSimple  #( $XMLDoc, $ParentTag, $strPlatformID, $Date, $rObsH
   
   KMLAddLatLong( $Doc, $Placemark, $Latitude, $Longitude );
   KMLAddTimeStamp( $Doc, $Placemark, $Date );
+  #DWR v1.1.0.0
+  KMLAddDescription( $Doc, $Placemark, $strDesc );
+  AddChild( $Doc, $Placemark, 'name', $strPlatformID );
   
   $Parent->appendChild( $Placemark );
   return(1);
@@ -537,6 +559,19 @@ sub KMLAddTimeStamp#( $Doc, $Parent, $strTimeStamp )
   $Parent->appendChild( $TimeStamp );
 
 }
+########################################################################################################
+# KMLAddDescription
+# Adds the timestamp into the placemark tag.
+########################################################################################################
+sub KMLAddDescription#( $Doc, $Parent, $strDesc )
+{
+  my ( $Doc, $Parent, $strDesc ) = @_;
+  
+  my $Desc = $Doc->createElement( 'description'); 
+  my $CDATADesc = $Doc->createCDATASection( $strDesc );
+  $Desc->appendChild( $CDATADesc );
+  $Parent->appendChild( $Desc );
+}
 
 ########################################################################################################
 #KMLAddObsList
@@ -549,15 +584,21 @@ sub KMLAddTimeStamp#( $Doc, $Parent, $strTimeStamp )
 #    date. The structure should be:
 #     $hObsList{elev}{obsType}{value}
 #     $hObsList{elev}{obsType}{uomType}
+# 5) $strDescription a reference to a string that will get populated with an HTML table displaying 
+#     the observations.
 ########################################################################################################
 
-sub KMLAddObsList #( $Doc, $Parent, $strPlatformURL, $hObsList )
+sub KMLAddObsList #( $Doc, $Parent, $strPlatformURL, $hObsList, \$strDescription )
 {
-  my( $Doc, $Parent, $strPlatformURL, $hObsList ) = @_;
+  my( $Doc, $Parent, $strPlatformURL, $hObsList, $strDescription ) = @_;  #DWR v1.1.0.0 Add description reference.
   
   #Create the obsList parent tag to place the obs under.
   my $ObsList = $Doc->createElement( 'obsList');
   AddChild( $Doc, $ObsList, 'platformURL', $strPlatformURL );
+  
+  #DWR v1.1.0.0
+  #Create the data for the descrition tag.
+  $$strDescription = '<table>';
   foreach my $Elev ( reverse sort { $a <=> $b } keys %{$hObsList->{elev}} )  
   {
     foreach my $ObsType ( sort keys %{$hObsList->{elev}{$Elev}{obsType}} )
@@ -581,8 +622,14 @@ sub KMLAddObsList #( $Doc, $Parent, $strPlatformURL, $hObsList )
       }
       #Add the child tag to the parent, ObsList.
       $ObsList->appendChild( $Obs );
+      #DWR v1.1.0.0
+      #Each obs has its own row with the observation type, value, and units of measurement.
+      $$strDescription = $$strDescription."<tr><td>$ObsType</td><td>$hObsList->{elev}{$Elev}{obsType}{$ObsType}{value}</td><td>$hObsList->{elev}{$Elev}{obsType}{$ObsType}{uomType}</td></tr>";
     }
   }
+  $$strDescription = $$strDescription.'</table>';
+  #print( "KMLAddObsList::Desc: $$strDescription\n");
+  
   # Add the ObsList tag with all attached obs to the parent.
   $Parent->appendChild( $ObsList );  
 }
