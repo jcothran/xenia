@@ -226,7 +226,7 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 	#and the program continuing, causing the program to halt(tried getting around this using an 'eval' block but still had problems)
 	#so just decided to write all these inserts to an output file and load them from there
 
-	print SQL_OUT $sql."\n";
+        print SQL_OUT "BEGIN;\n".$sql."\nCOMMIT;\n";
 
 	} #foreach $observation
 
