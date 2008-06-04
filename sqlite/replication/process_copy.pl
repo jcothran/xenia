@@ -33,8 +33,8 @@ my ($this_table,$these_columns,$filename_csv,$filename_sql);
 ##################################################################
 #'create' will create the source files from the source db within the specified time range
 if ($mode eq 'create') {
-        #replace content for 'latest.sql' file with placeholder line below
-        `echo "-- any sql statements will follow below here - may be no sql at times" > $dir_cpy$filename_latest`;
+	#replace content for 'latest.sql' file with placeholder line below
+	`echo "-- any sql statements will follow below here - may be no sql at times\nBEGIN;" > $dir_cpy$filename_latest`;
 
 foreach my $element ($xp_tables->findnodes('//tableList/table')) {
 
@@ -73,6 +73,9 @@ foreach my $element ($xp_tables->findnodes('//tableList/table')) {
 		system("cat $dir_cpy$filename_sql >> $dir_cpy$filename_latest");
 	}
 }
+
+#finish transaction
+`echo "COMMIT;\n" >> $dir_cpy$filename_latest`;
 
 }
 
