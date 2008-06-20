@@ -22,7 +22,7 @@ Sqlite allows the amount of memory utilized to be set via the 'PRAGMA default_ca
 
 This would provide a path for existing, future Seacoos netCDF feeds to be available via ObsKML/Xenia also.
 
-*Update* Dan Ramage completed this task documented at http://code.google.com/p/xenia/source/browse/trunk/obskml/products/georss
+*Update* Dan Ramage completed this task documented at http://code.google.com/p/xenia/source/browse/trunk/obskml/NetCDFToObsKML/scout
 
 = 3.a conversion script - CarolinasCoast aggregation to obskml =
 
