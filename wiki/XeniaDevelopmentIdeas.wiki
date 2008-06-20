@@ -18,9 +18,11 @@ jdbc -> geoserver http://jira.codehaus.org/browse/GEOT-241
 
 Sqlite allows the amount of memory utilized to be set via the 'PRAGMA default_cache_size' command.  Compare some 'typical' query response times with the db in memory (db size say around 200-500 MB) against a file(disk) based version. 
 
-= 3. conversion script - Seacoos netCDF to obskml =
+= 3. ~~conversion script - Seacoos netCDF to obskml~~ =
 
 This would provide a path for existing, future Seacoos netCDF feeds to be available via ObsKML/Xenia also.
+
+*Update* Dan Ramage completed this task documented at http://code.google.com/p/xenia/source/browse/trunk/obskml/products/georss
 
 = 3.a conversion script - CarolinasCoast aggregation to obskml =
 
@@ -40,7 +42,7 @@ The observation registry effort http://obsregistry.org utilizes a xml formatted 
 
 GeoRSS associates a description (perhaps changing with time like a weather feed) with an associated latitude, longitude and elevation.  Should be straightforward to convert hourly KML placemarks with table content into separate GeoRSS location feeds.
 
-Dan Ramage completed this documented at http://code.google.com/p/xenia/source/browse/trunk/obskml/products/georss
+*Update* Dan Ramage completed this task documented at http://code.google.com/p/xenia/source/browse/trunk/obskml/products/georss
 
 = 7. documentation of enabling an OGC SOS feed utilizing pySOS + Xenia (sqlite, postgres) =
 
