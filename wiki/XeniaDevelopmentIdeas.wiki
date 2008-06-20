@@ -36,9 +36,11 @@ This would allow the same observation labeling functionality given by the trigge
 
 The observation registry effort http://obsregistry.org utilizes a xml formatted feed/harvest.  A conversion script would help supply that feed type and support that effort.
 
-= 6. conversion script - obskml to georss =
+= 6. ~~conversion script - obskml to georss~~ =
 
 GeoRSS associates a description (perhaps changing with time like a weather feed) with an associated latitude, longitude and elevation.  Should be straightforward to convert hourly KML placemarks with table content into separate GeoRSS location feeds.
+
+Dan Ramage completed this documented at http://code.google.com/p/xenia/source/browse/trunk/obskml/products/georss
 
 = 7. documentation of enabling an OGC SOS feed utilizing pySOS + Xenia (sqlite, postgres) =
 
