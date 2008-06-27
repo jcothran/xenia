@@ -1,4 +1,12 @@
 #######################################################################################################
+#Revisions
+#Rev: 1.1.0.0
+#Author: DWR
+#Date: 6/27/2008
+#Sub: TabulatePlatformResults()
+#Changes: Added the sensor count out of expected interval value in the percentage output.
+#######################################################################################################
+#######################################################################################################
 #This script uses a Test Profile XML file to query each platform's sensors and do a percentage uptime
 # calculation. The default output is a csv file, broken down by test profiles as they are defined in the 
 # test profile xml file. Optionally(for use in a cron job, once a day) the results can populate a
@@ -21,7 +29,7 @@ use DBI;
 #Set to 0 if running in a Linux/Unix environment. This mostly deals with how file paths are handled, as well as a couple
 #of shell commands.
 
-use constant MICROSOFT_PLATFORM => 0;
+use constant MICROSOFT_PLATFORM => 1;
 
 #1 enables the various debug print statements, 0 turns them off.
 use constant USE_DEBUG_PRINTS   => 0;
@@ -541,7 +549,9 @@ sub TabulatePlatformResults #( $SensorFile, \%PlatformIDs, $iUpdateDatabase );
       {
         print( "WARNING: Platform: $strPlatformID Sensor: $Sensor has $iMaxCnt updates when the specified update interval is $iUpdateInterval.\n");
       }
-      $fSensorAvg = (( $fSensorAvg / $iDayCnt ) / $iUpdateInterval) * 100.0 ;
+      #DWR v1.1.0.0
+      my $fAvg = $fSensorAvg / $iDayCnt;
+      $fSensorAvg = ($fAvg / $iUpdateInterval) * 100.0 ;
       if( $iSensorCnt == 0 )
       {
         $strRow = $strRow.",$PlatformIDs->{Platform}{$strPlatformID}{URL},$strStartDate";        
@@ -551,7 +561,7 @@ sub TabulatePlatformResults #( $SensorFile, \%PlatformIDs, $iUpdateDatabase );
         $strRow = $strRow.',';
       } 
       my $strSensorAvg = sprintf( "%.2f",$fSensorAvg );
-      $strRow = $strRow."$strSensorAvg";
+      $strRow = $strRow."$strSensorAvg($fAvg/$iUpdateInterval)";
       if( $iUpdateDatabase )
       {
         AddRecordToDatabase( $DB, $strPlatformID, $Sensor, $strSensorAvg, $strStartDate );
