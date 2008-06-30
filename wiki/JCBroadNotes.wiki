@@ -14,7 +14,7 @@ NWS Marine Weather Portal (*beta/experimental*) http://129.252.37.86/wx/
 
 ----
 
-zope/plone(python based) http://en.wikipedia.org/wiki/Plone_(content_management_system)
+zope/plone(CMS (Content Management System) python based) http://en.wikipedia.org/wiki/Plone_(content_management_system)
 
 google project hosting(subversion,wiki,issue ticket) http://www.oss-watch.ac.uk/resources/googlecode.xml
 
