@@ -40,9 +40,7 @@ RDB/Xenia approach in regards to relatively sparse but disorganized in-situ obs
 
 secoora netcdf+qc(high-level,low-level flags, qartod)
 
-obskml, dsi(dynamic sensor inventory) - data scout
-
-xenia sqlite db + obskml + dsi files
+data scout: obskml(data) + dsi(dynamic sensor inventory metadata) -> xenia sqlite db
 
 	* remote sensing images
 	* hourly model shapefiles?
