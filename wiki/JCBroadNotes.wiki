@@ -38,9 +38,9 @@ datafile format specific - png,netCDF,etc
 
 RDB/Xenia approach in regards to relatively sparse but disorganized in-situ obs
 
-secoora netcdf+qc(high-level,low-level flags, qartod)
+secoora netcdf+qc(high-level,low-level flags, qartod) <-> obskml(data) + dsi(dynamic sensor inventory metadata
 
-data scout: obskml(data) + dsi(dynamic sensor inventory metadata) -> xenia sqlite db
+data scout: obskml + dsi -> xenia sqlite db
 
 	* remote sensing images
 	* hourly model shapefiles?
