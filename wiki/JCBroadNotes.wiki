@@ -1,4 +1,3 @@
-
 Carocoops http://carocoops.org
 
 Secoora maps http://secoora.org/maps
@@ -26,7 +25,7 @@ javascript (openlayers/ajax, simple animation)
 file RDB(Xenia/sqlite), XML approach to organization, metadata
 overlaying
 datafile format specific - png,netCDF,etc
-
+  
 RDB/Xenia approach in regards to relatively sparse but disorganized in-situ obs
 
 secoora netcdf+qc(high-level,low-level flags, qartod)
@@ -55,11 +54,11 @@ openlayers
 	permalink
 	
 data feeds/formats	
-	CSV,XML(GeoRSS,ObsKML,styled KML),shapefile,sqlite
+	* CSV,XML(GeoRSS,ObsKML,styled KML),shapefile,sqlite
 	
-	WMS(map image overlays)/WFS(feature info XML)
-	OGC SOS, DIF (feature info XML)
-	OPeNDAP(netCDF,RDB)
+	* WMS(map image overlays)/WFS(feature info XML)
+	* OGC SOS, DIF (feature info XML)
+	* OPeNDAP(netCDF,RDB)
 
 web throttling
 google analytics, custom log analysis
@@ -72,16 +71,16 @@ community engagement,third-party re-use/development
 data buffet, data/product format/service catalog, mix-and-match
 
 desktop tools
-	Google Earth/Maps,etc(KML,ObsKML,GeoRSS)
-	MapWindows(shapefile/GIS)
-	ncBrowse(netCDF)
-	ODV(ctd/csv)
-	Excel(CSV)
+	* Google Earth/Maps,etc(KML,ObsKML,GeoRSS)
+	* MapWindows(shapefile/GIS)
+	* ncBrowse(netCDF)
+	* ODV(ctd/csv)
+	* Excel(CSV)
 
 ----
 
 obsregistry
-	additional discovery - fgdc,gcmd,etc
+	* additional discovery - fgdc,gcmd,etc
 	
 IOOS/DIF
 
@@ -101,9 +100,7 @@ zope/plone, trac, web stats -> webhosting(hostmonster.com), google code/analytic
 
 ----
 
-format+convention vs service/software
-ROA vs SOA
-report vs query
-real-time vs model/archive
-
-  * Automatic links to other wiki pages
+  * format+convention vs service/software
+  * ROA vs SOA
+  * report vs query
+  * real-time vs model/archive
