@@ -1,7 +1,9 @@
 Carocoops http://carocoops.org
 
 Secoora maps http://secoora.org/maps
+
 Secoora maps (openlayers) http://secoora.org/maps/dynamic
+
 Secoora files and feeds http://secoora.org/data
 
 CarolinasRCOOS (beta/experimental) http://rcoos.org/carolinasrcoosrev2/
@@ -19,13 +21,19 @@ web hosting - hostmonster.com - perl,php,postgres
 
 
 perl (DBI,LibXML)
+
 php (webpages only)
+
 javascript (openlayers/ajax, simple animation)
 
+
 file RDB(Xenia/sqlite), XML approach to organization, metadata
+
 overlaying
+
 datafile format specific - png,netCDF,etc
   
+
 RDB/Xenia approach in regards to relatively sparse but disorganized in-situ obs
 
 secoora netcdf+qc(high-level,low-level flags, qartod)
@@ -34,12 +42,12 @@ obskml, dsi - scout
 
 xenia sqlite db + dsi files
 
-	*remote sensing images
-	*hourly model shapefiles?
+	* remote sensing images
+	* hourly model shapefiles?
 	
-	*other images
-	*ogr/sql - shapefiles, xenia db/html, 
-	
+	* other images
+	* ogr/sql - shapefiles, xenia db/html, 
+	 
 
 mapserver (wms/gfi,wfs) , ogr
 
@@ -50,8 +58,8 @@ instrument/event metrics/notification
 ----
 
 openlayers
-	exposed - interface controls, map layers 
-	permalink
+	* exposed - interface controls, map layers 
+	* permalink
 	
 data feeds/formats	
 	* CSV,XML(GeoRSS,ObsKML,styled KML),shapefile,sqlite
@@ -61,8 +69,12 @@ data feeds/formats
 	* OPeNDAP(netCDF,RDB)
 
 web throttling
+
 google analytics, custom log analysis
+
 firebug - client browser performance analysis, layer optimization
+
+
 
 personnel,hardware,software redundancy
 
