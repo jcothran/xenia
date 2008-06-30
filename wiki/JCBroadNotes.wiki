@@ -1,0 +1,109 @@
+
+Carocoops http://carocoops.org
+
+Secoora maps http://secoora.org/maps
+Secoora maps (openlayers) http://secoora.org/maps/dynamic
+Secoora files and feeds http://secoora.org/data
+
+CarolinasRCOOS (beta/experimental) http://rcoos.org/carolinasrcoosrev2/
+
+NWS Marine Weather Portal (beta/experimental) http://129.252.37.86/wx/
+
+----
+
+zope/plone
+
+google project hosting(subversion,wiki,issue ticket)
+
+web hosting - hostmonster.com - perl,php,postgres
+
+
+
+perl (DBI,LibXML)
+php (webpages only)
+javascript (openlayers/ajax, simple animation)
+
+file RDB(Xenia/sqlite), XML approach to organization, metadata
+overlaying
+datafile format specific - png,netCDF,etc
+
+RDB/Xenia approach in regards to relatively sparse but disorganized in-situ obs
+
+secoora netcdf+qc(high-level,low-level flags, qartod)
+
+obskml, dsi - scout
+
+xenia sqlite db + dsi files
+
+	*remote sensing images
+	*hourly model shapefiles?
+	
+	*other images
+	*ogr/sql - shapefiles, xenia db/html, 
+	
+
+mapserver (wms/gfi,wfs) , ogr
+
+gnuplot (time series, vector)
+
+instrument/event metrics/notification
+
+----
+
+openlayers
+	exposed - interface controls, map layers 
+	permalink
+	
+data feeds/formats	
+	CSV,XML(GeoRSS,ObsKML,styled KML),shapefile,sqlite
+	
+	WMS(map image overlays)/WFS(feature info XML)
+	OGC SOS, DIF (feature info XML)
+	OPeNDAP(netCDF,RDB)
+
+web throttling
+google analytics, custom log analysis
+firebug - client browser performance analysis, layer optimization
+
+personnel,hardware,software redundancy
+
+community engagement,third-party re-use/development
+
+data buffet, data/product format/service catalog, mix-and-match
+
+desktop tools
+	Google Earth/Maps,etc(KML,ObsKML,GeoRSS)
+	MapWindows(shapefile/GIS)
+	ncBrowse(netCDF)
+	ODV(ctd/csv)
+	Excel(CSV)
+
+----
+
+obsregistry
+	additional discovery - fgdc,gcmd,etc
+	
+IOOS/DIF
+
+OPeNDAP ?
+
+== Devolution - technology changes, lessons learned ==
+
+php/mapserver -> openlayers/javascript/ajax
+
+RDB - obs hard-coded/table approach -> xenia,obskml,dsi (obs non-specific)
+
+RDB quickscat, layers -> ogr/sql+shapefiles
+
+postgresql+postgis -> sqlite+ogr, sqlitegeo?
+
+zope/plone, trac, web stats -> webhosting(hostmonster.com), google code/analytics ?
+
+----
+
+format+convention vs service/software
+ROA vs SOA
+report vs query
+real-time vs model/archive
+
+  * Automatic links to other wiki pages
