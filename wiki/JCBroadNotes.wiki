@@ -22,21 +22,17 @@ web hosting - http://hostmonster.com - perl,php,postgres
 
 
 
-perl (packages 'DBI' for RDB interaction,'XML::LibXML' for XML interaction)
+perl (packages 'DBI' for RDB(Relational DataBase) interaction,'XML::LibXML' for XML interaction)
 
 php (webpages only)
 
 javascript (openlayers/ajax, simple animation)
 
 
-file RDB(Relational DataBase)(Xenia/sqlite), XML approach to organization, metadata
+RDB/Xenia/sqlite approach in regards to relatively sparse but disorganized in-situ obs
 
-overlaying
+XML approach to organization, metadata referencing data file format specific - png,netCDF,etc
 
-datafile format specific - png,netCDF,etc
-  
-
-RDB/Xenia approach in regards to relatively sparse but disorganized in-situ obs
 
 secoora netcdf+qc(high-level,low-level flags, qartod) <-> obskml(data) + dsi(dynamic sensor inventory metadata
 
