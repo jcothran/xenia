@@ -40,8 +40,8 @@ DSI(Dynamic Sensor Inventory) - associated organizatiom/platform/sensor/obs meta
 
 secoora netcdf+qc(high-level,low-level flags, qartod) <-> obskml(data) + dsi(metadata)
 
-  * http://trac.secoora.org/datamgmt/browser/docs/cdl/trunk/seacoos-netcdf-standard.doc
-  * http://trac.secoora.org/datamgmt/browser/docs/sprints/july2006
+  * base http://trac.secoora.org/datamgmt/browser/docs/cdl/trunk/seacoos-netcdf-standard.doc
+  * qc http://trac.secoora.org/datamgmt/browser/docs/sprints/july2006
 
 data scout: obskml + dsi -> xenia sqlite db
 
