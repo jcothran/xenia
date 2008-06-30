@@ -14,15 +14,15 @@ NWS Marine Weather Portal (*beta/experimental*) http://129.252.37.86/wx/
 
 ----
 
-zope/plone
+zope/plone(python based) http://en.wikipedia.org/wiki/Plone_(content_management_system)
 
-google project hosting(subversion,wiki,issue ticket)
+google project hosting(subversion,wiki,issue ticket) http://www.oss-watch.ac.uk/resources/googlecode.xml
 
 web hosting - http://hostmonster.com - perl,php,postgres
 
 
 
-perl (DBI,LibXML)
+perl (packages 'DBI' for RDB interaction,'XML::LibXML' for XML interaction)
 
 php (webpages only)
 
@@ -40,9 +40,9 @@ RDB/Xenia approach in regards to relatively sparse but disorganized in-situ obs
 
 secoora netcdf+qc(high-level,low-level flags, qartod)
 
-obskml, dsi - scout
+obskml, dsi(dynamic sensor inventory) - data scout
 
-xenia sqlite db + dsi files
+xenia sqlite db + obskml + dsi files
 
 	* remote sensing images
 	* hourly model shapefiles?
@@ -59,11 +59,11 @@ instrument/event metrics/notification
 
 ----
 
-openlayers
+openlayers http://openlayers.org
 	* exposed - interface controls, map layers 
 	* permalink
 	
-data feeds/formats	
+data feeds/formats http://secoora.org/data
 	* CSV,XML(GeoRSS,ObsKML,styled KML),shapefile,sqlite
 	
 	* WMS(map image overlays)/WFS(feature info XML)
