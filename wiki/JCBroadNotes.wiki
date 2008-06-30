@@ -30,11 +30,15 @@ javascript (openlayers/ajax, simple animation)
 
 
 RDB/Xenia/sqlite approach in regards to relatively sparse but disorganized in-situ obs
+http://code.google.com/p/xenia/wiki/XeniaPackageSqlite
+
+XML approach to sharing low-volume in-situ hourly data via ObsKML http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML
 
 XML approach to organization, metadata referencing data file format specific - png,netCDF,etc
 
+DSI(Dynamic Sensor Inventory) - associated organizatiom/platform/sensor/obs metadata file - under development
 
-secoora netcdf+qc(high-level,low-level flags, qartod) <-> obskml(data) + dsi(dynamic sensor inventory metadata
+secoora netcdf+qc(high-level,low-level flags, qartod) <-> obskml(data) + dsi(metadata)
 
 data scout: obskml + dsi -> xenia sqlite db
 
@@ -46,10 +50,11 @@ data scout: obskml + dsi -> xenia sqlite db
 	 
 
 mapserver (wms/gfi,wfs) , ogr
+http://code.google.com/p/rcoos/wiki/MapserverNotes
 
-gnuplot (time series, vector)
-
-instrument/event metrics/notification
+http://code.google.com/p/xenia/wiki/XeniaProducts
+  * gnuplot (time series, vector)
+  * instrument/event metrics/notification
 
 ----
 
@@ -80,15 +85,15 @@ community engagement,third-party re-use/development
 data buffet, data/product format/service catalog, mix-and-match
 
 desktop tools
-	* Google Earth/Maps,etc(KML,ObsKML,GeoRSS)
-	* MapWindows(shapefile/GIS)
-	* ncBrowse(netCDF)
-	* ODV(ctd/csv)
+	* Google Earth/Maps,etc(KML,ObsKML,GeoRSS) http://earth.google.com
+	* MapWindows(shapefile/GIS) http://www.mapwindow.com
+	* ncBrowse(netCDF) http://www.epic.noaa.gov/java/ncBrowse
+	* ODV(ctd/csv) http://odv.awi.de
 	* Excel(CSV)
 
 ----
 
-obsregistry
+obsregistry http://obsregistry.org
 	* additional discovery - fgdc,gcmd,etc
 	
 IOOS/DIF
