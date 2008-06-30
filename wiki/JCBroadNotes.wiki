@@ -16,7 +16,7 @@ zope/plone
 
 google project hosting(subversion,wiki,issue ticket)
 
-web hosting - hostmonster.com - perl,php,postgres
+web hosting - http://hostmonster.com - perl,php,postgres
 
 
 
@@ -27,7 +27,7 @@ php (webpages only)
 javascript (openlayers/ajax, simple animation)
 
 
-file RDB(Xenia/sqlite), XML approach to organization, metadata
+file RDB(Relational DataBase)(Xenia/sqlite), XML approach to organization, metadata
 
 overlaying
 
@@ -72,8 +72,9 @@ web throttling
 
 google analytics, custom log analysis
 
-firebug - client browser performance analysis, layer optimization
+firebug - firefox client browser performance analysis, layer optimization
 
+jmeter - simulated load testing
 
 
 personnel,hardware,software redundancy
@@ -98,20 +99,21 @@ IOOS/DIF
 
 OPeNDAP ?
 
+----
 == Devolution - technology changes, lessons learned ==
 
-php/mapserver -> openlayers/javascript/ajax
+web GIS interface: php/mapserver -> openlayers/javascript/ajax
 
-RDB - obs hard-coded/table approach -> xenia,obskml,dsi (obs non-specific)
+latest in-situ obs: RDB - obs hard-coded/table approach -> xenia,obskml,dsi (obs non-specific)
 
-RDB quickscat, layers -> ogr/sql+shapefiles
+hourly gridded data: RDB quickscat, layers -> ogr/sql+shapefiles
 
-postgresql+postgis -> sqlite+ogr, sqlitegeo?
+full RDB to file-based RDB: postgresql+postgis -> sqlite+ogr, sqlitegeo?
 
-zope/plone, trac, web stats -> webhosting(hostmonster.com), google code/analytics ?
+hosted web/productivity services: zope/plone, trac, web stats -> webhosting(hostmonster.com), google code/analytics ?
 
 ----
-
+== General discussions ==
   * format+convention vs service/software
   * ROA vs SOA
   * report vs query
