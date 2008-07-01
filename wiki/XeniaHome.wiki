@@ -73,7 +73,7 @@ Would like to facilitate any additional ideas, discussion or code developments/b
 This is an earlier documentation [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaDesign webpage] to list some Xenia design considerations, benchmarks, and tips as related to the relational database schema.
 
 ----
-= Related tools = 
+= Related links = 
 
 http://mapserver.gis.umn.edu
 
@@ -93,6 +93,8 @@ http://sqlite.org
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
 
+http://code.google.com/p/xenia/wiki/JCBroadNotes
+
 ----
 = Related efforts = 
 
@@ -106,6 +108,6 @@ http://oostethys.org
 
 http://weather.gov/carolinascoast
 
-http://seacoos.org/Data%20Access%20and%20Mapping/cached-images
+http://secoora.org/maps http://secoora.org/data
 
 http://trac.secoora.org
