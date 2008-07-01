@@ -29,7 +29,7 @@ php (webpages only)
 javascript (openlayers/ajax, simple animation)
 
 
-RDB/Xenia/sqlite approach in regards to relatively sparse but disorganized in-situ obs
+RDB/Xenia/sqlite approach in regards to relatively sparse but disorganized in-situ obs http://code.google.com/p/xenia/wiki/XeniaHome 
 http://code.google.com/p/xenia/wiki/XeniaPackageSqlite
 
 XML approach to sharing low-volume in-situ hourly data via ObsKML http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML
