@@ -55,15 +55,15 @@ data scout: obskml + dsi -> xenia sqlite db
 mapserver (wms/gfi,wfs) , ogr
 http://code.google.com/p/rcoos/wiki/MapserverNotes
 
-  * XeniaProducts
-    * gnuplot (time series, vector)
-    * instrument/event metrics/notification
-      * Percentage uptime
-        * http://carocoops.org/~dramage_prod/secoora/PlatformUptimePercentages.html
-        * http://trac.secoora.org/datamgmt/wiki/PercentageUptime
-      * Range tests
-        * http://carocoops.org/~dramage_prod/seacoos/test_results.html
-        * http://trac.secoora.org/datamgmt/wiki/RangeTests
+XeniaProducts
+  * gnuplot (time series, vector)
+  * instrument/event metrics/notification
+    * Percentage uptime
+      * http://carocoops.org/~dramage_prod/secoora/PlatformUptimePercentages.html
+      * http://trac.secoora.org/datamgmt/wiki/PercentageUptime
+    * Range tests
+      * http://carocoops.org/~dramage_prod/seacoos/test_results.html
+      * http://trac.secoora.org/datamgmt/wiki/RangeTests
 
 ----
 
