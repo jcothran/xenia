@@ -78,7 +78,9 @@ data feeds/formats http://secoora.org/data
 	* OGC SOS, DIF (feature info XML)
 	* OPeNDAP(netCDF,RDB)
 
-web throttling
+web/apache throttling (mod_cband ?)
+  * http://www.uno-code.com/?q=node/64
+  * http://www.montanalinux.org/mod_cband.html
 
 google analytics, custom log analysis
 
