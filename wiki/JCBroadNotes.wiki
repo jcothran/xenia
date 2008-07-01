@@ -45,11 +45,10 @@ secoora netcdf+qc(high-level,low-level flags, qartod) <-> obskml(data) + dsi(met
 
 data scout: obskml + dsi -> xenia sqlite db
 
-	* remote sensing images
-	* hourly model shapefiles?
-	
-	* other images
-	* ogr/sql - shapefiles, xenia db/html, 
+	* raster images(png,etc) - remote sensing, etc
+	* shapefiles - hourly model?, etc
+
+	* ogr/sql queryable - shapefiles, sqlite xenia db/html 
 	 
 
 mapserver (wms/gfi,wfs) , ogr
