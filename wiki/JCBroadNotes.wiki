@@ -38,6 +38,8 @@ XML approach to organization, metadata referencing data file format specific - p
 
 DSI(Dynamic Sensor Inventory) - associated organizatiom/platform/sensor/obs metadata file - under development
 
+see schemas for ObsKML,obs/sensor vocabs,DSI at http://trac.secoora.org/datamgmt/browser/docs/usc/docs/schemas
+
 secoora netcdf+qc(high-level,low-level flags, qartod) <-> obskml(data) + dsi(metadata)
 
   * base http://trac.secoora.org/datamgmt/browser/docs/cdl/trunk/seacoos-netcdf-standard.doc
