@@ -132,7 +132,7 @@ full RDB to file-based RDB: postgresql+postgis -> sqlite+ogr, sqlitegeo?
 hosted web/productivity services: zope/plone, trac, web stats -> webhosting(hostmonster.com), google code/analytics ?
 
 ----
-== General discussions ==
+== General technical discussions ==
   * format+convention vs service/software
   * ROA vs SOA
   * report vs query
