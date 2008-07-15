@@ -118,10 +118,10 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 	my $date_converted_1 = `date --date='$m_date +0000' +%s` + $timezone_sec;
 	#originally resolving seconds, but dropping second resolution due to duplicates(:00, :40) which are probably netcdf truncating related 
 	if ($time_seconds_resolution_flag == 1) {
-		$m_date = `date -u -d '1970-01-01 $date_converted_1 seconds' +"%Y-%m-%dT%H:%M:%S-00"`;
+		$m_date = `date -u -d '1970-01-01 $date_converted_1 seconds' +"%Y-%m-%dT%H:%M:%S"`;
 	}
 	else {
-		$m_date = `date -u -d '1970-01-01 $date_converted_1 seconds' +"%Y-%m-%dT%H:%M:00-00"`;
+		$m_date = `date -u -d '1970-01-01 $date_converted_1 seconds' +"%Y-%m-%dT%H:%M:00"`;
 	}
 
 	chomp($m_date);
@@ -226,7 +226,7 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 	#and the program continuing, causing the program to halt(tried getting around this using an 'eval' block but still had problems)
 	#so just decided to write all these inserts to an output file and load them from there
 
-        print SQL_OUT "BEGIN;\n".$sql."\nCOMMIT;\n";
+	print SQL_OUT $sql."\n";
 
 	} #foreach $observation
 
