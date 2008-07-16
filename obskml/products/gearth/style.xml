@@ -7,6 +7,14 @@
 	<range_high>100</range_high>
 	<range_low>40</range_low>
 </style>
+<style id="oxygen_concentration.mg_L-1">
+	<range_high>9</range_high>
+	<range_low>3</range_low>
+</style>
+<style id="oxygen_concentration.percent_saturation">
+	<range_high>100</range_high>
+	<range_low>40</range_low>
+</style>
 <style id="water_temperature.celsius">
 	<range_high>35</range_high>
 	<range_low>5</range_low>
@@ -16,6 +24,10 @@
 	<range_low>0</range_low>
 </style>
 <style id="water_level.m(MLLW)">
+	<range_high>2</range_high>
+	<range_low>-2</range_low>
+</style>
+<style id="water_level.m">
 	<range_high>2</range_high>
 	<range_low>-2</range_low>
 </style>
@@ -47,15 +59,28 @@
 	<range_high>1</range_high>
 	<range_low>0</range_low>
 </style>
+<style id="current_speed.cm_s-1">
+	<range_high>100</range_high>
+	<range_low>0</range_low>
+</style>
 <style id="current_to_direction.degrees_true">
 	<range_high>360</range_high>
 	<range_low>0</range_low>
 </style>
+<style id="drifter_speed.m_s-1">
+	<range_high>4</range_high>
+	<range_low>0</range_low>
+</style>
+
 <style id="significant_wave_height.m">
 	<range_high>3</range_high>
 	<range_low>0</range_low>
 </style>
 <style id="significant_wave_from_direction.degrees_true">
+	<range_high>360</range_high>
+	<range_low>0</range_low>
+</style>
+<style id="mean_wave_from_direction.degrees_true">
 	<range_high>360</range_high>
 	<range_low>0</range_low>
 </style>
@@ -71,6 +96,11 @@
 	<range_high>15</range_high>
 	<range_low>0</range_low>
 </style>
+<style id="average_wave_period.s">
+	<range_high>15</range_high>
+	<range_low>0</range_low>
+</style>
+
 <style id="swell_height.m">
 	<range_high>3</range_high>
 	<range_low>0</range_low>
@@ -83,11 +113,29 @@
 	<range_high>360</range_high>
 	<range_low>0</range_low>
 </style>
+
+<style id="wind_wave_height.m">
+        <range_high>3</range_high>
+        <range_low>0</range_low>
+</style>
+<style id="wind_wave_period.s">
+        <range_high>15</range_high>
+        <range_low>0</range_low>
+</style>
+<style id="wind_wave_from_direction.degrees_true">
+        <range_high>360</range_high>
+        <range_low>0</range_low>
+</style>
+
 <style id="air_temperature.celsius">
 	<range_high>40</range_high>
 	<range_low>-10</range_low>
 </style>
 <style id="air_pressure.millibar">
+	<range_high>1050</range_high>
+	<range_low>990</range_low>
+</style>
+<style id="air_pressure.mb">
 	<range_high>1050</range_high>
 	<range_low>990</range_low>
 </style>
