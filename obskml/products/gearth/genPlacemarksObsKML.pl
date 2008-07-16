@@ -3,6 +3,10 @@ use strict;
 
 ##config
 
+my $temp_dir = '/tmp/ms_tmp';
+my $http_return = 'http://nautilus.baruch.sc.edu/ms_tmp/gearth_';
+my $additional_links = '<a href=\"http://secoora.org\">http://secoora.org</a><br />';
+
 ##
 
 =comment
@@ -41,7 +45,7 @@ if ($count < 1) {
 
 #create temp working directory
 my $random_value = int(rand(10000000));
-my $target_dir = "/tmp/ms_tmp/gearth_$random_value";
+my $target_dir = "$temp_dir/gearth_$random_value";
 `mkdir $target_dir`;
 #print $target_dir."\n";
 
@@ -260,7 +264,7 @@ foreach my $datetime ( sort keys %{$rHoH->{$operator}{$local_platform}} ) {
 
      			$desc_header .= "Related links: ";
         		$desc_header .= "<a href=\"http://carocoops.org/twiki_dmcc/bin/view/Main/ObsKML\">ObsKML</a> ";
-        		$desc_header .= "<a href=\"http://secoora.org\">http://secoora.org</a><br /><br />";
+        		$desc_header .= "$additional_links<br />";
 
                 	$data_url = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'data_url'};
 			if ($data_url) {
@@ -411,7 +415,7 @@ foreach my $datetime ( sort keys %{$rHoH->{$operator}{$local_platform}} ) {
 
                         $desc_header .= "Related links: ";
                         $desc_header .= "<a href=\"http://carocoops.org/twiki_dmcc/bin/view/Main/ObsKML\">ObsKML</a> ";
-                        $desc_header .= "<a href=\"http://secoora.org\">http://secoora.org</a><br /><br />";
+                        $desc_header .= "$additional_links<br />";
 
                 	$data_url = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'data_url'};
 			if ($data_url) {
@@ -503,7 +507,7 @@ close (FILE_KML);
 
 `cd $target_dir; zip latest_placemarks.kmz latest_placemarks.kml`;
 
-my $kml_url = 'http://nautilus.baruch.sc.edu/ms_tmp/gearth_'.$random_value.'/latest_placemarks.kmz';
+my $kml_url = $http_return.$random_value.'/latest_placemarks.kmz';
 print $kml_url;
 
 `rm -f $target_dir/*.kml ; rm -f $target_dir/*.xml`;
