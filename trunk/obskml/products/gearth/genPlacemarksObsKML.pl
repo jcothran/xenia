@@ -1,6 +1,10 @@
 use strict;
 #use warnings;
 
+##config
+
+##
+
 =comment
 #usage notes
 
@@ -12,19 +16,20 @@ style.xml provides the default observation range limits to be used and can also 
 
 Also there is a literal http address returned to the calling php page which will need to be changed accordingly. 
 
+#see line time filter below to control acceptable date range used in creating output file
+#my $date_yesterday = `date +%Y%m%d%H%M --date='12 hours ago'`;
+
 =cut
-
-##config
-
-my $temp_dir = '/tmp/ms_tmp';
-my $http_return = 'http://nautilus.baruch.sc.edu/ms_tmp/gearth_';
-
-##
 
 use LWP::Simple;
 use XML::LibXML;
 
-my ($zip_obskml_url, $style_url) = @ARGV;
+my ($zip_obskml_url, $style_url, $feed_name) = @ARGV;
+if ($feed_name) { $feed_name = $feed_name.'_'; }
+
+open (LOG_FILE,">$feed_name\obskml_style.log");
+open (DEBUG,">./debug_genPlacemarks.txt");
+
 my $count = @ARGV;
 if ($count < 1) {
  print "usage: zip_obskml_url style_url\n";
@@ -36,7 +41,7 @@ if ($count < 1) {
 
 #create temp working directory
 my $random_value = int(rand(10000000));
-my $target_dir = "$temp_dir/gearth_$random_value";
+my $target_dir = "/tmp/ms_tmp/gearth_$random_value";
 `mkdir $target_dir`;
 #print $target_dir."\n";
 
@@ -53,7 +58,7 @@ die "Couldn't get $zip_obskml_url" unless defined $content;
 `cd $target_dir; unzip obskml.xml.zip`;
 
 #style_url
-if (!($style_url)) { `cp /var/www/html/obskml/scripts/style.xml $target_dir`; }
+if (!($style_url) || ($style_url eq 'null')) { `cp /var/www/html/obskml/scripts/style.xml $target_dir`; }
 else {
 my $style_filepath = "$target_dir/style.xml";
 my $content = getstore($style_url, $style_filepath);
@@ -66,6 +71,8 @@ die "Couldn't get $style_url" unless defined $content;
 #note that the below hashing convention assumes each element contains only one type of child element except at the terminals
 my %HoH = ();
 my $rHoH = \%HoH;
+
+my %HoH_stats = ();
 
 #below hash used later for sorting by ObsTypes
 my %ObsTypes = ();
@@ -81,9 +88,10 @@ my @files = split(/\n/,$filelist);
 #print @files;
 #exit 0;
 
-my $date_now = `date +%Y%m%d`;
+my $date_now = `date +%Y%m%d%H%M --date='+12 hours'`;
 chomp($date_now);
-my $date_yesterday = `date +%Y%m%d --date='1 day ago'`;
+#the below seems to catch 2+4(EDT) = 6 hours
+my $date_yesterday = `date +%Y%m%d%H%M --date='-12 hours'`;
 chomp($date_yesterday);
 
 foreach my $file (@files) {
@@ -128,10 +136,20 @@ foreach my $observation ($placemark->findnodes('Metadata/obsList/obs')) {
 
 	#print "$operator:$local_platform:$obs_property:$datetime:$longitude:$latitude:$measurement\n";
 
-	my $date_test = substr($datetime,0,4).substr($datetime,5,2).substr($datetime,8,2);
+	my $date_test = substr($datetime,0,4).substr($datetime,5,2).substr($datetime,8,2).substr($datetime,11,2).substr($datetime,14,2);
+	#print "date_test: $date_test \n";
 
 	#don't share erroneous 'future' observations greater than today's date or obs older than yesterday
 	if (($date_test >= $date_yesterday) && ($date_test <= $date_now)) { 
+	print DEBUG "date pass: $date_yesterday $date_now $date_test \n"; 
+
+	#for logging purposes
+        #only want to increment count for just latest measurements, not earlier
+	#tried $HoH_stats{$operator}{$placemark_id}{$obs_property} but hash complains/fails for more than one unknown level reference ??
+	if (!($HoH_stats{$operator}{$placemark_id.$obs_property})) {
+		$HoH_stats{$operator}{$placemark_id.$obs_property} = 1;
+		$HoH_stats{ $operator }{ $obs_property }{ obs_count }++;
+        }
 
 	#if ($operator eq 'nerrs') { print "$date_test $date_now $date_yesterday\n"; }
 	$HoH{ $operator }{ $local_platform }{ $datetime }{ $obs_property }{ 'operator_url' } = $operator_url;
@@ -147,8 +165,14 @@ foreach my $observation ($placemark->findnodes('Metadata/obsList/obs')) {
 	$HoH{ $operator }{ $local_platform }{ $datetime }{ $obs_property }{ 'elev' } = $observation->find('elev');
 	#$HoH{ $operator }{ $local_platform }{ $datetime }{ $obs_property }{ 'uom' } = $uom;
 	}
+	else { print DEBUG "date fail: $date_yesterday $date_now $date_test \n"; }
 
 } #foreach obs
+        #only want to increment count for just latest measurements, not earlier
+        if ($HoH_stats{$operator}{$placemark_id} != 1) {
+                $HoH_stats{$operator}{$placemark_id} = 1;
+		$HoH_stats{ $operator }{ platform_count }++;
+	}
 } #foreach Placemark
 } #foreach file
 
@@ -177,6 +201,16 @@ $kml_content .= "<Folder><name>List by operator</name><visibility>0</visibility>
 
 foreach my $operator ( sort keys %{$rHoH} ) {
         #print "operator:$operator\n";
+	
+	print LOG_FILE "operator $operator $HoH_stats{$operator}{platform_count}\n";
+
+	foreach my $obs_type ( sort keys %{$rObsTypes} ) {
+		my $obs_count = $HoH_stats{$operator}{$obs_type}{obs_count};
+		if ($obs_count > 0) {
+			print LOG_FILE "obs_type $obs_type $HoH_stats{$operator}{$obs_type}{obs_count}\n";
+		}
+	}
+	print LOG_FILE "\n\n";
 
 $kml_content .= "<Folder><name>$operator</name><visibility>0</visibility>";
 
@@ -226,7 +260,7 @@ foreach my $datetime ( sort keys %{$rHoH->{$operator}{$local_platform}} ) {
 
      			$desc_header .= "Related links: ";
         		$desc_header .= "<a href=\"http://carocoops.org/twiki_dmcc/bin/view/Main/ObsKML\">ObsKML</a> ";
-        		$desc_header .= "<a href=\"http://seacoos.org\">http://seacoos.org</a><br /><br />";
+        		$desc_header .= "<a href=\"http://secoora.org\">http://secoora.org</a><br /><br />";
 
                 	$data_url = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'data_url'};
 			if ($data_url) {
@@ -377,7 +411,7 @@ foreach my $datetime ( sort keys %{$rHoH->{$operator}{$local_platform}} ) {
 
                         $desc_header .= "Related links: ";
                         $desc_header .= "<a href=\"http://carocoops.org/twiki_dmcc/bin/view/Main/ObsKML\">ObsKML</a> ";
-                        $desc_header .= "<a href=\"http://seacoos.org\">http://seacoos.org</a><br /><br />";
+                        $desc_header .= "<a href=\"http://secoora.org\">http://secoora.org</a><br /><br />";
 
                 	$data_url = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'data_url'};
 			if ($data_url) {
@@ -469,12 +503,15 @@ close (FILE_KML);
 
 `cd $target_dir; zip latest_placemarks.kmz latest_placemarks.kml`;
 
-my $kml_url = $http_return.$random_value.'/latest_placemarks.kmz';
+my $kml_url = 'http://nautilus.baruch.sc.edu/ms_tmp/gearth_'.$random_value.'/latest_placemarks.kmz';
 print $kml_url;
 
 `rm -f $target_dir/*.kml ; rm -f $target_dir/*.xml`;
 
 #print `date`;
+
+close (LOG_FILE);
+close (DEBUG);
 
 exit 0;
 
@@ -489,7 +526,7 @@ my ($parameter_id, $parameter_value, $graph, $elev) = @_;
 
 $elev = sprintf("%.2f", $elev);
 #print ":$elev:\n";
-if ($elev ne '0.00') { $parameter_id .= " at $elev m"; }
+if ($elev ne '0.00' && $elev ne '-99999.00') { $parameter_id .= " at $elev m"; }
 
 my $string;
 if ($graph) {
