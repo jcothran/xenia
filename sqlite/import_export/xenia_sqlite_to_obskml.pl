@@ -165,7 +165,8 @@ print XML_FILE "<obs>";
 $m_date = $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{m_date};
 $m_date =~ s/ /T/g;
 $m_date = substr($m_date,0,22);
-$m_date .= ':00';
+#$m_date .= ':00'; #JTC - not sure what this line was for
+$m_date .= 'Z';
 #print $m_date."\n";
 
 my $m_type_id = $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{m_type_id};
