@@ -1,0 +1,66 @@
+#!/usr/bin/perl
+
+use strict;
+
+sub insert_break_interval 
+{
+#insert blank lines in file to represent break interval
+
+my ($graph_data_file, $break_interval) = @_;
+
+open (OUTFILE,"$graph_data_file");
+open (OUTFILE_2,">$graph_data_file"."_2");
+
+my $line;
+
+my $curr_time;
+my $prev_time = get_time_sec($line = <OUTFILE>);
+#print "line: $line\n";
+print OUTFILE_2 $line;
+#print "prev_time: $prev_time\n";
+
+my $break_diff = 0;
+
+while ($line = <OUTFILE>) {
+
+	$curr_time = get_time_sec($line);
+
+	$break_diff = $curr_time - $prev_time;  #assumes time constantly increasing
+	$prev_time = $curr_time;
+
+	#print "line: $line\n";
+	#print "break_diff: $break_diff\n";
+	if ($break_diff > $break_interval) {
+		print OUTFILE_2 "\n";
+		#print "break_diff: $break_diff\n";
+	}
+
+	print OUTFILE_2 $line;
+}
+
+close OUTFILE_2;
+close OUTFILE;
+
+`mv $graph_data_file"_2" $graph_data_file`;
+}
+
+#############################################
+
+sub get_time_sec
+{
+my ($line) = @_;
+
+#line format 09 27 2004 21:00        28.8915
+
+my $year = substr($line,8,2);
+my $month = substr($line,0,2);
+my $day = substr($line,3,2);
+my $hour = substr($line,11,2);
+my $minute = substr($line,14,2);
+
+my $time_sec = `date --date='20$year-$month-$day $hour:$minute:00' +%s`;
+
+return $time_sec;
+}
+
+1;
