@@ -1,0 +1,359 @@
+<environment>
+  <observation_list>
+        <observation standard_name="wind_gust">
+                <standard_uom>m_s-1</standard_uom>
+                <standard_uom_en>knots</standard_uom_en>
+
+                <range_min>0</range_min>
+                <range_max>45</range_max>
+                <title>Wind Gust</title>
+                <y_title>meters/second</y_title>
+                <with_clause>lines lt 1</with_clause>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="air_temperature">
+                <standard_uom>celsius</standard_uom>
+                <standard_uom_en>fahrenheit</standard_uom_en>
+
+                <range_min>-20</range_min>
+                <range_max>50</range_max>
+                <title>Air Temperature</title>
+                <y_title>degrees Celsius</y_title>
+    <with_clause>lines lt 1</with_clause>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="sea_surface_temperature">
+                <standard_uom>celsius</standard_uom>
+                <standard_uom_en>fahrenheit</standard_uom_en>
+
+                <range_min>-20</range_min>
+                <range_max>50</range_max>
+                <title>Sea Surface Temperature</title>
+                <y_title>degrees Celsius</y_title>
+    <with_clause>lines lt 1</with_clause>
+                <break_interval>21700</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="air_pressure">
+                <standard_uom>mb</standard_uom>
+                <standard_uom_en>mb</standard_uom_en>
+
+                <range_min>900</range_min>
+                <range_max>1050</range_max>
+                <title>Air Pressure</title>
+                <y_title>millibars</y_title>
+    <with_clause>lines lt 1</with_clause>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="relative_humidity">
+                <standard_uom>percent</standard_uom>
+                <standard_uom_en>percent</standard_uom_en>
+
+                <range_min>0</range_min>
+                <range_max>100</range_max>
+                <title>Relative Humidity</title>
+                <y_title>percent</y_title>
+    <with_clause>lines lt 1</with_clause>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="wind_from_direction">
+                <standard_uom>degrees_true</standard_uom>
+                <standard_uom_en>degrees_true</standard_uom_en>
+
+                <range_min>0</range_min>
+                <range_max>359</range_max>
+                <title>Wind From Direction</title>
+                <y_title>degrees from N</y_title>
+    <with_clause>points lt 8</with_clause>
+                <break_interval>0</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="wind_speed">
+                <standard_uom>m_s-1</standard_uom>
+                <standard_uom_en>knots</standard_uom_en>
+
+                <range_min>0</range_min>
+                <range_max>45</range_max>
+                <title>Wind Speed</title>
+                <y_title>meters/second</y_title>
+    <with_clause>lines lt 1</with_clause>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="precipitation">
+                <standard_uom>millimeter</standard_uom>
+                <standard_uom_en>millimeter</standard_uom_en>
+
+                <range_min>0</range_min>
+                <range_max>30</range_max>
+                <title>Precipitation</title>
+                <y_title>millibars</y_title>
+    <with_clause>points lt 8</with_clause>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="solar_radiation">
+                <standard_name>solar_radiation</standard_name>
+                <standard_uom>millimoles_per_m^2</standard_uom>
+                <standard_uom_en>millimoles_per_m^2</standard_uom_en>
+
+                <range_min>0</range_min>
+                <range_max>5000</range_max>
+                <title>Solar</title>
+                <y_title>millimoles per square meter</y_title>
+    <with_clause>lines lt 1</with_clause>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+
+  <observation standard_name="significant_wave_height">
+    <standard_uom>m</standard_uom>
+    <standard_uom_en>f</standard_uom_en>
+
+    <range_min>0</range_min>
+    <range_max>45</range_max>
+    <title>Significant Wave Height</title>
+    <with_clause>lines lt 1</with_clause>
+    <y_title>meters</y_title>
+    <break_interval>7300</break_interval>
+    <size_x>600</size_x>
+    <size_y>300</size_y>
+  </observation>
+
+        <observation standard_name="water_level">
+                <standard_uom>m</standard_uom>
+                <standard_uom_en>f</standard_uom_en>
+        
+                <range_min>-1000</range_min>
+                <range_max>1000</range_max>
+                <title>Water Level</title>
+                <with_clause>lines lt 1</with_clause>
+                <y_title>meters</y_title>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="water_temperature">
+                <standard_uom>celsius</standard_uom>
+                <standard_uom_en>fahrenheit</standard_uom_en>
+
+                <range_min>-20</range_min>
+                <range_max>50</range_max>
+                <title>Water Temperature</title>
+                <with_clause>lines lt 1</with_clause>
+                <y_title>degrees Celsius</y_title>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="water_conductivity">
+                <standard_uom>mS_cm-1</standard_uom>
+                <standard_uom_en>mS_cm-1</standard_uom_en>
+
+                <range_min>0</range_min>
+                <range_max>100</range_max>
+                <title>Water Conductivity</title>
+                <with_clause>lines lt 1</with_clause>
+                <y_title>milliSiemens per centimeter</y_title>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="salinity">
+                <standard_uom>psu</standard_uom>
+                <standard_uom_en>psu</standard_uom_en>
+        
+                <range_min>20</range_min>
+                <range_max>50</range_max>
+                <title>Water Salinity</title>
+                <with_clause>lines lt 1</with_clause>
+                <y_title>psu</y_title>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation m_type_id="34">
+                <standard_name>oxygen_concentration</standard_name>
+                <standard_uom>mg_L-1</standard_uom>
+                <standard_uom_en>mg_L-1</standard_uom_en>
+
+                <range_min>0</range_min>
+                <range_max>20</range_max>
+                <title>Dissolved Oxygen</title>
+                <with_clause>lines lt 1</with_clause>
+                <y_title>milligrams per liter</y_title>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation m_type_id="35">
+                <standard_name>oxygen_concentration</standard_name>
+                <standard_uom>percent</standard_uom>
+                <standard_uom_en>percent</standard_uom_en>
+
+                <range_min>0</range_min>
+                <range_max>110</range_max>
+                <title>Dissolved Oxygen</title>
+                <with_clause>lines lt 1</with_clause>
+                <y_title>percent</y_title>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="ph">
+                <standard_uom>units</standard_uom>
+                <standard_uom_en>units</standard_uom_en>
+
+                <range_min>-10</range_min>
+                <range_max>10</range_max>
+                <title>pH</title>
+                <with_clause>lines lt 1</with_clause>
+                <y_title>units</y_title>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="turbidity">
+                <standard_name>turbidity</standard_name>
+                <standard_uom>ntu</standard_uom>
+                <standard_uom_en>ntu</standard_uom_en>
+
+                <range_min>0</range_min>
+                <range_max>1200</range_max>
+                <title>Turbidity</title>
+                <with_clause>lines lt 1</with_clause>
+                <y_title>ntu</y_title>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+  </observation_list>
+
+  <unit_conversion_list>
+
+  <!-- below are the unit conversions, mainly going from si(metric) to en(english) units -->
+  <!-- be sure to include unit self (e.g., m_to_m) conversion reference which also acts as a data formatting statement -->
+
+        <unit_conversion id="percent_to_percent">
+          <conversion_formula>sprintf("%.1f",var1)</conversion_formula>
+                <y_title>percent</y_title>
+        </unit_conversion>
+
+        <unit_conversion id="mb_to_mb">
+          <conversion_formula>sprintf("%.1f",var1)</conversion_formula>
+                <y_title>mb</y_title>
+        </unit_conversion>
+        <unit_conversion id="mb_to_inches_mercury">
+          <conversion_formula>sprintf("%.2f",var1*0.0295)</conversion_formula>
+                <y_title>inches mercury</y_title>
+        </unit_conversion>
+
+        <unit_conversion id="celsius_to_celsius">
+          <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
+                <y_title>degrees Celsius</y_title>
+        </unit_conversion>
+        <unit_conversion id="celsius_to_fahrenheit">
+          <conversion_formula>sprintf("%.1f",var1*9/5+32)</conversion_formula>
+                <y_title>deg F</y_title>
+        </unit_conversion>
+
+        <unit_conversion id="degrees_true_to_degrees_true">
+          <conversion_formula>sprintf("%d",var1)</conversion_formula>
+                <y_title>deg from N</y_title>
+        </unit_conversion>
+ 
+        <unit_conversion id="m_s-1_to_m_s-1">
+          <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
+                <y_title>meters/second</y_title>
+        </unit_conversion>
+        <unit_conversion id="m_s-1_to_knots">
+          <conversion_formula>sprintf("%.1f",var1*1.9438)</conversion_formula>
+                <y_title>knots</y_title>
+        </unit_conversion>
+        <unit_conversion id="m_s-1_to_mph">
+          <conversion_formula>sprintf("%.1f",var1*2.2369)</conversion_formula>
+                <y_title>mph</y_title>
+        </unit_conversion>
+
+        <unit_conversion id="millimeter_to_millimeter">
+          <conversion_formula>sprintf("%.1f",var1)</conversion_formula>
+                <y_title>mm</y_title>
+        </unit_conversion>
+        <unit_conversion id="millimeter_to_inch">
+          <conversion_formula>sprintf("%.2f",var1*0.039)</conversion_formula>
+                <y_title>inches</y_title>
+        </unit_conversion>
+      
+        <unit_conversion id="millimoles_per_m^2_to_millimoles_per_m^2">
+          <conversion_formula>sprintf("%.1f",var1)</conversion_formula>
+                <y_title>millimoles/m^2</y_title>
+        </unit_conversion>
+
+  <unit_conversion id="m_to_m">
+    <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
+    <y_title>meters</y_title>
+  </unit_conversion>
+  <unit_conversion id="m_to_f">
+    <conversion_formula>sprintf("%.2f",var1*3.28)</conversion_formula>
+    <y_title>feet</y_title>
+  </unit_conversion>
+
+  <unit_conversion id="mS_cm-1_to_mS_cm-1">
+    <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
+    <y_title>milliSiemens per centimeter</y_title>
+  </unit_conversion>
+
+  <unit_conversion id="psu_to_psu">
+    <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
+    <y_title>psu</y_title>
+  </unit_conversion>
+
+  <unit_conversion id="mg_L-1_to_mg_L-1">
+    <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
+    <y_title>milligrams per liter</y_title>
+  </unit_conversion>
+
+  <unit_conversion id="units_to_units">
+    <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
+    <y_title>units</y_title>
+  </unit_conversion>
+
+  <unit_conversion id="ntu_to_ntu">
+    <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
+    <y_title>ntu</y_title>
+  </unit_conversion>
+
+  </unit_conversion_list>
+
+</environment>
+
