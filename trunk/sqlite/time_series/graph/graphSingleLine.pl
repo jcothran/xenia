@@ -156,7 +156,7 @@ my $time_subtract = -1*$time_zone{$time_zone_arg};
 #      I've changed the database population code to not include timezone(assume GMT) so the substr should be able to go away
 if ($time_query eq 'time_last') { $sql = qq{ SELECT strftime('%m-%d-%Y %H:%M',datetime(substr(m_date,1,19),'-$time_subtract hours')), $column_value FROM $db_table where sensor_id = $sensor_id and m_date > datetime('now','$time_interval') and $column_value >= $range_min and $column_value <= $range_max $qc_clause order by m_date; }; }
 
-elsif ($time_query eq 'time_date') { $sql = qq{ SELECT strftime('%m-%d-%Y %H:%M',datetime(substr(m_date,1,19),'-$time_subtract hours')), $column_value FROM $db_table where sensor_id = $sensor_id and datetime(m_date) >= datetime('$from_date 00:00:00','-$time_subtract hours') and datetime(m_date) <= datetime('$to_date 00:00:00','-$time_subtract hours') and $column_value >= $range_min and $column_value <= $range_max $qc_clause order by m_date; }; }
+elsif ($time_query eq 'time_date') { $sql = qq{ SELECT strftime('%m-%d-%Y %H:%M',datetime(substr(m_date,1,19),'-$time_subtract hours')), $column_value FROM $db_table where sensor_id = $sensor_id and datetime(m_date) >= datetime('$from_date 00:00:00','$time_subtract hours') and datetime(m_date) <= datetime('$to_date 00:00:00','$time_subtract hours') and $column_value >= $range_min and $column_value <= $range_max $qc_clause order by m_date; }; }
 
 #print "sql:".$sql."\n";
 $sth = $dbh->prepare( $sql );
