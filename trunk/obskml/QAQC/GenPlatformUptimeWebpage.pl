@@ -12,6 +12,10 @@ use Getopt::Long;
 #of shell commands.
 ##############################################################################################################################
 #Revisions
+#Rev: 1.3.0.0
+# Changes: Added code to break out the url in the sensor data column, if there is one, and form an HREF. Opens a new tab/browser
+# when the link is clicked.
+#
 #Rev: 1.2.0.0
 #Author: DWR 
 #Changes: Added BODY background color tag for style.
@@ -130,16 +134,27 @@ foreach my $strLine (<$PlatformPercentCSVFile>)
   	while (@Columns) 
   	{
   	  my $strColumn = shift(@Columns);
+      
  	    #my $rgbColor = RGB_DEFAULT;  	    
       my $strBGColorID = "RGB_DEFAULT";
   	  if( $iCnt >= 3 )
   	  {
-  	    if( $strColumn >= 90.0 )
+        #DWR v1.3.0.0
+        #Break out the url, if there is one, for the sensor query
+        my @ColData = split(/;/,$strColumn);
+        my $strVal = @ColData[0];
+        my $strURL = @ColData[1];
+        #Now format an HREF
+        $strColumn = "<A HREF=\"$strURL\" target=\"new\">$strVal</A>";       		    	      
+        
+        if( $strVal >= 90.0 )
+  	    #if( $strColumn >= 90.0 )
   	    {
   	     #$rgbColor = RGB_90THPERCENTILE;
          $strBGColorID = "RGB_90THPERCENTILE";
   	    }
-  	    elsif( $strColumn >= 70.0 )
+        elsif( $strVal >= 70.0 )
+  	    #elsif( $strColumn >= 70.0 )
   	    {
   	     #$rgbColor = RGB_70THPERCENTILE;  	      
          $strBGColorID = "RGB_70THPERCENTILE";
@@ -149,6 +164,7 @@ foreach my $strLine (<$PlatformPercentCSVFile>)
   	      #$rgbColor = RGB_UNDER70TH;
           $strBGColorID = "RGB_UNDER70TH";
   	    }
+        
   	  }
   	  # First 3 columns are platform, url, and date.
   	  else
