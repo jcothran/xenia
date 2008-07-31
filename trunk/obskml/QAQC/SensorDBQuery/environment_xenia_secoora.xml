@@ -1,0 +1,24 @@
+<environment>
+        <db>
+                <!-- <name>/usr2/home/data/seacoos/sqlite/latest.db</name> -->
+                <name>/var/www/cgi-bin/microwfs/microwfs.db</name>
+                <user></user>
+                <passwd></passwd>
+
+                <table>multi_obs</table>
+                <column_value>m_value</column_value>
+                <!-- <qc_clause>and qc_level=3</qc_clause> -->
+                <qc_clause></qc_clause>
+        </db>
+        <path>
+                <psql>/usr/bin/sqlite3-3.5.4.bin</psql>
+                <dir_tmp>/tmp/ms_tmp/</dir_tmp>
+                <dir_base>/var/www/html/data/nerrs/</dir_base>
+		<http_base>http://carocoops.org/data/nerrs/</http_base>
+		<http_xenia_graph>http://carocoops.org/xenia_sqlite/get_graph.php?</http_xenia_graph>
+        </path>
+	<use>
+		<archive>no</archive>
+	</use>
+</environment>
+
