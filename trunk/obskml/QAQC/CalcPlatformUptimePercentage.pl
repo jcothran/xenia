@@ -1,5 +1,14 @@
 #######################################################################################################
 #Revisions
+#Rev: 1.2.0.0
+#Author: DWR
+#Changes: Added handling of time zones. The data is stamped in GMT in the database, so we want to be able to move the time
+# frame to be EST for us east coasters.
+# Added command line option -TimeZone to allow for compensation away from GMT.
+#
+#Sub: TabulatePlatformResults()
+#Changes: Added a query URL to allow the ability to drill down on a sensor/platform to see the data for the time period.
+#
 #Rev: 1.1.0.0
 #Author: DWR
 #Date: 6/27/2008
@@ -29,11 +38,12 @@ use DBI;
 #Set to 0 if running in a Linux/Unix environment. This mostly deals with how file paths are handled, as well as a couple
 #of shell commands.
 
-use constant MICROSOFT_PLATFORM => 1;
+use constant MICROSOFT_PLATFORM => 0;
 
 #1 enables the various debug print statements, 0 turns them off.
 use constant USE_DEBUG_PRINTS   => 0;
 
+use constant SECONDS_PER_DAY => ( 24 * 60 * 60 );
 ###path config#############################################
 my $strDBName     = '';
 my $strSQLitePath = '';
@@ -58,7 +68,8 @@ GetOptions( \%CommandLineOptions,
             "WorkingDir=s",
             "TstProfFeed=s",
             "UpdateDatabase:s",
-            "Date:s" );
+            "Date:s", 
+            "TimeZone:s" );
 
 my $strWorkingDir   = $CommandLineOptions{"WorkingDir"};
 my $strTstProfFeed  = $CommandLineOptions{"TstProfFeed"}; 
@@ -71,7 +82,9 @@ if( length( $strWorkingDir ) == 0 ||
               "--WorkingDir provides the directory used to store the results file, test_results.csv Should provide a unique name, such as carocoops to denote where the data originated.\n".
               "--TstProfFeed provides the url where the test_profiles.xml file resides.\n".
               "--UpdateDatabase specifies if the metrics table in the database is to be updated. Values are \"yes\" to update, or \"no\". This value is optional, default is \"no\" \n".
-              "--Date specifies the day, in YYYY-MM-DD format, to get the stats for, this is optional and if not provided the default is the last full day( date '1 day ago')\n" );
+              "--Date specifies the day, in YYYY-MM-DD format, to get the stats for, this is optional and if not provided the default is the last full day( date '1 day ago')\n".
+              "--TimeZone optional timezone argument. The data dates in the DB are all in GMT. Options are EASTERN, CENTRAL, MOUNTAIN, PACIFIC. Default is EASTERN.");
+              
 }
 #Optional command line arguments.
 my $iUpdateDatabase = 0;
@@ -81,20 +94,32 @@ if( uc( $CommandLineOptions{"UpdateDatabase"} ) eq "YES" )
 }
 
 my $strDate         = $CommandLineOptions{"Date"};
+#DWR v1.2.0.0
+my $strEndDate;
 if( !length( $strDate ) )
 {
   if( !MICROSOFT_PLATFORM )
   {
     $strDate = `date --d=\"1 days ago\" +%Y-%m-%d`;
     chomp( $strDate );
+    
+    $strEndDate = `date +%Y-%m-%d`;
+    chomp( $strEndDate );
   }
   else
   {
     $strDate = `\\UnixUtils\\usr\\local\\wbin\\date.exe --d=\"1 days ago\" +%Y-%m-%d`;
     chomp( $strDate );   
+
+    $strEndDate = `\\UnixUtils\\usr\\local\\wbin\\date.exe +%Y-%m-%d`;
+    chomp( $strEndDate );
   }  
 }
-
+my $strTimeZone = $CommandLineOptions{"TimeZone"};
+if( length( $strTimeZone ) == 0 )
+{
+  $strTimeZone = 'EASTERN';
+}
 ###########################################################
 
 
@@ -178,8 +203,65 @@ if(!defined $DB)
 }
 
 
-my $strBeginDateRange = $strDate.'T00:00:00';
-my $strEndDateRange   = $strDate.'T24:00:00';
+#########################################################################################################
+#DWR v1.2.0.0
+#Add support for time zone handling.
+
+#if you want to reference other time zones, add them here
+my %time_zone = ('GMT',0,'EST',-5,'EDT',-4,'CST',-6,'CDT',-5,'MST',-7,'MDT',-6,'PST',-8,'PDT',-7);
+#print 'time_zone='.$time_zone{$strTimeZone}."\n";
+
+#daylight savings time consideration
+my ($temp_sec,$temp_min,$temp_hour,$temp_mday,$temp_mon,$temp_year,$temp_wday,$temp_yday,$isdst) = localtime(time);
+
+#correct $strTimeZone depending on whether $isdst is set for EASTERN,etc
+if ($strTimeZone eq 'EASTERN') 
+{
+  if ($isdst) 
+  { 
+    $strTimeZone = 'EDT';
+  } 
+  else
+  { 
+    $strTimeZone = 'EST'; 
+  }
+}
+if ($strTimeZone eq 'CENTRAL')
+{
+  if ($isdst)
+  { 
+    $strTimeZone = 'CDT'; 
+  } 
+  else
+  { 
+    $strTimeZone = 'CST'; 
+  }
+}
+if ($strTimeZone eq 'MOUNTAIN')
+{
+  if ($isdst)
+  { 
+    $strTimeZone = 'MDT';
+  }
+  else
+  {
+    $strTimeZone = 'MST'; 
+  }
+}
+if ($strTimeZone eq 'PACIFIC')
+{
+  if ($isdst)
+  { 
+    $strTimeZone = 'PDT'; 
+  } 
+  else
+  { 
+    $strTimeZone = 'PST'; 
+  }
+}
+my $iTimeZoneShift = -1*$time_zone{$strTimeZone};
+
+#########################################################################################################
 
 my %PlatformIDs;
 my $xp_tests = XML::LibXML->new->parse_file($strTstProfPath);
@@ -204,9 +286,11 @@ foreach my $test_profile ($xp_tests->findnodes('//testProfile'))
       #Get the interval that the sensor sends updates.
   		my $iUpdateInterval = sprintf( "%d", $obs->find('UpdateInterval') );
       
-      my $strStart = $strDate."T00:00:00";
-      my $strEnd   = $strDate."T24:00:00";
-      QueryPlatformSensorReportCount( $DB, $strPlatformID, $strStart, $strEnd, $strObsName, $iUpdateInterval, \%PlatformIDs );
+      my $strStart = $strDate.'T00:00:00';
+      my $strEnd   = $strEndDate.'T00:00:00';
+      #DWR v1.2.0.0
+      #Added $iTimeZoneShift to compensate for time zones. Measurements in the DB are all stored in GMT.
+      QueryPlatformSensorReportCount( $DB, $strPlatformID, $strStart, $strEnd, $strObsName, $iUpdateInterval, \%PlatformIDs, $iTimeZoneShift );
     }#obstypes
     #PlotPlatformResults( $DB, $strPlatformID, \%PlatformIDs, $strWorkingDir );
     my $strURL = GetPlatformURL( $DB, $strPlatformID );
@@ -243,18 +327,25 @@ else
 # 4. $strEndDate is a date in YYYY-MM-DDTHH:MM:SS format which is the end of the search range.
 # 5. $SensorIDs is a reference to a hash which will be populated as: key=Sensor ID from sensor.m_type_id column, value=Sensor Name from sensor.short_name column.
 ########################################################################################################################
-sub QueryReportingSensorsForPlatform #( $DB, $strPlatformID, $strStartDate, $strEndDate, \%SensorIDs )
+=comment
+sub QueryReportingSensorsForPlatform #( $DB, $strPlatformID, $strStartDate, $strEndDate, \%SensorIDs, $iTimeZoneShift )
 {
   my $DBI           = shift @_;
   my $strPlatform   = shift @_;
   my $strStartDate  = shift @_;
   my $strEndDate    = shift @_;
   my $SensorIDs     = shift @_;
-   
+  my $iTimeZoneShift= shift @_;
+
+  #m_date >= '$strStartDate' AND m_date < '$strEndDate' AND 
+
   my $strSQL = "SELECT DISTINCT(sensor.m_type_id), sensor.short_name 
                 FROM multi_obs
                 LEFT JOIN sensor on sensor.row_id=multi_obs.sensor_id
-                WHERE m_date >= '$strStartDate' AND m_date < '$strEndDate' AND platform_handle = '$strPlatform'
+                WHERE 
+                WHERE datetime(m_date) >= datetime('$strStartDate','-$iTimeZoneShift hours')  AND 
+                      datetime(m_date) < datetime('$strEndDate','-$iTimeZoneShift hours')     AND 
+                  platform_handle = '$strPlatform'
                 ORDER BY sensor.row_id ASC;";
   
   my $hSt = $DBI->prepare( $strSQL );
@@ -276,7 +367,7 @@ sub QueryReportingSensorsForPlatform #( $DB, $strPlatformID, $strStartDate, $str
   }
   return( $iCnt );
 }
-
+=cut
 ########################################################################################################################
 # QueryPlatformSensorReportCount
 # Parameters
@@ -287,16 +378,24 @@ sub QueryReportingSensorsForPlatform #( $DB, $strPlatformID, $strStartDate, $str
 # 5. $strSensorName is a string representing the sensor we are looking up.
 # 6. $PlatformInfo is a reference to a hash which will be populated with per platform/sensor information.
 ########################################################################################################################
-sub QueryPlatformSensorReportCount #( $DB, $strPlatformID, $strStart, $strEnd, $strSensorName, $iUpdateInterval, \%PlatformIDs )
+sub QueryPlatformSensorReportCount #( $DB, $strPlatformID, $strStart, $strEnd, $strSensorName, $iUpdateInterval, \%PlatformIDs, $iTimeZoneShift )
 {
-  my ( $DB, $strPlatformID, $strStart, $strEnd, $strSensorName, $iUpdateInterval, $PlatformIDs ) = @_;
+  my ( $DB, $strPlatformID, $strStart, $strEnd, $strSensorName, $iUpdateInterval, $PlatformIDs,$iTimeZoneShift ) = @_;
      
   #This query will return the number of entries of the sensor type given for the given platform and date range.
   #In other words how many times do we have an entry for that sensor for that platform during that date/time interval.
+  # m_date >= '$strStart' AND m_date < '$strEnd'      AND 
+
+  #DWR v1.2.0.0
+  #Added time zone adjustment into WHERE clause for start/end date range.
   my $strSQL = "SELECT COUNT( sensor.m_type_id )
                 FROM multi_obs 
                 LEFT JOIN sensor on sensor.row_id=multi_obs.sensor_id
-                WHERE platform_handle = '$strPlatformID' AND m_date >= '$strStart' AND m_date < '$strEnd' AND sensor.short_name = '$strSensorName';";
+                WHERE  
+                  platform_handle = '$strPlatformID'                                  AND 
+                  sensor.short_name = '$strSensorName'                                AND
+                  datetime(m_date) >= datetime('$strStart','$iTimeZoneShift hours')   AND  
+                  datetime(m_date) < datetime('$strEnd','$iTimeZoneShift hours');";      
 
   my $hSt = $DB->prepare( $strSQL );
   if( !defined $hSt )
@@ -513,6 +612,11 @@ sub TabulatePlatformResults #( $SensorFile, \%PlatformIDs, $iUpdateDatabase );
     {    
       my $fSensorAvg  = 0;
       my $iMaxCnt     = 0;
+
+      #DWR v1.2.0.0
+      #Build link to query data for sensor
+      my $strURL = 'http://nautilus.baruch.sc.edu/~dramage_prod/cgi-bin/DumpPlatformSensorReport.php?';
+      
       if( $iRowCnt == 0 )
       {
         if( length( $strHeader) )
@@ -551,6 +655,10 @@ sub TabulatePlatformResults #( $SensorFile, \%PlatformIDs, $iUpdateDatabase );
       }
       #DWR v1.1.0.0
       my $fAvg = $fSensorAvg / $iDayCnt;
+      if( $iUpdateInterval == 0 )
+      {
+        $iUpdateInterval = 1;
+      }
       $fSensorAvg = ($fAvg / $iUpdateInterval) * 100.0 ;
       if( $iSensorCnt == 0 )
       {
@@ -560,12 +668,18 @@ sub TabulatePlatformResults #( $SensorFile, \%PlatformIDs, $iUpdateDatabase );
       {
         $strRow = $strRow.',';
       } 
+      #DWR v1.2.0.0
+      #Build the url for our drill down into the database for this platform/sensor data.
+      my $iUpdatesInSeconds = SECONDS_PER_DAY / $iUpdateInterval;
+      $strURL .= "PLATFORMID=$strPlatformID&OBSERVATION=$Sensor&UPDATEINTERVAL=$iUpdatesInSeconds&STARTDATE=$strDate&ENDDATE=$strEndDate&TIMEZONE=EASTERN";
       my $strSensorAvg = sprintf( "%.2f",$fSensorAvg );
-      $strRow = $strRow."$strSensorAvg($fAvg/$iUpdateInterval)";
+      $strRow = $strRow."$strSensorAvg($fAvg/$iUpdateInterval);$strURL";
+      
       if( $iUpdateDatabase )
       {
         AddRecordToDatabase( $DB, $strPlatformID, $Sensor, $strSensorAvg, $strStartDate );
       }
+      
       $iSensorCnt++;
     }#foreach sensor
     #First row, let's print a column header.
