@@ -32,6 +32,10 @@ see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate#Conver
 
 TBD
 
+http://code.google.com/p/xenia/source/browse/trunk/sqlite/time_series
+
+http://code.google.com/p/xenia/source/browse/trunk/postgresql/time_series
+
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaSampleCase
 
 http://carocoops.org/xenia
