@@ -8,7 +8,7 @@ The CGI based difSOS instance is available at
 
 http://carocoops.org/obskml/scripts/difSOS.html
 
-The above html script calls the cgi script documented at [http://www.carocoops.org/obskml/microwfs/difSOS.cgi difSOS.cgi] which runs queries against the earlier established xenia sqlite database
+The above html script calls the cgi script documented at [http://www.carocoops.org/obskml/microwfs/difSOS.cgi difSOS.cgi] which runs queries against the earlier established xenia sqlite database.  Note that the sql request statement of this script could be modified to provide a similar resultset/functionality from other relational database schemas or resultsets.
 
 [http://www.carocoops.org/obskml/microwfs/difSOSConf.xml difSOSConf.xml] is the modified xml configuration support xml
 
@@ -20,4 +20,3 @@ Note:
    * the OBSERVEDPROPERTY parameter assumes one sensor per platform (for now)
    * the OBSERVEDPROPERTY parameter only specifies a single parameter (for now)
    * the xml response is xml/text only (for now) and the response can be quite large depending on the query - would like to eventually provide a zipped response or file link for large responses ?
-
