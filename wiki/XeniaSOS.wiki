@@ -2,7 +2,7 @@
 
 = [XeniaSOS#difSOS difSOS] =
 
-Built a CGI based script based on earlier work with the microWFS effort, substituting a xenia database schema specific sql query and associated DIF SOS response instead of the earlier more generic query and WFS response.
+Built a CGI based script based on earlier work with the microWFS effort, substituting a xenia database schema specific sql query and associated [http://ioos.noaa.gov/program/DIFdocs.html DIF] SOS response instead of the earlier more generic query and WFS response.
 
 The CGI based difSOS instance is available at
 
