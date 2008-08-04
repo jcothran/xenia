@@ -20,3 +20,11 @@ Note:
    * the OBSERVEDPROPERTY parameter assumes one sensor per platform (for now)
    * the OBSERVEDPROPERTY parameter only specifies a single parameter (for now)
    * the xml response is xml/text only (for now) and the response can be quite large depending on the query - would like to eventually provide a zipped response or file link for large responses ?
+
+----
+
+= [XeniaSOS#Related_Links Related Links] =
+
+NDBC SOS http://sdf.ndbc.noaa.gov/sos
+
+CO-OPS SOS http://opendap.co-ops.nos.noaa.gov/ioos-dif-sos/
