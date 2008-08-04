@@ -1,2 +1,23 @@
 #summary SOS (Sensor Observing Service) related Xenia development/documentation
 
+= [XeniaSOS#difSOS difSOS] =
+
+Built a CGI based script based on earlier work with the microWFS effort, substituting a xenia database schema specific sql query and associated DIF SOS response instead of the earlier more generic query and WFS response.
+
+The CGI based difSOS instance is available at
+
+http://carocoops.org/obskml/scripts/difSOS.html
+
+The above html script calls the cgi script documented at [http://www.carocoops.org/obskml/microwfs/difSOS.cgi difSOS.cgi] which runs queries against the earlier established xenia sqlite database
+
+[http://www.carocoops.org/obskml/microwfs/difSOSConf.xml difSOSConf.xml] is the modified xml configuration support xml
+
+Note:
+
+   * data is across a variety of data providers nationally for the latest 3 day period(time window could be enlarged as needed)
+   * observation elevation datum is optional or assumed MSL(Mean Sea Level)
+   * the sensorID is related to an internal database/system frame of reference and not related to any developing or recognized community sensorID reference
+   * the OBSERVEDPROPERTY parameter assumes one sensor per platform (for now)
+   * the OBSERVEDPROPERTY parameter only specifies a single parameter (for now)
+   * the xml response is xml/text only (for now) and the response can be quite large depending on the query - would like to eventually provide a zipped response or file link for large responses ?
+
