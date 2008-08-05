@@ -21,6 +21,12 @@ Note:
    * the OBSERVEDPROPERTY parameter only specifies a single parameter (for now)
    * the xml response is xml/text only (for now) and the response can be quite large depending on the query - would like to eventually provide a zipped response or file link for large responses ?
 
+= minimal dataflow setup =
+
+   * Convert [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate#Sample_cases raw data to obskml]
+   * Convert [http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/obskml_to_xenia_sqlite.pl obskml to xenia schema]
+   * Use [http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/obskml_to_xenia_sqlite.pl difSOS.cgi] script to provide DIF SOS web service
+
 ----
 
 = [XeniaSOS#Related_Links Related Links] =
