@@ -8,9 +8,9 @@ The CGI based difSOS instance is available at
 
 http://carocoops.org/obskml/scripts/difSOS.html
 
-The above html script calls the cgi script documented at [http://www.carocoops.org/obskml/microwfs/difSOS.cgi difSOS.cgi] which runs queries against the earlier established xenia sqlite database.  *Note that the sql request statement of this script could be modified to provide a similar resultset/functionality from other relational database schemas or resultsets.*
+The above html script calls the cgi script documented at [http://code.google.com/p/xenia/source/browse/trunk/sqlite/sos/difSOS.cgi difSOS.cgi] which runs queries against the earlier established xenia sqlite database.  *Note that the sql request statement of this script could be modified to provide a similar resultset/functionality from other relational database schemas or resultsets.*
 
-[http://www.carocoops.org/obskml/microwfs/difSOSConf.xml difSOSConf.xml] is the modified xml configuration support xml
+[http://code.google.com/p/xenia/source/browse/trunk/sqlite/sos/difSOSConf.xml difSOSConf.xml] is the modified xml configuration support xml
 
 Note:
 
@@ -25,7 +25,7 @@ Note:
 
    * Convert [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate#Sample_cases raw data to obskml]
    * Convert [http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/obskml_to_xenia_sqlite.pl obskml to xenia schema(sql)]
-   * Use [http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/obskml_to_xenia_sqlite.pl difSOS.cgi] script to provide DIF SOS web service
+   * Use [http://code.google.com/p/xenia/source/browse/trunk/sqlite/sos difSOS.cgi] script to provide DIF SOS web service
 
 ----
 
