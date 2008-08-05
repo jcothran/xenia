@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<difSOSConfig>
+	<dbname>/var/www/cgi-bin/microwfs/microwfs.db</dbname>
+	<logDir>/var/www/html/ms_tmp</logDir>
+	<srsName>urn:ogc:def:crs:EPSG:6.5:4326</srsName>
+	<sensorCodeSpace>urn:x-noaa:source:insitu:NFRA:2007a</sensorCodeSpace>
+	<obsNameCodeSpace>urn:x-noaa:source:def:phyOcean:2007a</obsNameCodeSpace>
+	<verticalDatumCodeSpace>urn:x-noaa:def:verticalDatum</verticalDatumCodeSpace>
+	<verticalPositionUom>urn:x-noaa:def:uom:2007a:meter</verticalPositionUom>
+	<TYPENAMES>
+<item>windspeed</item>
+<item>windgust</item>
+<item>windfromdirection</item>
+<item>airpressure</item>
+<item>airtemperature</item>
+<item>watertemperature</item>
+<item>waterconductivity</item>
+<item>waterpressure</item>
+<item>chlconcentration</item>
+<item>currentspeed</item>
+<item>currenttodirection</item>
+<item>significantwaveheight</item>
+<item>dominantwaveperiod</item>
+<item>significantwavetodirection</item>
+<item>relativehumidity</item>
+<item>waterlevel</item>
+<item>salinity</item>
+<item>precipitation</item>
+<item>solarradiation</item>
+<item>eastwardcurrent</item>
+<item>northwardcurrent</item>
+<item>oxygenconcentrationabsolute</item>
+<item>oxygenconcentrationpercent</item>
+<item>turbidity</item>
+<item>ph</item>
+<item>visibility</item>
+<item>drifterspeed</item>
+<item>drifterdirection</item>
+<item>gageheight</item>
+	</TYPENAMES>
+</difSOSConfig>
+
