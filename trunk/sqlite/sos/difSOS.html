@@ -1,0 +1,60 @@
+<html>
+<head><title>Very simple form to hit the DIF SOS</title></head>
+<body>
+<div align="center">
+<h3>Very simple form to hit the DIF SOS</h3>
+
+<form action="http://carocoops.org/cgi-bin/microwfs/difSOS.cgi" METHOD="GET">
+
+<input type="hidden" name="REQUEST" value="GetObservation" />
+<input type="hidden" name="SERVICE" value="SOS" />
+<input type="hidden" name="VERSION" value="1.0.0" />
+<input type="hidden" name="RESPONSEFORMAT" value="text/xml;schema=%22ioos/0.6.0%22" /> 
+
+<table border='1' bgcolor='lightgrey'>
+	<tr><td colspan="2" align="center">Target: http://carocoops.org/cgi-bin/microwfs/difSOS.cgi</td>
+
+	<tr><td><select name="OBSERVEDPROPERTY">
+<option>windspeed</option>
+<option>windgust</option>
+<option>windfromdirection</option>
+<option>airpressure</option>
+<option>airtemperature</option>
+<option>watertemperature</option>
+<option>waterconductivity</option>
+<option>waterpressure</option>
+<option>chlconcentration</option>
+<option>currentspeed</option>
+<option>currenttodirection</option>
+<option>significantwaveheight</option>
+<option>dominantwaveperiod</option>
+<option>significantwavetodirection</option>
+<option>relativehumidity</option>
+<option>waterlevel</option>
+<option>salinity</option>
+<option>precipitation</option>
+<option>solarradiation</option>
+<option>eastwardcurrent</option>
+<option>northwardcurrent</option>
+<option>oxygenconcentrationabsolute</option>
+<option>oxygenconcentrationpercent</option>
+<option>turbidity</option>
+<option>ph</option>
+<option>visibility</option>
+<option>drifterspeed</option>
+<option>drifterdirection</option>
+<option>gageheight</option>
+		</select></td><td>OBSERVEDPROPERTY(required): listing of operator/observation counts available from the database are <a href="http://www.carocoops.org/obskml/scripts/secoora_obskml_style.log">here</a></td></tr>
+	<tr><td><input type="text" size="40" maxlength="40" name="OFFERING" value="nerrs"></input>
+		</td><td>OFFERING(optional): like ndbc.41004.buoy, also accepts partial input for like comparison 'ndbc' for example will return all ndbc buoys.  If unspecified will restrict data as specified by BBOX.  Current offering list (organization/station/platform list) is available <a href="http://carocoops.org/obskml/scripts/station_list.txt">here</a></td></tr>
+	<tr><td><input type="text" size="50" name="BBOX" value=""></input>
+		</td><td>BBOX(optional): (min lon East, min lat North, max lon East, max lat North like -80.00,32.00,-75.00,36.00) in decimal degrees.  If unspecified will restrict data as specified by OFFERING.</td></tr>
+	<tr><td><input type="text" size='50' name="EVENTTIME" value=""></input></td>
+		<td>EVENTTIME(optional): (YYYY-MM-DDTHH:MM:SS/YYYY-MM-DDTHH:MM:SS like 2008-01-01T00:00:00/2008-12-31T23:00:00) in GMT.  If unspecified will return latest observation.  Available database keeps a maximum of the most recent 3 days data.</td></tr>
+	<tr><td colspan='2' align='center'><input type="Submit" /></td></tr>
+<tr><td colspan="2"><a href="http://code.google.com/p/xenia/wiki/XeniaSOS">difSOS Documentation</a></td></tr>
+</table>
+</form>
+</div>
+</body>
+</html>
