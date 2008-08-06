@@ -61,3 +61,7 @@ http://code.google.com/p/xenia/source/browse/trunk/obskml/products/html_tables
 = MicroWFS = 
 
 see http://code.google.com/p/xenia/wiki/XeniaPackageSqlite#MicroWFS
+
+= DIF SOS =
+
+see http://code.google.com/p/xenia/wiki/XeniaSOS
