@@ -219,6 +219,7 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 	##observation####################
 
 	if ($elev eq '') { $elev = -99999; }
+        if (!($measurement)) { print "missing measurement \n"; next; }
 
 	$sql = qq{ INSERT into multi_obs(row_entry_date,platform_handle,sensor_id,m_type_id,m_date,m_lon,m_lat,m_z,m_value) values (datetime('now'),'$platform_id',$sensor_row_id,$m_type_id,'$m_date',$longitude,$latitude,$elev,$measurement); };
 
