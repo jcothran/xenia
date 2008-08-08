@@ -50,6 +50,8 @@ http://www.sqlite.org/omitted.html
 
 === Other websites ===
 
+http://books.google.com/books?id=VsZ5bUh0XAkC&printsec=frontcover
+
 ==== Tutorials ====
 http://souptonuts.sourceforge.net/readme_sqlite_tutorial.html
 
