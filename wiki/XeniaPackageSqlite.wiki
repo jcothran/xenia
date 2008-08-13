@@ -176,8 +176,8 @@ see http://code.google.com/p/xenia/source/browse/trunk/sqlite
 
 the following cron jobs are called
 
-   * [http://www.carocoops.org/obskml/microwfs/obskml_to_xenia_sqlite.pl obskml_to_xenia_sqlite.pl] called once an hour to load the latest ObsKML in-situ observations into a Xenia(sqlite) RDB
-   *  [http://www.carocoops.org/obskml/microwfs/maintain.pl maintain.pl] once a day to delete observations older than 3 days and vacuum the database file(compact the database file).
+   * [http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/obskml_to_xenia_sqlite.pl obskml_to_xenia_sqlite.pl] called once an hour to load the latest ObsKML in-situ observations into a Xenia(sqlite) RDB
+   *  [http://code.google.com/p/xenia/source/browse/trunk/sqlite/replication/maintain.pl maintain.pl] once a day to delete observations older than 3 days and vacuum the database file(compact the database file).
 
 {{{
 0 * * * * cd /var/www/cgi-bin/microwfs; perl obskml_to_xenia_sqlite.pl http://carocoops.org/obskml/feeds/seacoos_all_latest.zip >/tmp/microwfs.log 2>&1
@@ -232,7 +232,7 @@ Note:
 
 == Earlier ObsKML based scripts ==
 
-The perl scripts earlier documented at http://www.gliffy.com/publish/1329032/ and http://carocoops.org/twiki_dmcc/bin/view/Main/ObsKMLGenerate for aggregating, visualizing,reformatting (CSV,shapefile,etc) and reservicing(oostethys,etc) ObsKML based data are applicable as before with the latest ObsKML generated from the Sqlite RDB [http://carocoops.org/obskml/microwfs/xenia_sqlite_to_obskml.pl perl script] .
+The perl scripts earlier documented at http://www.gliffy.com/publish/1329032/ and http://carocoops.org/twiki_dmcc/bin/view/Main/ObsKMLGenerate for aggregating, visualizing,reformatting (CSV,shapefile,etc) and reservicing(oostethys,etc) ObsKML based data are applicable as before with the latest ObsKML generated from the Sqlite RDB [http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/xenia_sqlite_to_obskml.pl perl script] .
 ----
 = Gotchas =
 
@@ -273,7 +273,7 @@ The solution was to just write the offending insert statements out to a sql file
 
 == Be sure to populate table m_type_display_order ==
 
-Be sure to [http://www.carocoops.org/obskml/microwfs/display_order.sql populate] the lookup table m_type_display_order as mentioned in the setup steps, otherwise your hash population in the [http://www.carocoops.org/obskml/microwfs/xenia_sqlite_to_obskml.pl xenia_sqlite_to_obskml.pl] script will only populate one variable per platform.
+Be sure to [http://code.google.com/p/xenia/source/browse/trunk/sqlite/sql/display_order.sql populate] the lookup table m_type_display_order as mentioned in the setup steps, otherwise your hash population in the [http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/xenia_sqlite_to_obskml.pl xenia_sqlite_to_obskml.pl] script will only populate one variable per platform.
 
 ----
 = Potential issues =
