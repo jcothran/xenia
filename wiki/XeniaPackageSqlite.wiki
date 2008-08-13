@@ -187,7 +187,7 @@ the following cron jobs are called
 
 == Export - Xenia(Sqlite) to ObsKML ==
 
-see http://code.google.com/p/xenia/source/browse/trunk/sqlite/xenia_sqlite_to_obskml.pl
+see http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/xenia_sqlite_to_obskml.pl
 ----
 == [XeniaPackageSqlite#Replication Replication] ==
 
