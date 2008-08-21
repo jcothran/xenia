@@ -62,6 +62,10 @@ data scout: obskml + dsi -> xenia sqlite db
 mapserver (wms/gfi,wfs) , ogr
 http://code.google.com/p/rcoos/wiki/MapserverNotes
 
+tilecache - great client performance speed-up(fast map loads on the client) by pregenerating/caching tiled map content
+
+http://code.google.com/p/rcoos/wiki/TileCacheNotes
+
 XeniaProducts
   * gnuplot (time series, vector)
   * instrument/event metrics/notification
