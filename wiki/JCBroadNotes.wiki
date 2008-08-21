@@ -8,7 +8,7 @@ Secoora maps (openlayers) http://secoora.org/maps/dynamic
 
 Secoora files and feeds http://secoora.org/data
 
-CarolinasRCOOS (openlayers *beta/experimental*) http://rcoos.org/carolinasrcoosrev2/
+CarolinasRCOOS (openlayers *beta/experimental*) http://carolinasrcoos.org
 
 NWS Marine Weather Portal (*beta/experimental*) http://129.252.37.86/wx/
 
