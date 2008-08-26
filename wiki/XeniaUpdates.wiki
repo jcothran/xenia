@@ -19,3 +19,35 @@ My current thinking regarding the metadata xml files is to combine metadata for 
 The earlier 'collection' table could be referenced as a sub element schema structure within each of these other parent schemas.
 
 Also removed 'm_desc' from the multi_obs table.
+
+= code revision 238 (August 26, 2008) =
+
+Adding/changing several things with this revision detailed below - all of these changes are in relation to the sqlite database version of the xenia code.
+
+== sqlite_query.pl ==
+
+http://code.google.com/p/xenia/source/browse/trunk/sqlite/misc/sqlite_query.pl
+
+This is a general use query script for performing many queries in a batch manner using q [http://code.google.com/p/xenia/source/browse/trunk/sqlite/misc/query.txt query.txt] file which specifies the 
+
+== batch_insert.pl ==
+
+http://code.google.com/p/xenia/source/browse/trunk/sqlite/misc/batch_insert.pl
+
+After noticing gaps in the data and investigating the insert process for the sqlite xenia database, it was seen that the sqlite database would become 'locked' and inserts to the database during this locked period were missed/unperformed resulting in gaps in the database data.
+
+While sqlite allows multiple concurrent readers to the same file, only one process is allowed to write to the database at a time.  A writer process can be made to 'wait' for a specified timeout period via either the meta commands (.timeout 30000 would be a 30 second timeout) or via a similar type request in the perl dbh (database handler) setup commands.  
+
+A bug with running sqlite in a batch mode is that the meta command (.timeout 30000) seemed to always be ignored whereas the dbh setup command was respected.  This resulted in changing the existing database write commands from something like
+
+$path_sqlite $dbname < $sql_file
+
+to
+
+perl batch_insert.pl $dbname $sql_file
+
+The batch_insert.pl script runs each sql file INSERT command one at a time in a non-transaction mode against the database with a wait/timeout condition(60 seconds) and will continue to retry the INSERT command until the the database is no longer returning a 'locked' status in the error code.
+
+By passing the earlier sql batch files through the batch_insert.pl script, this is having the desired effect of insuring that all data INSERT requests are handled properly.  I would like to also nest these sql batches as a sql transaction (begin transaction; commit; ) but the gain in speed doesn't offset the advantage of having a few individual INSERT commands fail where there might be bad data versus the whole transaction being rejected.
+ 
+=  =
