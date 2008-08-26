@@ -84,6 +84,6 @@ A 10 hour delayed offset(graph should be the same as the flow_microwfs.png graph
 
 http://carocoops.org/obskml/scripts/flow_archive.png
 
-== youtube demo video ==
+== YouTube demo video ==
 
 Put together an initial [http://www.youtube.com/watch?v=_CO9o2DyVV0 YouTube tech demo video] - captured the screen/audio using freeware 'CamStudio' but in trying to convert this to 640x480 screen size for youtube the detailed readouts are blurry/unreadable and the audio kept lagging behind the video becoming further out of sync as the video progresses.  Will probably do a retake of this with my initial screen resolution at 800x600 (instead of 1280x1024) to get more legible results.
