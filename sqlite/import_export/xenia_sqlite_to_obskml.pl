@@ -33,7 +33,8 @@ my $dbh = DBI->connect("dbi:SQLite:dbname=$dbname", "", "",
                     { RaiseError => 1, AutoCommit => 1 });
 if(!defined $dbh) {die "Cannot connect to database!\n";}
 
-#note: the below sql will get observations from the previous day -- now() - interval '1 day'
+##note: the below sql will get observations from the previous day -- now() - interval '1 day'
+#note: the below sql will get observations from the previous 8 hours (12 - 4 UTC = 8) - to counteract that the readout assumes synchronous obs composite on last measurement
 #note: make sure support table m_type_display_order is populated -- see http://carocoops.org/twiki_dmcc/pub/Main/XeniaTableSchema/m_type_display_order.sql
 
 my $sql = qq{
@@ -47,8 +48,10 @@ my $sql = qq{
     ,m_z
     ,m_value
     ,qc_level
+    ,sensor.row_id
     ,sensor.url
     ,platform.url
+    ,platform.description
     ,organization.short_name
     ,organization.url
     ,m_type_display_order.row_id
@@ -61,7 +64,7 @@ my $sql = qq{
     left join platform on platform.row_id=sensor.platform_id
     left join organization on organization.row_id=platform.organization_id
     left join m_type_display_order on m_type_display_order.m_type_id=multi_obs.m_type_id
-    where m_date > datetime('now','-1 day')
+    where m_date > datetime('now','-12 hours')
   order by multi_obs.platform_handle,m_type_display_order.row_id,m_date desc;
 };
 
@@ -79,8 +82,10 @@ while (my (
     ,$m_z
     ,$m_value
     ,$qc_level
+    ,$sensor_id
     ,$sensor_url
     ,$platform_url
+    ,$platform_desc
     ,$organization_name
     ,$organization_url
     ,$m_type_display_order
@@ -101,12 +106,14 @@ while (my (
     $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{m_value} = $m_value;
     $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{m_z}     = $m_z;
     $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{qc_level} = $qc_level;
-    $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{url} = $sensor_url;
+    $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{sensor_url} = $sensor_url;
+    $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{sensor_id} = $sensor_id;
 
     #assuming all observations are basically the same lat/lon as platform
     $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{m_lat} = $m_lat;
     $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{m_lon} = $m_lon;
     $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{url} = $platform_url;
+    $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{platform_desc} = $platform_desc;
 
     $latest_obs{operator_list}{$operator}{name} = $organization_name;
     $latest_obs{operator_list}{$operator}{url} = $organization_url;
@@ -139,7 +146,9 @@ print XML_FILE $xml_snippet;
 foreach my $operator (sort keys %{$r_latest_obs->{operator_list}}) {
 
 my $operator_name = $latest_obs{operator_list}{$operator}{name};
+$operator_name = &escape_literals($operator_name);
 my $operator_url = $latest_obs{operator_list}{$operator}{url};
+$operator_url = &escape_literals($operator_url);
 
 foreach my $platform_handle (sort keys %{$r_latest_obs->{operator_list}{$operator}{platform_list}}) {
 
@@ -147,6 +156,9 @@ my $m_lat = $latest_obs{operator_list}{$operator}{platform_list}{$platform_handl
 my $m_lon = $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{m_lon};
 my $platform_url = $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{url};
 $platform_url = &escape_literals($platform_url);
+my $platform_desc = $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{platform_desc};
+$platform_desc = &escape_literals($platform_desc);
+my $platform_name = &escape_literals($platform_handle);
 
 my $m_date = '';
 
@@ -157,7 +169,8 @@ print XML_FILE "<obsList>";
 print XML_FILE "<operatorURL>$operator_url</operatorURL>";
 print XML_FILE "<operatorName>$operator_name</operatorName>";
 print XML_FILE "<platformURL>$platform_url</platformURL>";
-print XML_FILE "<platformName>$platform_handle</platformName>";
+print XML_FILE "<platformName>$platform_name</platformName>";
+print XML_FILE "<platformDescription>$platform_desc</platformDescription>";
 
 foreach my $m_type_display_order (sort keys %{$r_latest_obs->{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}}) {
 print XML_FILE "<obs>";
@@ -175,6 +188,7 @@ my $uom_type = $latest_obs{operator_list}{$operator}{platform_list}{$platform_ha
 my $m_z = $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{m_z};
 my $m_value = $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{m_value};
 my $qc_level = $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{qc_level};
+my $sensor_id = $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{sensor_id};
 my $sensor_url = $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{sensor_url};
 $sensor_url = &escape_literals($sensor_url);
 
@@ -184,6 +198,7 @@ print XML_FILE "<value>$m_value</value>";
 print XML_FILE "<elev>$m_z</elev>";
 print XML_FILE "<qc_level>$qc_level</qc_level>";
 print XML_FILE "<dataURL>$sensor_url</dataURL>";
+print XML_FILE "<sensorID>$sensor_id</sensorID>";
 
 print XML_FILE "</obs>";
 }
@@ -211,11 +226,17 @@ close (XML_FILE);
 
 exit 0;
 
+#--------------------------------------------------------------------
+#                   escape_literals
+#--------------------------------------------------------------------
+# Must make sure values don't contain XML reserved chars
 sub escape_literals {
-
-my $platform_url = shift;
-$platform_url =~ s/&/&amp;/ ;
-
-return $platform_url;
-
+my $str = shift;
+$str =~ s/</&lt;/gs;
+$str =~ s/>/&gt;/gs;
+$str =~ s/&/&amp;/gs;
+$str =~ s/"/&quot;/gs;
+$str =~ s/'/&#39;/gs; 
+return ($str);
 }
+

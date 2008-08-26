@@ -9,6 +9,13 @@ use XML::LibXML;
 use DBI;
 use LWP::Simple;
 
+#log run out
+my $date_now = `date +%Y-%m-%dT%H:%M:%S`;
+chomp($date_now);
+print "obskml_to_xenia_sqlite.pl run start $date_now\n";
+
+my ($missing_count,$measurement_count);
+
 ####################
 #config
 
@@ -19,7 +26,11 @@ my $temp_dir = '/var/www/html/ms_tmp';
 
 my $dbname = '/var/www/cgi-bin/microwfs/microwfs.db';
 
-my $sqlite_path = '/usr/bin/sqlite3-3.5.4.bin';
+#my $path_sqlite = '/usr/bin/sqlite3-3.5.4.bin';
+my $path_batch_insert = 'perl /var/www/cgi-bin/microwfs/batch_insert.pl';
+my $path_sqlfile = './latest.sql';
+my $path_sqlfile_archive = "./archive_in/latest_$date_now.sql";
+my $path_log = '/tmp/microwfs_debug_db.log';
 
 my $undefined_platform_type_id = 6;
 
@@ -35,7 +46,9 @@ chomp($date_cutoff);
 #see usage in code below
 my $time_seconds_resolution_flag == 0;
 
-open (SQL_OUT, ">./latest.sql");
+open (SQL_OUT, ">$path_sqlfile");
+open (SQL_OUT_ARCHIVE, ">$path_sqlfile_archive");
+#print SQL_OUT "BEGIN IMMEDIATE TRANSACTION;\n";
 
 ###########################################################
 
@@ -103,7 +116,7 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 	#print "$lon $lat \n";
 	
         my $m_date = sprintf("%s",$platform->find('TimeStamp/when'));
-        #print "$m_date \n";
+        #print "$m_date :when \n";
 
 	#calculate seconds to add to base time to get zulu time
 	#note the below conversion could also be done using sqlite database command like
@@ -125,7 +138,7 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 	}
 
 	chomp($m_date);
-        #print "$m_date \n";
+        #print "$m_date :calculated\n";
 
 	if ($m_date < $date_cutoff) { print "rejecting date: $m_date \n"; next; }
 
@@ -219,7 +232,9 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 	##observation####################
 
 	if ($elev eq '') { $elev = -99999; }
-        if (!($measurement)) { print "missing measurement \n"; next; }
+
+	$measurement_count++;
+	if ($measurement eq '') { print "missing measurement: $platform_id:$obs_type.$uom_type $m_date\n"; $missing_count++; next; }
 
 	$sql = qq{ INSERT into multi_obs(row_entry_date,platform_handle,sensor_id,m_type_id,m_date,m_lon,m_lat,m_z,m_value) values (datetime('now'),'$platform_id',$sensor_row_id,$m_type_id,'$m_date',$longitude,$latitude,$elev,$measurement); };
 
@@ -228,6 +243,7 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 	#so just decided to write all these inserts to an output file and load them from there
 
 	print SQL_OUT $sql."\n";
+	print SQL_OUT_ARCHIVE $sql."\n";
 
 	} #foreach $observation
 
@@ -241,9 +257,24 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 
 $dbh->disconnect();
 
+#print SQL_OUT "COMMIT TRANSACTION;\n";
 close (SQL_OUT);
+close (SQL_OUT_ARCHIVE);
 
-`$sqlite_path microwfs.db < latest.sql`;
+my $missing_ratio = sprintf("%d", ($missing_count/$measurement_count)*100);
+print "missing_count/measurement_count = $missing_count/$measurement_count $missing_ratio% \n";
+
+$date_now = `date +%Y-%m-%dT%H:%M:%S`;
+chomp($date_now);
+print "obskml_to_xenia_sqlite.pl run stop $date_now\n";
+`echo "run start $date_now \n" >> $path_log`; 
+
+#`$path_sqlite microwfs.db < latest.sql >> $path_log`;
+`$path_batch_insert $dbname $path_sqlfile >> $path_log`;
+
+$date_now = `date +%Y-%m-%dT%H:%M:%S`;
+chomp($date_now);
+`echo "run stop $date_now \n" >> $path_log`; 
 
 exit 0;
 
@@ -293,7 +324,7 @@ if ($string eq 'dissolved_oxygen.percent_saturation') { push @ret_val, 35; push 
 if ($string eq 'water_conductivity.mS_cm-1') { push @ret_val, 7; push @ret_val, 30; push @ret_val, "water_conductivity"; }
 if ($string eq 'turbidity.ntu') { push @ret_val, 36; push @ret_val, 29; push @ret_val, "turbidity"; }
 if ($string eq 'ph.units') { push @ret_val, 38; push @ret_val, 27; push @ret_val, "ph"; }
-if ($string eq 'gage_height.m') { push @ret_val, 41; push @ret_val, 28; push @ret_val, "gage_height"; }
+if ($string eq 'gage_height.m') { push @ret_val, 43; push @ret_val, -99999; push @ret_val, "gage_height"; }
 
 #also available for mapping
 #dominant_wave_direction,water_conductivity,water_level(MLLW),ph,turbidity,precipitation,relative_humidity,dew_point,gage_height,stream_velocity,dissolved_oxygen.percent_saturation,vos-ships(wave_height,swell_height,swell_period,swell_from_direction)
