@@ -1,0 +1,22 @@
+#a comment line
+#line entries should be tab-separated fields
+#filename_out	dbname	sql_query	
+
+#query_out1	latest.db	select * from multi_obs limit 4;
+
+#query_out2	latest.db	select * from multi_obs order by m_date desc limit 4;
+
+#m_type_id = 4 = water_temperature.celcius
+#query_out3	latest_pm.db	select * from multi_obs where m_type_id = 6 order by m_date desc limit 4;
+
+#get last 4 water temperature measurements from platform = carocoops.CAP2.buoy
+#query_out4	latest.db	select * from multi_obs where m_type_id = 6 and platform_handle = 'carocoops.CAP2.buoy' order by m_date desc limit 4;
+
+#get a listing of platform handles on the database
+#platform_handles_out	latest.db	select platform_handle from platform;
+
+#get the current data dictionary listing
+dictionary_out	/var/www/cgi-bin/microwfs/microwfs.db	select t1.row_id,t2.standard_name,t3.standard_name from m_scalar_type t1,obs_type t2,uom_type t3 where t1.obs_type_id = t2.row_id and t1.uom_type_id = t3.row_id;
+
+#station_list	/var/www/cgi-bin/microwfs/microwfs.db	select platform_handle from platform order by platform_handle;
+

@@ -1,0 +1,60 @@
+#!/usr/bin/perl
+
+sub my_graph
+{
+my ($graph_data_file, $title, $y_units, $dir_path, $ref_legend, $size_x, $size_y, $range_top) = @_;
+
+my @legend = @{$ref_legend};
+
+#print "$legend[0]\n";
+
+if (!($size_x)) { $size_x = 600; }
+if (!($size_y)) { $size_y = 300; }
+
+$size_x = $size_x*0.001562499;
+$size_y = $size_y*0.00205;
+
+my $yrange;
+if ($range_top) { $yrange = "set yrange [0:$range_top]"; }
+else { $yrange = "set autoscale y"; }
+
+open (SCRIPT,">$graph_data_file.script");
+
+print SCRIPT "
+set terminal png
+set output \"$dir_path\"
+#640x480 default
+#set size 0.9375,0.625
+set size $size_x,$size_y
+set title \"$title\"
+set autoscale x
+$yrange
+set data style lines
+set xlabel \"Time (UTC)\"  
+set timefmt \"%m %d %Y %H:%M\"
+set xdata time
+set ylabel \"$y_units\"
+set format x \"%b%d\\n%l%p\"
+set grid
+set key right
+plot '$graph_data_file' using 1:5 t '$legend[0]' with lines lt 1, \\
+     '$graph_data_file' using 1:6 t '$legend[1]' with lines lt 2, \\
+     '$graph_data_file' using 1:7 t '$legend[2]' with lines lt 3, \\
+     '$graph_data_file' using 1:8 t '$legend[3]' with lines lt 4, \\
+     '$graph_data_file' using 1:9 t '$legend[4]' with lines lt 5, \\
+     '$graph_data_file' using 1:10 t '$legend[5]' with lines lt 6, \\
+     '$graph_data_file' using 1:11 t '$legend[6]' with lines lt 7, \\
+     '$graph_data_file' using 1:12 t '$legend[7]' with lines lt 8, \\
+     '$graph_data_file' using 1:13 t '$legend[8]' with lines lt 9
+
+#show grid
+reset
+quit";
+close SCRIPT;
+
+`gnuplot $graph_data_file.script`;
+#`rm $graph_data_file.script`;
+
+}
+
+1;
