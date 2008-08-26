@@ -28,7 +28,7 @@ Adding/changing several things with this revision detailed below - all of these 
 
 http://code.google.com/p/xenia/source/browse/trunk/sqlite/misc/sqlite_query.pl
 
-This is a general use query script for performing many queries in a batch manner using q [http://code.google.com/p/xenia/source/browse/trunk/sqlite/misc/query.txt query.txt] file which specifies the 
+This is a general use query script for performing many queries in a batch manner using a [http://code.google.com/p/xenia/source/browse/trunk/sqlite/misc/query.txt query.txt] file which specifies in tab separated fields:filename_out dbname sql_query
 
 == batch_insert.pl ==
 
@@ -38,16 +38,48 @@ After noticing gaps in the data and investigating the insert process for the sql
 
 While sqlite allows multiple concurrent readers to the same file, only one process is allowed to write to the database at a time.  A writer process can be made to 'wait' for a specified timeout period via either the meta commands (.timeout 30000 would be a 30 second timeout) or via a similar type request in the perl dbh (database handler) setup commands.  
 
-A bug with running sqlite in a batch mode is that the meta command (.timeout 30000) seemed to always be ignored whereas the dbh setup command was respected.  This resulted in changing the existing database write commands from something like
+A bug with running sqlite in a batch mode is that the meta command (.timeout 30000) seemed to always be ignored whereas the dbh setup command was respected.  This resulted in changing the existing database write commands in several of the perl scripts from something like
 
-$path_sqlite $dbname < $sql_file
+{{{$path_sqlite $dbname < $sql_file}}}
 
 to
 
-perl batch_insert.pl $dbname $sql_file
+{{{perl batch_insert.pl $dbname $sql_file}}}
 
 The batch_insert.pl script runs each sql file INSERT command one at a time in a non-transaction mode against the database with a wait/timeout condition(60 seconds) and will continue to retry the INSERT command until the the database is no longer returning a 'locked' status in the error code.
 
 By passing the earlier sql batch files through the batch_insert.pl script, this is having the desired effect of insuring that all data INSERT requests are handled properly.  I would like to also nest these sql batches as a sql transaction (begin transaction; commit; ) but the gain in speed doesn't offset the advantage of having a few individual INSERT commands fail where there might be bad data versus the whole transaction being rejected.
- 
-=  =
+
+== microwfsFlow.sh ==
+
+http://code.google.com/p/xenia/source/browse/trunk/sqlite/crontab/microwfsFlow.sh
+
+This shell script is called by the crontab at 50 minutes past each hour and details the various subscripts called and products generated.
+
+The name 'microwfs' is somewhat of a misnomer - the sqlite version of things started in the context of the MicroWFS experiment and the naming convention is sticking with it for now.
+
+== top of the hour trigger ==
+
+http://code.google.com/p/xenia/source/browse/trunk/sqlite/sql/top_report_hour.sql
+
+Spent a while trying to develop a sqlite version of the [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageV2#d_top_of_hour_integer_d_report_h  postgres version] of this trigger, but was very difficult to do as sqlite does not currently support variables or if/then conditions in triggers similar to postgres triggers.  Tried breaking everything into conditional update statements and while I got a working version, it became very verbose and *SLOW* so not implemented.  If I take another try at this will either implement as a C compiled function called from the trigger or push data to a separate 'top of hour only' database.
+
+== flow monitor ==
+
+http://code.google.com/p/xenia/source/browse/trunk/sqlite/flow_monitor
+
+The shell script [http://code.google.com/p/xenia/source/browse/trunk/sqlite/flow_monitor/checkStatus.sh checkStatus.sh] is called every 10 minutes past the hour and the script [http://code.google.com/p/xenia/source/browse/trunk/sqlite/flow_monitor/check_status.pl check_status.pl] uses the command line parameters to perform a database query on the latest sensor counts per organization.  The query results are sent to a column-oriented text file which is used to produce an hourly updated graph of the results using gnuplot ( [http://code.google.com/p/xenia/source/browse/trunk/sqlite/flow_monitor/status.lib status.lib] [http://code.google.com/p/xenia/source/browse/trunk/sqlite/flow_monitor/graphCommon.lib graphCommon.lib]) and an email notification is sent to staff if the sensor counts are critically low(zero for any organization with exceptions for those which are chronically low).
+
+The three status graphs are currently:
+
+Latest aggregated observations
+
+http://carocoops.org/obskml/scripts/flow_microwfs.png
+
+Latest aggregated observation for counts 0-100 (a magnification of the above graph at the bottom where organizations may only be providing a handful of observations each)
+
+http://carocoops.org/obskml/scripts/flow_low.png
+
+A 10 hour delayed offset of the latest observations aggregated to the julian weekly and monthly databases at http://www.carocoops.org/seacoos_data/sqlite/
+
+http://carocoops.org/obskml/scripts/flow_archive.png
