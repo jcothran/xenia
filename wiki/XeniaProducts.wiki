@@ -12,6 +12,14 @@ see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate#Mergin
 
 http://code.google.com/p/xenia/source/browse/trunk/obskml/products/gearth
 
+Latest placemarks
+
+http://carocoops.org/gearth/latest_placemarks.kmz
+
+Note that the time window control can be manipulated (moved, increased, decreased) - see the following documentation 
+
+http://earth.google.com/userguide/v4/ug_gps.html#timeline
+
 ObsKML can be merged and revisualized shown in the following image
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/ObsKMLGenerate/obskml_all_latest.jpg
