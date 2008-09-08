@@ -31,6 +31,8 @@ Note:
 
 = [XeniaSOS#Related_Links Related Links] =
 
+IOOS-DIF XML Schemas http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/
+
 NDBC SOS http://sdf.ndbc.noaa.gov/sos
 
 CO-OPS SOS http://opendap.co-ops.nos.noaa.gov/ioos-dif-sos/
