@@ -9,6 +9,8 @@ use DBI;
 #the below file assumes a text file with each line containing the resultset output filename and sql query separated by tab character
 my $query_file = './query.txt';
 
+#resultset filenames are appended to so that a query spanning several db files might append to the same resultfile
+
 #####################
 
 my ($dbh,$sth);
@@ -23,7 +25,7 @@ if ($query_line =~ /^#/ || $query_line =~ /^\s/) { next; }
 my ($filename_resultset,$dbname,$sql) = split(/\t/,$query_line);
 print "filename_resultset:$filename_resultset\tdb:$dbname\tsql:$sql";
 
-open(FILE_OUT, ">$filename_resultset");
+open(FILE_OUT, ">>$filename_resultset");
 
 #note: tried using the ATTACH statement with a union between databases, but query performance was slow(ignoring indexes?)
 #so for now recommending concatenating multiple query resulset files from separate queries
