@@ -1,0 +1,2 @@
+#summary Optimization notes for Sqlite, SQL statements
+
