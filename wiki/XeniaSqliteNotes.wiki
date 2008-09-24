@@ -1,8 +1,41 @@
 #summary Optimization notes for Sqlite, SQL statements
 
-= Data Dictionary Listing = 
+= Data Dictionary Listing(Simple Scalar Types) = 
 
 {{{
 -- scalar data dictionary listing (standard listing)
 -- select t1.row_id,t2.standard_name,t3.standard_name from m_scalar_type t1,obs_type t2,uom_type t3 where t1.obs_type_id = t2.row_id and t1.uom_type_id = t3.row_id;
 }}}
+
+= Adding simple scalar types to the data dictionary tables and processing scripts = 
+
+The below example shows how to add a simple scalar data type (a vector of only one component) to the data dictionary.  The particular observation type is 'depth' and the unit of measurement is meters 'm'
+
+For the tables involved, the row_id on each of the tables is defined as the primary key so they will autoincrement on inserts to the next available row_id.
+
+For further examples see the initial data dictionary population script at http://code.google.com/p/xenia/source/browse/trunk/sqlite/sql/obs.sql
+
+----
+
+Add observation type row to obs_type table
+
+`INSERT INTO obs_type(standard_name,definition) VALUES ('depth', 'approximate water depth');`
+
+obs_type.row_id = 42
+
+INSERT INTO uom_type(row_id,standard_name,definition,display) VALUES ('m', 'meter', 'm');
+
+uom_type.row_id = 6
+
+INSERT INTO m_scalar_type(obs_type_id,uom_type_id) VALUES (42,6);
+
+m_scalar_type.row_id = 48
+
+INSERT INTO m_type (num_types,m_scalar_type_id) VALUES (1,48);
+
+m_type.row_id = 44
+
+
+#with latest version of database that does not include NOT NULL constraints for sensor.type_id and sensor.short_name could shorten below statements to just return m_type_id
+
+if ($string eq 'depth.m') { push @ret_val, 44; push @ret_val, -99999; push @ret_val, "undefined"; }
