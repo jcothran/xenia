@@ -71,5 +71,11 @@ see http://www.sqlite.org/cvstrac/wiki?p=DateAndTimeFunctions
 
 `multi_obs.m_date <= strftime('%Y-%m-%dT%H:00:00','2008-09-24T14:00:00','+1 hour')`
 
-Note to use strftime, datetime, etc on known values or small subsets as they add much time cost to queries
+Note that function datetime by default returns a space separated result which will only compare the date portion against the ISO8601 'T' separated multi_obs.m_date field.  The above comparison avoids that date only comparison error.
+
+Note to use strftime, datetime, etc on known values or small subsets as they add much time cost to queries.  
+
+= use UNION instead of JOIN/OR = 
+
+from experimentation it seems JOINS and OR statements may not correctly use/invoke indexes and it may be faster to do a UNION of two separate SELECT statements which are making use of table indexes
 
