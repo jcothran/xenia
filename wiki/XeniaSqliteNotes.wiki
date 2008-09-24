@@ -2,5 +2,7 @@
 
 = Data Dictionary Listing = 
 
+{{{
 -- scalar data dictionary listing (standard listing)
 -- select t1.row_id,t2.standard_name,t3.standard_name from m_scalar_type t1,obs_type t2,uom_type t3 where t1.obs_type_id = t2.row_id and t1.uom_type_id = t3.row_id;
+}}}
