@@ -65,6 +65,11 @@ Add line to http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_exp
 if ($string eq 'depth.m') { push @ret_val, 44; push @ret_val, -99999; push @ret_val, "undefined"; }
 }}}
 
-= datetime formatting =
+= datetime formatting example for time comparison statements =
 
-strftime('%Y-%m-%dT%H:00:00',datetime(new.m_date,'+1 hour'))
+see http://www.sqlite.org/cvstrac/wiki?p=DateAndTimeFunctions
+
+`multi_obs.m_date <= strftime('%Y-%m-%dT%H:00:00','2008-09-24T14:00:00','+1 hour')`
+
+Note to use strftime, datetime, etc on known values or small subsets as they add much time cost to queries
+
