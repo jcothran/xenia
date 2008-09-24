@@ -64,3 +64,7 @@ Add line to http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_exp
 
 if ($string eq 'depth.m') { push @ret_val, 44; push @ret_val, -99999; push @ret_val, "undefined"; }
 }}}
+
+= datetime formatting =
+
+strftime('%Y-%m-%dT%H:00:00',datetime(new.m_date,'+1 hour'))
