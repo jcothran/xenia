@@ -17,25 +17,50 @@ For further examples see the initial data dictionary population script at http:/
 
 ----
 
-Add observation type row to obs_type table
-
+Add observation type row to obs_type table.  Note that the naming convention is all lower 
+case with underscore character as a space/word separator.
 `INSERT INTO obs_type(standard_name,definition) VALUES ('depth', 'approximate water depth');`
+
+Check the row_id of the newly inserted row for reference in later step
 
 obs_type.row_id = 42
 
-INSERT INTO uom_type(row_id,standard_name,definition,display) VALUES ('m', 'meter', 'm');
+----
+
+Add unit of measurement type row to uom_type table.  Note that the naming convention is all lower case with underscore character as a space/word separator.
+
+For this example the uom_type row (meter) already exists on the database so we do not perform the below step, but the below line shows how we would add this row.
+
+`INSERT INTO uom_type(row_id,standard_name,definition,display) VALUES ('m', 'meter', 'm');`
+
+Check the row_id of the newly inserted row for reference in later step
 
 uom_type.row_id = 6
 
-INSERT INTO m_scalar_type(obs_type_id,uom_type_id) VALUES (42,6);
+----
+
+Add row to m_scalar_type table to associate the obs_type with its uom - note the referenced row_id's used from the previous 2 steps
+
+`INSERT INTO m_scalar_type(obs_type_id,uom_type_id) VALUES (42,6);`
+
+Check the row_id of the newly inserted row for reference in later step
 
 m_scalar_type.row_id = 48
 
-INSERT INTO m_type (num_types,m_scalar_type_id) VALUES (1,48);
+----
+
+Add row to m_type table to associate the m_type.row_id=m_type_id to the m_scalar_type.row_id  The inserted '1' value lets us know that there is only one component to this vector
+
+`INSERT INTO m_type (num_types,m_scalar_type_id) VALUES (1,48);`
 
 m_type.row_id = 44
 
+----
 
+Add line to http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/obskml_to_xenia_sqlite.pl script (function at bottom of script) for associating the particular m_type_id code with a given obsType.uomType combination.
+
+{{{
 #with latest version of database that does not include NOT NULL constraints for sensor.type_id and sensor.short_name could shorten below statements to just return m_type_id
 
 if ($string eq 'depth.m') { push @ret_val, 44; push @ret_val, -99999; push @ret_val, "undefined"; }
+}}}
