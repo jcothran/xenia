@@ -20,6 +20,7 @@ my ($missing_count,$measurement_count);
 #config
 
 #usage: perl <path>/obskml_to_xenia_sqlite.pl <input zipped kml files> <optional: debug output sql directory> >> <log file>
+#note if using debug output sql directory to create a 'archive_in' subdirectory there also which is written to in the script below
 
 #usage: perl /var/www/cgi-bin/microwfs/obskml_to_xenia_sqlite.pl http://carocoops.org/obskml/feeds/seacoos_all_latest.zip >>/tmp/microwfs_debug.log 2>/dev/null
 
