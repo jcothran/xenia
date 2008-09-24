@@ -19,6 +19,12 @@ my ($missing_count,$measurement_count);
 ####################
 #config
 
+#usage: perl <path>/obskml_to_xenia_sqlite.pl <input zipped kml files> <optional: debug output sql directory> >> <log file>
+
+#usage: perl /var/www/cgi-bin/microwfs/obskml_to_xenia_sqlite.pl http://carocoops.org/obskml/feeds/seacoos_all_latest.zip >>/tmp/microwfs_debug.log 2>/dev/null
+
+#usage debug: perl /var/www/cgi-bin/microwfs/obskml_to_xenia_sqlite.pl http://carocoops.org/obskml/feeds/seacoos_all_latest.zip /mydir >>/tmp/microwfs_debug.log 2>/dev/null 
+
 #note the user process under which this runs needs to have permissions to write to the following paths
 
 #a temporary directory for decompressing, processing files
@@ -26,10 +32,14 @@ my $temp_dir = '/var/www/html/ms_tmp';
 
 my $dbname = '/var/www/cgi-bin/microwfs/microwfs.db';
 
+my $path_dir_sql = @ARGV[1];
+if ($path_dir_sql eq '') { $path_dir_sql = '.'; }
+
 #my $path_sqlite = '/usr/bin/sqlite3-3.5.4.bin';
 my $path_batch_insert = 'perl /var/www/cgi-bin/microwfs/batch_insert.pl';
-my $path_sqlfile = './latest.sql';
-my $path_sqlfile_archive = "./archive_in/latest_$date_now.sql";
+my $path_sqlfile = "$path_dir_sql/latest.sql";
+my $path_sqlfile_archive = "$path_dir_sql/archive_in/latest_$date_now.sql";
+my $path_zipfile_archive = "$path_dir_sql/archive_in/latest_$date_now.zip";
 my $path_log = '/tmp/microwfs_debug_db.log';
 
 my $undefined_platform_type_id = 6;
@@ -70,6 +80,7 @@ my $target_dir = "$temp_dir/gearth_$random_value";
 my $zip_filepath = "$target_dir/obskml.xml.zip";
 #print $zip_filepath."\n";
 getstore("$kml_zip_feed", $zip_filepath);
+getstore("$kml_zip_feed", $path_zipfile_archive);
 `cd $target_dir; unzip obskml.xml.zip`;
 
 my $filelist = `ls $target_dir/*.kml`;
@@ -108,11 +119,17 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
         if (&search_array($platform_id, @platform_ignore)) { next; }
 
 	my $operator_url = sprintf("%s",$platform->find('Metadata/obsList/operatorURL'));
+	$operator_url = escape_literals($operator_url);
         my $platform_url = sprintf("%s",$platform->find('Metadata/obsList/platformURL'));
+	$platform_url = escape_literals($platform_url);
         my $platform_desc = sprintf("%s",$platform->find('Metadata/obsList/platformDescription'));
+	$platform_desc = escape_literals($platform_desc);
 
 	my $lon_lat_string = sprintf("%s",$platform->find('Point/coordinates'));
 	my ($longitude,$latitude) = split(/,/,$lon_lat_string);
+	#only carry lon/lat precision to six decimal places
+	$longitude = sprintf("%.6f", $longitude);
+	$latitude = sprintf("%.6f", $latitude);
 	#print "$lon $lat \n";
 	
         my $m_date = sprintf("%s",$platform->find('TimeStamp/when'));
@@ -198,14 +215,21 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 	        my $uom_type = sprintf("%s",$observation->find('uomType'));
 	        my $measurement = sprintf("%s",$observation->find('value'));
                 my $elev = sprintf("%s",$observation->find('elev'));
+                my $sorder = sprintf("%s",$observation->find('sorder'));
+                my $qclevel = sprintf("%s",$observation->find('QCLevel'));
 
+
+		#with latest version of database that does not include NOT NULL constraints for sensor.type_id and sensor.short_name could shorten below statements to just utilize m_type_id
                 my ($m_type_id,$sensor_type_id,$sensor_short_name) = get_observed_property($obs_type.".".$uom_type);
 		#print ": $m_type_id $sensor_type_id $sensor_short_name \n";
 
 		if ($m_type_id eq 'undefined') { print "$obs_type.$uom_type undefined \n"; next; }
 
 	##sensor####################
-	$sql = qq{ SELECT row_id from sensor where m_type_id = $m_type_id and platform_id = $platform_row_id };
+
+	if ($sorder eq '') { $sorder = 1; }
+
+	$sql = qq{ SELECT row_id from sensor where m_type_id = $m_type_id and platform_id = $platform_row_id and s_order = $sorder };
 	#print $sql."\n";
 	$sth = $dbh->prepare( $sql );
 	$sth->execute();
@@ -215,7 +239,7 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 	else {
 		print "sensor $obs_type.$uom_type not found - inserting\n";
 
-		$sql = qq{ INSERT into sensor(row_entry_date,platform_id,type_id,short_name,m_type_id,s_order) values (datetime('now'),$platform_row_id,$sensor_type_id,'$sensor_short_name',$m_type_id,1); };
+		$sql = qq{ INSERT into sensor(row_entry_date,platform_id,type_id,short_name,m_type_id,s_order) values (datetime('now'),$platform_row_id,$sensor_type_id,'$sensor_short_name',$m_type_id,$sorder); };
 		#print $sql."\n";
 		$sth = $dbh->prepare( $sql );
 		$sth->execute();
@@ -234,6 +258,7 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 	if ($elev eq '') { $elev = -99999; }
 
 	$measurement_count++;
+	if ($qclevel ne '' && $qclevel ne '0' && $qclevel ne '3') { print "qclevel suspect/bad/missing($qclevel) measurement: $platform_id:$obs_type.$uom_type $m_date\n"; next; }
 	if ($measurement eq '') { print "missing measurement: $platform_id:$obs_type.$uom_type $m_date\n"; $missing_count++; next; }
 
 	$sql = qq{ INSERT into multi_obs(row_entry_date,platform_handle,sensor_id,m_type_id,m_date,m_lon,m_lat,m_z,m_value) values (datetime('now'),'$platform_id',$sensor_row_id,$m_type_id,'$m_date',$longitude,$latitude,$elev,$measurement); };
@@ -267,7 +292,7 @@ print "missing_count/measurement_count = $missing_count/$measurement_count $miss
 $date_now = `date +%Y-%m-%dT%H:%M:%S`;
 chomp($date_now);
 print "obskml_to_xenia_sqlite.pl run stop $date_now\n";
-`echo "run start $date_now \n" >> $path_log`; 
+`echo "=====================\nrun start $date_now \n" >> $path_log`; 
 
 #`$path_sqlite microwfs.db < latest.sql >> $path_log`;
 `$path_batch_insert $dbname $path_sqlfile >> $path_log`;
@@ -294,7 +319,10 @@ return 0;
 ####################################################
 sub get_observed_property {
 #this subs the xenia database sensor:m_type_id,type_id,short_name for the obs_type.uom_type string provided
-#got tired of specifying sensor type_id(attribute not really utilized), so using -99999 as default
+#sensor type_id(attribute not really utilized), so using '-99999' as default
+#short_name not really utilized, so using 'undefined' as default
+#with latest version of database that does not include NOT NULL constraints for sensor.type_id and sensor.short_name could shorten below statements to just return m_type_id
+
 
 my $string = shift;
 my @ret_val = ();
@@ -309,6 +337,7 @@ if ($string eq 'precipitation.millimeter') { push @ret_val, 29; push @ret_val, 3
 if ($string eq 'solar_radiation.millimoles_per_m^2') { push @ret_val, 30; push @ret_val, 3; push @ret_val, "solar_radiation"; }
 
 if ($string eq 'significant_wave_height.m') { push @ret_val, 13; push @ret_val, -99999; push @ret_val, "significant_wave_height"; }
+#if ($string eq 'significant_wave_to_direction.degrees_true') { push @ret_val, 13; push @ret_val, -99999; push @ret_val, "significant_wave_to_direction"; }
 if ($string eq 'dominant_wave_period.s') { push @ret_val, 14; push @ret_val, -99999; push @ret_val, "dominant_wave_period"; }
 if ($string eq 'visibility.nautical_miles') { push @ret_val, 39; push @ret_val, -99999; push @ret_val, "visibility"; }
 if ($string eq 'current_speed.m_s-1') { push @ret_val, 11; push @ret_val, -99999; push @ret_val, "current_speed"; }
@@ -325,6 +354,7 @@ if ($string eq 'water_conductivity.mS_cm-1') { push @ret_val, 7; push @ret_val, 
 if ($string eq 'turbidity.ntu') { push @ret_val, 36; push @ret_val, 29; push @ret_val, "turbidity"; }
 if ($string eq 'ph.units') { push @ret_val, 38; push @ret_val, 27; push @ret_val, "ph"; }
 if ($string eq 'gage_height.m') { push @ret_val, 43; push @ret_val, -99999; push @ret_val, "gage_height"; }
+if ($string eq 'depth.m') { push @ret_val, 44; push @ret_val, -99999; push @ret_val, "undefined"; }
 
 #also available for mapping
 #dominant_wave_direction,water_conductivity,water_level(MLLW),ph,turbidity,precipitation,relative_humidity,dew_point,gage_height,stream_velocity,dissolved_oxygen.percent_saturation,vos-ships(wave_height,swell_height,swell_period,swell_from_direction)
@@ -333,3 +363,18 @@ if ($ret_val[0] eq '') { push @ret_val, "undefined"; push @ret_val, "undefined";
 
 return @ret_val;
 }
+
+#--------------------------------------------------------------------
+#                   escape_literals
+#--------------------------------------------------------------------
+# Must make sure values don't contain XML reserved chars
+sub escape_literals {
+my $str = shift;
+$str =~ s/</&lt;/gs;
+$str =~ s/>/&gt;/gs;
+$str =~ s/&/&amp;/gs;
+$str =~ s/"/&quot;/gs;
+$str =~ s/'/&#39;/gs; 
+return ($str);
+}
+
