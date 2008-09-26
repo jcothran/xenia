@@ -31,7 +31,7 @@ Add unit of measurement type row to uom_type table.  Note that the naming conven
 
 For this example the uom_type row (meter) already exists on the database so we do not perform the below step, but the below line shows how we would add this row.
 
-`INSERT INTO uom_type(row_id,standard_name,definition,display) VALUES ('m', 'meter', 'm');`
+`INSERT INTO uom_type(standard_name,definition,display) VALUES ('m', 'meter', 'm');`
 
 Check the row_id of the newly inserted row for reference in later step
 
@@ -78,4 +78,3 @@ Note to use strftime, datetime, etc on known values or small subsets as they add
 = use UNION instead of JOIN/OR = 
 
 from experimentation it seems JOINS and OR statements may not correctly use/invoke indexes and it may be faster to do a UNION of two separate SELECT statements which are making use of table indexes
-
