@@ -137,7 +137,7 @@ hosted web/productivity services: zope/plone, trac, web stats -> webhosting(host
 
 ----
 == General technical discussions ==
-  * format+convention vs service/software
   * ROA vs SOA
-  * report vs query
+    * format+convention/data model vs service/software
+    * report vs query
   * real-time vs model/archive
