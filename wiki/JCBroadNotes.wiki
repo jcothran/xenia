@@ -10,7 +10,7 @@ Secoora files and feeds http://secoora.org/data
 
 CarolinasRCOOS (openlayers *beta/experimental*) http://carolinasrcoos.org
 
-NWS Marine Weather Portal (*beta/experimental*) http://129.252.37.86/wx/
+NWS Marine Weather Portal http://forecast.weather.gov/mwp/
 
 ----
 
