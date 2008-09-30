@@ -52,6 +52,8 @@ XeniaDevelopmentIdeas
 
 XeniaUpdates
 
+XeniaDesign
+
 ----
 = [XeniaHome#Notes Notes] =
 
@@ -71,15 +73,7 @@ An *IRC channel* is available for developer chat at irc://irc.freenode.net/#xeni
 Would like to facilitate any additional ideas, discussion or code developments/branches at this site as it might be useful to others as time and opportunity permit.
 
 ----
-= [XeniaHome#Xenia_Design Xenia Design] =
 
-This is an earlier documentation [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaDesign webpage] to list some Xenia design considerations, benchmarks, and tips as related to the relational database schema.
-
-== Similar observation schemas ==
-
-[ftp://ftp.research.microsoft.com/pub/tr/TR-2008-92.pdf A Data Model for Environmental Observations] [http://www.carocoops.org/documents/ODM_data_model.pdf pdf]
-
-----
 = Related links = 
 
 http://mapserver.gis.umn.edu
