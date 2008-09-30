@@ -138,7 +138,7 @@ hosted web/productivity services: zope/plone, trac, web stats -> webhosting(host
 ----
 == General technical discussions ==
   * ROA vs SOA (see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML#ObsKML_Design_Goals)
-    * common request method http://www.opensearch.org
+    * common search/request method http://www.opensearch.org
     * format+convention/data model vs service/software
     * report vs query
   * real-time vs model/archive
