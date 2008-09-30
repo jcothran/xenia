@@ -6,11 +6,11 @@ This is an earlier documentation [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/v
 
 == Similar observation schemas ==
 
-[ftp://ftp.research.microsoft.com/pub/tr/TR-2008-92.pdf A Data Model for Environmental Observations] [http://www.carocoops.org/documents/ODM_data_model.pdf pdf]
-
 ----
 
 = Brief Xenia/ODM schema comparison =
+
+[ftp://ftp.research.microsoft.com/pub/tr/TR-2008-92.pdf A Data Model for Environmental Observations] [http://www.carocoops.org/documents/ODM_data_model.pdf pdf]
 
 Reviewed the links and schema and here's some initial comparison and feedback between the ODM and Xenia schemas.
 
