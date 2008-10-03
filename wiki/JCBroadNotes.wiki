@@ -86,8 +86,11 @@ data feeds/formats http://secoora.org/data
 	* CSV,XML(GeoRSS,ObsKML,styled KML),shapefile,sqlite
 	
 	* WMS(map image overlays)/WFS(feature info XML)
-	* OGC SOS, DIF (feature info XML)
+	* OGC SOS, DIF (feature info XML) XeniaSOS
 	* OPeNDAP(netCDF,RDB)
+
+obsregistry http://obsregistry.org
+	* additional discovery - fgdc,gcmd,etc
 
 web/apache throttling (mod_cband ?)
   * http://www.uno-code.com/?q=node/64
@@ -112,15 +115,6 @@ desktop tools
 	* ncBrowse(netCDF) http://www.epic.noaa.gov/java/ncBrowse
 	* ODV(ctd/csv) http://odv.awi.de
 	* Excel(CSV)
-
-----
-
-obsregistry http://obsregistry.org
-	* additional discovery - fgdc,gcmd,etc
-	
-IOOS/DIF
-
-OPeNDAP ?
 
 ----
 == Devolution - technology changes, lessons learned ==
