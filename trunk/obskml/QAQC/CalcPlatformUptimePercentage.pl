@@ -1,5 +1,20 @@
 #######################################################################################################
 #Revisions
+# Rev: 1.4.0.0
+# Author: DWR
+# Sub: QueryPlatformSensorReportCount
+# Changes: reworked the query to get the sensor count to drastically improve the speed.
+# Sub: GetMTypeFromObsType
+# Changes: Added the subroutine. Given a platform and observation name, it returns the sensor type. Used in QueryPlatformSensorReportCount
+# to help speed up the query. Elimates the need to LEFT JOIN the sensor table.
+
+# Rev: 1.3.0.0
+# Author: DWR
+# Changes: Fixed the database error handling. On the database connect statement, changed RaiseError to 0 so the errors don't cause us to exit out.
+# 
+# Sub: AddRecordToDatabase(...)
+# Changes: Added retry ability for INSERTS if the database is locked. Added timeout value for database when retrying to keep CPU cycles down.
+# 
 #Rev: 1.2.0.0
 #Author: DWR
 #Changes: Added handling of time zones. The data is stamped in GMT in the database, so we want to be able to move the time
@@ -41,7 +56,7 @@ use DBI;
 use constant MICROSOFT_PLATFORM => 0;
 
 #1 enables the various debug print statements, 0 turns them off.
-use constant USE_DEBUG_PRINTS   => 0;
+use constant USE_DEBUG_PRINTS   => 1;
 
 use constant SECONDS_PER_DAY => ( 24 * 60 * 60 );
 ###path config#############################################
@@ -196,7 +211,7 @@ else
 
 #Try and connect to the database.
 my $DB = DBI->connect("dbi:SQLite:dbname=$strDBName", "", "",
-                      { RaiseError => 1, AutoCommit => 1 });
+                      { RaiseError => 0, AutoCommit => 1 });
 if(!defined $DB) 
 {
   die "ERROR: Cannot connect to database: $strDBName\n";
@@ -271,7 +286,7 @@ foreach my $test_profile ($xp_tests->findnodes('//testProfile'))
   my $test_profile_id = sprintf("%s",$test_profile->find('id'));
   if( USE_DEBUG_PRINTS )
   {
-   	print( "TestProfileID: $test_profile\n"); 
+   	print( "TestProfileID: $test_profile_id\n"); 
   }
   my %SensorIDs;
   foreach my $platform_id ($test_profile->findnodes('platformList/platform')) 
@@ -381,38 +396,71 @@ sub QueryReportingSensorsForPlatform #( $DB, $strPlatformID, $strStartDate, $str
 sub QueryPlatformSensorReportCount #( $DB, $strPlatformID, $strStart, $strEnd, $strSensorName, $iUpdateInterval, \%PlatformIDs, $iTimeZoneShift )
 {
   my ( $DB, $strPlatformID, $strStart, $strEnd, $strSensorName, $iUpdateInterval, $PlatformIDs,$iTimeZoneShift ) = @_;
-     
+  my $iCnt      = -1;
+  
   #This query will return the number of entries of the sensor type given for the given platform and date range.
   #In other words how many times do we have an entry for that sensor for that platform during that date/time interval.
   # m_date >= '$strStart' AND m_date < '$strEnd'      AND 
+  #$strPlatformID = 'usf.C14.IMET';
 
-  #DWR v1.2.0.0
-  #Added time zone adjustment into WHERE clause for start/end date range.
-  my $strSQL = "SELECT COUNT( sensor.m_type_id )
-                FROM multi_obs 
-                LEFT JOIN sensor on sensor.row_id=multi_obs.sensor_id
-                WHERE  
-                  platform_handle = '$strPlatformID'                                  AND 
-                  sensor.short_name = '$strSensorName'                                AND
-                  datetime(m_date) >= datetime('$strStart','$iTimeZoneShift hours')   AND  
-                  datetime(m_date) < datetime('$strEnd','$iTimeZoneShift hours');";      
-
-  my $hSt = $DB->prepare( $strSQL );
-  if( !defined $hSt )
+  #DWR v1.3.0.0
+  #Query the m_type_id to alleviate the need below to JOIN on the sensor table.
+  my $iType = GetMTypeFromObsType ( $DB, $strSensorName, $strPlatformID, 1);#($dbh, $strObsName, $strPlatformHandle, $iSOrder )
+  
+  if( defined( $iType ) )
   {
-    print( "ERROR: Unable to prepare SQL statement; $strSQL.\n");
-    return( -1 );
-  }         
-  if( !$hSt->execute( ) )
-  {
-    print( "ERROR: Failed execute: $hSt->errstr()\n SQLStatement: $strSQL\n");    
-    return( -1 );    
+    #DWR v1.2.0.0
+    #Added time zone adjustment into WHERE clause for start/end date range.
+    #DWR v1.3.0.0
+    #Reworked the SQL query for speed. Dropped the join the the sensor table since we are now
+    #looking up the sensor m_type_id above.
+    my $strSQL = "SELECT COUNT( m_type_id )
+                  FROM multi_obs 
+                  WHERE  
+                    multi_obs.m_type_id = $iType                              AND 
+                    m_date >= strftime( '%Y-%m-%dT%H:00:00',datetime('$strStart','$iTimeZoneShift hours') )   AND  
+                    m_date < strftime( '%Y-%m-%dT%H:00:00', datetime('$strEnd','$iTimeZoneShift hours') )     AND      
+                    platform_handle = '$strPlatformID';";                
+  #  my $strSQL = "SELECT COUNT( sensor.m_type_id )
+  #                FROM multi_obs 
+  #                LEFT JOIN sensor on sensor.row_id=multi_obs.sensor_id
+  #                WHERE  
+  #                  platform_handle = '$strPlatformID'                                  AND 
+  #                  sensor.short_name = '$strSensorName'                                AND
+  #                  datetime(m_date) >= datetime('$strStart','$iTimeZoneShift hours')   AND  
+  #                  datetime(m_date) < datetime('$strEnd','$iTimeZoneShift hours');";      
+  
+    
+    my $hSt       = $DB->prepare( $strSQL );
+    if( defined $hSt )
+    {
+      if( $hSt->execute( ) )
+      {
+        $iCnt = $hSt->fetchrow_array();   
+        my $strDay = substr( $strStart, 0, 10);
+        %$PlatformIDs->{Platform}{$strPlatformID}{Sensor}{$strSensorName}{Day}{$strDay}{Count} = $iCnt;  
+        %$PlatformIDs->{Platform}{$strPlatformID}{Sensor}{$strSensorName}{UpdateInterval} = $iUpdateInterval;
+      }
+      else
+      {
+        my $strErr = $hSt->errstr;
+        print( "QueryPlatformSensorReportCount::ERROR: Failed execute: $strErr\n SQLStatement: $strSQL\n");    
+      }
+    }
+    else
+    {
+      print( "QueryPlatformSensorReportCount::ERROR: Unable to prepare SQL statement: $strSQL.\n");
+    }
   }
-  my $iCnt = $hSt->fetchrow_array();   
-  my $strDay = substr( $strStart, 0, 10);
-  %$PlatformIDs->{Platform}{$strPlatformID}{Sensor}{$strSensorName}{Day}{$strDay}{Count} = $iCnt;  
-  %$PlatformIDs->{Platform}{$strPlatformID}{Sensor}{$strSensorName}{UpdateInterval} = $iUpdateInterval;
+  #No m_type_id for the sensor on the platform. We'll create a placeholder and give a count of 0.
+  else
+  {
+    my $strDay = substr( $strStart, 0, 10);
+    %$PlatformIDs->{Platform}{$strPlatformID}{Sensor}{$strSensorName}{Day}{$strDay}{Count} = 0;  
+    %$PlatformIDs->{Platform}{$strPlatformID}{Sensor}{$strSensorName}{UpdateInterval} = $iUpdateInterval;    
+  }    
   return( $iCnt );
+
 }
 
 ########################################################################################################################
@@ -444,7 +492,8 @@ sub GetPlatformURL #( $DB, $strPlatformID)
   }
   else
   {
-    print( "ERROR: Failed execute: $hSt->errstr()\n SQLStatement: $strSQL\n");    
+    my $strErr = $hSt->errstr;
+    print( "ERROR: Failed execute: $strErr\n SQLStatement: $strSQL\n");    
   }
   return( $strURL );
 }
@@ -697,6 +746,12 @@ sub AddRecordToDatabase #( $DB, $strPlatformID, $Sensor, $strSensorAvg, $strDate
 {
   my ( $DB, $strPlatformID, $Sensor, $strSensorAvg, $strDate ) = @_;
   
+  
+  # DWR v1.3.0.0
+  # Set the timout value to 2 seconds. This is applicable to the execute statement if the database is locked for instance, we'll wait 2 seconds
+  # waiting on the lock before we give up.
+  $DB->func( 2000, 'busy_timeout' );
+
   #We have to lookup the sensor id for the platform.
   my $strSQL = "SELECT sensor_id 
                 FROM multi_obs
@@ -704,18 +759,32 @@ sub AddRecordToDatabase #( $DB, $strPlatformID, $Sensor, $strSensorAvg, $strDate
                 WHERE platform_handle = '$strPlatformID' AND sensor.short_name = '$Sensor'
                 LIMIT 1;";
 
+  my $iSuccess  = 0;
+  my $iRetry    = 0;
+  my $strSensorID;
   my $hSt = $DB->prepare( $strSQL );
-  if( !defined $hSt )
+  if( defined $hSt )
   {
-    print( "ERROR: Unable to prepare SQL statement; $strSQL.\n");
+    if( $hSt->execute( ) )
+    {
+      $strSensorID = $hSt->fetchrow_array();
+    }
+    else
+    {
+      my $strErr = $hSt->errstr;
+      print( "AddRecordToDatabase::ERROR: Failed execute: $strErr\n SQLStatement: $strSQL\n");    
+      return( -1 );
+    }
+  }  
+  else
+  {
+    print( "AddRecordToDatabase::ERROR: Unable to prepare SQL statement: $strSQL.\n");
     return( -1 );
   }         
-  if(! $hSt->execute( ) )
-  {
-    print( "ERROR: Failed execute: $hSt->errstr()\n SQLStatement: $strSQL\n");    
-    return( -1 );    
-  }
-  my $strSensorID = $hSt->fetchrow_array();
+
+  $iSuccess  = 0;
+  $iRetry    = 0;
+  
   if( defined $strSensorID )
   {
     #Now we can update our sensor metrics table.
@@ -725,19 +794,80 @@ sub AddRecordToDatabase #( $DB, $strPlatformID, $Sensor, $strSensorAvg, $strDate
               (app_day,sensor_id,percentage_uptime)
               VALUES('$strDate', $strSensorID, $strSensorAvg);";
               
-    $hSt = $DB->prepare( $strSQL );
-    if( !defined $hSt )
+    #DWR v1.3.0.0
+    # Added retry capability if the database is locked.
+    while( !$iSuccess )
     {
-      print( "ERROR: Unable to prepare SQL statement; $strSQL.\n");
-      return( -1 );
-    }         
-    if( !$hSt->execute( ) )
-    {
-      print( "ERROR: Failed execute: $hSt->errstr()\n SQLStatement: $strSQL\n");    
-      return( -1 );    
-    }
-    return( 1 );
+      $hSt = $DB->prepare( $strSQL );
+      if( defined $hSt )
+      {
+        if( $hSt->execute( ) )
+        {
+          return( 1 );
+        }
+        else
+        {
+          my $strErr = $hSt->errstr;
+          if( $strErr =~ 'locked' )
+          {
+            print( "AddRecordToDatabase::ERROR: Failed execute: $strErr\n SQLStatement: $strSQL\n Retry Attempt: $iRetry\n");    
+          }
+          else
+          {
+            print( "AddRecordToDatabase::ERROR: Failed execute: $strErr\n SQLStatement: $strSQL\n");    
+            return( -1 );
+          }
+        }
+      }
+      else
+      {
+        print( "AddRecordToDatabase::ERROR: Unable to prepare SQL statement: $strSQL.\n DBI::errstr()\n");
+        return( -1 );
+      }      
+      $hSt->finish();
+      undef $hSt;
+      
+      $iRetry++;
+    }      
   } 
   return( 0 );                 
 }
 
+sub GetMTypeFromObsType
+{
+  my ($dbh, $strObsName, $strPlatformHandle, $iSOrder ) = @_;
+  
+  my $strSOrder = '';
+  if( defined $iSOrder )
+  {
+    $strSOrder = "sensor.s_order = $iSOrder AND";
+  }
+  my $strSQL = "SELECT DISTINCT(sensor.m_type_id) FROM m_type, m_scalar_type, obs_type, sensor, platform
+                WHERE  sensor.m_type_id = m_type.row_id AND
+                m_scalar_type.row_id = m_type.m_scalar_type_id AND
+                obs_type.row_id = m_scalar_type.obs_type_id AND
+                platform.row_id = sensor.platform_id AND
+                $strSOrder
+                obs_type.standard_name = '$strObsName' AND
+                platform.platform_handle = '$strPlatformHandle';";
+  my $iMType = -1;
+  my $sth = $dbh->prepare( $strSQL );
+  if( defined $sth )
+  {
+    if( $sth->execute() )
+    {      
+      $iMType = $sth->fetchrow();
+    }
+    else
+    {
+      my $strErr = $sth->errstr;
+      print( "ERROR::$strErr\n");
+    }
+  }
+  else
+  {
+    print( "ERROR::Unable to prepare SQL statement: $strSQL\n");
+  } 
+  $sth->finish();
+  return( $iMType );
+}
