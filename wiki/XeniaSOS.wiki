@@ -14,7 +14,7 @@ The above html script calls the cgi script documented at [http://code.google.com
 
 Note:
 
-   * data is across a variety of data providers nationally for the latest 3 day period(time window could be enlarged as needed)
+   * data is across a variety of data providers nationally for the latest 3 day period(time window could be enlarged as needed) - archival julian weekly sqlite files are available at http://carocoops.org/seacoos_data/sqlite/weekly
    * observation elevation datum is optional or assumed MSL(Mean Sea Level)
    * the sensorID is related to an internal database/system frame of reference and not related to any developing or recognized community sensorID reference
    * the OBSERVEDPROPERTY parameter assumes one sensor per platform (for now)
