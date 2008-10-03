@@ -86,7 +86,7 @@ data feeds/formats http://secoora.org/data
 	* CSV,XML(GeoRSS,ObsKML,styled KML),shapefile,sqlite
 	
 	* WMS(map image overlays)/WFS(feature info XML)
-	* OGC SOS, DIF (feature info XML) XeniaSOS
+	* OGC SOS, DIF (feature info XML) [XeniaSOS]
 	* OPeNDAP(netCDF,RDB)
 
 obsregistry http://obsregistry.org
