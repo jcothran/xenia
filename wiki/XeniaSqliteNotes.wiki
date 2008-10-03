@@ -57,6 +57,10 @@ m_type.row_id = 44
 
 ----
 
+Add or update rows on m_type_display_order which correspond to the display order of observation types for certain products(air,surface,water,etc) - if the order is unimportant, just insert the m_type_id the last row of the table.
+
+----
+
 Add line to http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/obskml_to_xenia_sqlite.pl script (function at bottom of script) for associating the particular m_type_id code with a given obsType.uomType combination.
 
 {{{
