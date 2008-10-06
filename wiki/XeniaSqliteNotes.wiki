@@ -43,6 +43,8 @@ uom_type.row_id = 6
 
 ----
 
+*Note* if using Xenia version 2 database the below INSERT statement will be against the m_type table and not the m_scalar_type
+
 Add row to m_scalar_type table to associate the obs_type with its uom - note the referenced row_id's used from the previous 2 steps
 
 `INSERT INTO m_scalar_type(obs_type_id,uom_type_id) VALUES (42,6);`
@@ -52,6 +54,8 @@ Check the row_id of the newly inserted row for reference in later step
 m_scalar_type.row_id = 48
 
 ----
+
+*Note* step only Xenia version 3 only
 
 Add row to m_type table to associate the m_type.row_id=m_type_id to the m_scalar_type.row_id  The inserted '1' value lets us know that there is only one component to this vector
 
@@ -65,13 +69,13 @@ Add or update rows on m_type_display_order which correspond to the display order
 
 ----
 
-Add line to http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/obskml_to_xenia_sqlite.pl script (function at bottom of script) for associating the particular m_type_id code with a given obsType.uomType combination.
+associated scripts for new observation types
 
-{{{
-#with latest version of database that does not include NOT NULL constraints for sensor.type_id and sensor.short_name could shorten below statements to just return m_type_id
+http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/obskml_to_xenia_sqlite.pl script, function get_m_type_id allows for creating synonym terms to also recognize the available data
 
-if ($string eq 'depth.m') { push @ret_val, 44; push @ret_val, -99999; push @ret_val, "undefined"; }
-}}}
+graph.xml used by http://code.google.com/p/xenia/source/browse/#svn/trunk/sqlite/time_series and http://code.google.com/p/xenia/source/browse/#svn/trunk/obskml/products/html_tables
+
+style.xml used by http://code.google.com/p/xenia/source/browse/#svn/trunk/obskml/products/gearth
 
 = datetime formatting example for time comparison statements =
 
