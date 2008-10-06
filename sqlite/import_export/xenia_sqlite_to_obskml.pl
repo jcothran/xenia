@@ -37,6 +37,8 @@ if(!defined $dbh) {die "Cannot connect to database!\n";}
 #note: the below sql will get observations from the previous 8 hours (12 - 4 UTC = 8) - to counteract that the readout assumes synchronous obs composite on last measurement
 #note: make sure support table m_type_display_order is populated -- see http://carocoops.org/twiki_dmcc/pub/Main/XeniaTableSchema/m_type_display_order.sql
 
+#results ordered by multi_obs.platform_handle,m_type_display_order.row_id,sensor.s_order,m_date
+
 my $sql = qq{
   select m_date
     ,multi_obs.platform_handle
@@ -49,6 +51,7 @@ my $sql = qq{
     ,m_value
     ,qc_level
     ,sensor.row_id
+    ,sensor.s_order
     ,sensor.url
     ,platform.url
     ,platform.description
@@ -65,8 +68,21 @@ my $sql = qq{
     left join organization on organization.row_id=platform.organization_id
     left join m_type_display_order on m_type_display_order.m_type_id=multi_obs.m_type_id
     where m_date > datetime('now','-12 hours')
-  order by multi_obs.platform_handle,m_type_display_order.row_id,m_date desc;
+  union
+select null,platform.platform_handle,null,null,null,platform.fixed_longitude,platform.fixed_latitude,null,null,null,null,null,null,platform.url,platform.long_name,organization.short_name,organization.url,0 from platform
+left join organization on organization.row_id=platform.organization_id
+  where platform.active = 1
+  order by 2,18,12,1 desc;
 };
+
+=comment
+  union
+select null,platform.platform_handle,null,null,null,platform.fixed_longitude,platform.fixed_latitude,null,null,null,null,null,platform.url,platform.long_name,organization.short_name,organization.url,null from platform
+left join organization on organization.row_id=platform.organization_id
+  where platform.active = 1
+=cut
+
+#  order by multi_obs.platform_handle,m_type_display_order.row_id,m_date desc;
 
 my $sth = $dbh->prepare($sql);
 $sth->execute();
@@ -83,6 +99,7 @@ while (my (
     ,$m_value
     ,$qc_level
     ,$sensor_id
+    ,$s_order
     ,$sensor_url
     ,$platform_url
     ,$platform_desc
@@ -91,7 +108,7 @@ while (my (
     ,$m_type_display_order
   ) = $sth->fetchrow_array) {
 
-  #print "$platform_handle:$obs_type:$uom_type:$m_type_display_order\n";
+  #print "query:$platform_handle:$obs_type:$uom_type:$m_type_display_order\n";
 
   # Since the obs are ordered by time descending, we only need to keep the
   # top times per platform/sensor.  
@@ -118,7 +135,7 @@ while (my (
     $latest_obs{operator_list}{$operator}{name} = $organization_name;
     $latest_obs{operator_list}{$operator}{url} = $organization_url;
 
-    print "$platform_handle:$obs_type:$uom_type:$m_value\n";
+    #print "obs:$platform_handle:$obs_type:$uom_type:$m_value\n";
   }
 
 }
@@ -172,14 +189,17 @@ print XML_FILE "<platformURL>$platform_url</platformURL>";
 print XML_FILE "<platformName>$platform_name</platformName>";
 print XML_FILE "<platformDescription>$platform_desc</platformDescription>";
 
-foreach my $m_type_display_order (sort keys %{$r_latest_obs->{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}}) {
+foreach my $m_type_display_order (sort { $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$a} <=> $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$b} } keys %{$r_latest_obs->{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}}) {
+
+if ($m_type_display_order eq '0') { next; }
+
 print XML_FILE "<obs>";
 
 $m_date = $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{m_date};
 $m_date =~ s/ /T/g;
 $m_date = substr($m_date,0,22);
 #$m_date .= ':00'; #JTC - not sure what this line was for
-$m_date .= 'Z';
+if ($m_date ne '') { $m_date .= 'Z'; }
 #print $m_date."\n";
 
 my $m_type_id = $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{m_type_id};

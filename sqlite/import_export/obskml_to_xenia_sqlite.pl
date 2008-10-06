@@ -45,7 +45,7 @@ my $path_log = '/tmp/microwfs_debug_db.log';
 
 my $undefined_platform_type_id = 6;
 
-#note: the subroutine get_observed_property has hardcoded values for sensor:m_type_id,type_id,short_name and may need to have different values depending on the target xenia database
+#note: the subroutine get_m_type_id has custom substituted synonyms for certain terms
 
 #provide input date cutoff for observation data
 my $date_cutoff = `date --date='3 days ago' +%Y-%m-%dT%H:%M:%S`;
@@ -99,6 +99,21 @@ my $dbh = DBI->connect("dbi:SQLite:dbname=$dbname", "", "",
                     { RaiseError => 1, AutoCommit => 1 });
 if(!defined $dbh) {die "Cannot connect to database!\n";}
 my ($sql,$sth);
+
+####initialize lookup hash for sub get_m_type_id
+
+my %m_type_lookup = ();
+
+$sql = qq{ select t0.row_id,t2.standard_name,t3.standard_name from m_type t0,m_scalar_type t1,obs_type t2,uom_type t3 where t0.m_scalar_type_id = t1.row_id and t0.num_types = 1 and t1.obs_type_id = t2.row_id and t1.uom_type_id = t3.row_id };
+#print $sql."\n";
+$sth = $dbh->prepare( $sql );
+$sth->execute();
+
+while (my ($row_id,$obs_type,$uom) = $sth->fetchrow_array) {
+        #print "$row_id $obs_type $uom\n";
+        $m_type_lookup{$obs_type.".".$uom} = $row_id;
+};
+####
 
 foreach my $file (@files) {
 my $xp = XML::LibXML->new->parse_file("$file");
@@ -188,7 +203,7 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 	}
 
 	##platform####################
-	$sql = qq{ SELECT row_id,short_name from platform where organization_id = $organization_row_id and short_name like '$platform_name' };
+	$sql = qq{ SELECT row_id,short_name from platform where organization_id = $organization_row_id and platform_handle like '$platform_id' };
 	#print $sql."\n";
 	$sth = $dbh->prepare( $sql );
 	$sth->execute();
@@ -204,7 +219,7 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 		$sth->execute();
 
 		#requery for new row_id
-		$sql = qq{ SELECT row_id from platform where organization_id = $organization_row_id and short_name like '$platform_name' };
+		$sql = qq{ SELECT row_id from platform where organization_id = $organization_row_id and platform_handle like '$platform_id' };
 		#print $sql."\n";
 		$sth = $dbh->prepare( $sql );
 		$sth->execute();
@@ -221,10 +236,9 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 
 
 		#with latest version of database that does not include NOT NULL constraints for sensor.type_id and sensor.short_name could shorten below statements to just utilize m_type_id
-                my ($m_type_id,$sensor_type_id,$sensor_short_name) = get_observed_property($obs_type.".".$uom_type);
-		#print ": $m_type_id $sensor_type_id $sensor_short_name \n";
 
-		if ($m_type_id eq 'undefined') { print "$obs_type.$uom_type undefined \n"; next; }
+                my $m_type_id = get_m_type_id($obs_type,$uom_type);
+		if ($m_type_id eq '') { print "$obs_type.$uom_type undefined \n"; next; }
 
 	##sensor####################
 
@@ -240,7 +254,7 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 	else {
 		print "sensor $obs_type.$uom_type not found - inserting\n";
 
-		$sql = qq{ INSERT into sensor(row_entry_date,platform_id,type_id,short_name,m_type_id,s_order) values (datetime('now'),$platform_row_id,$sensor_type_id,'$sensor_short_name',$m_type_id,$sorder); };
+		$sql = qq{ INSERT into sensor(row_entry_date,platform_id,type_id,short_name,m_type_id,s_order) values (datetime('now'),$platform_row_id,-99999,'undefined',$m_type_id,$sorder); };
 		#print $sql."\n";
 		$sth = $dbh->prepare( $sql );
 		$sth->execute();
@@ -317,52 +331,23 @@ foreach  my $search_page (@search_array) {
 return 0;
 }
 
-####################################################
-sub get_observed_property {
-#this subs the xenia database sensor:m_type_id,type_id,short_name for the obs_type.uom_type string provided
-#sensor type_id(attribute not really utilized), so using '-99999' as default
-#short_name not really utilized, so using 'undefined' as default
-#with latest version of database that does not include NOT NULL constraints for sensor.type_id and sensor.short_name could shorten below statements to just return m_type_id
+sub get_m_type_id {
+my ($obs_type,$uom) = @_;
+
+##CONFIG_START
+
+#conversions for the following which were labeled wrong on the way in to db
+if ($obs_type eq 'dissolved_oxygen') { $obs_type = 'oxygen_concentration'; }
+if ($uom eq 'millibar') { $uom = 'mb'; }
+if ($uom eq 'percent_saturation') { $uom = 'percent'; }
+if ($uom eq 'm(MLLW)') { $uom = 'm'; }
+
+##CONFIG_END
 
 
-my $string = shift;
-my @ret_val = ();
 
-if ($string eq 'air_temperature.celsius') { push @ret_val, 5; push @ret_val, 1; push @ret_val, "air_temperature"; }
-if ($string eq 'air_pressure.millibar') { push @ret_val, 4; push @ret_val, 2; push @ret_val, "air_pressure"; }
-if ($string eq 'wind_speed.m_s-1') { push @ret_val, 1; push @ret_val, 6; push @ret_val, "wind_speed"; }
-if ($string eq 'wind_gust.m_s-1') { push @ret_val, 2; push @ret_val, 5; push @ret_val, "wind_gust"; }
-if ($string eq 'wind_from_direction.degrees_true') { push @ret_val, 3; push @ret_val, 10; push @ret_val, "wind_from_direction"; }
-if ($string eq 'relative_humidity.percent') { push @ret_val, 22; push @ret_val, 4; push @ret_val, "relative_humidity"; }
-if ($string eq 'precipitation.millimeter') { push @ret_val, 29; push @ret_val, 31; push @ret_val, "precipitation"; }
-if ($string eq 'solar_radiation.millimoles_per_m^2') { push @ret_val, 30; push @ret_val, 3; push @ret_val, "solar_radiation"; }
-
-if ($string eq 'significant_wave_height.m') { push @ret_val, 13; push @ret_val, -99999; push @ret_val, "significant_wave_height"; }
-#if ($string eq 'significant_wave_to_direction.degrees_true') { push @ret_val, 13; push @ret_val, -99999; push @ret_val, "significant_wave_to_direction"; }
-if ($string eq 'dominant_wave_period.s') { push @ret_val, 14; push @ret_val, -99999; push @ret_val, "dominant_wave_period"; }
-if ($string eq 'visibility.nautical_miles') { push @ret_val, 39; push @ret_val, -99999; push @ret_val, "visibility"; }
-if ($string eq 'current_speed.m_s-1') { push @ret_val, 11; push @ret_val, -99999; push @ret_val, "current_speed"; }
-if ($string eq 'current_to_direction.degrees_true') { push @ret_val, 12; push @ret_val, -99999; push @ret_val, "current_to_direction"; }
-
-if ($string eq 'water_level.m(MLLW)') { push @ret_val, 23; push @ret_val, -99999; push @ret_val, "water_level"; }
-if ($string eq 'chlorophyll.ug_L-1') { push @ret_val, 10; push @ret_val, -99999; push @ret_val, "chlorophyll"; }
-if ($string eq 'salinity.psu') { push @ret_val, 28; push @ret_val, 20; push @ret_val, "salinity"; }
-if ($string eq 'water_temperature.celsius') { push @ret_val, 6; push @ret_val, 23; push @ret_val, "water_temperature"; }
-if ($string eq 'dissolved_oxygen.mg_L-1') { push @ret_val, 34; push @ret_val, 25; push @ret_val, "oxygen_concentration"; }
-if ($string eq 'dissolved_oxygen.percent') { push @ret_val, 35; push @ret_val, 25; push @ret_val, "oxygen_concentration"; }
-if ($string eq 'dissolved_oxygen.percent_saturation') { push @ret_val, 35; push @ret_val, 25; push @ret_val, "oxygen_concentration"; }
-if ($string eq 'water_conductivity.mS_cm-1') { push @ret_val, 7; push @ret_val, 30; push @ret_val, "water_conductivity"; }
-if ($string eq 'turbidity.ntu') { push @ret_val, 36; push @ret_val, 29; push @ret_val, "turbidity"; }
-if ($string eq 'ph.units') { push @ret_val, 38; push @ret_val, 27; push @ret_val, "ph"; }
-if ($string eq 'gage_height.m') { push @ret_val, 43; push @ret_val, -99999; push @ret_val, "gage_height"; }
-if ($string eq 'depth.m') { push @ret_val, 44; push @ret_val, -99999; push @ret_val, "undefined"; }
-
-#also available for mapping
-#dominant_wave_direction,water_conductivity,water_level(MLLW),ph,turbidity,precipitation,relative_humidity,dew_point,gage_height,stream_velocity,dissolved_oxygen.percent_saturation,vos-ships(wave_height,swell_height,swell_period,swell_from_direction)
-
-if ($ret_val[0] eq '') { push @ret_val, "undefined"; push @ret_val, "undefined"; push @ret_val, "undefined"; }
-
-return @ret_val;
+my $ret_val = $m_type_lookup{$obs_type.".".$uom};
+return $ret_val;
 }
 
 #--------------------------------------------------------------------

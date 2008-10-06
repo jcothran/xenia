@@ -3,9 +3,13 @@ use strict;
 
 ##config
 
+#usage: cd /var/www/html/obskml/scripts; perl genPlacemarksObsKML.pl http://nautilus.baruch.sc.edu/obskml/feeds/secoora_obskml_latest.kmz null secoora
+
 my $temp_dir = '/tmp/ms_tmp';
 my $http_return = 'http://nautilus.baruch.sc.edu/ms_tmp/gearth_';
-my $additional_links = '<a href=\"http://secoora.org\">http://secoora.org</a><br />';
+my $additional_links = 'Related links: <a href="http://carocoops.org/twiki_dmcc/bin/view/Main/ObsKML">ObsKML</a> <a href="http://code.google.com/p/xenia/wiki/XeniaHome">Xenia</a> <a href="http://secoora.org">http://secoora.org</a><br />';
+
+my $graph_link = 'http://nautilus.baruch.sc.edu/xenia_sqlite/get_graph.php?sensor_id=var1&output=webpage&time_interval=-1 day&time_zone_arg=EASTERN';
 
 ##
 
@@ -31,7 +35,11 @@ use XML::LibXML;
 my ($zip_obskml_url, $style_url, $feed_name) = @ARGV;
 if ($feed_name) { $feed_name = $feed_name.'_'; }
 
+my $date_log = `date +%Y%m%d%H%M`;
+chomp($date_log);
+
 open (LOG_FILE,">$feed_name\obskml_style.log");
+open (LOG_FILE_2,">./log/$feed_name\obskml_style_$date_log.log");
 open (DEBUG,">./debug_genPlacemarks.txt");
 
 my $count = @ARGV;
@@ -125,11 +133,18 @@ foreach my $placemark ($xp->findnodes('//Placemark')) {
 	my $platform_desc = $placemark->find('Metadata/obsList/platformDescription');
         $platform_desc = sprintf("%s", $platform_desc); 
 
+        $HoH{ $operator }{ $local_platform }{'metadata'}{ 'operator_url' } = $operator_url;
+        $HoH{ $operator }{ $local_platform }{'metadata'}{ 'platform_url' } = $platform_url;
+        $HoH{ $operator }{ $local_platform }{'metadata'}{ 'platform_desc' } = $platform_desc;
+	$HoH{ $operator }{ $local_platform }{'metadata'}{ 'longitude' } = $longitude;
+	$HoH{ $operator }{ $local_platform }{'metadata'}{ 'latitude' } = $latitude;
 	
 foreach my $observation ($placemark->findnodes('Metadata/obsList/obs')) {
 
-	my $obs_property = $observation->find('obsType');
-	my $uom = $observation->find('uomType');
+	my $obs_property = sprintf("%s",$observation->find('obsType'));
+ 	if ($obs_property eq '') { next; } #ignore obs with missing metadata	
+
+	my $uom = sprintf("%s",$observation->find('uomType'));
 	$obs_property .= '.'.$uom;
 
 	#have to cast measurement to float using sprintf to avoid comparison confusion later
@@ -156,18 +171,19 @@ foreach my $observation ($placemark->findnodes('Metadata/obsList/obs')) {
         }
 
 	#if ($operator eq 'nerrs') { print "$date_test $date_now $date_yesterday\n"; }
-	$HoH{ $operator }{ $local_platform }{ $datetime }{ $obs_property }{ 'operator_url' } = $operator_url;
-	$HoH{ $operator }{ $local_platform }{ $datetime }{ $obs_property }{ 'platform_url' } = $platform_url;
-	$HoH{ $operator }{ $local_platform }{ $datetime }{ $obs_property }{ 'platform_desc' } = $platform_desc;
+	#$HoH{ $operator }{ $local_platform }{'metadata'}{ 'operator_url' } = $operator_url;
+	#$HoH{ $operator }{ $local_platform }{'metadata'}{ 'platform_url' } = $platform_url;
+	#$HoH{ $operator }{ $local_platform }{'metadata'}{ 'platform_desc' } = $platform_desc;
 
-	$HoH{ $operator }{ $local_platform }{ $datetime }{ $obs_property }{ 'longitude' } = $longitude;
-	$HoH{ $operator }{ $local_platform }{ $datetime }{ $obs_property }{ 'latitude' } = $latitude;
-	$HoH{ $operator }{ $local_platform }{ $datetime }{ $obs_property }{ 'data_url' } = $observation->find('dataURL');
+	#could probably optimize lon/lat to allow platform movement without articulating for each $obs_property - leaving for now to satisfy foreach loops further below
+	$HoH{ $operator }{ $local_platform }{'data'}{ $datetime }{ $obs_property }{ 'longitude' } = $longitude;
+	$HoH{ $operator }{ $local_platform }{'data'}{ $datetime }{ $obs_property }{ 'latitude' } = $latitude;
+	$HoH{ $operator }{ $local_platform }{'metadata'}{ $obs_property }{ 'data_url' } = $observation->find('dataURL');
+	$HoH{ $operator }{ $local_platform }{'metadata'}{ $obs_property }{ 'sensor_id' } = $observation->find('sensorID');
 	
-	$HoH{ $operator }{ $local_platform }{ $datetime }{ $obs_property }{ 'datetime' } = $datetime;
-	$HoH{ $operator }{ $local_platform }{ $datetime }{ $obs_property }{ 'measurement' } = $measurement;
-	$HoH{ $operator }{ $local_platform }{ $datetime }{ $obs_property }{ 'elev' } = $observation->find('elev');
-	#$HoH{ $operator }{ $local_platform }{ $datetime }{ $obs_property }{ 'uom' } = $uom;
+	#$HoH{ $operator }{ $local_platform }{'data'}{ $datetime }{ $obs_property }{ 'datetime' } = $datetime;
+	$HoH{ $operator }{ $local_platform }{'data'}{ $datetime }{ $obs_property }{ 'measurement' } = $measurement;
+	$HoH{ $operator }{ $local_platform }{'data'}{ $datetime }{ $obs_property }{ 'elev' } = $observation->find('elev');
 	}
 	else { print DEBUG "date fail: $date_yesterday $date_now $date_test \n"; }
 
@@ -186,7 +202,10 @@ foreach my $observation ($placemark->findnodes('Metadata/obsList/obs')) {
 
 my $kml_content = <<"END_OF_FILE";
 <kml xmlns="http://earth.google.com/kml/2.0">
-<Folder>
+<Document>
+
+<Style id="PlatformNotActive"><IconStyle><color>ff0000ff</color></IconStyle></Style>
+
 <name>Ocean/Coastal Observing Platform Data</name>
 <visibility>0</visibility>
 <description><![CDATA[The following is a listing of primarily ocean/coastal observing platform data(some platform measurements from inland may also be included) shared by using http accessible xml and data files detailed at <a href="http://carocoops.org/twiki_dmcc/bin/view/Main/ObsKML">ObsKML</a>  Here are links to the <a href="http://carocoops.org/obskml/feeds">original source ObsKML data</a> and the <a href="http://carocoops.org/obskml/scripts/genPlacemarksObsKML.pl">styling script</a> used to generate this KML file.  Please email <a href="mailto:jeremy.cothran\@gmail.com">jeremy.cothran\@gmail.com</a> regarding questions or comments on this kml product or sharing/registering your observation data using these tools.]]></description>
@@ -207,14 +226,17 @@ foreach my $operator ( sort keys %{$rHoH} ) {
         #print "operator:$operator\n";
 	
 	print LOG_FILE "operator $operator $HoH_stats{$operator}{platform_count}\n";
+	print LOG_FILE_2 "operator $operator $HoH_stats{$operator}{platform_count}\n";
 
 	foreach my $obs_type ( sort keys %{$rObsTypes} ) {
 		my $obs_count = $HoH_stats{$operator}{$obs_type}{obs_count};
 		if ($obs_count > 0) {
 			print LOG_FILE "obs_type $obs_type $HoH_stats{$operator}{$obs_type}{obs_count}\n";
+			print LOG_FILE_2 "obs_type $obs_type $HoH_stats{$operator}{$obs_type}{obs_count}\n";
 		}
 	}
 	print LOG_FILE "\n\n";
+	print LOG_FILE_2 "\n\n";
 
 $kml_content .= "<Folder><name>$operator</name><visibility>0</visibility>";
 
@@ -223,25 +245,40 @@ foreach my $local_platform ( sort keys %{$rHoH->{$operator}} ) {
 
 	$kml_content .= "<Folder><name>$local_platform</name><visibility>0</visibility>";
 
-foreach my $datetime ( sort keys %{$rHoH->{$operator}{$local_platform}} ) {
-       	#print "datetime:$datetime\n";
+	my $platform_not_active = 1;
 
         my $desc_header = '';
         my $desc_table = '';
-        my $desc_footer = '';
+        my $description = '';
 
         my $operator_url = '';
         my $platform_url = '';
         my $platform_desc = '';
-	my $longitude = '';
-	my $latitude = '';
-	my $measurement = '';
-	#my $uom = '';
-	my $datetime_label = '';
-	my $data_url = '';
-        my $elev = '';
+        my $longitude = '';
+        my $latitude = '';
 
-	foreach my $obs_property ( sort keys %{$rHoH->{$operator}{$local_platform}{ $datetime }} ) {
+        $platform_desc = $HoH{$operator}{$local_platform}{'metadata'}{'platform_desc'};
+        if ($platform_desc) { $desc_header .= 'Description: '.$platform_desc.'<br />'; }
+        $operator_url = $HoH{$operator}{$local_platform}{'metadata'}{'operator_url'};
+        if ($operator_url) { $desc_header .= '<a href="'.$operator_url.'">OperatorURL</a><br />'; }
+        $platform_url = $HoH{$operator}{$local_platform}{'metadata'}{'platform_url'};
+        if ($platform_url) { $desc_header .= '<a href="'.$platform_url.'">PlatformURL</a><br />'; }
+
+        $desc_header .= "$additional_links<br />";
+
+
+foreach my $datetime ( sort keys %{$rHoH->{$operator}{$local_platform}{'data'}} ) {
+       	#print "datetime:$datetime\n";
+
+	$platform_not_active = 0;
+
+	my $measurement = '';
+	my $data_url = '';
+	my $sensor_id = '';
+        my $elev = '';
+	my $datetime_label = '';
+
+	foreach my $obs_property ( sort keys %{$rHoH->{$operator}{$local_platform}{'data'}{ $datetime }} ) {
         	#print "obs_property:$obs_property\n";
 
 	        #only need to do this initially once per platform
@@ -252,36 +289,30 @@ foreach my $datetime ( sort keys %{$rHoH->{$operator}{$local_platform}} ) {
                         #$datetime_label = substr($datetime_label,0,16).' GMT';
                         #print "$datetime_label\n";
 
-        		$desc_header .= '<![CDATA[';
-                        $desc_header .= "Last update: $datetime_label<br />";
-
-                	$platform_desc = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'platform_desc'};
-		        if ($platform_desc) { $desc_header .= 'Description: '.$platform_desc.'<br />'; }
-                	$operator_url = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'operator_url'};
-		        if ($operator_url) { $desc_header .= '<a href="'.$operator_url.'">OperatorURL</a><br />'; }
-                	$platform_url = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'platform_url'};
-		        if ($platform_url) { $desc_header .= '<a href="'.$platform_url.'">PlatformURL</a><br />'; }
-
-     			$desc_header .= "Related links: ";
-        		$desc_header .= "<a href=\"http://carocoops.org/twiki_dmcc/bin/view/Main/ObsKML\">ObsKML</a> ";
-        		$desc_header .= "$additional_links<br />";
-
-                	$data_url = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'data_url'};
-			if ($data_url) {
+                	$data_url = $HoH{$operator}{$local_platform}{'metadata'}{$obs_property}{'data_url'};
+                	$sensor_id = $HoH{$operator}{$local_platform}{'metadata'}{$obs_property}{'sensor_id'};
+			if (($data_url) || ($sensor_id)) {
                         	$desc_header .= "Click on the latest observation reading to view graphs of previous observations.<br /><br />";
 			}
                         $desc_table .= '<table  border="1">';
         	}
 
-        	$longitude = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'longitude'};
-        	$latitude = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'latitude'};
+        	$longitude = $HoH{$operator}{$local_platform}{'data'}{ $datetime }{$obs_property}{'longitude'};
+        	$latitude = $HoH{$operator}{$local_platform}{'data'}{ $datetime }{$obs_property}{'latitude'};
 		
-                $measurement = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'measurement'};
+                $measurement = $HoH{$operator}{$local_platform}{'data'}{ $datetime }{$obs_property}{'measurement'};
                 #print "$measurement\n";
 
-                #$uom = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'uom'};
-                $elev = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'elev'};
-                $data_url = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'data_url'};
+                $elev = $HoH{$operator}{$local_platform}{'data'}{ $datetime }{$obs_property}{'elev'};
+
+                $data_url = $HoH{$operator}{$local_platform}{'metadata'}{$obs_property}{'data_url'};
+                $sensor_id = $HoH{$operator}{$local_platform}{'metadata'}{$obs_property}{'sensor_id'};
+
+                #$sensor_id link overwrites $data_url if present, could convert next block to function since repeated
+                if ($sensor_id) {
+                        $data_url = $graph_link;
+                        $data_url =~ s/var1/$sensor_id/g;
+                }
 
                 $desc_table .= unit_convert_table($obs_property,$measurement,$data_url,$elev);
 
@@ -291,9 +322,7 @@ foreach my $datetime ( sort keys %{$rHoH->{$operator}{$local_platform}} ) {
 	#note that could sort table entries by elevation at this point if wanted
         if ($desc_table ne '') { $desc_table .= '</table>'; }
 
-        $desc_footer .= ']]>';
-
-my $description = $desc_header.$desc_table.$desc_footer;
+$description = '<![CDATA['."Last update: $datetime_label<br />".$desc_header.$desc_table.']]>';
 
 $kml_content .= <<"END_OF_FILE";
 <Placemark>
@@ -308,6 +337,27 @@ $kml_content .= <<"END_OF_FILE";
 END_OF_FILE
 
 } #foreach $datetime 
+
+if ($platform_not_active == 1) {
+
+$longitude = $HoH{$operator}{$local_platform}{'metadata'}{'longitude'};
+$latitude  = $HoH{$operator}{$local_platform}{'metadata'}{'latitude'};
+
+$description = '<![CDATA['."Last update: No recent reports<br />".$desc_header.']]>';
+
+$kml_content .= <<"END_OF_FILE";
+<Placemark>
+  <styleUrl>#PlatformNotActive</styleUrl>
+  <name>$local_platform</name>
+  <visibility>1</visibility>
+  <description>$description</description>
+  <Point>
+    <coordinates>$longitude,$latitude,0</coordinates>
+  </Point>
+</Placemark>
+END_OF_FILE
+
+}
 
 $kml_content .= "</Folder>";
 } #foreach $local_platform 
@@ -325,6 +375,8 @@ $kml_content .= "</Folder>";
 #print `date`;
 
 #the below is a cut and paste for the most part of the 'list be operator' except running through the ObsTypes list and comparing to determine #whether kml is output or not and the style application of colored ranges on the icons
+
+#BETTER: the below code could be improved where the 'metadata' type elements do not need re-referencing.  The placemarks could also style like 'SensorNotActive' to give a more sensor inventory where sensor not currently active/measuring (null measurements)
 
 my $xp_style = XML::LibXML->new->parse_file("$target_dir/style.xml");
 
@@ -370,7 +422,7 @@ foreach my $local_platform ( sort keys %{$rHoH->{$operator}} ) {
 
 	#$kml_content .= "<Folder><name>$local_platform</name><visibility>0</visibility>";
 
-foreach my $datetime ( sort keys %{$rHoH->{$operator}{$local_platform}} ) {
+foreach my $datetime ( sort keys %{$rHoH->{$operator}{$local_platform}{'data'}} ) {
 
 	$kml_temp_content = '';
 
@@ -384,15 +436,13 @@ foreach my $datetime ( sort keys %{$rHoH->{$operator}{$local_platform}} ) {
         my $longitude = '';
         my $latitude = '';
         my $measurement = '';
-        #my $uom = '';
         my $datetime_label = '';
         my $data_url = '';
+        my $sensor_id = '';
         my $elev = '';
 	my $color = '';
 
-        foreach my $obs_property ( sort keys %{$rHoH->{$operator}{$local_platform}{ $datetime }} ) {
-                #print "obs_property:$obs_property:$operator:$local_platform\n";
-		if ($obs_property ne $obs_type) { next; }
+		my $obs_property = $obs_type;
                 #print "obs_property:$obs_property:$operator:$local_platform\n";
 
                 #only need to do this initially once per platform
@@ -406,41 +456,45 @@ foreach my $datetime ( sort keys %{$rHoH->{$operator}{$local_platform}} ) {
                         $desc_header .= '<![CDATA[';
                         $desc_header .= "Last update: $datetime_label<br />";
  
-                	$platform_desc = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'platform_desc'};
+                	$platform_desc = $HoH{$operator}{$local_platform}{'metadata'}{'platform_desc'};
 		        if ($platform_desc) { $desc_header .= 'Description: '.$platform_desc.'<br />'; }
-                	$operator_url = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'operator_url'};
+                	$operator_url = $HoH{$operator}{$local_platform}{'metadata'}{'operator_url'};
 		        if ($operator_url) { $desc_header .= '<a href="'.$operator_url.'">OperatorURL</a><br />'; }
-                	$platform_url = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'platform_url'};
+                	$platform_url = $HoH{$operator}{$local_platform}{'metadata'}{'platform_url'};
 		        if ($platform_url) { $desc_header .= '<a href="'.$platform_url.'">PlatformURL</a><br />'; }
 
-                        $desc_header .= "Related links: ";
-                        $desc_header .= "<a href=\"http://carocoops.org/twiki_dmcc/bin/view/Main/ObsKML\">ObsKML</a> ";
                         $desc_header .= "$additional_links<br />";
 
-                	$data_url = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'data_url'};
-			if ($data_url) {
+                	$data_url = $HoH{$operator}{$local_platform}{'metadata'}{$obs_property}{'data_url'};
+                	$sensor_id = $HoH{$operator}{$local_platform}{'metadata'}{$obs_property}{'sensor_id'};
+
+			if (($data_url) || ($sensor_id)) {
                         	$desc_header .= "Click on the latest observation reading to view graphs of previous observations.<br /><br />";
 			}
                         $desc_table .= '<table  border="1">';
                 }
 
-                $longitude = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'longitude'};
-                $latitude = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'latitude'};
+                $longitude = $HoH{$operator}{$local_platform}{'data'}{ $datetime }{$obs_property}{'longitude'};
+                $latitude = $HoH{$operator}{$local_platform}{'data'}{ $datetime }{$obs_property}{'latitude'};
 
-                $measurement = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'measurement'};
+                $measurement = $HoH{$operator}{$local_platform}{'data'}{ $datetime }{$obs_property}{'measurement'};
                 #print "$measurement\n";
 
 		$color = conv_measurement_to_color($range_high,$range_low,$measurement);
 		#print "color:$color\n";
 
+                $elev = $HoH{$operator}{$local_platform}{'data'}{ $datetime }{$obs_property}{'elev'};
 
-                #$uom = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'uom'};
-                $elev = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'elev'};
-                $data_url = $HoH{$operator}{$local_platform}{ $datetime }{$obs_property}{'data_url'};
+                $data_url = $HoH{$operator}{$local_platform}{'metadata'}{$obs_property}{'data_url'};
+                $sensor_id = $HoH{$operator}{$local_platform}{'metadata'}{$obs_property}{'sensor_id'};
+
+		#$sensor_id link overwrites $data_url if present, could convert next block to function since repeated
+		if ($sensor_id) {
+			$data_url = $graph_link;
+			$data_url =~ s/var1/$sensor_id/g;
+		}
 
                 $desc_table .= unit_convert_table($obs_property,$measurement,$data_url,$elev);
-
-        }
 
 	#only closing table if exists
 	#note that could sort table entries by elevation at this point if wanted
@@ -497,7 +551,7 @@ $kml_content .= "</Folder>";
 ##################
 
 $kml_content .= <<"END_OF_FILE";
-</Folder>
+</Document>
 </kml>
 END_OF_FILE
 
@@ -515,6 +569,7 @@ print $kml_url;
 #print `date`;
 
 close (LOG_FILE);
+close (LOG_FILE_2);
 close (DEBUG);
 
 exit 0;
