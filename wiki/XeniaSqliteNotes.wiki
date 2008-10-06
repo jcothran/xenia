@@ -55,7 +55,7 @@ m_scalar_type.row_id = 48
 
 ----
 
-*Note* step only Xenia version 3 only
+*Note* step Xenia version 3 only
 
 Add row to m_type table to associate the m_type.row_id=m_type_id to the m_scalar_type.row_id  The inserted '1' value lets us know that there is only one component to this vector
 
