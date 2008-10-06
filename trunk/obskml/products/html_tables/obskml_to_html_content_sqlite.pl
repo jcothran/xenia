@@ -140,7 +140,11 @@ foreach my $placemark ($xp->findnodes('//Placemark')) {
         $datetime = sprintf("%s", $datetime); 
         print $datetime."\n";
 
-	my $datetime_label = $datetime;
+        my $datetime_label = "<span class=\"old\">No data available within the past 6 hours</span>";
+
+        if ($datetime ne '') {
+
+        $datetime_label = $datetime;
 	$datetime_label =~ s/T/ /g;
 	$datetime_label =~ s/Z/-00:00/g;
 
@@ -167,6 +171,7 @@ foreach my $placemark ($xp->findnodes('//Placemark')) {
                  $datetime_label .= "<br><span class=\"old\">Note: This report is more than 2 hours old</span>" ;
              }
 	}
+	}
 
         #print $datetime_label."\n";
 
@@ -185,11 +190,17 @@ foreach my $placemark ($xp->findnodes('//Placemark')) {
         $html_content .= "INSERT INTO html_content(wkt_geometry,organization,html) values ('POINT($longitude $latitude)','$operator','<hr/><br/><a href=\"$operator_url\" target=new onclick=\"\">organization: $operator</a><br/><a href=\"$platform_url\" target=new onclick=\"\">platform: $placemark_id</a><br/>$platform_desc<table cellpadding=\"2\" cellspacing=\"2\"><caption>$datetime_label</caption>";
 
 #  <caption>Surface conditions as of 10:00 AM EASTERN on 2/19</caption>
-	
+
+if (!($datetime_label =~ /No data available/)) {  #don't print obs if older than 6 hours	
 foreach my $observation ($placemark->findnodes('Metadata/obsList/obs')) {
 
         #add spaces and capitlize first letters to given obsType names
 	my $obs_type = sprintf("%s",$observation->find('obsType'));
+
+        #CONFIG
+        if ($obs_type eq 'eastward_current') { next; }
+        if ($obs_type eq 'northward_current') { next; }
+
 	my $obs_label = $obs_type;
 	$obs_label =~ s/_/ /g ;
 	$obs_label  =~ s/\b(\w)/uc($1)/eg ;
@@ -203,7 +214,7 @@ foreach my $observation ($placemark->findnodes('Metadata/obsList/obs')) {
 	my $measurement = sprintf("%.2f",$observation->find('value'));
 
 	my $measure_label = measure_convert($placemark_id,$obs_type,$uom,$measurement,$sensor_id);
-	#print "$operator:$placemark_id:$obs_type:$uom:$datetime:$longitude:$latitude:$measurement\n";
+	print "$operator:$placemark_id:$sensor_id:$obs_type:$uom:$datetime:$longitude:$latitude:$measurement\n";
 
 	my $date_test = substr($datetime,0,4).substr($datetime,5,2).substr($datetime,8,2);
 
@@ -216,6 +227,7 @@ foreach my $observation ($placemark->findnodes('Metadata/obsList/obs')) {
 	}
 
 } #foreach obs
+}
 
 $html_content .= "</table>'";
 $html_content .= ");\n";
@@ -253,7 +265,7 @@ if ($uom eq 'percent_saturation') { $uom = 'percent'; }
 
 ##CONFIG_END
 
-my $unit_conversion = $xp_graph->findvalue('//observation_list/observation[@standard_name="'.$obs_type.'"]/standard_uom_en');
+my $unit_conversion = $xp_graph->findvalue('//observation_list/observation[@standard_name="'.$obs_type.'.'.$uom.'"]/standard_uom_en');
 if ($unit_conversion eq '') { print "not found: $obs_type $uom \n"; return $label; }
 
 my $y_title = $xp_graph->findvalue('//unit_conversion_list/unit_conversion[@id="'.$uom.'_to_'.$unit_conversion.'"]/y_title');

@@ -1,7 +1,6 @@
 <environment>
   <observation_list>
-        <observation standard_name="wind_gust">
-                <standard_uom>m_s-1</standard_uom>
+        <observation standard_name="wind_gust.m_s-1">
                 <standard_uom_en>knots</standard_uom_en>
 
                 <range_min>0</range_min>
@@ -14,8 +13,7 @@
                 <size_y>300</size_y>
         </observation>
 
-        <observation standard_name="air_temperature">
-                <standard_uom>celsius</standard_uom>
+        <observation standard_name="air_temperature.celsius">
                 <standard_uom_en>fahrenheit</standard_uom_en>
 
                 <range_min>-20</range_min>
@@ -28,8 +26,7 @@
                 <size_y>300</size_y>
         </observation>
 
-        <observation standard_name="sea_surface_temperature">
-                <standard_uom>celsius</standard_uom>
+        <observation standard_name="sea_surface_temperature.celsius">
                 <standard_uom_en>fahrenheit</standard_uom_en>
 
                 <range_min>-20</range_min>
@@ -42,8 +39,7 @@
                 <size_y>300</size_y>
         </observation>
 
-        <observation standard_name="air_pressure">
-                <standard_uom>mb</standard_uom>
+        <observation standard_name="air_pressure.mb">
                 <standard_uom_en>mb</standard_uom_en>
 
                 <range_min>900</range_min>
@@ -56,8 +52,7 @@
                 <size_y>300</size_y>
         </observation>
 
-        <observation standard_name="relative_humidity">
-                <standard_uom>percent</standard_uom>
+        <observation standard_name="relative_humidity.percent">
                 <standard_uom_en>percent</standard_uom_en>
 
                 <range_min>0</range_min>
@@ -70,8 +65,7 @@
                 <size_y>300</size_y>
         </observation>
 
-        <observation standard_name="wind_from_direction">
-                <standard_uom>degrees_true</standard_uom>
+        <observation standard_name="wind_from_direction.degrees_true">
                 <standard_uom_en>degrees_true</standard_uom_en>
 
                 <range_min>0</range_min>
@@ -84,8 +78,7 @@
                 <size_y>300</size_y>
         </observation>
 
-        <observation standard_name="wind_speed">
-                <standard_uom>m_s-1</standard_uom>
+        <observation standard_name="wind_speed.m_s-1">
                 <standard_uom_en>knots</standard_uom_en>
 
                 <range_min>0</range_min>
@@ -98,8 +91,7 @@
                 <size_y>300</size_y>
         </observation>
 
-        <observation standard_name="precipitation">
-                <standard_uom>millimeter</standard_uom>
+        <observation standard_name="precipitation.millimeter">
                 <standard_uom_en>millimeter</standard_uom_en>
 
                 <range_min>0</range_min>
@@ -112,9 +104,7 @@
                 <size_y>300</size_y>
         </observation>
 
-        <observation standard_name="solar_radiation">
-                <standard_name>solar_radiation</standard_name>
-                <standard_uom>millimoles_per_m^2</standard_uom>
+        <observation standard_name="solar_radiation.millimoles_per_m^2">
                 <standard_uom_en>millimoles_per_m^2</standard_uom_en>
 
                 <range_min>0</range_min>
@@ -128,9 +118,8 @@
         </observation>
 
 
-  <observation standard_name="significant_wave_height">
-    <standard_uom>m</standard_uom>
-    <standard_uom_en>f</standard_uom_en>
+  <observation standard_name="significant_wave_height.m">
+    <standard_uom_en>ft</standard_uom_en>
 
     <range_min>0</range_min>
     <range_max>45</range_max>
@@ -142,9 +131,8 @@
     <size_y>300</size_y>
   </observation>
 
-        <observation standard_name="water_level">
-                <standard_uom>m</standard_uom>
-                <standard_uom_en>f</standard_uom_en>
+        <observation standard_name="water_level.m">
+                <standard_uom_en>ft</standard_uom_en>
         
                 <range_min>-1000</range_min>
                 <range_max>1000</range_max>
@@ -156,8 +144,7 @@
                 <size_y>300</size_y>
         </observation>
 
-        <observation standard_name="water_temperature">
-                <standard_uom>celsius</standard_uom>
+        <observation standard_name="water_temperature.celsius">
                 <standard_uom_en>fahrenheit</standard_uom_en>
 
                 <range_min>-20</range_min>
@@ -170,8 +157,7 @@
                 <size_y>300</size_y>
         </observation>
 
-        <observation standard_name="water_conductivity">
-                <standard_uom>mS_cm-1</standard_uom>
+        <observation standard_name="water_conductivity.mS_cm-1">
                 <standard_uom_en>mS_cm-1</standard_uom_en>
 
                 <range_min>0</range_min>
@@ -184,8 +170,7 @@
                 <size_y>300</size_y>
         </observation>
 
-        <observation standard_name="salinity">
-                <standard_uom>psu</standard_uom>
+        <observation standard_name="salinity.psu">
                 <standard_uom_en>psu</standard_uom_en>
         
                 <range_min>20</range_min>
@@ -198,9 +183,7 @@
                 <size_y>300</size_y>
         </observation>
 
-        <observation m_type_id="34">
-                <standard_name>oxygen_concentration</standard_name>
-                <standard_uom>mg_L-1</standard_uom>
+        <observation standard_name="oxygen_concentration.mg_L-1">
                 <standard_uom_en>mg_L-1</standard_uom_en>
 
                 <range_min>0</range_min>
@@ -213,9 +196,7 @@
                 <size_y>300</size_y>
         </observation>
 
-        <observation m_type_id="35">
-                <standard_name>oxygen_concentration</standard_name>
-                <standard_uom>percent</standard_uom>
+        <observation standard_name="oxygen_concentration.percent">
                 <standard_uom_en>percent</standard_uom_en>
 
                 <range_min>0</range_min>
@@ -228,8 +209,7 @@
                 <size_y>300</size_y>
         </observation>
 
-        <observation standard_name="ph">
-                <standard_uom>units</standard_uom>
+        <observation standard_name="ph.units">
                 <standard_uom_en>units</standard_uom_en>
 
                 <range_min>-10</range_min>
@@ -242,9 +222,7 @@
                 <size_y>300</size_y>
         </observation>
 
-        <observation standard_name="turbidity">
-                <standard_name>turbidity</standard_name>
-                <standard_uom>ntu</standard_uom>
+        <observation standard_name="turbidity.ntu">
                 <standard_uom_en>ntu</standard_uom_en>
 
                 <range_min>0</range_min>
@@ -252,6 +230,84 @@
                 <title>Turbidity</title>
                 <with_clause>lines lt 1</with_clause>
                 <y_title>ntu</y_title>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="depth.m">
+                <standard_uom_en>ft</standard_uom_en>
+          
+                <range_min>0</range_min>
+                <range_max>1200</range_max>
+                <title>Depth</title>
+                <with_clause>lines lt 1</with_clause>
+                <y_title>meters</y_title>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="gage_height.m">
+                <standard_uom_en>ft</standard_uom_en>
+
+                <range_min>0</range_min>
+                <range_max>1200</range_max>
+                <title>Gage Height</title>
+                <with_clause>lines lt 1</with_clause>
+                <y_title>meters</y_title>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="dominant_wave_period.s">
+                <standard_uom_en>s</standard_uom_en>
+          
+                <range_min>0</range_min>
+                <range_max>1200</range_max>
+                <title>Dominant Wave Period</title>
+                <with_clause>lines lt 1</with_clause>
+                <y_title>seconds</y_title>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="current_speed.cm_s-1">
+                <standard_uom_en>knots</standard_uom_en>
+
+                <range_min>0</range_min>
+                <range_max>500</range_max>
+                <title>Current Speed</title>
+                <with_clause>lines lt 1</with_clause>
+                <y_title>centimeters/second</y_title>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="current_to_direction.degrees_true">
+                <standard_uom_en>degrees_true</standard_uom_en>
+
+                <range_min>0</range_min>
+                <range_max>360</range_max>
+                <title>Current To Direction</title>
+                <with_clause>points lt 8</with_clause>
+                <y_title>degrees from N</y_title>
+                <break_interval>7300</break_interval>
+                <size_x>600</size_x>
+                <size_y>300</size_y>
+        </observation>
+
+        <observation standard_name="mean_wave_direction_peak_period.degrees_true">
+                <standard_uom_en>degrees_true</standard_uom_en>
+
+                <range_min>0</range_min>
+                <range_max>360</range_max>
+                <title>Mean Wave Direction Peak Period</title>
+                <with_clause>points lt 8</with_clause>
+                <y_title>degrees from N</y_title>
                 <break_interval>7300</break_interval>
                 <size_x>600</size_x>
                 <size_y>300</size_y>
@@ -300,6 +356,10 @@
           <conversion_formula>sprintf("%.1f",var1*1.9438)</conversion_formula>
                 <y_title>knots</y_title>
         </unit_conversion>
+        <unit_conversion id="cm_s-1_to_knots">
+          <conversion_formula>sprintf("%.2f",var1*0.019438)</conversion_formula>
+                <y_title>knots</y_title>
+        </unit_conversion>
         <unit_conversion id="m_s-1_to_mph">
           <conversion_formula>sprintf("%.1f",var1*2.2369)</conversion_formula>
                 <y_title>mph</y_title>
@@ -323,7 +383,7 @@
     <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
     <y_title>meters</y_title>
   </unit_conversion>
-  <unit_conversion id="m_to_f">
+  <unit_conversion id="m_to_ft">
     <conversion_formula>sprintf("%.2f",var1*3.28)</conversion_formula>
     <y_title>feet</y_title>
   </unit_conversion>
@@ -351,6 +411,11 @@
   <unit_conversion id="ntu_to_ntu">
     <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
     <y_title>ntu</y_title>
+  </unit_conversion>
+
+  <unit_conversion id="s_to_s">
+    <conversion_formula>sprintf("%.2f",var1)</conversion_formula>
+    <y_title>seconds</y_title>
   </unit_conversion>
 
   </unit_conversion_list>
