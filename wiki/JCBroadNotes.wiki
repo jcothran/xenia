@@ -62,7 +62,7 @@ data scout: obskml + dsi -> xenia sqlite db
 mapserver (wms/gfi,wfs) , ogr
 http://code.google.com/p/rcoos/wiki/MapserverNotes
 
-tilecache http://tilecache.org - great client performance speed-up(fast map loads on the client) by pregenerating/caching tiled map content
+tilecache http://tilecache.org - great client performance speed-up(fast map loads on the client) by pregenerating/caching tiled map content - both tilecache and openlayers are developed/maintained by Chris Schmidt
 
 http://code.google.com/p/rcoos/wiki/TileCacheNotes
 
