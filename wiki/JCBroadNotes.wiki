@@ -116,6 +116,8 @@ desktop tools
 	* ODV(ctd/csv) http://odv.awi.de
 	* Excel(CSV)
 
+earlier technical notes http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
+
 ----
 == Devolution - technology changes, lessons learned ==
 
