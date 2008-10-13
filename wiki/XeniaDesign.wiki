@@ -6,7 +6,7 @@ This is an earlier documentation [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/v
 
 ----
 
-== Brief Xenia/ODM schema comparison ==
+== Brief Xenia/Cuashi-ODM schema comparison ==
 
 [ftp://ftp.research.microsoft.com/pub/tr/TR-2008-92.pdf A Data Model for Environmental Observations] [http://www.carocoops.org/documents/ODM_data_model.pdf pdf]
 
