@@ -1,6 +1,6 @@
 #summary Sqlite version of Xenia relational database
 
-A sample Xenia sqlite database file of the past 3 days worth of collected observations can be copied from here http://carocoops.org/seacoos_data/sqlite/latest.db (approximately 70 MB)
+A sample Xenia sqlite database file of the past 3 days worth of collected observations can be copied from here http://carocoops.org/microwfs/microwfs.db
 
 Sqlite Manager - A simple Firefox add-on to view/query a sqlite database from Firefox
 
@@ -190,6 +190,11 @@ the following cron jobs are called
 see http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/xenia_sqlite_to_obskml.pl
 ----
 == [XeniaPackageSqlite#Replication Replication] ==
+
+*Update October 14, 2008* JTC - I've had problems with the replicated database and sql stream not populating correctly so I suggest the following two links be substituted for the latest sqlite file database and sql stream.
+
+Latest database http://carocoops.org/microwfs/microwfs.db
+Latest hourly SQL http://carocoops.org/microwfs/latest.sql
 
 There is some original documentation regarding PostgreSQL replication at http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaReplication
 
