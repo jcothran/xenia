@@ -14,7 +14,7 @@ s_order should reflect depth/height order from water surface(mean sea level) - s
 
 s_order also plays a role in establishing the sensor_id as a collection entity for a time-series set of related measurements(all measurements from the same bin over time) independent of tidal changes.  To support this role the number of bins reported and their orientation should be consistent.  Missing values should be used for bins which might be invalid.
 
-The field multi_obs.m_z will carry the repeated unvarying negative z value associated bin depth in meters for each sensor_id.  
+The field multi_obs.m_z will carry the repeated unvarying negative z value associated bin depth in meters for each sensor_id.  Tidal changes in depth will be captured by associated but separate water pressure or depth sensor_id.
 
 Optionally the negative z value associated bin depth may be carried in the field sensor.fixed_z and the bin label like 'bin_0,bin_1,etc' carried in sensor.short_name
 
