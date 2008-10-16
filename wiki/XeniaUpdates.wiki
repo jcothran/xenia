@@ -14,6 +14,8 @@ Simplified the sqlite schema [http://www.carocoops.org/obskml/microwfs/db_xenia_
 
 The metadata table is just a simple file pointer to supporting descriptive xml files of certain useful xml schema conventions.  The same metadata_id could appear on several rows as a way of providing an archival trail of changes to the same type file using the fields 'begin_date' and 'end_date' to determine the effective date range and 'active' to determine the latest (and only) active metadata record.  By this way, the database reference integrity is preserved while allowing simpler files and their attributes to change over time.
 
+For example, sensor.row_id = 739 might represent a salinity sensor.  It might have metadata_id = 456 which would be described by one or more metadata table records distinguished by their effective dates(metadata.begin_date,metadata.end_date) and active = 1 for the 'active' latest record.  Each of these metadata records would contain further pointers to either free-form and/or xml schema files that are local and/or url referenced.
+
 My current thinking regarding the metadata xml files is to combine metadata for platforms,sensors, qc to one file although this is somewhat inefficient as one change would effect the entire file, one file per platform seems to be the usual convention thus far.  Also thinking to use a filename convention of filename_begindate_enddate.xml 
 
 The earlier 'collection' table could be referenced as a sub element schema structure within each of these other parent schemas.
