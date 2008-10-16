@@ -1,3 +1,23 @@
 #summary Notes on how various instrumentation might be captured to the Xenia schema
 
 = ADCP(Acoustic Doppler Current Profiler) =
+
+A fixed number/depth of ADCP bins track current velocity and direction.
+
+A platform entry(platform.row_id, platform.platform_handle) may be setup independently for ADCP measurements (like scnms.smps1.adcp) or as part of an existing platform (like carocoops.cap2.buoy).
+
+Sensor entries(sensor.row_id,sensor.m_type_id,sensor.s_order) are created for the corresponding sensor types (where m_type_id corresponds to current_speed, current_to_direction)
+
+== conventions ==
+
+s_order should reflect depth/height order from water surface(mean sea level) - so the bin closest to the surface has the lowest bin number and the deepest bin has the highest s_order.
+
+s_order also plays a role in establishing the sensor_id as a collection entity for a time-series set of related measurements(all measurements from the same bin over time) independent of tidal changes.  To support this role the number of bins reported and their orientation should be consistent.  Missing values should be used for bins which might be invalid.
+
+The field multi_obs.m_z will carry the repeated unvarying negative z value associated bin depth in meters for each sensor_id.  
+
+Optionally the negative z value associated bin depth may be carried in the field sensor.fixed_z and the bin label like 'bin_0,bin_1,etc' carried in sensor.short_name
+
+== tracking extended metadata or setup changes ==
+
+If the bin depth configuration were to change, this would be tracked by additions to the metadata table which would point to the associated sensor_id(s) with an effective begin and end date and associated file/url references to free-form documents or related xml schemas.
