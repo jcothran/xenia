@@ -148,6 +148,9 @@ CREATE TABLE app_catalog (
     description varchar(1000)
 );
 
+-- only the NOT NULL fields in the sensor table are required to be populated, the other fields are included for metadata tracking purposes
+-- report_interval default unit is minutes
+
 CREATE TABLE sensor (
     row_id integer PRIMARY KEY,
     row_entry_date timestamp,
@@ -186,7 +189,7 @@ CREATE TABLE metadata (
     local_filepath varchar(500),
     netcdf_filepath varchar(500),
     begin_date timestamp,
-    end_data timestamp
+    end_date timestamp
 );
 
 CREATE UNIQUE INDEX i_platform ON platform (platform_handle);
