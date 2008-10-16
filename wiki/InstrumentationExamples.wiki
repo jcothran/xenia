@@ -20,4 +20,4 @@ Optionally the negative z value associated bin depth may be carried in the field
 
 == tracking extended metadata or setup changes ==
 
-If the bin depth configuration were to change, this would be tracked by additions to the metadata table which would point to the associated sensor_id(s) with an effective begin and end date and associated file/url references to free-form documents or related xml schemas.
+If the bin depth configuration were to change, this would be tracked by additions to the metadata table which would point to the associated sensor_id(s) with an effective begin and end date and associated file/url references to free-form documents or related xml schemas.  See http://code.google.com/p/xenia/wiki/XeniaUpdates 'sqlite version 3'
