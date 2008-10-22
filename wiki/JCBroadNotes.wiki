@@ -2,11 +2,10 @@
 
 Carocoops http://carocoops.org
 
-Secoora maps http://secoora.org/maps
-
-Secoora maps (openlayers) http://secoora.org/maps/dynamic
-
-Secoora files and feeds http://secoora.org/data
+Secoora
+  * maps http://secoora.org/maps
+  * maps (openlayers) http://secoora.org/maps/dynamic
+  * files and feeds http://secoora.org/data
 
 CarolinasRCOOS (openlayers *beta/experimental*) http://carolinasrcoos.org
 
