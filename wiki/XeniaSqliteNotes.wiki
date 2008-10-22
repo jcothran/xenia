@@ -95,6 +95,8 @@ from experimentation it seems JOINS and OR statements may not correctly use/invo
 
 http://www.sqlite.org/sqlite.html
 
+Below commands will dump the table select on table platform to the text file 'test.sql' as insert statements
+
 {{{
 sqlite> .output test.sql
 sqlite> .mode insert platform
