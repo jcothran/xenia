@@ -44,13 +44,13 @@ GeoRSS associates a description (perhaps changing with time like a weather feed)
 
 *Update* Dan Ramage completed this task documented at http://code.google.com/p/xenia/source/browse/trunk/obskml/products/georss
 
-= 7. documentation of enabling an OGC SOS feed utilizing pySOS + Xenia (sqlite, postgres) =
+= ~~7. documentation of enabling an OGC SOS feed utilizing pySOS + Xenia (sqlite, postgres)~~ =
+
+*Update* this issue has been addressed at http://code.google.com/p/xenia/wiki/XeniaSOS
 
 Bill Howe has developed a python script and configuration files to OGC SOS enable relational databases with 'view' queries configured appropriately http://www.oostethys.org/downloads/sos-cookbook-python
 
 Haven't gone through the Xenia specific steps to enable this type of service but want to and provide documentation.
-
-*Update* this issue has been addressed at http://code.google.com/p/xenia/wiki/XeniaSOS
 
 = 8. conversion script - obskml to 'IOOS' XML encoding = 
 
