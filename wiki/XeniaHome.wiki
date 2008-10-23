@@ -1,6 +1,6 @@
 #summary Xenia Package Home Page
 
-for further information or discussion regarding Xenia or ObsKML send email to jeremy.cothran 'at' gmail.com 
+for further information or discussion regarding *Xenia* or *ObsKML* send email to jeremy.cothran 'at' gmail.com 
 
 = [XeniaHome#Description Description] =
 I've been trying to reduce and simplify what we're doing in terms of data collection and sharing for ocean observations down to a single set of relational database tables and scripts.  The name I'm choosing for this effort is '*Xenia*' which is a kind of coral found in many marine aquarium coral collections which waves through the water with many palms or hands.
