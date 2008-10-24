@@ -8,6 +8,7 @@ Secoora
   * files and feeds http://secoora.org/data
 
 CarolinasRCOOS (openlayers *beta/experimental*) http://carolinasrcoos.org
+  * http://code.google.com/p/rcoos/wiki/RCOOSHome
 
 NWS Marine Weather Portal http://forecast.weather.gov/mwp/
 
