@@ -87,3 +87,8 @@ http://www.epa.gov/storet/wqx_downloads.html
 
 Water Quality Exchange Entity Relationship Diagram version 2.0
 http://www.epa.gov/storet/wqx_products/WQX_ERD_v2.11.pdf
+
+----
+== Seamonster ==
+
+http://robfatland.net/seamonster/index.php?title=Main_Page
