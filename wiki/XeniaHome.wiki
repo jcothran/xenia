@@ -35,9 +35,9 @@ ObsKML (the default xml import/export format for a Xenia instance)
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML
 
-Powerpoint (this is an older powerpoint , some points/slides may need updating)
+[http://carocoops.org/documents/sccc_poster_JCothran.ppt Powerpoint poster]
 
-http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/XeniaPackage/XeniaPackage.ppt
+[http://carocoops.org/documents/sccc_presentation_JCothran.ppt Powerpoint presentation]
 
 [http://www.youtube.com/watch?v=_CO9o2DyVV0&fmt=6 YouTube video]
 
