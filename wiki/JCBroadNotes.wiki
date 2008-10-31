@@ -123,15 +123,19 @@ earlier technical notes http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/J
 ----
 == Devolution - technology changes, lessons learned ==
 
-web GIS interface: php/mapserver -> openlayers/javascript/ajax
+  * Web GIS interface - server-side to client/browser side: php/mapscript -> openlayers/javascript/ajax, tilecache for improved WMS response time
 
-latest in-situ obs: RDB - obs hard-coded/table approach -> xenia,obskml,dsi (obs non-specific)
+  * Latest in-situ obs: RDB – sensor/obs hard-coded/table approach -> obs non-specific infrastructure(xenia,obskml) 
 
-hourly gridded data: RDB quickscat, layers -> ogr/sql+shapefiles
+  * Sensor/observation specific metadata: loosely link(database system id to file handle) a variety of more specific metadata files/schemas to common rdb infrastructure
 
-full RDB to file-based RDB: postgresql+postgis -> sqlite+ogr, sqlitegeo?
+  * Hourly dense/gridded data: RDB quickscat, model layers -> shapefiles which are queryable via ogr+sql
 
-hosted web/productivity services: zope/plone, trac, web stats -> webhosting(hostmonster.com), google code/analytics ?
+  * Full RDB to file-based RDB: postgresql+postgis -> sqlite+ogr, sqlitegeo? 
+
+  * Self hosted to third party hosted: third party website hosting for static content/context, common processing/storage.  Google code/analytics for basic shared development support/documentation.
+
+  * ROA(Resource Oriented Architecture)/REST style simpler declarative alternatives to complex query SOA(Service Oriented Architecture)
 
 ----
 == General technical discussions ==
