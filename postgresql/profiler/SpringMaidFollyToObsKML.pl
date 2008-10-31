@@ -67,6 +67,7 @@ if (($platform_id eq 'springmaid') || ($platform_id eq 'follybeach'))
   my $fLong;
   my $NDBCId;
   my $iNumBins = 20;  #Maximum number of bins.
+  my $Bin1Height = 1.55;
 	if ($platform_id eq 'follybeach') 
 	{ 
 	  $platform_ref = 1; 
@@ -141,16 +142,12 @@ if (($platform_id eq 'springmaid') || ($platform_id eq 'follybeach'))
     if( $sth->execute() )
     {      
       obsKMLSubRoutines::KMLAddPlatformHashEntry( $strPlatformID, $strURL, $fLat, $fLong, $refObsHash );
-      if( $depth > 0 )
-      {
-        $depth *= -1;
-      }
     	obsKMLSubRoutines::KMLAddObsToHash( 'depth',
     	                                     $strDate,
     	                                     $depth,
     	                                     1,
     	                                     $strPlatformID,
-    	                                     $depth,
+    	                                     ( $depth * -1 ),
     	                                     'm',
     	                                     $refObsHash );
     
@@ -169,16 +166,18 @@ if (($platform_id eq 'springmaid') || ($platform_id eq 'follybeach'))
         	}
     #    	print( "Current: $current_speed Direction: $current_to_direction Z: $depth_bin_bottom Desc: $bin_desc\n" );
           my $iSOrder = %SOrderMap->{$bin_desc};
-          if( $depth_bin_bottom > 0 )
+          my $RoundedDepth = RoundTo( $depth_bin_bottom, 0.5, 1 );
+       
+          if( $RoundedDepth > 0 )
           {
-            $depth_bin_bottom *= -1;
+            $RoundedDepth *= -1;
           }
         	obsKMLSubRoutines::KMLAddObsToHash( 'current_speed',
         	                                     $strDate,
         	                                     $current_speed,
         	                                     $iSOrder,
         	                                     $strPlatformID,
-        	                                     $depth_bin_bottom,
+        	                                     $RoundedDepth,
         	                                     'cm_s-1',
         	                                     $refObsHash );
         	obsKMLSubRoutines::KMLAddObsToHash( 'current_to_direction',
@@ -186,7 +185,7 @@ if (($platform_id eq 'springmaid') || ($platform_id eq 'follybeach'))
         	                                     $current_to_direction,
         	                                     $iSOrder,
         	                                     $strPlatformID,
-        	                                     $depth_bin_bottom,
+        	                                     $RoundedDepth,
         	                                     'degrees_true',
         	                                     $refObsHash );
           $iSOrder++;
@@ -267,93 +266,34 @@ if (($platform_id eq 'springmaid') || ($platform_id eq 'follybeach'))
   my $strKMLFilename = "$strDestinationDir/$platform_id-$strDate" . '_latest.kml'; 
   print( "KMLFile: $strKMLFilename\n" ); 
   obsKMLSubRoutines::BuildKMLFile( \%ObsHash, $strKMLFilename );
-=comment
-	$content =~ s/<DATETIME>/$measurement_date/g;
-	$content =~ s/<TIME>/$time_sec/g;
-	
-	$content =~ s/<DEPTH>/$depth/g;
+}
 
+sub RoundTo#( $Value, $Ceiling, $RoundUp )
+{
+  my( $Value, $Ceiling, $RoundUp ) = @_;
+  if( !defined( $RoundUp ) )
+  {
+    $RoundUp = 1;
+  }
+  #Round up to a whole integer -
+  # Any decimal value will force a round to the next integer.
+  #i.e. 0.01 = 1 or 0.8 = 1
+ 
+  my $tmpVal = (($Value / $Ceiling) + (-0.5 + ($RoundUp & 1)));
+  print( "tmpVal: $tmpVal " );
+  
+  my $tmp = int($tmpVal);
+  print( "tmp: $tmp " );
+  
+  $tmpVal = sprintf( "%d", ( $tmpVal - $tmp ) );
+  print( "tmpVal: $tmpVal " );
+  
+  my $nValue = $tmp + $tmpVal ;
+  print( "nValue: $nValue " );
 
-	#sea bottom current
-	$sql = qq{ SELECT measurement_value_current_speed,measurement_value_current_to_direction,z,<TIME_ID> FROM currents where platform_id = $platform_ref and z_desc = 'bottom' $measurement_date_query  };
-	$sql =~ s/<TIME_ID>/measurement_date/g;
-        $sth = $dbh_wls->prepare( $sql );
-        $sth->execute();
-	my ($sea_bottom_current_speed, $sea_bottom_current_to_direction, $depth_bin_bottom) = $sth->fetchrow_array;
-        $sth->finish;
-	if (!$sea_bottom_current_speed) { $sea_bottom_current_speed = -99999; }
-	else {
-		$sea_bottom_current_speed *= 100; #convert from m/s to cm/s
-	}
-
-	$content =~ s/<SEA_BOTTOM_CURRENT_SPEED>/$sea_bottom_current_speed/g;
-	$content =~ s/<SEA_BOTTOM_CURRENT_TO_DIRECTION>/$sea_bottom_current_to_direction/g;
-	$content =~ s/<DEPTH_BIN_BOTTOM>/$depth_bin_bottom/g;
-
-	my ($sea_bottom_eastward_current,$sea_bottom_northward_current);
-	if ($sea_bottom_current_speed = -99999) {	
-		$sea_bottom_eastward_current = -99999;
-		$sea_bottom_northward_current = -99999;
-	}
-	else {
-		$sea_bottom_eastward_current = sprintf("%.3f", $sea_bottom_current_speed * sin(deg2rad($sea_bottom_current_to_direction)));
-		$sea_bottom_northward_current = sprintf("%.3f", $sea_bottom_current_speed * cos(deg2rad($sea_bottom_current_to_direction)));
-	}
-
-	$content =~ s/<SEA_BOTTOM_EASTWARD_CURRENT>/$sea_bottom_eastward_current/g;
-	$content =~ s/<SEA_BOTTOM_NORTHWARD_CURRENT>/$sea_bottom_northward_current/g;
-
-	#sea surface current
-	$sql = qq{ SELECT measurement_value_current_speed,measurement_value_current_to_direction,z,<TIME_ID> FROM currents where platform_id = $platform_ref and z_desc = 'surface' $measurement_date_query  };
-	$sql =~ s/<TIME_ID>/measurement_date/g;
-        $sth = $dbh_wls->prepare( $sql );
-        $sth->execute();
-	my ($sea_surface_current_speed, $sea_surface_current_to_direction, $depth_bin_surface) = $sth->fetchrow_array;
-        $sth->finish;
-	if (!$sea_surface_current_speed) { $sea_surface_current_speed = -99999; $sea_surface_current_to_direction = -99999; $depth_bin_surface = -99999; }
-	else {
-		$sea_surface_current_speed *= 100; #convert from m/s to cm/s
-	}
-
-	$content =~ s/<SEA_SURFACE_CURRENT_SPEED>/$sea_surface_current_speed/g;
-        $content =~ s/<CURRENT_SPEED>/$sea_surface_current_speed/g;	
-	$content =~ s/<SEA_SURFACE_CURRENT_TO_DIRECTION>/$sea_surface_current_to_direction/g;
-        $content =~ s/<CURRENT_TO_DIRECTION>/$sea_surface_current_to_direction/g;
-	$content =~ s/<DEPTH_BIN_SURFACE>/$depth_bin_surface/g;
-
-	my ($sea_surface_eastward_current,$sea_surface_northward_current);
-	if ($sea_surface_current_speed == -99999) {
-		$sea_surface_eastward_current = -99999;
-		$sea_surface_northward_current = -99999;
-	}
-	else {
-		$sea_surface_eastward_current = sprintf("%.3f", $sea_surface_current_speed * sin(deg2rad($sea_surface_current_to_direction)));
-		$sea_surface_northward_current = sprintf("%.3f", $sea_surface_current_speed * cos(deg2rad($sea_surface_current_to_direction)));
-	}
-
-	$content =~ s/<SEA_SURFACE_EASTWARD_CURRENT>/$sea_surface_eastward_current/g;
-	$content =~ s/<EASTWARD_CURRENT>/$sea_surface_eastward_current/g;
-	$content =~ s/<SEA_SURFACE_NORTHWARD_CURRENT>/$sea_surface_northward_current/g;
-	$content =~ s/<NORTHWARD_CURRENT>/$sea_surface_northward_current/g;
-
-        #significant wave height
-	$sql = qq{ SELECT measurement_value_significant_wave_height,<TIME_ID> FROM waves where platform_id = $platform_ref $measurement_date_query  };
-	$sql =~ s/<TIME_ID>/measurement_date/g;
-        $sth = $dbh_wls->prepare( $sql );
-        $sth->execute();
-        my ($significant_wave_height) = $sth->fetchrow_array;
-        $sth->finish;
-	if (!$significant_wave_height) { $significant_wave_height = -99999; }
-	$content =~ s/<SIGNIFICANT_WAVE_HEIGHT>/$significant_wave_height/g;
-
-        #dominant wave period
-	$sql = qq{ SELECT measurement_value_peak_period,<TIME_ID> FROM waves where platform_id = $platform_ref $measurement_date_query  };
-	$sql =~ s/<TIME_ID>/measurement_date/g;
-        $sth = $dbh_wls->prepare( $sql );
-        $sth->execute();
-        my ($dominant_wave_period) = $sth->fetchrow_array;
-        $sth->finish;
-	if (!$dominant_wave_period) { $dominant_wave_period = -99999; }
-	$content =~ s/<DOMINANT_WAVE_PERIOD>/$dominant_wave_period/g;
-=cut
+  #Multiply by ceiling value to set RoundtoValue
+  my $RoundToValue = $nValue * $Ceiling;
+  print( "RoundToValue: $RoundToValue\n" );
+ 
+  return( $RoundToValue ); 
 }
