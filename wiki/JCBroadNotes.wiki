@@ -139,6 +139,8 @@ _Simplify, simplify - Thoreau_
 
   * ROA(Resource Oriented Architecture)/REST style simpler declarative alternatives to complex query SOA(Service Oriented Architecture)
 
+see also http://code.google.com/p/xenia/wiki/XeniaDesign
+
 ----
 == General technical discussions ==
   * ROA vs SOA (see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML#ObsKML_Design_Goals)
