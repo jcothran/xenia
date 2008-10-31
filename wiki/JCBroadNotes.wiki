@@ -121,7 +121,9 @@ desktop tools
 earlier technical notes http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
 
 ----
-== Devolution(Simplify,simplify) - technology changes, lessons learned ==
+== Devolution - technology changes, lessons learned ==
+
+_Simplify, simplify - Thoreau_
 
   * Web GIS interface - server-side to client/browser side: php/mapscript -> openlayers/javascript/ajax, tilecache for improved WMS response time
 
