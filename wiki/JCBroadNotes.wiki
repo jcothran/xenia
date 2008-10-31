@@ -139,7 +139,7 @@ _Simplify, simplify - Thoreau_
 
   * ROA(Resource Oriented Architecture)/REST style simpler declarative alternatives to complex query SOA(Service Oriented Architecture)
 
-  * need more, better quantitative(e.g. web server stats) and qualitative(e.g. user feedback and surveys) feedback broadly shared especiallly with data and product participants to better guide and encourage data and product development
+  * need more, better quantitative(e.g. web server stats) and qualitative(e.g. user feedback and surveys) feedback broadly shared especially with data and product participants to better guide and encourage data and product development
 
 see also http://code.google.com/p/xenia/wiki/XeniaDesign
 
