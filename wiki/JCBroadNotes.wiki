@@ -129,7 +129,7 @@ _Simplify, simplify - Thoreau_
 
   * Latest in-situ obs: RDB – sensor/obs hard-coded/table approach -> obs non-specific infrastructure(xenia,obskml) 
 
-  * Sensor/observation specific metadata: loosely link(database system id to file handle) a variety of more specific metadata files/schemas to common rdb infrastructure
+  * Sensor/observation specific metadata: loosely link(database system id to URL/file handle) a variety of more specific metadata files/schemas to common rdb infrastructure
 
   * Hourly dense/gridded data: RDB quickscat, model layers -> shapefiles which are queryable via ogr+sql
 
