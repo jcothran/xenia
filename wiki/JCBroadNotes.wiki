@@ -12,6 +12,10 @@ CarolinasRCOOS (openlayers *beta/experimental*) http://carolinasrcoos.org
 
 NWS Marine Weather Portal http://forecast.weather.gov/mwp/
 
+[http://carocoops.org/documents/sccc_poster_JCothran.ppt Powerpoint poster]
+
+[http://carocoops.org/documents/sccc_presentation_JCothran.ppt Powerpoint presentation]
+
 ----
 
 zope/plone(CMS (Content Management System) python based) http://en.wikipedia.org/wiki/Plone_(content_management_system)
@@ -142,10 +146,6 @@ _Simplify, simplify - Thoreau_
   * need more, better quantitative(e.g. web server stats) and qualitative(e.g. user feedback and surveys) feedback broadly shared especially with data and product participants to better guide and encourage data and product development
 
 see also http://code.google.com/p/xenia/wiki/XeniaDesign
-
-[http://carocoops.org/documents/sccc_poster_JCothran.ppt Powerpoint poster]
-
-[http://carocoops.org/documents/sccc_presentation_JCothran.ppt Powerpoint presentation]
 
 ----
 == General technical discussions ==
