@@ -143,6 +143,10 @@ _Simplify, simplify - Thoreau_
 
 see also http://code.google.com/p/xenia/wiki/XeniaDesign
 
+[http://carocoops.org/documents/sccc_poster_JCothran.ppt Powerpoint poster]
+
+[http://carocoops.org/documents/sccc_presentation_JCothran.ppt Powerpoint presentation]
+
 ----
 == General technical discussions ==
   * ROA vs SOA (see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML#ObsKML_Design_Goals)
