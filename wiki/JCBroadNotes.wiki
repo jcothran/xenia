@@ -149,7 +149,9 @@ see also http://code.google.com/p/xenia/wiki/XeniaDesign
 
 ----
 == General technical discussions ==
-  * ROA vs SOA (see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML#ObsKML_Design_Goals)
+  * ROA vs SOA 
+    * http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML#ObsKML_Design_Goals
+    * http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML#Related_Links
     * common search/request method http://www.opensearch.org
     * format+convention/data model vs service/software
     * report vs query
