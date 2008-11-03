@@ -151,7 +151,10 @@ see also http://code.google.com/p/xenia/wiki/XeniaDesign
 == General technical discussions ==
   * ROA vs SOA 
     * http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML#Related_Links
-    * common search/request method http://www.opensearch.org
+    * OpenSearch
+      * common search/request method http://www.opensearch.org
+      * http://www.xml.com/pub/a/2007/07/20/introducing-opensearch.html
+      * http://groups.google.com/group/geo-web-rest/browse_thread/thread/3e0a51cb7ef13866?pli=1
     * format+convention/data model vs service/software
     * report vs query
   * real-time vs model/archive
