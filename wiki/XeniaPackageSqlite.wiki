@@ -10,7 +10,7 @@ see also XeniaPackageV2 (database table schema diagram) and [http://nautilus.bar
 
 == Introduction ==
 
-*UPDATE: April 8, 2008* There is a geospatially enabled version of Sqilte labeled *SQLiteGeo* available at http://www.gaia-gis.it/spatialite  Would recommend using this version of sqlite for its geospatial and shapefile support.
+*UPDATE: April 8, 2008* There is a geospatially enabled version of Sqilte labeled *SQLiteGeo* available at http://www.gaia-gis.it/spatialite  Would recommend reviewing this version of sqlite for its geospatial and shapefile support.  See SpatialLite
 
 from http://sqlite.org
 
@@ -105,6 +105,8 @@ https://addons.mozilla.org/en-US/firefox/addon/5817
 http://www.nabble.com/Dump-w-o-Schema-td14852144.html
 ----
 = [XeniaPackageSqlite#Geospatial_enabling_Sqlite Geospatial enabling Sqlite - SQLiteGeo] =
+
+See SpatialLite
 
 copied from http://www.gaia-gis.it/spatialite
 
