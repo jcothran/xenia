@@ -7,3 +7,10 @@ SQLite supports the ability to load external extensions via 'load_extension'. Yo
 The downside I found is the DBI driver for SQLite in Perl does not support load_extension, nor does it have an interface to call the C routine 'sqlite3_enable_load_extension' which enables the ability to use 'load_extension'. So in short, there does not appear to be a way to use SpatiaLite via the DBD:SQLite driver in Perl. There are other SQLite DB interfaces in Perl, so one of those may have this ability.
 ==Python==
 The pysqlite module for Python, does in fact support the 'load_extension' ability.
+Here is a sample to get it up and running, this is on my windows machine(note the DLLs reside in the same directory as the script):
+{{{
+  DB = sqlite.connect( './html_content.db' )
+  DB.enable_load_extension(True)
+  DB.execute( 'SELECT load_extension("libspatialite-2.dll")' )
+  DBCursor = DB.cursor()
+}}}
