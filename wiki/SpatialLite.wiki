@@ -1,10 +1,10 @@
-#summary geospatially enabled version of sqlite
-
 =Overview=
 [http://http://www.gaia-gis.it/spatialite/ SpatiaLite] is an extension implementing OpenGIS on a SQLite database.
 
 ==Programmatically Invoking SpatiaLite==
 SQLite supports the ability to load external extensions via 'load_extension'. You can construct an SQL statement 'SELECT load_extension("libspatialite-2.dll")' to invoke the SpatiaLite extension. By default, however, 'load_extension' is disabled in SQLite, you need to be able to call the C API routine 'sqlite3_enable_load_extension' to enable it.
+When grabbing the code make sure you get the latest version, currently it is v2.2. There was an issue of negative values not being handled in previous versions, so I spent a day wondering why I could get nothing to work.
+
 ==Perl==
 The downside I found is the DBI driver for SQLite in Perl does not support load_extension, nor does it have an interface to call the C routine 'sqlite3_enable_load_extension' which enables the ability to use 'load_extension'. So in short, there does not appear to be a way to use SpatiaLite via the DBD:SQLite driver in Perl. There are other SQLite DB interfaces in Perl, so one of those may have this ability.
 ==Python==
@@ -17,4 +17,19 @@ Here is a sample to get it up and running, this is on my windows machine(note th
   DB.enable_load_extension(True)
   DB.execute( 'SELECT load_extension("libspatialite-2.dll")' )
   DBCursor = DB.cursor()
+}}}
+
+My database was a fairly simple using WKT geometry. Whole trying to determine why nothing would work, which in the end was due to old DLLs, I played around with testing to see if my WKT_geometry column was valid. It was a simple POINT( x y ) data set. Here is a quick query to find out what the SpatiaLite sees:
+{{{
+strSQL = 'SELECT GeometryType( GeomFromText(wkt_geometry) ) FROM html_content'
+}}}
+Here is a SQL statement to find a point inside a polygon(Note the double parenthesis around the 'POLYGON'):
+{{{
+strSQL = 'SELECT wkt_geometry,platform_handle FROM html_content 
+          WHERE Contains( GeomFromText( \'POLYGON((-79.22 32.36,-78.97 32.36,-78.97                
+                32.63,-79.22 32.63,-79.22 32.36))\'), GeomFromText(wkt_geometry) )'
+
+        DBCursor.execute( strSQL )
+        for row in DBCursor:
+            print( row[0] + ' ' + row[1] )
 }}}
