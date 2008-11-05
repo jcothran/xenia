@@ -1,3 +1,5 @@
+#summary geospatially enabled version of sqlite
+
 =Overview=
 [http://http://www.gaia-gis.it/spatialite/ SpatiaLite] is an extension implementing OpenGIS on a SQLite database.
 
