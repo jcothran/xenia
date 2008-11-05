@@ -139,6 +139,10 @@ _Simplify, simplify - Thoreau_
 
   * Full RDB to file-based RDB: postgresql+postgis -> sqlite+ogr, sqlitegeo? 
 
+  * continued focus for wider general IT audience usage on
+    * SQL type tools/queries against table/shapefile/RDB type data sources
+    * XPath(libXML) processing against XML file formats
+
   * Self hosted to third party hosted: third party website hosting for static content/context, common processing/storage.  Google code/analytics for basic shared development support/documentation.
 
   * ROA(Resource Oriented Architecture)/REST style simpler declarative alternatives to complex query SOA(Service Oriented Architecture)
