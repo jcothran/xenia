@@ -1,1 +1,9 @@
-SpatiaLite is an extension implementing OpenGIS on a SQLite database.
+=Overview=
+[http://http://www.gaia-gis.it/spatialite/ SpatiaLite] is an extension implementing OpenGIS on a SQLite database.
+
+==Programmatically Invoking SpatiaLite==
+SQLite supports the ability to load external extensions via 'load_extension'. You can construct an SQL statement 'SELECT load_extension("libspatialite-2.dll")' to invoke the SpatiaLite extension. By default, however, 'load_extension' is disabled in SQLite, you need to be able to call the C API routine 'sqlite3_enable_load_extension' to enable it.
+==Perl==
+The downside I found is the DBI driver for SQLite in Perl does not support load_extension, nor does it have an interface to call the C routine 'sqlite3_enable_load_extension' which enables the ability to use 'load_extension'. So in short, there does not appear to be a way to use SpatiaLite via the DBD:SQLite driver in Perl. There are other SQLite DB interfaces in Perl, so one of those may have this ability.
+==Python==
+The pysqlite module for Python, does in fact support the 'load_extension' ability.
