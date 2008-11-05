@@ -9,6 +9,8 @@ The downside I found is the DBI driver for SQLite in Perl does not support load_
 The pysqlite module for Python, does in fact support the 'load_extension' ability.
 Here is a sample to get it up and running, this is on my windows machine(note the DLLs reside in the same directory as the script):
 {{{
+  from pysqlite2 import dbapi2 as sqlite
+
   DB = sqlite.connect( './html_content.db' )
   DB.enable_load_extension(True)
   DB.execute( 'SELECT load_extension("libspatialite-2.dll")' )
