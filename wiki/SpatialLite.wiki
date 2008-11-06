@@ -3,7 +3,7 @@
 =Overview=
 [http://http://www.gaia-gis.it/spatialite/ SpatiaLite] is an extension implementing OpenGIS on a SQLite database.
 
-==Programmatically Invoking SpatiaLite==
+==Programmatically Invoking !SpatiaLite==
 SQLite supports the ability to load external extensions via 'load_extension'. You can construct an SQL statement 'SELECT load_extension("libspatialite-2.dll")' to invoke the SpatiaLite extension. By default, however, 'load_extension' is disabled in SQLite, you need to be able to call the C API routine 'sqlite3_enable_load_extension' to enable it.
 When grabbing the code make sure you get the latest version, currently it is v2.2. There was an issue of negative values not being handled in previous versions, so I spent a day wondering why I could get nothing to work.
 
@@ -46,4 +46,4 @@ Contains( GeomFromText( 'POLYGON((-82 31.65, -82 32.5, -74 37.5, -74 31.65, -82 
 ORDER BY platform_handle ASC
 }}}
 
-The area of interested is the 2nd GeomFromText, that's where I build the WKT POINT() from the existing longitude and latitude columns. Those columns are in  decimal degrees, but to use GeomFromText we need to build POINT( longitude, latitude ). So after some searching in teh SQL docs I see I can build the string on the fly using the concatenate "||" and roll my own WKT string.
+The area of interested is the 2nd !GeomFromText, that's where I build the WKT POINT() from the existing longitude and latitude columns. Those columns are in  decimal degrees, but to use !GeomFromText we need to build POINT( longitude, latitude ). So after some searching in teh SQL docs I see I can build the string on the fly using the concatenate "||" and roll my own WKT string.
