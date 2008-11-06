@@ -35,3 +35,15 @@ strSQL = 'SELECT wkt_geometry,platform_handle FROM html_content
         for row in DBCursor:
             print( row[0] + ' ' + row[1] )
 }}}
+
+==Xenia Database Query==
+Your database doesn't have to be constructed using WKB or WKT columns. Playing around with the Xenia database to get platforms only in the Carolinas RCOOS region, I cobbled together this query that runs against the Xenia DB:
+{{{
+SELECT platform_handle, description, fixed_longitude, fixed_latitude,url 
+FROM platform 
+WHERE active = 1 AND
+Contains( GeomFromText( 'POLYGON((-82 31.65, -82 32.5, -74 37.5, -74 31.65, -82 31.65))'), GeomFromText( 'POINT(' || fixed_longitude || ' ' || fixed_latitude ||')' ) )
+ORDER BY platform_handle ASC
+}}}
+
+The area of interested is the 2nd GeomFromText, that's where I build the WKT POINT() from the existing longitude and latitude columns. Those columns are in  decimal degrees, but to use GeomFromText we need to build POINT( longitude, latitude ). So after some searching in teh SQL docs I see I can build the string on the fly using the concatenate "||" and roll my own WKT string.
