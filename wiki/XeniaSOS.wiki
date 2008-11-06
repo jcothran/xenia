@@ -39,3 +39,15 @@ Encoding) listserv http://www.pmel.noaa.gov/maillists/tmap/ioos_wsde/
 NDBC SOS http://sdf.ndbc.noaa.gov/sos
 
 CO-OPS SOS http://opendap.co-ops.nos.noaa.gov/ioos-dif-sos/
+
+----
+
+= Development request =
+
+In addition to sensor/SensorML/SWE metadata development I would also like to see development/support relating to service efficiencies for:
+ 
+  * primitives/subsetting as discussed earlier 
+  * collections(give me some/all of your latest/time-range obs from a specified platform/bbox in one request instead of multiple specific/researched requests)
+  * zipped xml as a possible request/return format(since the data bloat of xml is repetitous tags to begin with)
+ 
+In any technical case down the road it would be great to get audience/customer feedback on how these services/formats are being utilized(or not) to guide their development.
