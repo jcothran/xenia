@@ -42,7 +42,7 @@ CO-OPS SOS http://opendap.co-ops.nos.noaa.gov/ioos-dif-sos/
 
 ----
 
-= Development request =
+= Ongoing development requests =
 
 In addition to sensor/SensorML/SWE metadata development I would also like to see development/support relating to service efficiencies for:
  
