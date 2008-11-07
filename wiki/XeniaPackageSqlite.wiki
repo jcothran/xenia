@@ -2,6 +2,14 @@
 
 A sample Xenia sqlite database file of the past 3 days worth of collected observations can be copied from here http://carocoops.org/microwfs/microwfs.db
 
+A sample Xenia sqlite database which has been purged of all but a few example observation records (but has a fully populated organization, platform, sensor and data dictionary tables) can be copied from here http://carocoops.org/microwfs/data_dictionary.db (3.5 MB) and a sql query for the data dictionary listing is below
+
+{{{
+-- scalar data dictionary listing for simple scalar obs (standard listing)
+-- Xenia version 3
+-- select t0.row_id,t2.standard_name,t3.standard_name from m_type t0,m_scalar_type t1,obs_type t2,uom_type t3 where t0.m_scalar_type_id = t1.row_id and t0.num_types = 1 and t1.obs_type_id = t2.row_id and t1.uom_type_id = t3.row_id;
+}}}
+
 Sqlite Manager - A simple Firefox add-on to view/query a sqlite database from Firefox
 
 https://addons.mozilla.org/en-US/firefox/addon/5817
