@@ -2,7 +2,7 @@
 
 A sample Xenia sqlite database file of the past 3 days worth of collected observations can be copied from here http://carocoops.org/microwfs/microwfs.db
 
-A sample Xenia sqlite database which has been purged of all but a few example observation records (but has a fully populated organization, platform, sensor and data dictionary tables) can be copied from here http://carocoops.org/microwfs/data_dictionary.db (3.5 MB) and a sql query for the data dictionary listing is below
+A sample Xenia sqlite database which has been purged of all but a few example observation records (but has a fully populated organization, platform, sensor and data dictionary tables) can be copied from here http://carocoops.org/microwfs/data_dictionary.db (3.5 MB) and a sql query for the [http://carocoops.org/microwfs/data_dictionary_listing.txt data dictionary listing] is below
 
 {{{
 -- scalar data dictionary listing for simple scalar obs (standard listing)
