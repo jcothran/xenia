@@ -54,6 +54,10 @@ To get SpatiaLite working under Debian, I had to make some changes in some of th
 1) in /src/versioninfo/Makefile there are 2 areas where the wrong
 directory was being used: libspatialite_la_DEPENDENCIES and
 libspatialite_la_LIBADD
+
+
 2) in /src/shell/Makefile incorrect directories:
 spatialite_DEPENDENCIES and LDADD
+
+
 3) also in /src/shell/Makefile added -liconv in the LDADD entry.
