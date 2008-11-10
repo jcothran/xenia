@@ -47,3 +47,13 @@ ORDER BY platform_handle ASC
 }}}
 
 The area of interested is the 2nd !GeomFromText, that's where I build the WKT POINT() from the existing longitude and latitude columns. Those columns are in  decimal degrees, but to use !GeomFromText we need to build POINT( longitude, latitude ). So after some searching in teh SQL docs I see I can build the string on the fly using the concatenate "||" and roll my own WKT string.
+
+=Debian Build=
+To get SpatiaLite working under Debian, I had to make some changes in some of the makefiles. The SpatiaLite developer will be addressing these in a future release, however I am documenting just in case.
+
+1) in /src/versioninfo/Makefile there are 2 areas where the wrong
+directory was being used: libspatialite_la_DEPENDENCIES and
+libspatialite_la_LIBADD
+2) in /src/shell/Makefile incorrect directories:
+spatialite_DEPENDENCIES and LDADD
+3) also in /src/shell/Makefile added -liconv in the LDADD entry.
