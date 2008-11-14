@@ -19,7 +19,7 @@ my ($missing_count,$measurement_count);
 ####################
 #config
 
-#usage: perl <path>/obskml_to_xenia_sqlite.pl <input zipped kml files> <optional: debug output sql directory> >> <log file>
+#usage: perl <path>/obskml_to_xenia_sqlite.pl <input zipped kml files> <optional: debug output sql directory> <optional: output sql filename prefix> >> <log file>
 #note if using debug output sql directory to create a 'archive_in' subdirectory there also which is written to in the script below
 
 #usage: perl /var/www/cgi-bin/microwfs/obskml_to_xenia_sqlite.pl http://carocoops.org/obskml/feeds/seacoos_all_latest.zip >>/tmp/microwfs_debug.log 2>/dev/null
@@ -36,9 +36,12 @@ my $dbname = '/var/www/cgi-bin/microwfs/microwfs.db';
 my $path_dir_sql = @ARGV[1];
 if ($path_dir_sql eq '') { $path_dir_sql = '.'; }
 
+my $filename_sql = @ARGV[2];
+if ($filename_sql eq '') { $filename_sql = 'latest'; }
+
 #my $path_sqlite = '/usr/bin/sqlite3-3.5.4.bin';
 my $path_batch_insert = 'perl /var/www/cgi-bin/microwfs/batch_insert.pl';
-my $path_sqlfile = "$path_dir_sql/latest.sql";
+my $path_sqlfile = "$path_dir_sql/$filename_sql.sql";
 my $path_sqlfile_archive = "$path_dir_sql/archive_in/latest_$date_now.sql";
 my $path_zipfile_archive = "$path_dir_sql/archive_in/latest_$date_now.zip";
 my $path_log = '/tmp/microwfs_debug_db.log';

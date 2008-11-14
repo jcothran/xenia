@@ -69,7 +69,7 @@ my $sql = qq{
     left join m_type_display_order on m_type_display_order.m_type_id=multi_obs.m_type_id
     where m_date > datetime('now','-12 hours')
   union
-select null,platform.platform_handle,null,null,null,platform.fixed_longitude,platform.fixed_latitude,null,null,null,null,null,null,platform.url,platform.long_name,organization.short_name,organization.url,0 from platform
+select null,platform.platform_handle,null,null,null,platform.fixed_longitude,platform.fixed_latitude,null,null,null,null,null,null,platform.url,platform.description,organization.short_name,organization.url,0 from platform
 left join organization on organization.row_id=platform.organization_id
   where platform.active = 1
   order by 2,18,12,1 desc;
@@ -195,12 +195,10 @@ if ($m_type_display_order eq '0') { next; }
 
 print XML_FILE "<obs>";
 
-$m_date = $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{m_date};
-$m_date =~ s/ /T/g;
-$m_date = substr($m_date,0,22);
-#$m_date .= ':00'; #JTC - not sure what this line was for
-if ($m_date ne '') { $m_date .= 'Z'; }
-#print $m_date."\n";
+my $this_date = $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{m_date};
+
+#only associating latest obs measurement date from platform for all platform obs - may be incorrect when missing certain platform obs at time
+if ($this_date gt $m_date) { $m_date = $this_date; }
 
 my $m_type_id = $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{m_type_id};
 my $obs_type = $latest_obs{operator_list}{$operator}{platform_list}{$platform_handle}{obs_list}{$m_type_display_order}{obs_type};
@@ -227,6 +225,13 @@ print XML_FILE "</Metadata>";
 
 print XML_FILE "<name>$platform_handle</name>";
 print XML_FILE "<Point><coordinates>$m_lon,$m_lat</coordinates></Point>";
+
+$m_date =~ s/ /T/g;
+$m_date = substr($m_date,0,22);
+#$m_date .= ':00'; #JTC - not sure what this line was for
+if ($m_date ne '') { $m_date .= 'Z'; }
+#print $m_date."\n";
+
 print XML_FILE "<TimeStamp><when>$m_date</when></TimeStamp>";
 
 print XML_FILE "</Placemark>";
