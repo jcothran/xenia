@@ -3,6 +3,7 @@ use strict;
 use Getopt::Long;
 use XML::LibXML;
 use LWP::Simple;
+use obsKMLSubRoutines; 
 
 use constant MICROSOFT_PLATFORM => 0;
 use constant USE_DEBUG_PRINTS => 1;
@@ -33,6 +34,10 @@ my $RandVal  = int(rand(10000000));
 my $strTmpDirName = "gearth_$RandVal";
 my $FileList;
 my @Files;
+
+#DWR v1.1.0.0
+my $strUnitsXMLFilename = './UnitsConversion.xml';
+my $XMLControlFile = XML::LibXML->new->parse_file("$strUnitsXMLFilename");
 
 if( !MICROSOFT_PLATFORM )
 {
@@ -251,7 +256,7 @@ foreach my $File (@Files)
 
     my $measurement = '';
     my $depth = ''; 
-    my $strDesc;
+    my $strDesc = '<table>';
     foreach my $observation ($platform->findnodes('Metadata/obsList/obs')) 
     {
       $depth                = sprintf("%s",$observation->find('elev'));
@@ -260,10 +265,31 @@ foreach my $File (@Files)
       my $uom               = sprintf("%s",$observation->find('uomType'));
       my $observed_property = $parameter.".".$uom;
       my $data_url          = sprintf("%s",$observation->find('dataURL'));
-      #Create the row. we use html table formatting to help present the data in a more readable fashion. 
-      #$strDesc = $strDesc."<tr><td>$parameter:</td><td>$measurement</td><td>$uom</td><td>Depth</td><td>$depth </td></tr>\n";
-      $strDesc = $strDesc."<tr><td>$parameter:</td><td>$measurement</td><td>$uom</td></tr>\n";
+      #DWR v1.1.0.0
+      #Add conversion to Imperial units as well.
+      my $strENUOM = GetConversionUnits( $uom, 'en' );
+      my $ConvertedVal = '';
+      if( length( $strENUOM ) )
+      {
+        if( defined( $XMLControlFile ) )
+        {
+          $ConvertedVal = obsKMLSubRoutines::MeasurementConvert( $measurement, $uom, $strENUOM, $XMLControlFile );
+        }
+      }
+      if( length( $ConvertedVal ) )
+      {
+        $strDesc .= "<tr><td>$parameter:</td><td>$measurement</td><td>$uom</td><td>$ConvertedVal</td><td>$strENUOM</td></tr>\n";
+      }
+      else
+      {
+        #Create the row. we use html table formatting to help present the data in a more readable fashion. 
+        #$strDesc = $strDesc."<tr><td>$parameter:</td><td>$measurement</td><td>$uom</td><td>Depth</td><td>$depth </td></tr>\n";
+        $strDesc .= "<tr><td>$parameter:</td><td>$measurement</td><td>$uom</td></tr>\n";
+      }
     } #obs
+    $strDesc .= '</table>';
+    $strDesc .= '<table><tr></br></tr><tr>Please fill out our survey and let us know your who/what/wheres and how we can improve the information to better serve you.<tr><a href="http://carolinasrcoos.org/survey.php">Survey</a></tr></table>';
+    
     #We use the ![CDATA]] directive to tell teh parser not to mess with the contents so we can take advantage of the HTML table
     #formatting.
     $strRow = "<description><![CDATA[$strDesc]]></description>\n";
@@ -299,3 +325,38 @@ else
   `cd $strTempDir & rmdir /S /Q $strTmpDirName`;
 }
 
+#######################################################################################################
+#Subroutine: GetConversionUnits
+#Given a unit of one measurement system, this subroutine will return the equivalent unit from the 
+# specified system. IE if you have "m" in the metric system and want the equivalent in the Imperial system.
+#######################################################################################################
+sub GetConversionUnits #($strCurrentUnits, $strDesiredUOMSystem )
+{
+  my ( $strCurrentUnits, $strDesiredUOMSystem ) = @_;
+  if( $strDesiredUOMSystem eq 'en' )
+  {
+    if( $strCurrentUnits eq 'm' )
+    {
+      return( 'ft' );
+    }
+    elsif( $strCurrentUnits eq  'm_s-1' )
+    {
+      return( 'mph' );
+    }
+    elsif( $strCurrentUnits eq 'celsius' )
+    {
+      return( 'fahrenheit' );
+    }
+    elsif( $strCurrentUnits eq 'cm_s-1' )
+    {
+      return( 'mph' );
+    }
+    elsif( $strCurrentUnits eq 'mph' )
+    {
+      return( 'knots' );
+    }
+  }
+  else
+  {
+  }
+}
