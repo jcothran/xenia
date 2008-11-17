@@ -18,6 +18,8 @@ Intelligent River http://www.intelligentriver.org/data-products (Clemson Univers
 
 [http://carocoops.org/documents/sccc_presentation_JCothran.ppt Powerpoint presentation] [http://carocoops.org/documents/sccc presentation slides mp3 audio]
 
+[http://www.carocoops.org/documents/sccc/kiosk/cothran-usc-sc08-Kiosk-audio/ browser/flash presentation]
+
 ----
 
 zope/plone(CMS (Content Management System) python based) http://en.wikipedia.org/wiki/Plone_(content_management_system)
