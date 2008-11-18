@@ -1,3 +1,10 @@
+##########################################################################################
+#Revisions
+# Rev: 1.1.0.0
+# Changes: Added conversion to imperial for some measurements, such as speeds and temperatures.
+# Fixedup the publication date to put the time in EST instead of UTC(subtract 4 hours)
+##########################################################################################
+
 use strict;
 
 use Getopt::Long;
@@ -146,7 +153,10 @@ foreach my $File (@Files)
     #We create a GeoRSS feed per platform.
     my $GeoRSSFile;
     my $strGeoRSSFilename;
-    my $strID = $platform_id;
+    #DWR v1.1.0.0
+    #Lowercase the platform id since that seems to be the standard now. Some platform short_names in the Xenia database
+    #are capitalized.
+    my $strID = lc( $platform_id );
     $strID =~ s/\./_/g;
     if( !MICROSOFT_PLATFORM )
     {
@@ -199,14 +209,18 @@ foreach my $File (@Files)
     if( !MICROSOFT_PLATFORM )
     {
       #Convert the DB date into RFC822 as per the RSS spec.
-      $strRFCDate = `date --date=\"$strRFCDate\" -R`;
+      #DWR v1.1.0.0
+      #Shift timezone to EST.
+      $strRFCDate = `date --date=\"$strRFCDate -4 hours\" -R`;
       #Get the current RFC822 date to use as channel publication date.
       $strChannelDate = `date -R`;
     }
     else
     {
       #Convert the DB date into RFC822 as per the RSS spec.
-      $strRFCDate = `\\UnixUtils\\usr\\local\\wbin\\date.exe --date=\"$strRFCDate\" -R`;
+      #DWR v1.1.0.0
+      #Shift timezone to EST.
+      $strRFCDate = `\\UnixUtils\\usr\\local\\wbin\\date.exe --date=\"$strRFCDate -4 hours\" -R`;
       #Get the current RFC822 date to use as channel publication date.
       $strChannelDate = `\\UnixUtils\\usr\\local\\wbin\\date.exe -R`;
     }
