@@ -155,6 +155,8 @@ _Simplify, simplify - Thoreau_
 
   * need more, better quantitative(e.g. web server stats) and qualitative(e.g. user feedback and surveys) feedback broadly shared especially with data and product participants to better guide and encourage data and product development
 
+  * the ongoing in-situ instrumentation deployment, maintenance and telemetry cost limits the amount of data to process making the near real-time data management aspects of a limited or finite scope as contrasted with the constant drop in data processing or storage costs 
+
 see also http://code.google.com/p/xenia/wiki/XeniaDesign
 
 ----
