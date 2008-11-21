@@ -13,6 +13,9 @@ CarolinasRCOOS (openlayers *beta/experimental*) http://carolinasrcoos.org
 NWS Marine Weather Portal http://forecast.weather.gov/mwp/
 
 Intelligent River http://www.intelligentriver.org/data-products (Clemson University, Xenia RDB)
+
+Great Lakes Information Network (GLIN) http://gis.glin.net (Xenia RDB)
+
 ----
 [http://www.carocoops.org/documents/sccc/kiosk/cothran-usc-sc08-Kiosk-audio/ browser/flash presentation]
 
