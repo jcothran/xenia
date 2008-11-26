@@ -136,30 +136,21 @@ earlier technical notes http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/J
 _Simplify, simplify - Thoreau_
 
   *  Move/Utilize common third party infrastructure at server and client level
-
     * Self hosted to third party hosted: third party website hosting for static content/context, common processing/storage.  Google code/analytics for basic shared development support/documentation.
-
     * Web GIS interface - server-side to client/browser side: php/mapscript -> openlayers/javascript/ajax, tilecache for improved WMS response time
 
   * Move/Utilize data access from complex software dependencies to simpler file formats
-
     * Latest in-situ obs: RDB – sensor/obs hard-coded/table approach -> obs non-specific infrastructure(xenia,obskml) 
-
     * Sensor/observation specific metadata: loosely link(database system id to URL/file handle) a variety of more specific metadata files/schemas to common rdb infrastructure
-
     * Hourly dense/gridded data: RDB quickscat, model layers -> shapefiles which are queryable via ogr+sql
-
     * Full RDB to file-based RDB: postgresql+postgis -> sqlite+ogr, sqlitegeo? 
-
     * ROA(Resource Oriented Architecture)/REST style simpler declarative alternatives to complex query SOA(Service Oriented Architecture)
 
   * General concerns
     * continued focus for wider general IT audience usage on
       * SQL type tools/queries against table/shapefile/RDB type data sources
       * XPath(libXML) processing against XML file formats
-
     * need more, better quantitative(e.g. web server stats) and qualitative(e.g. user feedback and surveys) feedback broadly shared especially with data and product participants to better guide and encourage data and product development
-
     * the ongoing in-situ instrumentation deployment, maintenance and telemetry cost limits the amount of data to process making the near real-time data management aspects of a limited or finite scope as contrasted with the constant drop in data processing or storage costs 
 
 see also http://code.google.com/p/xenia/wiki/XeniaDesign
