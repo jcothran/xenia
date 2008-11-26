@@ -1,0 +1,182 @@
+use constant MICROSOFT_PLATFORM => 0;
+
+	###########################################################
+	#  	  Subroutine that takes as input data file(s) and     #     
+	#     generates graph as output.                          # 
+	#  														  #	
+	###########################################################
+	
+	sub my_graph{
+		
+		my ($plot_graph_args_ref,$time_array_ref,$depth_hash_ref)=@_;
+		my %plot_graph_args = %$plot_graph_args_ref;			
+		my %depth_hash=%$depth_hash_ref;	
+		
+		my @time_array=@$time_array_ref;
+		my $string='';
+		
+		my $size=$#time_array;
+		my $i=0;
+		foreach my $val(@time_array){
+			if ($i==0){							
+				#$string.='"'.$val.'"';					
+			}
+			#if ($i%2 ==0)
+			if ($i%6 ==0)
+			{
+				$string.='"'.$val.'"';					
+			}
+			else{
+				$string.='" "';					
+			}
+			#$string.=' $val';					
+			if ($i!=$size){
+				$string.=',';				
+			}
+			$i++;
+		}	
+		
+		my $depth_string='';
+		
+		#(sort { $hash{$b} <=> $hash{$a} }
+		foreach my $val2(sort (keys %depth_hash)){
+		
+			$depth_string.="$val2";
+			$depth_string.=' ,';
+		}	
+		chop $depth_string;
+			
+		$img_path = $plot_graph_args{ 'img_path'};
+		$process_id=$plot_graph_args{'process_id'};		
+		$output_dir = $plot_graph_args{ 'output_dir'};
+		
+		my $max=$plot_graph_args{max_z}+2;
+		my $min=$plot_graph_args{min_z}-2;
+		
+		my $data_file=$plot_graph_args{ 'data_file'};
+		my $data_file_1=$plot_graph_args{ 'data_file_1'};
+		my $graph_script=$output_dir."plot_graph_$process_id.script";
+		
+		my ($size_x,$size_y);
+		my $script_build="";
+		
+		$plot_graph_args{last_time}=$plot_graph_args{last_time}+60;
+				
+		my $key="";					
+		if (($plot_graph_args{platform_handle} eq 'usf:C12:ADCP')||($plot_graph_args{platform_handle} eq 'usf:C13:ADCP')||($plot_graph_args{platform_handle} eq 'usf:C14:ADCP')){
+			$size_x = 800*0.001562499;
+			$size_y = 1000*0.00205;									
+		}
+		elsif ((defined $plot_graph_args{size_x}) && (defined $plot_graph_args{size_y})){
+			$size_x=$plot_graph_args{size_x}*0.001562499;
+			$size_y=$plot_graph_args{size_y}*0.00205;		
+		}
+		else{
+			$size_x = 600*0.001562499;
+			$size_y = 800*0.00205;				
+		}		
+		
+		my $title;
+		if (defined $plot_graph_args{title}){$title=$plot_graph_args{title};}
+		else{$title="ADCP Vector Plot";}
+		
+		my $strings='';
+		my $file;
+		
+		$file=$output_dir."adcp_data_file1_".$process_id.".txt";
+		$strings.="'$file' using 1:2:(\$3):(\$4) title '0 - 5 cm/sec' with vector ls 1,";	
+				
+		$file=$output_dir."adcp_data_file2_".$process_id.".txt";
+		$strings.="'$file' using 1:2:(\$3):(\$4) title '5+ - 10 cm/sec-' with vector ls 2,";
+		$file=$output_dir."adcp_data_file3_".$process_id.".txt";
+		$strings.="'$file' using 1:2:(\$3):(\$4) title '10+ - 15 cm/sec-' with vector ls 3,";
+		$file=$output_dir."adcp_data_file4_".$process_id.".txt";
+		$strings.="'$file' using 1:2:(\$3):(\$4) title '15+ - 20 cm/sec-' with vector ls 4,";
+		$file=$output_dir."adcp_data_file5_".$process_id.".txt";
+		$strings.="'$file' using 1:2:(\$3):(\$4) title '20+ - 25 cm/sec-' with vector ls 5,";
+		$file=$output_dir."adcp_data_file6_".$process_id.".txt";
+		$strings.="'$file' using 1:2:(\$3):(\$4) title '25+ - 30 cm/sec-' with vector ls 6,";
+		$file=$output_dir."adcp_data_file7_".$process_id.".txt";
+		$strings.="'$file' using 1:2:(\$3):(\$4) title '30+ - 35 cm/sec-' with vector ls 7,";
+		$file=$output_dir."adcp_data_file8_".$process_id.".txt";
+		$strings.="'$file' using 1:2:(\$3):(\$4) title '35+ - 40 cm/sec-' with vector ls 8,";
+		$file=$output_dir."adcp_data_file9_".$process_id.".txt";
+		$strings.="'$file' using 1:2:(\$3):(\$4) title '40+ - 45 cm/sec-' with vector ls 9,";
+		$file=$output_dir."adcp_data_file10_".$process_id.".txt";
+		$strings.="'$file' using 1:2:(\$3):(\$4) title '45+ - 50 cm/sec-' with vector ls 10,";
+		$file=$output_dir."adcp_data_file11_".$process_id.".txt";
+		$strings.="'$file' using 1:2:(\$3):(\$4) title '50+ - 75 cm/sec-' with vector ls 11";
+
+		open (SCRIPT,">$graph_script");
+
+		print SCRIPT "		
+				
+		set output \"$img_path\"
+		set term png		
+		set title '$title' font \"Times-Italic,60\"
+
+		set yrange [$min:$max]				
+		#set ytics $min,1
+		set ytics ($depth_string)						
+		
+						
+		#increase the xrange on both sides 		
+		set xrange [-60:$plot_graph_args{last_time}]				
+		set xtics 0,60 
+		
+		set xtics mirror
+		set noxtics		
+						
+		set x2data time	
+		set timefmt \"%Y-%m-%d-%H:%M:%S\"				
+				
+		set x2range [\"$plot_graph_args{first_unixtime}\":\"$plot_graph_args{last_unixtime}\"]								
+		set x2tics ($string)
+		
+		#set yrange [
+		
+		
+		set grid ytics 
+
+		set format x2 \"\\n%m/%d \\n%H:%M \" 		
+	
+		set linestyle 1 linetype 5		
+		set linestyle  2 linetype  37 
+		set linestyle  3 linetype  -1 
+		set linestyle  4 linetype  16 
+		set linestyle  5 linetype  3 
+		set linestyle  6 linetype  1 
+		set linestyle  7 linetype  4 
+		set linestyle  8 linetype  27 
+		set linestyle  9 linetype  29 
+		set linestyle 10 linetype 33 
+		set linestyle 11 linetype 40					
+	
+		set x2label \"Time(GMT)\"
+		set ylabel \"Depth(m)\"
+		set border 15
+		set ticscale 2
+
+		set size $size_x,$size_y
+		set linestyle 1 lt 2 lw 3
+		set key below width 3 spacing 1 
+		set key box linestyle 1	
+		
+		plot $strings
+		reset
+		
+		quit";
+		close SCRIPT;	
+    
+    if( !MICROSOFT_PLATFORM )
+    {
+      `gnuplot $graph_script`;
+    }
+    else
+    {
+      `"C:\\Program Files\\gnuplot\\gnuplot\\bin\\wgnuplot.exe" $graph_script`
+    }
+		#`rm $graph_script`; #remove script file	
+	}
+
+1;
