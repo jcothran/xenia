@@ -135,27 +135,32 @@ earlier technical notes http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/J
 
 _Simplify, simplify - Thoreau_
 
-  * Web GIS interface - server-side to client/browser side: php/mapscript -> openlayers/javascript/ajax, tilecache for improved WMS response time
+  *  Move/Utilize common third party infrastructure at server and client level
 
-  * Latest in-situ obs: RDB – sensor/obs hard-coded/table approach -> obs non-specific infrastructure(xenia,obskml) 
+    * Self hosted to third party hosted: third party website hosting for static content/context, common processing/storage.  Google code/analytics for basic shared development support/documentation.
 
-  * Sensor/observation specific metadata: loosely link(database system id to URL/file handle) a variety of more specific metadata files/schemas to common rdb infrastructure
+    * Web GIS interface - server-side to client/browser side: php/mapscript -> openlayers/javascript/ajax, tilecache for improved WMS response time
 
-  * Hourly dense/gridded data: RDB quickscat, model layers -> shapefiles which are queryable via ogr+sql
+  * Move/Utilize data access from complex software dependencies to simpler file formats
 
-  * Full RDB to file-based RDB: postgresql+postgis -> sqlite+ogr, sqlitegeo? 
+    * Latest in-situ obs: RDB – sensor/obs hard-coded/table approach -> obs non-specific infrastructure(xenia,obskml) 
 
-  * continued focus for wider general IT audience usage on
-    * SQL type tools/queries against table/shapefile/RDB type data sources
-    * XPath(libXML) processing against XML file formats
+    * Sensor/observation specific metadata: loosely link(database system id to URL/file handle) a variety of more specific metadata files/schemas to common rdb infrastructure
 
-  * Self hosted to third party hosted: third party website hosting for static content/context, common processing/storage.  Google code/analytics for basic shared development support/documentation.
+    * Hourly dense/gridded data: RDB quickscat, model layers -> shapefiles which are queryable via ogr+sql
 
-  * ROA(Resource Oriented Architecture)/REST style simpler declarative alternatives to complex query SOA(Service Oriented Architecture)
+    * Full RDB to file-based RDB: postgresql+postgis -> sqlite+ogr, sqlitegeo? 
 
-  * need more, better quantitative(e.g. web server stats) and qualitative(e.g. user feedback and surveys) feedback broadly shared especially with data and product participants to better guide and encourage data and product development
+    * ROA(Resource Oriented Architecture)/REST style simpler declarative alternatives to complex query SOA(Service Oriented Architecture)
 
-  * the ongoing in-situ instrumentation deployment, maintenance and telemetry cost limits the amount of data to process making the near real-time data management aspects of a limited or finite scope as contrasted with the constant drop in data processing or storage costs 
+  * General concerns
+    * continued focus for wider general IT audience usage on
+      * SQL type tools/queries against table/shapefile/RDB type data sources
+      * XPath(libXML) processing against XML file formats
+
+    * need more, better quantitative(e.g. web server stats) and qualitative(e.g. user feedback and surveys) feedback broadly shared especially with data and product participants to better guide and encourage data and product development
+
+    * the ongoing in-situ instrumentation deployment, maintenance and telemetry cost limits the amount of data to process making the near real-time data management aspects of a limited or finite scope as contrasted with the constant drop in data processing or storage costs 
 
 see also http://code.google.com/p/xenia/wiki/XeniaDesign
 
