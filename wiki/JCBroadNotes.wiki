@@ -139,7 +139,7 @@ _Simplify, simplify - Thoreau_
     * Self hosted to third party hosted: third party website hosting for static content/context, common processing/storage.  Google code/analytics for basic shared development support/documentation.
     * Web GIS interface - server-side to client/browser side: php/mapscript -> openlayers/javascript/ajax, tilecache for improved WMS response time
 
-  * Move/Utilize data access from in-house custom complex software/application dependencies to simpler common file formats broadly accessible by a variety of third party analysis tools
+  * Move/Utilize data access from in-house custom complex software/application dependencies to simpler common file formats and web services broadly accessible by a variety of third party analysis/visualization tools
     * Latest in-situ obs: RDB – sensor/obs hard-coded/table approach -> obs non-specific infrastructure(xenia,obskml) 
     * Sensor/observation specific metadata: loosely link(database system id to URL/file handle) a variety of more specific metadata files/schemas to common rdb infrastructure
     * Hourly dense/gridded data: RDB quickscat, model layers -> shapefiles which are queryable via ogr+sql
