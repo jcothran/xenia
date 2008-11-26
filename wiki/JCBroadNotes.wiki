@@ -139,17 +139,21 @@ _Simplify, simplify - Thoreau_
     * Self hosted to third party hosted: third party website hosting for static content/context, common processing/storage.  Google code/analytics for basic shared development support/documentation.
     * Web GIS interface - server-side to client/browser side: php/mapscript -> openlayers/javascript/ajax, tilecache for improved WMS response time
 
-  * Move/Utilize data storage/access from in-house custom complex software/application dependencies to simpler common file formats, web links and web services broadly accessible by a variety of third party analysis/visualization tools
+  * Find/Utilize a data model/schema which is simple enough to capture important aspects but not so complex that it becomes difficult to maintain
     * Latest in-situ obs: RDB – sensor/obs hard-coded/table approach -> obs non-specific infrastructure(xenia,obskml) 
     * Sensor/observation specific metadata: loosely link(database system id to URL/file handle) a variety of more specific metadata files/schemas to common rdb infrastructure
+
+  * Move/Utilize data storage/access from in-house custom complex software/application dependencies to simpler common file formats, web links and web services broadly accessible by a variety of third party analysis/visualization tools
     * Hourly dense/gridded data: RDB quickscat, model layers -> shapefiles which are queryable via ogr+sql
     * Full RDB to file-based RDB: postgresql+postgis -> sqlite+ogr, sqlitegeo? 
     * ROA(Resource Oriented Architecture)/REST style simpler declarative alternatives to complex query SOA(Service Oriented Architecture)
 
   * General concerns
+    * content-standards for popular, well-utilized formats and web services
     * continued focus for wider general IT audience usage on
       * SQL type tools/queries against table/shapefile/RDB type data sources
       * XPath(libXML) processing against XML file formats
+      * associated limitations or niches for various technical approaches
     * need more, better quantitative(e.g. web server stats) and qualitative(e.g. user feedback and surveys) feedback broadly shared especially with data and product participants to better guide and encourage data and product development
     * the ongoing in-situ instrumentation deployment, maintenance and telemetry cost limits the amount of data to process making the near real-time data management aspects of a limited or finite scope as contrasted with the constant drop in data processing or storage costs 
 
