@@ -137,7 +137,7 @@ _Simplify, simplify - Thoreau_
 
   *  Move/Utilize common third party infrastructure at server and client level
     * Self hosted to third party hosted: third party website hosting for static content/context, common processing/storage.  Google code/analytics for basic shared development support/documentation.
-    * Web GIS interface - server-side to client/browser side: php/mapscript -> openlayers/javascript/ajax, tilecache for improved WMS response time
+    * Web GIS interface - server-side to client/browser side: php/mapscript -> OpenLayers/Javascript/AJAX, TileCache for improved WMS response time
       * Google Maps/Earth type Javascript/AJAX API's
 
   * Find/Utilize a data model/schema which is simple enough to capture important aspects but not so complex that it becomes difficult to maintain
