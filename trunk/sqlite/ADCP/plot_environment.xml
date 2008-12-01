@@ -1,0 +1,37 @@
+<Environment>
+<Database>
+	<DB>	
+		<host></host>
+		<db_name>C:\Program Files\sqlite-3_5_6\microwfs\microwfs.db</db_name>
+		<db_user></db_user>
+		<db_passwd></db_passwd>
+	</DB>
+	<path>
+		<scripts>/usr2/prod/buoys/perl/profiler/</scripts>
+		<output_dir>c:/temp/adcp/</output_dir>
+		<img_path>http://nautilus.baruch.sc.edu/ms_tmp</img_path>
+		<no_img>./no_data.png</no_img>
+	</path>
+	<platforms>
+		<carocoops_cap2_adcp>72</carocoops_cap2_adcp>
+		<carocoops_cap3_adcp>72</carocoops_cap3_adcp>
+		<carocoops_frp2_adcp>72</carocoops_frp2_adcp>
+		<carocoops_sun2_adcp>72</carocoops_sun2_adcp>	
+		<carocoops_sun3_adcp>72</carocoops_sun3_adcp>
+		<cormp_ilm2_adcp>72</cormp_ilm2_adcp>
+		<cormp_ilm3_adcp>72</cormp_ilm3_adcp>
+		<ndbc_41012_adcp>72</ndbc_41012_adcp>
+		<ndbc_41035_adcp>72</ndbc_41035_adcp>
+		<ndbc_41036_adcp>72</ndbc_41036_adcp>
+		<usf_c12_adcp>72</usf_c12_adcp>
+		<usf_c13_adcp>72</usf_c13_adcp>	
+		<usf_c14_adcp>72</usf_c14_adcp>
+		<usf_c16_adcp>24</usf_c16_adcp>
+		<usf_c17_adcp>24</usf_c17_adcp>	
+	</platforms>	
+</Database>
+</Environment>
+
+
+
+
