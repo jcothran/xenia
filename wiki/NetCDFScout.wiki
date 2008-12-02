@@ -9,7 +9,10 @@ File list:
     This script uses the URLList.xml file to determine what sites to try and connect to for downloading the netCDF files.  Before downloading a netCDF file, the script uses a similarly named log file to check the last modified time. If the log files date/time stamp is older than the remote file, the script will download the file then execute the master data processing script cdl_0master.pl. The log file date/time stamp is updated and the next file is tested. 
 The current cron setup to run this script is:
 {{{
-0,10,20,30,40,50 * * * * cd /home/dramage/netcdf; /usr/bin/perl /home/dramage/netcdf/GetLatestData.pl --URLControlFile=./URLList.xml  --DirForObsKml=/home/dramage/public_html/html/obskml/feeds --UseLastNTimeStamps=10 --UseLastNTimeStampsForOrg="nos;60,nws;20" > /home/dramage/log/GetLatestData.log 2>&1
+0,10,20,30,40,50 * * * * cd /home/dramage/netcdf; /usr/bin/perl /home/dramage/netcdf/GetLatestData.pl --URLControlFile=./URLList.xml  
+--DirForObsKml=/home/dramage/public_html/html/obskml/feeds 
+--UseLastNTimeStamps=10 
+--UseLastNTimeStampsForOrg="nos;60,nws;20" > /home/dramage/log/GetLatestData.log 2>&1
 }}}
     It is recommend to pipe the output to a log file as shown above as the scripts do print quite a bit of information. In the next pass through them, I really need to add a log switch to toggle this behavior. The log files won't grow from run to run as the script deletes them before continuing. So basically you get a log of the last run.
     Notice the command line parameters which are detailed out below:
