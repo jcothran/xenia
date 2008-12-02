@@ -1,3 +1,9 @@
 <URLList>
   <URL>http://trident.baruch.sc.edu/storm_surge_data/latest</URL>
+  <URL>http://seacoos.skio.peachnet.edu/proc_data/latest_v2.0</URL>
+  <URL>http://whewell.marine.unc.edu/data/nws_metar/proc_data/latest_v2.0</URL>
+  <URL>http://whewell.marine.unc.edu/data/nos/proc_data/latest_v2.0</URL>
+  <URL>http://whewell.marine.unc.edu/data/nccoos/latest_v2.0</URL>
+  <URL>http://seacoos.marine.usf.edu/data/seacoos_rt_v2</URL>
+  <URL>http://www.cormp.org/data</URL>
 </URLList>
