@@ -4,7 +4,7 @@
 =Scout Perl Scripts=
 The scout consists of a number of perl scripts that can parse various types of netCDF files ranging from fixed points to adcp profilers. Recently we've been moving the scout away from creating SQL insert statements and into creating obsKML files. Currently the fixed point and adcp profiler scripts can do the obsKML creation. The original SQL insert statements are targeted to a no longer used database schema. This document will discuss only the use of the scout to create obsKML even though we still carry forward the other scripts that can create the SQL insert statements.
 ==Required Perl Packages==
-These packages are used in the Scout scripts and are available through CPAN:
+  These packages are used in the Scout scripts and are available through CPAN:
 {{{
 LWP::Simple
 Getopt::Long
@@ -12,12 +12,12 @@ XML::LibXML
 Time::Local
 Math::Trig
 }}}
-These packages are found at [http://www.unidata.ucar.edu/software/netcdf/software.html#Perl Unidata] or maybe they can be found in CPAN I am not sure. Getting these running gave me the biggest issue.
+  These packages are found at [http://www.unidata.ucar.edu/software/netcdf  /software.html#Perl Unidata] or maybe they can be found in CPAN I am not sure. Getting these running gave me the biggest issue.
 {{{
 NetCDF
 UDUNITS
 }}}
-These packages are homegrown and are found in the Xenia code repository [http://code.google.com/p/xenia/source/browse/trunk/obskml/General/obsKMLSubRoutines.pm here]. It has expanded to have other subroutines that are not specific to obsKML stuff, such as units conversions.
+  These packages are homegrown and are found in the Xenia code repository [http://code.google.com/p/xenia/source/browse/trunk/obskml/General/obsKMLSubRoutines.pm here]. It has expanded to have other subroutines that are not specific to obsKML stuff, such as units conversions.
 {{{
 obsKMLSubRoutines
 }}}
@@ -25,7 +25,7 @@ obsKMLSubRoutines
 File list:
   * !GetLatestData.pl
     This script uses the URLList.xml file to determine what sites to try and connect to for downloading the netCDF files.  Before downloading a netCDF file, the script uses a similarly named log file to check the last modified time. If the log files date/time stamp is older than the remote file, the script will download the file then execute the master data processing script cdl_0master.pl. The log file date/time stamp is updated and the next file is tested. 
-The current cron setup to run this script is:
+    The current cron setup to run this script is:
 {{{
 0,10,20,30,40,50 * * * * cd /home/dramage/netcdf; /usr/bin/perl /home/dramage/netcdf/GetLatestData.pl --URLControlFile=./URLList.xml  
 --DirForObsKml=/home/dramage/public_html/html/obskml/feeds 
@@ -33,7 +33,7 @@ The current cron setup to run this script is:
 --UseLastNTimeStampsForOrg="nos;60,nws;20" > /home/dramage/log/GetLatestData.log 2>&1
 }}}
     It is recommend to pipe the output to a log file as shown above as the scripts do print quite a bit of information. In the next pass through them, I really need to add a log switch to toggle this behavior. The log files won't grow from run to run as the script deletes them before continuing. So basically you get a log of the last run.
-    Notice the command line parameters which are detailed out below:
+    Command line parameters are detailed out below:
 {{{
 --URLControlFile is the XML file with the URL list the script will download the files from.
 --FileFilter is the filter to apply to the file listings to allow the script to download the files we really want. Optional.
