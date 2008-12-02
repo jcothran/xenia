@@ -5,7 +5,7 @@
 The scout consists of a number of perl scripts that can parse various types of netCDF files ranging from fixed points to adcp profilers. Recently we've been moving the scout away from creating SQL insert statements and into creating obsKML files. Currently the fixed point and adcp profiler scripts can do the obsKML creation. The original SQL insert statements are targeted to a no longer used database schema. This document will discuss only the use of the scout to create obsKML even though we still carry forward the other scripts that can create the SQL insert statements.
 The Scout files can be found [http://code.google.com/p/xenia/source/browse/#svn/trunk/scout here].
 ==Required Perl Packages==
-  These packages are used in the Scout scripts and are available through CPAN:
+These packages are used in the Scout scripts and are available through CPAN:
 {{{
 LWP::Simple
 Getopt::Long
@@ -13,12 +13,12 @@ XML::LibXML
 Time::Local
 Math::Trig
 }}}
-  These packages are found at [http://www.unidata.ucar.edu/software/netcdf  /software.html#Perl Unidata] or maybe they can be found in CPAN I am not sure. Getting these running gave me the biggest issue.
+These packages are found at [http://www.unidata.ucar.edu/software/netcdf  /software.html#Perl Unidata] or maybe they can be found in CPAN I am not sure. Getting these running gave me the biggest issue.
 {{{
 NetCDF
 UDUNITS
 }}}
-  These packages are homegrown and are found in the Xenia code repository [http://code.google.com/p/xenia/source/browse/trunk/obskml/General/obsKMLSubRoutines.pm here]. It has expanded to have other subroutines that are not specific to obsKML stuff, such as units conversions.
+These packages are homegrown and are found in the Xenia code repository [http://code.google.com/p/xenia/source/browse/trunk/obskml/General/obsKMLSubRoutines.pm here]. It has expanded to have other subroutines that are not specific to obsKML stuff, such as units conversions.
 {{{
 obsKMLSubRoutines
 }}}
@@ -56,18 +56,18 @@ ARGV 1 is an optional parameter. Valid values are: 0 Write only SQL files, 1 Wri
 ARGV 2 is the directory where the obsKML file is stored. If not provided the default directory is the current directory.
 ARGV 3 is the optional number of last N time stamps to use.
 ARGV 4 is the option organization/last N time stamps to use for organization. Format is \"Org1;NTimes,Org2,NTimes\"
-
 }}}
+
   * cdl_fixed_map.pl
-  * cdl_fixed_point.pl
-  * cdl_grid.pl
-  * cdl_grid_jpl.pl
-  * cdl_moving_point.pl
   * cdl_profiler_adcp.pl
   * UnitsConversion.xml
     This XML file contains our units conversion from-to functions. The main use of this is to translate various unit strings into the standard ones used in the Xenia schema. for example, some netCDF files have a velocity as m s-1, the Xenia representation is m_s-1, so we must fix that up before writing out the obsKML files.
   * URLList.xml
    This file contains the list of sites to connect to to download the netCDF files.
+  * cdl_fixed_point.pl
+  * cdl_grid.pl
+  * cdl_grid_jpl.pl
+  * cdl_moving_point.pl
 ==Directory Structure==
 This is a suggested directory setup for the Scout scripts.
 {{{
