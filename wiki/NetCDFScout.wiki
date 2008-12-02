@@ -9,10 +9,13 @@ These packages are used in the Scout scripts and are available through CPAN:
 LWP::Simple
 Getopt::Long
 XML::LibXML
-NetCDF
-UDUNITS
 Time::Local
 Math::Trig
+}}}
+These packages are found at [http://www.unidata.ucar.edu/software/netcdf/software.html#Perl Unidata] or maybe they can be found in CPAN I am not sure. Getting these running gave me the biggest issue.
+{{{
+NetCDF
+UDUNITS
 }}}
 These packages are homegrown and are found in the Xenia code repository here:
 {{{
