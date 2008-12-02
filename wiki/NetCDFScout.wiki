@@ -19,7 +19,11 @@ NetCDF
 UDUNITS
 }}}
 A couple of notes I scribbled down of dependencies for NetCDF are Exporter, AutoLoader and DynaLoader. 
-Also, for UDUNITS apparently for a Debian build I added in CPPFLAGS -Df2_Fortran as well as -D_XOPEN_SOURCE=500. None of this might be required if a real package can be pulled instead of building from source.
+Also, for UDUNITS apparently for a Debian build I added:
+{{{
+CPPFLAGS        = -I../port/misc -I../port/cfortran -Df2cFortran $(cpp_path)
+}}}
+None of this might be required if a real package can be pulled instead of building from source.
 These packages are homegrown and are found in the Xenia code repository [http://code.google.com/p/xenia/source/browse/trunk/obskml/General/obsKMLSubRoutines.pm here]. It has expanded to have other subroutines that are not specific to obsKML stuff, such as units conversions.
 {{{
 obsKMLSubRoutines
