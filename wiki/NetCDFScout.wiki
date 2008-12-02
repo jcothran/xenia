@@ -1,1 +1,29 @@
 #summary Page describes the setup and execution of the scout perl script suite.
+
+
+=Scout Perl Scripts=
+The scout consists of a number of perl scripts that can parse various types of netCDF files ranging from fixed points to adcp profilers. Recently we've been moving the scout away from creating SQL insert statements and into creating obsKML files. Currently the fixed point and adcp profiler scripts can do the obsKML creation. The original SQL insert statements are targeted to a no longer used database schema. This document will discuss only the use of the scout to create obsKML even though we still carry forward the other scripts that can create the SQL insert statements.
+
+File list:
+  * GetLatestData.pl
+    This script uses the URLList.xml file to determine what sites to try and connect to for downloading the netCDF files.  Before downloading a netCDF file, the script uses a similarly named log file to check the last modified time. If the log files date/time stamp is older than the remote file, the script will download the file then execute the master data processing script cdl_0master.pl. The log file date/time stamp is updated and the next file is tested.
+    Command Line Parameters:
+{{{
+--URLControlFile is the XML file with the URL list the script will download the files from.
+--FileFilter is the filter to apply to the file listings to allow the script to download the files we really want. Optional.
+--DirForObsKml provides the path to the store the ObsKML files created. This is an optional argument, if not provided no ObsKML files are written.
+--Delete specifies we delete the netcdf files after we write the ObsKML files. This is an optional argument.
+--DownloadDir is the directory to store the downloaded files. Optional, default is ./latest_netcdf_files.
+--FetchLogDir is the directory were the file time stamps are stored. The script uses these files to determine which files are really the latest. Optional, default is ./fetch_logs.
+--UseLastNTimeStamps Integer representing the last N time entries to use when converting the data to obsKML. Optional.
+--UseLastNTimeStampsForOrg Optional. List specifing orginization and the last N time entries to use for them. Whereas the UseLastNTimeStamps is applied to every organization, this can tailor to the specific. If not provided and UseLastNTimeStamps is provided, it is used.
+}}}
+  * cdl_0master.pl
+  * cdl_fixed_map.pl
+  * cdl_fixed_point.pl
+  * cdl_grid.pl
+  * cdl_grid_jpl.pl
+  * cdl_moving_point.pl
+  * cdl_profiler_adcp.pl
+  * UnitsConversion.xml
+  * URLList.xml
