@@ -1,1 +1,1 @@
-#Page describes the setup and execution of the scout perl script suite.
+#summary Page describes the setup and execution of the scout perl script suite.
