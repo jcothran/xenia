@@ -48,7 +48,7 @@ File list:
 
   * cdl_0master.pl
   This script takes the passed in netCDF file, opens it and determines what type of platform the file represents. A fixed point system such as a buoy, a moving point such as a boat, an adcp profiler, ect. The only two types of platforms we currently create obsKML files for are fixed point and adcp profiler. This script is called from the GetLatestDate.pl script. For debugging(which seems to always be needed), you can execute this script without running GetLatestData.pl on a single netCDF file as well.
-The command line parameters are(this script still uses ARGV command line structure):
+    The command line parameters are(this script still uses ARGV command line structure):
 {{{
 ARGV 0 is the netcdf filename to process.
 ARGV 1 is an optional parameter. Valid values are: 0 Write only SQL files, 1 Write only obsKML file, or 2 Write both SQL files and obsKML file. Default value is 0.
@@ -64,4 +64,6 @@ ARGV 4 is the option organization/last N time stamps to use for organization. Fo
   * cdl_moving_point.pl
   * cdl_profiler_adcp.pl
   * UnitsConversion.xml
+    This XML file contains our units conversion from-to functions. The main use of this is to translate various unit strings into the standard ones used in the Xenia schema. for example, some netCDF files have a velocity as m s-1, the Xenia representation is m_s-1, so we must fix that up before writing out the obsKML files.
   * URLList.xml
+   This file contains the list of sites to connect to to download the netCDF files.
