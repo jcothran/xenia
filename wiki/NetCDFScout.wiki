@@ -3,7 +3,22 @@
 
 =Scout Perl Scripts=
 The scout consists of a number of perl scripts that can parse various types of netCDF files ranging from fixed points to adcp profilers. Recently we've been moving the scout away from creating SQL insert statements and into creating obsKML files. Currently the fixed point and adcp profiler scripts can do the obsKML creation. The original SQL insert statements are targeted to a no longer used database schema. This document will discuss only the use of the scout to create obsKML even though we still carry forward the other scripts that can create the SQL insert statements.
-
+==Required Perl Packages==
+These packages are used in the Scout scripts and are available through CPAN:
+{{{
+LWP::Simple
+Getopt::Long
+XML::LibXML
+NetCDF
+UDUNITS
+Time::Local
+Math::Trig
+}}}
+These packages are homegrown and are found in the Xenia code repository here:
+{{{
+obsKMLSubRoutines
+}}}
+==Script Suite==
 File list:
   * !GetLatestData.pl
     This script uses the URLList.xml file to determine what sites to try and connect to for downloading the netCDF files.  Before downloading a netCDF file, the script uses a similarly named log file to check the last modified time. If the log files date/time stamp is older than the remote file, the script will download the file then execute the master data processing script cdl_0master.pl. The log file date/time stamp is updated and the next file is tested. 
