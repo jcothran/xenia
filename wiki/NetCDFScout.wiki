@@ -3,6 +3,7 @@
 
 =Scout Perl Scripts=
 The scout consists of a number of perl scripts that can parse various types of netCDF files ranging from fixed points to adcp profilers. Recently we've been moving the scout away from creating SQL insert statements and into creating obsKML files. Currently the fixed point and adcp profiler scripts can do the obsKML creation. The original SQL insert statements are targeted to a no longer used database schema. This document will discuss only the use of the scout to create obsKML even though we still carry forward the other scripts that can create the SQL insert statements.
+The Scout files can be found [http://code.google.com/p/xenia/source/browse/#svn/trunk/scout here].
 ==Required Perl Packages==
   These packages are used in the Scout scripts and are available through CPAN:
 {{{
@@ -67,3 +68,13 @@ ARGV 4 is the option organization/last N time stamps to use for organization. Fo
     This XML file contains our units conversion from-to functions. The main use of this is to translate various unit strings into the standard ones used in the Xenia schema. for example, some netCDF files have a velocity as m s-1, the Xenia representation is m_s-1, so we must fix that up before writing out the obsKML files.
   * URLList.xml
    This file contains the list of sites to connect to to download the netCDF files.
+==Directory Structure==
+This is a suggested directory setup for the Scout scripts.
+{{{
+-ScoutParentDir: Contains the files for the Scout script suite.
+ |
+ --fetch_logs: Contains the log files for the various netCDF files that get downloaded.
+ |
+ --latest_netcdf: Contains the netCDF files for processing.
+ 
+}}}
