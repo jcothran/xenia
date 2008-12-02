@@ -29,6 +29,16 @@ The current cron setup to run this script is:
    If --DownloadDir and --FetchLogDir are not specified, the defaults are used, however you must insure the directories exist, otherwise the script will error out with a missing directory message.
 
   * cdl_0master.pl
+  This script takes the passed in netCDF file, opens it and determines what type of platform the file represents. A fixed point system such as a buoy, a moving point such as a boat, an adcp profiler, ect. The only two types of platforms we currently create obsKML files for are fixed point and adcp profiler. This script is called from the GetLatestDate.pl script. For debugging(which seems to always be needed), you can execute this script without running GetLatestData.pl on a single netCDF file as well.
+The command line parameters are(this script still uses ARGV command line structure):
+{{{
+ARGV 0 is the netcdf filename to process.
+ARGV 1 is an optional parameter. Valid values are: 0 Write only SQL files, 1 Write only obsKML file, or 2 Write both SQL files and obsKML file. Default value is 0.
+ARGV 2 is the directory where the obsKML file is stored. If not provided the default directory is the current directory.
+ARGV 3 is the optional number of last N time stamps to use.
+ARGV 4 is the option organization/last N time stamps to use for organization. Format is \"Org1;NTimes,Org2,NTimes\"
+
+}}}
   * cdl_fixed_map.pl
   * cdl_fixed_point.pl
   * cdl_grid.pl
