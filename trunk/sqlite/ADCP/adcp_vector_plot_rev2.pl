@@ -13,7 +13,7 @@ use Getopt::Long;
 use Time::Local;
 use Math::Trig;
 
-use constant MICROSOFT_PLATFORM => 0;
+#use constant MICROSOFT_PLATFORM => 1;
 	
 	#perl adcp_vector_plot.pl --PlatformHandle "usf:C17:ADCP" --Date "2007-03-12 12:00:00" --ProcessId 10
 	
@@ -26,7 +26,7 @@ use constant MICROSOFT_PLATFORM => 0;
 	           "size_y:f",
 	           "title:s",
 	           "RoundDepths:s",
-             "TimeInterval:s"); 
+             "TimeInterval:s" ); 
 	my ($platform_handle,$date,$process_id);
 	
 	$platform_handle=$arguments{'PlatformHandle'};
@@ -69,7 +69,19 @@ use constant MICROSOFT_PLATFORM => 0;
 	$env{output_dir} = $xp_env->findvalue('//path/output_dir');	
 	$env{no_img} = $xp_env->findvalue('//path/no_img');
 	
-  #print( "platform_handle: $env{platform_handle} hostname: $env{hostname} db_name: $env{db_name} output_dir: $env{output_dir} no_img: $env{no_img}\n" );
+  $env{log_dir} = $xp_env->findvalue('//path/log_dir');	
+	my $iEnableLog = 0;
+  my $LogFile;
+	if( defined( $env{log_dir} ))
+	{
+    my $strLogFile = $env{log_dir} . "adcp_vector_plot.log";
+	  $iEnableLog = 1;
+    if( !open( $LogFile, ">$strLogFile" ) )
+    {
+      die( "ERROR: Unable to open log file: $strLogFile\n" );
+    }
+	}
+
   
 	my $lc_platform_handle=lc($platform_handle);
 	$lc_platform_handle=~s/:/_/g;
@@ -96,7 +108,12 @@ use constant MICROSOFT_PLATFORM => 0;
 	if ($arguments{'size_x'}){ $env{size_x}=$arguments{'size_x'};}		
 	if ($arguments{'size_y'}){ $env{size_y}=$arguments{'size_y'};}		
 	if ($arguments{'title'}){ $env{title}=$arguments{'title'}; }	
-	
+
+  if( $iEnableLog )
+  {
+    print( $LogFile "platform_handle: $env{platform_handle}\nhostname: $env{hostname}\ndb_name: $env{db_name}\noutput_dir: $env{output_dir}\nno_img: $env{no_img}\n" );
+    print( $LogFile "time_interval: $env{time_interval}\ndata_file: $env{data_file}\ndata_file_1: $env{data_file_1}\nimg_path: $env{img_path}\nprocess_id: $env{process_id}\ngraph_script: $env{graph_script}\nlog_dir: $env{log_dir}\n" );
+	}
 	my ($dbh,$sql,$sth,@row);		
 	#$dbh = DBI->connect ( "dbi:Pg:dbname=$env{db_name};host=$env{hostname}", "$env{db_user}", "$env{db_passwd}");
   
@@ -114,12 +131,21 @@ use constant MICROSOFT_PLATFORM => 0;
           WHERE platform_handle = '$platform_handle' 
           ORDER BY m_date DESC limit 1;";		
 		
+    if( $iEnableLog )
+    {
+      print( $LogFile "SQL latest date query: $sql\n" );
+    }
 		$sth = $dbh->prepare( $sql );
 		if( defined $sth )
 		{
   		if( $sth->execute() )
   		{
     		$date= $sth->fetchrow_array();
+        if( $iEnableLog )
+        {
+          print( $LogFile "Date to process: $date\n" );
+        }
+        
     		if( ! defined $date )
     		{
           `cp $env{no_img} $env{img_path}`;   
@@ -130,11 +156,19 @@ use constant MICROSOFT_PLATFORM => 0;
   		{
   		  my $strErr = $sth->errstr;
   		  print( "ERROR::$strErr\n");
+        if( $iEnableLog )
+        {
+          print( $LogFile "ERROR::$strErr\n" );
+        }
   		}
 		}
 		else
 		{
 		  print( "ERROR::Unable to prepare SQL statement: $sql\n");
+      if( $iEnableLog )
+      {
+        print( $LogFile "ERROR::Unable to prepare SQL statement: $sql\n" );
+      }
 		}	
 	}	
 =comment  
@@ -205,6 +239,11 @@ use constant MICROSOFT_PLATFORM => 0;
   my %Hoh;
   my %BinDepths;
   $sth = $dbh->prepare( $sql );
+  if( $iEnableLog )
+  {
+    print( $LogFile "SQL Data query: $sql\n" );
+  }
+  
   if( defined $sth )
   {
     if( $sth->execute() )
@@ -215,7 +254,7 @@ use constant MICROSOFT_PLATFORM => 0;
     	my ($sensor_type,$s_order,$m_date,$m_z,$m_value);
     	$sth -> bind_columns(undef,\$sensor_type,\$s_order,\$m_date,\$m_z,\$m_value);	   	
     	my $bin;
-    	
+    	my $iRowCnt = 0;
     	while ( @row = $sth->fetchrow())
     	{
     	  
@@ -251,17 +290,30 @@ use constant MICROSOFT_PLATFORM => 0;
         {
           $env{min_z} = $Hoh{$m_date}{$bin}{depth};
         }
-    	}	
+        $iRowCnt++;
+    	}
+      if( $iEnableLog )
+      {
+        print( $LogFile "Number of rows processed: $iRowCnt\n" );
+      }
     }
     else
     {
       my $strErr = $sth->errstr;
       print( "ERROR::$strErr\n");
+      if( $iEnableLog )
+      {
+        print( $LogFile "ERROR::$strErr\n" );
+      }
     }
   }
   else
   {
     print( "ERROR::Unable to prepare SQL statement: $sql\n");
+    if( $iEnableLog )
+    {
+      print( $LogFile "ERROR::Unable to prepare SQL statement\n" );
+    }
   } 
   #The original xenia database that the original plot program ran against had the eastward and 
   #northward components. Since those can be computed from the current_speed and current_to_direciton
@@ -297,6 +349,10 @@ use constant MICROSOFT_PLATFORM => 0;
 
 	call_gnuplot(\%Hoh,\%env,$process_id, \%BinDepths);
 	
+  if( $iEnableLog )
+  {
+    print( $LogFile "Output File: $strFilename\n" );
+  }
   print( $strFilename );
 	
 sub call_gnuplot{
@@ -336,6 +392,11 @@ sub call_gnuplot{
   #key1 = m_date, key2 = bin 
   my %depth_hash;	
   my $bDepthHashPrimed = 0;
+  if( $iEnableLog )
+  {
+    print( $LogFile "Building plot files.\n" );
+  }
+  
   for my $key1 ( sort (keys %Hoh) ) 
   {
     $val=$key1;		
@@ -348,7 +409,7 @@ sub call_gnuplot{
       for my $key2(sort (keys %{$Hoh{$key1}})) 
       {					
         ($year,$mon,$mday,$hours,$min,$sec)=split('-',$val3);
-        $time = timelocal($sec,$min,$hours,$mday,$mon,$year);
+        $time = timelocal($sec,$min,$hours,$mday,($mon-1),$year);
         push(@time,$time);					
         
         if (!defined($time_diff)){
@@ -366,52 +427,133 @@ sub call_gnuplot{
           $depth_hash{$Hoh{$key1}{$key2}{depth}} = $Hoh{$key1}{$key2}{depth};
           
           my $strOutput = "  $time_diff \t $Hoh{$key1}{$key2}{depth} \t $eastward \t $northward \t $val \n";  					
+          #if( $iEnableLog )
+          #{
+          #  print( $LogFile "$strOutput\n" );
+          #}
+          
           #my $strOutput = "  $time_diff \t $BinDepths{$key2}{depth} \t $eastward \t $northward \t $val \n";
           if ($Hoh{$key1}{$key2}{mag}<=5.0){
-            print	OUTPUT_1 $strOutput;					
+            if( !print	OUTPUT_1 $strOutput )
+            {
+              if( $iEnableLog )
+              {
+                print( $LogFile "Failed to print: $strOutput to file.\n" );
+              }
+            }
           }	
           elsif ($Hoh{$key1}{$key2}{mag}>5.0 && $Hoh{$key1}{$key2}{mag}<=10.0 ){
-            print	OUTPUT_2 $strOutput;					
+            if( !print	OUTPUT_2 $strOutput )
+            {
+              if( $iEnableLog )
+              {
+                print( $LogFile "Failed to print: $strOutput to file.\n" );
+              }
+            }
           }
           elsif ($Hoh{$key1}{$key2}{mag}>10.0 && $Hoh{$key1}{$key2}{mag}<=15.0){
-            print	OUTPUT_3 $strOutput;					
+            if( !print	OUTPUT_3 $strOutput )
+            {
+              if( $iEnableLog )
+              {
+                print( $LogFile "Failed to print: $strOutput to file.\n" );
+              }
+            }
           }
           elsif ($Hoh{$key1}{$key2}{mag}>15.0 && $Hoh{$key1}{$key2}{mag}<=20.0){
-            print	OUTPUT_4 $strOutput;						
+            if( !print	OUTPUT_4 $strOutput )
+            {
+              if( $iEnableLog )
+              {
+                print( $LogFile "Failed to print: $strOutput to file.\n" );
+              }
+            }
           }
           elsif ($Hoh{$key1}{$key2}{mag}>20.0 && $Hoh{$key1}{$key2}{mag}<=25.0){
-            print	OUTPUT_5 $strOutput;					
+            if( !print	OUTPUT_5 $strOutput )
+            {
+              if( $iEnableLog )
+              {
+                print( $LogFile "Failed to print: $strOutput to file.\n" );
+              }
+            }
           }
           elsif ($Hoh{$key1}{$key2}{mag}>25.0 && $Hoh{$key1}{$key2}{mag}<=30.0){
-            print	OUTPUT_6 $strOutput;					
+            if( !print	OUTPUT_6 $strOutput )
+            {
+              if( $iEnableLog )
+              {
+                print( $LogFile "Failed to print: $strOutput to file.\n" );
+              }
+            }
           }
           elsif ($Hoh{$key1}{$key2}{mag}>30.0 && $Hoh{$key1}{$key2}{mag}<=35.0){
-            print	OUTPUT_7 $strOutput;					
+            if( !print	OUTPUT_7 $strOutput )
+            {
+              if( $iEnableLog )
+              {
+                print( $LogFile "Failed to print: $strOutput to file.\n" );
+              }
+            }
           }
           elsif ($Hoh{$key1}{$key2}{mag}>35.0 && $Hoh{$key1}{$key2}{mag}<=40.0){
-            print	OUTPUT_8 $strOutput;					
+            if( !print	OUTPUT_8 $strOutput )
+            {
+              if( $iEnableLog )
+              {
+                print( $LogFile "Failed to print: $strOutput to file.\n" );
+              }
+            }
           }
           elsif ($Hoh{$key1}{$key2}{mag}>40.0 && $Hoh{$key1}{$key2}{mag}<=45.0){
-            print	OUTPUT_9 $strOutput;					
+            if( !print	OUTPUT_9 $strOutput )
+            {
+              if( $iEnableLog )
+              {
+                print( $LogFile "Failed to print: $strOutput to file.\n" );
+              }
+            }
           }
           elsif ($Hoh{$key1}{$key2}{mag}>45.0 && $Hoh{$key1}{$key2}{mag}<=50.0){
-            print	OUTPUT_10 $strOutput;					
+            if( !print	OUTPUT_10 $strOutput )
+            {
+              if( $iEnableLog )
+              {
+                print( $LogFile "Failed to print: $strOutput to file.\n" );
+              }
+            }
           }
           #if ($Hoh{$key1}{$key2}{mag}>=0.5){
           #limiting the magnitude to 0.75 m/sec (75 cm/sec)
           elsif ($Hoh{$key1}{$key2}{mag}>=0.5 && $Hoh{$key1}{$key2}{mag}<=0.75){
-            print	OUTPUT_11 $strOutput;
+            if( !print	OUTPUT_11 $strOutput )
+            {
+              if( $iEnableLog )
+              {
+                print( $LogFile "Failed to print: $strOutput to file.\n" );
+              }
+            }
+            
           }
           else
           {
-            print( "WARNING:: Magitude: $Hoh{$key1}{$key2}{mag} does not fall into any buckets!\n")
+            print( "WARNING:: Magitude: $Hoh{$key1}{$key2}{mag} does not fall into any buckets!\n");
+            if( $iEnableLog )
+            {
+              print( $LogFile "WARNING:: Magitude: $Hoh{$key1}{$key2}{mag} does not fall into any buckets!\n" );
+            }
           }					  					
         }
         $env{last_time}=$time_diff;          
     }	
     #print OUTPUT "\n\n\n";
+    
     $bDepthHashPrimed = 1;
   }		
+  if( $iEnableLog )
+  {
+    print( $LogFile "Finished building plot files.\n" );
+  }
   
   close OUTPUT_1;			
   close OUTPUT_2;			
@@ -424,16 +566,30 @@ sub call_gnuplot{
   close OUTPUT_9;
   close OUTPUT_10;
   close OUTPUT_11;
+
+  if( $iEnableLog )
+  {
+    print( $LogFile "Ouput plot files closed\n" );
+  }
   
   my $t=$time[$#time]+3600;
   
   my ( $temp_sec, $temp_min, $temp_hour, $temp_day, $temp_month, $temp_year ) = localtime($t);
+  #Month is 0-11.
+  $temp_month = $temp_month + 1;
   $env{last_unixtime}=sprintf ("%04d-%02d-%02d-%02d:%02d:%02s ", $temp_year+1900, $temp_month, $temp_day,  $temp_hour, $temp_min, $temp_sec  );				
   push(@time_array, $env{last_unixtime});
+  #print( "$env{last_unixtime}\n" );
+  #$env{last_unixtime} = @time_array[-1];
+  
   $t=$time[0]-3600;
   ( $temp_sec, $temp_min, $temp_hour, $temp_day, $temp_month, $temp_year ) = localtime($t);
+  #Month is 0-11.
+  $temp_month = $temp_month + 1;
   $env{first_unixtime}=sprintf ("%04d-%02d-%02d-%02d:%02d:%02s ", $temp_year+1900, $temp_month, $temp_day,  $temp_hour, $temp_min, $temp_sec  );			
+  #print( "$env{first_unixtime}\n" );
   unshift(@time_array, $env{first_unixtime});		
+  #$env{first_unixtime} = @time_array[0];
 
   #Build depth hash
 #    for my $iDepth ( sort (keys %BinDepths) )
@@ -443,14 +599,23 @@ sub call_gnuplot{
 #      print( "Depth Hash: $depth_hash{$BinDepths{$iDepth}}\n"); 
 #    }    			
   require "adcp_gnuplot.lib";
+  if( $iEnableLog )
+  {
+    print( $LogFile "Calling plot library.\n" );
+  }
+  
   my_graph(\%env,\@time_array,\%depth_hash);
     
   
   my ($i,$file);
-  for($i=1;$i<=11;$i++){
-    $file = $env{output_dir}."adcp_data_file".$i."_".$process_id.".txt";
-    `rm $file`;
-  }		
+#  for($i=1;$i<=11;$i++){
+#    $file = $env{output_dir}."adcp_data_file".$i."_".$process_id.".txt";
+#    if( $iEnableLog )
+#    {
+#      print( $LogFile "Removing bucket file: $file\n" );
+#    }
+#    `rm $file`;
+#  }		
   #`rm $env{graph_script}`;
   my $file_size = -s $env{img_path};
   
@@ -512,20 +677,15 @@ sub RoundTo#( $Value, $Ceiling, $RoundUp )
   #i.e. 0.01 = 1 or 0.8 = 1
  
   my $tmpVal = (($Value / $Ceiling) + (-0.5 + ($RoundUp & 1)));
-  print( "tmpVal: $tmpVal " );
   
   my $tmp = int($tmpVal);
-  print( "tmp: $tmp " );
   
   $tmpVal = sprintf( "%d", ( $tmpVal - $tmp ) );
-  print( "tmpVal: $tmpVal " );
   
   my $nValue = $tmp + $tmpVal ;
-  print( "nValue: $nValue " );
 
   #Multiply by ceiling value to set RoundtoValue
   my $RoundToValue = $nValue * $Ceiling;
-  print( "RoundToValue: $RoundToValue\n" );
  
   return( $RoundToValue ); 
 }
