@@ -63,7 +63,10 @@ ARGV 2 is the directory where the obsKML file is stored. If not provided the def
 ARGV 3 is the optional number of last N time stamps to use.
 ARGV 4 is the option organization/last N time stamps to use for organization. Format is \"Org1;NTimes,Org2,NTimes\"
 }}}
-
+  Make sure the path to initialize the UDUNITS  package is set correctly. Currently the setting is: 
+{{{
+UDUNITS::init("/usr/local/lib/perl/5.8.8/udunits/udunits-1.12.4/etc/udunits.dat")
+}}}
   * cdl_fixed_point.pl
   Creates the obsKML file from a fixed point obsKML file.
   * cdl_profiler_adcp.pl
