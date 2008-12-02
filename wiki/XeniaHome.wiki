@@ -60,6 +60,12 @@ XeniaUpdates
 XeniaDesign
 
 ----
+
+http://code.google.com/p/xenia/wiki/JCBroadNotes
+
+http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
+
+----
 = [XeniaHome#Notes Notes] =
 
 Would recommend using the *version 2* schema, I have listed the version 1 as a point of historical reference but am not developing any more against it.
@@ -96,10 +102,6 @@ http://postgresql.org
 http://postgis.refractions.net
 
 http://sqlite.org
-
-http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
-
-http://code.google.com/p/xenia/wiki/JCBroadNotes
 
 ----
 = Related efforts = 
