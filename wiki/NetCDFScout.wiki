@@ -59,13 +59,15 @@ ARGV 3 is the optional number of last N time stamps to use.
 ARGV 4 is the option organization/last N time stamps to use for organization. Format is \"Org1;NTimes,Org2,NTimes\"
 }}}
 
-  * cdl_fixed_map.pl
+  * cdl_fixed_point.pl
+  Creates the obsKML file from a fixed point obsKML file.
   * cdl_profiler_adcp.pl
+  Creates the obsKML file from a fixed adcp profiler. In this script, I tried to remedy alot of the issues I noticed in the cdl_fixed_point.pl script. The approach is completely different and in the future I hope to use this as the model to re-work the cdl_fixed_point script as well as any others we need. This script has some generic netCDF I/O subroutines that should be re-usable.
   * UnitsConversion.xml
     This XML file contains our units conversion from-to functions. The main use of this is to translate various unit strings into the standard ones used in the Xenia schema. for example, some netCDF files have a velocity as m s-1, the Xenia representation is m_s-1, so we must fix that up before writing out the obsKML files.
   * URLList.xml
    This file contains the list of sites to connect to to download the netCDF files.
-  * cdl_fixed_point.pl
+  * cdl_fixed_map.pl
   * cdl_grid.pl
   * cdl_grid_jpl.pl
   * cdl_moving_point.pl
