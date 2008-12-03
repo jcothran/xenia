@@ -143,14 +143,12 @@ What I'm currently thinking of is something like a 'custom_fields' table with th
   * custom_value - float
   * custom_string - string
 
-The first 3 'row_' columns are generic to most tables.
+The first 3 'row...' columns are generic to most tables.
 
 The metadata_id provides a link to the metadata table which further describes what table these values/strings might be referencing and their usage/meaning.
 
 The ref_row_id and ref_date are linking mechanisms to the referenced table (like multi_obs) - row_id may be sufficient alone, but wanted to include ref_date where there might be issues with the row_id rollover possibly causing duplicate row references - I figure that the combination of ref_row_id and ref_date better gaurantees a correct row reference.  The ref_date field alone could also be used for query purposes.  A database view might be established dynamically recombining say the multi_obs row with the custom_fields referenced/appended fields.
 
 The custom_value and/or custom_string fields would contain the additional custom column info.
-
-
 
 
