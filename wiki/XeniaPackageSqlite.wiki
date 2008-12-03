@@ -13,6 +13,11 @@ A sample Xenia sqlite database which has been purged of all but a few example ob
 -- select t0.row_id,t2.standard_name,t3.standard_name from m_type t0,m_scalar_type t1,obs_type t2,uom_type t3 where t0.m_scalar_type_id = t1.row_id and t0.num_types = 1 and t1.obs_type_id = t2.row_id and t1.uom_type_id = t3.row_id;
 }}}
 
+= Simplified schema = 
+
+Below is a simplified schema display reduced from an earlier schema - the exact table columns are listed in the source sql 
+http://carocoops.org/documents/xenia/xenia_schema_small.jpg
+
 ----
 
 Sqlite Manager - A simple Firefox add-on to view/query a sqlite database from Firefox
