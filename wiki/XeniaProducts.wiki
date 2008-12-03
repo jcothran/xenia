@@ -16,6 +16,20 @@ Latest placemarks
 
 http://carocoops.org/gearth/latest_placemarks.kmz
 
+----
+Note the above KML/KMZ styling has the following features:
+  
+  * layer folders toggle on/off by operator(visualize individual operator/data provider status)
+    * platform styling highlights non-reporting platforms as shaded red - platform link information still available.  Don't want platforms or observation to disappear from the map if they are intermittently reporting.
+  * *by 'operator' layer* listing *all* the latest observations available at each platform
+  * *by 'observation' layer* listing observations of the same obs_type.uom_type for *all* associated platforms
+    * acts as a observation type 'inventory'
+    * optional style.xml to provide basic default blue/green/red color scale for obs_type.uom_type measurement value range limit
+  * naming/reference hierarchy
+    * platform = operator.platform<.package> where operator and platform names are controlled vocabularies and package name is optional unique string
+    * sensor = sensor_id (an integer id) = obs_type.uom_type.s_order
+
+----
 Note that the time window control can be manipulated (moved, increased, decreased) - see the following documentation 
 
 http://earth.google.com/userguide/v4/ug_gps.html#timeline
