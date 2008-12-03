@@ -12,11 +12,11 @@ see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate#Mergin
 
 http://code.google.com/p/xenia/source/browse/trunk/obskml/products/gearth
 
+----
 Latest placemarks
 
 http://carocoops.org/gearth/latest_placemarks.kmz
 
-----
 Note the above KML/KMZ styling has the following features:
   
   * *layer folders toggle on/off by operator*(visualize individual operator/data provider status)
