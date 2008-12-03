@@ -28,6 +28,7 @@ Note the above KML/KMZ styling has the following features:
   * *naming/reference hierarchy*
     * platform = operator.platform<.package> where operator and platform names are controlled vocabularies and package name is optional unique string
     * sensor = sensor_id (an integer id) = obs_type.uom_type.s_order  s_order is an integer counter to help distinguish between redundant or profiling sensor arrays of the same obs_type.uom_type
+  * a feature which I would like to incorporate is use of regions to help break the entire layer into more manageable data blocks for better download/display concerns similar in concept to the Google Maps implementation at http://tidesandcurrents.noaa.gov/gmap3
 
 ----
 Note that the time window control can be manipulated (moved, increased, decreased) - see the following documentation 
