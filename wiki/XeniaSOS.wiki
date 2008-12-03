@@ -52,6 +52,13 @@ In addition to sensor/SensorML/SWE metadata development I would also like to see
  
   * primitives/subsetting as discussed earlier 
   * collections(give me some/all of your latest/time-range obs from a specified platform/bbox in one request instead of multiple specific/researched requests)
+    * under the offering category beyond the initial development pass of offering = specific platform, will also be interested in aggregate offering(s) that range from less-specific to more-specific like
+    * *all* observed properties for *latest* time for a given bounding box
+    * specific observed properties for *latest* time for a given bounding box
+    * *all* observed properties for time-range for a given bounding box
+    * specific observed properties for time-range for a given bounding box
+ 
+  * all of which can expose a range of data without having to necessarily know/process the multitude of individual web service addresses.   Web service providers could cache both specific and/or aggregate responses for common repeated requests to increase efficiency/response time. 
   * zipped xml as a possible request/return format(since the data bloat of xml is repetitous tags to begin with)
  
 In any technical case down the road it would be great to get audience/customer feedback on how these services/formats are being utilized(or not) to guide their development.
