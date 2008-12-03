@@ -56,8 +56,7 @@ In addition to sensor/SensorML/SWE metadata development I would also like to see
       * *all* observed properties for *latest* time for a given bounding box
       * specific observed properties for *latest* time for a given bounding box
       * *all* observed properties for time-range for a given bounding box
-      * specific observed properties for time-range for a given bounding box
- 
+      * specific observed properties for time-range for a given bounding box 
     * all of which can expose a range of data without having to necessarily know/process the multitude of individual web service addresses.   Web service providers could cache both specific and/or aggregate responses for common repeated requests to increase efficiency/response time. 
   * zipped xml as a possible request/return format(since the data bloat of xml is repetitous tags to begin with)
  
