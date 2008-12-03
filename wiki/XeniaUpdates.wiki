@@ -128,7 +128,7 @@ I've mentioned Pachube http://pachube.com earlier, primarily in the context of E
 
 http://community.pachube.com/?q=node/11
 
-== ad hoc custom fields/columns for observation data ==
+== custom fields/columns for observation data ==
 
 One issue which I'm grappling with is how to extend or tag rows of data with additional custom fields in a generic way.  The main use case of this is say a researcher runs a custom quality control analysis and adds a good/bad/suspect flag to certain rows of data.  I don't want to add a database column to my multi_obs table every time this happens as it might only effect a subset of rows.
 
@@ -150,8 +150,6 @@ The metadata_id provides a link to the metadata table which further describes wh
 The ref_row_id and ref_date are linking mechanisms to the referenced table (like multi_obs) - row_id may be sufficient alone, but wanted to include ref_date where there might be issues with the row_id rollover possibly causing duplicate row references - I figure that the combination of ref_row_id and ref_date better gaurantees a correct row reference.  The ref_date field alone could also be used for query purposes.  A database view might be established dynamically recombining say the multi_obs row with the custom_fields referenced/appended fields.
 
 The custom_value and/or custom_string fields would contain the additional custom column info.
-
-
 
 
 
