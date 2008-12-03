@@ -19,8 +19,9 @@ Watch the server path specific literals, everything gets unzipped and worked on 
 
 my $temp_dir = '/tmp/ms_tmp';
 
-my $sqlite_path = '/usr/bin/sqlite3-3.5.4.bin';
-my $html_db = 'html_content.db';
+#my $sqlite_path = '/usr/bin/sqlite3-3.5.4.bin';
+my $path_batch_insert = 'perl /var/www/cgi-bin/microwfs/batch_insert.pl';
+my $html_db = '/usr2/home/data/seacoos/html_tables/html_content.db';
 
 #note this script assumes the folder './html_content.sql' for writing files out
 
@@ -136,6 +137,8 @@ foreach my $placemark ($xp->findnodes('//Placemark')) {
 
 	if (invalid_lon_lat($longitude,$latitude)) { next; }
 
+	open (PLATFORM,">./html_tables/$placemark_id.htm");
+
 	my $datetime = $placemark->find('TimeStamp/when');
         $datetime = sprintf("%s", $datetime); 
         print $datetime."\n";
@@ -186,8 +189,13 @@ foreach my $placemark ($xp->findnodes('//Placemark')) {
         $platform_desc = escape_literals($platform_desc); 
 
 	my $html_content = '';
+	my $platform_content = '';
 
-        $html_content .= "INSERT INTO html_content(wkt_geometry,organization,html) values ('POINT($longitude $latitude)','$operator','<hr/><br/><a href=\"$operator_url\" target=new onclick=\"\">organization: $operator</a><br/><a href=\"$platform_url\" target=new onclick=\"\">platform: $placemark_id</a><br/>$platform_desc<table cellpadding=\"2\" cellspacing=\"2\"><caption>$datetime_label</caption>";
+	my $content_header = "<div class=\"holder\"><hr/>$platform_desc<br/><a href=\"$operator_url\" target=new onclick=\"\">organization: $operator</a><br/><a href=\"$platform_url\" target=new onclick=\"\">platform: $placemark_id</a><!-- DAN_HEADER --><table cellpadding=\"2\" cellspacing=\"2\"><caption>$datetime_label</caption>";
+	my $platform_content_header = "<div class=\"holder\"><hr/>$platform_desc<br/><table cellpadding=\"2\" cellspacing=\"2\"><caption>$datetime_label</caption>";
+
+        $html_content .= "INSERT INTO html_content(wkt_geometry,organization,html,platform_handle) values ('POINT($longitude $latitude)','$operator','$content_header";
+	$platform_content .= $platform_content_header;
 
 #  <caption>Surface conditions as of 10:00 AM EASTERN on 2/19</caption>
 
@@ -223,16 +231,20 @@ foreach my $observation ($placemark->findnodes('Metadata/obsList/obs')) {
 
 	#print "html: $obs_label $measure_label \n";
         $html_content .= "<tr><th scope=\"row\">$obs_label</th><td>$measure_label</td></tr>";
+        $platform_content .= "<tr><th scope=\"row\">$obs_label</th><td>$measure_label</td></tr>";
 	
 	}
 
 } #foreach obs
 }
 
-$html_content .= "</table>'";
-$html_content .= ");\n";
+$html_content .= "</table><!-- DAN_FOOTER --></div>','$placemark_id');\n";
+$platform_content .= "</table></div>";
 
 print FILE_HTML $html_content;
+print PLATFORM $platform_content;
+
+close (PLATFORM);
 
 } #foreach Placemark
 } #foreach file
@@ -240,8 +252,10 @@ print FILE_HTML $html_content;
 close (FILE_HTML);
 
 #CONFIGSTART
-`$sqlite_path $html_db < delete_html_content.sql`;
-`$sqlite_path $html_db < html_content.sql`;
+#`$sqlite_path $html_db < delete_html_content.sql`;
+#`$sqlite_path $html_db < html_content.sql`;
+`$path_batch_insert $html_db delete_html_content.sql`;
+`$path_batch_insert $html_db html_content.sql`;
 #CONFIGEND
 
 exit 0;
