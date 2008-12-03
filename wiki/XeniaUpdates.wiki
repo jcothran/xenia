@@ -101,7 +101,9 @@ Put together an initial [http://www.youtube.com/watch?v=_CO9o2DyVV0 YouTube tech
 Added the following wiki page to detail Xenia Sqlite, SQL notes(sql usage, optimization, etc) http://code.google.com/p/xenia/wiki/XeniaSqliteNotes
 
 ----
-== Sqlite problems (December 2, 2008) ==
+= December 2, 2008) =
+
+== Sqlite problems ==
 
 Tried running several read/write processes against the main observation sqlite db, but seem to be running into problems with my process threads hanging - not sure if its related to my 'wrapper' batch_insert.pl script which waits for lockout to be released so as not to lose data or something else.  Also running into similar issue with automated 'delete' scripts which are meant to trim the database to a recent time window - they fail to run resulting in the sqlite database file growing several times larger than intended until I run the delete script manually.
 
