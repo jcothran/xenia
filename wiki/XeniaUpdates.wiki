@@ -109,6 +109,8 @@ Tried running several read/write processes against the main observation sqlite d
 
 == Javascript, XSLT - multidimensional hashes and sorting ==
 
+see also http://www.pmel.noaa.gov/maillists/tmap/ioos_wsde/msg00430.html
+
 Was continuing to look for additional information regarding javascript as it might be applicable in conjunction with or in place of XSLT and found the following links
 http://code.google.com/p/ajaxslt/
 
