@@ -101,7 +101,7 @@ Put together an initial [http://www.youtube.com/watch?v=_CO9o2DyVV0 YouTube tech
 Added the following wiki page to detail Xenia Sqlite, SQL notes(sql usage, optimization, etc) http://code.google.com/p/xenia/wiki/XeniaSqliteNotes
 
 ----
-= December 2, 2008) =
+= December 2, 2008 =
 
 == Sqlite problems ==
 
