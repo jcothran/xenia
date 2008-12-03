@@ -18,9 +18,9 @@ A sample Xenia sqlite database which has been purged of all but a few example ob
 Below is a simplified schema display reduced from an earlier schema - the exact table columns are listed in the source sql. 
 
 Main features
-  * organizations->platforms->sensors->observations  The observations table contains the bulk of the database dynamic observation data
-  * data dictionary tables support a measurement type(m_type) composed of a observation_type(obs_type) and unit of measure(uom_type)
-  * more detailed metadata are loosely linked documents referenced via a generic metadata table which details common abstract details like location and effective dates
+  * - organizations->platforms->sensors->observations  The observations table contains the bulk of the database dynamic observation data
+  * - data dictionary tables support a measurement type(m_type) composed of a observation_type(obs_type) and unit of measure(uom_type)
+  * - more detailed metadata are loosely linked documents referenced via a generic metadata table which details common abstract details like location and effective dates
 
 http://carocoops.org/documents/xenia/xenia_schema_small.jpg
 
