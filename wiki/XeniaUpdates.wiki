@@ -122,6 +122,10 @@ Thought that I might be able to convert some of my perl scripts which convert Ob
 
 Possible solution might still be using XSLT sort functionality assuming could cross-reference between higher level metadata and associated low level data.
 
+== Javascript Frameworks ==
+
+Also looked into Javascript Frameworks http://en.wikipedia.org/wiki/Comparison_of_JavaScript_frameworks to simplify some of the javascript development efforts, in particular jquery http://en.wikipedia.org/wiki/JQuery
+
 == Arduino + computer + Pachube ==
 
 I've mentioned Pachube http://pachube.com earlier, primarily in the context of EEML http://www.eeml.org having a similar minimal XML schema for observation measurements to ObsKML.  In addition, instrumentation folks may want to take a look at Arduino(processing board) and Firmata(firmware) which are on the initial data measurement end of things.
@@ -150,5 +154,3 @@ The metadata_id provides a link to the metadata table which further describes wh
 The ref_row_id and ref_date are linking mechanisms to the referenced table (like multi_obs) - row_id may be sufficient alone, but wanted to include ref_date where there might be issues with the row_id rollover possibly causing duplicate row references - I figure that the combination of ref_row_id and ref_date better gaurantees a correct row reference.  The ref_date field alone could also be used for query purposes.  A database view might be established dynamically recombining say the multi_obs row with the custom_fields referenced/appended fields.
 
 The custom_value and/or custom_string fields would contain the additional custom column info.
-
-
