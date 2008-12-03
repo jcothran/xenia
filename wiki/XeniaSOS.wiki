@@ -64,5 +64,5 @@ In addition to sensor/SensorML/SWE metadata development I would also like to see
 In any technical case down the road it would be great to get audience/customer *feedback* on how these services/formats are being utilized(or not) to guide their development.
 
 Also of interest would be better
-  * service/schema *documentation* - particularly if the number of services/schemas could be *abstracted/minimized* to the *fewest* possible common use cases
+  * service/schema *documentation* - particularly if the number of services/schemas could be *abstracted/minimized* to the fewest possible common use cases
   * *shared code* in a variety of source language implementations to help data providers implement the services/schemas
