@@ -4,10 +4,12 @@
 
 There is a geospatially enabled version of Sqilte labeled SQLiteGeo available at http://www.gaia-gis.it/spatialite Would recommend using this version of sqlite for its geospatial and shapefile support.  OGR also supports sqlite access, see http://www.jasonbirch.com/nodes/2008/05/06/184/sqlite-for-fdo-with-sugar-free-ogr/
 
+----
 = monthly/latest file db replication script (April 10, 2008) =
 
 This [http://code.google.com/p/xenia/source/browse/trunk/sqlite/monthly_latest_copy source code] shows how I'm using my [http://www.carocoops.org/obskml/feeds/xenia/archive/latest.sql latest.sql] hourly feed to create/populate [http://carocoops.org/seacoos_data/sqlite monthly archive file db's and a latest db].  The amount total amount of observation data currently collected is around 20 MB per day, so a month file should be around 20 MB*30 days = 600 MB
 
+----
 = sqlite version 3 (May 31, 2008) =
 
 Simplified the sqlite schema [http://www.carocoops.org/obskml/microwfs/db_xenia_v3_sqlite.sql main schema] by removing tables which have been unutilized thus far (quality_control, collection) and adding a 'metadata' table which provides a simple xml file lookup mechanism associated with various table row_id's.  On the pro-side this means that platform, sensor, qc, etc configs can change independently of the basic RDB schema, on the con side I'll be depending on a limited set of xml schema conventions and hardcoding to these various schemas(as opposed to hardtabling I guess).
@@ -22,6 +24,7 @@ The earlier 'collection' table could be referenced as a sub element schema struc
 
 Also removed 'm_desc' from the multi_obs table.
 
+----
 = code revision 238 (August 26, 2008) =
 
 Adding/changing several things with this revision detailed below - all of these changes are in relation to the sqlite database version of the xenia code.
@@ -92,6 +95,27 @@ Put together an initial [http://www.youtube.com/watch?v=_CO9o2DyVV0 YouTube tech
 
 *Update* Also discovered that if you add '&fmt=6' to a youtube link it will display at a better resolution - at 800x600 initial capture my smaller text becomes readable.
 
+----
 = Xenia Sqlite Notes (September 24, 2008) =
 
 Added the following wiki page to detail Xenia Sqlite, SQL notes(sql usage, optimization, etc) http://code.google.com/p/xenia/wiki/XeniaSqliteNotes
+
+----
+== Sqlite problems (December 2, 2008) ==
+
+Tried running several read/write processes against the main observation sqlite db, but seem to be running into problems with my process threads hanging - not sure if its related to my 'wrapper' batch_insert.pl script which waits for lockout to be released so as not to lose data or something else.  Also running into similar issue with automated 'delete' scripts which are meant to trim the database to a recent time window - they fail to run resulting in the sqlite database file growing several times larger than intended until I run the delete script manually.
+
+== Javascript, XSLT - multidimensional hashes and sorting ==
+
+Was continuing to look for additional information regarding javascript as it might be applicable in conjunction with or in place of XSLT and found the following links
+http://code.google.com/p/ajaxslt/
+
+AJAXSLT is an implementation of XSLT in JavaScript. Because XSLT uses XPath, it is also an implementation of XPath that can be used independently of XSLT. This implementation has the advantange that it makes XSLT uniformly available on more browsers than natively provide it, and that it can be extended to yet more browsers if necessary.
+
+The lead developer on this project works for Google on Google Maps.
+
+Was also thinking about server-side automated conversions between XML documents which would require their own XSLT or Javascript implementations.  For Javascript there is Spidermonkey http://www.mozilla.org/js/spidermonkey/ which is a C implementation for processing Javascript.  A corresponding perl package is http://search.cpan.org/~tbusch/JavaScript-SpiderMonkey-0.19/SpiderMonkey.pm
+
+Thought that I might be able to convert some of my perl scripts which convert ObsKML to styled KML/KMZ scripts to javascript, but while javascript provides a more traditional programming language, it lacks hashes except at a very basic level - my mulidimensional hashes could be faked using a single concatenated string, but would be difficult to separate and sort hash elements as I do in perl.
+
+Possible solution might still be using XSLT sort functionality assuming could cross-reference between higher level metadata and associated low level data.
