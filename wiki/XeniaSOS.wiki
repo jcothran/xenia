@@ -31,6 +31,10 @@ Note:
 
 = [XeniaSOS#Related_Links Related Links] =
 
+http://xi.nos.noaa.gov/dif/ (Draft webpage)
+
+http://carocoops.org/documents/IOOS_SOS_Implementations.ppt
+
 IOOS-DIF XML Schemas http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/
 
 IOOS WSDE (Web Services & Data
