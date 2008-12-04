@@ -14,7 +14,7 @@ WaterML OGC spec http://xml.coverpages.org/OGC-07-041r1-CUAHSI-WaterML.pdf
 
 REST data access http://www7.ncdc.noaa.gov/rest
 
----
+----
 from http://www.clemson.edu/restoration/events/past_events/sc_water_resources/t5_proceedings_presentations/t5_zip/goodall_ppt.pdf
 
 Summary
