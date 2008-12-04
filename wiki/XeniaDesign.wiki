@@ -14,24 +14,19 @@ WaterML OGC spec http://xml.coverpages.org/OGC-07-041r1-CUAHSI-WaterML.pdf
 
 REST data access http://www7.ncdc.noaa.gov/rest
 
+---
 from http://www.clemson.edu/restoration/events/past_events/sc_water_resources/t5_proceedings_presentations/t5_zip/goodall_ppt.pdf
 
 Summary
-  * How can we integrate measurements and models from
-various sources into a single description of the environment?
-  # By decoupling the system into autonomous components and
-defining standard interfaces between the components
-  # By developing algorithms that define the communication between
-system components (feedback loops, semantic mediation,
-space/time rescaling of exchanges, etc.)
+  * How can we integrate measurements and models from various sources into a single description of the environment?
+  # By decoupling the system into autonomous components and defining standard interfaces between the components
+  # By developing algorithms that define the communication between system components (feedback loops, semantic mediation, space/time rescaling of exchanges, etc.)
 
 Remaining Challenges
   * Computational Efficiency
-    * How does the “loose-coupling” paradigm scale as
-systems become more complex?
+    * How does the “loose-coupling” paradigm scale as systems become more complex?
   * Granularity
-    * What level of granularity is necessary and appropriate
-for modeling a watershed?
+    * What level of granularity is necessary and appropriate for modeling a watershed?
   * Semantic mediation
     * How can we match exchanges between multidisciplinary components (semantic mediation,space/time rescaling)?
 
