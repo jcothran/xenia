@@ -6,7 +6,57 @@ This is an earlier documentation [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/v
 
 ----
 
-== Brief Xenia/Cuashi-ODM schema comparison ==
+== Hydrology efforts ==
+
+CUAHSI http://his.cuahsi.org
+
+WaterML OGC spec http://xml.coverpages.org/OGC-07-041r1-CUAHSI-WaterML.pdf
+
+REST data access http://www7.ncdc.noaa.gov/rest
+
+from http://www.clemson.edu/restoration/events/past_events/sc_water_resources/t5_proceedings_presentations/t5_zip/goodall_ppt.pdf
+
+Summary
+  * How can we integrate measurements and models from
+various sources into a single description of the environment?
+  # By decoupling the system into autonomous components and
+defining standard interfaces between the components
+  # By developing algorithms that define the communication between
+system components (feedback loops, semantic mediation,
+space/time rescaling of exchanges, etc.)
+
+Remaining Challenges
+  * Computational Efficiency
+    * How does the “loose-coupling” paradigm scale as
+systems become more complex?
+  * Granularity
+    * What level of granularity is necessary and appropriate
+for modeling a watershed?
+  * Semantic mediation
+    * How can we match exchanges between multidisciplinary components (semantic mediation,space/time rescaling)?
+
+----
+
+=== OpenMI ===
+
+OpenMI (Open Model Integration environment) 
+  * http://www.openmi.org
+  * http://www.crwr.utexas.edu/gis/gishydro06/GISandHIS/GISHydro06_Goodall.htm
+  * http://code.google.com/u/jon.goodall/
+
+from http://www.crwr.utexas.edu/gis/gishydro06/GISandHIS/GISHydro06_Goodall.htm
+
+The Big Picture: Why use OpenMI?
+ 
+It’s easy to get lost in the details of creating an OpenMI component, so let me first start with a big picture view.  One way to think of OpenMI is as a flexible, extensible modeling engine.  It’s flexible and extensible because developers can make their databases, text files, spreadsheets, FORTRAN models, C models, etc Open-MI compliant.  This basically means that developers tell OpenMI what the values the data source or model is capable of supplying and how to extract these values from the source or model.  OpenMI handles all of the coordination issues between different data source and models (i.e. if a groundwater model needs recharge from a watershed model, OpenMI knows when and how to get the value from the watershed model).  As you would imagine, one of the most difficult issues of model and data integration is misalignment in space and time.  The computational mesh for a watershed, for example, may not match up with the computational mesh for a groundwater model.  OpenMI is designed to handle these misalignments through user defined linkages (watershed node 1 links to groundwater node 2) or spatial linkages (linkages are derived by the spatial overlap and intersection of features). 
+ 
+The issues that arise in model and data integration can become quite complex and OpenMI is a valiant attempt to create a system capable of facilitating the integration of heterogeneous data sources and models.  That said, it still requires a fairly significant amount of work for a model developer to make his or her model “OpenMI compliant”.  The most significant change that needs to be made to make a model OpenMI-compliant is “stripping out” the time looping component of the model so that OpenMI can run the model more interactively through time. Depending on the complexity of your model, this process could take weeks to months to complete (as estimated by the OpenMI group themselves).  Thus, OpenMI might not be the way to go for all modeling activities, but as we become more interdisciplinary and need to integrate models capable of computing different components of the water and biochemical cycles, the applicability of a modeling framework like OpenMI becomes more attractive. 
+
+OpenMI and WaterML https://lists.sdsc.edu/pipermail/his/2008-August/000251.html
+
+----
+
+=== Brief Xenia/Cuahsi-ODM schema comparison ===
 
 [ftp://ftp.research.microsoft.com/pub/tr/TR-2008-92.pdf A Data Model for Environmental Observations] [http://www.carocoops.org/documents/ODM_data_model.pdf pdf]
 
