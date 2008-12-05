@@ -114,7 +114,7 @@ http://www.obsregistry.org
 
 http://oostethys.org http://code.google.com/p/oostethys/
 
-http://weather.gov/carolinascoast
+http://forecast.weather.gov/mwp/
 
 http://secoora.org/maps http://secoora.org/data
 
