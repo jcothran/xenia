@@ -171,3 +171,6 @@ see also http://code.google.com/p/xenia/wiki/XeniaDesign
     * format+convention/data model vs service/software
     * report vs query
   * real-time vs model/archive
+  * utility/grid/cloud computing by Google, Amazon, etc
+    * http://blog.wired.com/wiredscience/2008/01/google-to-provi.html
+    * http://research.google.com/university/
