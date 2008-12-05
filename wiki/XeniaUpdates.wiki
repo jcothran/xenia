@@ -157,3 +157,12 @@ The metadata_id provides a link to the metadata table which further describes wh
 The ref_table, ref_row_id and ref_date are linking mechanisms to the referenced table (like multi_obs) - row_id may be sufficient alone, but wanted to include ref_date where there might be issues with the row_id rollover possibly causing duplicate row references - I figure that the combination of ref_row_id and ref_date better gaurantees a correct row reference.  The ref_date field alone could also be used for query purposes.  A database view might be established dynamically recombining say the multi_obs row with the custom_fields referenced/appended fields.
 
 The custom_value and/or custom_string fields would contain the additional custom column info.
+
+== Hadoop ==
+
+Hadoop seems interesting in utility based computing against large amounts of unstructured data (like image processing).
+
+from http://en.wikipedia.org/wiki/Hadoop
+
+Apache Hadoop is a free Java software framework that supports data intensive distributed applications.[1] It enables applications to work with thousands of nodes and petabytes of data. Hadoop was inspired by Google's MapReduce and Google File System (GFS) papers.
+Hadoop is a top level Apache project, being built and used by a community of contributors from all over the world[2]. Yahoo! has been the largest contributor[3] to the project and uses Hadoop extensively in its Web Search and Advertising businesses.[4] IBM and Google have announced a major initiative to use Hadoop to support University courses in Distributed Computer Programming.
