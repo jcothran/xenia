@@ -160,7 +160,7 @@ The custom_value and/or custom_string fields would contain the additional custom
 
 == Hadoop ==
 
-Hadoop seems interesting in utility based computing against large amounts of unstructured data (like image processing).
+Hadoop seems interesting in utility based computing against large(terabyte/petabyte) amounts of unstructured data (like image processing).
 
 from http://en.wikipedia.org/wiki/Hadoop
 
