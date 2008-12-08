@@ -148,8 +148,10 @@ CREATE TABLE app_catalog (
     description varchar(1000)
 );
 
+-- for table 'sensor' usage
 -- only the NOT NULL fields in the sensor table are required to be populated, the other fields are included for metadata tracking purposes
 -- report_interval default unit is minutes
+-- see also http://code.google.com/p/xenia/wiki/InstrumentationExamples
 
 CREATE TABLE sensor (
     row_id integer PRIMARY KEY,
@@ -177,6 +179,8 @@ CREATE TABLE sensor_type (
 
 -- -----------------------------------------------------------------------------------
 
+-- for table 'metadata' usage see http://code.google.com/p/xenia/wiki/XeniaUpdates section 'sqlite version 3'
+
 CREATE TABLE metadata (
     row_id integer PRIMARY KEY,
     row_entry_date timestamp,
@@ -191,6 +195,21 @@ CREATE TABLE metadata (
     begin_date timestamp,
     end_date timestamp
 );
+
+-- for table custom_fields usage see 'custom_fields' on page XeniaUpdates
+
+CREATE TABLE custom_fields (
+    row_id integer PRIMARY KEY,
+    row_entry_date timestamp,
+    row_update_date timestamp,
+    metadata_id integer,
+    ref_table varchar(50),
+    ref_row_id integer,
+    ref_date timestamp,
+    custom_value double precision,
+    custom_string varchar(200)    
+);
+
 
 CREATE UNIQUE INDEX i_platform ON platform (platform_handle);
 
