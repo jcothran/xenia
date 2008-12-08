@@ -66,3 +66,4 @@ In any technical case down the road it would be great to get audience/customer *
 Also of interest would be better
   * service/schema *documentation* - particularly if the number of services/schemas could be *abstracted/minimized* and demonstrated as applied to the most common use cases
   * *shared code* in a variety of source language implementations to help data providers implement the services/schemas
+  * a way/mechanism for identifying/resolving *redundant* metadata/data from several independent sources - which source is primary author or quality/timeliness of data sources
