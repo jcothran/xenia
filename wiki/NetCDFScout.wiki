@@ -39,6 +39,18 @@ File list:
 --UseLastNTimeStamps=10 
 --UseLastNTimeStampsForOrg="nos;60,nws;20" > /home/dramage/log/GetLatestData.log 2>&1
 }}}
+    Here are some other cron jobs that help keep the file count down since we aren't archiving netcdfs:
+{{{
+#Cleanup netcdf files older than 3days/4320minutes.
+0 0 * * * /usr/bin/find /home/dramage/netcdf/latest_netcdf_files -path *.nc -maxdepth 1 -cmin +4320 -exec rm -f {} \;
+0 0 * * * /usr/bin/find /home/dramage/netcdf/fetch_logs -path *.nc -maxdepth 1 -cmin +4320 -exec rm -f {} \;
+#Cleanup obsKML files older than 4 hours
+0 0,4,8,12,16,20 * * * /usr/bin/find /home/dramage/public_html/obskml/feeds/* -path *.kml -cmin +240 -exec rm -f {} \;
+
+#Cleanup the log files older than 2 days.
+0 0 * * * /usr/bin/find /home/dramage/log -path *.log -maxdepth 1 -cmin +1440 -exec rm -f {} \;
+
+}}}
     It is recommend to pipe the output to a log file as shown above as the scripts do print quite a bit of information. In the next pass through them, I really need to add a log switch to toggle this behavior. The log files won't grow from run to run as the script deletes them before continuing. So basically you get a log of the last run. The other log file created is cdl_0master.log which is where GetLatestData.pl pipes the output from its call to cdl_0master.pl. Running the Scout every 10 minutes is porbably overkill with having the flag --UseLastNTimeStamps=10. However some netCDF files only have the most current data, where others have the last 48 hours. My thinking was I wanted to make sure I got the most recent data and was always up to date. 
     Command line parameters are detailed out below:
 {{{
