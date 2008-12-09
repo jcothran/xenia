@@ -1,0 +1,6 @@
+#obskml dan(netcdf2obskml - ndbc,nws,nos,usf,skio,cormp,carocoops)
+0,20,40 * * * * cd /home/buoy/scripts ; perl getDanObsKML.pl >> /tmp/microwfs_debug.log 2>&1
+
+#IMPORTANT - PRIMARY SCOUT FLOW
+50 * * * * /home/buoy/scripts/microwfsFlow.sh >> /tmp/buoy.log 2>&1
+
