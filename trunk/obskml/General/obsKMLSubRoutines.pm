@@ -256,6 +256,22 @@ sub MeasurementConvert #($Measurement,$strSourceUOM,$strDesiredUOM,$XMLDoc)
 
 }
 #######################################################################################################
+# Subroutine: CleanString
+# Takes a string and removes unprintable characters from it. Tries to make sure the string contains
+# only alpha numerics.
+#######################################################################################################
+sub CleanString #( $strString )
+{
+  my $strString = shift @_;
+  my $strClean;
+  $strClean = $strString;
+  $strClean =~ tr/\x80-\xFF//d;
+  $strClean =~ s/\x//;
+  $strClean =~ s/\x00$//;
+  
+  return $strClean;
+}
+#######################################################################################################
 # Subroutine: UnitsStringConversion
 # Takes a given units string and converts it into a string that we use internally.
 #######################################################################################################
@@ -266,16 +282,18 @@ sub UnitsStringConversion #($strFromUOMString, $XMLDoc)
   my $strConvertedString = '';
   #DWR 4/15/2008
   #Remove any characters we don't want used. I did notice the unicode char "\x" was in some ndbc files.
-  $strFromUOMString =~ tr/\x80-\xFF//d;
-  $strFromUOMString =~ s/\x//;
+  #$strFromUOMString =~ tr/\x80-\xFF//d;
+  #$strFromUOMString =~ s/\x//;
+  #$strFromUOMString =~ s/\x00$//;
+  my $strUOM = CleanString( $strFromUOMString );
   
   #print( "UnitsStringConversion:: XMLLookup: //unit_conversion_list/unit_conversion[\@id=\"$strFromUOMString\"]/units\n");
-  my $strConversionString = $XMLDoc->findvalue('//unit_conversion_list/unit_conversion[@id="'.$strFromUOMString.'"]/units');
+  my $strConversionString = $XMLDoc->findvalue('//unit_conversion_list/unit_conversion[@id="'.$strUOM.'"]/units');
   if( length( $strConversionString ) )
   {
     $strConvertedString = $strConversionString;
   }
-  print "Units: $strConvertedString \n";
+  #print "UnitsStringConversion::Units: $strConvertedString \n";
   return $strConvertedString;
  
 }
@@ -622,9 +640,11 @@ sub KMLAddObsList #( $Doc, $Parent, $strPlatformURL, $hObsList, \$strDescription
       }
       #Add the child tag to the parent, ObsList.
       $ObsList->appendChild( $Obs );
+      #print( "obsType: $ObsType value: $hObsList->{elev}{$Elev}{obsType}{$ObsType}{value} uomType: $hObsList->{elev}{$Elev}{obsType}{$ObsType}{uomType}\n" );
       #DWR v1.1.0.0
       #Each obs has its own row with the observation type, value, and units of measurement.
       $$strDescription = $$strDescription."<tr><td>$ObsType</td><td>$hObsList->{elev}{$Elev}{obsType}{$ObsType}{value}</td><td>$hObsList->{elev}{$Elev}{obsType}{$ObsType}{uomType}</td></tr>";
+      #print( "KMLAddObsList::strDescription: $$strDescription\n" );
     }
   }
   $$strDescription = $$strDescription.'</table>';
