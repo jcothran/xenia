@@ -63,9 +63,7 @@ sqlite3.exe dhec.db < sample_query.txt
 }}}
 And it will produce the output files query1.txt and query2.txt
 
-That should be enough to give you an idea of what's possible - if you're interested can explain answer further questions about sqlite commands or sql queries.
-
-Additional information at http://www.sqlite.org/sqlite.html http://www.sqlite.org/lang_select.html http://www.sqlite.org/lang.html
+That should be enough to give an idea of what's initially possible.  Additional information at http://www.sqlite.org/sqlite.html http://www.sqlite.org/lang_select.html http://www.sqlite.org/lang.html
 
 #table structure
 {{{
