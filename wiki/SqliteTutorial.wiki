@@ -25,15 +25,15 @@ To show just say the columns station,insp_date,etcoc for the above query
 select station,insp_date,etcoc from dhec_beach where etcoc > 20 order by insp_date desc limit 30;
 }}}
 To limit the results to just station 'WAC-015' add the following condition to the where clause
-  * note that 'text' fields need to be surrounded by single quotes
 {{{
 select station,insp_date,etcoc from dhec_beach where etcoc > 20 and station = 'WAC-015' order by insp_date desc limit 30;
 }}}
+  * note that 'text' fields need to be surrounded by single quotes
 To limit the result to just the year 2006 add the following condition to the where clause
-  * note that the insp_date field is a text field and the comparison works because of the YYYY-MM-DD format order of the date
 {{{
 select station,insp_date,etcoc from dhec_beach where etcoc > 20 and station = 'WAC-015' and insp_date >= '2006-01-01' and insp_date < '2007-01-01' order by insp_date desc limit 30;
 }}}
+  * note that the insp_date field is a text field and the comparison works because of the YYYY-MM-DD format order of the date
 For additional command line help 
 {{{
 .help
