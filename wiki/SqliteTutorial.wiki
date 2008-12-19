@@ -43,7 +43,7 @@ To exit back to the command line
 .exit
 }}}
 
-One of the nice features is that we can create a command/query file and tell sqlite to run that so that if there's some small condition or value that needs to be adjusted we can change the file and rerun the command/query file against the database.
+One of the nice features is that we can create a command/query file and tell sqlite to run that so that if there's some small condition or value that needs to be adjusted automated ) we can change the file and rerun the command/query file against the database.  Running the queries via a command file also opens a path to automating the query process.  Sqlite also supports SQL queries via various scripting languages(perl,python,php,etc) also.
 
 Create the following sample_query.txt file with the following commands
 
