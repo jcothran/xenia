@@ -57,7 +57,7 @@ select * from dhec_beach where etcoc > 20 order by insp_date desc limit 30;
 select station,insp_date,etcoc from dhec_beach where etcoc > 20 order by insp_date desc limit 30;
 }}}
 
-This file contains just the same two initial queries mentioned earlier but sent to their own output files.
+This file contains just the same two initial queries mentioned earlier but sent to their own output files.  The line '.mode csv' sets the field separator to comma separated, but there are several other separators and output types available (see the .help command line listing)
 
 To run this file against the database enter the following at the command line
 {{{
