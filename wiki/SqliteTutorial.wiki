@@ -84,3 +84,19 @@ wind_curr int,
 weather int
 );
 }}}
+----
+= Sample SQL statements =
+{{{
+select count(distinct name) from survey;
+
+select count(distinct name) from survey where purpose = 'research';
+ 
+SELECT name, COUNT(*)
+    FROM survey
+    GROUP BY name
+    HAVING COUNT(*) > 1
+    ORDER BY COUNT(*) DESC;
+
+select distinct email from survey where email like '%@%';
+}}}
+----
