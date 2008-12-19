@@ -29,10 +29,17 @@ To limit the results to just station 'WAC-015' add the following condition to th
 select station,insp_date,etcoc from dhec_beach where etcoc > 20 and station = 'WAC-015' order by insp_date desc limit 30;
 }}}
 To limit the result to just the year 2006 add the following condition to the where clause
-
+{{{
 select station,insp_date,etcoc from dhec_beach where etcoc > 20 and station = 'WAC-015' and insp_date >= '2006-01-01' and insp_date < '2007-01-01' order by insp_date desc limit 30;
-
-type '.exit' and return to get back to the command line.
+}}}
+For additional help 
+{{{
+.help
+}}}
+To exit back to the command line
+{{{
+.exit
+}}}
 
 One of the nice features is that we can create a command/query file and tell sqlite to run that so that if there's some small condition or value that needs to be adjusted we can change the file and rerun the command/query file against the database.
 
@@ -58,7 +65,7 @@ And it will produce the output files query1.txt and query2.txt
 
 That should be enough to give you an idea of what's possible - if you're interested can explain answer further questions about sqlite commands or sql queries.
 
-There's additional information at http://www.sqlite.org/sqlite.html 
+Additional information at http://www.sqlite.org/sqlite.html http://www.sqlite.org/lang_select.html http://www.sqlite.org/lang.html
 
 #table structure
 {{{
