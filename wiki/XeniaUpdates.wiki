@@ -174,6 +174,7 @@ Hadoop is a top level Apache project, being built and used by a community of con
 http://developers.slashdot.org/article.pl?sid=09/01/07/2316227
 
 from http://www.nytimes.com/2009/01/07/technology/business-computing/07program.html
+
 R is similar to other programming languages, like C, Java and Perl, in that it helps people perform a wide variety of computing tasks by giving them access to various commands. For statisticians, however, R is particularly useful because it contains a number of built-in mechanisms for organizing data, running calculations on the information and creating graphical representations of data sets.
 
 Some people familiar with R describe it as a supercharged version of Microsoft’s Excel spreadsheet software that can help illuminate data trends more clearly than is possible by entering information into rows and columns.
@@ -187,4 +188,3 @@ Another package, called Emu, analyzes speech patterns, while GenABEL is used to 
 The financial services community has demonstrated a particular affinity for R; dozens of packages exist for derivatives analysis alone.
 
 “The great beauty of R is that you can modify it to do all sorts of things,” said Hal Varian, chief economist at Google. “And you have a lot of prepackaged stuff that’s already available, so you’re standing on the shoulders of giants.”
-
