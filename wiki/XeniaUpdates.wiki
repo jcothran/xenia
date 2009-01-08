@@ -166,3 +166,10 @@ from http://en.wikipedia.org/wiki/Hadoop
 
 Apache Hadoop is a free Java software framework that supports data intensive distributed applications.[1] It enables applications to work with thousands of nodes and petabytes of data. Hadoop was inspired by Google's MapReduce and Google File System (GFS) papers.
 Hadoop is a top level Apache project, being built and used by a community of contributors from all over the world[2]. Yahoo! has been the largest contributor[3] to the project and uses Hadoop extensively in its Web Search and Advertising businesses.[4] IBM and Google have announced a major initiative to use Hadoop to support University courses in Distributed Computer Programming.
+
+== R ==
+
+R is popular FOSS (Free Open Source Software) library of package for statistics analysis, graphing, etc.  I'd like to start using it for QA/QC purposes against the Xenia sqlite schema.  QA/QC routines could be R scripts running against a common RDB schema.
+
+http://developers.slashdot.org/article.pl?sid=09/01/07/2316227
+
