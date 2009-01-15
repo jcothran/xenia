@@ -1,0 +1,168 @@
+total_pages:3560	date_start:2009-01-13T17:10:00	date_end:2009-01-14T15:41:00	min_page_count:5	min_ip_count:0	min_ref_count:0
+
+#######################################################
+412	/error_pages/error_403.html
+181	"-"
+162	"http://ocean.floridamarine.org/efh%5Fcoral/ims/MapFrame.htm"
+66	"http://ocean.floridamarine.org/efh_coral/ims/MapFrame.htm"
+3	"http://ocean.floridamarine.org/efh_coral/MapFrame.htm"
+#######################################################
+271	/carocoops_website/buoy_query.php?obs=public&platform_id=buoy7&observation_id=wind&time_interval=1+day&submit_type=DownloadData
+271	"-"
+#######################################################
+271	/carocoops_website/buoy_query.php?obs=public&platform_id=WLS1&observation_id=wind&time_interval=1+day&submit_type=DownloadData
+271	"-"
+#######################################################
+271	/carocoops_website/buoy_query.php?obs=public&platform_id=buoy6&observation_id=wind&time_interval=1+day&submit_type=DownloadData
+271	"-"
+#######################################################
+271	/carocoops_website/buoy_query.php?obs=public&platform_id=WLS3&observation_id=wind&time_interval=1+day&submit_type=DownloadData
+271	"-"
+#######################################################
+271	/carocoops_website/buoy_query.php?obs=public&platform_id=WLS2&observation_id=wind&time_interval=1+day&submit_type=DownloadData
+271	"-"
+#######################################################
+227	phpbb2
+227	"-"
+#######################################################
+212	twiki
+197	"-"
+11	"http://72.14.235.100/translate_c
+1	"http://images.google.com/images
+1	"http://seacoos.org/documents/cookbook"
+1	"http://translate.google.co.jp/translate
+1	"http://www.ncddc.noaa.gov/activities/qartod/view"
+#######################################################
+153	/obskml/feeds/pachube/carocoops.cap2.buoy.xml
+153	"-"
+#######################################################
+136	/obskml/feeds/scnms/scnms_latest_obskml.zip
+136	"-"
+#######################################################
+75	/seacoos_data/html_tables/html_tables/
+75	"-"
+#######################################################
+65	/waves/folly/index.php
+64	"-"
+1	"http://carolinasrcoos.org/stationList.php
+#######################################################
+47	/
+38	"-"
+2	"http://seacoos.org/Data%20Access%20and%20Mapping/"
+1	"http://www.ndbc.noaa.gov/cgi-bin/ndbcexit.pl
+1	"http://www.cormp.org/links.html"
+1	"http://web.vims.edu/bridge/oos.html
+#######################################################
+46	/carocoops_website/index.php
+45	"-"
+1	"http://us.mg2.mail.yahoo.com/dc/launch
+#######################################################
+31	/carocoops_website/buoy_detail.php?buoy=buoy4
+31	"-"
+#######################################################
+30	/carocoops_website/guestbook.php
+30	"-"
+#######################################################
+28	/carocoops_website/jpgraph_cache/EN/buoy4/graph/1_day_wind.png
+22	"http://www.catchsomeair.us/weather_content.shtml"
+6	"http://catchsomeair.us/weather_content.shtml"
+#######################################################
+27	/carocoops_website/images/EN/buoy4/graphic/temperature_sky.png
+23	"http://www.charlestondiving.com/phpnuke/"
+3	"http://www.pelagicnavigator.com/vbdev/index.php
+1	"-"
+#######################################################
+27	/carocoops_website/images/EN/buoy4/graphic/current_surf_knots.png
+23	"http://www.charlestondiving.com/phpnuke/"
+3	"http://www.pelagicnavigator.com/vbdev/index.php
+1	"-"
+#######################################################
+26	/carocoops_website/guestbook_invalid.htm
+26	"-"
+#######################################################
+26	/carocoops_website/images/EN/buoy4/graphic/air_pressure_sky.png
+22	"http://www.charlestondiving.com/phpnuke/"
+3	"http://www.pelagicnavigator.com/vbdev/index.php
+1	"-"
+#######################################################
+25	/carocoops_website/images/EN/buoy4/graphic/temperature_surf.png
+22	"http://www.charlestondiving.com/phpnuke/"
+3	"http://www.pelagicnavigator.com/vbdev/index.php
+#######################################################
+25	/carocoops_website/images/EN/buoy4/graphic/wind_sky_knots.png
+22	"http://www.charlestondiving.com/phpnuke/"
+3	"http://www.pelagicnavigator.com/vbdev/index.php
+#######################################################
+24	/carocoops_website/images/EN/buoy4/graphic/salinity_bot.png
+23	"http://www.charlestondiving.com/phpnuke/"
+1	"-"
+#######################################################
+23	/waves/springmaid/image_1.png
+23	"http://www.geol.sc.edu/gvoulgar/obs/realtime_java.html"
+#######################################################
+23	/waves/springmaid/image_currents.png
+23	"http://www.geol.sc.edu/gvoulgar/obs/realtime_java.html"
+#######################################################
+23	/obskml/feeds/latest_raw.sql
+23	"-"
+#######################################################
+23	/carocoops_website/images/EN/buoy4/graphic/temperature_bot.png
+22	"http://www.charlestondiving.com/phpnuke/"
+1	"-"
+#######################################################
+23	/carocoops_website/images/EN/buoy4/graphic/current_bot_knots.png
+22	"http://www.charlestondiving.com/phpnuke/"
+1	"-"
+#######################################################
+23	/obskml/feeds/seacoos_all_latest.zip
+23	"-"
+#######################################################
+12	/carocoops_website/buoy_detail.php?buoy=buoy6
+6	"http://www.oifc.com/localwx.cfm"
+3	"-"
+2	"http://www.cormp.org/index.php"
+1	"http://www.fishmyrtlebeach.com/Weather.cfm"
+#######################################################
+12	/bb/login.php?redirect=posting.php&mode=newtopic&f=23
+12	"-"
+#######################################################
+9	/carocoops_website/buoy_detail.php
+2	"http://www.clastaz.com"
+2	"http://www.milkthenet.com"
+1	"http://itku8.cn/"
+1	"http://www.itku8.cn/"
+1	"http://hard-drive-recovery-site.info/hard-drive-recovery/some-simple-tricks-for-hard-drive-recovery/"
+1	"http://www.hard-drive-recovery-site.info"
+1	"http://muazhadi.blogspot.com/"
+#######################################################
+7	/obskml/scripts/tracker.php?url=/~dramage_prod/seacoos/georss/carocoops_FRP2_buoy_GeoRSS_latest
+7	"-"
+#######################################################
+6	/carocoops_website/buoy_detail.php?buoy=buoy2
+5	"-"
+1	"http://www.dickens.com/Fripp/fripp.html"
+#######################################################
+6	/carocoops_website/buoy_detail.php?buoy=WLS3
+6	"-"
+#######################################################
+6	/~dramage_prod/seacoos/georss/ndbc_41101_met_GeoRSS_latest.xml
+6	"-"
+#######################################################
+5	/bb/
+5	"-"
+#######################################################
+5	/carocoops_website/buoy_detail.php?buoy=buoy7
+5	"http://www.oifc.com/localwx.cfm"
+#######################################################
+5	/bb/viewtopic.php?p=564
+4	"-"
+1	"http://seacoos.org/documents/cookbook"
+#######################################################
+5	/wms/all_seacoos?temperature_units=f&LAYERS=sst%5Flegend%5Ffull%5Frange&REQUEST=GetMap&SERVICE=WMS&FORMAT=image%2Fpng&STYLES=&VERSION=1.1.0&SRS=EPSG:4269&TRANSPARENT=TRUE&EXCEPTIONS=application/vnd.ogc.se_inimage
+5	"-"
+#######################################################
+5	/gearth/latest_placemarks.kmz
+5	"-"
+#######################################################
+5	/gearth/latest_overlays.kml
+5	"-"
