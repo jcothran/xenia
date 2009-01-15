@@ -14,7 +14,7 @@ apache web log input or script [http://code.google.com/p/xenia/source/browse/tru
 
 [http://code.google.com/p/xenia/source/browse/trunk/sqlite/web_stats/web_stats.v2.pl web_stats.v2.pl] can also be modified to ignore particular ip,page,agent,referer arguments and filter page content, etc
 
-secondary analysis scripts can have '`min_`' variables set to other minimum thresholds
+secondary analysis scripts can have '`min_`' variables set to other minimum thresholds for reporting
 
 {{{
 #general flow
