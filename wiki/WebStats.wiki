@@ -1,19 +1,27 @@
 #summary set of perl scripts and sqlite database for apache web log analysis
 
+Developed these scripts out of frustration with other freely available web analysis packages including Google Analytics lately which has been having problems lately with how statistics are reported(documented [http://www.google.com/support/forum/p/Google+Analytics/thread?tid=77847d39560ae940&fid=77847d39560ae94000045dd9df11662b&hl=en here])  Mainly I am looking for more than just total hits, but also to filter and cross reference content with its users and references.
+
 source code http://code.google.com/p/xenia/source/browse/#svn/trunk/sqlite/web_stats
 
-Create sqlite database web_stats.db using http://code.google.com/p/xenia/source/browse/trunk/sqlite/web_stats/create_web_stats.sql or use existing created(unpopulated) at http://code.google.com/p/xenia/source/browse/trunk/sqlite/web_stats/web_stats.db
+Create sqlite database web_stats.db using [http://code.google.com/p/xenia/source/browse/trunk/sqlite/web_stats/create_web_stats.sql create_web_stats.sql] or use existing created(unpopulated) at [http://code.google.com/p/xenia/source/browse/trunk/sqlite/web_stats/web_stats.db web_stats.db]
+
+apache web log input or script [http://code.google.com/p/xenia/source/browse/trunk/sqlite/web_stats/web_stats.v2.pl web_stats.v2.pl] should be modified to pull apache record fields (see @record variable) in same format as 
+
+[http://code.google.com/p/xenia/source/browse/trunk/sqlite/web_stats/web_stats.v2.pl web_stats.v2.pl] can also be modified to ignore particular ip,page,agent,referer arguments and filter page content, etc
+
+secondary analysis scripts can have 'min_' variables set to other minimum thresholds
 
 {{{
 #general flow
-move log file to be analyzed to folder 'log' within scripts folder
+move log files to be analyzed to subfolder 'log' within scripts folder
 
 delete cross_ref_info depending on date overlap?
-
+#latest page_date processed
 select * from cross_ref_info order by page_date desc limit 1;
 
+#populate lookup tables and cross_ref_info table
 perl web_stats.v2.pl > logfile &
-
 
 #mark significant ip's for host/dns lookup    
 perl update_host_lkp.pl    
@@ -23,4 +31,3 @@ perl update_host_info.pl
 #generates set of report .txt files
 perl report_cross_ref.pl
 }}}
-
