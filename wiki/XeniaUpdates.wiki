@@ -188,3 +188,13 @@ Another package, called Emu, analyzes speech patterns, while GenABEL is used to 
 The financial services community has demonstrated a particular affinity for R; dozens of packages exist for derivatives analysis alone.
 
 “The great beauty of R is that you can modify it to do all sorts of things,” said Hal Varian, chief economist at Google. “And you have a lot of prepackaged stuff that’s already available, so you’re standing on the shoulders of giants.”
+
+= January 15, 2009 = 
+
+== WebStats ==
+
+see http://code.google.com/p/xenia/wiki/WebStats
+
+Set of perl scripts and sqlite database for apache web log analysis.
+
+Developed these scripts out of frustration with other freely available web analysis packages including Google Analytics lately which has been having problems lately with how statistics are reported.  Mainly I am looking for more than just total hits, but also to filter and cross reference content with its users and references.
