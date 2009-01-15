@@ -18,7 +18,7 @@ my @referer_ignore = qw(nautilus.baruch.sc.edu carocoops.org caro-coops.org sear
 
 my $dbname = '/usr2/prod/buoys/perl/apachestats/web_stats.db';
 
-see PAGE_ARGUMENT/ELEMENT_FILTERING label section for page argument filtering options 
+#see PAGE_ARGUMENT/ELEMENT_FILTERING label section for page argument filtering options 
 
 #CONFIG END
 
