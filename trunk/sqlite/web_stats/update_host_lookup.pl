@@ -1,14 +1,14 @@
 #!/usr/bin/perl
 use strict;
 
-use DBI;
+#CONFIG BEGIN
 my $dbname = '/usr2/prod/buoys/perl/apachestats/web_stats.db';
-#my $path_batch_insert = 'perl /var/www/cgi-bin/microwfs/batch_insert.pl';
-
 my $min_ip_count = 5; #don't change ignore status if <= this number
+#CONFIG END
 
 ###########################################################
 
+use DBI;
 my $dbh = DBI->connect("dbi:SQLite:dbname=$dbname", "", "",
                     { RaiseError => 1, AutoCommit => 1 });
 if(!defined $dbh) {die "Cannot connect to database!\n";}

@@ -1,9 +1,8 @@
 #!/usr/bin/perl
 use strict;
 
-use DBI;
+#CONFIG BEGIN
 my $dbname = '/usr2/prod/buoys/perl/apachestats/web_stats.db';
-#my $path_batch_insert = 'perl /var/www/cgi-bin/microwfs/batch_insert.pl';
 
 my $min_page_count = 5;  #must be at least this number of page hits to be included in report
 my $min_ip_count = 1;  #must be at least this number of ip hits to be included in report
@@ -26,8 +25,11 @@ open (FILE_PAGE_REF,">page_ref_summary.txt");
 open (FILE_IP,">ip_summary.txt");
 open (FILE_REF,">ref_summary.txt");
 
+#CONFIG END
+
 ###########################################################
 
+use DBI;
 my $dbh = DBI->connect("dbi:SQLite:dbname=$dbname", "", "",
                     { RaiseError => 1, AutoCommit => 1 });
 if(!defined $dbh) {die "Cannot connect to database!\n";}
