@@ -7,6 +7,10 @@ source code http://code.google.com/p/xenia/source/browse/#svn/trunk/sqlite/web_s
 Create sqlite database web_stats.db using [http://code.google.com/p/xenia/source/browse/trunk/sqlite/web_stats/create_web_stats.sql create_web_stats.sql] or use existing created(unpopulated) at [http://code.google.com/p/xenia/source/browse/trunk/sqlite/web_stats/web_stats.db web_stats.db]
 
 apache web log input or script [http://code.google.com/p/xenia/source/browse/trunk/sqlite/web_stats/web_stats.v2.pl web_stats.v2.pl] should be modified to pull apache record fields (see @record variable) in same format as 
+{{{
+#apache log record/line format like below
+#74.220.203.50 - - [11/Jan/2009:04:26:27 -0500] "GET /seacoos_data/html_tables/html_tables/usgs.021720709.wq.htm HTTP/1.0" 200 213 "http://www.carocoops.org/seacoos_data/html_tables/html_tables/" "Wget/1.10.2 (Red Hat modified)"
+}}}
 
 [http://code.google.com/p/xenia/source/browse/trunk/sqlite/web_stats/web_stats.v2.pl web_stats.v2.pl] can also be modified to ignore particular ip,page,agent,referer arguments and filter page content, etc
 
