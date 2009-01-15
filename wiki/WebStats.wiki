@@ -1,6 +1,8 @@
 #summary set of perl scripts and sqlite database for apache web log analysis
 
-source code 
+source code http://code.google.com/p/xenia/source/browse/#svn/trunk/sqlite/web_stats
+
+Create sqlite database web_stats.db using http://code.google.com/p/xenia/source/browse/trunk/sqlite/web_stats/create_web_stats.sql or use existing created(unpopulated) at http://code.google.com/p/xenia/source/browse/trunk/sqlite/web_stats/web_stats.db
 
 {{{
 #general flow
@@ -21,3 +23,4 @@ perl update_host_info.pl
 #generates set of report .txt files
 perl report_cross_ref.pl
 }}}
+
