@@ -1,0 +1,23 @@
+#summary set of perl scripts and sqlite database for apache web log analysis
+
+source code 
+
+{{{
+#general flow
+move log file to be analyzed to folder 'log' within scripts folder
+
+delete cross_ref_info depending on date overlap?
+
+select * from cross_ref_info order by page_date desc limit 1;
+
+perl web_stats.v2.pl > logfile &
+
+
+#mark significant ip's for host/dns lookup    
+perl update_host_lkp.pl    
+perl update_host_info.pl
+
+#set analysis date_range,min_page/ip/ref
+#generates set of report .txt files
+perl report_cross_ref.pl
+}}}
