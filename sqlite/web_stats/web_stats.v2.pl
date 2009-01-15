@@ -1,46 +1,36 @@
 #!/usr/bin/perl
 use strict;
 
-####various elements which we are filtering as bad, ignored,good or subscriber - configure as needed
+#CONFIG BEGIN
+
+####various elements which we are filtering as ignored - configure as needed
 my @bots_ignore = qw(googlebot inktomi livebot crawl proxy.aol.com);
-#my @ip_ignore = qw(129.252.37 129.252.37 129.252.37.86 129.252.139 129.252.139 127.0.0.1 152.2.92.48 152.20.240.9);
-my @ip_ignore = qw(129.252.37 129.252.37 129.252.37.86 129.252.139 129.252.139 127.0.0.1);
+my @ip_ignore = qw(129.252.37 129.252.139 127.0.0.1);
 my @agent_ignore = qw(bot Slurp Validator compass spider crawler);
-
 my @page_ignore = qw(TWiki Sandbox robots.txt WebStatistics bin/oops bin/rdiff error_404 error_403);
-#my @page_good = qw(carocoops_website/index.php carocoops_website/buoy_detail.php carocoops_website/buoy_graph.php folly/index.php springmaid/index.php carolinas/ gearth);
-
 my @referer_ignore = qw(nautilus.baruch.sc.edu carocoops.org caro-coops.org search http://images.google.*/imgres);
-#my @referer_good = qw(oifish magic oceanislebeachsurf charlestondiving catchsomeair oceanislefishingcenter palmettosurfers ocean.floridamarine.org iopweather www.follywaves.com);
-
-#my @subscriber_good = qw(www.gomoos.org nys.biz.rr.com piper.weatherflow.com maury.marine.unc.edu cromwell.marine.unc.edu seacoos3.marine.unc.edu web1.iboattrack.com cormp2.das.uncw.edu oceanlab.rsmas.miami.edu rmo.bellsouth.net navy.mil);
-
 ##
 
 #apache log record/line format like below
 #74.220.203.50 - - [11/Jan/2009:04:26:27 -0500] "GET /seacoos_data/html_tables/html_tables/usgs.021720709.wq.htm HTTP/1.0" 200 213 "http://www.carocoops.org/seacoos_data/html_tables/html_tables/" "Wget/1.10.2 (Red Hat modified)"
 
-my $date_yesterday = `date +%d/%b/%Y --date='1 day ago'`;
-chomp $date_yesterday;
-my ($day,$month,$year) = split(/\//, $date_yesterday);
-
 @ARGV = glob 'log/*.log';
 
-my ($total_count,$hit_count,$ip_ignore_count,$agent_ignore_count,$page_ignore_count,$referer_ignore_count);
-
-use DBI;
 my $dbname = '/usr2/prod/buoys/perl/apachestats/web_stats.db';
-my $path_batch_insert = 'perl /var/www/cgi-bin/microwfs/batch_insert.pl';
 
-open (SQL_OUT, ">web_stats_latest.sql");
+see PAGE_ARGUMENT/ELEMENT_FILTERING label section for page argument filtering options 
+
+#CONFIG END
 
 ###########################################################
 
+use DBI;
 my $dbh = DBI->connect("dbi:SQLite:dbname=$dbname", "", "",
                     { RaiseError => 1, AutoCommit => 1 });
 if(!defined $dbh) {die "Cannot connect to database!\n";}
 my ($sql,$sth);
 
+my ($total_count,$hit_count,$ip_ignore_count,$agent_ignore_count,$page_ignore_count,$referer_ignore_count);
 
 ##################
 while (my $input_file = shift @ARGV) {
@@ -48,19 +38,15 @@ print "$input_file\n";
 open(LOGFILE, "$input_file");
 
 foreach my $line (<LOGFILE>) {
+$total_count++;
 
 my @record = split(/\s+/, $line);
 
 my $date = @record[3];
-#only tracking within date range
-#if (!($date =~ /^\[$day\/$month\/$year/ )) { next; }
 
 #only tracking successful page returns
 my $return_code = @record[8];
-$total_count++;
-
 if ($return_code eq '200') {
-#print "ok! $date\n";
 $hit_count++;
 
 my $ip = @record[0];
@@ -73,6 +59,7 @@ my @temp_array = split(/\&/,$http_page);
 while (@temp_array) {
 	my $element = shift @temp_array;
 
+	#PAGE_ARGUMENT/ELEMENT_FILTERING
 	#remove
 	if ($element =~ /BBOX/i) { next; }
 	if ($element =~ /HEIGHT/i) { next; }
@@ -219,7 +206,6 @@ my $agent = escape_literals(@record_quotes[5]);
         #insert cross_ref
         $sql = qq{ INSERT into cross_ref_info(ip_id,page_date,page_id,referer_id) values ($ip_row_id,'$page_time',$page_row_id,$referer_row_id); };
         #print $sql."\n";
-	print SQL_OUT $sql."\n";
         $sth = $dbh->prepare( $sql );
         $sth->execute();
 
@@ -240,7 +226,6 @@ my $good_hits = $hit_count-$ip_ignore_count-$agent_ignore_count-$page_ignore_cou
 print "good_hits:".$good_hits."\n";
 
 close (LOGFILE);
-close (SQL_OUT);
 
 exit 0;
 

@@ -1,17 +1,19 @@
 #!/usr/bin/perl
 use strict;
 
-use DBI;
+#CONFIG BEGIN
 my $dbname = '/usr2/prod/buoys/perl/apachestats/web_stats.db';
-#my $path_batch_insert = 'perl /var/www/cgi-bin/microwfs/batch_insert.pl';
+
+#assuming 'host' command option is setup on system and functions same as used below(takes the last string argment which is the dns lookup name
+#CONFIG END
 
 ###########################################################
 
+use DBI;
 my $dbh = DBI->connect("dbi:SQLite:dbname=$dbname", "", "",
                     { RaiseError => 1, AutoCommit => 1 });
 if(!defined $dbh) {die "Cannot connect to database!\n";}
 my ($sql,$sth);
-
 
 ####
 #db processing
@@ -37,7 +39,6 @@ foreach my $row ( @{$ref} ) {
     $sth->execute();
 
 }
-
 
 exit 0;
 
