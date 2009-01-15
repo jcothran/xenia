@@ -40,6 +40,6 @@ perl report_cross_ref.pl
 Note that these perl scripts do not include closing statement handlers (sth) or database disconnects(dbh) at the end of file but this does not seem to have any negative effects.
 
 Other potential development options
-  * profile non-200(unsuccessful) web hits
+  * profile page return codes that are *not* 200(unsuccessful) web hits
   * profile page,ip,ref history over time
   * profile agents
