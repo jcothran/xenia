@@ -14,10 +14,11 @@ secondary analysis scripts can have 'min_' variables set to other minimum thresh
 
 {{{
 #general flow
-move log files to be analyzed to subfolder 'log' within scripts folder
+move log files(suffixed .log) to be analyzed to subfolder 'log' within scripts folder
 
-delete cross_ref_info depending on date overlap?
-#latest page_date processed
+no duplicate row checking/indexes on table cross_ref_info
+so delete cross_ref_info rows depending on date overlap? 
+#to see latest cross_ref_info.page_date row processed
 select * from cross_ref_info order by page_date desc limit 1;
 
 #populate lookup tables and cross_ref_info table
