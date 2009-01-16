@@ -1,6 +1,6 @@
 #summary set of perl scripts and sqlite database for apache web log analysis
 
-Developed these scripts out of frustration with other freely available web analysis packages including Google Analytics lately which has been having problems lately with how statistics are reported(documented [http://www.google.com/support/forum/p/Google+Analytics/thread?tid=77847d39560ae940&fid=77847d39560ae94000045dd9df11662b&hl=en here])  Mainly I am looking for more than just total hits, but also to filter and cross reference content with its users and references.
+Developed these scripts out of frustration with other freely available web analysis packages including Google Analytics which has been having problems lately with how statistics are reported(documented [http://www.google.com/support/forum/p/Google+Analytics/thread?tid=77847d39560ae940&fid=77847d39560ae94000045dd9df11662b&hl=en here])  Mainly I am looking for more than just total hits, but also to filter and cross reference content with its users and references.
 
 source code http://code.google.com/p/xenia/source/browse/#svn/trunk/sqlite/web_stats
 
@@ -37,9 +37,17 @@ perl update_host_info.pl
 perl report_cross_ref.pl
 }}}
 
+Description of report text files created
+  * page_summary.txt - top pages/content requested
+  * ip_summary.txt - top ip (users)
+  * ref_summary - top referers
+  * page_ip_summary.txt - cross reference of pages with ip users
+  * page_ref_summary.txt - cross reference of pages with referers
+
 Note that these perl scripts do not include closing statement handlers (sth) or database disconnects(dbh) at the end of file but this does not seem to have any negative effects.
 
 Other potential development options
+  * providing content/user trending via indicators,graphs,etc
   * profile page return codes that are *not* 200(unsuccessful) web hits
   * profile page,ip,ref history over time
   * profile agents
