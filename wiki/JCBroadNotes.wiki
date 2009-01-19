@@ -77,7 +77,7 @@ tilecache http://tilecache.org - great client performance speed-up(fast map load
 http://code.google.com/p/rcoos/wiki/TileCacheNotes
 
 XeniaProducts
-  * gnuplot (time series, vector)
+  * gnuplot (time series, vector) http://en.wikipedia.org/wiki/Gnuplot
   * instrument/event metrics/notification
     * Percentage uptime
       * http://carocoops.org/~dramage_prod/secoora/PlatformUptimePercentages.html
@@ -174,3 +174,18 @@ see also http://code.google.com/p/xenia/wiki/XeniaDesign
   * utility/grid/cloud computing by Google, Amazon, etc
     * http://blog.wired.com/wiredscience/2008/01/google-to-provi.html
     * http://research.google.com/university/
+
+----
+== Upcoming development ==
+
+Geoserver - http://geoserver.org
+  * variety of supported geospatial formats and web services
+
+VMWare - improved sharable/portable/redundant open source server/appliance stack via vmware
+  * https://help.ubuntu.com/community/VMware/Player
+
+Python - (shares common scripting language with ESRI GIS, variety of useful numeric and geospatial processing libraries)
+
+R - http://en.wikipedia.org/wiki/R_(programming_language)
+  * possible application in QA/QC algorithms/analysis
+  * has python, sqlite interfaces
