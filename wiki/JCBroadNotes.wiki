@@ -178,11 +178,11 @@ see also http://code.google.com/p/xenia/wiki/XeniaDesign
 ----
 == Upcoming development ==
 
-Geoserver - http://geoserver.org
-  * variety of supported geospatial formats and web services
-
 VMWare - improved sharable/portable/redundant open source server/appliance stack via vmware
   * https://help.ubuntu.com/community/VMware/Player
+
+Geoserver - http://geoserver.org
+  * variety of supported geospatial formats and web services
 
 Python - (shares common scripting language with ESRI GIS, variety of useful numeric and geospatial processing libraries)
 
