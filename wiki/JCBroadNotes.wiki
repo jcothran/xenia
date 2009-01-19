@@ -186,6 +186,7 @@ VMWare - improved sharable/portable/redundant open source server/appliance stack
 
 Geoserver - http://geoserver.org
   * variety of supported geospatial formats and web services
+  * supports response caching (tiles,etc) for better efficiencies
 
 Python - (shares common scripting language with ESRI GIS, variety of useful numeric and geospatial processing libraries)
 
