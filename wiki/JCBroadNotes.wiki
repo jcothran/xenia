@@ -130,6 +130,8 @@ desktop tools
 
 earlier technical notes http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
 
+updates XeniaUpdates
+
 ----
 == Devolution - technology changes, lessons learned ==
 
