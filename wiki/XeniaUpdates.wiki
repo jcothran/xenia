@@ -189,6 +189,7 @@ The financial services community has demonstrated a particular affinity for R; d
 
 “The great beauty of R is that you can modify it to do all sorts of things,” said Hal Varian, chief economist at Google. “And you have a lot of prepackaged stuff that’s already available, so you’re standing on the shoulders of giants.”
 
+----
 = January 15, 2009 = 
 
 == WebStats ==
