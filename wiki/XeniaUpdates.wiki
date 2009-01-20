@@ -199,3 +199,22 @@ see http://code.google.com/p/xenia/wiki/WebStats
 Set of perl scripts and sqlite database for apache web log analysis.
 
 Developed these scripts out of frustration with other freely available web analysis packages including Google Analytics lately which has been having problems lately with how statistics are reported.  Mainly I am looking for more than just total hits, but also to filter and cross reference content with its users and references.
+
+----
+= January 20, 3009 =
+
+== GISVM ==
+
+from http://gisvm.com 
+
+GISVM is a free and ready to use anywhere Geographic Information System Virtual Machine.
+
+GISVM is intended to be a full-feature GIS Workstation based exclusively on free GIS software: PostgreSQL, PostGIS, GeoServer, Mapserver, FWTools, QGIS, GRASS, gvSIG, uDIG, Kosmo and OpenJump, on Ubuntu Desktop.
+
+It also aims to be a hassle-free installation option for anyone that needs a ready to use GIS solution.
+
+Based on the amazing Virtualization technology it can be used on almost any operating system environment.
+
+GISVM only requires you to previously install the Free VMWare Player, VirtualBox or any other product that can run a VMWare image.
+
+there is also an image which includes 'R' see http://gisvm.com/forum/index.php?topic=11.0
