@@ -183,7 +183,7 @@ see also http://code.google.com/p/xenia/wiki/XeniaDesign
 
 VMWare - improved sharable/portable/redundant open source server/appliance stack via vmware
   * https://help.ubuntu.com/community/VMware/Player
-  * GISVM http://gisvm.com GISVM is a free and ready to use anywhere Geographic Information System Virtual Machine - there is also an image which includes 'R' see http://gisvm.com/forum/index.php?topic=11.0
+  * GISVM http://gisvm.com GISVM is a free and ready to use anywhere Geographic Information System Virtual Machine - GISVM is intended to be a full-feature GIS Workstation based exclusively on free GIS software: PostgreSQL, PostGIS, GeoServer, Mapserver, FWTools, QGIS, GRASS, gvSIG, uDIG, Kosmo and OpenJump, on Ubuntu Desktop - there is also an image which includes 'R' see http://gisvm.com/forum/index.php?topic=11.0
 
 Geoserver - http://geoserver.org
   * variety of supported geospatial formats and web services
