@@ -201,7 +201,7 @@ Set of perl scripts and sqlite database for apache web log analysis.
 Developed these scripts out of frustration with other freely available web analysis packages including Google Analytics lately which has been having problems lately with how statistics are reported.  Mainly I am looking for more than just total hits, but also to filter and cross reference content with its users and references.
 
 ----
-= January 20, 3009 =
+= January 20, 2009 =
 
 == GISVM ==
 
@@ -218,3 +218,28 @@ Based on the amazing Virtualization technology it can be used on almost any oper
 GISVM only requires you to previously install the Free VMWare Player, VirtualBox or any other product that can run a VMWare image.
 
 there is also an image which includes 'R' see http://gisvm.com/forum/index.php?topic=11.0
+
+----
+= January 22, 2009 =
+
+== VMWare ==
+
+Had a chance to experiment some with vmware this week.  Would have to say that it was all fairly straightforward and interesting and am looking towards trying to utilize this server virtualization as a means to help standardardize and maintain our in-house server setups.  Additionally since the server is virtualized as a file image, it is possible to share and reproduce this server and associated tools wherever the vmware file image is supported (including other 'players' or cloud type services).  The following article link describes how this concept is helpful to IT shops  
+
+http://rwhiffen.wordpress.com/2006/07/13/the-genius-of-free-vmware/
+
+And the below link talks about vmware images as 'appliances'
+
+http://fettig.net/weblog/2006/02/27/the-vmware-image-is-the-new-appliance/
+
+which is how vmware also describes their community collection of them at their site http://www.vmware.com/appliances/
+
+Other associated file links are at 
+
+http://delicious.com/giraclarc/vmware
+http://delicious.com/giraclarc/cloud
+
+
+
+http://neptune.baruch.sc.edu/geoserver/demo.do
+
