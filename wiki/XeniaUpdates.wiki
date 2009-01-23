@@ -224,7 +224,7 @@ there is also an image which includes 'R' see http://gisvm.com/forum/index.php?t
 
 == VMWare ==
 
-Had a chance to experiment some with vmware this week.  Would have to say that it was all fairly straightforward and interesting and am looking towards trying to utilize this server virtualization as a means to help standardardize and maintain our in-house server setups.  Additionally since the server is virtualized as a file image, it is possible to share and reproduce this server and associated tools wherever the vmware file image is supported (including other 'players' or cloud type services).  The following article link describes how this concept is helpful to IT shops  
+Had a chance to experiment some with vmware http://www.vmware.com via the free vmware 'player' utility this week.  Would have to say that it was all fairly straightforward and interesting and am looking towards trying to utilize this server virtualization as a means to help standardardize and maintain our in-house server setups.  Additionally since the server is virtualized as a file image, it is possible to share and reproduce this server and associated tools/development wherever the vmware file image is supported (including other 'players' or cloud type services).  The following article link describes how this concept is helpful to IT shops  
 
 http://rwhiffen.wordpress.com/2006/07/13/the-genius-of-free-vmware/
 
@@ -242,4 +242,3 @@ http://delicious.com/giraclarc/cloud
 
 
 http://neptune.baruch.sc.edu/geoserver/demo.do
-
