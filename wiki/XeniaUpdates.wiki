@@ -249,7 +249,7 @@ No problems with the install and downloaded the gisvm image (geostatistics versi
 
 The downloaded image is a .rar compressed file, used windows unrar utility to decompress image and support files to 5.5 GB size.
 
-In the vmware player opened the associated .vmx file for the gisvm image (the .vmdk file image) and was able to work with this virtual ubuntu server and GIS toolset within my Windows desktop without problems.  Neat!
+In the vmware player opened the associated .vmx file for the gisvm image (the .vmdk file image) and was able to work with this virtual ubuntu server and GIS toolset within my Windows host desktop without problems.  Neat!
 
 === Linux install ===
 
@@ -267,7 +267,7 @@ gksudo bash ./VMware-Player-2.5.1-126130.i386.bundle
 
 Again downloaded the gisvm geostatistics (1.3 GB) image from http://gisvm.com/download.html and utilized the ubuntu desktop 'File Browser' file right-click option to extract/decompress the .rar file
 
-In the vmware player opened the associated .vmx file for the gisvm image (the .vmdk file image) and was able to work with this virtual ubuntu server and GIS toolset within my Ubuntu desktop without problems.  Neat again!
+In the vmware player opened the associated .vmx file for the gisvm image (the .vmdk file image) and was able to work with this virtual ubuntu server and GIS toolset within my Ubuntu host desktop without problems.  Neat again!
 
 === Additional server notes - static IP, network bridge, iptables ===
 
