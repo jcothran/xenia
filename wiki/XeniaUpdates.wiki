@@ -271,7 +271,7 @@ In the vmware player opened the associated .vmx file for the gisvm image (the .v
 
 === Additional server notes - static IP, network bridge, iptables ===
 
-Wanted to bridge the 'virtual' vmware player server across the 'host' server.  I had to establish my static IP on the host using the following steps
+Wanted to bridge the 'virtual' vmware player server across the 'host' server.  Established my static IP on the host using the following steps.
 
 The 'ifconfig' command will tell you which ethernet device the server is trying to communicate on.  For mine the host server was running 'eth0' and the virtual was running 'eth5'
 
