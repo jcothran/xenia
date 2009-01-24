@@ -1,5 +1,7 @@
 #summary project update notes
 
+this is a continuation of earlier developer notes at http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
+
 = SQLiteGeo (April 8, 2008) =
 
 There is a geospatially enabled version of Sqilte labeled SQLiteGeo available at http://www.gaia-gis.it/spatialite Would recommend using this version of sqlite for its geospatial and shapefile support.  OGR also supports sqlite access, see http://www.jasonbirch.com/nodes/2008/05/06/184/sqlite-for-fdo-with-sugar-free-ogr/
