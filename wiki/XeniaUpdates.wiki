@@ -323,3 +323,5 @@ http://129.252.37.90/geoserver/demo.do
 Note that a few of the demos include google images which need a new certificate and won't load until that is swapped also.  But it is interesting to see the virtual server/application communicating across the host to the outside.  Follow-up steps will be to see what performance or other virtualization related issues there might be.
 
 As a test, I also modified some files on my Windows vmplayer instance and transferred the image to the Linux vmplayer and ran the image with no problems - so would like to be able to run and test virtual development images on the desktop and promote and share final images to other developers and production servers. 
+
+I have received several comments from others that they are utilizing VirtualBox http://www.virtualbox.org as a better performing vmware image player and will have to try that also.
