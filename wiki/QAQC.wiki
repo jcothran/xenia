@@ -12,7 +12,7 @@ qc_flag
 
 In reference to the qc_level and qc_flag fields, also see the [http://trac.secoora.org/datamgmt/browser/docs/whitepapers/trunk/SEACOOS%20QA-QC%20Standards%20and%20Procedures%20Whitepaper.doc SECOORA QAQC documentation]
 
-The valid values for the high/overview qc_level flag are easiest to discuss
+The valid values for the high/overview qc_level flag are easiest to discuss.  It represents an integer field with one of the following five possible values.
 {{{
 VALUE	CONDITION
 -9	the data field is missing a value
@@ -37,9 +37,9 @@ Other Comparison
 
 My suggestion would be to use a position-dependent string encoding (test not evaluated = 0, test fail = 1, test pass = 3) as to mimic the qc_level settings.
 
-Where the string '3330000' would represent data which passed the first three tests for data availability, sensor range, gross range and the other tests were unevaluated.
+Where the string qc_level = '3330000' would represent data which passed the first three tests for data availability, sensor range, gross range and the other tests were unevaluated.
 
-'3010000' would represent data which passed the first test, sensor range not evaluated and gross range test fail.
+qc_level = '3010000' would represent data which passed the first test, sensor range not evaluated and gross range test fail.
 
 = qc_id = 
 
