@@ -1,3 +1,9 @@
 #summary QAQC issues and Xenia implementation
 
-
+The Xenia schema currently has the following fields on the multi_obs table for tracking some basic QAQC type information.
+{{{
+#table multi_obs
+qc_id
+qc_level
+qc_flag
+}}}
