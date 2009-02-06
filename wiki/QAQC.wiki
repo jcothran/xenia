@@ -32,12 +32,15 @@ Gross Range
 Climatological Range
 Rate of Change
 Nearest Neighbor
-Other Comparison 1 (other comparisons described in qc metadata record documentation link)
+Other Comparison 1 
 Other Comparison 2
 ...
 }}}
 
-My suggestion would be to use a position-dependent string encoding (*test not evaluated = 0, test fail = 1, test pass = 3*) as to mimic the qc_level settings.
+'Other Comparisons' meaning would be described in qc metadata record documentation link - 
+multi_obs.qc_id = metadata.row_id, metadata table row_id contains additional pointers to documentation formats,links and effective dates.
+
+My suggestion would be to use a position-dependent string encoding (*test not evaluated = 0, test fail = 1, test pass = 3*) as to mimic the qc_level settings.  Also suggested is representing tests up through 'Other Comparison 1'(7 digits) although these last set of test may be unevaluated for some time to come and might act more as placeholders for later development.
 
 Where the string qc_level = '3330000' would represent data which passed the first three tests for data availability, sensor range, gross range and the other tests were unevaluated.
 
