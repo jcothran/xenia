@@ -35,7 +35,7 @@ Nearest Neighbor
 Other Comparison
 }}}
 
-My suggestion would be to use a position-dependent string encoding (test not evaluated = 0, test fail = 1, test pass = 3) as to mimic the qc_level settings.
+My suggestion would be to use a position-dependent string encoding (*test not evaluated = 0, test fail = 1, test pass = 3*) as to mimic the qc_level settings.
 
 Where the string qc_level = '3330000' would represent data which passed the first three tests for data availability, sensor range, gross range and the other tests were unevaluated.
 
