@@ -61,6 +61,15 @@ row_id = 1
 }}}  
 
 ----
+= Secondary, Revisional QAQC
+
+*Note:* This secondary,revisional level of quality control may be redeveloped under a *custom fields* type concept.  Please see discussion of that topic as it develops.
+
+The Xenia schema currently includes a secondary repeat of the earlier discussed fields suffixed with '_2' as qc_id_2,qc_level_2,qc_flag_2
+
+These fields are *optional* placeholder fields for a secondary or revisional level of applied qc and would operate in the same manner as the *primary* qc listed earlier, just reflecting the qc results as applied by another party or later process.
+
+----
 
 = Related Links =
 
