@@ -32,7 +32,7 @@ Gross Range
 Climatological Range
 Rate of Change
 Nearest Neighbor
-Other Comparison
+Other Comparison (described in qc metadata record documentation link)
 }}}
 
 My suggestion would be to use a position-dependent string encoding (*test not evaluated = 0, test fail = 1, test pass = 3*) as to mimic the qc_level settings.
