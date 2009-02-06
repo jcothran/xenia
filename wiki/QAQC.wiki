@@ -7,3 +7,61 @@ qc_id
 qc_level
 qc_flag
 }}}
+
+= qc_level, qc_flag =
+
+In reference to the qc_level and qc_flag fields, also see the [http://trac.secoora.org/datamgmt/browser/docs/whitepapers/trunk/SEACOOS%20QA-QC%20Standards%20and%20Procedures%20Whitepaper.doc SECOORA QAQC documentation]
+
+The valid values for the high/overview qc_level flag are easiest to discuss
+{{{
+VALUE	CONDITION
+-9	the data field is missing a value
+0	the data quality is not evaluated
+1	the data quality is bad
+2	the data quality is questionable or suspect
+3	the data quality is good
+}}}
+
+For the qc_flag, the below set of tests have been suggested, with the first two (data availability, sensor range) required.  An encoding has not been agreed upon.
+
+{{{
+#QA/QC Tests
+Data Availability
+Sensor Range
+Gross Range
+Climatological Range
+Rate of Change
+Nearest Neighbor
+Other Comparison
+}}}
+
+My suggestion would be to use a position-dependent string encoding (test not evaluated = 0, test fail = 1, test pass = 3) as to mimic the qc_level settings.
+
+Where the string '3330000' would represent data which passed the first three tests for data availability, sensor range, gross range and the other tests were unevaluated.
+
+'3010000' would represent data which passed the first test, sensor range not evaluated and gross range test fail.
+
+= qc_id = 
+
+_section under development_
+
+The qc_id is a integer referencing a primary key row on the table metadata.row_id and its associated metadata fields.  The following would be a suggested sample metadata record for an ongoing quality control application.
+
+{{{
+#table metadata
+row_id = 1
+
+}}}  
+
+----
+
+= Related Links =
+
+NDBC
+  * http://www.ndbc.noaa.gov/qc.shtml
+  * http://www.ndbc.noaa.gov/handbook.pdf
+
+Quality Assurance of Real-Time Ocean Data http://qartod.org 
+
+SECOORA Whitepaper
+http://trac.secoora.org/datamgmt/browser/docs/whitepapers/trunk/SEACOOS%20QA-QC%20Standards%20and%20Procedures%20Whitepaper.doc
