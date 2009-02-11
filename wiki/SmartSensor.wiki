@@ -3,7 +3,6 @@
     # Benefits?
       * Marketing edge? Why do it? Mostly for the users.
       
-    # Mfg update on sensors
     # Create working group
     # Meaning of interoperability
       * Plug it in and go
@@ -79,7 +78,7 @@
             - Built into sensor
             - Adapter for legacy instruments
             - Offboard software PUCK interpreter.
-    # Manufacturers
+  # Mfg update on sensors
       * Seabird
        - Implemented PUCK 2-3 years ago
          * MBARI is only PUCK user
@@ -122,7 +121,17 @@
       - Recreational 
       - Researchers
       - Primary decision makes for public policy: Storm Warning, Beach advisory....      
-     
+    # OOSTETHYS
+      * Info Models Schemas
+        - Sensor Model Language
+        - Obs and Measurements
+        - TransducerML
+        - SWE Common
+      * Web Services
+        - Sensor Observation Service(SOS)
+        - Sensor Planning Service(SPS)
+        - Sensor Alert Service(SAS)
+        - Sensor Registries  
 {{{
 Attendees 
 Neil Caderer: St Johns University
