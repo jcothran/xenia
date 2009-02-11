@@ -1,8 +1,15 @@
 #Notes from the Smart Sensor conference
   * Defining Interoperability
     # Benefits?
+      * Marketting edge? Why do it? Mostly for the users.
+      
     # Mfg update on sensors
     # Create working group
+    # Meaning
+      * Plug it in and go
+      * Interface? Which type, electrical, mechanical, hardware, software.
+      * Sensor interoperability, System interoperability, what is the dividing line?
+{{{
 Attendees 
 Neil Caderer: St Johns University
 Sherry Power: Conference Coordinator, Marine Institute
@@ -19,3 +26,4 @@ Ed King: VP YSI R&D
 Tom O'Reily Software Engineer, Monterrey Bay
 Graham Jones: Tech Mgr, RDR, firmware
 Frank Ellison: RDR
+}}}
