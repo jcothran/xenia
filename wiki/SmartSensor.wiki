@@ -30,6 +30,17 @@
             -Driver devel is complex
             -Driver must be installed and configured on instrument host
             -Firmware may not conform to observatory standard.
+          * WHo writes the driver?
+         * Standard instrument firmware
+           * Instrument and its data/metadata automatically integrated into observatory without driver. Low cost to integrate
+           *Comprehensive standard spec can be complex.
+            - Implementers mst understand spec.
+            - Firmware implementation can be complex
+            - Reference implementation needed
+           * Observatory protocol standards are still evolving.
+             - Need to update firmware
+             - Embedded programming
+             - How to update on deployed instruments.
 {{{
 Attendees 
 Neil Caderer: St Johns University
