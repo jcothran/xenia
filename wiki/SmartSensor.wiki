@@ -1,14 +1,17 @@
 #Notes from the Smart Sensor conference
   * Defining Interoperability
     # Benefits?
-      * Marketting edge? Why do it? Mostly for the users.
+      * Marketing edge? Why do it? Mostly for the users.
       
     # Mfg update on sensors
     # Create working group
-    # Meaning
+    # Meaning of interoperability
       * Plug it in and go
       * Interface? Which type, electrical, mechanical, hardware, software.
       * Sensor interoperability, System interoperability, what is the dividing line?
+      * Black box approach?
+      * Smart sensors? Only have a couple of settings.
+      * Is physical connection important? Environment dictates connector.
 {{{
 Attendees 
 Neil Caderer: St Johns University
