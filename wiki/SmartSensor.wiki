@@ -64,10 +64,32 @@
             * Drivers to provide standard network interface to diverse serial instruments through generic Java interface. 
             * Portable. Compatible with low power/low bandwidth moorings
             * Integration with IEEE and OGC standards
-              - IEEE 1451.0 is HTTP based standard interface for interactiing with instruments. Integrated into OGC sensor web enablement
+              - IEEE 1451.0 is HTTP based standard interface for interacting with instruments. Integrated into OGC sensor web enablement
           * PUCK protocol patented. Royalty free license. Will be submitted as OGC standard.
           * Website [http://www.mbari.org/pw PUCK]
-
+  # Manufacturers
+    * Seabird
+      - Implemented PUCK 2-3 years ago
+        * MBARI is only PUCK user
+      - Implement instrument XML format
+        * All in house format.
+      - Did not follow IEEE-1451 because of its treatment of sensors
+    * RDI
+      - No PUCK implementation
+      - Outputs are serial. Formats are standard.
+      - Data correlation
+      - Outputs metadata
+    * YSI
+      - No PUCK implementation
+      - Conforms to STI 12
+      - Who does hardware connectivity fall to? Mfg, user???
+      - Interface to provide PUCK to existing sensors.
+    * RDR
+      - 2008 Implemented PUCK
+      - 2-4 weeks development time
+      - Implemented in the instrument, uses 96 byte ID header, 128kb payload space
+      - Stock instrument, get RS232/485 ascii delimeted string.
+       
 {{{
 Attendees 
 Neil Caderer: St Johns University
@@ -85,4 +107,6 @@ Ed King: VP YSI R&D
 Tom O'Reily Software Engineer, Monterrey Bay
 Graham Jones: Tech Mgr, RDR, firmware
 Frank Ellison: RDR
+By phone:
+Khang Leap
 }}}
