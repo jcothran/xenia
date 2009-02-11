@@ -42,7 +42,7 @@
              - Embedded programming
              - How to update on deployed instruments.
          * PUCK
-           * Provides a protocol and container to store instrument-related info.
+           * Provides a [http://www.mbari.org/pw/puckProtocol_1_3.pdf protocol] and container to store instrument-related info.
            * No restrictions on payload content or format.
              - Instrument driver code, calibration, metadata, ect
            * Enables plug and work for RS-232 oceanographic instruments
