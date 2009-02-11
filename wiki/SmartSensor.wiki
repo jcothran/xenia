@@ -41,6 +41,8 @@
              - Need to update firmware
              - Embedded programming
              - How to update on deployed instruments.
+         * PUCK
+           * Provides a protocol and container to store instrument-related info.
 {{{
 Attendees 
 Neil Caderer: St Johns University
