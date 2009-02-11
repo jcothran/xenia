@@ -1,0 +1,5 @@
+#Notes from the Smart Sensor conference
+  *Defining Interoperability
+    # Benefits?
+    # Mfg update on sensors
+    # Create working group
