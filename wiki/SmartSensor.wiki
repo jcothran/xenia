@@ -65,6 +65,8 @@
             * Portable. Compatible with low power/low bandwidth moorings
             * Integration with IEEE and OGC standards
               - IEEE 1451.0 is HTTP based standard interface for interactiing with instruments. Intergrated into OGC sensor web enablement
+          * PUCK protocol patented. Royalty free license. Will be submitted as OGC standard.
+          * Website [http://www.mbari.org/pw PUCK]
 
 {{{
 Attendees 
