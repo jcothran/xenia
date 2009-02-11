@@ -12,6 +12,16 @@
       * Black box approach?
       * Smart sensors? Only have a couple of settings.
       * Is physical connection important? Environment dictates connector.
+    #MBARI 
+      *Instruments are interperable with each other if:
+        *thier data can be accessed through a common interface, orocessed and compared   with a common set if tools.
+        *they can be configured and operatted though a common interface.
+      * Different mfgs implement their own protocols.
+      * Stndard observatory protocl
+        * COmmoand protocol to configure and interact with instrument: IEEE-1451, OGC Sesnsor Panning service
+        * Standard data format
+        * Standard metadata format
+
 {{{
 Attendees 
 Neil Caderer: St Johns University
