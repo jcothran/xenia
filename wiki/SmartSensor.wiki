@@ -14,18 +14,18 @@
       * Is physical connection important? Environment dictates connector.
     # MBARI 
       * Instruments are interperable with each other if:
-        * thier data can be accessed through a common interface, orocessed and compared   with a common set if tools.
-        *they can be configured and operatted though a common interface.
+        * Their data can be accessed through a common interface, orocessed and compared   with a common set if tools.
+        * They can be configured and operated though a common interface.
       * Different mfgs implement their own protocols.
-      * Stndard observatory protocl
-        * COmmoand protocol to configure and interact with instrument: IEEE-1451, OGC Sesnsor Panning service
+      * Standard observatory protocol
+        * Command protocol to configure and interact with instrument: IEEE-1451, OGC Sensor Panning service
         * Standard data format
         * Standard metadata format
       * Implement driver to sit between sensor and host.
-        * Dirver on host, non-standard instrument firmware
+        * Driver on host, non-standard instrument firmware
           * Advantages
             -Can accommodate very diverse instruments
-            -Instrument frmware is immune to observatory protocol changes.
+            -Instrument firmware is immune to observatory protocol changes.
           * Disadvantages
             -Driver devel is complex
             -Driver must be installed and configured on instrument host
@@ -48,9 +48,9 @@
            * Enables plug and work for RS-232 oceanographic instruments
            * Simple, robust. 12 commands: Write, read, erase
            * Steps to update
-             - PLug in instruments
-             - OPerator tells host instrument plugged in
-             - HOst applies power to port
+             - Plug in instruments
+             - Operator tells host instrument plugged in
+             - Host applies power to port
              - Host executes driver
              - Driver handles client requests.
             * Does not define ho wto acquire data, configure instrument
@@ -61,10 +61,10 @@
             * Does not change existing software
             * Deployed on MOOS moored observatory, MARS cable to shore
           * SIAM
-            * Drivers to provide standard network interface to diverse serial instruments through generic JAva interface. 
+            * Drivers to provide standard network interface to diverse serial instruments through generic Java interface. 
             * Portable. Compatible with low power/low bandwidth moorings
             * Integration with IEEE and OGC standards
-              - IEEE 1451.0 is HTTP based standard interface for interactiing with instruments. Intergrated into OGC sensor web enablement
+              - IEEE 1451.0 is HTTP based standard interface for interactiing with instruments. Integrated into OGC sensor web enablement
           * PUCK protocol patented. Royalty free license. Will be submitted as OGC standard.
           * Website [http://www.mbari.org/pw PUCK]
 
