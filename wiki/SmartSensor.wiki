@@ -1,5 +1,21 @@
 #Notes from the Smart Sensor conference
-  *Defining Interoperability
+  * Defining Interoperability
     # Benefits?
     # Mfg update on sensors
     # Create working group
+Attendees 
+Neil Caderer: St Johns University
+Sherry Power: Conference Coordinator, Marine Institute
+David Murhpy: Seabird Electronics, R&D Manager
+Craig Johnson: RDR, Director of Engineer
+Gregg Dusett: NOAA, Marine Biotoxins
+Jim Fahey: Sales Manager, Teledyne
+Vadim: Teledyne
+Rob Ellison: YSI, Sensors & Sons
+Luis Bermudez: Soora
+Sam Walker: Secoora
+Dan Ramage: Baruch Institute
+Ed King: VP YSI R&D
+Tom O'Reily Software Engineer, Monterrey Bay
+Graham Jones: Tech Mgr, RDR, firmware
+Frank Ellison: RDR
