@@ -89,7 +89,7 @@
       - 2-4 weeks development time
       - Implemented in the instrument, uses 96 byte ID header, 128kb payload space
       - Stock instrument, get RS232/485 ascii delimeted string.
-  # IEEE 1451 Discussion (Khang Lee)
+  # IEEE 1451 Discussion (Khang Lee,Darold Wobschall)
     * Trends
       - Digital Comm, networking
       - Use open standards solution
@@ -127,4 +127,5 @@ Graham Jones: Tech Mgr, RDR, firmware
 Frank Ellison: RDR
 By phone:
 Khang Lee
+Darold Wobschall
 }}}
