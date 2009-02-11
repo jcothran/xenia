@@ -21,7 +21,15 @@
         * COmmoand protocol to configure and interact with instrument: IEEE-1451, OGC Sesnsor Panning service
         * Standard data format
         * Standard metadata format
-
+      * Implement driver to sit between sensor and host.
+        * Dirver on host, non-standard instrument firmware
+          * Advantages
+            -Can accommodate very diverse instruments
+            -Instrument frmware is immune to observatory protocol changes.
+          * Disadvantages
+            -Driver devel is complex
+            -Driver must be installed and configured on instrument host
+            -Firmware may not conform to observatory standard.
 {{{
 Attendees 
 Neil Caderer: St Johns University
