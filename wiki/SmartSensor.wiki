@@ -12,9 +12,17 @@
       * Black box approach?
       * Smart sensors? Only have a couple of settings.
       * Is physical connection important? Environment dictates connector.
+      * Summary of meaning
+        * Driver position
+        * Roadmap
+        * Mechanical
+        * Electrical
+        * Metatable
+        * Driver information
+          
     # MBARI 
-      * Instruments are interperable with each other if:
-        * Their data can be accessed through a common interface, orocessed and compared   with a common set if tools.
+      * Instruments are interoperable with each other if:
+        * Their data can be accessed through a common interface, processed and compared   with a common set if tools.
         * They can be configured and operated though a common interface.
       * Different mfgs implement their own protocols.
       * Standard observatory protocol
@@ -67,6 +75,10 @@
               - IEEE 1451.0 is HTTP based standard interface for interacting with instruments. Integrated into OGC sensor web enablement
           * PUCK protocol patented. Royalty free license. Will be submitted as OGC standard.
           * Website [http://www.mbari.org/pw PUCK]
+          * Potential 3 modes
+            - Built into sensor
+            - Adapter for legacy instruments
+            - Offboard software PUCK interpreter.
     # Manufacturers
       * Seabird
        - Implemented PUCK 2-3 years ago
@@ -84,7 +96,7 @@
         - Conforms to STI 12
         - Who does hardware connectivity fall to? Mfg, user???
         - Interface to provide PUCK to existing sensors.
-      * RDR
+      * RBR
         - 2008 Implemented PUCK
         - 2-4 weeks development time
         - Implemented in the instrument, uses 96 byte ID header, 128kb payload space
@@ -106,14 +118,17 @@
         - Self describing sensor via TEDS data sheet
         - Achieve PnP via common interface and TEDS
         - Provides an infrastructure for open system distributed architecture.
-      
-
+    # Users
+      - Recreational 
+      - Researchers
+      - Primary decision makes for public policy: Storm Warning, Beach advisory....      
+     
 {{{
 Attendees 
 Neil Caderer: St Johns University
 Sherry Power: Conference Coordinator, Marine Institute
 David Murhpy: Seabird Electronics, R&D Manager
-Craig Johnson: RDR, Director of Engineer
+Craig Johnson: RBR, Director of Engineer
 Gregg Dusett: NOAA, Marine Biotoxins
 Jim Fahey: Sales Manager, Teledyne
 Vadim: Teledyne
@@ -123,8 +138,8 @@ Sam Walker: Secoora
 Dan Ramage: Baruch Institute
 Ed King: VP YSI R&D
 Tom O'Reily Software Engineer, Monterrey Bay
-Graham Jones: Tech Mgr, RDR, firmware
-Frank Ellison: RDR
+Graham Jones: Tech Mgr, RBR, firmware
+Frank Ellison: RBR
 By phone:
 Khang Lee
 Darold Wobschall
