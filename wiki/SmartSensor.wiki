@@ -12,9 +12,9 @@
       * Black box approach?
       * Smart sensors? Only have a couple of settings.
       * Is physical connection important? Environment dictates connector.
-    #MBARI 
-      *Instruments are interperable with each other if:
-        *thier data can be accessed through a common interface, orocessed and compared   with a common set if tools.
+    # MBARI 
+      * Instruments are interperable with each other if:
+        * thier data can be accessed through a common interface, orocessed and compared   with a common set if tools.
         *they can be configured and operatted though a common interface.
       * Different mfgs implement their own protocols.
       * Stndard observatory protocl
@@ -33,7 +33,7 @@
           * WHo writes the driver?
          * Standard instrument firmware
            * Instrument and its data/metadata automatically integrated into observatory without driver. Low cost to integrate
-           *Comprehensive standard spec can be complex.
+           * Comprehensive standard spec can be complex.
             - Implementers mst understand spec.
             - Firmware implementation can be complex
             - Reference implementation needed
@@ -43,6 +43,29 @@
              - How to update on deployed instruments.
          * PUCK
            * Provides a protocol and container to store instrument-related info.
+           * No restrictions on payload content or format.
+             - Instrument driver code, calibration, metadata, ect
+           * Enables plug and work for RS-232 oceanographic instruments
+           * Simple, robust. 12 commands: Write, read, erase
+           * Steps to update
+             - PLug in instruments
+             - OPerator tells host instrument plugged in
+             - HOst applies power to port
+             - Host executes driver
+             - Driver handles client requests.
+            * Does not define ho wto acquire data, configure instrument
+            * Does not define instrument metadata beyond minimal PUCK header.
+            * Does not define sensor data structure
+            * 4 mfgs have implemented PUCK in firmware
+            * 2-4 weeks of implementation into sensor  
+            * Does not change existing software
+            * Deployed on MOOS moored observatory, MARS cable to shore
+          * SIAM
+            * Drivers to provide standard network interface to diverse serial instruments through generic JAva interface. 
+            * Portable. Compatible with low power/low bandwidth moorings
+            * Integration with IEEE and OGC standards
+              - IEEE 1451.0 is HTTP based standard interface for interactiing with instruments. Intergrated into OGC sensor web enablement
+
 {{{
 Attendees 
 Neil Caderer: St Johns University
