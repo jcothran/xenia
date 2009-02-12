@@ -9,10 +9,9 @@ This vmware image was developed on top of the FOSS geospatial vmware image(geost
 While the Xenia scripts do not directly utilize/interact those included applications, I thought they represent the best existing development base of FOSS geospatial software for future development.
 
 The main links of interest regarding this vmware instance are
-  * VMwareTest
+  * [VMwareTest]
   * VMwareInstall
   * VMwareDesign
   * VMwareMod
   * VMwareUpdates
   * VMwareDevelopmentIdeas
-
