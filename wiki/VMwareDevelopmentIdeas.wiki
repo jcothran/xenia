@@ -10,7 +10,7 @@
     * 'scout' component and associated [http://code.google.com/p/xenia/source/browse/#svn/trunk/scout scripts] for generating obskml feeds 
     * ADCP vector visualization [http://code.google.com/p/xenia/source/browse/#svn/trunk/sqlite/ADCP scripts]
     * web statistics report [http://code.google.com/p/xenia/source/browse/#svn/trunk/sqlite/web_stats scripts]
-  * [http://code.google.com/p/xenia/wiki/QAQC QA/QC] development scripts (R scripts, etc) , status and notification (internal/external)
+  * [http://code.google.com/p/xenia/wiki/QAQC QA/QC] development scripts (R scripts, etc) , *status, updates and notification (internal/external)*
   * Obsregistry support http://obsregistry.org
   * Oostethys SOS support http://oostethys.org
 
