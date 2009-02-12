@@ -2,6 +2,8 @@
 
 A listing of Xenia development ideas in no particular priority order
 
+<wiki:toc max_depth="6" />
+
 = 1. Sqlite Xenia + Geoserver =
 
 Currently Geoserver (http://geoserver.com) can connect directly to several popular databases, but not Sqlite that I have seen documented.  Having this path would allow the usual array of formats/products available via Geoserver to also be available via a Sqlite Xenia db instance.
@@ -59,5 +61,7 @@ An IOOS program office http://ioos.noaa.gov/program effort is underway to define
 *Update* this issue has been addressed at http://code.google.com/p/xenia/wiki/XeniaSOS
 
 = 9. Xenia 'package' or build = 
+
+*Update Feb 12, 2009* this issue has been address at [VMwareHome]
 
 Same as the earlier idea at http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageImage this would be to have a 'build' version which might utilize some configuration xml files, but otherwise outputs/products/services are already setup to go with whatever data is imported into it.  Something like a knoppix/debian distribution that might live on an embedded device like a gumstix http://www.gumstix.com
