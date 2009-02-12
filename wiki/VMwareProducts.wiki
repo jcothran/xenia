@@ -53,7 +53,7 @@ http://neptune.baruch.sc.edu/xenia/feeds/html_tables
 
 HTML platform table stubs are suitable for dynamic webpage popups via AJAX type calls
 
-[http://neptune.baruch.sc.edu/xenia/feeds/html_tables/html_content.db html_content sqlite table] also populated available for use.
+[http://neptune.baruch.sc.edu/xenia/feeds/html_tables/html_content.db html_content.db sqlite table] also populated available for use.
 
 see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastNotesAjax
 
