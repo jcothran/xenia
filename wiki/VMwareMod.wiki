@@ -1,2 +1,23 @@
 #summary modifications list (installed software, packages, etc)
 
+This is a list of the wmware image modifications/installs which I added to the original http://gisvm.com vmware image (geostatistics version, includes 'R')
+
+----
+{{{
+sudo apt-get install nmap
+sudo apt-get install subversion
+svn checkout http://xenia.googlecode.com/svn/trunk/ /home/xeniaprod/scripts
+
+#install cpan
+perl -MCPAN -e install "Bundle::CPAN"
+
+#install XML::LibXML
+sudo apt-get install libxml2-dev
+sudo cpan -i "XML::LibXML"
+
+sudo cpan -i "DBD::SQLite"
+sudo apt-get install gnuplot-nox #no X11 windows support
+sudo cpan -i "XML::XPath"
+
+installed google earth to desktop, but slow display with only OpenGL
+}}}
