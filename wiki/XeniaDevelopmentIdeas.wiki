@@ -22,9 +22,9 @@ Sqlite allows the amount of memory utilized to be set via the 'PRAGMA default_ca
 
 = 3. ~~conversion script - Seacoos netCDF to obskml~~ =
 
-This would provide a path for existing, future Seacoos netCDF feeds to be available via ObsKML/Xenia also.
-
 *Update* Dan Ramage completed this task documented at http://code.google.com/p/xenia/source/browse/trunk/obskml/NetCDFToObsKML/scout
+
+This would provide a path for existing, future Seacoos netCDF feeds to be available via ObsKML/Xenia also.
 
 = 3.a conversion script - CarolinasCoast aggregation to obskml =
 
@@ -32,7 +32,9 @@ Charlton Galvorino did some earlier aggregations of NWS, NDBC, USGS, etc to a ha
 
 If an 'IOOS' xml encoding is used at some future date by several federal backbone providers, that common xml encoding could also be used as a conversion source to obskml or just converted directly to sql for populating a xenia instance.
 
-= 4. Convert PostgreSQL 'top_of_hour' trigger to Sqlite = 
+= 4. ~~Convert PostgreSQL 'top_of_hour' trigger to Sqlite~~ = 
+
+*Update* This issue has been [http://code.google.com/p/xenia/wiki/XeniaUpdates#top_of_the_hour_trigger addressed]
 
 This would allow the same observation labeling functionality given by the trigger described at http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageV2#d_top_of_hour_integer_d_report_h to the Xenia Sqlite version
 
@@ -42,9 +44,9 @@ The observation registry effort http://obsregistry.org utilizes a xml formatted 
 
 = 6. ~~conversion script - obskml to georss~~ =
 
-GeoRSS associates a description (perhaps changing with time like a weather feed) with an associated latitude, longitude and elevation.  Should be straightforward to convert hourly KML placemarks with table content into separate GeoRSS location feeds.
-
 *Update* Dan Ramage completed this task documented at http://code.google.com/p/xenia/source/browse/trunk/obskml/products/georss
+
+GeoRSS associates a description (perhaps changing with time like a weather feed) with an associated latitude, longitude and elevation.  Should be straightforward to convert hourly KML placemarks with table content into separate GeoRSS location feeds.
 
 = ~~7. documentation of enabling an OGC SOS feed utilizing pySOS + Xenia (sqlite, postgres)~~ =
 
@@ -54,13 +56,14 @@ Bill Howe has developed a python script and configuration files to OGC SOS enabl
 
 Haven't gone through the Xenia specific steps to enable this type of service but want to and provide documentation.
 
-= 8. conversion script - obskml to 'IOOS' XML encoding = 
-
-An IOOS program office http://ioos.noaa.gov/program effort is underway to define an initial XML encoding for observations which can be agreed upon and utilized to share data nationally.  A conversion script would help supply that feed type and support that effort.
+= 8. ~~conversion script - obskml to 'IOOS' XML encoding~~ = 
 
 *Update* this issue has been addressed at http://code.google.com/p/xenia/wiki/XeniaSOS
 
-= 9. Xenia 'package' or build = 
+
+An IOOS program office http://ioos.noaa.gov/program effort is underway to define an initial XML encoding for observations which can be agreed upon and utilized to share data nationally.  A conversion script would help supply that feed type and support that effort.
+
+= 9. ~~Xenia 'package' or build~~ = 
 
 *Update Feb 12, 2009* this issue has been address at [VMwareHome]
 
