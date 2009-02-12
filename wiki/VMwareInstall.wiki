@@ -1,5 +1,7 @@
 #summary running a server production instance
 
+<wiki:toc max_depth="6" />
+
 = static IP, network bridge, iptables =
 
 some below content copied from [http://code.google.com/p/xenia/wiki/XeniaUpdates#Additional_server_notes_-_static_IP,_network_bridge,_iptables here]
