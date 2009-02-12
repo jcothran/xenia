@@ -14,7 +14,7 @@ A script runs once an hour to take the latest observations and create a
     * A [http://neptune.baruch.sc.edu/xenia/feeds/latest_placemarks.kmz styled KMZ] version of these combined observations for display in Google Earth/Maps,etc
     * An [http://neptune.baruch.sc.edu/xenia/feeds/archive/ archive] of the last 24 hours of styled KMZ files is available also
   * By Organization
-    * A [http://neptune.baruch.sc.edu/xenia/feeds/wq/wq_metadata_latest.kmz styled KMZ] version of each organizations observations for display in Google Earth/Maps,etc
+    * A [http://neptune.baruch.sc.edu/xenia/feeds/wq/wq_latest_placemarks.kmz styled KMZ] version of each organizations observations for display in Google Earth/Maps,etc
     * An [http://neptune.baruch.sc.edu/xenia/feeds/wq/archive/ archive] of the last 24 hours of styled KMZ files is available also
 
 Note the above KML/KMZ styling has the following features:
