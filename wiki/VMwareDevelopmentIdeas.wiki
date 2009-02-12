@@ -7,7 +7,7 @@
   * Include earlier development
     * shapefile generation
     * 'by obs' split-outs for several formats
-    * 'scout' component and associated scripts for generating obskml feeds
+    * 'scout' component and associated [http://code.google.com/p/xenia/source/browse/#svn/trunk/scout scripts] for generating obskml feeds 
   * Obsregistry support http://obsregistry.org
   * Oostethys SOS support http://oostethys.org
 
