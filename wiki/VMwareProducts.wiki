@@ -1,5 +1,7 @@
 #summary various formats/products and services supported by the Xenia vmware instance
 
+Note that the below instances use the example http host of 'http://neptune.baruch.sc.edu' which will be replaced by your host address for your instance
+
 <wiki:toc max_depth="6" />
 
 = Latest ObsKML, Styled KML =
@@ -11,4 +13,3 @@ A script runs once an hour to take the latest observations and create a combined
   * A [http://neptune.baruch.sc.edu/xenia/feeds/latest_placemarks.kmz styled KMZ] version of these combined observations for display in Google Earth/Maps,etc
 
 = Time-series graphs =
-
