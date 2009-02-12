@@ -29,5 +29,4 @@ The latest vmware image(version 1.0, rar-compressed size x) is available at http
 
 This vmware image was developed on top of the FOSS geospatial vmware image(geostatistics package which includes 'R') available at http://gisvm.com - thanks to Ricardo Pinho.
 
-While the Xenia scripts do not directly utilize/interact those included applications in the gisvm image at this time, I thought they represent the best existing development base of FOSS geospatial software for future development.
-
+While the Xenia scripts do not directly utilize/interact those included applications in the gisvm image at this time, I thought they represent the best existing collection of FOSS geospatial software for future development.
