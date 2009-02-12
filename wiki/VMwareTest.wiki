@@ -42,3 +42,7 @@ add styleLatest.sh
 
 #check_status - array, graph spots
 }}}
+
+= Generating ObsKML examples =
+
+http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate#Merging_and_styling_several_ObsK
