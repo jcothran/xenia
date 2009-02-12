@@ -64,4 +64,6 @@ A [http://neptune.baruch.sc.edu/xenia/feeds/all_metadata_latest.zip zip file] of
 
 http://neptune.baruch.sc.edu/xenia/sos/difSOS.html
 
+An OGC SOS(Sensor Observation Service) web service method supports queries on the database 
+
 see http://code.google.com/p/xenia/wiki/XeniaSOS
