@@ -133,6 +133,17 @@
         * Sensor Planning Service(SPS)
         * Sensor Alert Service(SAS)
         * Sensor Registries  
+
+2-12-2009
+  # Suggestions from Tom O'Reilly
+    * Meeting of Smart Sensors pay a nominal fee for time spent on group activities/meetings
+    * Members pledge to comply with group approved standards.
+    * Members agree to supply a UUID with each compliant instrument and will comply with a group-defined interface to retrieve the UUID from device's serial port. Could be the UUID supplied by PUCK protocol if PUCK adopted bt the group.
+    * Members agree to supply a SensorML description of each compliant instrument. The SensorML might be supplied in the PCK payload. Alternatively SensorML could be obtained at a member's website or supplied on media.
+    * The working group will establish a standard driver model interface. Interface could be based on standards such as IEEE-1451, OGC Sensor Web Enablement or existing vendor model such as the vendor model of RBR. The driver could be stored as PUCK payload(if adopted) obtained at a member's website or on supplied media.
+      
+    
+
 {{{
 Attendees 
 Neil Caderer: St Johns University
