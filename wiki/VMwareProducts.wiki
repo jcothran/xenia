@@ -61,5 +61,3 @@ A [http://neptune.baruch.sc.edu/xenia/feeds/all_metadata_latest.zip zip file] of
 http://neptune.baruch.sc.edu/xenia/sos/difSOS.html
 
 see http://code.google.com/p/xenia/wiki/XeniaSOS
-
-http://neptune.baruch.sc.edu/xenia/feeds/all_metadata_latest.zip
