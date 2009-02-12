@@ -2,3 +2,13 @@
 
 <wiki:toc max_depth="6" />
 
+= Latest ObsKML, Styled KML =
+
+see original documentation [http://code.google.com/p/xenia/wiki/XeniaProducts#Google_Earth_and_Maps here] 
+
+A script runs once an hour to take the latest observations and create a combined
+  * ObsKML latest [http://neptune.baruch.sc.edu/xenia/feeds/xenia_obskml_latest.kml KML] and [http://neptune.baruch.sc.edu/xenia/feeds/xenia_obskml_latest.kmz KMZ] files
+  * A [http://neptune.baruch.sc.edu/xenia/feeds/latest_placemarks.kmz styled KMZ] version of these combined observations for display in Google Earth/Maps,etc
+
+= Time-series graphs =
+
