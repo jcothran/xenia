@@ -7,8 +7,7 @@
   * Include earlier development
     * shapefile generation
     * 'by obs' split-outs for several formats
-    * 'scout' component and associated 
-[http://code.google.com/p/xenia/source/browse/#svn/trunk/scout scripts] for generating obskml feeds 
+    * 'scout' component and associated [http://code.google.com/p/xenia/source/browse/#svn/trunk/scout scripts] for generating obskml feeds 
     * ADCP vector visualization [http://code.google.com/p/xenia/source/browse/#svn/trunk/sqlite/ADCP scripts]
     * web statistics report [http://code.google.com/p/xenia/source/browse/#svn/trunk/sqlite/web_stats scripts]
   * Obsregistry support http://obsregistry.org
