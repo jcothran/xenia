@@ -1,1 +1,24 @@
 #summary taking the vmware image for a quick spin
+
+<wiki:toc max_depth="6" />
+
+= Download the vmware player =
+
+
+
+== Windows ==
+
+Goto vmware player download page at http://www.vmware.com/download/player/download.html and download, install windows version(2.5.1 tested)
+
+== Linux ==
+
+Goto vmware player download page http://www.vmware.com/download/player/download.html and download the Linux version 2.5.1(the 32-bit, not 64-bit) .bundle file
+
+Used the instructions at https://help.ubuntu.com/community/VMware/Player for guidance, only had to run the following line
+{{{
+gksudo bash ./VMware-Player-2.5.1-126130.i386.bundle
+}}}
+
+== Macintosh ==
+
+see http://www.vmware.com/products/fusion
