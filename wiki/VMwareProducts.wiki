@@ -62,7 +62,7 @@ A [http://neptune.baruch.sc.edu/xenia/feeds/all_metadata_latest.zip zip file] of
 
 = Latest 3 day database and julian weekly archive databases = 
 
-Sqlite file download for priming, analysis, etc of the latest 3 day time window [ http://neptune.baruch.sc.edu/xenia/archive_db/latest.db database] and [http://neptune.baruch.sc.edu/xenia/archive_db/weekly/ folder] containing the julian-weekly-split archive of sqlite databases.
+Sqlite file download for priming, analysis, etc of the latest 3 day time window [http://neptune.baruch.sc.edu/xenia/archive_db/latest.db database] and [http://neptune.baruch.sc.edu/xenia/archive_db/weekly/ folder] containing the julian-weekly-split archive of sqlite databases.
 
 = DIF SOS =
 
