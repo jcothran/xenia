@@ -45,7 +45,7 @@ http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastLite#a_desc
 
 http://neptune.baruch.sc.edu/xenia/feeds/georss
 
-GeoRSS provides a simple geospatially referenced RSS feed for simple harvesting/redisplay of latest observations.
+GeoRSS provides a simple geospatially referenced RSS feed for simple harvesting/redisplay of latest observations for each platform as a data feed.
 
 = html table styling = 
 
