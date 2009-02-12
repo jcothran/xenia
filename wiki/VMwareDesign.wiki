@@ -1,1 +1,1 @@
-#summary VMware considerations and best practices
+#summary vmware considerations and best practices
