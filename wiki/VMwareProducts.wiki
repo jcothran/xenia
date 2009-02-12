@@ -4,12 +4,56 @@ Note that the below instances use the example http host of 'http://neptune.baruc
 
 <wiki:toc max_depth="6" />
 
-= Latest ObsKML, Styled KML =
+= Google Earth/Maps, Latest ObsKML, Styled KML =
 
-see original documentation [http://code.google.com/p/xenia/wiki/XeniaProducts#Google_Earth_and_Maps here] 
+[http://code.google.com/p/xenia/wiki/XeniaProducts#Google_Earth_and_Maps original documentation ] 
 
 A script runs once an hour to take the latest observations and create a combined
   * ObsKML latest [http://neptune.baruch.sc.edu/xenia/feeds/xenia_obskml_latest.kml KML] and [http://neptune.baruch.sc.edu/xenia/feeds/xenia_obskml_latest.kmz KMZ] files
   * A [http://neptune.baruch.sc.edu/xenia/feeds/latest_placemarks.kmz styled KMZ] version of these combined observations for display in Google Earth/Maps,etc
 
-= Time-series graphs =
+Note the above KML/KMZ styling has the following features:
+  
+  * *layer folders toggle on/off by operator*(visualize individual operator/data provider status)
+    * platform styling highlights non-reporting platforms as shaded red - platform link information still available.  Don't want platforms or observation to disappear from the map if they are intermittently reporting.
+  * *by 'operator' layer* listing *all* the latest observations available at each platform
+  * *by 'observation' layer* listing observations of the same obs_type.uom_type for *all* associated platforms
+    * acts as a observation type 'inventory'
+    * optional style.xml to provide basic default blue/green/red color scale for obs_type.uom_type measurement value range limit
+  * *naming/reference hierarchy*
+    * platform = operator.platform<.package> where operator and platform names are controlled vocabularies and package name is optional unique string
+    * sensor = sensor_id (an integer id) = obs_type.uom_type.s_order  s_order is an integer counter to help distinguish between redundant or profiling sensor arrays of the same obs_type.uom_type
+  * a feature which I would like to implement is use of *regions* to help break the entire layer into more manageable data blocks/levels of detail for *better download/display* concerns similar in concept to the Google Maps implementation at http://tidesandcurrents.noaa.gov/gmap3 or using some automated solution possibly like http://www.mapeed.com
+
+----
+Note that the time window control can be manipulated (moved, increased, decreased) - see the following documentation 
+
+http://earth.google.com/userguide/v4/ug_gps.html#timeline
+
+ObsKML can be merged and revisualized shown in the following image
+
+http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/ObsKMLGenerate/obskml_all_latest.jpg
+
+= convert from ObsKML to other formats (CSV,shapefile) =
+
+Currently just all the latest observations combined, will add 'by obs' later
+
+http://neptune.baruch.sc.edu/xenia/feeds/all_latest.csv
+
+http://neptune.baruch.sc.edu/xenia/feeds/all_latest.csv.zip
+
+= time-series graphs =
+
+http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastLite#a_description_of_the_graph_xml_f
+
+= html table styling = 
+
+http://neptune.baruch.sc.edu/xenia/feeds/html_tables/
+
+see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastNotesAjax
+
+= DIF SOS =
+
+http://neptune.baruch.sc.edu/xenia/sos/difSOS.html
+
+see http://code.google.com/p/xenia/wiki/XeniaSOS
