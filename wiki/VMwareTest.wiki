@@ -1,0 +1,1 @@
+#summary Taking the vmware image for a quick spin
