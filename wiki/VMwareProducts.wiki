@@ -1,1 +1,1 @@
-#summary development ideas or requests in regards to the Xenia vmware instance
+#summary various formats/products and services derived from a Xenia database instance
