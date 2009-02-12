@@ -1,1 +1,49 @@
 #summary running a server production instance
+
+= static IP, network bridge, iptables =
+
+some below content copied from [http://code.google.com/p/xenia/wiki/XeniaUpdates#Additional_server_notes_-_static_IP,_network_bridge,_iptables here]
+
+Wanted to bridge the 'virtual' vmware player server across the 'host' server.  Established my static IP on the host using the following steps.
+
+The 'ifconfig' command will tell you which ethernet device the server is trying to communicate on.  For mine the host server was running 'eth0' and the virtual was running 'eth5'
+
+from http://forums.techarena.in/operating-systems/1106661.htm
+
+for the host the static IP is 129.252.37.90 
+
+In host file /etc/networking/interfaces
+{{{
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 129.252.37.90
+netmask 255.255.255.0
+gateway 192.252.37.1
+}}}
+
+Then restart network with 
+{{{
+sudo /etc/init.d/networking restart
+}}}
+
+For the 'virtual' server on the vmplayer menu at screen top, changed the 'Devices->Network Adapter' setting to 'Bridged' which establishes network communication between the virtual server and host.
+
+Running 'ifconfig' command from virtual host listed ethernet as 'eth5' which is substituted for the 'eth0' and run in the same steps listed above for configuring the static IP for the host except now on the virtual server.
+
+I did not have to modify the defaulted dns file settings for host or virtual server files under /etc/resolv.conf 
+
+----
+
+With the network 'bridge' setting in the vmware player, any ports on the virtual server are bridged over the host server (use 'nmap' command to see open ports).  So with the gisvm image opened on the vmplayer I was able to see the apache web server sample webpage running on port 80 and J2EE/tomcat server sample webpage running on port 8080 from other machines.
+
+Currently only have port 80 open to machines outside the university network and wanted to show the geoserver demo applications running on port 8080 so used the following iptables commands (on the virtual server) to port forward 80 to 8080.
+
+from http://www.klawitter.de/tomcat80.html
+{{{
+iptables -t nat -A OUTPUT -d localhost -p tcp --dport 80 -j REDIRECT --to-ports 8080
+iptables -t nat -A OUTPUT -d 129.252.37.90 -p tcp --dport 80 -j REDIRECT --to-ports 8080
+iptables -t nat -A PREROUTING -d 129.252.37.90 -p tcp --dport 80 -j REDIRECT --to-ports 8080
+}}}
