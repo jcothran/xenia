@@ -43,6 +43,6 @@ add styleLatest.sh
 #check_status - array, graph spots
 }}}
 
-= Generating ObsKML examples =
+= Example scripts for generating ObsKML =
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate
