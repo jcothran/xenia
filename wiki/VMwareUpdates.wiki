@@ -1,1 +1,1 @@
-#summary update notices and descriptions
+#summary vmware project update notes
