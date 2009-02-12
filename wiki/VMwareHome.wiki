@@ -10,8 +10,8 @@ While the Xenia scripts do not directly utilize/interact those included applicat
 
 The main links of interest regarding this vmware instance are
   * [VMwareTest]
-  * VMwareInstall
-  * VMwareDesign
-  * VMwareMod
-  * VMwareUpdates
-  * VMwareDevelopmentIdeas
+  * [VMwareInstall]
+  * [VMwareDesign]
+  * [VMwareMod]
+  * [VMwareUpdates]
+  * [VMwareDevelopmentIdeas]
