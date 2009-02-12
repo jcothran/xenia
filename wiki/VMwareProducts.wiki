@@ -30,17 +30,9 @@ Note that the time window control can be manipulated (moved, increased, decrease
 
 http://earth.google.com/userguide/v4/ug_gps.html#timeline
 
-ObsKML can be merged and revisualized shown in the following image
+ObsKML can be merged and revisualized as shown in the following image
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/ObsKMLGenerate/obskml_all_latest.jpg
-
-= convert from ObsKML to other formats (CSV,shapefile) =
-
-Currently just all the latest observations combined, will add 'by obs' later
-
-http://neptune.baruch.sc.edu/xenia/feeds/all_latest.csv
-
-http://neptune.baruch.sc.edu/xenia/feeds/all_latest.csv.zip
 
 = time-series graphs =
 
@@ -52,8 +44,22 @@ http://neptune.baruch.sc.edu/xenia/feeds/html_tables/
 
 see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastNotesAjax
 
+= convert from ObsKML to other formats (CSV,shapefile) =
+
+Currently just all the latest observations combined, will add 'by obs' later
+
+http://neptune.baruch.sc.edu/xenia/feeds/all_latest.csv
+
+http://neptune.baruch.sc.edu/xenia/feeds/all_latest.csv.zip
+
+= Data source files - zipped ObsKML and SQL =
+
+A [http://neptune.baruch.sc.edu/xenia/feeds/all_metadata_latest.zip zip file] of all the ObsKML imported to the database and a [http://neptune.baruch.sc.edu/xenia/feeds/latest_raw.sql SQL file] of the ObsKML as converted to SQL INSERT statements.  Either source could be used to populate other copy xenia instances.  
+
 = DIF SOS =
 
 http://neptune.baruch.sc.edu/xenia/sos/difSOS.html
 
 see http://code.google.com/p/xenia/wiki/XeniaSOS
+
+http://neptune.baruch.sc.edu/xenia/feeds/all_metadata_latest.zip
