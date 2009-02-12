@@ -11,6 +11,7 @@ Note that the below instances use the example http host of 'http://neptune.baruc
 A script runs once an hour to take the latest observations and create a combined
   * ObsKML latest [http://neptune.baruch.sc.edu/xenia/feeds/xenia_obskml_latest.kml KML] and [http://neptune.baruch.sc.edu/xenia/feeds/xenia_obskml_latest.kmz KMZ] files
   * A [http://neptune.baruch.sc.edu/xenia/feeds/latest_placemarks.kmz styled KMZ] version of these combined observations for display in Google Earth/Maps,etc
+  * An [http://neptune.baruch.sc.edu/xenia/feeds/archive/ archive] of the last 24 hours of styled KML files is available also
 
 Note the above KML/KMZ styling has the following features:
   
@@ -40,9 +41,15 @@ Simple time-series graphs of the previous days observations are available as web
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastLite#a_description_of_the_graph_xml_f
 
+= GeoRSS = 
+
+http://neptune.baruch.sc.edu/xenia/feeds/georss
+
+GeoRSS provides a simple geospatially referenced RSS feed for simple harvesting/redisplay of latest observations.
+
 = html table styling = 
 
-http://neptune.baruch.sc.edu/xenia/feeds/html_tables/
+http://neptune.baruch.sc.edu/xenia/feeds/html_tables
 
 HTML platform table stubs are suitable for dynamic webpage popups via AJAX type calls
 
