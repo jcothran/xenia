@@ -1,5 +1,7 @@
 #summary modifications list (installed software, packages, etc) and distribution checklist
 
+<wiki:toc max_depth="6" />
+
 = Mod list =
 
 This is a list of the wmware image modifications/installs which I added to the original http://gisvm.com vmware image (geostatistics version, includes 'R') listed in their install order.
@@ -40,4 +42,3 @@ installed google earth to desktop, but slow display with only OpenGL
     * disable automated crons as necessary, document to user how to re-enable and expectations
     * document user setup of any user id's, crontab, file linkages, config files/search labels
     * create a backup image and version release name/number
-
