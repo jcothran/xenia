@@ -30,7 +30,7 @@ installed google earth to desktop, but slow display with only OpenGL
 
   * Organization
     * include any image application type installs to mod list
-    * include any script changes to project svn
+    * include any script/database changes to project svn
   * Storage
     * remove all large sized testing datasets, files
     * clear any browser, application caches
