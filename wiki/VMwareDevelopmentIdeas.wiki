@@ -16,5 +16,6 @@
 
 = Long term = 
 
-  * Other languages, frameworks
-    * Redevelop existing scripts in popular languages/frameworks such as python, java/J2EE, .NET, etc
+  * Other languages, databases, frameworks
+    * Redevelop existing scripts and add additional scripts in popular languages/frameworks such as python, java/J2EE, .NET, etc
+    * Redevelop scripts to allow connection to a variety of different backend relational databases (Oracle,SQL Server,PostgreSQL,MySQL,Sqlite)
