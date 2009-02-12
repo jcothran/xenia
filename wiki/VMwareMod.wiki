@@ -1,6 +1,6 @@
 #summary modifications list (installed software, packages, etc)
 
-This is a list of the wmware image modifications/installs which I added to the original http://gisvm.com vmware image (geostatistics version, includes 'R')
+This is a list of the wmware image modifications/installs which I added to the original http://gisvm.com vmware image (geostatistics version, includes 'R') listed in their install order.
 
 ----
 {{{
