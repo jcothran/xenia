@@ -1,1 +1,17 @@
 #summary vmware considerations and best practices
+
+<wiki:toc max_depth="6" />
+
+= Security = 
+
+_Try to keep the distributed image as secure as possible._
+
+As an image or clone, any security weaknesses in one copy will be present in all copies until the image security issue is addressed or the image patched and updated.
+
+Any personal/institutional information or passwords should not be included as part of the distributed image.
+
+= Storage = 
+
+_Try to keep the distributed image physical disk size as small as possible._
+
+Relevant applications and software should be included on the image, but large associated datasets should be referenced off-image with documentation regarding access as a separate link or download.
