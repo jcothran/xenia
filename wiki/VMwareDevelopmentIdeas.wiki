@@ -7,6 +7,7 @@
   * Include earlier development
     * shapefile generation
     * 'by obs' split-outs for several formats
+    * 'scout' component and associated scripts for generating obskml feeds
   * Obsregistry support http://obsregistry.org
   * Oostethys SOS support http://oostethys.org
 
@@ -14,5 +15,3 @@
 
   * Other languages, frameworks
     * Redevelop existing scripts in popular languages/frameworks such as python, java/J2EE, .NET, etc
-
-
