@@ -36,17 +36,21 @@ http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/ObsKMLGenerate/obskml_all_late
 
 = time-series graphs =
 
+Simple time-series graphs of the previous days observations are available as web links embedded within the KML and HTML table stub displays
+
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastLite#a_description_of_the_graph_xml_f
 
 = html table styling = 
 
 http://neptune.baruch.sc.edu/xenia/feeds/html_tables/
 
+HTML platform table stubs are suitable for dynamic webpage popups via AJAX type calls
+
 see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastNotesAjax
 
 = convert from ObsKML to other formats (CSV,shapefile) =
 
-Currently just all the latest observations combined, will add 'by obs' later
+Currently just all the latest observations combined, will add 'by obs' and shapefile later
 
 http://neptune.baruch.sc.edu/xenia/feeds/all_latest.csv
 
