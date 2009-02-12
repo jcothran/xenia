@@ -1,6 +1,6 @@
 #summary project update notes
 
-<wiki:toc max_depth="4" />
+<wiki:toc max_depth="6" />
 
 this is a continuation of earlier developer notes at http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
 
