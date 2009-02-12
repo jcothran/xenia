@@ -148,10 +148,15 @@
      # SensorML describes instrument
      # XML command set
      # binary driver
-
+ 
+  # First steps
+    * Members come to agreement on interoperability
+    * Discuss whether PUCK should be adopted as standard
+    * More important to get other mfgs and users on board to come to
+      agreement on standard, then worry about OGC standard.
 {{{
 Attendees 
-Neil Caderer: St Johns University
+Neil Cater: St Johns University
 Sherry Power: Conference Coordinator, Marine Institute
 David Murhpy: Seabird Electronics, R&D Manager
 Craig Johnson: RBR, Director of Engineer
