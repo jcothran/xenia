@@ -8,10 +8,14 @@ Note that the below instances use the example http host of 'http://neptune.baruc
 
 [http://code.google.com/p/xenia/wiki/XeniaProducts#Google_Earth_and_Maps original documentation ] 
 
-A script runs once an hour to take the latest observations and create a combined
-  * ObsKML latest [http://neptune.baruch.sc.edu/xenia/feeds/xenia_obskml_latest.kml KML] and [http://neptune.baruch.sc.edu/xenia/feeds/xenia_obskml_latest.kmz KMZ] files
-  * A [http://neptune.baruch.sc.edu/xenia/feeds/latest_placemarks.kmz styled KMZ] version of these combined observations for display in Google Earth/Maps,etc
-  * An [http://neptune.baruch.sc.edu/xenia/feeds/archive/ archive] of the last 24 hours of styled KML files is available also
+A script runs once an hour to take the latest observations and create a
+  * Combined
+    * ObsKML latest [http://neptune.baruch.sc.edu/xenia/feeds/xenia_obskml_latest.kml KML] and [http://neptune.baruch.sc.edu/xenia/feeds/xenia_obskml_latest.kmz KMZ] files for resharing
+    * A [http://neptune.baruch.sc.edu/xenia/feeds/latest_placemarks.kmz styled KMZ] version of these combined observations for display in Google Earth/Maps,etc
+    * An [http://neptune.baruch.sc.edu/xenia/feeds/archive/ archive] of the last 24 hours of styled KMZ files is available also
+  * By Organization
+    * A [http://neptune.baruch.sc.edu/xenia/feeds/wq/wq_metadata_latest.kmz styled KMZ] version of each organizations observations for display in Google Earth/Maps,etc
+    * An [http://neptune.baruch.sc.edu/xenia/feeds/wq/archive/ archive] of the last 24 hours of styled KMZ files is available also
 
 Note the above KML/KMZ styling has the following features:
   
