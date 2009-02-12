@@ -1,5 +1,7 @@
 #summary project update notes
 
+<wiki:toc max_depth="1" />
+
 this is a continuation of earlier developer notes at http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
 
 = SQLiteGeo (April 8, 2008) =
