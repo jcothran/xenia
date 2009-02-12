@@ -28,6 +28,6 @@ The folders/scripts under /home/xeniaprod should reflect the same xenia project 
 
 = Code/Scripts = 
 
-Try to make configuration easier by placing all configuration options and security information within the same or a few config files (say in XML format).  Failing this, try to use comment LABELS which are documented and easily seen and searched for in the code.
+Try to make configuration easier by placing all configuration options and security information within the same or a few *config files* (say in XML format).  Failing this, try to use comment LABELS which are documented and easily seen and searched for in the code.
 
-Try to make common code flexible enough for reuse in a variety of possible contexts.  For instance, would prefer to have one script with a few database flag options (Oracle,SQL Server, PostgreSQL, MySQL, Sqlite, etc) than several scripts which only vary by their database connection method and small differences in SQL syntax.
+Try to make common code *flexible enough for reuse in a variety of possible contexts*.  For instance, would prefer to have one script with a few database flag options (Oracle,SQL Server, PostgreSQL, MySQL, Sqlite, etc) than several scripts which only vary by their database connection method and small differences in SQL syntax.
