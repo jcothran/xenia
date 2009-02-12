@@ -34,7 +34,7 @@ installed google earth to desktop, but slow display with only OpenGL
   * Storage
     * remove all large sized testing datasets, files
     * clear any browser, application caches
- * Security
+  * Security
     * return user/passwords to initial test spec or common suggested/known distribution value
     * remove any personal/institution specific information or addresses which should not be circulated
     * return hosts.allow, hosts.deny, iptables or other security related files to clean distribution state
