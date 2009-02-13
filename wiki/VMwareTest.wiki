@@ -33,9 +33,35 @@ This vmware image was developed on top of the FOSS geospatial vmware image(geost
 
 While the Xenia scripts do not directly utilize/interact those included applications in the gisvm image at this time, I thought they represent the best existing collection of FOSS geospatial software for future development.
 
+Start the vmware image on the vmware player by opening the associated .vmx file
+
 ----
 
+= Startup issues = 
+
+The instance is running an openssh daemon but with no hosts allowed in file /etc/hosts.allow - edit this service and related security files as necessary if needed.
+
+The username associated with the xenia development is *xeniaprod* with password *xeniaprod999*  Modify this password as needed.
+
+The username *user* has password *user999* although this user account is not utilized.
+
+'sudo' all commands that need root access.
+
+The two crontabs which are active are root which performs a nightly cleanup of files under directory /home/xeniaprod/tmp_web and xeniaprod which also performs file cleanup but more importantly runs the following main job hourly.
+
+/home/xeniaprod/cron/xeniaflow.sh
+
+This is the file which creates all the subsequent related products and should be referenced to understand the product creation flow.
+
+*For the initial version, please line comment (# prefix) the crontab line which executes the line containing the call to execute xeniaflow.sh until you have made the below correct host oriented substitution for your instance.*
+
+Xenia related log files are at /home/xeniaprod/tmp and cleared nightly.
+
+Apache user(www-data) created related temporary files are at /home/xeniaprod/tmp_web and cleared nightly.
+
 = Substitutions =
+
+The 
 
 = Adding a new ObsKML feed =
 
