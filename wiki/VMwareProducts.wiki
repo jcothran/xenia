@@ -56,7 +56,7 @@ http://neptune.baruch.sc.edu/xenia/feeds/georss
 
 http://xenia.googlecode.com/files/georss.jpg
 
-GeoRSS provides a simple geospatially referenced RSS feed for simple harvesting/redisplay of latest observations for each platform as a data feed.
+GeoRSS provides a simple geospatially referenced RSS feed for simple harvesting/redisplay of latest observations for each platform as a data feed.  Above feed displays correctly in Firefox browser.
 
 ----
 = html table styling = 
@@ -94,6 +94,8 @@ Sqlite file download for priming, analysis, etc of the latest 3 day time window 
 = DIF SOS =
 
 http://neptune.baruch.sc.edu/xenia/sos/difSOS.html
+
+XML responses should display correctly within Firefox, IE browsers
 
 An OGC SOS(OpenGeospatial Consortium [http://www.opengeospatial.org/standards/sos Sensor Observation Service]) web service method supports queries on the database 
 
