@@ -73,4 +73,4 @@ http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate
 
 Note that the ObsKML schema does not currently utilize an 'obskml' namespace convention but may in a future version.
 
-If you have created an ObsKML feed that you would like to share please email me (jeremy.cothran@gmail.com) and I will add it to a community catalog.
+If you have created an ObsKML feed that you would like to share please email me (jeremy.cothran@gmail.com) and I will add it to an online community catalog.
