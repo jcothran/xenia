@@ -1,5 +1,7 @@
 #summary taking the vmware image for a quick spin
 
+see also [VMwareHome]
+
 <wiki:toc max_depth="6" />
 
 = Download the vmware player =
