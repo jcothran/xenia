@@ -7,9 +7,21 @@
 This is a list of the wmware image modifications/installs which I added to the original http://gisvm.com vmware image (geostatistics version, includes 'R') listed in their install order.
 
 ----
+
+file /etc/hosts.allow
 {{{
+#your http ip substituted below for ssh access
+sshd : xxx.xxx.xxx.xxx : allow
+sshd : ALL : deny
+}}}
+
+{{{
+#controlling ssh access via hosts.allow
+sudo apt-get install openssh-server
+
 sudo apt-get install nmap
 sudo apt-get install subversion
+#svn not currently in sync with latest vmware image so skip following step for now
 svn checkout http://xenia.googlecode.com/svn/trunk/ /home/xeniaprod/scripts
 
 #install cpan
