@@ -4,6 +4,7 @@ Note that the below instances use the example http host of 'http://neptune.baruc
 
 <wiki:toc max_depth="6" />
 
+----
 = Google Earth/Maps, Latest ObsKML, Styled KML =
 
 [http://code.google.com/p/xenia/wiki/XeniaProducts#Google_Earth_and_Maps original documentation ] 
@@ -39,6 +40,7 @@ ObsKML can be merged and revisualized as shown in the following image
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/ObsKMLGenerate/obskml_all_latest.jpg
 
+----
 = time-series graphs =
 
 http://xenia.googlecode.com/files/time_series.jpg
@@ -47,6 +49,7 @@ Simple time-series graphs of the previous days observations are available as web
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastLite#a_description_of_the_graph_xml_f
 
+----
 = GeoRSS = 
 
 http://neptune.baruch.sc.edu/xenia/feeds/georss
@@ -55,6 +58,7 @@ http://xenia.googlecode.com/files/georss.jpg
 
 GeoRSS provides a simple geospatially referenced RSS feed for simple harvesting/redisplay of latest observations for each platform as a data feed.
 
+----
 = html table styling = 
 
 http://neptune.baruch.sc.edu/xenia/feeds/html_tables
@@ -67,6 +71,7 @@ HTML platform table stubs are suitable for dynamic webpage popups via AJAX type 
 
 see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastNotesAjax
 
+----
 = convert from ObsKML to other formats (CSV,shapefile) =
 
 Currently just all the latest observations combined, will add 'by obs' and shapefile later
@@ -75,14 +80,17 @@ http://neptune.baruch.sc.edu/xenia/feeds/all_latest.csv
 
 http://neptune.baruch.sc.edu/xenia/feeds/all_latest.csv.zip
 
+----
 = Data source files - zipped ObsKML and SQL =
 
 A [http://neptune.baruch.sc.edu/xenia/feeds/all_metadata_latest.zip zip file] of all the ObsKML imported to the database and a [http://neptune.baruch.sc.edu/xenia/feeds/latest_raw.sql SQL file] of the ObsKML as converted to SQL INSERT statements.  Either source could be used to populate other copy xenia instances.  
 
+----
 = Latest 3 day database and julian weekly archive databases = 
 
 Sqlite file download for priming, analysis, etc of the latest 3 day time window [http://neptune.baruch.sc.edu/xenia/archive_db/latest.db database] and [http://neptune.baruch.sc.edu/xenia/archive_db/weekly/ folder] containing the julian-weekly-split archive of sqlite databases.
 
+----
 = DIF SOS =
 
 http://neptune.baruch.sc.edu/xenia/sos/difSOS.html
@@ -91,6 +99,7 @@ An OGC SOS(OpenGeospatial Consortium [http://www.opengeospatial.org/standards/so
 
 see http://code.google.com/p/xenia/wiki/XeniaSOS
 
+----
 = Flow/Feed status and notification = 
 
 [http://code.google.com/p/xenia/wiki/XeniaUpdates#flow_monitor original documentation]
