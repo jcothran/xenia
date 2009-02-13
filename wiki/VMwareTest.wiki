@@ -37,7 +37,7 @@ While the Xenia scripts do not directly utilize/interact those included applicat
 
 = Adding a new ObsKML feed =
 
-So the existing sample USGS and NERRS feeds are flowing correctly and you are ready to try adding another feed.
+The sample USGS and NERRS feeds are flowing correctly and you are ready to try adding another feed.
 
 Note the following currently available ObsKML feeds at http://carocoops.org/obskml/feeds/
   * nos (National Ocean Service - Tides and Currents)
