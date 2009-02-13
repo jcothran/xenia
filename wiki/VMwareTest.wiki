@@ -70,7 +70,7 @@ cd /home/xeniaprod
 grep -r "VM_CONFIG" * 
 }}}
 
-After making these subsititions, and re-enabling(if disabled/commented out) the user xeniaprod crontab process xeniaflow.sh, you begin to see the products as listed at [VMwareProducts] (substituting your http host address).  The xeniaprod crontab executes once an hour at the top of the hour, so you may have to wait a few hours(or manually run/bash the file xeniaflow.sh) to start seeing results.
+After making these substitutions, and re-enabling(if disabled/commented out) the user xeniaprod crontab process xeniaflow.sh, you begin to see the products as listed at [VMwareProducts] (substituting your http host address).  The xeniaprod crontab executes once an hour at the top of the hour, so you may have to wait a few hours(or manually run/bash the file xeniaflow.sh) to start seeing results.
 
 = Adding a new ObsKML feed =
 
