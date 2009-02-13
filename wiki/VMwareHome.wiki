@@ -1,6 +1,6 @@
 #summary vmware home page
 
-Developed a vmware appliance/image of the Xenia relational database and associated scripts and products for free community use, download and modification.
+Developed a vmware appliance/image of the Xenia relational database and associated scripts and products for free community use, download and modification.  The current default Xenia setup uses a combination of perl scripts and sqlite relational database to process approximately 10,000 observations per hour.
 
 The latest vmware image(version 1.0, rar-compressed size x) is available at http://carocoops.org/vmware/x
 
