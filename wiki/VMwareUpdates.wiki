@@ -1,5 +1,7 @@
 #summary vmware project update notes
 
+<wiki:toc max_depth="6" />
+
 = February 13, 2009 Xenia VMware version 1.0 =
 
 Initial release.
