@@ -32,6 +32,28 @@ This vmware image was developed on top of the FOSS geospatial vmware image(geost
 While the Xenia scripts do not directly utilize/interact those included applications in the gisvm image at this time, I thought they represent the best existing collection of FOSS geospatial software for future development.
 
 ----
+
+= Substitutions =
+
+= Adding a new ObsKML feed =
+
+So the existing sample USGS and NERRS feeds are flowing correctly and you are ready to try adding another feed.
+
+The following example demonstrates adding the hourly [http://www.ndbc.noaa.gov/ NDBC] ObsKML feed as available from 
+
+http://carocoops.org/obskml/feeds/ndbc/ndbc_latest_obskml.zip
+
+Note also the following currently available ObsKML feeds at http://carocoops.org/obskml/feeds/
+  * nos (National Ocean Service - Tides and Currents)
+  * nws (National Weather Service)
+  * usf (University of South Florida)
+  * nccoos (North Carolina Coastal Ocean Observing System)
+  * cormp (UNCS Coastal Ocean Research and Monitoring Program)
+  * carocoops (Carolinas Coastal Ocean Observing and Prediction System)
+  * wq  (this is Southeast USGS coastal stations)
+  * nerrs (National Estuarine Research Reserve System)
+  * vos (NOAA Volutary Observing Ships)
+
 {{{
 create nerrs folders (nerrs, nerrs/archive)
 wget latest nerrs obskml
@@ -45,4 +67,8 @@ add styleLatest.sh
 
 = Example scripts for generating ObsKML =
 
+Here are some example scripts detailing how to create ObsKML from several data source types
+
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate
+
+Note that the ObsKML schema does not currently utilize an 'obskml' namespace convention but may in a future version.
