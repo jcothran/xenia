@@ -91,7 +91,7 @@ see http://code.google.com/p/xenia/wiki/XeniaSOS
 
 A script is run once an hour 
   * to check that the data feeds have not dropped below threshold levels(if so an email notification is sent)
-  * to generate a graph of
+  * to generate a graph(past several days) of
     * recent observation flow
     * low count magnified flow
     * archival database flow
