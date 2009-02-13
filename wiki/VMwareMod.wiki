@@ -10,7 +10,7 @@ This is a list of the wmware image modifications/installs which I added to the o
 
 file /etc/hosts.allow
 {{{
-#your http ip substituted below for ssh access
+#uncomment below line and add substitute your http ip below for ssh access
 #sshd : xxx.xxx.xxx.xxx : allow
 sshd : ALL : deny
 }}}
