@@ -2,7 +2,7 @@
 
 <wiki:toc max_depth="6" />
 
-see also [http://www.vmware.com/appliances/partner/vmware_ready/test_matrix.html test matrix] [http://www.vmware.com/files/pdf/vam_virtual_appliance_guidelines.pdf appliance guidelines]
+see also vmware documents [http://www.vmware.com/appliances/partner/vmware_ready/test_matrix.html test matrix] [http://www.vmware.com/files/pdf/vam_virtual_appliance_guidelines.pdf appliance guidelines]
 
 = Security = 
 
