@@ -48,4 +48,14 @@ from http://www.klawitter.de/tomcat80.html
 iptables -t nat -A OUTPUT -d localhost -p tcp --dport 80 -j REDIRECT --to-ports 8080
 iptables -t nat -A OUTPUT -d 129.252.37.90 -p tcp --dport 80 -j REDIRECT --to-ports 8080
 iptables -t nat -A PREROUTING -d 129.252.37.90 -p tcp --dport 80 -j REDIRECT --to-ports 8080
+
+= openssh =
+
+The initial image runs an openssh daemon which accepts no outside connects via the /etc/hosts.allow file below.  Modify the hosts.allow,hosts.deny files as necessary for access/security purposes.
+
+file /etc/hosts.allow
+{{{
+#uncomment below line and add substitute your http ip below for ssh access
+#sshd : xxx.xxx.xxx.xxx : allow
+sshd : ALL : deny
 }}}
