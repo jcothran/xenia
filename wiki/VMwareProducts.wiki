@@ -97,7 +97,6 @@ A script is run once an hour
 Recent observation flow
 http://neptune.baruch.sc.edu/xenia/feeds/flow_xenia.png
 Low count magnified flow
-http://neptune.baruch.sc.edu/xenia/feeds/flow_xenia.png
+http://neptune.baruch.sc.edu/xenia/feeds/flow_low.png
 Archival database flow
-http://neptune.baruch.sc.edu/xenia/feeds/flow_xenia.png
-
+http://neptune.baruch.sc.edu/xenia/feeds/flow_archive.png
