@@ -43,7 +43,9 @@ The instance is running an openssh daemon but with no hosts allowed in file /etc
 
 The username associated with the xenia development is *xeniaprod* with password *xeniaprod999*  Modify this password as needed.
 
-The username *user* has password *user999* although this user account is not utilized.
+The username *user* has password *user999* although this user account is not utilized.  Modify this password as needed.
+
+See the other gisvm related passwords [http://www.vmware.com/appliances/directory/55606 here] and modify as needed.
 
 'sudo' all commands that need root access.
 
