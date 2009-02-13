@@ -16,3 +16,8 @@ The main links of interest regarding this vmware instance are
   * [VMwareMod]
   * [VMwareUpdates]
   * [VMwareDevelopmentIdeas]
+
+[VMwareUpdates] will contain any notes regarding xenia vmware image related development updates.
+
+A listserv or IRC channel(would suggest #xeniavm ) could also be established if enough developers are interested.
+
