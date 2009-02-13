@@ -4,7 +4,7 @@
 
 = static IP, network bridge, iptables =
 
-some below content copied from [http://code.google.com/p/xenia/wiki/XeniaUpdates#Additional_server_notes_-_static_IP,_network_bridge,_iptables here]
+[http://code.google.com/p/xenia/wiki/XeniaUpdates#Additional_server_notes_-_static_IP,_network_bridge,_iptables original documentation]
 
 Wanted to bridge the 'virtual' vmware player server across the 'host' server.  Established my static IP on the host using the following steps.
 
