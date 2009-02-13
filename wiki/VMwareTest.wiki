@@ -39,7 +39,7 @@ Start the vmware image on the vmware player by opening the associated .vmx file
 
 = Startup issues = 
 
-The instance is running an openssh daemon but with no hosts allowed in file /etc/hosts.allow - edit this service and related security files as necessary if needed.
+The instance is running an *openssh daemon* but with no hosts allowed in file /etc/hosts.allow - edit this service and related security files as necessary if needed.
 
 The username associated with the xenia development is *xeniaprod* with password *xeniaprod999*  Modify this password as needed.
 
