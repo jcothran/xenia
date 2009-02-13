@@ -86,8 +86,7 @@ Note the following currently available ObsKML feeds at http://carocoops.org/obsk
   * wq  (this is Southeast USGS coastal stations)
   * nerrs (National Estuarine Research Reserve System)
   * vos (NOAA Volutary Observing Ships)
-
-_can add more ObsKML feeds to an online catalog if community interest_
+  * _can add more ObsKML feeds to an online catalog if community interest_
 
 The following example demonstrates adding the hourly [http://www.ndbc.noaa.gov/ NDBC] ObsKML feed as available from 
 
