@@ -39,11 +39,7 @@ While the Xenia scripts do not directly utilize/interact those included applicat
 
 So the existing sample USGS and NERRS feeds are flowing correctly and you are ready to try adding another feed.
 
-The following example demonstrates adding the hourly [http://www.ndbc.noaa.gov/ NDBC] ObsKML feed as available from 
-
-http://carocoops.org/obskml/feeds/ndbc/ndbc_latest_obskml.zip
-
-Note also the following currently available ObsKML feeds at http://carocoops.org/obskml/feeds/
+Note the following currently available ObsKML feeds at http://carocoops.org/obskml/feeds/
   * nos (National Ocean Service - Tides and Currents)
   * nws (National Weather Service)
   * usf (University of South Florida)
@@ -53,6 +49,10 @@ Note also the following currently available ObsKML feeds at http://carocoops.org
   * wq  (this is Southeast USGS coastal stations)
   * nerrs (National Estuarine Research Reserve System)
   * vos (NOAA Volutary Observing Ships)
+
+The following example demonstrates adding the hourly [http://www.ndbc.noaa.gov/ NDBC] ObsKML feed as available from 
+
+http://carocoops.org/obskml/feeds/ndbc/ndbc_latest_obskml.zip
 
 {{{
 create nerrs folders (nerrs, nerrs/archive)
