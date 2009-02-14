@@ -1,6 +1,8 @@
 #summary various formats/products and services supported by the Xenia vmware instance
 
-Note that the below instances use the example http host of 'http://neptune.baruch.sc.edu' which will be replaced by your host address for your instance
+Note that the below instances use the example http host of 'http://neptune.baruch.sc.edu' which will be replaced by your host address for your instance.
+
+*If running a local xenai vmware instance, replace http://neptune.baruch.sc.edu with http://localhost in the below URLs to see the locally produced results.*  
 
 <wiki:toc max_depth="6" />
 
