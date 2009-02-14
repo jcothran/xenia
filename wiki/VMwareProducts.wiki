@@ -1,8 +1,8 @@
 #summary various formats/products and services supported by the Xenia vmware instance
 
-*If running a local xenia vmware instance, replace http://neptune.baruch.sc.edu with http://localhost in the below URLs to see the locally produced results.
+*If running a local xenia vmware instance, replace http://neptune.baruch.sc.edu with http://localhost in the below URLs to see the locally produced results.*
 
-If running a final production instance for reference by others via the web, replace http://localhost with your web http address.*  
+If running a final production instance for reference by others via the web, replace http://localhost with your web http address.
 
 <wiki:toc max_depth="6" />
 
