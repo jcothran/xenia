@@ -2,7 +2,7 @@
 
 Developed a vmware appliance/image of the Xenia relational database and associated scripts and products for free community use, download and modification.  The current default Xenia setup uses a combination of perl scripts and sqlite relational database to process approximately 10,000 observations per hour.
 
-The latest vmware image(version 1.0, rar-compressed size x) is available at http://carocoops.org/vmware/x
+The latest vmware image(version 1.0, rar-compressed size 1.5 GB, uncompressed 6 GB) is available at http://neptune.baruch.sc.edu/xenia/vmware_dist/xeniavm20090213.rar
 
 This vmware image was developed on top of the FOSS geospatial vmware image(geostatistics package which includes 'R') available at http://gisvm.com ([http://www.vmware.com/appliances/directory/55606 appliance description]) - thanks to Ricardo Pinho.
 
@@ -20,4 +20,3 @@ The main links of interest regarding this vmware instance are
 [VMwareUpdates] will contain any notes regarding xenia vmware image related development updates.
 
 A listserv or IRC channel(would suggest #xeniavm ) could also be established if enough developers are interested.
-
