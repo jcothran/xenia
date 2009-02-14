@@ -27,7 +27,7 @@ see http://www.vmware.com/products/fusion
 
 = Download the vmware image instance =
 
-The latest vmware image(version 1.0, rar-compressed size x) is available at http://carocoops.org/vmware/x
+The latest vmware image(version 1.0, rar-compressed size 1.5 GB, uncompressed 6 GB) is available at http://neptune.baruch.sc.edu/xenia/vmware_dist/xeniavm20090213.rar
 
 This vmware image was developed on top of the FOSS geospatial vmware image(geostatistics package which includes 'R') available at http://gisvm.com ([http://www.vmware.com/appliances/directory/55606 appliance description]) - thanks to Ricardo Pinho.
 
