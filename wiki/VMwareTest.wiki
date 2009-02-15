@@ -158,15 +158,17 @@ The below sample kml file shows an example of two observations listed at a platf
 </Document>
 </kml>
 }}}
+{{{
 The above schema represents two observations from a single platform.
 
-The 'elev' tag in the above schema corresponds to elevation. Positive is meters above sea level and negative is meters below sea level. Missing or unknown elevation values can leave an empty elev tag like &lt;elev /&gt;
+The 'elev' tag in the above schema corresponds to elevation. Positive is meters above sea level and negative is meters below sea level. Missing or unknown elevation values can leave an empty elev tag like <elev />
 
 A recommended but not required convention is to use the Placemark id attribute to help uniquely identify observations between data providers. The recommended convention is the concatenation of <operator>.<platform>.<package> like carocoops.CAP1.buoy or nws.KCAE.met
 
 Observation listing order is preferred to be from highest elevation/altitude to lowest elevation/depth.
 
 Redundant sensors/observations would be listed in their order of importance (primary, secondary, etc).
+}}}
 
 == Example scripts for generating ObsKML ==
 
