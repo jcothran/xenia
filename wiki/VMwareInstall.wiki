@@ -61,7 +61,7 @@ file /etc/hosts.allow
 sshd : ALL : deny
 }}}
 
-= miscellaneous =
+= image default users, passwords =
 
 The username associated with the xenia development is *xeniaprod* with password *xeniaprod999*  Modify this password as needed.
 
@@ -69,7 +69,16 @@ The username *user* has password *user999* although this user account is not uti
 
 See the other gisvm related passwords [http://www.vmware.com/appliances/directory/55606 here] and modify as needed.
 
+= miscellaneous =
+
 *sudo* all commands that need root access.
+
+To sudo between users (use the first user password not the target user password)
+{{{
+user@gisvm:~$ sudo su - xeniaprod
+[sudo] password for user: _enter user999_
+xeniaprod@gisvm:~$ 
+}}}
 
 The *two crontabs* which are active are *root* which performs a nightly cleanup of files under directory /home/xeniaprod/tmp_web and *xeniaprod* which also performs file cleanup but more importantly runs the following main job hourly.
 
