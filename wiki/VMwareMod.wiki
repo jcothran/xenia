@@ -64,6 +64,7 @@ sudo ln -sv /usr/lib/libcrypto.so.0.9.8 ./
   * Storage
     * remove all large sized testing datasets, files
     * clear any browser, application caches
+    * clear user histories (history -c) or profile changes, info
   * Security
     * return user/passwords to initial test spec or common suggested/known distribution value
     * remove any personal/institution specific information or addresses which should not be circulated
