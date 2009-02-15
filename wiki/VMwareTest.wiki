@@ -60,39 +60,68 @@ bash /home/xeniaprod/cron/xeniaflow.sh
 After the *xeniaflow.sh* script has executed, most of the products listed at [VMwareProductsLocal] should be populated locally.  A few of the graph products,etc require two or more runs before displaying properly so you may have to wait a few hours/passes or so to start seeing proper results.
 
 
-
+----
 = Adding a new ObsKML feed =
 
 The sample USGS and NERRS feeds are flowing correctly and you are ready to try adding another feed.
 
 Note the following currently available ObsKML feeds at http://carocoops.org/obskml/feeds/
+  * ndbc (National Data Buoy Center) _included with test install_
   * nos (National Ocean Service - Tides and Currents)
   * nws (National Weather Service)
   * usf (University of South Florida)
   * nccoos (North Carolina Coastal Ocean Observing System)
   * cormp (UNCS Coastal Ocean Research and Monitoring Program)
   * carocoops (Carolinas Coastal Ocean Observing and Prediction System)
-  * wq  (this is Southeast USGS coastal stations)
-  * nerrs (National Estuarine Research Reserve System)
+  * wq  (this is Southeast USGS coastal stations) _included with test install_
+  * nerrs (National Estuarine Research Reserve System) _included with test install_
   * vos (NOAA Volutary Observing Ships)
   * _can add more ObsKML feeds to an online catalog if community interest_
 
-The following example demonstrates adding the hourly [http://www.ndbc.noaa.gov/ NDBC] ObsKML feed as available from 
+The following example demonstrates adding an hourly [http://www.nws.noaa.gov/ NWS] ObsKML feed as available from 
 
-http://carocoops.org/obskml/feeds/ndbc/ndbc_latest_obskml.zip
+http://carocoops.org/obskml/feeds/nws/nws_latest_obskml.zip
+
+== Changes ==
+
+All the following steps are done as user *xeniaprod*
+
+=== Create necessary organization import, archive folders
+{{{
+mkdir /home/xeniaprod/feeds/nws
+mkdir /home/xeniaprod/feeds/nws/archive
+}}}
+=== Edit xeniaprod crontab to nightly cleanup archive files ===
+As user xeniaprod run the following command to edit xeniaprod crontab in 'nano' editor
+{{{crontab -e}}}
+add line
+{{{
+2 0 * * * find /home/xeniaprod/feeds/ndbc/archive/* -maxdepth 1 -cmin +1400 -exec rm -f {} \;
+}}}
+=== Edit /home/xeniaprod/cron/getObskml.sh ==
+add line
+{{{
+wget http://carocoops.org/obskml/feeds/nws/nws_latest_obskml.zip -O /home/xeniaprod/feeds/nws/nws_metadata_latest.kmz
+}}}
+=== Edit /home/xeniaprod/cron/mk_xenia_all_latest.sh ===
+add line
+{{{
+unzip -q "../nws/nws_metadata_latest.kmz" >> /home/xeniaprod/tmp/cron.log 2>&1    
+}}}
+
 
 {{{
-create nerrs folders (nerrs, nerrs/archive)
-wget latest nerrs obskml
-archive cleanup
-
 add getObskml.sh
 add styleLatest.sh
 
 #check_status - array, graph spots
 }}}
 
-= Example scripts for generating ObsKML =
+== ObsKML simple samlpe ==
+
+blah
+
+== Example scripts for generating ObsKML ==
 
 Here are some example scripts detailing how to create ObsKML from several data source types
 
