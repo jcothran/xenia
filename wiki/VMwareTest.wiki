@@ -86,7 +86,7 @@ http://carocoops.org/obskml/feeds/nws/nws_latest_obskml.zip
 
 All the following steps are done as user *xeniaprod*
 
-=== Create necessary organization import, archive folders
+=== Create necessary organization import, archive folders ===
 {{{
 mkdir /home/xeniaprod/feeds/nws
 mkdir /home/xeniaprod/feeds/nws/archive
