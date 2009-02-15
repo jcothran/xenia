@@ -135,22 +135,24 @@ The below sample kml file shows an example of two observations listed at a platf
       <coordinates>-79.68,32.86,0</coordinates>
     </Point>
     <TimeStamp><when>2007-01-15T14:00:00</when></TimeStamp>
+ 
+    <Metadata>
+    <obsList>
+    <obs>
+      <obsType>air_temperature</obsType>
+      <uomType>celsius</uomType>
+      <value>21</value>
+      <elev>3</elev>
+    </obs>
 
-    <obskml:obsList>
-    <obskml:obs>
-      <obskml:obsType>air_temperature</obskml:obsType>
-      <obskml:uomType>celsius</obskml:uomType>
-      <obskml:value>21</obskml:value>
-      <obskml:elev>3</obskml:elev>
-    </obskml:obs>
-
-    <obskml:obs>
-      <obskml:obsType>water_temperature</obskml:obsType>
-      <obskml:uomType>celsius</obskml:uomType>
-      <obskml:value>16</obskml:value>
-      <obskml:elev>-1</obskml:elev>
-    </obskml:obs>
-    </obskml:obsList>
+    <obs>
+      <obsType>water_temperature</obsType>
+      <uomType>celsius</uomType>
+      <value>16</value>
+      <elev>-1</elev>
+    </obs>
+    </obsList>
+    </Metadata>
 
   </Placemark>
 </Document>
