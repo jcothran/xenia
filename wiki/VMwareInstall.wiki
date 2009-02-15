@@ -82,9 +82,7 @@ xeniaprod@gisvm:~$
 
 The *two crontabs* which are active are *root* which performs a nightly cleanup of files under directory /home/xeniaprod/tmp_web and *xeniaprod* which also performs file cleanup but more importantly runs the following main job hourly.
 
-*/home/xeniaprod/cron/xeniaflow.sh*
-
-The above listed file creates all the subsequent related products and should be referenced to understand the product creation flow.
+The file */home/xeniaprod/cron/xeniaflow.sh* creates all the subsequent related products and should be referenced to understand the product creation flow.
 
 Xenia related log files are at /home/xeniaprod/tmp and cleared nightly.
 
