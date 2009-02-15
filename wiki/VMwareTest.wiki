@@ -52,7 +52,7 @@ If you wish to re-enable the GUI default behaviour see instructions at http://ub
 
 While leaving the xenia vmware instance running, it is by default using the xeniaprod crontab to once an hour(at the top of the hour) fetch 3 sample organization hourly data feed files formatted as ObsKML (see ObsKML simple sample below) to populate a local sqlite database and produce several products.
 
-The main file which creates the data process flow can be invoked manually by the following command (also executed hourly at the top of the hour)
+The main file which creates the data process flow can be invoked manually by the following command (also automatically executed hourly at the top of the hour by the xeniaprod crontab)
 {{{
 bash /home/xeniaprod/cron/xeniaflow.sh
 }}}
