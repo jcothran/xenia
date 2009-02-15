@@ -83,7 +83,7 @@ Apache user(www-data) created related temporary files are at /home/xeniaprod/tmp
 
 = host substitutions, configuration =
 
-If you plan to run a production xenia vmware instance accessible by others on the web, grep the code from the following directory to see the line substitutions you'll need to make(mainly relating to the particular host machine address the instance is run on).
+If you plan to run a production xenia vmware instance accessible by others on the web, search the xeniaprod code from the following directory to see the necessary localhost substitutions(for your production machine http address) or other configuration options.
 
 {{{
 cd /home/xeniaprod
