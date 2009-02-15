@@ -1,0 +1,125 @@
+#summary various formats/products and services supported by the Xenia vmware instance
+
+*Note the following links reference products produced by a properly running vmware instance local to the current machine via http://localhost*
+
+If running a final production instance for reference by others via the web, replace http://localhost with your web http address.
+
+<wiki:toc max_depth="6" />
+
+----
+= Google Earth/Maps, Latest ObsKML, Styled KML =
+
+[http://code.google.com/p/xenia/wiki/XeniaProducts#Google_Earth_and_Maps original documentation ] 
+
+A script runs once an hour to take the latest observations and create a
+  * Combined
+    * ObsKML latest [http://localhost/xenia/feeds/xenia_obskml_latest.kml KML] and [http://localhost/xenia/feeds/xenia_obskml_latest.kmz KMZ] files for resharing
+    * A [http://localhost/xenia/feeds/latest_placemarks.kmz styled KMZ] version of these combined observations for display in Google Earth/Maps,etc
+    * An [http://localhost/xenia/feeds/archive/ archive] of the last 24 hours of styled KMZ files is available also
+  * By Organization
+    * A [http://localhost/xenia/feeds/wq/wq_latest_placemarks.kmz styled KMZ] version of each organizations observations for display in Google Earth/Maps,etc
+    * An [http://localhost/xenia/feeds/wq/archive/ archive] of the last 24 hours of styled KMZ files is available also
+
+Note the above KML/KMZ styling has the following features:
+  
+  * *layer folders toggle on/off by operator*(visualize individual operator/data provider status)
+    * platform styling highlights non-reporting platforms as shaded red - platform link information still available.  Don't want platforms or observation to disappear from the map if they are intermittently reporting.
+  * *by 'operator' layer* listing *all* the latest observations available at each platform
+  * *by 'observation' layer* listing observations of the same obs_type.uom_type for *all* associated platforms
+    * acts as a observation type 'inventory'
+    * optional style.xml to provide basic default blue/green/red color scale for obs_type.uom_type measurement value range limit
+  * *naming/reference hierarchy*
+    * platform = operator.platform<.package> where operator and platform names are controlled vocabularies and package name is optional unique string
+    * sensor = sensor_id (an integer id) = obs_type.uom_type.s_order  s_order is an integer counter to help distinguish between redundant or profiling sensor arrays of the same obs_type.uom_type
+  * a feature which I would like to implement is use of *regions* to help break the entire layer into more manageable data blocks/levels of detail for *better download/display* concerns similar in concept to the Google Maps implementation at http://tidesandcurrents.noaa.gov/gmap3 or using some automated solution possibly like http://www.mapeed.com
+
+----
+Note that the time window control can be manipulated (moved, increased, decreased) - see the following documentation 
+
+http://earth.google.com/userguide/v4/ug_gps.html#timeline
+
+ObsKML can be merged and revisualized as shown in the following image
+
+http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/ObsKMLGenerate/obskml_all_latest.jpg
+
+----
+= time-series graphs =
+
+http://xenia.googlecode.com/files/time_series.jpg
+
+Simple time-series graphs of the previous days observations are available as web links embedded within the KML and HTML table stub displays
+
+http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastLite#a_description_of_the_graph_xml_f
+
+----
+= GeoRSS = 
+
+http://localhost/xenia/feeds/georss
+
+http://xenia.googlecode.com/files/georss.jpg
+
+GeoRSS provides a simple geospatially referenced RSS feed for simple harvesting/redisplay of latest observations for each platform as a data feed.  Above feed displays correctly in Firefox browser.
+
+----
+= html table styling = 
+
+http://localhost/xenia/feeds/html_tables
+
+http://xenia.googlecode.com/files/html_table.jpg
+
+HTML platform table stubs are suitable for dynamic webpage popups via AJAX type calls
+
+[http://localhost/xenia/feeds/html_tables/html_content.db html_content.db sqlite table] also populated available for use.
+
+see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastNotesAjax
+
+----
+= convert from ObsKML to other formats (CSV,shapefile) =
+
+Currently just all the latest observations combined, will add 'by obs' and shapefile later
+
+http://localhost/xenia/feeds/all_latest.csv
+
+http://localhost/xenia/feeds/all_latest.csv.zip
+
+----
+= Data source files - zipped ObsKML and SQL =
+
+A [http://localhost/xenia/feeds/all_metadata_latest.zip zip file] of all the ObsKML imported to the database and a [http://localhost/xenia/feeds/latest_raw.sql SQL file] of the ObsKML as converted to SQL INSERT statements.  Either source could be used to populate other copy xenia instances.  
+
+----
+= Latest 3 day database and julian weekly archive databases = 
+
+Sqlite file download for priming, analysis, etc of the latest 3 day time window [http://localhost/xenia/archive_db/latest.db database] and [http://localhost/xenia/archive_db/weekly/ folder] containing the julian-weekly-split archive of sqlite databases.
+
+----
+= DIF SOS =
+
+http://localhost/xenia/sos/difSOS.html
+
+XML responses should display correctly within Firefox, IE browsers
+
+An OGC SOS(OpenGeospatial Consortium [http://www.opengeospatial.org/standards/sos Sensor Observation Service]) web service method supports queries on the database 
+
+see http://code.google.com/p/xenia/wiki/XeniaSOS
+
+----
+= Flow/Feed status and notification = 
+
+[http://code.google.com/p/xenia/wiki/XeniaUpdates#flow_monitor original documentation]
+
+A script is run once an hour 
+  * to check that the data feeds have not dropped below threshold levels(if so an email notification is sent)
+  * to generate a graph(past several days) of
+    * recent observation flow
+    * low count magnified flow
+    * archival database flow
+
+Recent observation flow<br/>
+http://localhost/xenia/feeds/flow_xenia.png
+
+Low count magnified flow<br/>
+http://localhost/xenia/feeds/flow_low.png
+
+Archival database flow<br/>
+http://localhost/xenia/feeds/flow_archive.png
