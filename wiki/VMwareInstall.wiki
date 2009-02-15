@@ -73,10 +73,10 @@ See the other gisvm related passwords [http://www.vmware.com/appliances/director
 
 *sudo* all commands that need root access.
 
-To sudo between users (use the first user password not the target user password)
+To sudo between users, use the first user password(user999 in the below example) not the target user password
 {{{
 user@gisvm:~$ sudo su - xeniaprod
-[sudo] password for user: _enter user999_
+[sudo] password for user:
 xeniaprod@gisvm:~$ 
 }}}
 
