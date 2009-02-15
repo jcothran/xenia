@@ -60,3 +60,36 @@ file /etc/hosts.allow
 #sshd : xxx.xxx.xxx.xxx : allow
 sshd : ALL : deny
 }}}
+
+= miscellaneous =
+
+The username associated with the xenia development is *xeniaprod* with password *xeniaprod999*  Modify this password as needed.
+
+The username *user* has password *user999* although this user account is not utilized.  Modify this password as needed.
+
+See the other gisvm related passwords [http://www.vmware.com/appliances/directory/55606 here] and modify as needed.
+
+*sudo* all commands that need root access.
+
+The *two crontabs* which are active are *root* which performs a nightly cleanup of files under directory /home/xeniaprod/tmp_web and *xeniaprod* which also performs file cleanup but more importantly runs the following main job hourly.
+
+*/home/xeniaprod/cron/xeniaflow.sh*
+
+The above listed file creates all the subsequent related products and should be referenced to understand the product creation flow.
+
+Xenia related log files are at /home/xeniaprod/tmp and cleared nightly.
+
+Apache user(www-data) created related temporary files are at /home/xeniaprod/tmp_web and cleared nightly.
+
+= host substitutions, configuration =
+
+grep the code from the following directory to see the line substitutions you'll need to make(mainly relating to the particular host machine address the instance is run on).
+
+{{{
+cd /home/xeniaprod
+find . -name "*" -exec grep -H "VM_CONFIG" {} \; 
+find . -name "*.sh" -exec grep -H "localhost" {} \; 
+find . -name "*.pl" -exec grep -H "localhost" {} \;  
+find . -name "*.xml" -exec grep -H "localhost" {} \;
+}}}
+
