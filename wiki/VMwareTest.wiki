@@ -39,38 +39,27 @@ Start the vmware image on the vmware player by opening the associated .vmx file
 
 = Startup issues = 
 
-The instance is running an *openssh daemon* but with no hosts allowed in file /etc/hosts.allow - edit this service and related security files as necessary if needed.
+The image being played may report in the player title the gisvm version 'gisvm20081101en_r' which can be ignored.  I have not determined how to set this title properly yet.
 
-The username associated with the xenia development is *xeniaprod* with password *xeniaprod999*  Modify this password as needed.
+The image should boot to a command line user login.  Login as user *xeniaprod* with password *xeniaprod999*
 
-The username *user* has password *user999* although this user account is not utilized.  Modify this password as needed.
-
-See the other gisvm related passwords [http://www.vmware.com/appliances/directory/55606 here] and modify as needed.
-
-*sudo* all commands that need root access.
-
-The *two crontabs* which are active are *root* which performs a nightly cleanup of files under directory /home/xeniaprod/tmp_web and *xeniaprod* which also performs file cleanup but more importantly runs the following main job hourly.
-
-*/home/xeniaprod/cron/xeniaflow.sh*
-
-The above listed file creates all the subsequent related products and should be referenced to understand the product creation flow.
-
-*For the initial version, please line comment (# prefix) the crontab line which executes the line containing the call to execute xeniaflow.sh until you have made the below correct host oriented substitution for your instance.*
-
-Xenia related log files are at /home/xeniaprod/tmp and cleared nightly.
-
-Apache user(www-data) created related temporary files are at /home/xeniaprod/tmp_web and cleared nightly.
-
-= Substitutions =
-
-grep the code from the following directory to see the line substitutions you'll need to make(mainly relating to the particular host machine address the instance is run on).
-
+I have the GUI display (gdm) disabled by default.  To start a GUI session enter the following command and wait for the GUI to display.
 {{{
-cd /home/xeniaprod
-grep -r "VM_CONFIG" * 
+sudo gdm start
 }}}
 
-After making these substitutions, and re-enabling(if disabled/commented out) the user xeniaprod crontab process xeniaflow.sh, you begin to see the products on your host instance(substituting your http host address) populating as listed at [VMwareProducts].  The xeniaprod crontab executes once an hour at the top of the hour, so you may have to wait a few hours(or manually run/bash the file xeniaflow.sh) to start seeing results.
+If you wish to re-enable the GUI default behaviour see instructions at http://ubuntuforums.org/showthread.php?t=664199 
+
+While leaving the xenia vmware instance running, it is by default using the xeniaprod crontab to once an hour(at the top of the hour) fetch 3 sample organization hourly data feed files formatted as ObsKML (see ObsKML simple sample below) to populate a local sqlite database and produce several products.
+
+The main file which creates the data process flow can be invoked manually by the following command (also executed hourly at the top of the hour)
+{{{
+bash /home/xeniaprod/cron/xeniaflow.sh
+}}}
+
+After the *xeniaflow.sh* script has executed, most of the products listed at [VMwareProductsLocal] should be populated locally.  A few of the graph products,etc require two or more runs before displaying properly so you may have to wait a few hours/passes or so to start seeing proper results.
+
+
 
 = Adding a new ObsKML feed =
 
