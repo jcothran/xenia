@@ -41,6 +41,12 @@ Start the vmware image on the vmware player by opening the associated .vmx file
 
 The image being played may report in the player title the gisvm version 'gisvm20081101en_r' which can be ignored.  I have not determined how to set this title properly yet.
 
+For the 'virtual' server on the vmplayer menu at screen top, changed the 'Devices->Network Adapter' setting to 'Bridged' which establishes network communication between the virtual server and host.
+
+You may also need to set the radio button 'wired network' from the top menu icon(circled in red) in the following image
+
+http://xenia.googlecode.com/files/screen_1.jpg
+
 The image should boot to a command line user login.  Login as user *xeniaprod* with password *xeniaprod999*
 
 I have the GUI display (gdm) disabled by default.  To start a GUI session enter the following command and wait for the GUI to display.
