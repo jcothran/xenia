@@ -76,7 +76,7 @@ How to add additional data feeds(obskml formatted) beyond those already included
 Note the following currently available ObsKML feeds at http://carocoops.org/obskml/feeds/
   * ndbc (National Data Buoy Center) _included with test install_
   * nos (National Ocean Service - Tides and Currents)
-  * nws (National Weather Service)
+  * nws (National Weather Service) _included with test install_
   * usf (University of South Florida)
   * nccoos (North Carolina Coastal Ocean Observing System)
   * cormp (UNCS Coastal Ocean Research and Monitoring Program)
