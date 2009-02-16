@@ -1,6 +1,8 @@
 #summary vmware project update notes
 
-These notes are in part a continuation of earlier developer notes at http://code.google.com/p/xenia/wiki/XeniaUpdates and http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
+These notes are in part a continuation of earlier developer notes at
+  * 2008 http://code.google.com/p/xenia/wiki/XeniaUpdates
+  * 2004-2007 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
 
 <wiki:toc max_depth="6" />
 
