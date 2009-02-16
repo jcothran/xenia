@@ -1,5 +1,7 @@
 #summary Optimization notes for Sqlite, SQL statements
 
+<wiki:toc max_depth="6" />
+
 = Data Dictionary Listing(Simple Scalar Types) = 
 
 {{{
