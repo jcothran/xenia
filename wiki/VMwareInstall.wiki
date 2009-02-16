@@ -10,9 +10,9 @@ Wanted to bridge the 'virtual' vmware player server across the 'host' server.  E
 
 For the 'virtual' server on the vmplayer menu at screen top, changed the 'Devices->Network Adapter' setting to 'Bridged' which establishes network communication between the virtual server and host.
 
-You may also need to set the radio button 'wired network' from the top menu icon in the following image
+You may also need to set the radio button 'wired network' from the top menu icon(circled in red) in the following image
 
-
+http://xenia.googlecode.com/files/screen_1.jpg
 
 The 'ifconfig' command will tell you which ethernet device the server is trying to communicate on.  For mine the host server was running 'eth0' and the virtual was running 'eth5'
 
