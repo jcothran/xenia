@@ -177,7 +177,7 @@ The above schema represents two observations from a single platform.
 
 The 'elev' tag in the above schema corresponds to elevation. Positive is meters above sea level and negative is meters below sea level. Missing or unknown elevation values can leave an empty elev tag like <elev />
 
-A recommended but not required convention is to use the Placemark id attribute to help uniquely identify observations between data providers. The recommended convention is the concatenation of <operator>.<platform>.<package> like carocoops.CAP1.buoy or nws.KCAE.met
+A recommended but not required convention is to use the Placemark id attribute to help uniquely identify observations between data providers. The recommended convention is the concatenation of <organization>.<platform>.<package> like carocoops.CAP1.buoy or nws.KCAE.met
 
 Observation listing order is preferred to be from highest elevation/altitude to lowest elevation/depth.
 
