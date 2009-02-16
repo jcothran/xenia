@@ -186,7 +186,7 @@ Redundant sensors/observations would be listed in their order of importance (pri
 
 == Example scripts for generating ObsKML ==
 
-Here are some example scripts detailing how to create ObsKML from several data source types
+Example scripts detailing how to create ObsKML from several data source types are documented at
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate
 
