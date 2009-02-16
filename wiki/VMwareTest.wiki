@@ -186,6 +186,12 @@ Observation listing order is preferred to be from highest elevation/altitude to 
 Redundant sensors/observations would be listed in their order of importance (primary, secondary, etc).
 }}}
 
+== Adding new measurement types (m_type_id) ==
+
+The existing database supported data dictionary of measurement types(m_type) which is the combination of observation type(obsType) and unit of measurement type(uom_type) is listed [http://carocoops.org/microwfs/data_dictionary_listing.txt here]
+
+If you would like to add additional measurement types see documentatation [http://code.google.com/p/xenia/wiki/XeniaSqliteNotes#Adding_simple_scalar_types_to_the_data_dictionary_tables_and_pro here]
+
 == Example scripts for generating ObsKML ==
 
 Example scripts detailing how to create ObsKML from several data source types are documented at
