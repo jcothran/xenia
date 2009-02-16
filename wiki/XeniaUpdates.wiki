@@ -327,3 +327,32 @@ Note that a few of the demos include google images which need a new certificate 
 As a test, I also modified some files on my Windows vmplayer instance and transferred the image to the Linux vmplayer and ran the image with no problems - so would like to be able to run and test virtual development images on the desktop and promote and share final images to other developers and production servers. 
 
 I have received several comments from others that they are utilizing VirtualBox http://www.virtualbox.org as a better performing vmware image player and will have to try that also.
+
+----
+= February 13, 2009 Xenia vmware image =
+
+Wanted to relay that I've been experimenting with vmware http://www.vmware.com and the vmware player and have created a virtual instance/image/appliance of the 'Xenia' development and associated scripts and database (xeniavm). 
+
+The 1.5 GB rar-compressed(6 GB uncompressed) vmware image/appliance is available for download at http://neptune.baruch.sc.edu/xenia/vmware_dist/xeniavm20090213.rar
+
+This vmware image was developed on top of the FOSS geospatial vmware image(geostatistics package which includes 'R') available at http://gisvm.com (appliance description) - thanks to Ricardo Pinho.
+
+While the Xenia scripts do not directly utilize/interact those included applications in the gisvm image at this time, I thought they represent the best existing collection of FOSS geospatial software for future development.
+
+I've created wiki documentation relating to the vmware instance with the starting link at http://code.google.com/p/xenia/wiki/VMwareHome
+
+The documentation at http://code.google.com/p/xenia/wiki/VMwareTest details some getting started info and how to add your own imported data files formatted as ObsKML and get the immediate benefit of your observation data aggregated, restyled and reformatted into a variety of formats and services listed below.
+
+from http://code.google.com/p/xenia/wiki/VMwareProducts
+
+  * Google Earth/Maps, Latest ObsKML, Styled KML
+  * time-series graphs
+  * GeoRSS
+  * html table styling
+  * convert from ObsKML to other formats (CSV,shapefile)
+  * Data source files - zipped ObsKML and SQL
+  * Latest 3 day database and julian weekly archive databases
+  * DIF SOS
+  * Flow/Feed status and notification
+
+Anyone interested in providing feedback or contributions(development or data) regarding the image/development please contact me at jeremy.cothran@gmail.com
