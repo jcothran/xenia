@@ -52,7 +52,7 @@ sudo gdm start
 
 If you wish to re-enable the GUI default behaviour see instructions at http://ubuntuforums.org/showthread.php?t=664199 
 
-You may also need to set the radio button 'wired network' from the top menu icon(circled in red) in the following image
+You may also need to set the radio button '*Wired Network*' from the top menu icon(circled in red) in the following image
 
 http://xenia.googlecode.com/files/screen_1.jpg
 
