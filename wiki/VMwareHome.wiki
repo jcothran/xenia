@@ -24,7 +24,7 @@ If you are looking to experiment with the xeniavm image instance on a local vmpl
 
 A listserv or IRC channel(would suggest #xeniavm ) could also be established if enough developers are interested.
 
-Am looking towards trying to utilize this server virtualization as a means to help standardardize and maintain our in-house server setups. Additionally since the server is virtualized as a file image, it is possible to share and reproduce this server and associated tools/development wherever the vmware file image is supported (including other 'players' or cloud type services). The following article link describes how this concept is helpful to IT shops
+Trying to utilize this server virtualization as a means to help standardardize and maintain our in-house server setups. Additionally since the server is virtualized as a file image, it is possible to share and reproduce this server and associated tools/development wherever the vmware file image is supported (including other 'players' or cloud type services). The following article link describes how this concept is helpful to IT shops
 
 http://rwhiffen.wordpress.com/2006/07/13/the-genius-of-free-vmware/
 
