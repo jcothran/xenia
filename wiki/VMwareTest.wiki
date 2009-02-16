@@ -111,7 +111,7 @@ unzip -q "../nws/nws_metadata_latest.kmz" >> /home/xeniaprod/tmp/cron.log 2>&1
 === add organization to styled KMZ /home/xeniaprod/cron/styleLatest.sh ===
 add org name to array list
 {{{
-my @org_array = qw(usgs nerrs ndbc *nws*);
+my @org_array = qw(usgs nerrs ndbc nws);
 }}}
 === add organization name to be included in status graphs, email notification ===
 file /home/xeniaprod/scripts/sqlite/flow_monitor/check_status.pl
