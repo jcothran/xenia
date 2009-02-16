@@ -12,7 +12,7 @@ For the 'virtual' server on the vmplayer menu at screen top, changed the 'Device
 
 You may also need to set the radio button 'wired network' from the top menu icon(circled in red) in the following image
 
-http://xenia.googlecode.com/files/screen_1.jpg
+<img src="http://xenia.googlecode.com/files/screen_1.jpg" height=300 width=600>
 
 The 'ifconfig' command will tell you which ethernet device the server is trying to communicate on.  For mine the host server was running 'eth0' and the virtual was running 'eth5'
 
