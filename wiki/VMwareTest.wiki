@@ -190,7 +190,7 @@ Redundant sensors/observations would be listed in their order of importance (pri
 
 The existing database supported data dictionary of measurement types(m_type) which is the combination of observation type(obsType) and unit of measurement type(uom_type) is listed [http://carocoops.org/microwfs/data_dictionary_listing.txt here]
 
-If you would like to add additional measurement types see documentatation [http://code.google.com/p/xenia/wiki/XeniaSqliteNotes#Adding_simple_scalar_types_to_the_data_dictionary_tables_and_pro here]
+If you would like to add additional measurement types see documentatation [http://code.google.com/p/xenia/wiki/XeniaSqliteNotes#Adding_simple_scalar_types_to_the_data_dictionary_tables_and_pro here] and database schema diagram [http://code.google.com/p/xenia/wiki/XeniaPackageSqlite#Simplified_schema here]
 
 == Example scripts for generating ObsKML ==
 
