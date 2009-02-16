@@ -99,22 +99,30 @@ add line
 2 0 * * * find /home/xeniaprod/feeds/ndbc/archive/* -maxdepth 1 -cmin +1400 -exec rm -f {} \;
 }}}
 === Edit /home/xeniaprod/cron/getObskml.sh ==
-add line
+add line to retrieve obskml files(one or several as .kmz,.zip) to local folder
 {{{
 wget http://carocoops.org/obskml/feeds/nws/nws_latest_obskml.zip -O /home/xeniaprod/feeds/nws/nws_metadata_latest.kmz
 }}}
 === Edit /home/xeniaprod/cron/mk_xenia_all_latest.sh ===
-add line
+add line to unzip one or several input obskml files(.kmz,.zip) to common temporary folder for common zip/processing
 {{{
 unzip -q "../nws/nws_metadata_latest.kmz" >> /home/xeniaprod/tmp/cron.log 2>&1    
 }}}
-
-
+=== add organization to styled KMZ /home/xeniaprod/cron/styleLatest.sh ===
+add org name to array list
 {{{
-add getObskml.sh
-add styleLatest.sh
-
-#check_status - array, graph spots
+my @org_array = qw(usgs nerrs ndbc *nws*);
+}}}
+=== add organization name to be included in status graphs, email notification ===
+file /home/xeniaprod/scripts/sqlite/flow_monitor/check_status.pl
+{{{
+my @org_array = qw(usgs nerrs ndbc nws);  #VM_CONFIG
+}}}
+additional line plot
+file /home/xeniaprod/scripts/sqlite/flow_monitor/status.lib
+{{{
+     '$graph_data_file' using 1:7 t '$legend[2]' with lines lt 3, \\
+     '$graph_data_file' using 1:8 t '$legend[3]' with lines lt 4
 }}}
 
 == ObsKML simple example ==
