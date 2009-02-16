@@ -135,7 +135,9 @@ file /home/xeniaprod/scripts/sqlite/flow_monitor/status.lib
 
 == ObsKML simple example ==
 
-The below sample kml file shows an example of two observations listed at a platform. The xml schema is available [http://carocoops.org/obskml/1.0.0/obskml_simple.xsd.txt here].
+The below sample kml file shows an example of two observations listed at a platform. The xml schema is available [http://carocoops.org/obskml/1.0.0/obskml_simple.xsd.txt here]
+
+ObsKML is not a community standard at this time, but an in-house developed convention for staging/ingesting imported data to a common XML format using KML as a wrapper(GeoRSS,Atom/JSON could also utilize this data content schema also).  Further ObsKML documentation is available [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML here].
 
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
