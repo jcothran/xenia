@@ -63,7 +63,7 @@ The main file which creates the data process flow can be invoked manually by the
 bash /home/xeniaprod/cron/xeniaflow.sh
 }}}
 
-After the *xeniaflow.sh* script has executed, most of the products listed at [VMwareProductsLocal] should be populated locally(start a firefox browser image within the instance and goto http://localhost/xenia) to the vmware image instance.  A few of the graph products,etc require two or more runs before displaying properly so you may have to wait a few hours/passes or so to start seeing proper results.
+After the *xeniaflow.sh* script has executed, most of the products listed at [VMwareProductsLocal] should be populated locally to the vmware image instance(start a firefox browser image within the instance and goto http://localhost/xenia).  A few of the graph products,etc require two or more runs before displaying properly so you may have to wait a few hours/passes or so to start seeing proper results.
 
 
 ----
