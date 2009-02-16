@@ -54,7 +54,7 @@ If you wish to re-enable the GUI default behaviour see instructions at http://ub
 
 You may also need to set the radio button '*Wired Network*' from the top menu icon(circled in red) in the following image
 
-http://xenia.googlecode.com/files/screen_1.jpg
+<img src="http://xenia.googlecode.com/files/screen_1.jpg" height=300 width=600>
 
 While leaving the xenia vmware instance running, it is by default using the xeniaprod crontab to once an hour(at the top of the hour) fetch 3 sample organization hourly data feed files formatted as ObsKML (see ObsKML simple sample below) to populate a local sqlite database and produce several products.
 
