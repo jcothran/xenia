@@ -37,7 +37,7 @@ Start the vmware image on the vmware player by opening the associated .vmx file
 
 ----
 
-= Startup issues = 
+= Startup = 
 
 The image being played may report in the player title the gisvm version 'gisvm20081101en_r' which can be ignored.  I have not determined how to set this title properly yet.
 
