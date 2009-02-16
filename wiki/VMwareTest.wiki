@@ -56,6 +56,8 @@ You may also need to set the radio button '*Wired Network*' from the top menu ic
 
 <img src="http://xenia.googlecode.com/files/screen_1.jpg" height=300 width=600>
 
+At this point your image instance should have internet connectivity and you should be able to start a firefox browser(browser shortcut at top-of-screen menu) which will default to the website at http://gisvm.com  Typing in the URL http://localhost/xenia should display the same as the above screenshot.
+
 While leaving the xenia vmware instance running, it is by default using the xeniaprod crontab to once an hour(at the top of the hour) fetch 3 sample organization hourly data feed files formatted as ObsKML (see ObsKML simple sample below) to populate a local sqlite database and produce several products.
 
 The main file which creates the data process flow can be invoked manually by the following command (also automatically executed hourly at the top of the hour by the xeniaprod crontab)
