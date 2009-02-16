@@ -69,7 +69,7 @@ After the *xeniaflow.sh* script has executed, most of the products listed at [VM
 ----
 = Adding a new ObsKML feed =
 
-The sample USGS and NERRS feeds are flowing correctly and you are ready to try adding another feed.
+How to add additional data feeds(obskml formatted) beyond those already included (usgs, nerrs, ndbc, nws).
 
 Note the following currently available ObsKML feeds at http://carocoops.org/obskml/feeds/
   * ndbc (National Data Buoy Center) _included with test install_
@@ -84,7 +84,7 @@ Note the following currently available ObsKML feeds at http://carocoops.org/obsk
   * vos (NOAA Volutary Observing Ships)
   * _can add more ObsKML feeds to an online catalog if community interest_
 
-The following example demonstrates adding an hourly [http://www.nws.noaa.gov/ NWS] ObsKML feed as available from 
+The following example demonstrates how the hourly ObsKML data feed was added for  [http://www.nws.noaa.gov/ NWS] as available from 
 
 http://carocoops.org/obskml/feeds/nws/nws_latest_obskml.zip
 
