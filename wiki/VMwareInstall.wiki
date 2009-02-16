@@ -8,6 +8,12 @@
 
 Wanted to bridge the 'virtual' vmware player server across the 'host' server.  Established my static IP on the host using the following steps.
 
+For the 'virtual' server on the vmplayer menu at screen top, changed the 'Devices->Network Adapter' setting to 'Bridged' which establishes network communication between the virtual server and host.
+
+You may also need to set the radio button 'wired network' from the top menu icon in the following image
+
+
+
 The 'ifconfig' command will tell you which ethernet device the server is trying to communicate on.  For mine the host server was running 'eth0' and the virtual was running 'eth5'
 
 from http://forums.techarena.in/operating-systems/1106661.htm
@@ -30,8 +36,6 @@ Then restart network with
 {{{
 sudo /etc/init.d/networking restart
 }}}
-
-For the 'virtual' server on the vmplayer menu at screen top, changed the 'Devices->Network Adapter' setting to 'Bridged' which establishes network communication between the virtual server and host.
 
 Running 'ifconfig' command from virtual host listed ethernet as 'eth5' which is substituted for the 'eth0' and run in the same steps listed above for configuring the static IP for the host except now on the virtual server.
 
