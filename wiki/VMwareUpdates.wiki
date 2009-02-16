@@ -1,5 +1,7 @@
 #summary vmware project update notes
 
+These notes are in part a continuation of earlier developer notes at http://code.google.com/p/xenia/wiki/XeniaUpdates and 
+
 <wiki:toc max_depth="6" />
 
 = February 13, 2009 Xenia VMware version 1.0 =
