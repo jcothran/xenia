@@ -23,12 +23,15 @@ Intelligent River http://www.intelligentriver.org/data-products (Clemson Univers
 Great Lakes Information Network (GLIN) http://gis.glin.net (Xenia RDB)
 
 ----
+= presentation materials =
 [http://www.carocoops.org/documents/sccc/kiosk/cothran-usc-sc08-Kiosk-audio/ browser/flash presentation]
 
 [http://carocoops.org/documents/sccc_poster_JCothran.ppt Powerpoint poster]
 
 [http://carocoops.org/documents/sccc_presentation_JCothran.ppt Powerpoint presentation] [http://carocoops.org/documents/sccc presentation slides mp3 audio]
 ----
+
+= miscellaneous topics/links = 
 
 zope/plone(CMS (Content Management System) python based) http://en.wikipedia.org/wiki/Plone_(content_management_system)
 
