@@ -11,7 +11,7 @@ Secoora
   * maps (openlayers) http://secoora.org/maps/dynamic
   * files and feeds http://secoora.org/data
 
-= Project utilizing Xenia RDB schema = 
+= Projects utilizing Xenia RDB schema = 
 
 CarolinasRCOOS (openlayers *beta/experimental*) http://carolinasrcoos.org
   * http://code.google.com/p/rcoos/wiki/RCOOSHome
