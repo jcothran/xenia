@@ -1,11 +1,17 @@
 #summary general projects outline and ideas
 
+<wiki:toc max_depth="6">
+
+= Related projects = 
+
 Carocoops http://carocoops.org
 
 Secoora
   * maps http://secoora.org/maps
   * maps (openlayers) http://secoora.org/maps/dynamic
   * files and feeds http://secoora.org/data
+
+= Project utilizing Xenia RDB schema = 
 
 CarolinasRCOOS (openlayers *beta/experimental*) http://carolinasrcoos.org
   * http://code.google.com/p/rcoos/wiki/RCOOSHome
