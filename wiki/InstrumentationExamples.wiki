@@ -1,5 +1,9 @@
 #summary Notes on how various instrumentation might be captured to the Xenia schema
 
+see also http://trac.secoora.org/datamgmt/browser/docs/usc/docs/schemas
+
+<wiki:toc max_depth="6">
+
 = ADCP(Acoustic Doppler Current Profiler) =
 
 A fixed number/depth of ADCP bins track current velocity and direction.
