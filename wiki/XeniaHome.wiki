@@ -2,6 +2,8 @@
 
 for further information or discussion regarding *Xenia* or *ObsKML* send email to jeremy.cothran 'at' gmail.com 
 
+
+
 [http://www.carocoops.org/documents/sccc/kiosk/cothran-usc-sc08-Kiosk-audio/ browser/flash presentation]
 
 [http://carocoops.org/documents/sccc_poster_JCothran.ppt Powerpoint poster]
@@ -9,6 +11,8 @@ for further information or discussion regarding *Xenia* or *ObsKML* send email t
 [http://carocoops.org/documents/sccc_presentation_JCothran.ppt Powerpoint presentation] [http://carocoops.org/documents/sccc presentation slides mp3 audio]
 
 [http://www.youtube.com/watch?v=_CO9o2DyVV0&fmt=6 YouTube video]
+
+<wiki:toc max_depth="6">
 
 
 = [XeniaHome#Description Description] =
