@@ -1,6 +1,6 @@
 #summary Notes on how various instrumentation might be captured to the Xenia schema
 
-see also http://trac.secoora.org/datamgmt/browser/docs/usc/docs/schemas
+see also http://trac.secoora.org/datamgmt/browser/docs/usc/docs/schemas (adcp,glider,hf radar)
 
 <wiki:toc max_depth="6">
 
