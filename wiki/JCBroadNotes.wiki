@@ -139,7 +139,7 @@ earlier technical notes http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/J
 updates XeniaUpdates
 
 ----
-== Devolution - technology changes, lessons learned ==
+= Devolution - technology changes, lessons learned =
 
 _Simplify, simplify - Thoreau_
 
@@ -170,7 +170,7 @@ _Simplify, simplify - Thoreau_
 see also http://code.google.com/p/xenia/wiki/XeniaDesign
 
 ----
-== General technical discussions ==
+= General technical discussions =
   * ROA vs SOA 
     * http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML#Related_Links
     * OpenSearch
@@ -185,7 +185,7 @@ see also http://code.google.com/p/xenia/wiki/XeniaDesign
     * http://research.google.com/university/
 
 ----
-== Upcoming development ==
+= Upcoming development =
 
 VMWare - improved sharable/portable/redundant open source server/appliance stack via vmware
   * https://help.ubuntu.com/community/VMware/Player
