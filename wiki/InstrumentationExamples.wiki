@@ -52,8 +52,84 @@ Optionally the negative z value associated bin depth may be carried in the field
 
 If the bin depth configuration were to change, this would be tracked by additions to the metadata table which would point to the associated sensor_id(s) with an effective begin and end date and associated file/url references to free-form documents or related xml schemas.  See http://code.google.com/p/xenia/wiki/XeniaUpdates 'sqlite version 3'
 
+=== obskml example ===
+{{{
+<!-- for this adcp example (fixed-profiler), a new placemark is generated for each change in timestamp.  Repeated obsType.uomType bins are differentiated by their sOrder and elev(depth).  Preference is for sOrder to be listed in increasing order(1,2,3,...) from MSL surface downward(depth) or upward(height) -->
+
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Document>
+  <name>Obskml sample</name>
+  <open>1</open>
+  <Placemark id="carocoops.CAP2.adcp">
+    <name>carocoops.CAP2.adcp</name>  <!-- the name field is the preferred element for capturing the platform_id (organization.platform.package) related key id fields -->
+    <description>An html table derived from the obs kml metadata tags might be displayed here</description>
+    <Point>
+      <coordinates>-79.68,32.86</coordinates>
+    </Point>
+    <TimeStamp><when>2007-01-15T14:00:00</when></TimeStamp>
+
+    <Metadata>
+    <obsList xmlns="http://carocoops.org/obskml/1.0.0/obskml_simple.xsd" >
+
+    <!-- adcp bin closest to MSL surface, bins/sOrder listed in order from surface -->
+    <obs>
+      <obsType>current_speed</obsType> <!-- key id field -->
+      <uomType>cm_s-1</uomType> <!-- key id field -->
+      <value>55</value>
+      <elev>-1</elev> <!-- elevation assumed unit meters above height(+) or below depth(-) MSL, this would also be the 'average' height/depth for tidally influenced sources -->
+      <sOrder>1</sOrder>
+    </obs>
+
+    <obs>
+      <obsType>current_to_direction</obsType> <!-- key id field -->
+      <uomType>degrees_true</uomType> <!-- key id field -->
+      <value>264</value>
+      <elev>-1</elev>
+      <sOrder>1</sOrder>      
+    </obs>
+
+    <obs>
+      <obsType>current_speed</obsType> <!-- key id field -->
+      <uomType>cm_s-1</uomType> <!-- key id field -->
+      <value>49</value>
+      <elev>-3</elev> <!-- elevation assumed unit meters above height(+) or below depth(-) MSL, this would also be the 'average' height/depth for tidally influenced sources -->
+      <sOrder>2</sOrder>
+    </obs>
+
+    <obs>
+      <obsType>current_to_direction</obsType> <!-- key id field -->
+      <uomType>degrees_true</uomType> <!-- key id field -->
+      <value>271</value>
+      <elev>-3</elev>
+      <sOrder>2</sOrder>
+    </obs>
+    
+    <obs>
+      <obsType>current_speed</obsType> <!-- key id field -->
+      <uomType>cm_s-1</uomType> <!-- key id field -->
+      <value>47</value>
+      <elev>-5</elev> <!-- elevation assumed unit meters above height(+) or below depth(-) MSL, this would also be the 'average' height/depth for tidally influenced sources -->
+      <sOrder>3</sOrder>
+    </obs>
+
+    <obs>
+      <obsType>current_to_direction</obsType> <!-- key id field -->
+      <uomType>degrees_true</uomType> <!-- key id field -->
+      <value>253</value>
+      <elev>-5</elev>
+      <sOrder>3</sOrder>      
+    </obs>    
+
+    </obsList>
+    </Metadata>
+  </Placemark>
+</Document>
+</kml>
+}}}
+
 = Glider = 
 
+=== obskml example ===
 {{{
 <!-- for this glider example (moving-point-3D), a new placemark is generated for each change in timestamp/position.  This would also work the similarly for moving-point-2D -->
 
