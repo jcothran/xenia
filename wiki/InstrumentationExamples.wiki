@@ -52,7 +52,6 @@ Optionally the negative z value associated bin depth may be carried in the field
 
 If the bin depth configuration were to change, this would be tracked by additions to the metadata table which would point to the associated sensor_id(s) with an effective begin and end date and associated file/url references to free-form documents or related xml schemas.  See http://code.google.com/p/xenia/wiki/XeniaUpdates 'sqlite version 3'
 
-=== obskml example ===
 {{{
 <!-- for this adcp example (fixed-profiler), a new placemark is generated for each change in timestamp.  Repeated obsType.uomType bins are differentiated by their sOrder and elev(depth).  Preference is for sOrder to be listed in increasing order(1,2,3,...) from MSL surface downward(depth) or upward(height) -->
 
@@ -129,7 +128,6 @@ If the bin depth configuration were to change, this would be tracked by addition
 
 = Glider = 
 
-=== obskml example ===
 {{{
 <!-- for this glider example (moving-point-3D), a new placemark is generated for each change in timestamp/position.  This would also work the similarly for moving-point-2D -->
 
