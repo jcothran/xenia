@@ -1,5 +1,7 @@
 #summary Sqlite version of Xenia relational database
 
+See also [VMwareHome] regarding a vmware image for testing/development purposes.
+
 <wiki:toc max_depth="6">
 
 = Sample database = 
