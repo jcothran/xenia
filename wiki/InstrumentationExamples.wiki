@@ -272,7 +272,7 @@ Also in regards to the CTD bottle casts, would propose that a new sOrder (which 
       <obsType>salinity</obsType> <!-- key id field -->
       <uomType>psu</uomType> <!-- key id field -->
       <value>34.5</value>
-      
+    
       <elev>-1.0</elev> <!-- elevation assumed unit meters above height(+) or below depth(-) MSL, this would also be the 'average' height/depth for tidally influenced sources -->
       <sOrder>1</sOrder>
       <metadata_id>43</metadata_id> <!-- optional bottle metadata if reference, include in further placemarks -->
@@ -292,7 +292,7 @@ Also in regards to the CTD bottle casts, would propose that a new sOrder (which 
   </Placemark>
 }}}
 {{{  
-  <!-- location #1, cast#1, depth#2, changes in time(5 sec), depth/elev(1 m), measurement values only -->
+  <!-- location #1, cast#1, depth#2, changes in time(+5 sec), depth/elev(-1 m) -->
   <Placemark id="acme.alvin.1">
     <name>acme.alvin.1</name>
     <description>An html table derived from the obs kml metadata tags might be displayed here</description>
@@ -308,7 +308,6 @@ Also in regards to the CTD bottle casts, would propose that a new sOrder (which 
       <obsType>salinity</obsType>
       <uomType>psu</uomType>
       <value>33.5</value>
-      
       <elev>-2.0</elev>
       <sOrder>1</sOrder>
     </obs>
@@ -325,7 +324,71 @@ Also in regards to the CTD bottle casts, would propose that a new sOrder (which 
     </Metadata>
   </Placemark>  
 }}}
+{{{  
+  <!-- location #2, cast#2, depth#1, changes in time(+1 hour),latitude(+0.1 deg),sOrder -->
+  <Placemark id="acme.alvin.1">
+    <name>acme.alvin.1</name>
+    <description>An html table derived from the obs kml metadata tags might be displayed here</description>
+    <Point>
+      <coordinates>-79.68,32.96</coordinates>
+    </Point>
+    <TimeStamp><when>2007-01-15T15:00:00</when></TimeStamp>
 
+    <Metadata>
+    <obsList xmlns="http://carocoops.org/obskml/1.0.0/obskml_simple.xsd" >
+
+    <obs>
+      <obsType>salinity</obsType>
+      <uomType>psu</uomType>
+      <value>33.2</value>
+      <elev>-1.0</elev>
+      <sOrder>2</sOrder>
+    </obs>
+
+    <obs>
+      <obsType>water_temperature</obsType>
+      <uomType>celsius</uomType>
+      <value>15.2</value>
+      <elev>-1.0</elev>
+      <sOrder>2</sOrder>      
+    </obs>
+
+    </obsList>
+    </Metadata>
+  </Placemark>  
+}}}
+{{{
+  <!-- location #2, cast#2, depth#2, changes in time(+5 sec), depth/elev(-1 m) -->  <Placemark id="acme.alvin.1">
+    <name>acme.alvin.1</name>
+    <description>An html table derived from the obs kml metadata tags might be displayed here</description>
+    <Point>
+      <coordinates>-79.68,32.96</coordinates>
+    </Point>
+    <TimeStamp><when>2007-01-15T15:00:05</when></TimeStamp>
+
+    <Metadata>
+    <obsList xmlns="http://carocoops.org/obskml/1.0.0/obskml_simple.xsd" >
+
+    <obs>
+      <obsType>salinity</obsType>
+      <uomType>psu</uomType>
+      <value>31.2</value>
+      <elev>-2.0</elev>
+      <sOrder>2</sOrder>
+    </obs>
+
+    <obs>
+      <obsType>water_temperature</obsType>
+      <uomType>celsius</uomType>
+      <value>14.2</value>
+      <elev>-2.0</elev>
+      <sOrder>2</sOrder>      
+    </obs>
+
+    </obsList>
+    </Metadata>
+  </Placemark>  
+}}}
 {{{
 </Document>
 </kml>
