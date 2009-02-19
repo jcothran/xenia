@@ -11,8 +11,6 @@ below is a common xml header/description for kml files
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- for this glider example (moving-point-3D), a new placemark is generated for each change in timestamp/position.  This would also work the similarly for moving-point-2D -->
-
 <!-- more documentation at http://carocoops.org/twiki_dmcc/bin/view/Main/ObsKML#Schema_simple  -->
 
 <!-- obskml 'complex' schema elements can be seen in the associated metadata dsi(dynamic sensor inventory) schema -->
@@ -57,6 +55,8 @@ If the bin depth configuration were to change, this would be tracked by addition
 = Glider = 
 
 {{{
+<!-- for this glider example (moving-point-3D), a new placemark is generated for each change in timestamp/position.  This would also work the similarly for moving-point-2D -->
+
 <kml xmlns="http://earth.google.com/kml/2.1">
 <Document>
   <name>Obskml sample</name>
