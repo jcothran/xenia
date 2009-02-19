@@ -2,7 +2,7 @@
 
 for further information or discussion regarding *Xenia* or *ObsKML* send email to jeremy.cothran 'at' gmail.com 
 
-
+See also [VMwareHome] regarding a vmware image for testing/development purposes.
 
 [http://www.carocoops.org/documents/sccc/kiosk/cothran-usc-sc08-Kiosk-audio/ browser/flash presentation]
 
