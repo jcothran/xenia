@@ -140,3 +140,18 @@ http://www.epa.gov/storet/wqx_products/WQX_ERD_v2.11.pdf
 == Seamonster ==
 
 http://robfatland.net/seamonster/index.php?title=Main_Page
+
+= Performance issues =
+
+>Do you have any metrics on the number of Xenia users, or
+aggregate # of total obs/hour across Xenia instance available?
+
+The general figure that I use is 10,000 obs/hour on a generic Dell Poweredge 2850(old 2006 model dual-core with 2  GB memory) which is what I have tested here - the processing time could be divided between:
+
+  * time required to process raw->ObsKML->SQL
+  * time required to process SQL against database(s)
+  * time required to pregenerate output products (variable depending on number and complexity of output products, could be workload balanced against other servers)
+
+The storage space that this translates into at 10K obs/day (with some 'wasted' space for convenience since fields such as multi_obs.platform_handle could be an integer reference instead of a string) is about 40-50 MB/day or a little over 300 MB per julian week.
+
+The place where I'd like to optimize further is in running the SQL against the sqlite database, would like to use transaction level SQL(begin/commit blocks) to greatly speed this step up, but haven't had time to program in catching SQL insert problems for logging and reprocessing.  And running inserts individually I've had to write a wrapper script around also as the default process tends to drop data rows silently http://code.google.com/p/xenia/wiki/XeniaUpdates#batch_insert.pl .
