@@ -146,7 +146,7 @@ http://robfatland.net/seamonster/index.php?title=Main_Page
 >Do you have any metrics on the number of Xenia users, or
 aggregate # of total obs/hour across Xenia instance available?
 
-The general figure that I use is 10,000 obs/hour on a generic Dell Poweredge 2850(old 2006 model dual-core with 2  GB memory) which is what I have tested here - the processing time could be divided between:
+The general figure that I use is 10,000 obs/hour(see data flow graph [http://code.google.com/p/xenia/wiki/XeniaUpdates#flow_monitor here]) on a generic Dell Poweredge 2850(old 2006 model dual-core with 2  GB memory) which is what I have tested here - the processing time could be divided between:
 
   * time required to process raw->ObsKML->SQL
   * time required to process SQL against database(s)
