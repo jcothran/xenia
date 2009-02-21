@@ -263,7 +263,7 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 		$sth->execute();
 
 		#requery for new row_id
-		$sql = qq{ SELECT row_id from sensor where m_type_id = $m_type_id and platform_id = $platform_row_id };
+		$sql = qq{ SELECT row_id from sensor where m_type_id = $m_type_id and platform_id = $platform_row_id and s_order = $sorder };
 		#print $sql."\n";
 		$sth = $dbh->prepare( $sql );
 		$sth->execute();
