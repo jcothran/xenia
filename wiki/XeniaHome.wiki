@@ -4,7 +4,7 @@ for further information or discussion regarding *Xenia* or *ObsKML* send email t
 
 See also [VMwareHome] regarding a vmware image for testing/development purposes.
 
-<wiki:toc max_depth="6">
+<wiki:toc max_depth="4">
 
 = Presentation materials = 
 
