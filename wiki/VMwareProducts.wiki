@@ -4,7 +4,7 @@
 
 If running a final production instance for reference by others via the web, replace http references with your web http production http address.
 
-<wiki:toc max_depth="6" />
+<wiki:toc max_depth="4" />
 
 ----
 = Google Earth/Maps, Latest ObsKML, Styled KML =
