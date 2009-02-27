@@ -1,0 +1,214 @@
+=!TileCache Notes=
+[http://tilecache.org/ TileCache] is a tile serving server that I am using to sit in between  the RCOOS [http://openlayers.org/ OpenLayers] client and [http://mapserver.gis.umn.edu/ Mapserver] server. In short, this software creates a disk cache for maps and layers. Instead of !OpenLayers having to query mapserver each time for certain maps/layers, it queries !TileCache which then returns the tile set for the WMS request. The first time a query is made, if the tiles don't exist, !TileCache will make the appropriate query to retrieve the requested map area. Once the cache is primed, future queries will result in !TileCache sending the previously generated tile(s) to the client, thus reducing the overhead of a mapserver call. This is quite useful in speeding up the initial loads for our base map. 
+
+Layers that caching is useful for are ones like maps where the data is not going to change very often. Data such as radar images are not a good candidate since !TileCache will cache the image once and continue to serve it up even though the source data is changing. For example, let's say a radar image is updated every 10 minutes, but we've set up a !TileCache layer for it. Once that layer is cached, when we turn it on it is going to be the image from the initial caching, not an updated one. So this is where we need to take care when trying to use !TileCache.
+
+==Setup==
+  I configured my !TileCache to be used through cgi. According to the documentation, you have the options of CGI, mod_python, standalone(WSGI), FastCGI or under IIS. Currently my install resides under a /var/www/tilecache directory, simply because the documentation didn't make alot of sense to me and I was not sure what files needed to be where for me to be so bold as to install in /usr/lib/cgi-bin.
+
+    * Tilecache.cfg
+    For each layer we want to cache, we must have an entry in the tilecache.cfg file. The following is an example of a Mapserver layer configuration.  
+{{{
+[basemap]                                  
+type=MapServerLayer
+mapfile=/home/rcoos/mapserver/RCOOS.map
+layers=us_filled,counties,states_outline
+levels=5
+maxResolution=0.012699
+size=512,512
+bbox=-82,31,-74,37
+srs=EPSG:4326
+extension=png
+}}}
+    * [basemap]
+      This is the LAYER name we use in the !OpenLayers WMS query. It does not need to reflect the layers we are actually retrieving, it is simply an identifier.
+    * type 
+      This is the source we are querying. !TileCache can handle the following  types of queries: WMSLayer, MapnikLayer,   MapServerLayer, ImageLayer.
+    * mapfile
+      This is the full path to the mapfile the query is to use.
+    * layers 
+       These are the layer(s) we want to retrieve for this !TileCache query. Our [basemap] will contain these layers if the query is successful.
+    * levels
+      This is the number of zoom levels the !OpenLayers map supports. This and maxResolution are two key settings that must be correct to get the data you want back and not a blank tile. The configuration can be setup in one of two ways. Here we will discuss the way the configuration is set above. With the levels and maxesolution set, !TileCache can then compute the resolution array for the various zoom levels. When a query occurs, !TileCache parses the zoom level passed from !OpenLayers to then determine what resolution tile should be returned. If we have either levels or maxesolution set wrong, we'll get an empty tile back. There are error messages, however the only way I've been able to find out what is going is to look into the apache access.log, copy the query, then paste it into a browser. Most errors I saw were something on the order of "No index found for resolution XXXX. Resolutions available: [xxx,yyy,zzz]"
+    * maxResolution
+      This is the maximum resolution for our map. This is basically how many "units" does a pixel on the screen represent.  See Calculating Scales and Resolutions to find out how to calculate this value.
+    * size
+      This is the tile size we want to use for our map. Instead of one large image, the map can be divided up into individual tiles. The map object in !OpenLayers must also be set to use the same tile size. This can be accomplished in the map constructor by setting "tileSize: new OpenLayers.Size(512,512)" in the options.
+    * bbox
+      This is the bounding box for our query. 
+    *srs
+     This is the projection the data is in. This is the equivalent of the srs field in !OpenLayers as well as the PROJECTION setting in the Mapserver .map file.
+    * extension
+      This is the file type the image will be returned as.
+    * resolutions - Not used above
+    The other method to setup the tiles is to define each resolution for each zoom level. 
+    The reason I did not use this method was I thought it would be easier to let !TileCache calculate them for me.
+
+  * WMSLayer
+  The following is an example of setting up a query for an WMS layer. Note the new parameter, "url".
+{{{
+[WMSbasemap]
+type=WMSLayer
+url=http://129.252.37.86/cgi-bin/mapserv?MAP=/home/rcoos/mapserver/RCOOS.map
+layers=us_filled,counties,states_outline
+levels=5
+maxesolution=0.012699
+size=512,512
+bbox=-82,31,-74,37
+extension=png
+}}}
+    * url
+    This is the http address of the WMS server we are querying.
+
+  * Transparent Layer/Overlay
+  For data we want to use as an overlay on a map, we need to add "transparent=true" onto the end of our WMS url. Below is an example layer, note the url line:
+{{{
+[WMShtmlobs]
+type=WMSLayer
+url=http://129.252.37.86/cgi-bin/mapserv?MAP=/home/rcoos/mapserver/RCOOS.map&transparent=true
+layers=HTMLObsTable
+levels=4
+maxResolution=0.012699
+size=512,512
+bbox=-82,31,-74,37
+srs=EPSG:4326
+extension=png
+}}}
+*Setup Notes/Gotchas*
+  !TileCache uses the python mapscript from the Mapserver source to make the connection to mapserver. In my initial testing, my WMS query to my server also seemed to require the use of mapscript, however querying to the example server provided seemed to work fine. Originally I had compiled most of my Mapserver components( FreeType, Libconv, GD2) with a configuration setting of --disabled-shared. When I started to use !TileCache, I was seeing undefined symbol errors, such as FT_New_Face being undefined. I went back and compiled alot of the components without the --disabled-share setting, thus creating shared objects, or .so files, and mapscript was happy. A valuable linux tool I used to see what libraries the _mapscript.so file was using was "ldd". This allowed me to see what and where the libraries were. What I discovered is that for whatever reason the ones where I had undefined symbols were not linked into _mapscript.so at all.
+
+==!OpenLayers==
+  To make a call to the !TileCache, you simply need to modify your !OpenLayers WMS layer slightly.
+  The following is an example of our base layer:
+{{{
+  var TileCacheBaseMap = new OpenLayers.Layer.WMS( "Cached Base Map",
+                                      "http://129.252.37.86/tilecache/tilecache.cgi?",
+                                      {
+                                         LAYERS : "basemap",
+                                         GROUP : "BaseMap"
+                                       }
+                                     );                                    
+
+}}}
+  Our original layer, not pointing at !TileCache, is here:
+{{{
+  var BaseMap = new OpenLayers.Layer.WMS( "Base Map",
+                                      "http://129.252.37.86/cgi-bin/mapserv?",
+                                      {
+                                         MAP : '/home/rcoos/mapserver/RCOOS.map', 
+                                         SRS : 'epsg:4326', 
+                                         FORMAT : 'image/png', 
+                                         LAYERS : "us_filled,counties,states_outline",
+                                         GROUP : "BaseMap"
+                                       }, 
+                                       {
+                                         GUTTER: 10,
+                                         BUFFER: 2
+                                       }                                       
+                                      );
+
+}}}
+    The two areas of interest are the url used, and the LAYERS name. The url points to the  http directory for the tilecache.cgi file. The LAYERS is the name used in the tilecache.cfg file, [basemap]. Note that the square brackets are not used. 
+
+  * *Overlay Layer-With transparency*
+{{{
+      var HTMLObs = new OpenLayers.Layer.WMS( "Real Time Observations", 
+                                          'http://129.252.37.86/tilecache/tilecache.cgi?',
+                                          {
+                                           LAYERS: 'WMShtmlobs',  
+                                           GROUP : "InSitu",            
+                                           QUERYABLE: 'true',
+                                           REPROJECT: 'false'                                           
+                                           }                                           
+                                        );
+}}}
+  The parameter of interest here is "REPROJECT 'false'". From the !TileCache documents:
+  "If you are using !TileCache for overlays, you should set the 'reproject' option on the 
+  layer to 'false'."
+  * *Notes/Gotchas*
+  To be able to have a TileCached layer which also is able to answer a !GetFeatureInfo request, an invisble layer is setup to handle this. The reason for the two layers is !TileCache does not process !GetFeatureInfo requests, it is a simple !TileCaching service. For example, this is an example of the In Situ points:
+{{{
+  This is our !TileCached layer which we see on the map.
+  var HTMLObsOverlay = new OpenLayers.Layer.WMS( "Real Time Observations",                                                                                             
+                                          'http://129.252.37.86/tilecache/tilecache.cgi?', 
+                                           {
+                                           TRANSPARENT : true, 
+                                           LAYERS: 'WMShtmlobs',                                           
+                                           GROUP : "InSitu",            
+                                           REPROJECT: false                                           
+                                           }                                           
+                                        );
+  Here is the invisible layer which is used to process the GetFeatureInfo requests.
+  Note the displayInLayerSwitcher and visibility parameters.
+  var HTMLObs = new OpenLayers.Layer.WMS( "Invisible Obs", 
+                                           strMapservURL,
+                                           {
+                                             MAP : '/home/rcoos/mapserver/RCOOS.map', 
+                                             TRANSPARENT : true, 
+                                             LAYERS : 'HTMLObsTable',
+                                             GROUP : "InSitu",            
+                                             QUERYABLE: true,
+                                           },
+                                           {
+                                            displayInLayerSwitcher: false,
+                                            visibility: false
+                                           }
+                                        );
+
+
+}}}
+==Calculating Scales and Resolutions==
+How do I know what my maxResolution is? I asked myself that many times and found a couple of ways to do this.
+  * How to Calculate by Hand
+    Searching around on [http://www.nabble.com/ Nabble]for how this was done, I came across the following example:
+{{{
+Units Conversion Factor
+inches        1
+ft           12
+mi        63360
+m       39,3701
+km      39370,1
+dd      4374754      Decimal Degrees
+in            1
+
+Setup 
+dpi          72      Screen dots per inch            
+Units        dd      Units our map is in for OpenLayers            
+Factor  4374754      Scale factor based on units.
+
+Bounding Box 
+(-122,1655000,43,0083000,-122,1077000,42,9505000 )
+Left         -122,1655000                  
+Right        -122,1077000                  
+Top            43,0083000                  
+Bottom         42,9505000     
+
+Map DIV               The size of the area on the webpage the map will go in.
+WIDTH         600     pixel
+HEIGHT        600     pixel
+
+dx         = Left - Right
+Scale      = dx/WIDTH * dpi * Factor
+Resolution = dx/WIDTH
+
+dx                  0,0578     
+dy                  0,0578     
+Scale          30343,29374                  
+Resolution  0,000096333333                  
+}}}
+One thing you have to take into account is how you've setup your open layers map. Our RCOOS site has a list of scales defined for the map. Because of this, if we simply try to plug in the numbers from our setup in the formulas above we are not going to get the correct resolution. It took me a day of banging my head to figure out what the heck was going on. Let's assume we did not set our scales in !OpenLayers, we'll calculate what our resolution would be.
+Our settings:
+{{{
+Bounding Box = -82.0, 31.0, -74.0, 37.0
+Map DIV size = 500,400
+dpi = 72
+units = degrees
+
+dx = -82 - -74 = -8 (Use the absolute value) = 8
+Resolution = 8 / 500 = 0.016
+Scale = 0.016 * 72 * 4374754 = 5039716.608
+}}}
+In reality our resolution is 0.012699, this is where I was lost. How could that be? It turned out to be because we had defined our scales for the map to be: 4000000, 2000000, 1000000, 500000,250000. So let's solve for resolution:
+{{{
+Resolution = Scale / ( dpi * factor ) = 4000000 / ( 72 * 4374754  ) = 0.012699
+}}}
