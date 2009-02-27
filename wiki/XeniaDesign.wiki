@@ -2,7 +2,7 @@
 
 This is an earlier documentation [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaDesign webpage] to list some Xenia design considerations, benchmarks, and tips as related to the relational database schema.
 
-<wiki:toc max_depth="6" />
+<wiki:toc max_depth="4" />
 
 = Similar observation schemas =
 
