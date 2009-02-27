@@ -2,7 +2,7 @@
 
 See also [VMwareHome] regarding a vmware image for testing/development purposes.
 
-<wiki:toc max_depth="6">
+<wiki:toc max_depth="4">
 
 = Sample database = 
 A sample Xenia sqlite database file of the past 3 days worth of collected observations can be copied from here http://carocoops.org/microwfs/microwfs.db
