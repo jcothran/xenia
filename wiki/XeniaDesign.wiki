@@ -155,3 +155,33 @@ The general figure that I use is 10,000 obs/hour(see data flow graph [http://cod
 The storage space that this translates into at 10K obs/day (with some 'wasted' space for convenience since fields such as multi_obs.platform_handle could be an integer reference instead of a string) is about 40-50 MB/day or a little over 300 MB per julian week.
 
 The place where I'd like to optimize further is in running the SQL against the sqlite database, would like to use transaction level SQL(begin/commit blocks) to greatly speed this step up, but haven't had time to program in catching SQL insert problems for logging and reprocessing.  And running inserts individually I've had to write a wrapper script around also as the default process tends to drop data rows silently http://code.google.com/p/xenia/wiki/XeniaUpdates#batch_insert.pl .
+
+= sensor_id concept = 
+
+Thought some more about the concern regarding the fixed single hierarchy regarding one platform per sensor and was thinking of the possible compromise solution. 
+
+Right now when I define a sensor row it is usually only in the fields row_id,platform_id, m_type_id,s_order and sometimes fixed_z and active.  The active field for the platform and sensor table should be defined as an int instead of boolean (need to update latest schemas with that).  The wider intent with the active field is to provide status lookup codes which would correlate as to whether the platform or sensor was functioning/reporting and associated report/display.  
+
+But where I'm planning to define the rest of the sensor was in a metadata table entry/id  which would point to all the specific metadata details about the sensor as exists in another referenced platform/sensor specific table/xml.  
+
+For individual cruises/transects with the same sensor metadata, one could point the 'new' sensor_id to the 'old' metadata_id record and lookups.  With the metadata table I essentially wanted to build in links/references, effective dates and a metadata.active field which would help provide a shortcut to the latest record(instead of sorting through the effective dates).
+
+So it would be a waste of a repeated row for each new cruise/platform of the new sensor_id pointing to possibly the same old effective metadata record, but it should be possible if necessary to link the same physical sensor/data across cruises via the same referenced metadata_id record.
+
+Maybe a bit contorted, but first thing that came to mind.  Essentially the metadata table, in addition to a history/provenance function, could provide a grouping function across multiple sensor_id's where the main table hierarchy fails.
+
+The sensor table and issuance of new sensor_id's is mainly utilized to group or associate a collection of measurements on the multi_obs table that might be later referenced or visualized/graphed as a single sensor_id collection (one sensor_id for an ongoing water_temperature collection at the same platform or multiple sensor_id's for water_temperature depending on cruise/downcast/upcast for CTD case for example).
+
+The metadata_id also would provide an additionally system specific level of reference for association or alias lookups.
+
+  * platform_handle=organization.platform.package or platform.metadata_id
+  * sensor_id or sensor.metadata_id
+
+= platform,etc aliases = 
+
+The same platform might be referenced under multiple platform handle names currently such as carocoops.CAP2.buoy and ndbc.41024.met
+
+To reduce redundant observation data being collected/referenced/queried, the metadata table could also be utilized to cross-reference aliased platforms or sensors.
+
+As data is collected by the data scout, the sensor_id could be cross-referenced with the metadata alias to insure that data is only collected/referenced/queried by a single preferred alias(multiple preferences might be available depending on a server config and/or passed URL token argument on reference/query).  An alias table report could also be generated for manual cross-referencing.  Platforms might be partially overlapping in regards to which sensor_id's are referenced by the full org.platform.package handle.
+
