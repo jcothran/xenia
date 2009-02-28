@@ -4,7 +4,7 @@ see also http://trac.secoora.org/datamgmt/browser/docs/usc/docs/schemas (adcp,gl
 
 The below kml examples are contained as a zip [http://xenia.googlecode.com/files/obskml_examples.zip here] and populating a sample xenia database [http://xenia.googlecode.com/files/xenia_examples.db here]
 
-<wiki:toc max_depth="6">
+<wiki:toc max_depth="4">
 
 = common xml header = 
 
