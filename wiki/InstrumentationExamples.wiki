@@ -30,6 +30,26 @@ below is a common xml header/description for kml files
      
      sOrder (sensor Order) allows for redundant or profiling sensors(ADCP's,etc) of the same obsType.uomType to be articulated
 -->
+
+<!-- metadata_id elements would be xml referenced as follows
+
+Note:
+
+platform_metadata_id is an alias/substitute for organization.platform.package platform_handle and sensor_metadata_id is a alias/substitute for sensor_id or obsType.uomType.sOrder
+
+platform_metadata_id = platform.metadata_id
+sensor_metadata_id = sensor.metadata_id
+obs_metadata_id = multi_obs.metadata_id
+
+<obsList>
+<platform_metadata_id>
+  <obs>
+    <sensor_metadata_id>
+    <obs_metadata_id>
+  <obs>
+</obsList>
+
+-->
 }}}
 
 = ADCP(Acoustic Doppler Current Profiler) =
@@ -246,7 +266,7 @@ platform_handle = acme.alvin.2
 
 The field platform.metadata_id could provide an associated record id (custom rdb table or custom xml schema via the metadata table mechanism) with the lon/lat path of the cruise captured as a WKT formatted POLYLINE.
 
-In regards to the CTD bottle casts, each bottle if needed could have bottle specific metadata associated with the particular location(xyz),time(t) measurement on the multi_obs table via the multi_obs.metadata_id field reference(custom rdb table or custom xml schema via the metadata table mechanism).  At this time, the multi_obs.metadata_id is not built into the obskml<->SQL import/export script, but in regards to the obskml schema, the metadata_id field would be paralleled by a 'metadata_id' element associated with each observation.
+In regards to the CTD bottle casts, each bottle if needed could have bottle specific metadata associated with the particular location(xyz),time(t) measurement on the multi_obs table via the multi_obs.metadata_id field reference(custom rdb table or custom xml schema via the metadata table mechanism).  At this time, the multi_obs.metadata_id is not built into the obskml<->SQL import/export script, but in regards to the obskml schema, the metadata_id field would be paralleled by a 'obs_metadata_id' element associated with each observation.
 
 Also in regards to the CTD bottle casts, would propose that a new sOrder (which would trigger a new sensor_id) be issued for each CTD cast of the same measurement type(m_type = obsType.uomType).  This would allow time series graph plots for each cast/measurement type based on the unique sOrder/sensor_id.
 
