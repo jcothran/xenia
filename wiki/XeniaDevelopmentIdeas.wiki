@@ -2,6 +2,8 @@
 
 A listing of Xenia development ideas in no particular priority order
 
+see also [VMwareDevelopmentIdeas]
+
 <wiki:toc max_depth="6" />
 
 = 1. Sqlite Xenia + Geoserver =
