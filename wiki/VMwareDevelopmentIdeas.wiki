@@ -1,5 +1,7 @@
 #summary development ideas or requests in regards to the Xenia vmware instance
 
+[VMwareHome]
+
 <wiki:toc max_depth="6" />
 
 = Short term = 
