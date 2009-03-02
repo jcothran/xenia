@@ -2,6 +2,8 @@
 
 this is a continuation of earlier developer notes at http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
 
+see also [VMwareUpdates]
+
 <wiki:toc max_depth="6" />
 
 = SQLiteGeo (April 8, 2008) =
