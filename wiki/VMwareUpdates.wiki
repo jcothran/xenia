@@ -11,4 +11,20 @@ Table of contents
 
 Initial release.
 
-----
+= March 2, 2009 = 
+
+== documentation updates = 
+
+Added more instrumentation example ObsKML and SQL at [InstrumentationExamples]
+
+Added discussion of some performance/design issues at [XeniaDesign]
+
+== Pachube ==
+Pachube http://www.pachube.com/ is an example type website/service that parallels(translating from urban to natural environments) a lot of the same ideas regarding simpler, minimalist schemas(EEML http://www.eeml.org/ like ObsKML/Xenia http://tinyurl.com/a9q8wf ) that support observation type maps/services.  Like twitter http://en.wikipedia.org/wiki/Twitter , its not only long, full-status emails, but short and simple status messages that can be useful.
+
+Pachube ties into a sensor board project called 'Arduino' http://www.arduino.cc/ which reflects similarly on the smart sensor type projects in regards to providing open source sensor firmware which support further software efforts.
+
+The pachube project from what I can tell is still very small and mainly just an idea/pitch man(Usman Haque) and a few developers running a private site/service.  But conceptually in terms of trying to make simpler things scale more broadly I think there may be some potential.
+
+http://www.ugotrade.com/2009/01/28/pachube-patching-the-planet-interview-with-usman-haque/
+
