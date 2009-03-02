@@ -140,7 +140,7 @@ http://www.epa.gov/storet/wqx_products/WQX_ERD_v2.11.pdf
 == Seamonster ==
 
 http://robfatland.net/seamonster/index.php?title=Main_Page
-
+----
 = Performance issues =
 
 >Do you have any metrics on the number of Xenia users, or
@@ -184,4 +184,3 @@ The same platform might be referenced under multiple platform handle names curre
 To reduce redundant observation data being collected/referenced/queried, the metadata table could also be utilized to cross-reference aliased platforms or sensors.
 
 As data is collected by the data scout, the sensor_id could be cross-referenced with the metadata alias to insure that data is only collected/referenced/queried by a single preferred alias(multiple preferences might be available depending on a server config and/or passed URL token argument on reference/query).  An alias table report could also be generated for manual cross-referencing.  Platforms might be partially overlapping in regards to which sensor_id's are referenced by the full org.platform.package handle.
-
