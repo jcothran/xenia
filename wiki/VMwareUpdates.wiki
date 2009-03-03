@@ -28,3 +28,9 @@ The pachube project from what I can tell is still very small and mainly just an 
 
 http://www.ugotrade.com/2009/01/28/pachube-patching-the-planet-interview-with-usman-haque/
 
+= March 3, 2009 = 
+
+Google groups discussion has been added at http://groups.google.com/group/xeniavm
+
+IRC channel at #xeniavm
+
