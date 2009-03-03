@@ -22,7 +22,10 @@ If you are looking to experiment with the xeniavm image instance on a local vmpl
 
 [VMwareUpdates] will contain any notes regarding xenia vmware image related development updates.
 
+A google groups has been setup for discussion at http://groups.google.com/group/xeniavm
+
 A listserv or IRC channel(would suggest #xeniavm ) could also be established if enough developers are interested.
+
 ----
 Trying to utilize this server virtualization as a means to help standardardize and maintain our in-house server setups. Additionally since the server is virtualized as a file image, it is possible to share and reproduce this server and associated tools/development wherever the vmware file image is supported (including other 'players' or cloud type services). The following article link describes how this concept is helpful to IT shops
 
