@@ -1,4 +1,4 @@
-#summary Notes on how various instrumentation might be captured to the Xenia schema
+#summary Notes on how various instrumentation might be captured to the Xenia schema via ObsKML
 
 see also 
   * http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML#Schema_simple
