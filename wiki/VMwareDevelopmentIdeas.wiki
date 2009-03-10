@@ -22,4 +22,5 @@
   * Other languages, databases, frameworks
     * Redevelop existing scripts and add additional scripts in popular languages/frameworks such as *python, java/J2EE, .NET*, etc
     * Redevelop scripts to allow connection to a variety of different backend relational databases (*Oracle,SQL Server,PostgreSQL,MySQL,Sqlite*)
-  * Catalog other ObsKML data providers or Xenia VMware instances
+  * Registry/Catalog of other ObsKML data providers or Xenia VMware instances
+  * currently using gnuplot for graph images, would also like to provide more interactive/dynamic client-side type plots such as Google's [http://code.google.com/apis/chart/types.html Chart API] or [http://code.google.com/apis/visualization/documentation/examples.html Visualization API]
