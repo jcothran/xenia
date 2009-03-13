@@ -102,3 +102,11 @@ SELECT name, COUNT(*)
 select distinct email from survey where email like '%@%';
 }}}
 ----
+----
+Another useful example to sus out duplicates:
+SELECT *,
+COUNT(date) AS NumOccurrences
+FROM daily_tide_range
+GROUP BY date
+HAVING ( COUNT(date) > 1 )
+----
