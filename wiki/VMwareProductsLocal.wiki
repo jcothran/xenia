@@ -1,5 +1,7 @@
 #summary various formats/products and services supported by the Xenia vmware instance (localhost reference)
 
+[VMwareHome]
+
 *Note the following links reference products produced by a properly running xenia vmware instance local to the current vmware image instance via http://localhost *
 
 If running a final production instance for reference by others via the web, replace http://localhost with your web http address.
