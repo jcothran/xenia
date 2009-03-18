@@ -3,6 +3,8 @@
 see also 
   * http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML#Schema_simple
   * http://trac.secoora.org/datamgmt/browser/docs/usc/docs/schemas (adcp,glider,hf radar)
+  * http://code.google.com/p/xenia/wiki/XeniaDesign#sensor_id_concept
+  * http://code.google.com/p/xenia/wiki/XeniaDesign#platform,etc_aliases
 
 The below kml examples are contained as a zip [http://xenia.googlecode.com/files/obskml_examples.zip here] and populating a sample xenia database [http://xenia.googlecode.com/files/xenia_examples.db here]
 
