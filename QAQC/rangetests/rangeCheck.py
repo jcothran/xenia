@@ -239,6 +239,12 @@ if __name__ == '__main__':
           #m_value = None
           dataTests.runRangeTests(obsNfo, m_value)
           
+          #The qcFlag string is interpretted as follows. The leftmost byte is the first test, which is the data available test,
+          #each preceeding byte is another test of lesser importance. We store the values in a string which is to always contain
+          #the same number of bytes for consistency. Some examples:
+          #"000000" would represent no tests were done
+          #"200000" represents the data available test was done and passed(0 = no test, 1 = failed, 2 = passed)
+          #"220000" data available, sensor range tests performed.
           qcFlag[qaqcTestFlags.TQFLAG_DA] = ( "%d" % dataTests.dataAvailable )
           qcFlag[qaqcTestFlags.TQFLAG_SR] = ( "%d" % dataTests.sensorRangeCheck )
           qcFlag[qaqcTestFlags.TQFLAG_GR] = ( "%d" % dataTests.grossRangeCheck )
