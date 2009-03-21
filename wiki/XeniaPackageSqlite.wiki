@@ -56,6 +56,17 @@ The resulting Sqlite RDB based solution provides a much lower-complexity/profile
 
 == Helpful links ==
 
+Under perl for Debian Ubuntu, the following package was installed for sqlite
+{{{
+}}}
+
+----
+
+Under Windows ActiveState Perl, the following command is used to search for the necessary package
+{{{ppm search dbd}}}
+and following command to install sqlite package(sqlite2 is latest available to my knowledge)
+{{{ppm install dbd-sqlite2}}}
+
 === Sqlite Homepage ===
 
 From http://sqlite.org
