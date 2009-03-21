@@ -70,9 +70,9 @@ Under Windows ActiveState Perl, the following command is used to search for the 
 ppm search dbd
 }}}
 
-and following command to install sqlite package(sqlite2 is latest available to my knowledge)
+and following command to install sqlite package(may be more recent packages available, but the below seems to work)
 {{{
-ppm install dbd-sqlite2
+ppm install dbd-sqlite
 }}}
 
 === Sqlite Homepage ===
