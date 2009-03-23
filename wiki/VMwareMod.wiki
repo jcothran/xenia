@@ -56,6 +56,10 @@ Code:
 sudo ln -sv /usr/lib/libcrypto.so.0.9.8 ./
 }}}
 
+{{{
+sudo cpan -i "Number::Bytes::Human"
+}}}
+
 = Distribution checklist = 
 
   * Organization
