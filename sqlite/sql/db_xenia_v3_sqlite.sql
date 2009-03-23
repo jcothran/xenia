@@ -215,7 +215,7 @@ CREATE UNIQUE INDEX i_platform ON platform (platform_handle);
 
 CREATE UNIQUE INDEX i_sensor ON sensor (platform_id,m_type_id,s_order);
 
-CREATE UNIQUE INDEX i_multi_obs ON multi_obs (m_type_id, m_date, sensor_id);
+CREATE UNIQUE INDEX i_multi_obs ON multi_obs (m_date, m_type_id, sensor_id);
 
 
 
