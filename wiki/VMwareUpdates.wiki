@@ -52,9 +52,9 @@ create unique index i_multi_obs on multi_obs(m_type,m_date,sensor_id);
 create unique index i_multi_obs on multi_obs(m_date,m_type,sensor_id);
 }}}
 
-Generally speaking the index order declared should match the order of columns stated in the where clause(or vice versa) with the first column being critical to invoking the index.  Better documentation regarding this is at http://www.sqlite.org/optoverview.html under the 'WHERE clause analysis' section. 
+Generally speaking the index order declared should match the order of columns stated in the WHERE clause(or vice versa) with the first column being critical to invoking the index.  Better documentation regarding this is at http://www.sqlite.org/optoverview.html under the 'WHERE clause analysis' section. 
 
-Also noticed that queries in the xenia_to_obskml export script and time_series graph where incorrectly string comparing the results of a 'datetime' function which returns datetime *with* a space to the multi_obs.m_date field which uses a *T* instead of *space* as the date/time separator character.  Queries should be structured similar to below using the strftime function for a correct comparison.
+Also noticed that queries in the xenia_to_obskml export script and time_series graph where incorrectly string comparing the results of a 'datetime' function which returns datetime *with* a space to the multi_obs.m_date field which uses a *T* instead of *space* as the date/time separator character.  Queries should be structured similar to below using the *strftime* function(instead of datetime function) for a correct comparison.
 {{{
 select m_date FROM multi_obs where m_date >= strftime('%Y-%m-%dT%H:%M:%S','now','-6 hours')
 }}}
