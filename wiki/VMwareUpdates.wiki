@@ -47,7 +47,7 @@ It turns out that the way I declared the unique index for the multi_obs table sh
 create unique index i_multi_obs on multi_obs(m_type,m_date,sensor_id);
 }}} 
 
-Current index, fast - m_date declared first*
+*Current index, fast - m_date declared first*
 {{{
 create unique index i_multi_obs on multi_obs(m_date,m_type,sensor_id);
 }}}
