@@ -1,0 +1,25 @@
+<environment>
+  <database>
+    <db>
+      <type>sqlite</type>
+      <name>C:\Program Files\sqlite-3_5_6\microwfs\microwfs.db</name>
+    </db>
+    <sqlQCUpdateFile>"C:\Program Files\sqlite-3_5_6\microwfs\sql_qc_update.sql</sqlQCUpdateFile>
+  </database>
+  <qcLimits>
+    <fileType>test_profiles</fileType>
+    <file>C:\Documents and Settings\dramage\workspace\obsKMLLimits\processObsKML\rcoos\test_profiles.xml</file>
+  </qcLimits>
+  <unitsCoversion>
+    <file>C:\Documents and Settings\dramage\workspace\QAQC-ControlChart\UnitsConversionPython.xml</file>
+  </unitsCoversion>
+  <logging>    
+    <logMsgs>1</logMsgs>
+    <logDir>C:\Documents and Settings\dramage\workspace\SVNSandbox\wqportlet\trunk\data\dhec.log</logDir>
+    <fetchLogging>
+      <use>1</use>
+      <checkModDate>0</checkModDate>
+      <logDir>c:\temp\nws_precip\fetchlog\</logDir>
+    </fetchLogging>    
+  </logging> 
+</environment>
