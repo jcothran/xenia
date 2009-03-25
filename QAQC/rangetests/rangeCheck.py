@@ -3,10 +3,33 @@ import array
 import time
 from xenia import xeniaDB
 from lxml import etree
+import logging
 
+"""
+Class: uomconversionFunctions
+Purpose: Uses a conversion XML file to look up a from units of measurement and to units of measurement conversion 
+routine. If one is found, will evaluate the function and return the result. The XML file needs to be formated with 
+valid python code.
+"""
 class uomconversionFunctions:
+  """
+  Function: __init__
+  Purpose: Initializes the class
+  Parameters: 
+    xmlConversionFile is the full path to the XML file to use for the conversions.
+  """
   def __init__(self, xmlConversionFile):
     self.xmlConversionFile = xmlConversionFile
+  """
+  Function: measurementConvert
+  Purpose: Attempts to find a conversion formula using the passed in fromUOM and toUOM variables.
+  Parameters:
+    value is the floating point number to try and convert.
+    fromUOM is the units of measurement the value is currently in.
+    toUOM is the units of measurement we want to value to be converted to.
+  Return:
+    If a conversion routine is found, then the converted value is returned, otherwise None is returned.
+  """
   def measurementConvert(self, value, fromUOM, toUOM):
     xmlTree = etree.parse(self.xmlConversionFile)
     
@@ -19,7 +42,11 @@ class uomconversionFunctions:
       convertedVal = float(eval( conversionString ))
       return(convertedVal)
     return(None)
-    
+
+"""
+Class: qaqcTestFlags
+Purpose: This is more of an enumeration class that details out the various quality flags.
+"""    
 class qaqcTestFlags:
 
   TQFLAG_DA = 0   #Data Availability               
@@ -40,45 +67,105 @@ class qaqcTestFlags:
   DATA_QUAL_SUSPECT = 2  #the data quality is questionable or suspect
   DATA_QUAL_GOOD    = 3  #the data quality is good
 
+"""
+Class: rangeLimits
+Purpose: Simple structure containing a hi and lo range.
+"""
 class rangeLimits:
   def __init__(self):
     self.rangeLo = None
     self.rangeHi = None
-    
+
+"""
+Class: obsInfo
+Purpose: Container for the various limits(sensor,gross,climate) for the given observation type.
+"""    
 class obsInfo:
   def __init__(self, obsName):
-    self.obsName        = obsName
-    self.uom            = None
-    self.updateInterval = None
-    self.sensorRangeLimits = rangeLimits()
-    self.grossRangeLimits = rangeLimits()
-    self.climateRangeLimits = {} 
+    self.obsName        = obsName           #Observation these limits are for.
+    self.sensorID       = None              #Correllary to the Xenia sensor ID(not m_type)
+    self.uom            = None              #units of measurement for the observation.
+    self.updateInterval = None              #The rate at which the sensor updates.
+    self.sensorRangeLimits = rangeLimits()  #The limits for the sensor range.
+    self.grossRangeLimits = rangeLimits()   #The limits for the gross range.
+    self.climateRangeLimits = {}            #A dictionary keyed from 1-12 representing the climate ranges for the month.
     
-    
+"""
+Class: platformInfo
+Purpose: This class encapsulates the limits for each sensor on a platform.     
+"""
 class platformInfo:
+  """
+  Function: __init__
+  Purpose: Initializes the class. 
+  Paramters: 
+    platform is the platform name this class is used for.
+  """
   def __init__(self,platform):
-    self.platformHandle = platform
-    self.obsList = {}
-  def addObsInfo(self, obsInfo):
-    self.obsList[obsInfo.obsName] = obsInfo
+    self.platformHandle = platform      #Platform name
+    self.obsList = {}                   #Dictionary keyed on the observation names that contains obsInfo objects for each observation on the platform.
+  """
+  Function:addObsInfo
+  Purpose: Add a new obsInfo class into this classes obsList dictionary
+  Parameters: 
+    obsNfo is an obsInfo class to store into the dictionary
+  """  
+  def addObsInfo(self, obsNfo):
+    self.obsList[obsNfo.obsName] = obsNfo
     
+  """
+  Function: getObsInfo
+  Purpose: For the given obsName, this routine looks to see if it exists in the dictionary, and if so returns it.
+  Parameters: 
+    obsName is the observation name we are looking up.
+  Return: 
+    obsInfo class for the obsName, if none found returns None.
+  """  
   def getObsInfo(self, obsName):
     if( obsName in self.obsList != False ):
       return( self.obsList[obsName] )
     return( None )
-  
+
+"""
+Class: obsRangeCheck
+Purpose: Implements the range checks for an observation as defined in the Seacoos netCDF document.
+"""  
 class obsRangeCheck:
-  def __init__(self, obsName ='' ):
-    self.limits = rangeLimits()
-    self.testType   = None
-    self.observation = obsName
   
-  def setRanges(self, lowerRange, upperRange, testType = None ):
-    self.limits.rangeLo = lowerRange
-    self.limits.rangeHi = upperRange
+  """
+  Function: __init__
+  Purpose: Initializes the class. 
+  Paramters: 
+    obsName is the observation this class is used for. Default value is ''
+  """
+  def __init__(self, obsName ='' ):
+    self.limits = rangeLimits()       #rangeLimits object to contain the limits
+    self.testType   = None            #Test type(qaqcTestFlags) this objects limits are used for.
+    self.observation = obsName        #The observation name this classes checks are for.
+  
+  """
+  Function: setRanges
+  Purpose: Sets the upper and lower range for the test. 
+  Paramters: 
+    limits is the rangeLimits object containing the limits to use.
+    testType is the type(qaqcTestFlags) of test the limits are used for, default is None.
+  """
+  def setRanges(self, limits, testType = None ):
+    self.limits.rangeLo = limits.rangeLo
+    self.limits.rangeHi = limits.rangeHi
     self.testType       = testType
     
     
+  """
+  Function: rangeTest
+  Purpose: performs the range test. Checks are done to verify limits were provided as well as a valid value. 
+  Paramters: 
+    value is the data we are range checking.
+  Return:
+    If the test is sucessful, qaqcTestFlags.TEST_PASSED is returned. 
+    if the test fails, qaqcTestFlags.TEST_FAILED is returned.
+    if no limits or no value was provided, qaqcTestFlags.NO_TEST is returned.
+  """
   def rangeTest(self, value):
     if( self.limits.rangeLo != None and self.limits.rangeHi != None ):
       if( value != None ):
@@ -92,37 +179,63 @@ class obsRangeCheck:
   def getTestType(self):
     return(self.testType)
 
+"""
+Class: qcTestSuite
+Purpose: Implements the range tests and qcFlag determination detailed in the Seacoos netCDF documentation.
+"""
 class qcTestSuite:
   def __init__(self):
-    self.dataAvailable      = qaqcTestFlags.NO_TEST  
-    self.grossRangeCheck    = qaqcTestFlags.NO_TEST  
-    self.sensorRangeCheck   = qaqcTestFlags.NO_TEST  
-    self.climateRangeCheck  = qaqcTestFlags.NO_TEST
-    self.rateofchangeCheck  = qaqcTestFlags.NO_TEST
-    self.nearneighborCheck  = qaqcTestFlags.NO_TEST
-    self.rangeCheck         = obsRangeCheck()
-    self.qcFlag             = qaqcTestFlags.DATA_QUAL_NO_EVAL
-  
+    #Values for each of these flags can be: Values can be qaqcTestFlags.NO_TEST, qaqcTestFlags.TEST_FAILED, qaqcTestFlags.TEST_PASSED
+    self.dataAvailable      = qaqcTestFlags.NO_TEST   #Flag specifing the validity of whether data is available. 1st test performed
+    self.sensorRangeCheck   = qaqcTestFlags.NO_TEST   #Flag specifing the validity of the sensor range check. 2nd test performed
+    self.grossRangeCheck    = qaqcTestFlags.NO_TEST   #Flag specifing the validity of the gross range check. 3rd test performed
+    self.climateRangeCheck  = qaqcTestFlags.NO_TEST   #Flag specifing the validity of the climate range check. 4th test performed
+    self.rateofchangeCheck  = qaqcTestFlags.NO_TEST   #Flag specifing the validity of the rate of change check.
+    self.nearneighborCheck  = qaqcTestFlags.NO_TEST   #Flag specifing the validity of the nearest neighbor check.
+    self.rangeCheck         = obsRangeCheck()         #obsRangeCheck object used to do the limits tests.
+    self.qcFlag             = qaqcTestFlags.DATA_QUAL_NO_EVAL #The aggregate quality flag as specified by the Seacoos netCDF doc.
+                                                              #Values can be qaqcTestFlags.NO_DATA,qaqcTestFlags.DATA_QUAL_NO_EVAL,
+                                                              #qaqcTestFlags.DATA_QUAL_BAD, qaqcTestFlags.DATA_QUAL_SUSPECT, qaqcTestFlags.DATA_QUAL_GOOD
+
+  """
+  Function: runRangeTests
+  Purpose: Runs each of the limits tests, starting with the sensor range test. Each must pass to be able to move on to the next one.
+  As the tests are run, this function is also setting the flags specifing the outcome of each test. These flags are later used in the
+  qclevel calculation.
+  Parameters:
+    obsNfo is the obsInfo object used.
+    value is the floating point value we are testing.
+    month is the numeric representation of the month to use for the climate range tests.
+  Return:
+    qaqcTestFlags.TEST_PASSED is the tests were passed, otherwise qaqcTestFlags.TEST_FAILED.
+  """
   def runRangeTests(self, obsNfo, value, month = 0):
     if(value != None):
       self.dataAvailable = qaqcTestFlags.TEST_PASSED
       if( obsNfo.sensorRangeLimits.rangeLo != None and obsNfo.sensorRangeLimits.rangeHi ):
-        self.rangeCheck.setRanges( obsNfo.sensorRangeLimits.rangeLo,obsNfo.sensorRangeLimits.rangeHi )
+        self.rangeCheck.setRanges( obsNfo.sensorRangeLimits )
         self.sensorRangeCheck = self.rangeCheck.rangeTest( value )
         #If we don't pass the sensor range check, do not run any other tests.
         if( self.sensorRangeCheck == qaqcTestFlags.TEST_PASSED ):    
           #Run the gross range checks if we have limits.    
           if( obsNfo.grossRangeLimits.rangeLo != None and obsNfo.grossRangeLimits.rangeHi != None ):
-            self.rangeCheck.setRanges( obsNfo.grossRangeLimits.rangeLo,obsNfo.grossRangeLimits.rangeHi )
+            self.rangeCheck.setRanges( obsNfo.grossRangeLimits )
             self.grossRangeCheck = self.rangeCheck.rangeTest( value )
           #Run the climatalogical range checks if we have limits.    
           if( len(obsNfo.climateRangeLimits) and month != 0 ):
             limits = obsNfo.climateRangeLimits[month]
-            self.rangeCheck.setRanges( limits.rangeLo,limits.rangeHi )
+            self.rangeCheck.setRanges( limits )
             self.climateRangeCheck = self.rangeCheck.rangeTest( value )
     else:
       self.dataAvailable      = qaqcTestFlags.TEST_FAILED  
 
+  """
+  Function: calcQCLevel
+  Purpose: Calculates the aggregate data quality flag. This determination depends on the value of each of the limit test flags.
+  Parameters:
+  Return:
+    qaqcTestFlags.DATA_QUAL_GOOD if all the range tests were completed successfully. 
+  """
   def calcQCLevel(self):
     if( self.dataAvailable == qaqcTestFlags.NO_TEST or self.sensorRangeCheck == qaqcTestFlags.NO_TEST ):
       self.qcFlag = qaqcTestFlags.DATA_QUAL_NO_EVAL
@@ -158,8 +271,18 @@ class qcTestSuite:
           self.qcFlag = qaqcTestFlags.DATA_QUAL_SUSPECT
             
     return( self.qcFlag )
+"""
+Class: loadSettings
+Purpose: Depending on the routine used, loads the limits to be used. This class will be expanded to use the database or the sensor inventory
+  xml file. 
+"""  
 class loadSettings:
-    
+  """
+  Function: loadFromTestProfilesXML
+  Purpose: Loads the limits from the test_profiles.xml file passed in with xmlConfigFile
+  Parameters: 
+    xmlConfigFile is the full path to the test_profiles file to use.
+  """  
   def loadFromTestProfilesXML(self, xmlConfigFile):  
     platformInfoDict = {}
     try:
@@ -263,40 +386,100 @@ if __name__ == '__main__':
   #Get the various settings we need from out xml config file.
   xmlTree = etree.parse(sys.argv[1])
 
+  #Setup the log file
+  logFile = ''
+  logger = None
+  if(len(xmlTree.xpath( '//environment/logging/logDir' ))):
+    logFile = xmlTree.xpath( '//environment/logging/logDir' )[0].text
+    logger = logging.getLogger("qaqc_logger")
+    logger.setLevel(logging.DEBUG)
+    # create file handler which logs even debug messages
+    logFh = logging.FileHandler(logFile)
+    logFh.setLevel(logging.DEBUG)
+    # create formatter and add it to the handlers
+    formatter = logging.Formatter("%(asctime)s,%(levelname)s,%(lineno)d,%(message)s")
+    logFh.setFormatter(formatter)
+    logger.addHandler(logFh)
+    logger.info('Log file opened.')
+  
   #Get the settings for how the qc Limits are stored so we know how to process them.
   settings = loadSettings()
   if(len(xmlTree.xpath( '//environment/qcLimits/fileType' ))):
-    xmlTag = xmlTree.xpath( '//environment/qcLimits/fileType' )[0].text
-    if( xmlTag == 'test_profiles' ):
+    type = xmlTree.xpath( '//environment/qcLimits/fileType' )[0].text
+    if( type == 'test_profiles' ):
       if( len(xmlTree.xpath( '//environment/qcLimits/file' )) ):
         xmlTag = xmlTree.xpath( '//environment/qcLimits/file' )[0].text
         platformInfoDict = settings.loadFromTestProfilesXML(xmlTag)
+        if( logger != None ):
+          logger.info("Limits type file: %s File: %s" % (type,xmlTag) )
       else:
-        print( "ERROR: No QC Limits provided." )
+        if( logger != None ):
+          logger.error( "No QC Limits provided." )
         sys.exit(-1)
   else:
-    print( "ERROR: No QC Limits type specified." )
+    if( logger != None ):
+      logger.error( "No QC Limits type provided." )
     sys.exit(-1)
 
   db = xeniaDB()
-  if(len(xmlTree.xpath( '//environment/database/db/name' ))):
-    xmlTag = xmlTree.xpath( '//environment/database/db/name' )[0].text
-    db.openXeniaSQLite( xmlTag )
+  if(len(xmlTree.xpath( '//environment/database/db/type' ))):
+    type = xmlTree.xpath( '//environment/database/db/type' )[0].text
+    if( type == 'sqlite' ):
+      if(len(xmlTree.xpath( '//environment/database/db/name' ))):
+        xmlTag = xmlTree.xpath( '//environment/database/db/name' )[0].text
+        db.openXeniaSQLite( xmlTag )
+        if( logger != None ):
+          logger.info("Database type: %s File: %s" % (type,xmlTag) )
+      else:
+        if( logger != None ):
+          logger.error( "No Xenia database provided." )
+        sys.exit(-1)
   else:
-    print( "ERROR: No Xenia database provided." )
-    sys.exit(-1)
-  
+    logger.error( "No database type provided." )
+    
   if(len(xmlTree.xpath( '//environment/database/sqlQCUpdateFile' ))):
     xmlTag = xmlTree.xpath( '//environment/database/sqlQCUpdateFile' )[0].text
-    sqlUpdateFile = open( "C:\Program Files\sqlite-3_5_6\microwfs\sql_qc_update.sql", "w" )
+    sqlUpdateFile = open( xmlTag, "w" )
+    if( logger != None ):
+      logger.debug( "SQL QC Update file: %s" % (xmlTag)) 
   else:
-    print( "ERROR: No SQL update filename provided." )
+    if( logger != None ):
+      logger.error( "No SQL update filename." )
     sys.exit(-1)
+  #Get conversion xml file
+  uomConvertFile = None
+  if(len(xmlTree.xpath( '//environment/unitsCoversion/file' ))):
+    uomConvertFile = xmlTree.xpath( '//environment/unitsCoversion/file' )[0].text      
+    if( logger != None ):
+      logger.info("Units conversion file: %s" % (uomConvertFile) )
+  else:
+    if( logger != None ):
+      logger.debug("No units conversion file specified in config file." % (uomConvertFile) )
     
   #rangeCheck = obsRangeCheck( '' )
   for platformKey in platformInfoDict.keys():
     platformNfo = platformInfoDict[platformKey]
-    dbCursor = db.getObsDataForPlatform( platformKey, -12 )
+    startTime = 0;
+    
+    if( sys.platform == 'win32'):
+      queryStart = time.clock()
+    else:
+      queryStart = time.time()            
+    dbCursor = db.getObsDataForPlatform( platformKey )
+    if( sys.platform == 'win32'):
+      queryEnd = time.clock()
+    else:
+      queryEnd = time.time()
+    logger.debug( "%s getObsDataForPlatform query time: %f(ms)" %(platformKey, (queryEnd-queryStart)*1000.0 ) )
+    
+    if( dbCursor == None ):
+      if( db.getLastErrorMsg() != '' ):
+        if( logger != None ):
+          logger.error( "%s" % (db.getLastErrorMsg()) )
+      else:
+        if( logger != None ):
+          logger.debug( "No data retrieved from query for platform: %s" % (platformKey) )
+              
     for row in dbCursor:
       dataTests = qcTestSuite()
       if( row['standard_name'] != None ):
@@ -328,9 +511,11 @@ if __name__ == '__main__':
 
         obsNfo = platformNfo.getObsInfo(obsName)
         if( obsNfo != None ):
+          if( obsNfo.sensorID == None ):
+            obsNfo.sensorID = sensor_id
           #Check to see if the units of measurement for the limits is the same for the data, if not we'll get our conversion factor.
           if( uom != obsNfo.uom ):
-            uomConvert = uomconversionFunctions("C:\Documents and Settings\dramage\workspace\QAQC-ControlChart\UnitsConversionPython.xml")
+            uomConvert = uomconversionFunctions(uomConvertFile)
             convertedVal = uomConvert.measurementConvert( m_value, obsNfo.uom, uom)
             if(convertedVal != None ):
               m_value = convertedVal
@@ -355,14 +540,23 @@ if __name__ == '__main__':
           qcFlag[qaqcTestFlags.TQFLAG_GR] = ( "%d" % dataTests.grossRangeCheck )
           qcFlag[qaqcTestFlags.TQFLAG_CR] = ( "%d" % dataTests.climateRangeCheck )
           qcLevel = dataTests.calcQCLevel()
-          if( qcLevel != qaqcTestFlags.DATA_QUAL_GOOD ):
-            print( "%s Platform: %s obsName: %s value: %f qcFlag: %s qcLevel: %d" % (date, platformKey, obsName, m_value, qcFlag.tostring(), qcLevel))
+          
+          if( qcLevel != qaqcTestFlags.DATA_QUAL_GOOD and logger != None ):
+            logger.debug( "QCTest Failed: Date %s Platform: %s obsName: %s value: %f(%s) qcFlag: %s qcLevel: %d" % (date, platformKey, obsName, m_value, uom, qcFlag.tostring(), qcLevel) )
+
           sql = "UPDATE multi_obs SET \
                   qc_flag='%s',qc_level=%d WHERE \
                   m_date='%s' AND sensor_id=%d" \
                   %(qcFlag.tostring(), qcLevel, date, sensor_id)
           sqlUpdateFile.write(sql+"\n")
-          #print( "%s Platform: %s obsName: %s value: %f TestFlag: %d" % (date, platformKey, obsName, m_value, retVal))
         else:
-          print( "\n%s ERROR: No limit set for Platform: %s obsName: %s\n" % (date, platformKey,obsName) )
+          if( logger != None ):
+            logger.error( "%s No limit set for Platform: %s obsName: %s" % (date, platformKey,obsName) )
+            
+    if( sys.platform == 'win32'):
+      processingEnd = time.clock()
+    else:
+      processingEnd = time.time()
+      logger.debug( "%s QAQC processing time: %f(ms)" %(platformKey, (processingEnd-queryEnd)*1000.0 ) )
+            
   sqlUpdateFile.close()        
