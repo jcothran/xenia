@@ -210,22 +210,25 @@ class qcTestSuite:
     qaqcTestFlags.TEST_PASSED is the tests were passed, otherwise qaqcTestFlags.TEST_FAILED.
   """
   def runRangeTests(self, obsNfo, value, month = 0):
-    if(value != None):
+    #Do we have a valid value?
+    if(value != None):     
       self.dataAvailable = qaqcTestFlags.TEST_PASSED
-      if( obsNfo.sensorRangeLimits.rangeLo != None and obsNfo.sensorRangeLimits.rangeHi ):
-        self.rangeCheck.setRanges( obsNfo.sensorRangeLimits )
-        self.sensorRangeCheck = self.rangeCheck.rangeTest( value )
-        #If we don't pass the sensor range check, do not run any other tests.
-        if( self.sensorRangeCheck == qaqcTestFlags.TEST_PASSED ):    
-          #Run the gross range checks if we have limits.    
-          if( obsNfo.grossRangeLimits.rangeLo != None and obsNfo.grossRangeLimits.rangeHi != None ):
-            self.rangeCheck.setRanges( obsNfo.grossRangeLimits )
-            self.grossRangeCheck = self.rangeCheck.rangeTest( value )
-          #Run the climatalogical range checks if we have limits.    
-          if( len(obsNfo.climateRangeLimits) and month != 0 ):
-            limits = obsNfo.climateRangeLimits[month]
-            self.rangeCheck.setRanges( limits )
-            self.climateRangeCheck = self.rangeCheck.rangeTest( value )
+      #Did we get a valid obsNfo that we need for the limits?
+      if( obsNfo != None ):
+        if( obsNfo.sensorRangeLimits.rangeLo != None and obsNfo.sensorRangeLimits.rangeHi != None ):
+          self.rangeCheck.setRanges( obsNfo.sensorRangeLimits )
+          self.sensorRangeCheck = self.rangeCheck.rangeTest( value )
+          #If we don't pass the sensor range check, do not run any other tests.
+          if( self.sensorRangeCheck == qaqcTestFlags.TEST_PASSED ):    
+            #Run the gross range checks if we have limits.    
+            if( obsNfo.grossRangeLimits.rangeLo != None and obsNfo.grossRangeLimits.rangeHi != None ):
+              self.rangeCheck.setRanges( obsNfo.grossRangeLimits )
+              self.grossRangeCheck = self.rangeCheck.rangeTest( value )
+            #Run the climatalogical range checks if we have limits.    
+            if( len(obsNfo.climateRangeLimits) and month != 0 ):
+              limits = obsNfo.climateRangeLimits[month]
+              self.rangeCheck.setRanges( limits )
+              self.climateRangeCheck = self.rangeCheck.rangeTest( value )
     else:
       self.dataAvailable      = qaqcTestFlags.TEST_FAILED  
 
@@ -381,6 +384,13 @@ if __name__ == '__main__':
   if( len(sys.argv) < 2 ):
     print( "Usage: rangeCheck.py xmlconfigfile")
     sys.exit(-1)    
+  totalRows = 0
+  qcTotalFailCnt = 0
+  qcTotalMissingLimitsCnt = 0
+  if( sys.platform == 'win32'):
+    startProcess = time.clock()
+  else:
+    startProcess = time.time()
   
 
   #Get the various settings we need from out xml config file.
@@ -427,6 +437,7 @@ if __name__ == '__main__':
     if( type == 'sqlite' ):
       if(len(xmlTree.xpath( '//environment/database/db/name' ))):
         xmlTag = xmlTree.xpath( '//environment/database/db/name' )[0].text
+        xmlTag = time.strftime(xmlTag, time.gmtime())        
         db.openXeniaSQLite( xmlTag )
         if( logger != None ):
           logger.info("Database type: %s File: %s" % (type,xmlTag) )
@@ -441,7 +452,7 @@ if __name__ == '__main__':
     xmlTag = xmlTree.xpath( '//environment/database/sqlQCUpdateFile' )[0].text
     sqlUpdateFile = open( xmlTag, "w" )
     if( logger != None ):
-      logger.debug( "SQL QC Update file: %s" % (xmlTag)) 
+      logger.info( "SQL QC Update file: %s" % (xmlTag)) 
   else:
     if( logger != None ):
       logger.error( "No SQL update filename." )
@@ -470,18 +481,23 @@ if __name__ == '__main__':
       queryEnd = time.clock()
     else:
       queryEnd = time.time()
-    logger.debug( "%s getObsDataForPlatform query time: %f(ms)" %(platformKey, (queryEnd-queryStart)*1000.0 ) )
+    #logger.debug( "%s getObsDataForPlatform query time: %f(ms)" %(platformKey, (queryEnd-queryStart)*1000.0 ) )
     
     if( dbCursor == None ):
-      if( db.getLastErrorMsg() != '' ):
+      if( len(db.lastErrorMsg) ):
         if( logger != None ):
           logger.error( "%s" % (db.getLastErrorMsg()) )
+          db.lastErrorMsg = ''
       else:
         if( logger != None ):
           logger.debug( "No data retrieved from query for platform: %s" % (platformKey) )
-              
+      continue          
+    qcFailCnt = 0
+    qcMissingLimitsCnt = 0   
+    rowCnt = 0 
     for row in dbCursor:
       dataTests = qcTestSuite()
+      rowCnt += 1
       if( row['standard_name'] != None ):
         obsName   = row['standard_name']
         
@@ -502,61 +518,81 @@ if __name__ == '__main__':
           m_value   = float(row['m_value'])
           
         sensor_id = -1
-        if( row['row_id'] != None ):
-          sensor_id = int(row['row_id'])
+        if( row['sensor_id'] != None ):
+          sensor_id = int(row['sensor_id'])
           
         s_order = -1
         if( row['s_order'] != None ):
           s_order   = int(row['s_order'])
 
         obsNfo = platformNfo.getObsInfo(obsName)
+        #the qc_flag in the database is a string. We've defined a character array to represent each type of test, so
+        #here we fill up the array with 0s to begin with, then per array ndx set the test results.
+        qcFlag = array.array('c')
+        fill = ''       
+        fill = fill.zfill(qaqcTestFlags.TQFLAG_NN+1)   
+        qcFlag.fromstring(fill)
         if( obsNfo != None ):
           if( obsNfo.sensorID == None ):
-            obsNfo.sensorID = sensor_id
+            obsNfo.sensorID = sensor_id            
           #Check to see if the units of measurement for the limits is the same for the data, if not we'll get our conversion factor.
           if( uom != obsNfo.uom ):
             uomConvert = uomconversionFunctions(uomConvertFile)
             convertedVal = uomConvert.measurementConvert( m_value, obsNfo.uom, uom)
             if(convertedVal != None ):
               m_value = convertedVal
-          #the qc_flag in the database is a string. We've defined a character array to represent each type of test, so
-          #here we fill up the array with 0s to begin with, then per array ndx set the test results.
-          qcFlag = array.array('c')
-          fill = ''       
-          fill = fill.zfill(qaqcTestFlags.TQFLAG_NN+1)   
-          qcFlag.fromstring(fill)
-          #m_value = None
-          month = int(time.strftime( "%m", time.strptime(date, "%Y-%m-%dT%H:%M:%S") ))
-          dataTests.runRangeTests(obsNfo, m_value, month)
-          
-          #The qcFlag string is interpretted as follows. The leftmost byte is the first test, which is the data available test,
-          #each preceeding byte is another test of lesser importance. We store the values in a string which is to always contain
-          #the same number of bytes for consistency. Some examples:
-          #"000000" would represent no tests were done
-          #"200000" represents the data available test was done and passed(0 = no test, 1 = failed, 2 = passed)
-          #"220000" data available, sensor range tests performed.
-          qcFlag[qaqcTestFlags.TQFLAG_DA] = ( "%d" % dataTests.dataAvailable )
-          qcFlag[qaqcTestFlags.TQFLAG_SR] = ( "%d" % dataTests.sensorRangeCheck )
-          qcFlag[qaqcTestFlags.TQFLAG_GR] = ( "%d" % dataTests.grossRangeCheck )
-          qcFlag[qaqcTestFlags.TQFLAG_CR] = ( "%d" % dataTests.climateRangeCheck )
-          qcLevel = dataTests.calcQCLevel()
-          
-          if( qcLevel != qaqcTestFlags.DATA_QUAL_GOOD and logger != None ):
-            logger.debug( "QCTest Failed: Date %s Platform: %s obsName: %s value: %f(%s) qcFlag: %s qcLevel: %d" % (date, platformKey, obsName, m_value, uom, qcFlag.tostring(), qcLevel) )
-
-          sql = "UPDATE multi_obs SET \
-                  qc_flag='%s',qc_level=%d WHERE \
-                  m_date='%s' AND sensor_id=%d" \
-                  %(qcFlag.tostring(), qcLevel, date, sensor_id)
-          sqlUpdateFile.write(sql+"\n")
         else:
+          qcMissingLimitsCnt += 1
           if( logger != None ):
             logger.error( "%s No limit set for Platform: %s obsName: %s" % (date, platformKey,obsName) )
             
+        #Get the numeric representation of the month(1...12)
+        month = int(time.strftime( "%m", time.strptime(date, "%Y-%m-%dT%H:%M:%S") ))
+        dataTests.runRangeTests(obsNfo, m_value, month)
+        
+        #The qcFlag string is interpreted as follows. The leftmost byte is the first test, which is the data available test,
+        #each preceeding byte is another test of lesser importance. We store the values in a string which is to always contain
+        #the same number of bytes for consistency. Some examples:
+        #"000000" would represent no tests were done
+        #"200000" represents the data available test was done and passed(0 = no test, 1 = failed, 2 = passed)
+        #"220000" data available, sensor range tests performed.
+        qcFlag[qaqcTestFlags.TQFLAG_DA] = ( "%d" % dataTests.dataAvailable )
+        qcFlag[qaqcTestFlags.TQFLAG_SR] = ( "%d" % dataTests.sensorRangeCheck )
+        qcFlag[qaqcTestFlags.TQFLAG_GR] = ( "%d" % dataTests.grossRangeCheck )
+        qcFlag[qaqcTestFlags.TQFLAG_CR] = ( "%d" % dataTests.climateRangeCheck )
+        qcLevel = dataTests.calcQCLevel()
+        
+        if( qcLevel != qaqcTestFlags.DATA_QUAL_GOOD and logger != None ):
+          logger.debug( "QCTest Failed: Date %s Platform: %s obsName: %s value: %f(%s) qcFlag: %s qcLevel: %d" % (date, platformKey, obsName, m_value, uom, qcFlag.tostring(), qcLevel) )
+          qcFailCnt += 1
+
+        sql = "UPDATE multi_obs SET \
+                qc_flag='%s',qc_level=%d WHERE \
+                m_date='%s' AND sensor_id=%d" \
+                %(qcFlag.tostring(), qcLevel, date, sensor_id)
+        sqlUpdateFile.write(sql+"\n")
+          
+    #Keep a running count of the total number of rows processed.    
+    totalRows += rowCnt
+    qcTotalFailCnt += qcFailCnt
+    qcTotalMissingLimitsCnt += qcMissingLimitsCnt
+    
     if( sys.platform == 'win32'):
       processingEnd = time.clock()
     else:
       processingEnd = time.time()
-      logger.debug( "%s QAQC processing time: %f(ms)" %(platformKey, (processingEnd-queryEnd)*1000.0 ) )
+    if( logger != None ):
+      logger.info( "Platform stats-----------------------------------------------------------------------------" )
+      logger.info( "%s getObsDataForPlatform SQL query time: %f(ms) QAQC Proc'd: %d rows in time: %f(ms)" %(platformKey, ((queryEnd-queryStart)*1000.0 ), rowCnt, ((processingEnd-queryEnd)*1000.0 )) )
+      logger.info( "%s QAQC suspect or bad count: %d QAQC no limits count: %d" %(platformKey,qcFailCnt,qcMissingLimitsCnt) )
             
+  if( sys.platform == 'win32'):
+    endProcess = time.clock()
+  else:
+    endProcess = time.time()
+  if( logger != None ):
+    logger.info( "Final stats-----------------------------------------------------------------------------" )
+    logger.info( "%d rows processed in %f(ms)" %(totalRows,((endProcess-startProcess)*1000.0 )) )
+    logger.info( "Total QAQC not good count: %d Total QAQC no limits count: %d" %(qcTotalFailCnt,qcTotalMissingLimitsCnt) )
+    logger.info( "Closing log file." )
   sqlUpdateFile.close()        
