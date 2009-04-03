@@ -401,6 +401,13 @@ if __name__ == '__main__':
   logger = None
   if(len(xmlTree.xpath( '//environment/logging/logDir' ))):
     logFile = xmlTree.xpath( '//environment/logging/logDir' )[0].text
+    
+    streamHandler = False
+    if( xmlTree.xpath( '//environment/logging/streamhandler') ):
+      tag = int(xmlTree.xpath( '//environment/logging/streamhandler')[0].text)
+      if( tag ):
+        streamHandler = True
+      
     logger = logging.getLogger("qaqc_logger")
     logger.setLevel(logging.DEBUG)
     # create file handler which logs even debug messages
@@ -410,6 +417,12 @@ if __name__ == '__main__':
     formatter = logging.Formatter("%(asctime)s,%(levelname)s,%(lineno)d,%(message)s")
     logFh.setFormatter(formatter)
     logger.addHandler(logFh)
+    #Do we want to create a stream handler to put the message out to stdout?
+    if(streamHandler):
+      logSh = logging.StreamHandler()
+      logSh.setLevel(logging.DEBUG)
+      logSh.setFormatter(formatter)
+      logger.addHandler(logSh)
     logger.info('Log file opened.')
   
   #Get the settings for how the qc Limits are stored so we know how to process them.
@@ -434,6 +447,7 @@ if __name__ == '__main__':
   db = xeniaDB()
   if(len(xmlTree.xpath( '//environment/database/db/type' ))):
     type = xmlTree.xpath( '//environment/database/db/type' )[0].text
+    #Are we connecting to a SQLite database?
     if( type == 'sqlite' ):
       if(len(xmlTree.xpath( '//environment/database/db/name' ))):
         xmlTag = xmlTree.xpath( '//environment/database/db/name' )[0].text
@@ -445,6 +459,25 @@ if __name__ == '__main__':
         if( logger != None ):
           logger.error( "No Xenia database provided." )
         sys.exit(-1)
+     #PostGres db?
+    elif( type == 'postgres' ):
+      name = xmlTree.xpath( '//environment/database/db/name' )
+      user = xmlTree.xpath( '//environment/database/db/user' )
+      pwd = xmlTree.xpath( '//environment/database/db/pwd' )
+      if( len(name) and len(user) and len(pwd) ):
+        name = name[0].text
+        user = user[0].text
+        pwd = pwd[0].text
+        if( db.openXeniaPostGres( None, name, user, pwd ) == False ):
+          if( logger != None ):
+            logger.error( "Unable to connect to PostGres." )
+            sys.exit(-1)
+          
+      else:
+        if( logger != None ):
+          logger.error( "Missing configuration info for PostGres setup." )
+        sys.exit(-1)
+        
   else:
     logger.error( "No database type provided." )
     
@@ -493,16 +526,20 @@ if __name__ == '__main__':
       qcMissingLimitsCnt = 0   
       rowCnt = 0
       #for row in dbCursor:
+      """
       if( sys.platform == 'win32'):
         startFetch = time.clock()
       else:
         startFetch = time.time()
+      """
       row = dbCursor.fetchone()
+      """
       if( sys.platform == 'win32'):
         endFetch = time.clock()
       else:
         endFetch = time.time()
       logger.debug( "%s row fetch time: %f(ms)" %(platformKey, (endFetch-startFetch)*1000.0 ) )
+      """
       while( row != None ):
         """
         if( sys.platform == 'win32'):
@@ -515,10 +552,14 @@ if __name__ == '__main__':
         if( row['standard_name'] != None ):
           obsName   = row['standard_name']
           
-          date = None
+          dateVal = None
           if( row['m_date'] != None ):
-            date = row['m_date']
-            
+            dateVal = row['m_date']
+            #Determine if we were given a datetime object. The psycopg2 connection returns that type, although
+            #pysqlite returns just the string since it has not datetime concept.
+            if( dateVal.__class__.__name__ == 'datetime' ):
+              dateVal = dateVal.__str__()
+                        
           uom = None
           if( row['uom'] != None ):
             uom = row['uom']
@@ -530,7 +571,7 @@ if __name__ == '__main__':
           m_value = None
           if( row['m_value'] != None ):
             m_value   = float(row['m_value'])
-            
+
           sensor_id = -1
           if( row['sensor_id'] != None ):
             sensor_id = int(row['sensor_id'])
@@ -547,11 +588,12 @@ if __name__ == '__main__':
           fill = fill.zfill(qaqcTestFlags.TQFLAG_NN+1)   
           qcFlag.fromstring(fill)
 
+
           if( obsNfo != None ):
             if( obsNfo.sensorID == None ):
               obsNfo.sensorID = sensor_id            
             #Check to see if the units of measurement for the limits is the same for the data, if not we'll get our conversion factor.
-            if( uom != obsNfo.uom ):
+            if( uom != obsNfo.uom and m_value != None ):
               uomConvert = uomconversionFunctions(uomConvertFile)
               convertedVal = uomConvert.measurementConvert( m_value, obsNfo.uom, uom)
               if(convertedVal != None ):
@@ -559,10 +601,14 @@ if __name__ == '__main__':
           else:
             qcMissingLimitsCnt += 1
             if( logger != None ):
-              logger.error( "%s No limit set for Platform: %s obsName: %s" % (date, platformKey,obsName) )
+              logger.error( "%s No limit set for Platform: %s obsName: %s" % (dateVal, platformKey,obsName) )
             
           #Get the numeric representation of the month(1...12)
-          month = int(time.strftime( "%m", time.strptime(date, "%Y-%m-%dT%H:%M:%S") ))
+          dateformat = "%Y-%m-%dT%H:%M:%S"
+          if( dateVal.find("T") == -1 ):
+            dateformat = "%Y-%m-%d %H:%M:%S"
+            
+          month = int(time.strftime( "%m", time.strptime(dateVal, dateformat) ))
           dataTests.runRangeTests(obsNfo, m_value, month)
           
           #The qcFlag string is interpreted as follows. The leftmost byte is the first test, which is the data available test,
@@ -578,13 +624,13 @@ if __name__ == '__main__':
           qcLevel = dataTests.calcQCLevel()
         
           if( qcLevel != qaqcTestFlags.DATA_QUAL_GOOD and logger != None ):
-            logger.debug( "QCTest Failed: Date %s Platform: %s obsName: %s value: %f(%s) qcFlag: %s qcLevel: %d" % (date, platformKey, obsName, m_value, uom, qcFlag.tostring(), qcLevel) )
+            logger.debug( "QCTest Failed: Date %s Platform: %s obsName: %s value: %f(%s) qcFlag: %s qcLevel: %d" % (dateVal, platformKey, obsName, ( m_value != None ) and m_value or -9999.0, uom, qcFlag.tostring(), qcLevel) )
             qcFailCnt += 1
 
           sql = "UPDATE multi_obs SET \
                   qc_flag='%s',qc_level=%d WHERE \
                   m_date='%s' AND sensor_id=%d" \
-                  %(qcFlag.tostring(), qcLevel, date, sensor_id)
+                  %(qcFlag.tostring(), qcLevel, dateVal, sensor_id)
           sqlUpdateFile.write(sql+"\n")
           """
           if( sys.platform == 'win32'):
