@@ -1,6 +1,7 @@
-import time
-from pysqlite2 import dbapi2 as sqlite3
-#from pgdb
+#import time
+from pysqlite2 import dbapi2 as sqlite3      
+import psycopg2
+import psycopg2.extras
 
 class dbTypes:
   undefined = 0
@@ -33,19 +34,28 @@ class xeniaDB:
         self.DB = sqlite3.connect( self.dbFilePath )
         #This enables the ability to manipulate rows with the column name instead of an index.
         self.DB.row_factory = sqlite3.Row
-
+        return(True)
       except Exception, E:
-        print( 'ERROR: ' + str(E) )
-        
-    #def openXeniaPostGres( dbHost, dbName, dbUser, dbPasswd ):
-    #  self.dbType = dbTypes.PostGRES
-    #  try:
-    #    self.DB = postgres.connect( dbname=dbHost, host=dbName, user=dbUser, password=dbPasswd )       
-    #  except Exception, E:
-    #    print( 'ERROR: ' + str(E) )
-    
+        self.lastErrorMsg = str(E)                     
+      return(False)
+      
+    def openXeniaPostGres( self, host, dbName, user, passwd ):
+      self.dbType = dbTypes.PostGRES
+      try:
+        self.DB = psycopg2.connect( "dbname='%s' user='%s' password='%s'" % ( dbName,user,passwd) )
+        return(True)       
+      except Exception, E:
+        self.lastErrorMsg = str(E)                     
+      return(False)
+
     def executeQuery(self, sqlQuery):
-      dbCursor = self.DB.cursor()
+      
+      if( self.dbType == dbTypes.SQLite ):
+        dbCursor = self.DB.cursor()
+      
+      elif( self.dbType == dbTypes.PostGRES ):
+        dbCursor = self.DB.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
       dbCursor.execute( sqlQuery )        
       return( dbCursor )
     
@@ -155,8 +165,11 @@ class xeniaDB:
                 platform.platform_handle = '%s'" % platform;
       try:
         dbCursor = self.executeQuery( sql )
-        for row in dbCursor:
-          obsList[ row[0] ] = row[1]  
+        row = dbCursor.fetchone()
+        #for row in dbCursor:
+        while( row != None ):
+          obsList[ row['standard_name'] ] = row['row_id']  
+          row = dbCursor.fetchone()
         dbCursor.close()
       except sqlite3.Error, e:        
         self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
@@ -174,12 +187,15 @@ class xeniaDB:
       return( data)
  
     def getObsDataForPlatform(self, platform, lastNHours = None ):      
-      platformList = []
       
       #Do we want to query from a datetime of now back lastNHours?
       dateOffset = ''
       if( lastNHours != None ):
-        dateOffset = "m_date > strftime('%%Y-%%m-%%dT%%H:%%M:%%S', 'now','-%d hours') AND" % (lastNHours)
+        if( self.dbType == dbTypes.SQLite ):
+          dateOffset = "m_date > strftime('%%Y-%%m-%%dT%%H:%%M:%%S', 'now','-%d hours') AND" % (lastNHours)
+        elif( self.dbType == dbTypes.PostGRES ):
+          dateOffset = "m_date > ( now() - interval '%d hours' ) AND" % (lastNHours)
+          
       sql= "SELECT m_date \
             ,multi_obs.platform_handle \
             ,obs_type.standard_name \
@@ -199,7 +215,7 @@ class xeniaDB:
             ORDER BY m_date DESC" \
             % (dateOffset,platform)
       try:
-        dbCursor = self.executeQuery( sql )
+        dbCursor = self.executeQuery( sql )       
         return( dbCursor )
       except sqlite3.Error, e:        
         self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
