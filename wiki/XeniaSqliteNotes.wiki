@@ -129,8 +129,9 @@ where platform_handle like 'carocoops%'
 
 = get all the latest observations per platform =
 
-http://www.sql-tutorial.com/sql-group-by-sql-tutorial/
-http://www.w3schools.com/sql/sql_groupby.asp
+http://www.sql-tutorial.com/sql-group-by-sql-tutorial/ <br>
+http://www.w3schools.com/sql/sql_groupby.asp <br>
+http://manuals.sybase.com/onlinebooks/group-as/asg1250e/sqlug/@Generic__BookTextView/9669;pt=9699
 
 in below example, change WHERE statement for testing as needed
 
