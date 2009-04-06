@@ -105,3 +105,44 @@ sqlite> .mode insert platform
 sqlite> select * from platform;
 sqlite> .quit
 }}}
+
+= get all sensors per platform = 
+
+in below example, change WHERE statement for testing as needed
+
+{{{
+select distinct platform.platform_handle
+    ,fixed_longitude
+    ,fixed_latitude
+    ,'2009-01-02T15:00:00Z'
+    ,''
+    ,platform.description
+    ,obs_type.standard_name
+  from platform
+    left join sensor on platform.row_id=sensor.platform_id
+    left join m_type on m_type.row_id=sensor.m_type_id
+    left join m_scalar_type on m_scalar_type.row_id=m_type.m_scalar_type_id
+    left join obs_type on obs_type.row_id=m_scalar_type.obs_type_id
+where platform_handle like 'carocoops%'
+  order by platform_handle,obs_type.standard_name;
+}}}
+
+= get all the latest observations per platform =
+
+in below example, change WHERE statement for testing as needed
+
+use left join to add in additional table columns
+
+{{{
+select platform_handle
+    ,m_type_id
+    ,max(m_date)
+    ,m_lat
+    ,m_lon
+    ,m_z
+    ,m_value
+  from multi_obs
+  where platform_handle like 'carocoops%'
+  and m_date > strftime('%Y-%m-%dT%H:%M:%S','now','-12 hours')
+group by platform_handle,m_type_id;
+}}}
