@@ -129,6 +129,9 @@ where platform_handle like 'carocoops%'
 
 = get all the latest observations per platform =
 
+http://www.sql-tutorial.com/sql-group-by-sql-tutorial/
+http://www.w3schools.com/sql/sql_groupby.asp
+
 in below example, change WHERE statement for testing as needed
 
 use left join to add in additional table columns
