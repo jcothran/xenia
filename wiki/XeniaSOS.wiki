@@ -2,7 +2,7 @@
 
 <wiki:toc max_depth="6" />
 
-= [XeniaSOS#difSOS difSOS] =
+= DIF SOS =
 
 Built a CGI based script based on earlier work with the [XeniaPackageSqlite#MicroWFS microWFS] effort, substituting a xenia database schema specific sql query and associated [http://ioos.noaa.gov/program/DIFdocs.html DIF] SOS response instead of the earlier more generic query and WFS response.
 
@@ -72,7 +72,7 @@ Also of interest would be better
 
 ----
 
-= [XeniaSOS#difSOS difSOS] =
+= Oostethys SOS =
 
 Worked through Eric Bridger's perl RDB script (oostethys_sos.cgi) with the Xenia database schema as the backend and have an Oostethys SOS service available for SECOORA at the following sample links:
 
