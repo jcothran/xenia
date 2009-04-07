@@ -56,15 +56,20 @@ use Time::Local;
 	
 	my ($dbh,$sql,$sth,@row);		
 	$dbh = DBI->connect ( "dbi:Pg:dbname=$env{db_name};host=$env{hostname}", "$env{db_user}", "$env{db_passwd}");
-	if ( !defined $dbh ) {die "Cannot connect to database!\n";}	
+	if ( !defined $dbh )
+  {
+    die "Cannot connect to database!\n";
+  }	
 	
-	if (! defined $date){
+	if (! defined $date)
+  {
 		$sql="SELECT m_date from multi_obs where platform_handle ilike '%$platform_handle%' order by m_date desc limit 1;";		
 		
 		$sth = $dbh->prepare( $sql );
 		$sth->execute();
 		
-		if ($sth->rows == 0){
+		if ($sth->rows == 0)
+    {
 			`cp $env{no_img} $env{img_path}`;		
 			die "No rows returned \n";
 		}	
@@ -72,8 +77,12 @@ use Time::Local;
 		$date= $sth->fetchrow_array();	
 	}	
 	#$env{time_interval}=12;
-	$sql="SELECT  max(abs(m_value)),max(abs(m_value_2)),max(m_z),min(m_z) from multi_obs WHERE (((multi_obs.platform_handle)ilike '%$platform_handle%') AND
-	 (m_z<>-99999) AND (m_value<>-99999) AND (multi_obs.m_date <=timestamp '$date' and multi_obs.m_date>=(timestamp '$date' - interval '$env{time_interval} hours')));";
+	$sql="SELECT  max(abs(m_value)),max(abs(m_value_2)),max(m_z),min(m_z) 
+        FROM multi_obs 
+        WHERE (((multi_obs.platform_handle)ilike '%$platform_handle%') AND
+              (m_z<>-99999) AND (m_value<>-99999) AND 
+              (multi_obs.m_date <=timestamp '$date' AND 
+              multi_obs.m_date>=(timestamp '$date' - interval '$env{time_interval} hours')));";
  
 	$sth = $dbh->prepare( $sql );
 	$sth->execute();
@@ -89,9 +98,15 @@ use Time::Local;
 	
 	
 	$sql="SELECT  sensor_type.type_name, sensor.s_order, multi_obs.m_date,multi_obs.m_z, multi_obs.m_value, multi_obs.m_value_2 
-		FROM sensor_type INNER JOIN (sensor INNER JOIN multi_obs ON sensor.row_id = multi_obs.sensor_id) ON 
-		sensor_type.row_id = sensor.type_id WHERE ( ( (multi_obs.platform_handle) ilike '%$platform_handle%') AND (multi_obs.m_z<>-99999) AND(multi_obs.m_value<>-99999)
-		AND(multi_obs.m_value_2<>-99999)AND (multi_obs.m_date <=timestamp '$date' and multi_obs.m_date>=(timestamp '$date' - interval '$env{time_interval} hours')));";
+        FROM sensor_type 
+        INNER JOIN (sensor INNER JOIN multi_obs ON sensor.row_id = multi_obs.sensor_id) 
+        ON sensor_type.row_id = sensor.type_id 
+        WHERE ( ( (multi_obs.platform_handle) ilike '%$platform_handle%') AND 
+              (multi_obs.m_z<>-99999) AND
+              (multi_obs.m_value<>-99999) AND
+              (multi_obs.m_value_2<>-99999)AND 
+              (multi_obs.m_date <=timestamp '$date' AND 
+              multi_obs.m_date>=(timestamp '$date' - interval '$env{time_interval} hours')));";
 	
 	$sth = $dbh->prepare( $sql );
 	$sth->execute();
