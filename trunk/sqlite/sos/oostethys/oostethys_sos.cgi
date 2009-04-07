@@ -1210,9 +1210,9 @@ ESQL
 ##########SQL
 
 #since apache process, must write log file to apache-owned folder like /tmp/ms_tmp
-open (DEBUG_FILE,">/tmp/ms_tmp/debug.txt");
-print DEBUG_FILE "$in_time \n $sql_statement";
-close (DEBUG_FILE);
+#open (DEBUG_FILE,">/tmp/ms_tmp/debug.txt");
+#print DEBUG_FILE "$in_time \n $sql_statement";
+#close (DEBUG_FILE);
 
 # END LOCAL EDITS
 
