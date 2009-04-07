@@ -191,7 +191,6 @@ CREATE TABLE metadata (
     schema_url varchar(500),
     file_url varchar(500),
     local_filepath varchar(500),
-    netcdf_filepath varchar(500),
     begin_date timestamp,
     end_date timestamp
 );
