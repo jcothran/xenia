@@ -5,9 +5,14 @@ use Time::Local;
 use File::Basename;
 use XML::LibXML;
 use CGI ":cgi";
+
+#print "Content-type: text/html\n\n";
+#print "hello";
+#exit 0;
+
 # if using the SOS Config file DBI is optional
 #### LOCAL EDIT
-#use DBI;
+use DBI;
 #### END LOCAL EDIT
 ################################################################################
 # SOS OVERVIEW
@@ -54,8 +59,9 @@ use CGI ":cgi";
 # To utilize your database set $use_config to 0. To utilize the sos_config.xml file set to 1.
 # Note: You can keep set $use_config = 1  get your metadata from your local config file but still get observation data from you database by setting the <SOSDataFile> element to 'DataBase' instead of a local ASCII file name
 # E.g. <SOSDataFile>DataBase</SOSDataFile>
-our $use_config = 1;
+our $use_config = 0;
 
+=comment
 our %uom_lookup = (
 	'air_temperature'								=> 'celsius',
 	'chlorophyll'									=> 'mg_m-3',
@@ -78,6 +84,28 @@ our %uom_lookup = (
 	'dominant_wave_period'							=> 's',
 	'turbidity'										=> 'ntu',
 );
+=cut
+
+my $dbname = '/var/www/cgi-bin/microwfs/microwfs.db';
+my $dbh = DBI->connect("dbi:SQLite:dbname=$dbname", "", "",
+    { RaiseError => 1, AutoCommit => 1 });
+
+unless ($dbh){ die("Database Error", DBI->errstr); }
+
+my $sth;
+
+our %uom_lookup = ();
+
+my $sql = qq{ select t0.row_id,t2.standard_name,t3.standard_name from m_type t0,m_scalar_type t1,obs_type t2,uom_type t3 where t0.m_scalar_type_id = t1.row_id and t0.num_types = 1 and t1.obs_type_id = t2.row_id and t1.uom_type_id = t3.row_id };
+#print $sql."\n";
+$sth = $dbh->prepare( $sql );
+$sth->execute();
+
+while (my ($row_id,$obs_type,$uom) = $sth->fetchrow_array) {
+        #print "$row_id $obs_type $uom\n";
+        $uom_lookup{$obs_type} = $uom;
+};
+
 
 #### END LOCAL EDIT
 
@@ -109,8 +137,8 @@ sub exception_error
 
 	my  @exception_codes = (
 	'OperationNotSupported',
-	'MissingParamterValue',
-	'InvalidParamterValue',
+	'MissingParameterValue',
+	'InvalidParameterValue',
 	'VersionNegotiationFailed',
 	'InvalidUpdateSequence',
 	'NoApplicableCode'
@@ -128,6 +156,12 @@ sub exception_error
 			-type => 'text/xml',
 	);
 	print $exception->serialize;
+
+$sth->finish;
+undef $sth; # to stop "closing dbh with active statement handles"
+ 	  # http://rt.cpan.org/Ticket/Display.html?id=22688	
+$dbh->disconnect();
+
 	exit;
 }
 
@@ -144,25 +178,25 @@ sub exception_error
 ########################################
 #### LOCAL EDIT
 # Full name of your organization
-our $org = 'Gulf of Maine Ocean Observing System';
-our $short_org = 'GoMOOS';
-our $org_acronym = 'GoMOOS';
-our @key_words = ('OCEANOGRAPHY', 'Ocean Observations', 'GoMOOS', 'Gulf of Maine');
-our $org_url = 'http://www.gomoos.org/';
-our $title = "Gulf of Maine Ocean Observing System SOS";
-our $ra_name = 'NERACOOS';
-our $contact = 'Eric Bridger';
-our $email = 'eric@gomoos.org';
+our $org = 'Southeast Atlantic Coastal Ocean Observing System';
+our $short_org = 'SECOORA';
+our $org_acronym = 'SECOORA';
+our @key_words = ('OCEANOGRAPHY', 'Ocean Observations', 'SECOORA', 'Southeast Atlantic');
+our $org_url = 'http://secoora.org/';
+our $title = "SECOORA SOS";
+our $ra_name = 'SECOORA';
+our $contact = 'Jeremy Cothran';
+our $email = 'jeremy.cothran@gmail.com';
 
 # This must point to the full URL path to this CGI script.
-our $sos_url = 'http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi';
+our $sos_url = 'http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi';
 
 #####################
 # platform_urn.  To ensure unique platform identifiers acroos the internet your local platform or sensor id 
 # should be turned into a urn.   Typically this should be: urn:your_org.your_domaine:source.moooring#
 # The local platform name will be appended after the #
 #####################
-our $platform_uri = 'urn:gomoos.org:source.mooring#';
+our $platform_uri = 'urn:secoora.org:source.mooring#';
 
 #### END LOCAL EDIT
 
@@ -271,6 +305,11 @@ print header(
 );
 
 print $sos_xml;
+
+$sth->finish;
+undef $sth; # to stop "closing dbh with active statement handles"
+ 	  # http://rt.cpan.org/Ticket/Display.html?id=22688	
+$dbh->disconnect();
 
 exit;
 
@@ -638,7 +677,7 @@ sub doGetObservation
 
 	my $node;
 
-	my @output_data = getData($sensorID, $in_time, $bbox, \@params, $sensor_list);
+	my @output_data = getDataDB($sensorID, $in_time, $bbox, \@params);
 
 	my $stime = '';
 	my $etime = '';
@@ -950,7 +989,7 @@ sub getInputParams
 sub getMetaData
 {
 	my ($use_config, $sensor_list) = @_;
-	return ($use_config ? getMetaConfig($sensor_list) : getMetaDB($sensor_list));
+	return (getMetaDB($sensor_list));
 }
 ###############################################
 sub getMetaDB
@@ -959,28 +998,28 @@ sub getMetaDB
 	my $sensor_list = shift;
 
 # LOCAL EDIT
- 	my $dbname = 'your_db_name';
- 	my $dbhost = 'your_db_host.host.org';
- 	my $dbuser = 'dbuser_name';
- 	my $dbpass = 'db_password';
 
-	my $dbh = DBI->connect("dbi:Pg:dbname=$dbname;host=$dbhost","$dbuser","$dbpass",{ PrintError =>1, RaiseError=>0} );
-
-	unless ($dbh){
-		die("Database Error", DBI->errstr);
-	}
-
+##########SQL
 	my $sql_statement =  <<ESQL;
-SELECT distinct ts.display_platform AS platform, ts.lon AS longitude, ts.lat AS latitude, ts.mooring_site_desc AS description, ts.data_type AS observed_property
-FROM time_series ts 
-JOIN active_platforms ap ON ap.platform::text = ts.platform::text
-WHERE ts.program = 'GoMOOS'
-ORDER BY ts.display_platform, ts.data_type
+select distinct platform.platform_handle as platform
+    ,fixed_longitude as longitude
+    ,fixed_latitude as latitude
+    ,'2009-01-02T15:00:00Z'
+    ,''
+    ,platform.description as description 
+    ,obs_type.standard_name as observed_property
+  from platform
+    left join sensor on platform.row_id=sensor.platform_id
+    left join m_type on m_type.row_id=sensor.m_type_id
+    left join m_scalar_type on m_scalar_type.row_id=m_type.m_scalar_type_id
+    left join obs_type on obs_type.row_id=m_scalar_type.obs_type_id
+  order by platform_handle,obs_type.standard_name;
 ESQL
+##########SQL
 
 # END LOCAL EDIT
 
-	my $sth = $dbh->prepare($sql_statement) or die("Database Error", $dbh->errstr);
+	$sth = $dbh->prepare($sql_statement) or die("Database Error", $dbh->errstr);
 	if ($sth->execute()) {
 		while (my $ref = $sth->fetchrow_hashref()) {
 			my $platform = $ref->{platform};
@@ -1007,10 +1046,8 @@ ESQL
 
 		}
 	}else{
-		$dbh->disconnect();
 		die("Database Error", $dbh->errstr);
 	}
-	$dbh->disconnect();
 
 	#########################
 	# An Example of adding a procedure which allows retrieval of obervedProperties for all GoMOOS Platforms
@@ -1042,7 +1079,11 @@ ESQL
 ###############################################
 sub get_start_time
 {
+
+		return '2009-01-01T00:00:00Z'; #LOCAL EDIT
+=comment
 	my ($dbh, $platform) = @_;
+#LOCAL EDIT - SQL
 	my $sql_statement =  "select min(start_time) at time zone 'UTC' as start_time from time_series where program = 'GoMOOS' AND display_platform = '$platform'";
 	my $sth = $dbh->prepare($sql_statement) or die("Database Error", $dbh->errstr);
 	if ($sth->execute()) {
@@ -1052,226 +1093,9 @@ sub get_start_time
 		$t .= 'Z';
 		return $t;
 	}
+=cut
 }
 
-###############################################
-sub getMetaConfig
-{
-	my $sensor_list = shift;
-	my $config = $parser->parse_file("$base_dir/sos_config.xml");
-	exception_error(5, "Could not sos_config.xml file") if ! $config;
-
-	$org = $config->find("//DataProvider/Publisher/OrganizationName");
-	$short_org = $config->find("//DataProvider/Publisher/shortOrganizationName");
-	$org_acronym = $config->find("//DataProvider/Publisher/OrganizationAcronym");
-	$short_org = $org_acronym if (not $short_org);
-	$org_url = $config->find("//DataProvider/Publisher/OrganizationURL");
-	$title = $org . ' SOS';
-
-	$ra_name = $config->find("//DataProvider/RegionalAssociation/shortOrganizationName");
-	$ra_name = $short_org if (not $ra_name);
-
-	$contact = $config->find("//DataProvider/Publisher/ContactPersonName");
-	$email = $config->find("//DataProvider/Publisher/ContactPersonEmail");
-	$sos_url = $config->find("//DataProvider/Publisher/SOSURL");
-
-	@key_words = ();
-	foreach my $node ($config->findnodes("//DataProvider/Publisher/Keywords/Keyword")){
-		#push(@key_words, $node->find("Keyword")->string_value);
-		push(@key_words, $node->string_value);
-	}
-
-	foreach my $node ($config->findnodes("//DataProvider/ObservationList/Observation")){
-		my $obsprop = $node->find("observedProperty")->string_value;
-		my $uom = $node->find("uom")->string_value;
-		my $obs_file = $node->find("SOSDataFile")->string_value;
-
-		my $platform = $node->find("localPlatformName")->string_value;
-		my $provider_name = $node->find("dataProviderShortName")->string_value;
-		$provider_name = $short_org if(not $provider_name);
-
-		$sensor_list->{$platform}->{platform} = $platform;
-		$sensor_list->{$platform}->{urn} = $node->find("platformURI")->string_value;
-		# check for missing platformURI value. and just use platform
-		$sensor_list->{$platform}->{urn} = $platform if(not $sensor_list->{$platform}->{urn});
-		$sensor_list->{$platform}->{long_name} = $node->find("platformLongName")->string_value;
-		$sensor_list->{$platform}->{provider_name} = $provider_name;
-		$sensor_list->{$platform}->{lat} = $node->find("latitude")->string_value;
-		$sensor_list->{$platform}->{lon} = $node->find("longitude")->string_value;
-		$sensor_list->{$platform}->{start_time} = $node->find("startTime")->string_value;
-		$sensor_list->{$platform}->{end_time} = $node->find("endTime")->string_value;
-		$sensor_list->{$platform}->{comments} = $node->find("comments")->string_value;
-		$sensor_list->{$platform}->{obsproplist}->{$obsprop}->{uom} = $uom;
-		$sensor_list->{$platform}->{obsproplist}->{$obsprop}->{obs_file} = $obs_file;
-	}
-}
-
-###############################################
-sub getData
-{
-	my ($sensorID, $in_time, $bbox, $params, $sensor_list) = @_;
-
-	# Use the first param in the sensor_list to see if it's DB or File based observations.
-	# We assume you cannot mix DB and File observations in a list of parameters.
-	my $param = @{$params}[0];
-
-	if( $sensor_list->{$sensorID}->{obsproplist}->{$param}->{obs_file} eq 'DataBase') {
-		return getDataDB($sensorID, $in_time, $bbox, $params, $sensor_list);
-	} else {
-		# not Bounding Box queries for File base observations
-		return getDataFile($sensorID, $in_time, $params, $sensor_list);
-	}
-
-}
-# HERE NB This is working now but could really use better logic based on the DataRecord? e.g.
-# What is the obs value what is the QA/QC value
-###############################################
-# getDataFile  Get observation data from the files listed in the sos_config.xml file.
-#   We have to jump thru hoops to get 2 or more observations out of these text files which are one
-#   observation per file.
-###############################################
-sub getDataFile
-{
-	my ($sensorID, $in_time, $params, $sensor_list) = @_;
-
-
-	my ($time1, $time2) = ('','');;
-	# '/' is the separator
-	if($in_time =~ /\// ){
-		($time1, $time2) = split( /\//, $in_time);
-	}else{
-		$time1 = $in_time;
-	}
-
-
-	my $sse1  = time2sse($time1);
-	my $sse2  = time2sse($time2);
-
-	my @output_data = ();
-	my @return_data = ();
-	my %data_by_time = ();
-	my @sensors = ();
-
-	# Handle ALL_PLATFORMS
-	if($sensorID eq 'ALL_PLATFORMS'){
-		foreach ( keys %{$sensor_list} ){
-			next if ($_ eq 'ALL_PLATFORMS');
-			push @sensors, $_;
-		}
-	}else{
-		push @sensors, $sensorID;
-	}
-
-foreach my $sensor (@sensors){
-
-	# Make sure we have an entry for every time and depth for each param
-	# but within time filters
-	foreach my $param (@{$params}){
-		my $obs_file = $sensor_list->{$sensor}->{obsproplist}->{$param}->{obs_file};
-		if($obs_file){
-			open(DATA, "< $obs_file") or exception_error(5, "Could not open: $base_dir/$obs_file $!");
-			@output_data = <DATA>;
-			close(DATA);
-			# no data
-			exception_error(5,  "Data not available for the requested Observation Offering.") if  not @output_data;
-		}
-		foreach my $line (@output_data){
-			chomp($line);
-			my @vals = split(',', $line);
-			# Note:  time is now second field
-			my $t = $vals[1];
-			my $sse = time2sse($t);
-			my $depth = $vals[4];
-			if($sse1 and $sse2){
-				if ( not ( ($sse >= $sse1) and ($sse <= $sse2) ) ){
-					next;
-				}
-			}
-			elsif($sse1){
-				next if ( $sse1 != $sse  );
-			}
-
-			#$data_by_time{$sensor}{$t}{$depth} = "$sensor," . join(',', @vals[0..$#vals]);
-			# Note: not the value, everything up to the value
-			$data_by_time{$sensor}{$t}{$depth} = join(',', @vals[0..$#vals-1]);
-		}
-	} # end first foreach $param
-
-	exception_error(5,  "Data not available for the requested Time or BBOX.") if  not %data_by_time;
-
-	# Now got thru again and get values
-	foreach my $param (@{$params}){
-		my $obs_file = $sensor_list->{$sensor}->{obsproplist}->{$param}->{obs_file};
-		if($obs_file){
-			open(DATA, "< $obs_file") or exception_error(5, "Could not open: $obs_file $!");
-			@output_data = <DATA>;
-			close(DATA);
-			# no data
-			exception_error(5,  "Data not available for the requested Observation Offering.") if  not @output_data;
-		}
-
-		# Add trailing comma for each param but only for this $sensor
-		foreach my $dt (keys %{ $data_by_time{$sensor} }){
-			foreach my $dp (keys %{ $data_by_time{$sensor}{$dt} }){
-				$data_by_time{$sensor}{$dt}{$dp} .= ',';
-			}
-		}
-
-		foreach my $line (@output_data){
-			chomp($line);
-			my @vals = split(',', $line);
-			# time is now second field
-			my $t = $vals[1];
-			my $sse = time2sse($t);
-			my $depth = $vals[4];
-			my $val = $vals[$#vals];
-			# Time filters
-			if($sse1 and $sse2){
-				if ( not ( ($sse >= $sse1) and ($sse <= $sse2) ) ){
-					next;
-				}
-			}
-			elsif($sse1){
-				next if ( $sse1 != $sse  );
-			}
-			$data_by_time{$sensor}{$t}{$depth} .= $val;
-		}
-	} # end foreach $param
-
-} # end for each $sensor
-
-	# build the return_data array
-	foreach my $plt (sort keys %data_by_time){
-		foreach my $dt (sort keys %{ $data_by_time{$plt} }){
-			foreach my $dp (sort {$a <=> $b} keys %{ $data_by_time{$plt}{$dt} }){
-				push (@return_data, $data_by_time{$plt}{$dt}{$dp});
-			}
-		}
-	}
-
-	return @return_data;
-}
-
-########################################
-# Convert ISO8601 time string to seconds since epoch (01/01/1970)
-# requires Time::Local which has the timegm function
-########################################
-sub time2sse
-{
-	my ($time) = @_;
-	return 0 if not $time;
-	return 0 if ($time eq '');
-	
-	$time =~ s/Z$//;
-	my ($yr, $mo, $da) = split('-', $time);
-	my ($da, $t) = split('T', $da);
-	my ($hr, $min, $sec) = split(':', $t);
-	$yr -= 1900;
-	$mo--;
-	# truncate all to the previous hour
-	my $sse = timegm( (0,0,$hr,$da,$mo,$yr));
-	return $sse;
-}
 
 ########################################
 #  getDataDB()
@@ -1291,107 +1115,111 @@ sub time2sse
 #        'A01,2008-13-02T18:00:00Z,43.5695,-70.055,20,3.178'
 #    ];
 #######################################
+
 sub getDataDB
 {
-	my ($sensorID, $in_time, $bbox, $params, $sensor_list) = @_;
+	my ($sensorID, $in_time, $bbox, $params) = @_;
 
 	my @params = @{$params};
 
 # LOCAL EDITS
- 	my $dbname = 'your_db_name';
- 	my $dbhost = 'your_db_host.host.org';
- 	my $dbuser = 'dbuser_name';
- 	my $dbpass = 'db_password';
+
+	my ($date_column,$date_clause,$group_clause);	
+	#my $obstype_clause = "obs_type.standard_name = 'wind_speed'"; #testing
+	my $obstype_clause = "";
+        my $platform_clause = "platform_handle = '$sensorID'";
+	my $location_clause = '1=1'; #bbox here but not really working right
 
 
-	# Get Latest requires a differnt join table than a query with time parameters
-	my $join_table = 'v_most_recent_hourly_readings';
-	if($in_time){
-		$join_table = 'readings';
-	}
+        ###########################
+        # Handle ALL_PLATFORMS procedure
+        ###########################
+        #if($sensorID ne 'ALL_PLATFORMS'){
+        #       $platform_clause = "platform_handle like '%$sensorID%'";
+        #}
 
-	my $dbh = DBI->connect("dbi:Pg:dbname=$dbname;host=$dbhost","$dbuser","$dbpass",{ PrintError =>1, RaiseError=>0} );
+        ###########################
+        # Handle BBOX queries $bbox = 'min_longitude, min_latitude, max_longitude, max_latitude'
+        ###########################
+        if($bbox){
+                my @latlons = split(',', $bbox);
+                $location_clause = "m_lon >= $latlons[0] and m_lon <= $latlons[2]";
+                $location_clause .= " and m_lat >= $latlons[1] and m_lat <= $latlons[3]";
+        }
 
-	unless ($dbh){
-		die("Database Error", DBI->errstr);
-	}
+        ###########################
+        # Handle time range parameters(or absence=latest)
+        ###########################
+        if($in_time){
+                my ($time1, $time2) = ('','');;
+                # '/' is the separator
+                if($in_time =~ /\// ){
+                        ($time1, $time2) = split( /\//, $in_time);
+                }else{
+                        $time1 = $in_time;
+                        $time2 = $in_time;
+                }
+                #strip Z from $in_time
+                $time1 =~ s/Z$//;
+                $time2 =~ s/Z$//;
+                $date_column = "m_date";
+                $group_clause = "";
+                $date_clause = "m_date >= '$time1' and m_date <= '$time2'";
+        }
+        else {
+                #note 'where m_date > now()' is based on EST/EDT which gives us a 4-5 hour window for latest obs in consideration, will need to add/subtract additional hours for other time zones
+                $date_column = "max(m_date)";
+                $group_clause = "group by platform_handle,obs_type.standard_name";
+                $date_clause = "m_date > strftime('%Y-%m-%dT%H:%M:%S','now','-1 day')";        
+        }
 
+        ###########################
+        # Handle mulitple parameters
+        # E.g. we need:  AND (observed_property = 'salinity' OR observed_property = 'water_temperature')
+        ###########################
+
+        $obstype_clause .= 'AND (';
+        for my $idx (0 .. $#params){
+                $obstype_clause .= " OR observed_property =  '$params[$idx]' " if ($idx > 0);
+                $obstype_clause .= " observed_property =  '$params[$idx]' " if ($idx == 0);
+        }
+        $obstype_clause .= ')';
+ 
+
+##########SQL
+#note SQL WHERE column order should match search indexes or vice versa for performance
 
 	my $sql_statement =  <<ESQL;
-SELECT 
-ts.display_platform  as platform,
-ts.data_type as observed_property,
-r.reading_time AT TIME ZONE 'UTC' AS date_time,
-ts.lat AS latitude,
-ts.lon AS longitude,
-ts.depth AS depth,
-r.reading AS observation
-FROM time_series ts
-JOIN $join_table r ON (ts.id = r.time_series)
-WHERE
-ts.program = 'GoMOOS'
-AND r.quality = 3
-AND ts.display_platform = '$sensorID'
+select platform_handle as platform
+    ,obs_type.standard_name as observed_property
+    ,$date_column as date_time
+    ,m_lat as latitude
+    ,m_lon as longitude
+    ,m_z as depth
+    ,m_value as observation
+  from multi_obs
+    left join m_type on m_type.row_id=multi_obs.m_type_id
+    left join m_scalar_type on m_scalar_type.row_id=m_type.m_scalar_type_id
+    left join obs_type on obs_type.row_id=m_scalar_type.obs_type_id
+  where $date_clause
+  $obstype_clause
+  and $platform_clause
+  and $location_clause
+$group_clause;
 ESQL
+##########SQL
 
-	###########################
-	# Handle ALL_PLATFORMS procedure
-	###########################
-	#if($sensorID ne 'ALL_PLATFORMS'){
-	#	$sql_statement .= "AND ts.display_platform = '$sensorID' ";
-	#}
-
-	###########################
-	# Handle time range parameters we use BETWEEN even for a single time
-	###########################
-	if($in_time){
-		my ($time1, $time2) = ('','');;
-		# '/' is the separator
-		if($in_time =~ /\// ){
-			($time1, $time2) = split( /\//, $in_time);
-		}else{
-			$time1 = $in_time;
-			$time2 = $in_time;
-		}
-		# Postgres 8.1 won't take the Z.  time inputs are UTC format: YYYY-MM-DDTHH:MM:SSZ
-		$time1 =~ s/Z$//;
-		$time2 =~ s/Z$//;
-		$sql_statement .= " AND r.reading_time BETWEEN '$time1 UTC' AND '$time2 UTC' "
-	}
-
-	###########################
-	# Handle BBOX queries $bbox = 'min_longitude, min_latitude, max_longitude, max_latitude'
-	# Your lat lons must be stored as floats in your database for this to work
-	###########################
-	if($bbox){
-		my @latlons = split(',', $bbox);
-		$sql_statement .= " AND ts.lon BETWEEN $latlons[0]  AND $latlons[2]  ";
-		$sql_statement .= " AND ts.lat BETWEEN $latlons[1]  AND $latlons[3]  ";
-
-		# This an approach using PostGIS geography operators
-		#$sql_statement .= " AND (GeometryFromText('POINT( ' || ts.lon || ' ' || ts.lat || ')',-1) ";
-		#$sql_statement .= " && 'BOX3D( $latlons[0] $latlons[1], $latlons[2] $latlons[3])'::box3d )";
-	}
-
-	###########################
-	# Handle mulitple parameters
-	# E.g. we need:  AND (data_type = 'salinity' OR data_type = 'sea_water_temperature')
-	###########################
-
-	$sql_statement .= 'AND (';
-	for my $idx (0 .. $#params){
-		$sql_statement .= " OR ts.data_type =  '$params[$idx]' " if ($idx > 0);
-		$sql_statement .= " ts.data_type =  '$params[$idx]' " if ($idx == 0);
-	}
-
-	$sql_statement .= ')';
+#since apache process, must write log file to apache-owned folder like /tmp/ms_tmp
+open (DEBUG_FILE,">/tmp/ms_tmp/debug.txt");
+print DEBUG_FILE "$in_time \n $sql_statement";
+close (DEBUG_FILE);
 
 # END LOCAL EDITS
 
 	my @return_data = ();
 	my %data_by_time = ();
 
-	my $sth = $dbh->prepare($sql_statement) or die("Database Error", $dbh->errstr);
+	$sth = $dbh->prepare($sql_statement) or die("Database Error", $dbh->errstr);
 	if ($sth->execute()) {
 		my $rows = $sth->fetchall_arrayref({});
 		foreach my $row ( @{$rows} ){
@@ -1404,7 +1232,6 @@ ESQL
 			my $lon = $row->{longitude};
 			$data_by_time{$platform}{$t}{$depth} = "$platform,$t,$lat,$lon,$depth";
 		}
-		$dbh->disconnect() if not %data_by_time;
 		exception_error(5,  "Data not available for the requested Time or BBOX.") if  not %data_by_time;
 
 		foreach my $this_param (@params){
@@ -1429,11 +1256,8 @@ ESQL
 		} # end foreach $this_param
 
 	}else{
-		$dbh->disconnect();
 		die("Database Error", $dbh->errstr);
 	}
-
-	$dbh->disconnect();
 
 	foreach my $plt (sort keys %data_by_time){
 		foreach my $dt (sort keys %{ $data_by_time{$plt} }){
@@ -1446,129 +1270,3 @@ ESQL
 	return @return_data;
 }
 
-###############################################
-#  A much simpler example of getting observations
-###############################################
-sub simple_getDataDB
-{
-	my ($sensorID, $in_time, $bbox, $params, $sensor_list) = @_;
-
-	my @params = @{$params};
-
-# LOCAL EDITS
- 	my $dbname = 'your_db_name';
- 	my $dbhost = 'your_db_host.host.org';
- 	my $dbuser = 'dbuser_name';
- 	my $dbpass = 'db_password';
-
-
-	my $dbh = DBI->connect("dbi:Pg:dbname=$dbname;host=$dbhost","$dbuser","$dbpass",{ PrintError =>1, RaiseError=>0} );
-
-	unless ($dbh){
-		die("Database Error", DBI->errstr);
-	}
-
-
-	my $sql_statement =  <<ESQL;
-SELECT 
-platform,
-observed_property,
-date_time AT TIME ZONE 'UTC',
-latitude,
-longitude,
-depth,
-observation
-FROM readings
-WHERE platform = '$sensorID'
-ESQL
-
-	###########################
-	# Handle time range parameters we use BETWEEN even for a single time
-	###########################
-	if($in_time){
-		my ($time1, $time2) = ('','');;
-		# '/' is the separator
-		if($in_time =~ /\// ){
-			($time1, $time2) = split( /\//, $in_time);
-		}else{
-			$time1 = $in_time;
-			$time2 = $in_time;
-		}
-		# Postgres 8.1 won't take the Z.  time inputs are UTC format: YYYY-MM-DDTHH:MM:SSZ
-		$time1 =~ s/Z$//;
-		$time2 =~ s/Z$//;
-		$sql_statement .= " AND reading_time BETWEEN '$time1 UTC' AND '$time2 UTC' "
-	}
-
-	###########################
-	# Handle mulitple parameters
-	# E.g. we need:  AND (data_type = 'salinity' OR data_type = 'sea_water_temperature')
-	###########################
-
-	$sql_statement .= 'AND (';
-	for my $idx (0 .. $#params){
-		$sql_statement .= " OR data_type =  '$params[$idx]' " if ($idx > 0);
-		$sql_statement .= " data_type =  '$params[$idx]' " if ($idx == 0);
-	}
-
-	$sql_statement .= ')';
-
-# END LOCAL EDITS
-
-	my @return_data = ();
-	my %data_by_time = ();
-
-	my $sth = $dbh->prepare($sql_statement) or die("Database Error", $dbh->errstr);
-	if ($sth->execute()) {
-		my $rows = $sth->fetchall_arrayref({});
-		foreach my $row ( @{$rows} ){
-			my $platform = $row->{platform};
-			my $t = $row->{date_time};
-			$t =~ s/ /T/;
-			$t .= 'Z';
-			my $depth = $row->{depth};
-			my $lat = $row->{latitude};
-			my $lon = $row->{longitude};
-			$data_by_time{$platform}{$t}{$depth} = "$platform,$t,$lat,$lon,$depth";
-		}
-		$dbh->disconnect() if not %data_by_time;
-		exception_error(5,  "Data not available for the requested Time or BBOX.") if  not %data_by_time;
-
-		foreach my $this_param (@params){
-			# Add trailing comma for each param
-			foreach my $plt (keys %data_by_time){
-				foreach my $dt (keys %{ $data_by_time{$plt} }){
-					foreach my $dp (keys %{ $data_by_time{$plt}{$dt} }){
-						$data_by_time{$plt}{$dt}{$dp} .= ',';
-					}
-				}
-			}
-			foreach my $row ( @{$rows} ){
-				next if ($row->{observed_property} ne "$this_param");
-				my $plt = $row->{platform};
-				my $t = $row->{date_time};
-				$t =~ s/ /T/;
-				$t .= 'Z';
-				my $depth = $row->{depth};
-				my $obs = $row->{observation};
-				$data_by_time{$plt}{$t}{$depth} .= $obs;
-			}
-		} # end foreach $this_param
-
-	}else{
-		$dbh->disconnect();
-		die("Database Error", $dbh->errstr);
-	}
-
-	$dbh->disconnect();
-
-	foreach my $plt (sort keys %data_by_time){
-		foreach my $dt (sort keys %{ $data_by_time{$plt} }){
-			foreach my $dp (sort {$a <=> $b} keys %{ $data_by_time{$plt}{$dt} }){
-				push (@return_data, $data_by_time{$plt}{$dt}{$dp});
-			}
-		}
-	}
-
-	return @return_data;
-}
