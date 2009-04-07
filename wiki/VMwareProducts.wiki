@@ -95,7 +95,9 @@ A [http://neptune.baruch.sc.edu/xenia/feeds/all_metadata_latest.zip zip file] of
 Sqlite file download for priming, analysis, etc of the latest 3 day time window [http://neptune.baruch.sc.edu/xenia/archive_db/latest.db database] and [http://neptune.baruch.sc.edu/xenia/archive_db/weekly/ folder] containing the julian-weekly-split archive of sqlite databases.
 
 ----
-= DIF SOS =
+= SOS =
+
+== DIF ==
 
 http://neptune.baruch.sc.edu/xenia/sos/difSOS.html
 
@@ -104,6 +106,10 @@ XML responses should display correctly within Firefox, IE browsers
 An OGC SOS(OpenGeospatial Consortium [http://www.opengeospatial.org/standards/sos Sensor Observation Service]) web service method supports queries on the database 
 
 see http://code.google.com/p/xenia/wiki/XeniaSOS
+
+== Oostethys ==
+
+http://code.google.com/p/xenia/wiki/XeniaSOS#Oostethys_SOS
 
 ----
 = Flow/Feed status and notification = 
