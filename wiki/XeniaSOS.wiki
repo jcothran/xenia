@@ -1,5 +1,6 @@
 #summary SOS (Sensor Observing Service) related Xenia development/documentation
 
+<wiki:toc max_depth="6" />
 
 = [XeniaSOS#difSOS difSOS] =
 
@@ -111,4 +112,3 @@ It would be good to see in addition to a service registry, a test script or serv
 Also I tried to register the GetCapabilites link above at http://score.itsc.uah.edu/MMI/, but it timed out with no result.
 
 Two other caveats with the SECOORA Oostethys SOS service is that the platform metadata regarding platform start_dates are not currently populated, so for now it is constantly defaulted to '2009-01-01T00:00:00Z'.  Also the RDB that the oostethys_sos.cgi script is running against is a smaller sqlite file database of the latest 3 days worth of observations with older observations pushed off into julian weekly sqlite files of the same schema.  Time ranges are always for the past 3 days until I implement further functionality to search earlier archive files.
-
