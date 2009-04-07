@@ -109,6 +109,6 @@ http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi?request=GetObservation&
 
 It would be good to see in addition to a service registry, a test script or service to validate the desired service functionality(service compliance test and feedback).  The pattern that I tend to see is that the 'usual' SOS service request path is available, but some of the extra features are not uniformly tested or implemented.
 
-Also I tried to register the GetCapabilites link above at http://score.itsc.uah.edu/MMI/, but it timed out with no result.
+Also I tried to register the GetCapabilites link above at http://score.itsc.uah.edu/MMI/, but it timed out with no result.  The number of platforms available is around 1,000 (most of which are federal backbone providers, many of which are on the existing application maps) which may be part of the time-out issue.
 
 Two other caveats with the SECOORA Oostethys SOS service is that the platform metadata regarding platform start_dates are not currently populated, so for now it is constantly defaulted to '2009-01-01T00:00:00Z'.  Also the RDB that the oostethys_sos.cgi script is running against is a smaller sqlite file database of the latest 3 days worth of observations with older observations pushed off into julian weekly sqlite files of the same schema.  Time ranges are always for the past 3 days until I implement further functionality to search earlier archive files.
