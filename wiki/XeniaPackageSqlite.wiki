@@ -2,6 +2,8 @@
 
 See also [VMwareHome] regarding a vmware image for testing/development purposes.
 
+See also SqliteTutorial and XeniaSqliteNotes for in-house simple examples
+
 <wiki:toc max_depth="6">
 
 = Sample database = 
