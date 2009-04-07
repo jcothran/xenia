@@ -63,7 +63,7 @@ http://xenia.googlecode.com/files/georss.jpg
 GeoRSS provides a simple geospatially referenced RSS feed for simple harvesting/redisplay of latest observations for each platform as a data feed.  Above feed displays correctly in Firefox browser.
 
 ----
-= html table styling = 
+= html table styling for AJAX,etc = 
 
 http://neptune.baruch.sc.edu/xenia/feeds/html_tables
 
