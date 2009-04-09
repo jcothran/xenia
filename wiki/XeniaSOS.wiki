@@ -70,20 +70,19 @@ Also of interest would be better
   * *shared code* in a variety of source language implementations to help data providers implement the services/schemas
   * a way/mechanism for identifying/resolving *redundant* metadata/data from several independent sources - which source is primary author or quality/timeliness of data sources
 
+== Usage examples ==
+
+Firefox and IE browsers should support correct displaying of the following responses XML.
+
+=== !GetObservation ===
+
+http://carocoops.org/cgi-bin/microwfs/difSOS.cgi?REQUEST=GetObservation&SERVICE=SOS&VERSION=1.0.0&RESPONSEFORMAT=text%2Fxml%3Bschema%3D%2522ioos%2F0.6.0%2522&OBSERVEDPROPERTY=windspeed&OFFERING=nerrs&BBOX=&EVENTTIME=
+
 ----
 
 = Oostethys SOS =
 
-Worked through Eric Bridger's perl RDB script (oostethys_sos.cgi) with the Xenia database schema as the backend and have an Oostethys SOS service available for SECOORA at the following sample links:
-
-#GetCapabilities
-http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi?request=GetCapabilities&service=SOS&version=1.0
-
-#sample DescribeSensor
-http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi?REQUEST=DescribeSensor&procedure=carocoops.FRP2.buoy
-
-#sample GetObservation
-http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi?REQUEST=GetObservation&offering=carocoops.FRP2.buoy&observedProperty=wind_gust
+Worked through Eric Bridger's perl RDB script (oostethys_sos.cgi) with the Xenia database schema as the backend and have an Oostethys SOS service available for SECOORA at the following sample links listed [ below]
 
 == Source, differences ==
 
