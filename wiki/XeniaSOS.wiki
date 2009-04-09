@@ -70,11 +70,11 @@ Also of interest would be better
   * *shared code* in a variety of source language implementations to help data providers implement the services/schemas
   * a way/mechanism for identifying/resolving *redundant* metadata/data from several independent sources - which source is primary author or quality/timeliness of data sources
 
-== Usage examples ==
+== Usage examples - DIF SOS ==
 
 Firefox and IE browsers should support correct displaying of the following responses XML.
 
-=== !GetObservation ===
+=== !GetObservation - DIF SOS ===
 
 http://carocoops.org/cgi-bin/microwfs/difSOS.cgi?REQUEST=GetObservation&SERVICE=SOS&VERSION=1.0.0&RESPONSEFORMAT=text%2Fxml%3Bschema%3D%2522ioos%2F0.6.0%2522&OBSERVEDPROPERTY=windspeed&OFFERING=nerrs&BBOX=&EVENTTIME=
 
@@ -114,38 +114,38 @@ Also I tried to register the GetCapabilites link above at http://score.itsc.uah.
 
 Two other caveats with the SECOORA Oostethys SOS service is that the platform metadata regarding platform start_dates are not currently populated, so for now it is constantly defaulted to '2009-01-01T00:00:00Z'.  Also the RDB that the oostethys_sos.cgi script is running against is a smaller sqlite file database of the latest 3 days worth of observations with older observations pushed off into julian weekly sqlite files of the same schema.  Time ranges are always for the past 3 days until I implement further functionality to search earlier archive files.
 
-== Usage examples ==
+== Usage examples - Oostethys SOS==
 
 Firefox and IE browsers should support correct displaying of the following responses XML.
 
-=== !GetCapabilities ===
+=== !GetCapabilities - Oostethys SOS ===
 
 http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi?request=GetCapabilities&service=SOS&version=1.0
 
-=== !DescribeSensor ===
+=== !DescribeSensor - Oostethys SOS ===
 
 Procedure shouldn't include prefix or should be offering instead of procedure below
 
 http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi?REQUEST=DescribeSensor&procedure=carocoops.FRP2.buoy
 
-=== !GetObservation ===
+=== !GetObservation - Oostethys SOS ===
 
-==== data latest ====
+==== data latest - Oostethys SOS ====
 http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi?REQUEST=GetObservation&offering=carocoops.FRP2.buoy&observedProperty=wind_speed
 
-==== time instance ====
+==== time instance - Oostethys SOS ====
 http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi?REQUEST=GetObservation&offering=carocoops.FRP2.buoy&observedProperty=wind_speed&eventTime=2009-04-06T19:00:00Z
 
-==== time start/end ====
+==== time start/end - Oostethys SOS ====
 http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi?REQUEST=GetObservation&offering=carocoops.FRP2.buoy&observedProperty=wind_speed&time=2009-04-06T16:00:00Z/2009-04-06T19:00:00Z
 
-==== bbox ====
+==== bbox - Oostethys SOS ====
 
 Works but should allow no offering parameter(all within bbox) or maybe 'like' comparison "where offering like 'ndbc%'"
 
 http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi?REQUEST=GetObservation&offering=carocoops.FRP2.buoy&observedProperty=wind_speed&time=2009-04-06T16:00:00Z/2009-04-06T19:00:00Z&bbox=-81.50,0.0,-63.0,40.0
 
-==== multiple observedProperty ====
+==== multiple observedProperty - Oostethys SOS ====
 
 Only works with observedProperties at same elevation(height/depth), get blanks otherwise 
 
