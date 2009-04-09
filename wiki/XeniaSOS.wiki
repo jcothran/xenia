@@ -82,7 +82,7 @@ http://carocoops.org/cgi-bin/microwfs/difSOS.cgi?REQUEST=GetObservation&SERVICE=
 
 = Oostethys SOS =
 
-Worked through Eric Bridger's perl RDB script (oostethys_sos.cgi) with the Xenia database schema as the backend and have an Oostethys SOS service available for SECOORA at the following sample links listed [http://code.google.com/p/xenia/wiki/XeniaSOS#Usage_examples_-_Oostethys_SOS below]
+Worked through [http://www.oostethys.org/downloads/sos-cookbook-perl/sos-server-cgi-cookbook-rdbms Eric Bridger's perl RDB script] (oostethys_sos.cgi) with the Xenia database schema as the backend and have an Oostethys SOS service available for SECOORA at the following sample links listed [http://code.google.com/p/xenia/wiki/XeniaSOS#Usage_examples_-_Oostethys_SOS below]
 
 == Source, differences ==
 
