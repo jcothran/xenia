@@ -149,4 +149,12 @@ select platform_handle
   where platform_handle like 'carocoops%'
   and m_date > strftime('%Y-%m-%dT%H:%M:%S','now','-12 hours')
 group by platform_handle,m_type_id;
+
+= simple row formatting on SELECT result =
+
+{{{
+select ',"'||standard_name||'"' from obs_type;
+}}}
+
+
 }}}
