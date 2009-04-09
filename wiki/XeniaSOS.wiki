@@ -117,6 +117,8 @@ Two other caveats with the SECOORA Oostethys SOS service is that the platform me
 
 == Usage examples ==
 
+Firefox and IE browsers should support correct displaying of the following responses XML.
+
 === !GetCapabilities ===
 
 http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi?request=GetCapabilities&service=SOS&version=1.0
