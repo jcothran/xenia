@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #xenia_sqlite_to_obskml.pl
 
-# This script reads from the multi_obs table and creates a latest 48 hour GeoJSON data file for each platform
+# This script reads from the multi_obs table and creates latest hours GeoJSON data file for each platform
 
 #note 'where m_date > now()' is based on EST/EDT which gives us a 4-5 hour window for latest obs in consideration, will need to add/subtract additional hours for other time zones
 
@@ -174,25 +174,14 @@ undef $sth; # to stop "closing dbh with active statement handles"
 
 $dbh->disconnect();
 
-#####################
-
-=comment
-
-$operator_url = &escape_literals($operator_url);
-
-$m_date =~ s/ /T/g;
-$m_date = substr($m_date,0,22);
-#$m_date .= ':00'; #JTC - not sure what this line was for
-if ($m_date ne '') { $m_date .= 'Z'; }
-#print $m_date."\n";
-
-=cut
-
 exit 0;
 
 #--------------------------------------------------------------------
 #                   escape_literals
 #--------------------------------------------------------------------
+
+#$operator_url = &escape_literals($operator_url);
+
 # Must make sure values don't contain XML reserved chars
 sub escape_literals {
 my $str = shift;
@@ -204,15 +193,3 @@ $str =~ s/'/&#39;/gs;
 return ($str);
 }
 
-##########################
-sub search_array {
-
-my $search_term = shift @_;
-my @search_array = @_;
-
-foreach  my $search_item (@search_array) {
-        if ($search_term =~ $search_item) { return 1; }
-}
-
-return 0;
-}
