@@ -36,8 +36,8 @@ select
     ,obs_type.standard_name
     ,uom_type.standard_name
     ,m_date
-    ,m_lat
     ,m_lon
+    ,m_lat
     ,m_z
     ,m_value
   from multi_obs
@@ -46,7 +46,7 @@ select
     left join m_type on m_type.row_id=multi_obs.m_type_id
     left join m_scalar_type on m_scalar_type.row_id=m_type.m_scalar_type_id
     left join obs_type on obs_type.row_id=m_scalar_type.obs_type_id  
-    left join uom_type on uom_type.row_id=m_scalar_type.obs_type_id  
+    left join uom_type on uom_type.row_id=m_scalar_type.uom_type_id  
   and m_date > strftime('%Y-%m-%dT%H:%M:%S','now','-12 hours')
 order by multi_obs.platform_handle,obs_type.standard_name,m_date;
 };
@@ -71,10 +71,6 @@ $latest_obs{platform_list}{$platform_handle}{org_url} = $org_url;
 $latest_obs{platform_list}{$platform_handle}{platform_url} = $platform_url;
 $latest_obs{platform_list}{$platform_handle}{m_lon} = $m_lon;
 $latest_obs{platform_list}{$platform_handle}{m_lat} = $m_lat;
-
-$latest_obs{platform_list}{$platform_handle}{m_date}{$m_date}{obs_list}{$obs_type}{uom_type} = $uom_type;
-$latest_obs{platform_list}{$platform_handle}{m_date}{$m_date}{obs_list}{$obs_type}{m_z} = $m_z;
-$latest_obs{platform_list}{$platform_handle}{m_date}{$m_date}{obs_list}{$obs_type}{m_value} = $m_value;
 
 $latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{uom_type} = $uom_type;
 $latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{m_z} = $m_z;
