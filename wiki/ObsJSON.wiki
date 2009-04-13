@@ -58,10 +58,9 @@ Could also use the KML TimeSpan tag below as well (especially if only referencin
 
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://earth.google.com/kml/2.1"
-     xmlns:obskml="http://carocoops.org/obskml/1.0.0/obskml_simple.xsd">
+<kml xmlns="http://earth.google.com/kml/2.1">
 <Document>
-  <name>Obskml sample</name>
+  <name>ObsJSON example</name>
   <open>1</open>
   <Placemark id="ndbc.41024.buoy">
     <name>ndbc.41024.buoy</name>
