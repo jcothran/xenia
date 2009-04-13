@@ -89,9 +89,9 @@ Could also use the KML TimeSpan tag below as well (especially if only referencin
 </kml>
 }}}
 
-= Schema simple links embedded in AtomPub = 
+= Schema simple links embedded in Atom = 
 
-A simple AtomPub using just JSON links, in this scenario each entry could reference the available platforms from a given provider.
+A simple Atom example using just JSON links, in this scenario each entry could reference the available platforms from a given provider.
 
 {{{
 ...
