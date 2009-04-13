@@ -2,19 +2,17 @@
 
 see also [http://geojson.org/geojson-spec.html geojson]
 
+developed from earlier documentation regarding [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML#Simple_schema_JSON_Alternate_1_O ObsJSON] and [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML ObsKML]
+
 = Simple schema = 
 
 Below example is more flat/array oriented like netCDF,CSV and could support moving platforms(ships,gliders) as well as stationary ones.
 
-elevRel is the 'relative elevation' in meters height(+) or depth(-) from the given GeoJSON z coordinate(s) with zero z coordinate corresponding to mean sea level(MSL).
-
-The ordering of effected list arguments is in time increasing order(oldest first, latest last) allowing picking off the latest value be grabbing the last associated set of time/values off the list.
-
-Stationary platforms would use GeoJSON 'Point' type and mobile platforms would use 'MultiPoint' type.  Multipoint coordinates are paired with listed time values.
-
-(optional) Observation listing order is preferred to be from highest elevation/altitude to lowest elevation/depth.
-
-(optional) Redundant sensors/observations would be listed in their order of importance (primary, secondary, etc) or depth(highest to lowest elevation).
+  * elevRel is the 'relative elevation' in meters height(+) or depth(-) from the given GeoJSON z coordinate(s) with zero z coordinate corresponding to mean sea level(MSL).
+  * The ordering of effected list arguments is in time increasing order(oldest first, latest last) allowing picking off the latest value be grabbing the last associated set of time/values off the list.
+  * Stationary platforms would use GeoJSON 'Point' type and mobile platforms would use 'MultiPoint' type.  Multipoint coordinates are paired with listed time values.
+  * (optional) Observation listing order is preferred to be from highest elevation/altitude to lowest elevation/depth.
+  * (optional) Redundant sensors/observations would be listed in their order of importance (primary, secondary, etc) or depth(highest to lowest elevation).
 
 {{{
 {
@@ -127,4 +125,3 @@ A simple AtomPub using just JSON links, in this scenario each entry could refere
 Used the following links for examples <br>
 http://sgillies.net/blog/883/sensible-observation-services <br>
 http://www.youtube.com/watch?v=T04fKsD56LU
-
