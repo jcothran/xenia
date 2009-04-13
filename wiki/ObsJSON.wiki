@@ -1,0 +1,130 @@
+#summary a GeoJSON based observations/data-centric minimal schema
+
+see also [http://geojson.org/geojson-spec.html geojson]
+
+= Simple schema = 
+
+Below example is more flat/array oriented like netCDF,CSV and could support moving platforms(ships,gliders) as well as stationary ones.
+
+elevRel is the 'relative elevation' in meters height(+) or depth(-) from the given GeoJSON z coordinate(s) with zero z coordinate corresponding to mean sea level(MSL).
+
+The ordering of effected list arguments is in time increasing order(oldest first, latest last) allowing picking off the latest value be grabbing the last associated set of time/values off the list.
+
+Stationary platforms would use GeoJSON 'Point' type and mobile platforms would use 'MultiPoint' type.  Multipoint coordinates are paired with listed time values.
+
+(optional) Observation listing order is preferred to be from highest elevation/altitude to lowest elevation/depth.
+
+(optional) Redundant sensors/observations would be listed in their order of importance (primary, secondary, etc) or depth(highest to lowest elevation).
+
+{{{
+{
+    "type": "Feature",
+    "geometry": {
+        "type": "MultiPoint",
+        "coordinates": [[-80.55,30.04,0],[-79.00,31.00,0],[-78.00,32.00,0]] 
+    },
+    "properties": {
+        "schemaRef": "ioos blessed schema name reference",
+        "dictionaryRef": "ioos blessed obstype uom dictionary reference",
+        "dictionaryURL": "http://nautilus.baruch.sc.edu/obsjson/secoora_dictionary.json",
+        "metadataURL": "a link to further operator/platform metadata as GeoJSON"
+        "operatorName": "ndbc",
+        "operatorURL": "http://www.ndbc.noaa.gov/",
+        "platformName": "41012",
+        "platformURL": "http://www.ndbc.noaa.gov/station_page.php?station=41012",
+        "stationId": "urn:x-noaa:def:station:noaa.nws.ndbc::41012",
+   
+        "time": ["2009-03-31T10:50:00Z","2009-03-31T11:50:00Z","2009-03-31T12:50:00Z"],
+
+        "obsList": [
+            {
+                "obsType": "air_temperature",
+                "uomType": "celsius",
+                "valueList": ["22.0","23.0","24.0"],
+                "elevRel": "3" 
+            },
+            {
+                "obsType": "water_temperature",
+                "uomType": "celsius",
+                "valueList": ["17.0","18.0","19.0"],
+                "elevRel": "-1" 
+            } 
+        ] 
+    } 
+} 
+}}}
+
+= Example GeoJSON embedded in KML as atom:link =
+
+Could also use the KML TimeSpan tag below as well (especially if only referencing TimeSpan files only)
+
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.1"
+     xmlns:obskml="http://carocoops.org/obskml/1.0.0/obskml_simple.xsd">
+<Document>
+  <name>Obskml sample</name>
+  <open>1</open>
+  <Placemark id="ndbc.41024.buoy">
+    <name>ndbc.41024.buoy</name>
+    <description>An html table derived from the obs kml metadata tags would be displayed here</description>
+    <Point>
+      <coordinates>-77.0,32.0,0</coordinates>
+    </Point>
+    <TimeStamp><when>2009-03-14T16:00Z</when></TimeStamp>
+
+    <ExtendedData>
+
+   <!-- GeoJSON related link(latest obs) -->
+   <atom:link type="application/json"
+    href="http://myurl/feeds/ndbc/latest/ndbc.41024.buoy.json" />
+
+   <!-- GeoJSON related link (latest obs - past 48 hours -->
+   <atom:link type="application/json"
+    href="http://myurl/feeds/ndbc/latest_hours_48/ndbc.41024.buoy.json" />
+
+    </ExtendedData>
+
+  </Placemark>
+</Document>
+</kml>
+}}}
+
+= Schema simple links embedded in AtomPub = 
+
+A simple AtomPub using just JSON links, in this scenario each entry could reference the available platforms from a given provider.
+
+{{{
+...
+<entry>
+   <id>latest/ndbc.41024.buoy.json</id>
+   <title>ndbc.41024.buoy</title>
+   <updated>2009-03-14T16:00:00Z</updated>
+   <georss:where>
+     <gml:Point><gml:pos>-77 32</gml:pos></gml:Point>
+   </georss:where>
+
+   <!-- GeoJSON related link -->
+   <link type="application/json"
+    href="http://myurl/feeds/ndbc/latest/ndbc.41024.buoy.json" />
+</entry>
+
+<entry>
+   <id>latest_hours_48/ndbc.41024.buoy.json</id>
+   <title>ndbc.41024.buoy</title>
+   <updated>2009-03-14T16:00:00Z</updated>
+   <georss:where>
+     <gml:Point><gml:pos>-77 32</gml:pos></gml:Point>
+   </georss:where>
+
+   <!-- GeoJSON related link -->
+   <link type="application/json"
+    href="http://myurl/feeds/ndbc/latest_hours_48/ndbc.41024.buoy.json" />
+</entry>
+...
+}}}
+
+Used the following links for examples <br>
+http://sgillies.net/blog/883/sensible-observation-services <br>
+http://www.youtube.com/watch?v=T04fKsD56LU
+
