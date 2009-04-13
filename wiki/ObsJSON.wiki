@@ -30,7 +30,7 @@ Below example is more flat/array oriented like netCDF,CSV and could support movi
         "operatorURL": "http://www.ndbc.noaa.gov/",
         "platformName": "41012",
         "platformURL": "http://www.ndbc.noaa.gov/station_page.php?station=41012",
-        "stationId": "urn:x-noaa:def:station:noaa.nws.ndbc::41012",
+        "platformId": "urn:x-noaa:def:station:noaa.nws.ndbc::41012",
    
         "time": ["2009-03-31T10:50:00Z","2009-03-31T11:50:00Z","2009-03-31T12:50:00Z"],
 
