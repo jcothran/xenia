@@ -54,7 +54,7 @@ Below example is more flat/array oriented like netCDF,CSV and could support movi
 } 
 }}}
 
-= Example GeoJSON embedded in KML as atom:link =
+= Example embedded in KML as atom:link =
 
 Could also use the KML TimeSpan tag below as well (especially if only referencing TimeSpan files only)
 
