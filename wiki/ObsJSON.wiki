@@ -66,7 +66,7 @@ Could also use the KML TimeSpan tag below as well (especially if only referencin
   <open>1</open>
   <Placemark id="ndbc.41024.buoy">
     <name>ndbc.41024.buoy</name>
-    <description>An html table derived from the obs kml metadata tags would be displayed here</description>
+    <description>An html table derived from the ObsJSON would be displayed here</description>
     <Point>
       <coordinates>-77.0,32.0,0</coordinates>
     </Point>
