@@ -65,14 +65,14 @@ GeoRSS provides a simple geospatially referenced RSS feed for simple harvesting/
 ----
 = GeoJSON =
 
-JSON provides a
-  * Javascript performance-oriented
+JSON provides
+  * dynamic Javascript performance-oriented
   * cross-browser compatible
   * site-proxy workaround
 
-method for presenting data to websites.  [http://geojson.org/geojson-spec.html GeoJSON] provides a geospatial markup for associated data.
+method for presenting data to websites similar to traditional AJAX methods.  [http://geojson.org/geojson-spec.html GeoJSON] provides a geospatial markup for associated data.
 
-
+see http://code.google.com/p/xenia/wiki/ObsJSON
 
 ----
 = html table styling for AJAX,etc = 
