@@ -63,6 +63,18 @@ http://xenia.googlecode.com/files/georss.jpg
 GeoRSS provides a simple geospatially referenced RSS feed for simple harvesting/redisplay of latest observations for each platform as a data feed.  Above feed displays correctly in Firefox browser.
 
 ----
+= GeoJSON =
+
+JSON provides a
+  * Javascript performance-oriented
+  * cross-browser compatible
+  * site-proxy workaround
+
+method for presenting data to websites.  [http://geojson.org GeoJSON] provides a geospatial markup for associated data.
+
+
+
+----
 = html table styling for AJAX,etc = 
 
 http://neptune.baruch.sc.edu/xenia/feeds/html_tables
@@ -124,10 +136,10 @@ A script is run once an hour
     * archival database flow
 
 Recent observation flow<br/>
-http://neptune.baruch.sc.edu/xenia/feeds/flow_xenia.png
+http://carocoops.org/obskml/scripts/flow_microwfs.png
 
 Low count magnified flow<br/>
-http://neptune.baruch.sc.edu/xenia/feeds/flow_low.png
+http://carocoops.org/obskml/scripts/flow_low.png
 
 Archival database flow<br/>
-http://neptune.baruch.sc.edu/xenia/feeds/flow_archive.png
+http://carocoops.org/obskml/scripts/flow_archive.png
