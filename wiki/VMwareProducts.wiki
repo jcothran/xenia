@@ -70,7 +70,7 @@ JSON provides a
   * cross-browser compatible
   * site-proxy workaround
 
-method for presenting data to websites.  [http://geojson.org GeoJSON] provides a geospatial markup for associated data.
+method for presenting data to websites.  [http://geojson.org/geojson-spec.html GeoJSON] provides a geospatial markup for associated data.
 
 
 
