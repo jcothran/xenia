@@ -91,7 +91,11 @@ Worked through [http://www.oostethys.org/downloads/sos-cookbook-perl/sos-server-
 
 == Source, differences ==
 
-The link to the revised *oostethys_sos.cgi script* is [http://code.google.com/p/xenia/source/browse/trunk/sqlite/sos/oostethys/oostethys_sos.cgi here] with *differences from the original script* [http://code.google.com/p/xenia/source/diff?spec=svn826&r=826&format=side&path=/trunk/sqlite/sos/oostethys/oostethys_sos.cgi here] and may be helpful as an example of reuse of the script against another RDB schema.
+The link to the revised *oostethys_sos.cgi script* is
+  * [http://code.google.com/p/xenia/source/browse/trunk/sqlite/sos/oostethys/oostethys_sos.cgi sqlite version]
+  * [http://code.google.com/p/rcoos/source/browse/trunk/datastream/cgi/oostethys_sos.cgi postgresql version]
+
+with *differences from the original script* [http://code.google.com/p/xenia/source/diff?spec=svn826&r=826&format=side&path=/trunk/sqlite/sos/oostethys/oostethys_sos.cgi here] and may be helpful as an example of reuse of the script against another RDB schema.
 
 == Issues ==
 
