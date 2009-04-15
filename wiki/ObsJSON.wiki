@@ -4,7 +4,7 @@ see also [http://geojson.org/geojson-spec.html geojson]
 
 see also [http://carocoops.org/obsjson/feeds/all/latest_hours_12 latest 12 hours from platforms as ObsJSON]
 
-see also [http://code.google.com/p/xenia/source/browse/trunk/sqlite/json/xenia_sqlite_to_json.pl source script]
+see also [http://code.google.com/p/xenia/source/browse/trunk/sqlite/json/xenia_sqlite_to_json.pl xenia to json perl script]
 
 developed from earlier documentation regarding [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML#Simple_schema_JSON_Alternate_1_O ObsJSON] and [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML ObsKML]
 
