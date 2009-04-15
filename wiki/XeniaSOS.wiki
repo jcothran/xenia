@@ -10,7 +10,12 @@ The CGI based difSOS instance is available at
 
 http://carocoops.org/obskml/scripts/difSOS.html
 
-The above html script calls the cgi script documented at [http://code.google.com/p/xenia/source/browse/trunk/sqlite/sos/difSOS.cgi difSOS.cgi] which runs queries against the earlier established xenia sqlite database(PostgreSQL adapation of this script by Xiaoyan Qi [http://code.google.com/p/rcoos/source/browse/#svn/trunk/datastream/cgi here]).  *Note that the sql request statement of this script could be modified to provide a similar resultset/functionality from other relational database schemas or resultsets.*
+The above html script calls the cgi script documented at
+
+  * [http://code.google.com/p/xenia/source/browse/trunk/sqlite/sos/difSOS.cgi sqlite version]
+  * [http://code.google.com/p/rcoos/source/browse/trunk/datastream/cgi/difSOS_postgres_wave.cgi postgresql version]
+
+which runs queries against the earlier established xenia sqlite database(PostgreSQL adapation of this script by Xiaoyan Qi [http://code.google.com/p/rcoos/source/browse/#svn/trunk/datastream/cgi here]).  *Note that the sql request statement of this script could be modified to provide a similar resultset/functionality from other relational database schemas or resultsets.*
 
 [http://code.google.com/p/xenia/source/browse/trunk/sqlite/sos/difSOSConf.xml difSOSConf.xml] is the modified xml configuration support xml
 
