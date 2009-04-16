@@ -139,7 +139,8 @@ Below is another revision to the initial ObsJSON schema, which treats each platf
   * Geometry z coordinate is relative to mean sea level(MSL) with height(+) or depth(-) in meters.
   * The ordering of effected list arguments is in time increasing order(oldest first, latest last) allowing picking off the latest value be grabbing the last associated set of time/values off the list.
   * Stationary platforms would use GeoJSON 'Point' type and mobile platforms would use '!MultiPoint' type.  !MultiPoint coordinates are paired with listed time values.
-
+  * (optional ?) All fields under 'FeatureCollection' are optional except platformId.  Think the other fields give some more self-contained minimal context,usage but all these could be linked in some way via the platformId reference.
+  * (optional ?) sensorId is optional but would provide a means of association for related time-series or sensor metadata.
 {{{
 {
     "type": "FeatureCollection",
@@ -189,4 +190,3 @@ Below is another revision to the initial ObsJSON schema, which treats each platf
 
   * Traditional request/response approaches are single-obs centric(give me just water_temperature for platform/area) rather than platform/sensor-centric(give me everything for a given platform)
   * How good/complete are request/response from SOS,ERDDAP,etc for 'all' recent platform data?
-
