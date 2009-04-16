@@ -190,6 +190,7 @@ Below is another revision to the initial ObsJSON schema, which treats each platf
 
   * Traditional request/response approaches are single-obs centric(give me just water_temperature for platform/area) rather than platform/sensor-centric(give me everything for a given platform)
   * How good/complete are request/response from SOS,ERDDAP,etc for 'all' recent platform data?
+  * How would KML/javascript styling support possible JSON/GeoJSON
 
 = Simple schema version 3 =
 
