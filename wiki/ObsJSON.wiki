@@ -147,7 +147,7 @@ Below is another revision to the initial ObsJSON schema, which treats each platf
     "dictionaryRef": "ioos blessed obstype uom dictionary reference",
     "dictionaryURL": "http://nautilus.baruch.sc.edu/obsjson/secoora_dictionary.json",
     "platformId": "urn:x-noaa:def:station:noaa.nws.ndbc::41012",
-    "metadataURL": "a link to further operator/platform metadata/links as XML/GeoJSON",
+    "metadataURL": "link to further operator/platform metadata/links as XML/GeoJSON",
     "operatorName": "ndbc",
     "operatorURL": "http://www.ndbc.noaa.gov/",
     "platformName": "41012",
@@ -160,7 +160,7 @@ Below is another revision to the initial ObsJSON schema, which treats each platf
                 "coordinates": [[-80.55,30.04,3],[-79.00,31.00,3],[-78.00,32.00,3]] 
             },
             "properties": {
-                "sensorId": "handle to sensor metadata/links as XML/GeoJSON",
+                "sensorId": "link to further sensor metadata/links as XML/GeoJSON",
                 "obsType": "air_temperature",
                 "uomType": "celsius",
                 "time": ["2009-03-31T10:50:00Z","2009-03-31T11:50:00Z","2009-03-31T12:50:00Z"],
@@ -174,7 +174,7 @@ Below is another revision to the initial ObsJSON schema, which treats each platf
                 "coordinates": [[-80.55,30.04,-1],[-79.00,31.00,-1],[-78.00,32.00,-1]] 
             },
             "properties": {
-                "sensorId": "handle to sensor metadata/links as XML/GeoJSON",
+                "sensorId": "link to further sensor metadata/links as XML/GeoJSON",
                 "obsType": "water_temperature",
                 "uomType": "celsius",
                 "time": ["2009-03-31T10:50:00Z","2009-03-31T11:50:00Z","2009-03-31T12:50:00Z"],
