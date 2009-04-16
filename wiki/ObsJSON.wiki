@@ -137,7 +137,7 @@ Below is another revision to the initial ObsJSON schema, which treats each platf
 
   * Geometry z coordinate is relative to mean sea level(MSL) with height(+) or depth(-) in meters.
   * The ordering of effected list arguments is in time increasing order(oldest first, latest last) allowing picking off the latest value be grabbing the last associated set of time/values off the list.
-  * Stationary platforms would use GeoJSON 'Point' type and mobile platforms would use '!MultiPoint' type.  !Multipoint coordinates are paired with listed time values.
+  * Stationary platforms would use GeoJSON 'Point' type and mobile platforms would use '!MultiPoint' type.  !MultiPoint coordinates are paired with listed time values.
 
 {{{
 {
