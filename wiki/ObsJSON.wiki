@@ -131,6 +131,7 @@ Used the following links for examples <br>
 http://sgillies.net/blog/883/sensible-observation-services <br>
 http://www.youtube.com/watch?v=T04fKsD56LU
 
+----
 = Simple schema version 2 =
 
 Below is another revision to the initial ObsJSON schema, which treats each platform sensor as a feature with associated geometries,properties and utilizing list association between geometry/time/value per feature/sensor.
