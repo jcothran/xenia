@@ -190,3 +190,114 @@ Below is another revision to the initial ObsJSON schema, which treats each platf
 
   * Traditional request/response approaches are single-obs centric(give me just water_temperature for platform/area) rather than platform/sensor-centric(give me everything for a given platform)
   * How good/complete are request/response from SOS,ERDDAP,etc for 'all' recent platform data?
+
+= Simple schema version 3 =
+
+The below schema is flattened as much as possible, dropping the GeoJSON nesting/list and time/value list.  Would be very similar schema-wise to [http://www.ogcnetwork.net/node/189 WFS Simple GetFeature] (thanks Raj Singh for the reminder/link regarding WFS Simple) or the earlier example ERDDAP GeoJSON response(thanks Roy Mendelssohn) below.
+
+{{{
+{
+    "type": "FeatureCollection",
+    "schemaRef": "ioos blessed schema name reference",
+    "dictionaryRef": "ioos blessed obstype uom dictionary reference",
+    "dictionaryURL": "http://nautilus.baruch.sc.edu/obsjson/secoora_dictionary.json",
+    "platformId": "urn:x-noaa:def:station:noaa.nws.ndbc::41012",
+    "metadataURL": "link to further operator/platform metadata/links as XML/JSON",
+    "operatorName": "ndbc",
+    "operatorURL": "http://www.ndbc.noaa.gov/",
+    "platformName": "41012",
+    "platformURL": "http://www.ndbc.noaa.gov/station_page.php?station=41012",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "latitude": "-80.55",
+                "longitude": "30.04",
+                "elevation": "3",
+                "sensorId": "link to further sensor metadata/links as XML/JSON",
+                "obsType": "air_temperature",
+                "uomType": "celsius",
+                "time": "2009-03-31T10:50:00Z",
+                "value": "22.0" 
+            } 
+        },
+       {
+            "type": "Feature",
+            "properties": {
+                "latitude": "-80.55",
+                "longitude": "30.04",
+                "elevation": "3",
+                "sensorId": "link to further sensor metadata/links as XML/JSON",
+                "obsType": "air_temperature",
+                "uomType": "celsius",
+                "time": "2009-03-31T11:50:00Z",
+                "value": "23.0" 
+            } 
+        },        
+       {
+            "type": "Feature",
+            "properties": {
+                "latitude": "-80.55",
+                "longitude": "30.04",
+                "elevation": "-1",
+                "sensorId": "link to further sensor metadata/links as XML/JSON",
+                "obsType": "water_temperature",
+                "uomType": "celsius",
+                "time": "2009-03-31T10:50:00Z",
+                "value": "17.0" 
+            } 
+        }, 
+       {
+            "type": "Feature",
+            "properties": {
+                "latitude": "-80.55",
+                "longitude": "30.04",
+                "elevation": "-1",
+                "sensorId": "link to further sensor metadata/links as XML/JSON",
+                "obsType": "water_temperature",
+                "uomType": "celsius",
+                "time": "2009-03-31T11:50:00Z",
+                "value": "18.0" 
+            } 
+        }              
+    ] 
+}
+}}}
+
+= example ERDDAP GeoJSON response = 
+
+response below to request
+
+http://coastwatch.pfeg.noaa.gov/erddap/tabledap/ndbcSosWTemp.geoJson?longitude,latitude,station_id,altitude,time,WaterTemperature&longitude%3E=-130&longitude%3C=-110&latitude%3E=30&latitude%3C=39&time%3E=2009-04-03T00:00:00Z
+
+{{{
+{
+  "type": "FeatureCollection",
+  "propertyNames": ["station_id", "altitude", "time", "WaterTemperature"],
+  "propertyUnits": [null, "m", "UTC", "degrees_C"],
+  "bbox": [-130.0, 33.74, -119.06, 38.23],
+  "features": [
+
+{"type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [-123.32, 38.23] },
+  "properties": {
+    "station_id": "urn:x-noaa:def:station:noaa.nws.ndbc::46013",
+    "altitude": null,
+    "time": "2009-04-03T10:50:00Z",
+    "WaterTemperature": 10.6 }
+},
+{"type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [-123.32, 38.23] },
+  "properties": {
+    "station_id": "urn:x-noaa:def:station:noaa.nws.ndbc::46013",
+    "altitude": null,
+    "time": "2009-04-03T14:50:00Z",
+    "WaterTemperature": 9.9 }
+}
+]
+}
+}}}
