@@ -144,8 +144,8 @@ Below is another revision to the initial ObsJSON schema, which treats each platf
 {{{
 {
     "type": "FeatureCollection",
-    "schemaRef": "ioos blessed schema name reference",
-    "dictionaryRef": "ioos blessed obstype uom dictionary reference",
+    "schemaRef": "ioos blessed schema name reference(s)",
+    "dictionaryRef": "ioos blessed obstype uom dictionary reference(s)",
     "dictionaryURL": "http://nautilus.baruch.sc.edu/obsjson/secoora_dictionary.json",
     "platformId": "urn:x-noaa:def:station:noaa.nws.ndbc::41012",
     "metadataURL": "link to further operator/platform metadata/links as XML/JSON",
@@ -199,8 +199,8 @@ The below schema is flattened as much as possible, dropping the GeoJSON nesting/
 {{{
 {
     "type": "FeatureCollection",
-    "schemaRef": "ioos blessed schema name reference",
-    "dictionaryRef": "ioos blessed obstype uom dictionary reference",
+    "schemaRef": "ioos blessed schema name reference(s)",
+    "dictionaryRef": "ioos blessed obstype uom dictionary reference(s)",
     "dictionaryURL": "http://nautilus.baruch.sc.edu/obsjson/secoora_dictionary.json",
     "platformId": "urn:x-noaa:def:station:noaa.nws.ndbc::41012",
     "metadataURL": "link to further operator/platform metadata/links as XML/JSON",
