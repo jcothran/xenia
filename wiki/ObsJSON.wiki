@@ -317,7 +317,7 @@ This bounding box request might include several platforms data, requiring the st
 
 = Suggestions =
 
-= dictionary URI, platformType(systemType) = 
+== dictionary URI, platformType(systemType) ==
 
 ----
 suggested by Luis Bermudez
