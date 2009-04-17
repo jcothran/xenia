@@ -686,7 +686,7 @@ if __name__ == '__main__':
 
   except IOError, e:
    if( logger != None ):
-      logger.error( e + ' Terminating script.' )
+      logger.error( str(e) + ' Terminating script.' )
   except Exception, e:
    if( logger != None ):
       logger.error( str(e) + ' Terminating script.' )
