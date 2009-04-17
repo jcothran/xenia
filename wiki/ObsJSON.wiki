@@ -300,6 +300,16 @@ This bounding box request might include several platforms data, requiring the st
     "altitude": null,
     "time": "2009-04-03T14:50:00Z",
     "WaterTemperature": 9.9 }
+},
+{"type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [-120.97, 34.71] },
+  "properties": {
+    "station_id": "urn:x-noaa:def:station:noaa.nws.ndbc::46023",
+    "altitude": null,
+    "time": "2009-04-03T00:50:00Z",
+    "WaterTemperature": 10.5 }
 }
 ]
 }
