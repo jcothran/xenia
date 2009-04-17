@@ -313,4 +313,27 @@ This bounding box request might include several platforms data, requiring the st
 }
 ]
 }
+
+= Suggestions =
+
+= dictionary URI, platformType(systemType) = 
+
+----
+suggested by Luis Bermudez
+
+1)  if we were going to make this dictionary available for  the semantic web we should have a base URI. I think, all the values you have,  will not have problems of  being part of a URI ( they have no spaces etc ..).
+
+Could you define a base URI ? It could be for example:
+
+http://nautilus.baruch.sc.edu/obsjson/secoora_dictionary.json
+
+I know  expressing the URI may appear unnecessary, but if we have this file in another location (e.g. locally), it will help us going back to it and will be easier to creating an RDF from it.
+
+2) There is no platform type (which  I prefer to call it system type ). I think this is important if we want to categorize observations by source and even putting nice icons.
+----
+
+_dictionary URI example_
+
+For platformType(systemType) property, the simplest initial values I'd imagine would be 'fixed' or 'mobile'.  Could reference developed lookup list from others as suggested. 
+
 }}}
