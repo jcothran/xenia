@@ -271,6 +271,8 @@ response below to request
 
 http://coastwatch.pfeg.noaa.gov/erddap/tabledap/ndbcSosWTemp.geoJson?longitude,latitude,station_id,altitude,time,WaterTemperature&longitude%3E=-130&longitude%3C=-110&latitude%3E=30&latitude%3C=39&time%3E=2009-04-03T00:00:00Z
 
+This bounding box request might include several platforms data, requiring the station_id with each observation feature.
+
 {{{
 {
   "type": "FeatureCollection",
