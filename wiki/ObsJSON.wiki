@@ -4,7 +4,7 @@ developed from discussions with working group http://groups.google.com/group/ioo
 
 see also [http://geojson.org/geojson-spec.html geojson]
 
-see also [http://carocoops.org/obsjson/feeds/all/latest_hours_12 latest 12 hours from platforms as ObsJSON]
+see also [http://carocoops.org/obsjson/feeds/all/latest_hours_12 latest 12 hours from platforms as ObsJSON], note the function and smooth brackets wrapping the GeoJSON are utilized to support the dynamic Javascript callback functionality for KML in GE version 5.
 
 see also [http://code.google.com/p/xenia/source/browse/trunk/sqlite/json/xenia_sqlite_to_json.pl xenia to json perl script]
 
