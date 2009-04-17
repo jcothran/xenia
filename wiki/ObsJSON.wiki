@@ -1,5 +1,7 @@
 #summary a GeoJSON based observations/data-centric minimal schema
 
+developed from discussions with working group http://groups.google.com/group/ioos-kml
+
 see also [http://geojson.org/geojson-spec.html geojson]
 
 see also [http://carocoops.org/obsjson/feeds/all/latest_hours_12 latest 12 hours from platforms as ObsJSON]
