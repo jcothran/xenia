@@ -1,3 +1,7 @@
+#Revisions
+#Rev: 1.1.1.0
+#Fixed up passing unitialized values for north/east current and mag/dir. Symptom was values being reported as 0 when really they were missing.
+
 sub fixed_point() {
 
 
@@ -2563,9 +2567,19 @@ print STATION_ID_SQLFILE "-- this_air_pressure_data[j]=".$this_air_pressure_data
                   $NCurrentDataVal = sprintf("%.2f",$sea_surface_northward_current[$j]{'data'}[$k]);
                   @VectorDataVal = get_mag_and_dir( $ECurrentDataVal, $NCurrentDataVal, 1 );
                 }
+                #DWR v1.1.1.0
+                #Initialize the array elements with NULL so if the data is either missing we correctly put the missing data flag.
+                my $mag = 'NULL';
+                my $dir = 'NULL';
+                my $len = @VectorDataVal;
+                if( $len == 2 )
+                {
+                  $mag = @VectorDataVal[0] * 100.0;#Convert to cm_s-1
+                  $dir = @VectorDataVal[1];
+                }
                 obsKMLSubRoutines::KMLAddObsToHash( 'current_to_direction', 
                                                     $KMLTimeStamp[$k],
-                                                    @VectorDataVal[1],
+                                                    $dir,
                                                     1,
                                                     $strPlatformID,
                                                     $Height,
@@ -2575,7 +2589,7 @@ print STATION_ID_SQLFILE "-- this_air_pressure_data[j]=".$this_air_pressure_data
 
                 obsKMLSubRoutines::KMLAddObsToHash( 'current_speed', 
                                                     $KMLTimeStamp[$k],
-                                                    ( @VectorDataVal[0] * 100.0 ), #Convert to cm_s-1
+                                                    $mag, 
                                                     1,
                                                     $strPlatformID,
                                                     $Height,
@@ -2589,9 +2603,16 @@ print STATION_ID_SQLFILE "-- this_air_pressure_data[j]=".$this_air_pressure_data
                   #Make sure we don't have any unprintable characters.            
                 #  $strUnits = obsKMLSubRoutines::CleanString( $sea_surface_northward_current[$i]{'units'} );                 
                 #}
+                #DWR v1.1.1.0
+                #Fixed bug where data was missing, so $NCurrentDataVal would be NULL, but multiplying it by 100.0 would result in 0 so it appeared
+                #to be a real observation
+                if( $NCurrentDataVal != 'NULL' )
+                {
+                  $NCurrentDataVal * 100.0; #DWR convert to cm_s-1
+                }
                 obsKMLSubRoutines::KMLAddObsToHash( 'northward_current', 
                                                     $KMLTimeStamp[$k],
-                                                    $NCurrentDataVal * 100.0, #DWR convert to cm_s-1
+                                                    $NCurrentDataVal, #DWR convert to cm_s-1
                                                     1,
                                                     $strPlatformID,
                                                     $Height,
@@ -2604,9 +2625,17 @@ print STATION_ID_SQLFILE "-- this_air_pressure_data[j]=".$this_air_pressure_data
                   #Make sure we don't have any unprintable characters.            
                 #  $strUnits = obsKMLSubRoutines::CleanString( $sea_surface_eastward_current[$i]{'units'} );                 
                 #}
+                #DWR v1.1.1.0
+                #Fixed bug where data was missing, so $NCurrentDataVal would be NULL, but multiplying it by 100.0 would result in 0 so it appeared
+                #to be a real observation
+                if( $ECurrentDataVal != 'NULL' )
+                {
+                  $ECurrentDataVal * 100.0; #DWR convert to cm_s-1
+                }
+                
                 obsKMLSubRoutines::KMLAddObsToHash( 'eastward_current', 
                                                     $KMLTimeStamp[$k],
-                                                    $ECurrentDataVal * 100.0, #DWR convert to cm_s-1
+                                                    $ECurrentDataVal, #DWR convert to cm_s-1
                                                     1,
                                                     $strPlatformID,
                                                     $Height,
