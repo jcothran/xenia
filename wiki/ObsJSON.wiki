@@ -10,7 +10,7 @@ see also [http://code.google.com/p/xenia/source/browse/trunk/sqlite/json/xenia_s
 
 developed from earlier documentation regarding [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML#Simple_schema_JSON_Alternate_1_O ObsJSON] and [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML ObsKML]
 
-[ Version 2] is the preferred working version at this time.
+[http://code.google.com/p/xenia/wiki/ObsJSON#Simple_schema_version_2 Version 2] is the preferred working version at this time.
 
 <wiki:toc max_depth="6" />
 
