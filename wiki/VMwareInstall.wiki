@@ -103,3 +103,17 @@ The file */home/xeniaprod/cron/xeniaflow.sh* creates all the subsequent related 
 Xenia related log files are at /home/xeniaprod/tmp and cleared nightly.
 
 Apache user(www-data) created related temporary files are at /home/xeniaprod/tmp_web and cleared nightly.
+
+----
+= VMware Server =
+
+Successfully installed VMware Server 2.0.1 on Ubuntu 8.10 
+
+== Problems, workarounds ==
+
+One problem I ran into was that VMware server configure vmnet0(only shows up in the process list 'ps -auxf' not via 'ifconfig' command) to eth0 and eth0 was not bridging ('x' symbol in the server maintenance ui).  Switched vmnet0 over to eth1 via the vmware-config.pl script which did bridge correctly.
+
+Make sure to set your ethx (eth7,eth8,etc) connection correctly as the same found per virtual image listing of 'ifconfig' in the file /etc/network/interfaces setting and restart via {{{/etc/init.d/networking restart}}}
+
+vmware images can be referenced on the host machine vmware ui by placing or symbolically linking via the /var/lib/vmware/Virtual Machines folder
+
