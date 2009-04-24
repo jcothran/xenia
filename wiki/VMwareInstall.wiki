@@ -111,9 +111,12 @@ Successfully installed VMware Server 2.0.1 on Ubuntu 8.10
 
 == Problems, workarounds ==
 
-One problem I ran into was that VMware server configure vmnet0(only shows up in the process list 'ps -auxf' not via 'ifconfig' command) to eth0 and eth0 was not bridging ('x' symbol in the server maintenance ui).  Switched vmnet0 over to eth1 via the vmware-config.pl script which did bridge correctly.
+Had a compile error on 'vmsock' but the install said this was not critical to the usual processes.  Not having it compiled does not seem to create any noticeable issue.
+
+One problem I ran into was that VMware server configure vmnet0(only shows up in the process list 'ps -auxf' not via 'ifconfig' command) to eth0 and eth0 was not bridging ('x' symbol in the server maintenance ui).  Switched vmnet0 over to eth1 via the {{{/usr/bin/vmware-config.pl}}} script which did bridge correctly.
 
 Make sure to set your ethx (eth7,eth8,etc) connection correctly as the same found per virtual image listing of 'ifconfig' in the file /etc/network/interfaces setting and restart via {{{/etc/init.d/networking restart}}}
 
 vmware images can be referenced on the host machine vmware ui by placing or symbolically linking via the /var/lib/vmware/Virtual Machines folder
 
+Saw some notes regarding ethernet optimization/mishandling issues such as to run the command {{{ethtool -K eth1 sg off rx off tx off tso off}}} but did not utilize this command.
