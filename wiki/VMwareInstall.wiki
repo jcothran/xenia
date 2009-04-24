@@ -109,13 +109,15 @@ Apache user(www-data) created related temporary files are at /home/xeniaprod/tmp
 
 Successfully installed VMware Server 2.0.1 on Ubuntu 8.10 
 
+The vmware server is installed via the vmware-install.pl script and starts the services at the end of a successful install.  The vmware server maintenance ui is accessed via browser at http://localhost:8222 or secure port https://localhost:8333
+
 == Problems, workarounds ==
 
 Had a compile error on 'vmsock' but the install said this was not critical to the usual processes.  Not having it compiled does not seem to create any noticeable issue.
 
-One problem I ran into was that VMware server configure vmnet0(only shows up in the process list 'ps -auxf' not via 'ifconfig' command) to eth0 and eth0 was not bridging ('x' symbol in the server maintenance ui).  Switched vmnet0 over to eth1 via the {{{/usr/bin/vmware-config.pl}}} script which did bridge correctly.
+One problem I ran into was that VMware server configured vmnet0 (only shows up in the process list 'ps -auxf' not via 'ifconfig' command) to eth0 and eth0 was not bridging ('x' symbol in the server maintenance ui).  Switched vmnet0 over to eth1 via the {{{/usr/bin/vmware-config.pl}}} script which did bridge correctly.
 
-Make sure to set your ethx (eth7,eth8,etc) connection correctly as the same found per virtual image listing of 'ifconfig' in the file /etc/network/interfaces setting and restart via {{{/etc/init.d/networking restart}}}
+Per each virtual image instance/IP address as configured in the file /etc/network/interfaces, make sure to set your ethx (eth7,eth8,etc)  connection correctly the same as found in the 'ifconfig' listing  setting and restart via {{{/etc/init.d/networking restart}}}  The correct image IP listing should also show up in the vmware server maintenance ui.
 
 vmware images can be referenced on the host machine vmware ui by placing or symbolically linking via the /var/lib/vmware/Virtual Machines folder
 
