@@ -1,0 +1,9 @@
+#summary discussion about Google spreadsheets as templates for simple,common metadata application, infrastructure and sharing
+
+= examples = 
+
+== SensorInventory_v1.0 ==
+
+Captures basic metadata regarding organization, platformList, sensorList, sensorTypes with linkages to further custom spreadsheets via MetadataId field
+
+http://spreadsheets.google.com/pub?key=ryTSVxKd0ZEz2UbsmFiYZLA
