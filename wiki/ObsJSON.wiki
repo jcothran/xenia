@@ -342,3 +342,30 @@ _dictionary URI example_
 For platformType(systemType) property, the simplest initial values I'd imagine would be 'fixed' or 'mobile'.  Could reference developed lookup list from others as suggested. 
 
 }}}
+
+= Demo 1 =
+Date: April 29, 2009
+
+== Links ==
+
+Latest 24 hour file folder
+http://carocoops.org/obsjson/feeds/all/latest_hours_24/
+
+Latest 24 hour dynamic javascript styled kmz
+http://carocoops.org/obsjson/feeds/all/latest_hours_24/all_latest.kmz
+
+
+== Known issues ==
+
+Jeremy will address
+
+  * some platforms repeat multiple times
+  * some wind_from_direction reporting > 360 degrees
+  * order sensor listing to match elevation ? top to bottom?
+  * will add 'DescribeSensorURL' to platform metadata JSON
+
+Pete ?
+
+  * label y-value splits may have a large number of decimal places(19.000000003) - can style to 2 or 3 decimals max?
+  * safe to show all graphs with no time axis?  need filler/blank graph values if only one or two observations in past 24 hours?  some platforms sampling more/less than once per hour.
+
