@@ -368,3 +368,64 @@ Pete ?
 
   * label y-value splits may have a large number of decimal places(19.000000003) - can style to 2 or 3 decimals max?
   * safe to show all graphs with no time axis?  need filler/blank graph values if only one or two observations in past 24 hours?  some platforms sampling more/less than once per hour.
+
+== Sample schema ==
+
+= metadata =
+
+{{{
+{
+"type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-80.5,30]
+            },
+"properties": {
+    "schemaRef": "ioos_blessed_schema_name_reference",
+    "dictionaryRef": "ioos_blessed_obstype_uom_dictionary_reference",
+    "dictionaryURL": "http://nautilus.baruch.sc.edu/obsjson/secoora_dictionary.json",
+    "organizationName": "ndbc",
+    "organizationURL": "http://www.ndbc.noaa.gov",
+    "stationURL": "http://www.ndbc.noaa.gov/station_page.php?station=41012",
+    "stationTypeName": "buoy",
+    "stationTypeImage": "http://www.ndbc.noaa.gov/images/stations/3m.jpg",
+    "stationId": "urn:x-noaa:def:station:ndbc::41012",
+
+    "origin":"National Data Buoy Center",
+    "useconst":"The information on government servers are in the public domain, unless specifically annotated otherwise, and may be used freely by the public so long as you do not 1) claim it is your own (e.g. by claiming copyright for NWS information -- see below), 2) use it in a manner that implies an endorsement or affiliation with NOAA/NWS, or 3) modify it in content and then present it as official government material. You also cannot present information of your own in a way that makes it appear to be official government information."
+}
+}
+}}}
+
+= data =
+
+{{{
+json_callback({
+"type": "FeatureCollection",
+"properties": {
+    "stationId": "urn:x-noaa:def:station:ndbc::41012",
+
+    "features": [        {"type": "Feature",
+            "geometry": {
+                "type": "MultiPoint",
+                "coordinates": [[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0]] 
+            },
+         "properties": {
+            "obsType": "air_pressure",
+            "uomType": "mb",
+            "time": ["2009-04-28T18:50:00Z","2009-04-28T19:50:00Z","2009-04-28T20:50:00Z","2009-04-28T21:50:00Z","2009-04-28T22:50:00Z","2009-04-28T23:50:00Z","2009-04-29T00:50:00Z","2009-04-29T01:50:00Z","2009-04-29T02:50:00Z","2009-04-29T03:50:00Z","2009-04-29T04:50:00Z","2009-04-29T05:50:00Z","2009-04-29T06:50:00Z","2009-04-29T07:50:00Z","2009-04-29T08:50:00Z","2009-04-29T09:50:00Z","2009-04-29T10:50:00Z","2009-04-29T11:50:00Z","2009-04-29T12:50:00Z","2009-04-29T13:50:00Z","2009-04-29T14:50:00Z","2009-04-29T15:50:00Z","2009-04-29T16:50:00Z"],
+            "value": ["1027.3","1026.5","1026","1025.9","1025.5","1025.3","1025.7","1025.6","1025.9","1026","1025.8","1025.7","1025","1024.6","1024.5","1024.9","1025.4","1025.9","1026.3","1026.3","1026.6","1026.2","1025.7"]
+        }},
+        {"type": "Feature",
+            "geometry": {
+                "type": "MultiPoint",
+                "coordinates": [[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4]] 
+            },
+         "properties": {
+            "obsType": "air_temperature",
+            "uomType": "celsius",
+            "time": ["2009-04-28T18:50:00Z","2009-04-28T19:50:00Z","2009-04-28T20:50:00Z","2009-04-28T21:50:00Z","2009-04-28T22:50:00Z","2009-04-28T23:50:00Z","2009-04-29T00:50:00Z","2009-04-29T01:50:00Z","2009-04-29T02:50:00Z","2009-04-29T03:50:00Z","2009-04-29T04:50:00Z","2009-04-29T05:50:00Z","2009-04-29T06:50:00Z","2009-04-29T07:50:00Z","2009-04-29T08:50:00Z","2009-04-29T09:50:00Z","2009-04-29T10:50:00Z","2009-04-29T11:50:00Z","2009-04-29T12:50:00Z","2009-04-29T13:50:00Z","2009-04-29T14:50:00Z","2009-04-29T15:50:00Z","2009-04-29T16:50:00Z"],
+            "value": ["23","23.2","23","23","23","22.9","22.9","22.8","22.8","22.8","22.7","22.7","22.4","22.4","22.2","22.2","22.1","22.2","22.6","22.4","22.7","23","23"]
+        }},
+...
+}}} 
