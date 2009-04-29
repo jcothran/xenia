@@ -1,4 +1,22 @@
-#summary discussion about Google spreadsheets as templates for simple,common metadata application, infrastructure and sharing
+#summary discussion about Google spreadsheets as templates for simple,common metadata application, infrastructure and sharing via data API
+
+I've been experimenting some with Google spreadsheets lately and I did not realize that it includes a back-end data API for gathering spreadsheet data.
+
+A common issue from an IT perspective is that we are constantly trying to move and reformat Excel spreadsheet data (both data and metadata) from research projects/instrumentation logs into relational databases or other formats that are easier to work with and manage.
+
+Turns out that google spreadsheets could be shared among a list of collaborators with a Google account(which can be aliased against an existing non-gmail email address). Spreadsheet info could be published for public viewing/access or kept private to the group of document collaborators.
+
+Spreadsheets include a revision history so that if someone accidentally messed up the wrong sheet/tow/cell, we could correct using the earlier revision.
+
+Best of all spreadsheets include an easy to use developer data API(supporting a variety of languages) that includes data access/edit and some visualization capabilities via community-contributed 'gadgets'.
+
+http://code.google.com/apis/spreadsheets/overview.html
+
+http://code.google.com/apis/spreadsheets/docs/2.0/reference.html
+
+http://code.google.com/apis/spreadsheets/spreadsheet_gadgets.html
+
+I really like this approach as I think it would allow people to contribute easily on the front-end using a familiar approach (spreadsheets) while also allowing us automated access and display/report capabilities on the back-end. Might also allow us to bypass relational databases/sqlite altogether in regards to diverse but relatively low-volume metadata with the focus being on finding spreadsheet content layouts and visualizations/reports that are commonly useful.
 
 = examples = 
 
