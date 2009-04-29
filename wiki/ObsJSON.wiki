@@ -362,7 +362,7 @@ Jeremy will address
   * some platforms repeat multiple times
   * some wind_from_direction reporting > 360 degrees
   * order sensor listing to match elevation ? top to bottom?
-  * will add 'DescribeSensorURL' to platform metadata JSON
+  * will add 'describeSensorURL' to platform metadata JSON
 
 Pete ?
 
@@ -390,7 +390,7 @@ Pete ?
     "stationURL": "http://www.ndbc.noaa.gov/station_page.php?station=41012",
     "stationTypeName": "buoy",
     "stationTypeImage": "http://www.ndbc.noaa.gov/images/stations/3m.jpg",
-    "DescribeSensorURL": "TBD",
+    "describeSensorURL": "TBD",
 
     "origin":"National Data Buoy Center",
     "useconst":"The information on government servers are in the public domain, unless specifically annotated otherwise, and may be used freely by the public so long as you do not 1) claim it is your own (e.g. by claiming copyright for NWS information -- see below), 2) use it in a manner that implies an endorsement or affiliation with NOAA/NWS, or 3) modify it in content and then present it as official government material. You also cannot present information of your own in a way that makes it appear to be official government information."
