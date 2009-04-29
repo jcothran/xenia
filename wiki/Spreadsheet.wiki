@@ -18,6 +18,25 @@ http://code.google.com/apis/spreadsheets/spreadsheet_gadgets.html
 
 I really like this approach as I think it would allow people to contribute easily on the front-end using a familiar approach (spreadsheets) while also allowing us automated access and display/report capabilities on the back-end. Might also allow us to bypass relational databases/sqlite altogether in regards to diverse but relatively low-volume metadata with the focus being on finding spreadsheet content layouts and visualizations/reports that are commonly useful.
 
+= Links =
+
+Spreadsheet mapper - create kml displays via spreadsheet template
+http://earth.google.com/outreach/tutorial_mapper.html
+
+Spreadsheet importing
+http://googlesystem.blogspot.com/2007/09/google-spreadsheets-lets-you-import.html
+
+= google maps, javascript = 
+
+Jquery
+http://googlegeodevelopers.blogspot.com/2009/04/new-articles-jquery-heat-maps-multi.html
+
+MarkerCluster
+http://googlegeodevelopers.blogspot.com/2009/04/markerclusterer-solution-to-too-many.html
+
+TimeMap
+http://googlegeodevelopers.blogspot.com/2009/01/timemap-helping-you-add-4th-dimension.html
+
 = examples = 
 
 == SensorInventory_v1.0 ==
