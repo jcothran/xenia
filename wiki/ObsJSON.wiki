@@ -341,7 +341,7 @@ _dictionary URI example_
 
 For platformType(systemType) property, the simplest initial values I'd imagine would be 'fixed' or 'mobile'.  Could reference developed lookup list from others as suggested. 
 
-}}}
+
 
 = Demo 1 =
 Date: April 29, 2009
@@ -368,4 +368,3 @@ Pete ?
 
   * label y-value splits may have a large number of decimal places(19.000000003) - can style to 2 or 3 decimals max?
   * safe to show all graphs with no time axis?  need filler/blank graph values if only one or two observations in past 24 hours?  some platforms sampling more/less than once per hour.
-
