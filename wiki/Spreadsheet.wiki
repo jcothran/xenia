@@ -85,3 +85,9 @@ I personally use an iframe+inline scripting for updating real-time AIS tracks on
 Just throwing that out there, in case anyone hasn't seen a real-time web app yet.
 
 Paul
+
+== hf radar ==
+
+National coastal HF radar displayed via google maps, javascript
+
+http://hfradar.ndbc.noaa.gov
