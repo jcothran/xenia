@@ -40,12 +40,12 @@ http://googlesystem.blogspot.com/2007/09/google-spreadsheets-lets-you-import.htm
 
 = google maps, javascript = 
 
-== TimeMap ==
+== !TimeMap ==
 TimeMap includes a scrollable timeslider element to google maps that changes the placemarks according to the time window.
 
 http://googlegeodevelopers.blogspot.com/2009/01/timemap-helping-you-add-4th-dimension.html
 
-== MarkerCluster ==
+== !MarkerCluster ==
 MarkerCluster pools a large number(hundreds) of placemarks into single cluster which can be expanded to improve map performance.
 
 http://googlegeodevelopers.blogspot.com/2009/04/markerclusterer-solution-to-too-many.html
