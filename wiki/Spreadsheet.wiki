@@ -86,8 +86,8 @@ Just throwing that out there, in case anyone hasn't seen a real-time web app yet
 
 Paul
 
-== hf radar ==
+== HF radar ==
 
-National coastal HF radar displayed via google maps, javascript
+National coastal HF(high-frequency) radar displayed via google maps, javascript
 
 http://hfradar.ndbc.noaa.gov
