@@ -40,14 +40,40 @@ http://googlesystem.blogspot.com/2007/09/google-spreadsheets-lets-you-import.htm
 
 = google maps, javascript = 
 
-Jquery
-http://googlegeodevelopers.blogspot.com/2009/04/new-articles-jquery-heat-maps-multi.html
+== TimeMap ==
+TimeMap includes a scrollable timeslider element to google maps that changes the placemarks according to the time window.
 
-MarkerCluster
+http://googlegeodevelopers.blogspot.com/2009/01/timemap-helping-you-add-4th-dimension.html
+
+== MarkerCluster ==
+MarkerCluster pools a large number(hundreds) of placemarks into single cluster which can be expanded to improve map performance.
+
 http://googlegeodevelopers.blogspot.com/2009/04/markerclusterer-solution-to-too-many.html
 
-TimeMap
-http://googlegeodevelopers.blogspot.com/2009/01/timemap-helping-you-add-4th-dimension.html
+== Jquery ==
+Jquery is an open javascript library which simplifies javascript development including cross-browser compatibility
+
+http://googlegeodevelopers.blogspot.com/2009/04/new-articles-jquery-heat-maps-multi.html
+
+== real-time boat tracking ==
+
+Sharing the following *experimental* technical browser/javascript/JSON based application link from Paul Reuter working with SCCOOS.
+
+It shows live boat tracking via an AIS message stream(click the 'start streaming' button below the map).
+
+http://cordc.ucsd.edu/projects/ais/
+
+Jeremy
+
+From Paul's email:
+
+One more really nice thing about JSON is it's intrinsic web-based push capability.  Seen here, http://app.lightstreamer.com/GridDemo/ is an example of using an embedded iframe and inline scripting to execute a function upon receiving real-time data.  Their API is a bit more complex, but the results are a scalable, high-volume, high-connectivity application with bandwidth throttling and real-time push/pull capability.  From the Web Developer Toolbar -> View Javascript.
+
+I personally use an iframe+inline scripting for updating real-time AIS tracks on Google Maps.  If I had parsed my data on the server, I would create JSON objects, rather than provide the raw data as a means of reducing the client-side load.  See: http://cordc.ucsd.edu/projects/ais/  (click the start streaming button).  The AIS feed is about 15 messages per second, and incurs a fair amount of client-side scripting - be forewarned.
+
+Just throwing that out there, in case anyone hasn't seen a real-time web app yet.
+
+Paul
 
 = examples = 
 
