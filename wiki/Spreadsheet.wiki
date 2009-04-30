@@ -51,7 +51,7 @@ http://googlegeodevelopers.blogspot.com/2009/01/timemap-helping-you-add-4th-dime
 
 = examples = 
 
-== SensorInventory_v1.0 ==
+== !SensorInventory_v1.0 ==
 
 Captures basic metadata regarding organization, platformList, sensorList, sensorTypes with linkages to further custom spreadsheets via MetadataId field
 
