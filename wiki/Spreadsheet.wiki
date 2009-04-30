@@ -10,7 +10,7 @@ A common issue from an IT perspective is that we are constantly trying to move a
 
 Turns out that google spreadsheets could be shared among a list of collaborators with a Google account(which can be aliased against an existing non-gmail email address). Spreadsheet info could be published for public viewing/access or kept private to the group of document collaborators.
 
-Spreadsheets include a revision history so that if someone accidentally messed up the wrong sheet/tow/cell, we could correct using the earlier revision.
+Spreadsheets include a revision history so that if someone accidentally messed up the wrong sheet/tow/cell, we could correct using the earlier revision.  The revision capacity could also be used for provenance, time comparison purposes.
 
 Best of all spreadsheets include an easy to use developer data API(supporting a variety of languages) that includes data access/edit and some visualization capabilities via community-contributed 'gadgets'.
 
