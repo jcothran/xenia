@@ -18,6 +18,14 @@ http://code.google.com/apis/spreadsheets/spreadsheet_gadgets.html
 
 I really like this approach as I think it would allow people to contribute easily on the front-end using a familiar approach (spreadsheets) while also allowing us automated access and display/report capabilities on the back-end. Might also allow us to bypass relational databases/sqlite altogether in regards to diverse but relatively low-volume metadata with the focus being on finding spreadsheet content layouts and visualizations/reports that are commonly useful.
 
+= Potential spreadsheets = 
+
+  * service,format,application registries
+  * observing capacity resource inventory/mapping
+  * cruise, point-of-opportunity shared resource scheduling
+  * instrumentation maintenance/tracking, reports
+  * qc,monitoring reports
+
 = Links =
 
 Spreadsheet mapper - create kml displays via spreadsheet template
