@@ -44,6 +44,10 @@ http://googlesystem.blogspot.com/2007/09/google-spreadsheets-lets-you-import.htm
 
 Captures basic metadata regarding organization, platformList, sensorList, sensorTypes with linkages to further custom spreadsheets via MetadataId field
 
+  * sheets are suffixed by 'List' or 'Type'(which futher describes List elements) or neither(table with single row)
+
+http://spreadsheets.google.com/pub?key=ryTSVxKd0ZEz2UbsmFiYZLA
+
 ----
 = google maps, javascript = 
 
@@ -81,7 +85,3 @@ I personally use an iframe+inline scripting for updating real-time AIS tracks on
 Just throwing that out there, in case anyone hasn't seen a real-time web app yet.
 
 Paul
-
-
-
-http://spreadsheets.google.com/pub?key=ryTSVxKd0ZEz2UbsmFiYZLA
