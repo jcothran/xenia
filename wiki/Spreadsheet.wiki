@@ -38,15 +38,22 @@ http://earth.google.com/outreach/tutorial_mapper.html
 Spreadsheet importing
 http://googlesystem.blogspot.com/2007/09/google-spreadsheets-lets-you-import.html
 
+= examples = 
+
+== !SensorInventory_v1.0 ==
+
+Captures basic metadata regarding organization, platformList, sensorList, sensorTypes with linkages to further custom spreadsheets via MetadataId field
+
+----
 = google maps, javascript = 
 
 == !TimeMap ==
-TimeMap includes a scrollable timeslider element to google maps that changes the placemarks according to the time window.
+!TimeMap includes a scrollable timeslider element to google maps that changes the placemarks according to the time window.
 
 http://googlegeodevelopers.blogspot.com/2009/01/timemap-helping-you-add-4th-dimension.html
 
 == !MarkerCluster ==
-MarkerCluster pools a large number(hundreds) of placemarks into single cluster which can be expanded to improve map performance.
+!MarkerCluster pools a large number(hundreds) of placemarks into single cluster which can be expanded to improve map performance.
 
 http://googlegeodevelopers.blogspot.com/2009/04/markerclusterer-solution-to-too-many.html
 
@@ -75,10 +82,6 @@ Just throwing that out there, in case anyone hasn't seen a real-time web app yet
 
 Paul
 
-= examples = 
 
-== !SensorInventory_v1.0 ==
-
-Captures basic metadata regarding organization, platformList, sensorList, sensorTypes with linkages to further custom spreadsheets via MetadataId field
 
 http://spreadsheets.google.com/pub?key=ryTSVxKd0ZEz2UbsmFiYZLA
