@@ -4,7 +4,7 @@
 
 = Intro =
 
-I've been experimenting some with Google spreadsheets lately and I did not realize that it includes a back-end data API for gathering spreadsheet data.
+I've been experimenting some with Google spreadsheets lately and I did not realize that it includes a back-end data API for gathering/updating spreadsheet data.
 
 A common issue from an IT perspective is that we are constantly trying to move and reformat Excel spreadsheet data (both data and metadata) from research projects/instrumentation logs into relational databases or other formats that are easier to work with and manage.
 
