@@ -54,7 +54,7 @@ see
   * time [http://en.wikipedia.org/wiki/ISO_8601 ISO8601]
 
 conventions
-  * spreadsheet name should include <templateName>_<versionNumber> like 'SecooraSensorInventory_v1.0'
+  * spreadsheet name should include &lt;templateName&gt;_&lt;versionNumber&gt; like 'SecooraSensorInventory_v1.0'
   * column header names use no whitespace, camelCase convention
   * fields are strings or numbers unless field name suffixed by
     * Type - indicates a Type lookup value which should be one of the associated row values on the 'type' sheet
@@ -78,6 +78,8 @@ conventions
     * timeStart - ISO8601 formatted time, like '2009-02-01T14:00:00Z'
     * timeEnd - ISO8601 formatted time, like '2009-02-01T14:00:00Z'
 
+  * spreadsheet may be extended by additional sheets or fields and be template compliant as long as no sheets or fields are removed
+  * _spreadsheet column color guide (required, optional) ?_
 
 == !SensorInventory_v1.0 ==
 
