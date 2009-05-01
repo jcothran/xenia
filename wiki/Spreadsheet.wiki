@@ -64,7 +64,10 @@ conventions
   * if 'Time' is used as a fieldname suffix, it implies an ISO8601 formatted datetime
 
   * common sheet fields
-    * id - unique id, may be autonumbered or string
+    * id
+      * required as first column on each sheet
+      * id's must be unique within each sheet
+      * may be autonumbered or string
     * URL - URL link to further webpage info/links
     * description - free-form verbiage description
     * location - Well-Known Text(WKT) representation of points and/or lines and/or polygons using decimal degrees and meters height(+)/depth(-) to mean sea level(MSL)
