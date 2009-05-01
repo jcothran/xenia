@@ -41,6 +41,11 @@ http://earth.google.com/outreach/tutorial_mapper.html
 Simple example of retrieving JSON feeds from Spreadsheets Data API
 http://code.google.com/apis/gdata/samples/spreadsheet_sample.html
 
+Change contents of a cell
+http://code.google.com/apis/spreadsheets/docs/2.0/developers_guide_protocol.html#UpdatingCells
+
+
+
 = examples = 
 
 == !SensorInventory_v1.0 ==
