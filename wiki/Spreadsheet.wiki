@@ -51,8 +51,8 @@ http://code.google.com/apis/spreadsheets/docs/2.0/developers_guide_protocol.html
 == spreadsheet design ==
 
 see 
-  * [http://en.wikipedia.org/wiki/Well-known_text Well-Known Text(WKT)]
-  * [http://en.wikipedia.org/wiki/ISO_8601 ISO8601]
+  * location [http://en.wikipedia.org/wiki/Well-known_text Well-Known Text(WKT)]
+  * time [http://en.wikipedia.org/wiki/ISO_8601 ISO8601]
 
 conventions
   * column header names use no whitespace, camelCase convention
