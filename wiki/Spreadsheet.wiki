@@ -63,7 +63,7 @@ conventions
     * *Type* - indicates a Type lookup value which should be one of the associated row values on the 'type' sheet
     * *Id* - indicates a row Id lookup value which should be on the associated Id sheet list
     * stated another way, a *Type* has a single possible value lookup while an *Id* might have several row associated values
-  * sheets suffixed *Type* correspond to row id associated *TypeId* references from other sheets (like sheet sensorType)
+  * sheets suffixed *Type* correspond to row id associated *!TypeId* references from other sheets (like sensor.sensorTypeId references sensorType.id)
 
   * if *Date* is used as a fieldname suffix, it implies a YYYY-MM-DD formatted day
   * if *Time* is used as a fieldname suffix, it implies an ISO8601 formatted datetime
