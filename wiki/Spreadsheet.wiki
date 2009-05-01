@@ -57,6 +57,8 @@ conventions
   * spreadsheet name should include templateName_versionNumber like 'SecooraSensorInventory_v1.0'
   * column header names use no whitespace, camelCase convention
 
+  * the 'type' sheet is special in that the only field description is 'id' and the number of row elements varies depending on the possible type values for a given id 
+
   * fields are strings or numbers unless field name suffixed by
     * Type - indicates a Type lookup value which should be one of the associated row values on the 'type' sheet
     * Id - indicates a row Id lookup value which should be on the associated Id sheet list
