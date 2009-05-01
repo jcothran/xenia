@@ -78,8 +78,8 @@ conventions
     * *URL* - URL link to further webpage info/links
     * *description* - free-form verbiage description
 
-    * longitude - decimal degrees East
-    * latitude - decimal degrees North
+    * *longitude* - decimal degrees East
+    * *latitude* - decimal degrees North
     * *locationWKT* - Well-Known Text(WKT) representation of points and/or lines and/or polygons using decimal degrees and meters height(+)/depth(-) to mean sea level(MSL)
     * *locationDescription* - free-form verbiage describing location
 
