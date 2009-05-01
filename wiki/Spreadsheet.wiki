@@ -54,13 +54,15 @@ see
   * time [http://en.wikipedia.org/wiki/ISO_8601 ISO8601]
 
 conventions
-  * spreadsheet name should include &lt;templateName&gt;_&lt;versionNumber&gt; like 'SecooraSensorInventory_v1.0'
+  * spreadsheet name should include templateName_versionNumber like 'SecooraSensorInventory_v1.0'
   * column header names use no whitespace, camelCase convention
+
   * fields are strings or numbers unless field name suffixed by
     * Type - indicates a Type lookup value which should be one of the associated row values on the 'type' sheet
     * Id - indicates a row Id lookup value which should be on the associated Id sheet list
     * stated another way, a 'Type' has a single possible value lookup while an 'Id' might have several row associated values
   * sheets suffixed 'Type' correspond to row id associated TypeId references from other sheets (like sheet sensorType)
+
   * if 'Date' is used as a fieldname suffix, it implies a YYYY-MM-DD formatted day
   * if 'Time' is used as a fieldname suffix, it implies an ISO8601 formatted datetime
 
@@ -69,10 +71,13 @@ conventions
       * required as first column on each sheet
       * id's must be unique within each sheet
       * may be autonumbered or string
+
     * URL - URL link to further webpage info/links
     * description - free-form verbiage description
+
     * location - Well-Known Text(WKT) representation of points and/or lines and/or polygons using decimal degrees and meters height(+)/depth(-) to mean sea level(MSL)
     * locationDescription - free-form verbiage describing location
+
     * timeSpanList - list of ISO8601 ranges like '2009-02-01T14:00:00Z/2009-02-02T14:00:00Z,2009-03-01T14:00:00Z/2009-03-02T14:00:00Z'
       * if seasonally repeating will accept 'XXXX' for the year like 'XXXX-02-01T14:00:00Z/XXXX-03-01T14:00:00Z' denoting a repeat span every February
     * timeStart - ISO8601 formatted time, like '2009-02-01T14:00:00Z'
