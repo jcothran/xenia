@@ -48,11 +48,26 @@ http://code.google.com/apis/spreadsheets/docs/2.0/developers_guide_protocol.html
 
 = examples = 
 
+== spreadsheet design ==
+
+  * column header names use no whitespace, camelCase convention
+  * fields are strings or numbers unless field name suffixed by
+    * Type - indicates a Type lookup value which should be one of the associated row values on the 'type' sheet
+    * Id - indicates a row Id lookup value which should be on the associated Id sheet list
+    * stated another way, a 'Type' has a single possible value lookup while an 'Id' might have several row associated values
+
+  * common sheet fields
+    * id
+    * URL
+    * description
+    * timeSpanList
+    * timeStart
+    * timeEnd
+
+
 == !SensorInventory_v1.0 ==
 
 Captures basic metadata regarding organization, platformList, sensorList, sensorTypes with linkages to further custom spreadsheets via MetadataId field
-
-  * sheets are suffixed by 'List' or 'Type'(which futher describes List elements) or neither(table with single row)
 
 http://spreadsheets.google.com/pub?key=ryTSVxKd0ZEz2UbsmFiYZLA
 
