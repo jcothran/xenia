@@ -45,7 +45,7 @@ Change contents of a cell
 http://code.google.com/apis/spreadsheets/docs/2.0/developers_guide_protocol.html#UpdatingCells
 
 
-= Examples = 
+= examples = 
 
 == spreadsheet design ==
 
