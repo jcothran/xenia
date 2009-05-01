@@ -59,7 +59,7 @@ conventions
 
   * the *type* sheet is special in that the only field description is *id* and the number of row elements varies depending on the possible type values for a given id 
 
-  * fields are strings or numbers unless field name suffixed by
+  * field/column names are strings or numbers unless field name suffixed by
     * *Type* - indicates a Type lookup value which should be one of the associated row values on the 'type' sheet
     * *Id* - indicates a row Id lookup value which should be on the associated Id sheet list
     * stated another way, a *Type* has a single possible value lookup while an *Id* might have several row associated values
