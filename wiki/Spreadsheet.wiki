@@ -38,6 +38,9 @@ http://googlesystem.blogspot.com/2007/09/google-spreadsheets-lets-you-import.htm
 Spreadsheet mapper - create kml displays via spreadsheet template
 http://earth.google.com/outreach/tutorial_mapper.html
 
+Simple example of retrieving JSON feeds from Spreadsheets Data API
+http://code.google.com/apis/gdata/samples/spreadsheet_sample.html
+
 = examples = 
 
 == !SensorInventory_v1.0 ==
