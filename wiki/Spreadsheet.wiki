@@ -33,7 +33,8 @@ I really like this approach as I think it would allow people to contribute easil
 = Links =
 
 Spreadsheet importing
-http://googlesystem.blogspot.com/2007/09/google-spreadsheets-lets-you-import.html
+  * http://docs.google.com/support/bin/answer.py?answer=75507
+  * http://googlesystem.blogspot.com/2007/09/google-spreadsheets-lets-you-import.html
 
 Spreadsheet mapper - create kml displays via spreadsheet template
 http://earth.google.com/outreach/tutorial_mapper.html
