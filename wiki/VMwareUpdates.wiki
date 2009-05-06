@@ -88,7 +88,7 @@ I really like this approach as I think it would allow people to contribute easil
 
 == !MapServer/OGR vs table views = 
 
-On a development note, Dan Ramage was working with HF Radar datasets recently and was pushing the data to a sqlite database table and mapping via !MapServer/OGR and OpenLayers.
+On a development note, Dan Ramage was working with HF Radar datasets recently and was pushing the data to a sqlite database table and mapping via !MapServer/OGR and !OpenLayers.
 
 Dan was collecting a days worth of data in the same table, but only wanted to map the most recent data.  The performance issue we ran into for this case is that as !MapServer/OGR *does not support general database indexes for query* (like an index on the time column) only supporting spatial indexes or attribute indexes for shapefiles.  This results in a slow performing query/map render as !MapServer/OGR was performing a full table scan(reading all table rows).
 
