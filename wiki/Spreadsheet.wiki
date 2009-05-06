@@ -105,24 +105,24 @@ Scripts http://carocoops.org/spreadsheet/
 
 description of existing scripts from http://carocoops.org/spreadsheet/readme.txt
 {{{
-convert_si.pl
+convert_sheet_si.pl
 
 #this script converts a combined org/platform spreadsheet into two separate
 #TSV spreadsheets org, platform with the correct field mappings for load/import
 #by the google spreadsheet SecooraSensorInventory_v1.0
 
-create_si.pl
+sheet_to_db.pl
 
 #this script creates the necessary initial si.db table structure based on the
 #header lines of the associated spreadsheet file referenced
 
-refresh_si.pl
+refresh_sheet.pl
 
 #this script populates/refreshes the local si.db sqlite database with the
 #latest google spreadsheet values.  Spreadsheets are located via the google
 #spreadsheet registry file.
 
-create_kml.pl
+create_kml_si.pl
 
 #this script reads the local si.db sqlite database and creates kml/kmz output
 #files
