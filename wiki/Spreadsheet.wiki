@@ -103,7 +103,7 @@ http://spreadsheets.google.com/pub?key=ryTSVxKd0ZEz2UbsmFiYZLA
 
 Scripts http://carocoops.org/spreadsheet/
 
-description of existing scripts from http://carocoops.org/spreadsheet/readme.txt
+description of existing scripts([http://code.google.com/p/xenia/source/browse/#svn/trunk/sqlite/spreadsheet source svn]) from http://carocoops.org/spreadsheet/readme.txt
 {{{
 convert_sheet_si.pl
 
