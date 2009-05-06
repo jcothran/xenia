@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#this script creates the necessary initial si.db table structure based on the
+#this script creates the necessary initial database table structure based on the
 #header lines of the associated spreadsheet file referenced
 
 use strict;
@@ -16,6 +16,7 @@ my %gid = ('organization' => 0,
 	   'platform' => 1);
 
 my $path_sqlite = '/usr/bin/sqlite3-3.6.1.bin';
+my $dbname = 'si.db';
 
 #CONFIG END
 
@@ -83,7 +84,7 @@ open (FILE_TABLES_SQL,">./create_tables.sql");
 print FILE_TABLES_SQL $all_tables;
 close (FILE_TABLES_SQL);
 
-`$path_sqlite si.db < create_tables.sql`;
+`$path_sqlite $dbname < create_tables.sql`;
 
 exit 0;
 

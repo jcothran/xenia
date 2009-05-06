@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#this script populates/refreshes the local si.db sqlite database with the
+#this script populates/refreshes the local sqlite database with the
 #latest google spreadsheet values.  Spreadsheets are located via the google
 #spreadsheet registry file.
 
@@ -17,6 +17,7 @@ my %gid = ('organization' => 0,
            'platform' => 1);
 
 my $path_sqlite = '/usr/bin/sqlite3-3.6.1.bin';
+my $dbname = 'si.db';
 
 #CONFIG END
 
@@ -99,7 +100,7 @@ close (FILE_SHEET_OUT);
 open (FILE_SQL,">./temp.sql");
 print FILE_SQL ".separator \"\t\"\n.import $sheet\_out.csv $sheet";
 close (FILE_SQL);
-`$path_sqlite si.db < temp.sql`;
+`$path_sqlite $dbname < temp.sql`;
 
 } #foreach $sheet
 } #foreach $registry
