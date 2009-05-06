@@ -169,7 +169,7 @@ Platforms KMZ file http://carocoops.org/spreadsheet/si.kmz
   * Google maps
     * kml/kmz file is best viewed in Google Earth as Google Maps does not support the [http://code.google.com/p/kml-samples/issues/detail?id=1#makechanges visibility] tag at this time, causing all the placemarks to be displayed on the initial load of the file
 
-
+----
 === Data Provider Steps ===
 
 To have your metadata/data included with the current Secoora sensor inventory and presented in associated reports/maps, perform the following steps.
