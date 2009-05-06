@@ -144,6 +144,13 @@ Platforms KMZ file http://carocoops.org/spreadsheet/si.kmz
   * spreadsheet
     * track/check sheet update time to only load/update changed sheets
 
+=== Data Provider Steps ===
+
+To have your data included with the current Secoora sensor inventory, perform the following steps.
+
+==== Copy Spreadsheet Template ===
+
+With your own Google account, 
 
 ----
 = google maps, javascript = 
