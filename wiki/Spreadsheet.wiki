@@ -152,13 +152,19 @@ Platforms KMZ file http://carocoops.org/spreadsheet/si.kmz
 
 === Data Provider Steps ===
 
-To have your data included with the current Secoora sensor inventory, perform the following steps.
+To have your metadata/data included with the current Secoora sensor inventory and presented in associated reports/maps, perform the following steps.
 
-==== Copy Spreadsheet Template ===
+==== Copy Spreadsheet Template ====
 
 While logged into your own Google account, make a copy of the blank template using the below link
 
 http://spreadsheets.google.com/ccc?key=re-OoRQa_Xsr6k5mgzZlMLA&newcopy
+
+==== Populate Spreadsheet ====
+
+Rename the spreadsheet, removing the 'Copy of' and replacing 'Template' with your organization id (like 'carocoops').
+
+Populate the sheet cells similar to the examples listed above 
 
 ==== Publish Spreadsheet ====
 
