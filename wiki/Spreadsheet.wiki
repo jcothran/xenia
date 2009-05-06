@@ -153,12 +153,15 @@ Platforms KMZ file http://carocoops.org/spreadsheet/si.kmz
 
 === Issues ===
 
-    * switched to TSV(Tab Separated Value) related file import as CSV(Comma Separated Value) became difficult to process relating to commas within quotes type field issues(mainly in regards to sqlite .import)
-    * Google spreadsheets
-      * requires space character ' ' instead of null on importData function to successfully parse empty fields/cells.
-      * includes footnotes within cells and formulas at the page bottom for CSV output which I filter out using regular expressions
-      * does not include ending commas or null fields on empty cell values at the end of rows, making it difficult to automatically process nulls forward - get around this for now by checking the number of fields in the header line
-      * updates the publish [http://spreadsheets.google.com/feeds/worksheets/ryTSVxKd0ZEz2UbsmFiYZLA/public/values update] time for the entire spreadsheet on a single sheet cell change - would like it better if just the timestamp of the effected sheet were changed which would allow sheet specific upload/changes of metadata/data.  If sheet specific update was available, then perhaps a *latest data* sheet might also be a simple spreadsheet way of sharing latest in-situ data.
+  * switched to TSV(Tab Separated Value) related file import as CSV(Comma Separated Value) became difficult to process relating to commas within quotes type field issues(mainly in regards to sqlite .import)
+  * Google spreadsheets
+    * requires space character ' ' instead of null on importData function to successfully parse empty fields/cells.
+    * includes footnotes within cells and formulas at the page bottom for CSV output which I filter out using regular expressions
+    * does not include ending commas or null fields on empty cell values at the end of rows, making it difficult to automatically process nulls forward - get around this for now by checking the number of fields in the header line
+    * updates the publish [http://spreadsheets.google.com/feeds/worksheets/ryTSVxKd0ZEz2UbsmFiYZLA/public/values update] time for the entire spreadsheet on a single sheet cell change - would like it better if just the timestamp of the effected sheet were changed which would allow sheet specific upload/changes of metadata/data.  If sheet specific update was available, then perhaps a *latest data* sheet might also be a simple spreadsheet way of sharing latest in-situ data.
+  * Google maps
+    * kml/kmz file is best viewed in Google Earth as Google Maps does not support the [http://code.google.com/p/kml-samples/issues/detail?id=1#makechanges visibility] tag at this time, causing all the placemarks to be displayed on the initial load of the file
+
 
 === Data Provider Steps ===
 
