@@ -155,7 +155,7 @@ To have your metadata/data included with the current Secoora sensor inventory an
 
 ==== Copy Spreadsheet Template ====
 
-While logged into your own Google account, make a copy of the blank template using the below link
+While logged into your own [http://www.google.com/support/accounts/bin/answer.py?hl=en&answer=27441 Google account], make a copy of the blank template using the below link
 
 http://spreadsheets.google.com/ccc?key=re-OoRQa_Xsr6k5mgzZlMLA&newcopy
 
@@ -163,7 +163,19 @@ http://spreadsheets.google.com/ccc?key=re-OoRQa_Xsr6k5mgzZlMLA&newcopy
 
 Rename the spreadsheet, removing the 'Copy of' and replacing 'Template' with your organization id (like 'carocoops').
 
-Populate the sheet cells similar to the examples listed above 
+Populate the sheet cells similar to the examples listed above, the main fields utilized at this time are:
+
+  * organization
+    * id
+    * institution
+  * platform
+    * id
+    * organizationId
+    * URL
+    * description
+    * longitude
+    * latitude
+    * reportType 
 
 ==== Publish Spreadsheet ====
 
