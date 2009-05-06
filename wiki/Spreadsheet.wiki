@@ -107,9 +107,14 @@ Partially populated examples
   * http://spreadsheets.google.com/pub?key=rtrdkWtsIxB5VQZ-f_F2Idw&gid=1
   * http://spreadsheets.google.com/pub?key=ryTSVxKd0ZEz2UbsmFiYZLA
 
+----
 Scripts http://carocoops.org/spreadsheet/
 
 description of existing scripts([http://code.google.com/p/xenia/source/browse/#svn/trunk/sqlite/spreadsheet source svn]) from http://carocoops.org/spreadsheet/readme.txt
+
+Note that the script sheet_to_db.pl and refresh_sheet.pl could be reused to create/refresh a sql database from other spreadsheet templates also.
+
+The local database created in the below scripts is a sqlite file-database which acts as a SQL accessible, local cache of metadata/data for further maps/reports/products.
 {{{
 convert_sheet_si.pl
 
@@ -133,6 +138,8 @@ create_kml_si.pl
 #this script reads the local si.db sqlite database and creates kml/kmz output
 #files
 }}}
+
+----
 
 Platforms KMZ file http://carocoops.org/spreadsheet/si.kmz
   * Google Maps http://maps.google.com/?q=http://carocoops.org/spreadsheet/si.kmz
