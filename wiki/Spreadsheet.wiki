@@ -144,7 +144,6 @@ Platforms KMZ file http://carocoops.org/spreadsheet/si.kmz
     * provide separate kmz layers by observationType
     * provide separate kmz layers styled by online/offline similar to NDBC status map
     * provide separate kmz layer denoting longer-term operational/funding issues/concerns
-
     * provide cruise/operations map
 
   * spreadsheet
