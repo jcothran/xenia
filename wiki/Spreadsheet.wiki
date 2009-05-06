@@ -48,6 +48,17 @@ http://code.google.com/apis/gdata/samples/spreadsheet_sample.html
 Change contents of a cell
 http://code.google.com/apis/spreadsheets/docs/2.0/developers_guide_protocol.html#UpdatingCells
 
+Return CSV of sheet/gid
+http://spreadsheets.google.com/pub?key=rtrdkWtsIxB5VQZ-f_F2Idw&output=csv&gid=1
+
+  * For Google chrome prefix 'view-source:' to URL to see XML tags
+  * Firefox and IE also present a very nice interface to the below ATOM formatted row responses
+
+Return sheet/update time info 
+http://spreadsheets.google.com/feeds/worksheets/rtrdkWtsIxB5VQZ-f_F2Idw/public/values
+
+Spreadsheet SQL-type query
+http://spreadsheets.google.com/feeds/list/rtrdkWtsIxB5VQZ-f_F2Idw/od7/public/values?sq=id=CAP2
 
 = examples = 
 
