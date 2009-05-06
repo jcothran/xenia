@@ -156,7 +156,9 @@ To have your data included with the current Secoora sensor inventory, perform th
 
 ==== Copy Spreadsheet Template ===
 
-With your own Google account, 
+While logged into your own Google account, make a copy of the blank template using the below link
+
+http://spreadsheets.google.com/ccc?key=re-OoRQa_Xsr6k5mgzZlMLA&newcopy
 
 ==== Publish Spreadsheet ====
 
