@@ -128,9 +128,16 @@ create_kml.pl
 #files
 }}}
 
-Platforms http://carocoops.org/spreadsheet/si.kmz
+Platforms KMZ file http://carocoops.org/spreadsheet/si.kmz
+  * Google Maps http://maps.google.com/?q=http://carocoops.org/spreadsheet/si.kmz
   * note that the above kmz file is best viewed in Google Earth as Google Maps does not support the [http://code.google.com/p/kml-samples/issues/detail?id=1#makechanges visibility] tag at this time, causing all the placemarks to be displayed on the initial load of the file
 
+=== To Do ===
+
+  * add observationType to platform descriptions
+  * provide separate kmz layers by observationType
+  * provide separate kmz layers styled by online/offline similar to NDBC status map
+  * provide separate kmz layer denoting longer-term operational/funding issues/concerns
 
 ----
 = google maps, javascript = 
