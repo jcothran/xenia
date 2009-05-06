@@ -148,18 +148,21 @@ Platforms KMZ file http://carocoops.org/spreadsheet/si.kmz
 
   * spreadsheet
     * track/check sheet update time to only load/update changed sheets
+    * provide perl example of automated 'PUT' to change row/cell contents
 
 === Data Provider Steps ===
 
 To have your metadata/data included with the current Secoora sensor inventory and presented in associated reports/maps, perform the following steps.
 
-==== Copy Spreadsheet Template ====
+==== Using Google ====
+
+===== Copy Spreadsheet Template =====
 
 While logged into your own [http://www.google.com/support/accounts/bin/answer.py?hl=en&answer=27441 Google account], make a copy of the blank template using the below link
 
 http://spreadsheets.google.com/ccc?key=re-OoRQa_Xsr6k5mgzZlMLA&newcopy
 
-==== Populate Spreadsheet ====
+===== Populate Spreadsheet =====
 
 Rename the spreadsheet, removing the 'Copy of' and replacing 'Template' with your organization id (like 'carocoops').
 
@@ -177,13 +180,30 @@ Populate the spreadsheet similar to [http://spreadsheets.google.com/pub?key=rtrd
     * latitude
     * reportType 
 
-==== Publish Spreadsheet ====
+===== Publish Spreadsheet =====
 
 At the top right page of the spreadsheet choose the *Share->Publish as a web page*
 
 On the 'Publish as a web page' pop-up window choose *Publish Now*
 
 On the refreshed *Publish as a web page* pop-up window choose *Automatically re-publish when changes are made* and *Re-publish document*, closing the pop-up when finished.
+
+===== Notify staff =====
+
+Send an email to jeremy.cothran [at] gmail.com with the spreadsheet key(the string hash in the browser address next to *key=*) which you would like included as part of the spreadsheet registry and associated products.  You should receive notification that your spreadsheet was successfully included or any issues related to upload.
+
+==== Using internal TSV(Tab Separated Value) files ====
+
+The steps are similar to the steps above for using Google spreadsheets for sharing metadata/data, except that the data provider is sharing an internally HTTP hosted set of TSV (Tab Separated Value) files that mimic the spreadsheet layout.
+
+For example
+  * organization http://carocoops.org/spreadsheet/si_organization.tsv
+  * platform http://carocoops.org/spreadsheet/si_platform.tsv
+
+Note that empty fields have a *space character ' '* and are not null.
+
+These TSV files are imported on the collection end via a centrally hosted template-based google spreadsheet using the *importData(URL)* cell [http://docs.google.com/support/bin/answer.py?answer=75507 function].
+
 
 ----
 = google maps, javascript = 
