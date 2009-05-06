@@ -99,7 +99,13 @@ conventions
 
 Captures basic metadata regarding organization, platformList, sensorList, sensorTypes with linkages to further custom spreadsheets via MetadataId field
 
-http://spreadsheets.google.com/pub?key=ryTSVxKd0ZEz2UbsmFiYZLA
+Blank template http://spreadsheets.google.com/pub?key=re-OoRQa_Xsr6k5mgzZlMLA
+
+Registry http://spreadsheets.google.com/pub?key=rZGUM4s620-UQ_OQ1AI6R_g
+
+Partially populated examples
+  * http://spreadsheets.google.com/pub?key=rtrdkWtsIxB5VQZ-f_F2Idw
+  * http://spreadsheets.google.com/pub?key=ryTSVxKd0ZEz2UbsmFiYZLA
 
 Scripts http://carocoops.org/spreadsheet/
 
