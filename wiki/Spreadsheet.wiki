@@ -95,11 +95,17 @@ conventions
   * spreadsheet may be extended by additional sheets or fields and be template compliant as long as no sheets or fields are removed
   * _spreadsheet column color guide (required, optional) ?_
 
-== !SensorInventory_v1.0 ==
+== !SecooraSensorInventory_v1.0 ==
 
 Captures basic metadata regarding organization, platformList, sensorList, sensorTypes with linkages to further custom spreadsheets via MetadataId field
 
 http://spreadsheets.google.com/pub?key=ryTSVxKd0ZEz2UbsmFiYZLA
+
+Scripts http://carocoops.org/spreadsheet/
+
+Platforms http://carocoops.org/spreadsheet/si.kmz
+  * note that the above kmz file is best viewed in Google Earth as Google Maps does not support the [http://code.google.com/p/kml-samples/issues/detail?id=1#makechanges visibility] tag at this time, causing all the placemarks to be displayed on the initial load of the file
+
 
 ----
 = google maps, javascript = 
