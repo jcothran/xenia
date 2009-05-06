@@ -158,6 +158,14 @@ To have your data included with the current Secoora sensor inventory, perform th
 
 With your own Google account, 
 
+==== Publish Spreadsheet ====
+
+At the top right page of the spreadsheet choose the 'Share->Publish as a web page'
+
+On the 'Publish as a web page' pop-up window choose 'Publish Now'
+
+On the refreshed 'Published as a web page' pop-up window choose 'Automatically re-publish when changes are made' and 'Re-publish document', closing the pop-up when finished.
+
 ----
 = google maps, javascript = 
 
