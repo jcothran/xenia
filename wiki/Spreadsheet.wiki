@@ -60,6 +60,9 @@ http://spreadsheets.google.com/feeds/worksheets/rtrdkWtsIxB5VQZ-f_F2Idw/public/v
 Spreadsheet SQL-type query
 http://spreadsheets.google.com/feeds/list/rtrdkWtsIxB5VQZ-f_F2Idw/od7/public/values?sq=id=CAP2
 
+Google Map webpage embedding
+http://www.askdavetaylor.com/how_to_embed_google_map_on_web_page.html
+
 = examples = 
 
 == spreadsheet design ==
