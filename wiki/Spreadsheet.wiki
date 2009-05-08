@@ -86,6 +86,7 @@ conventions
 
   * if *Date* is used as a fieldname suffix, it implies a YYYY-MM-DD formatted day
   * if *Time* is used as a fieldname suffix, it implies an ISO8601 formatted datetime
+  * if *List* is used as a fieldname suffix, it implies a comma separated list
 
   * common sheet fields
     * *id*
