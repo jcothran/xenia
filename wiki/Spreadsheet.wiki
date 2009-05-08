@@ -113,6 +113,8 @@ conventions
 ----
 == !SecooraSpreadsheetRegistry ==
 
+This spreadsheet contains the key id's to other spreadsheets and their associated spreadsheetType and OrganizationType
+
 Registry http://spreadsheets.google.com/pub?key=rZGUM4s620-UQ_OQ1AI6R_g
 
 ----
