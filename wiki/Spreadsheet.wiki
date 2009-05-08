@@ -87,7 +87,7 @@ conventions
   * if *Date* is used as a fieldname suffix, it implies a YYYY-MM-DD formatted day
   * if *Time* is used as a fieldname suffix, it implies an ISO8601 formatted datetime
   * if *List* is used as a fieldname suffix, it implies a comma separated list
-  * if *TypeList* is used as a fieldname suffix, it implies a comma separated list of types from the associated 'type' sheet row
+  * if *!TypeList* is used as a fieldname suffix, it implies a comma separated list of types from the associated 'type' sheet row
 
   * common sheet fields
     * *id*
