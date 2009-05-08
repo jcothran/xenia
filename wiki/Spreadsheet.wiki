@@ -110,13 +110,17 @@ conventions
   * spreadsheet may be extended by additional sheets or fields and be template compliant as long as no sheets or fields are removed
   * _spreadsheet column color guide (required, optional) ?_
 
+----
+== !SecooraSpreadsheetRegistry ==
+
+Registry http://spreadsheets.google.com/pub?key=rZGUM4s620-UQ_OQ1AI6R_g
+
+----
 == !SecooraSensorInventory_v1.0 ==
 
 Captures basic metadata regarding organization, platformList, sensorList, sensorTypes with linkages to further custom spreadsheets via MetadataId field
 
 Blank template http://spreadsheets.google.com/pub?key=re-OoRQa_Xsr6k5mgzZlMLA
-
-Registry http://spreadsheets.google.com/pub?key=rZGUM4s620-UQ_OQ1AI6R_g
 
 Partially populated examples
   * http://spreadsheets.google.com/pub?key=rtrdkWtsIxB5VQZ-f_F2Idw&gid=1
@@ -242,6 +246,7 @@ Notify staff similarly regarding the URL's of the TSV files for access/collectio
 
 These TSV files are imported on the collection end via a centrally hosted template-based google spreadsheet using the *importData(URL)* cell [http://docs.google.com/support/bin/answer.py?answer=75507 function].  Note that this google spreadsheet 'wrapper' provides [http://code.google.com/apis/spreadsheets/overview.html google data API functionality] to the underlying source TSV file.
 
+----
 == !SecooraServiceInventory_v1.0 ==
 
 Captures basic metadata regarding 
