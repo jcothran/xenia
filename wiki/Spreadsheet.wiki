@@ -261,6 +261,15 @@ Captures basic metadata regarding
 
 Blank template http://spreadsheets.google.com/pub?key=rK30gum7jSX4uFJktCozRmQ&gid=11
 
+----
+== !SecooraMembers_v1.0 ==
+
+Captures basic metadata regarding
+  * Secoora membership,status and location
+
+Example http://spreadsheets.google.com/pub?key=rUevo3Uxo4Uyip3hLKWeA0Q
+
+Styled Google Map http://maps.google.com/?q=http://carocoops.org/spreadsheet/sm.kmz
 
 ----
 = google maps, javascript = 
