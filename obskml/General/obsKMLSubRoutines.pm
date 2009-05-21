@@ -1,5 +1,10 @@
 #######################################################################################################
 #Revisions
+#Rev: 1.2.0.0
+#Author: DWR
+#Sub: KMLAddObsToHash, KMLAddObsList
+#Changes: In the observation hash, the sorder is now a hash key and not simply a value. This allows us to have the same sensor
+# at the same elevation, and we can distinguish them by the sorder.
 #Rev: 1.1.0.0
 #Author: DWR
 #Date: 6/4/2008
@@ -228,6 +233,42 @@ sub GetObsData #( $rPlatformHash, $strObsHandle, $SOrder, $Results )
   $Results->{UoM}       = $strUOM;
   return( $iFoundItems );
 }
+#######################################################################################################
+#Subroutine: GetConversionUnits
+#Given a unit of one measurement system, this subroutine will return the equivalent unit from the 
+# specified system. IE if you have "m" in the metric system and want the equivalent in the Imperial system.
+#######################################################################################################
+sub GetConversionUnits #($strCurrentUnits, $strDesiredUOMSystem )
+{
+  my ( $strCurrentUnits, $strDesiredUOMSystem ) = @_;
+  if( $strDesiredUOMSystem eq 'en' )
+  {
+    if( $strCurrentUnits eq 'm' )
+    {
+      return( 'ft' );
+    }
+    elsif( $strCurrentUnits eq  'm_s-1' )
+    {
+      return( 'mph' );
+    }
+    elsif( $strCurrentUnits eq 'celsius' )
+    {
+      return( 'fahrenheit' );
+    }
+    elsif( $strCurrentUnits eq 'cm_s-1' )
+    {
+      return( 'mph' );
+    }
+    elsif( $strCurrentUnits eq 'mph' )
+    {
+      return( 'knots' );
+    }
+  }
+  else
+  {
+  }
+  return('')
+}
 
 #######################################################################################################
 # Subroutine: MeasurementConvert
@@ -327,11 +368,9 @@ sub UnitsStringConversion #($strFromUOMString, $XMLDoc)
 sub KMLAddPlatformHashEntry #( $strPlatformID, $strPlatformURL, $Latitude, $Longitude, $rObsHash )
 {
   my ( $strPlatformID, $strPlatformURL, $Latitude, $Longitude, $rObsHash ) = @_;
-
   $rObsHash->{PlatformID}{$strPlatformID}{Latitude}     = $Latitude;
   $rObsHash->{PlatformID}{$strPlatformID}{Longitude}    = $Longitude;
-  $rObsHash->{PlatformID}{$strPlatformID}{PlatformURL}  = $strPlatformURL;
-  
+  $rObsHash->{PlatformID}{$strPlatformID}{PlatformURL}  = $strPlatformURL;    
 }
 #######################################################################################################
 # Subroutine: AddObsHashEntry
@@ -397,22 +436,28 @@ sub KMLAddObsHashEntry #( $strObsName, $strDate, $Value, $SensorSOrder, $rObsHas
 sub KMLAddObsToHash #( $strObsName, $strDate, $Value, $SensorSOrder, $strPlatformID, $ObsElevation, $strUnits, $rObsHash  )
 {
   my ( $strObsName, $strDate, $Value, $SensorSOrder, $strPlatformID, $ObsElevation, $strUnits, $rObsHash ) = @_;
-  print( "KMLAddObsToHash:: Obs: $strObsName Date: $strDate Val: $Value SORder: $SensorSOrder Platform: $strPlatformID Elev: $ObsElevation Units: $strUnits\n" );
+  print( "KMLAddObsToHash::Adding Obs: $strObsName Date: $strDate Val: $Value SORder: $SensorSOrder Platform: $strPlatformID Elev: $ObsElevation Units: $strUnits Lat: $rObsHash->{PlatformID}{$strPlatformID}{Latitude} Long: $rObsHash->{PlatformID}{$strPlatformID}{Longitude}\n" );
   my $QCLevel = $QCLEVEL_DATANOTEVALD;
-  $rObsHash->{PlatformID}{$strPlatformID}{TimeStamp}{$strDate}{elev}{$ObsElevation}{obsType}{$strObsName}{uomType} = $strUnits;
-  $rObsHash->{PlatformID}{$strPlatformID}{TimeStamp}{$strDate}{elev}{$ObsElevation}{obsType}{$strObsName}{sorder}  = $SensorSOrder;
+  #DWR v1.2.0.0 Use the sorder as a has key, not just a value.
+  $rObsHash->{PlatformID}{$strPlatformID}{TimeStamp}{$strDate}{elev}{$ObsElevation}{sorder}{$SensorSOrder}{obsType}{$strObsName}{uomType} = $strUnits;
+  #$rObsHash->{PlatformID}{$strPlatformID}{TimeStamp}{$strDate}{elev}{$ObsElevation}{obsType}{$strObsName}{sorder}  = $SensorSOrder;  
   if( $Value ne 'NULL')
   {
-    $rObsHash->{PlatformID}{$strPlatformID}{TimeStamp}{$strDate}{elev}{$ObsElevation}{obsType}{$strObsName}{value} = $Value;
+    #$rObsHash->{PlatformID}{$strPlatformID}{TimeStamp}{$strDate}{elev}{$ObsElevation}{obsType}{$strObsName}{value} = $Value;
+    #DWR v1.2.0.0 Use the sorder as a has key.
+    $rObsHash->{PlatformID}{$strPlatformID}{TimeStamp}{$strDate}{elev}{$ObsElevation}{sorder}{$SensorSOrder}{obsType}{$strObsName}{value} = $Value;
   }
   else
   {
     $QCLevel = $QCLEVEL_DATAMISSING;
   }
-  $rObsHash->{PlatformID}{$strPlatformID}{TimeStamp}{$strDate}{elev}{$ObsElevation}{obsType}{$strObsName}{QCLevel} = $QCLevel;  
+  #$rObsHash->{PlatformID}{$strPlatformID}{TimeStamp}{$strDate}{elev}{$ObsElevation}{obsType}{$strObsName}{QCLevel} = $QCLevel;  
+  #DWR v1.2.0.0 Use the sorder as a has key.
+  $rObsHash->{PlatformID}{$strPlatformID}{TimeStamp}{$strDate}{elev}{$ObsElevation}{sorder}{$SensorSOrder}{obsType}{$strObsName}{QCLevel} = $QCLevel;  
 }
 
-#######################################################################################################
+                                    
+######################################################################################################
 #Subroutine: BuildKMLFile
 # Given a hash and a filename, this set of subroutines will build an obsKML file.
 # Parameters:
@@ -538,7 +583,6 @@ sub KMLAddPlacemarkSimple  #( $XMLDoc, $ParentTag, $strPlatformID, $Date, $rObsH
   
   my $Latitude =  $hObsList->{PlatformID}{$strPlatformID}{Latitude};       
   my $Longitude =  $hObsList->{PlatformID}{$strPlatformID}{Longitude};       
-  
   KMLAddLatLong( $Doc, $Placemark, $Latitude, $Longitude );
   KMLAddTimeStamp( $Doc, $Placemark, $Date );
   #DWR v1.1.0.0
@@ -619,32 +663,45 @@ sub KMLAddObsList #( $Doc, $Parent, $strPlatformURL, $hObsList, \$strDescription
   $$strDescription = '<table>';
   foreach my $Elev ( reverse sort { $a <=> $b } keys %{$hObsList->{elev}} )  
   {
-    foreach my $ObsType ( sort keys %{$hObsList->{elev}{$Elev}{obsType}} )
-    {
-      
-      #Create the obs child tag.
-      my $Obs = $Doc->createElement( 'obs');
-
-      #my $strVal = $hObsList->{elev}{$Elev}{obsType}{$ObsType}{value};
-      #my $strUOM = $hObsList->{elev}{$Elev}{obsType}{$ObsType}{uomType};
-      #Add all the data for the obs.
-      AddChild( $Doc, $Obs, 'obsType', $ObsType );
-      AddChild( $Doc, $Obs, 'value', $hObsList->{elev}{$Elev}{obsType}{$ObsType}{value} );
-      AddChild( $Doc, $Obs, 'uomType', $hObsList->{elev}{$Elev}{obsType}{$ObsType}{uomType} );
-      AddChild( $Doc, $Obs, 'elev', $Elev );
-      AddChild( $Doc, $Obs, 'sorder', $hObsList->{elev}{$Elev}{obsType}{$ObsType}{sorder} );
-      if( exists $hObsList->{elev}{$Elev}{obsType}{$ObsType}{QCLevel} )
+    #foreach my $ObsType ( sort keys %{$hObsList->{elev}{$Elev}{obsType}} )
+    foreach my $SensorSOrder ( sort keys %{$hObsList->{elev}{$Elev}{sorder}} )
+    {   
+      foreach my $ObsType ( sort keys %{$hObsList->{elev}{$Elev}{sorder}{$SensorSOrder}{obsType}} )
       {
-        my $QCLevel = $hObsList->{elev}{$Elev}{obsType}{$ObsType}{QCLevel};
-        AddChild( $Doc, $Obs, 'QCLevel', $QCLevel );
+        #Create the obs child tag.
+        my $Obs = $Doc->createElement( 'obs');
+
+        #my $strVal = $hObsList->{elev}{$Elev}{obsType}{$ObsType}{value};
+        #my $strUOM = $hObsList->{elev}{$Elev}{obsType}{$ObsType}{uomType};
+        #Add all the data for the obs.
+        AddChild( $Doc, $Obs, 'obsType', $ObsType );
+        
+        #DWR v1.2.0.0 Use the sorder as a has key.
+        #AddChild( $Doc, $Obs, 'value', $hObsList->{elev}{$Elev}{obsType}{$ObsType}{value} );
+        AddChild( $Doc, $Obs, 'value', $hObsList->{elev}{$Elev}{sorder}{$SensorSOrder}{obsType}{$ObsType}{value} );        
+        #AddChild( $Doc, $Obs, 'uomType', $hObsList->{elev}{$Elev}{obsType}{$ObsType}{uomType} );
+        AddChild( $Doc, $Obs, 'uomType', $hObsList->{elev}{$Elev}{sorder}{$SensorSOrder}{obsType}{$ObsType}{uomType} );
+        AddChild( $Doc, $Obs, 'elev', $Elev );
+        #DWR v1.2.0.0 Use the sorder as a has key.
+        #AddChild( $Doc, $Obs, 'sorder', $hObsList->{elev}{$Elev}{obsType}{$ObsType}{sorder} );
+        AddChild( $Doc, $Obs, 'sorder', $SensorSOrder );
+        #DWR v1.2.0.0 Use the sorder as a has key.
+        #if( exists $hObsList->{elev}{$Elev}{obsType}{$ObsType}{QCLevel} )
+        if( exists $hObsList->{elev}{$Elev}{sorder}{$SensorSOrder}{obsType}{$ObsType}{QCLevel} )
+        {
+          #my $QCLevel = $hObsList->{elev}{$Elev}{obsType}{$ObsType}{QCLevel};
+          my $QCLevel = $hObsList->{elev}{$Elev}{sorder}{$SensorSOrder}{obsType}{$ObsType}{QCLevel};
+          AddChild( $Doc, $Obs, 'QCLevel', $QCLevel );
+        }
+        #Add the child tag to the parent, ObsList.
+        $ObsList->appendChild( $Obs );
+        #print( "obsType: $ObsType value: $hObsList->{elev}{$Elev}{obsType}{$ObsType}{value} uomType: $hObsList->{elev}{$Elev}{obsType}{$ObsType}{uomType}\n" );
+        #DWR v1.1.0.0
+        #Each obs has its own row with the observation type, value, and units of measurement.
+        #DWR v1.2.0.0 Use the sorder as a has key.
+        $$strDescription = $$strDescription."<tr><td>$ObsType</td><td>$hObsList->{elev}{$Elev}{sorder}{$SensorSOrder}{obsType}{$ObsType}{value}</td><td>$hObsList->{elev}{$Elev}{sorder}{$SensorSOrder}{obsType}{$ObsType}{uomType}</td></tr>";
+        #print( "KMLAddObsList::strDescription: $$strDescription\n" );
       }
-      #Add the child tag to the parent, ObsList.
-      $ObsList->appendChild( $Obs );
-      #print( "obsType: $ObsType value: $hObsList->{elev}{$Elev}{obsType}{$ObsType}{value} uomType: $hObsList->{elev}{$Elev}{obsType}{$ObsType}{uomType}\n" );
-      #DWR v1.1.0.0
-      #Each obs has its own row with the observation type, value, and units of measurement.
-      $$strDescription = $$strDescription."<tr><td>$ObsType</td><td>$hObsList->{elev}{$Elev}{obsType}{$ObsType}{value}</td><td>$hObsList->{elev}{$Elev}{obsType}{$ObsType}{uomType}</td></tr>";
-      #print( "KMLAddObsList::strDescription: $$strDescription\n" );
     }
   }
   $$strDescription = $$strDescription.'</table>';
