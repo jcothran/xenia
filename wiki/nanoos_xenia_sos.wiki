@@ -2,17 +2,24 @@ _Implementation of Xenia OOSTethys SOS Perl server on NANOOS Xenia RDB_
 
 = NANOOS Xenia OOSTethys SOS Perl server =
 
-We are implementing GoMOOS/Eric Bridger's [http://code.google.com/p/oostethys/source/browse/#svn/trunk/component/server/perl Perl SOS server] on the NANOOS Xenia data base we're developing at APL. This SOS server is currently only running within our firewall at APL, for testing purposes.
+== Background ==
 
-oostethys_sos.cgi
+We are implementing GoMOOS/Eric Bridger's [http://code.google.com/p/oostethys/source/browse/#svn/trunk/component/server/perl Perl SOS server (oostethys_sos.cgi)] on the NANOOS Xenia data base we're developing at APL. This SOS server is currently only running within our firewall at APL, for testing purposes.
 
 While the code I've adapted originally came from Eric, I got it via Jeremy Cothran (SECOORA) and Xiaoyin Qi (Carolinas RCOOS); this code is available at [http://code.google.com/p/xenia/wiki/XeniaSOS Jeremy's Xenia repository]. They made [http://groups.google.com/group/xeniavm/browse_thread/thread/37618beca6d0a159 some adaptations to Eric's code for PostgreSQL-Xenia] which made it easier to get going.
 
-== sub-heading ==
+Jeremy has extensive comments and discussions on this server on [http://code.google.com/p/xenia/wiki/XeniaSOS his Xenia SOS page]. oostethys_sos.cgi implements the OOSTethys SOS flavor, not the DIF flavor. Jeremy has a separate Perl SOS server that implements DIF SOS (also available from that page).
 
-asdfaf *ddf* dsaf
+Our adapted SOS server code will be made available once our SOS service goes operational.
 
-= Details =
+== Brief technical specs ==
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
+I've adapted the Xenia data model for PostgreSQL. It's running on Ubuntu Linux 8.10, with PostgreSQL 8.3.7. Eric's code can use configurations and pull data from a set of XML and ascii files, or do everything by directly querying the database, or a mix of both. Currently I'm relying exclusively on database queries. I've created a Xenia table (_obs_series_cat_) that holds what I call an "observation series catalog" summarizing available platforms, sensors, measurements, locations and data extent (and automatically kept updated); I'm making use of these catalog table for quick summary data extraction from the SOS server.
+
+== Issues identified and already addressed ==
+
+* [https://mail.google.com/mail/?hl=en&shva=1#search/eric+bridger/120f7d711e9fbbe6 Rick Blair identified a validation error with <sos:eventTime>. After pointing it out to Eric, he provided a solution], which we've implemented.
+* 
+
+
+== Other outstanding issues or decision points ==
