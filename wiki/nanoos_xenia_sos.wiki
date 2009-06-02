@@ -18,8 +18,8 @@ I've adapted the Xenia data model for PostgreSQL. It's running on Ubuntu Linux 8
 
 == Issues identified and already addressed ==
 
-* [https://mail.google.com/mail/?hl=en&shva=1#search/eric+bridger/120f7d711e9fbbe6 Rick Blair identified a validation error with <sos:eventTime>. After pointing it out to Eric, he provided a solution], which we've implemented.
-* 
-
+  * [http://groups.google.com/group/xeniavm/browse_thread/thread/dda47881b87e5206# Rick Blair identified a validation error with <sos:eventTime>. After pointing it out to Eric, he provided a solution], which I've implemented.
+  * I'm querying _obs_series_cat_ (see above) to extract and populate an accurate start_time. Previously, it was hard-wired to a fixed value.
+  * Our Xenia implementation includes observations from ship cruises and buoys. The SOS server is hard-wired to expect moorings. I adapted the code to provide the center point of each cruise program as the boundedBy:Envelope point location.
 
 == Other outstanding issues or decision points ==
