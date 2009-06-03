@@ -19,6 +19,7 @@ I've adapted the Xenia data model for PostgreSQL. It's running on Ubuntu Linux 8
 == Issues identified and already addressed ==
 
   * [http://groups.google.com/group/xeniavm/browse_thread/thread/dda47881b87e5206# Rick Blair identified a validation error with <sos:eventTime>. After pointing it out to Eric, he provided a solution], which I've implemented.
+  * Implemented Eric's correction (April 2009) to <swe:elementCount><swe:Count><swe:value> in GetObservation (it's supposed to represent the number of swe:values DataRecords, but it wasn't doing that).
   * I'm querying _obs_series_cat_ (see above) to extract and populate an accurate start_time. Previously, it was hard-wired to a fixed value.
   * Our Xenia implementation includes observations from ship cruises and buoys. The SOS server is hard-wired to expect moorings. I adapted the code to provide the center point of each cruise program as the boundedBy:Envelope point location in the !GetCapabilities and !GetObservation responses.
 
@@ -29,7 +30,7 @@ I've adapted the Xenia data model for PostgreSQL. It's running on Ubuntu Linux 8
     # The SOS server provides all bounding box envelopes as points, because it has a hard-wired expectation that all platforms are moorings. But for ship cruises, a rectangular bounding box seems more appropriate and realistic. I've modified the code to do this for cruises (again by querying _obs_series_cat_), but I'm not yet 100% sure this would be a valid response. The NANOOS CMOP/PySOS service currently does serve rectangular bounding boxes for cruises.
     # Currently the bounding box includes a third value that's probably for depth. But the code hard-wires that value to be zero. We could modify it so it returns actual depth envelopes.
   * The "elevation" value in _multi_obs_ (m_z column) is interpreted as depth (hard-wired in the code). But I've adopted the convention that m_z is positive up, so maybe it should be identified as such?
-  * Change time/TimePeriod/timeInterval so it's not hardwired? But what would we use instead? Many of the platforms in the Xenia-APL database provide observations at irregularl intervals. Even ORCA observations have intervals that change throughout the year.
+  * Change time/!TimePeriod/timeInterval so it's not hardwired? But what would we use instead? Many of the platforms in the Xenia-APL database provide observations at irregular intervals. Even ORCA observations have intervals that change throughout the year.
   * Measurements vs. observations vs. sensors
     # We need to look into using observation type (O&M's) terms that correspond to a defined ontology on MMI. The server currently just uses what's found in the Xenia data dictionary
     # I've run into two important problems: 1, For a platform, multiple sensors with the same m_type (measurement type); it's not clear whether results are coming from only one of the sensors, or mixing up data from both sensors. 2, Vector m_type's, such as velocity vectors. The query in the SOS server has no mechanism to return the 2nd component. [http://groups.google.com/group/xeniavm/browse_thread/thread/49bb9549cb35f8a2# A discussion with Jeremy and Eric provided some ideas for moving forward on this.]
