@@ -4,7 +4,7 @@ _Implementation of Xenia OOSTethys SOS Perl server on NANOOS Xenia RDB_
 
 == Background ==
 
-We are implementing GoMOOS/Eric Bridger's [http://code.google.com/p/oostethys/source/browse/#svn/trunk/component/server/perl Perl SOS server (oostethys_sos.cgi)] on the NANOOS Xenia data base we're developing at APL. This SOS server is currently only running within our firewall at APL, for testing purposes.
+We are implementing GoMOOS/Eric Bridger's Perl SOS server (oostethys_sos.cgi) on the NANOOS Xenia data base we're developing at APL. This SOS server is currently only running within our firewall at APL, for testing purposes. Eric's code is available as an [http://www.oostethys.org/downloads/sos-cookbook-perl OOSTethys SOS Cookbook (with additional documentation)] and as code files in his [http://code.google.com/p/oostethys/source/browse/#svn/trunk/component/server/perl Google Code SVN repository].
 
 While the code I've adapted originally came from Eric, I got it via Jeremy Cothran (SECOORA) and Xiaoyin Qi (Carolinas RCOOS); this code is available at [http://code.google.com/p/xenia/wiki/XeniaSOS Jeremy's Xenia repository]. They made [http://groups.google.com/group/xeniavm/browse_thread/thread/37618beca6d0a159 some adaptations to Eric's code for PostgreSQL-Xenia] which made it easier to get going.
 
