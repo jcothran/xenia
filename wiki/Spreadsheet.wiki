@@ -63,6 +63,12 @@ http://spreadsheets.google.com/feeds/list/rtrdkWtsIxB5VQZ-f_F2Idw/od7/public/val
 Google Map webpage embedding
 http://www.askdavetaylor.com/how_to_embed_google_map_on_web_page.html
 
+Google Apps scripting
+http://googleenterprise.blogspot.com/2009/05/old-tool-new-tricks.html
+
+Google Squared
+http://radar.oreilly.com/2009/06/google-squared-is-an-exponenti.html
+
 = examples = 
 
 == spreadsheet design ==
