@@ -115,6 +115,8 @@ Also it would be nice if the platform search was looser in allowing 'like' type 
 
 http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi?request=GetObservation&service=SOS&version=1.0.0&responseFormat=text%2Fxml%3B%20subtype%3D%22om%2F1.0%22&offering=A01&observedProperty=http%3A%2F%2Fmmisw.org%2Fcf%23air_temperature,http%3A%2F%2Fmmisw.org%2Fcf%23sea_water_temperature
 
+_Correction, this is not an issue: the above result is correct, just null values at different depths for different parameters_
+
 == Other Caveats ==
 
 It would be good to see in addition to a service registry, a test script or service to validate the desired service functionality(service compliance test and feedback).  The pattern that I tend to see is that the 'usual' SOS service request path is available, but some of the extra features are not uniformly tested or implemented.
