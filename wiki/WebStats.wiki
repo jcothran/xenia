@@ -1,5 +1,7 @@
 #summary set of perl scripts and sqlite database for apache web log analysis
 
+earlier Google Analytics filtering/proxy ideas at http://trac.secoora.org/datamgmt/wiki/JCothranGAProxy
+
 Developed these scripts out of frustration with other freely available web analysis packages including Google Analytics which has been having problems lately with how statistics are reported(documented [http://www.google.com/support/forum/p/Google+Analytics/thread?tid=77847d39560ae940&fid=77847d39560ae94000045dd9df11662b&hl=en here])  Mainly I am looking for more than just total hits, but also to filter and cross reference content with its users and references.
 
 source code http://code.google.com/p/xenia/source/browse/#svn/trunk/sqlite/web_stats
