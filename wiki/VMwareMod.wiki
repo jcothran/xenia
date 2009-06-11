@@ -62,6 +62,7 @@ sudo cpan -i "Number::Bytes::Human"
 
 {{{
 sudo apt-get install gparted
+sudo apt-get install rdate
 }}}
 
 = Distribution checklist = 
