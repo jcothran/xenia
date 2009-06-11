@@ -34,6 +34,7 @@ sudo apt-get install libxml2-dev
 sudo cpan -i "XML::LibXML"
 
 sudo cpan -i "DBD::SQLite"
+sudo cpan -i DBD::Pg             #PostGres DBD. NOTE: Don't use "DBD::Pg", odd fail.
 sudo apt-get install gnuplot-nox #no X11 windows support
 sudo cpan -i "XML::XPath"
 }}}
