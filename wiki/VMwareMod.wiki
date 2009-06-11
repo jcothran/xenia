@@ -46,6 +46,7 @@ sudo cpan -i "XML::XPath"
 sudo apt-get install python-setuptools #Used to install the easy_install package manager
 sudo apt-get install python-pysqlite2  #SQLite python DB package.
 sudo apt-get install python2.5-psycopg2#PostGres python DB package.
+sudo apt-get install python2.5-lxml    #XML parser.
 
 {{{
 installed google earth to desktop, but slow display with only OpenGL
