@@ -1,4 +1,5 @@
 #summary modifications list (installed software, packages, etc) and distribution checklist
+#labels a
 
 <wiki:toc max_depth="6" />
 
@@ -39,6 +40,10 @@ sudo apt-get install gnuplot-nox #no X11 windows support
 sudo cpan -i "XML::XPath"
 }}}
 
+{{{
+#Python packages
+}}}
+sudo apt-get install python-setuptools #Used to install the easy_install package manager
 {{{
 installed google earth to desktop, but slow display with only OpenGL
 == GE uses OpenGL so slow unless optimized for particular graphics card
