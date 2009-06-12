@@ -40,14 +40,19 @@ sudo apt-get install gnuplot-nox #no X11 windows support
 sudo cpan -i "XML::XPath"
 }}}
 
-{{{
-#Python packages
+{{{ 
+For NetCDF, download the perl source [http://www.unidata.ucar.edu/downloads/netcdf-perl/index.jsp Here]
+A prerequisite is the netCDF dev package: sudo apt-get install sudo apt-get install libnetcdf-dev
+Once libnetcdf-dev is installed, edit the CUSTOMIZE file in the perl NetCDF directory and verify/modify the CPP_NETCDF, LD_NETCDF, and PERL_MANDIR flags.
 }}}
+
+#Python packages
+{{{
 sudo apt-get install python-setuptools #Used to install the easy_install package manager
 sudo apt-get install python-pysqlite2  #SQLite python DB package.
 sudo apt-get install python2.5-psycopg2#PostGres python DB package.
 sudo apt-get install python2.5-lxml    #XML parser.
-
+}}}
 {{{
 installed google earth to desktop, but slow display with only OpenGL
 == GE uses OpenGL so slow unless optimized for particular graphics card
