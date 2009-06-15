@@ -40,10 +40,14 @@ sudo apt-get install gnuplot-nox #no X11 windows support
 sudo cpan -i "XML::XPath"
 }}}
 
+#NetCDf Perl
 {{{ 
 For NetCDF, download the perl source [http://www.unidata.ucar.edu/downloads/netcdf-perl/index.jsp Here]
 A prerequisite is the netCDF dev package: sudo apt-get install sudo apt-get install libnetcdf-dev
 Once libnetcdf-dev is installed, edit the CUSTOMIZE file in the perl NetCDF directory and verify/modify the CPP_NETCDF, LD_NETCDF, and PERL_MANDIR flags.
+
+For UDUNITS, to instead of having to install yacc, you can move the UDUNITS.pm and udunits.dat (conversions data file) to /usr/local/lib/perl/5.8.8
+Then move the contents of the auto/UDUNITS directory into /usr/local/lib/perl/5.8.8/auto/UDUNITS. The contents of the directory should be: UDUNITS.so, UDUNITS.bs, and autosplit.ix.
 }}}
 
 #Python packages
