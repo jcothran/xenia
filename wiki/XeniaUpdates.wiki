@@ -77,7 +77,11 @@ Spent a while trying to develop a sqlite version of the [http://nautilus.baruch.
 
 == flow monitor ==
 
+Initial sqlite version
 http://code.google.com/p/xenia/source/browse/trunk/sqlite/flow_monitor
+
+Updated better version(sqlite or postgresql, config file) by Dan Ramage
+http://code.google.com/p/rcoos/source/browse/#svn/trunk/datastream/flowmonitor
 
 The shell script [http://code.google.com/p/xenia/source/browse/trunk/sqlite/flow_monitor/checkStatus.sh checkStatus.sh] is called every 10 minutes past the hour and the script [http://code.google.com/p/xenia/source/browse/trunk/sqlite/flow_monitor/check_status.pl check_status.pl] uses the command line parameters to perform a database query on the latest sensor counts per organization.  The query results are sent to a column-oriented text file which is used to produce an hourly updated graph of the results using gnuplot ( [http://code.google.com/p/xenia/source/browse/trunk/sqlite/flow_monitor/status.lib status.lib] [http://code.google.com/p/xenia/source/browse/trunk/sqlite/flow_monitor/graphCommon.lib graphCommon.lib]) and an email notification is sent to staff if the sensor counts are critically low(zero for any organization with exceptions for those which are chronically low).
 
