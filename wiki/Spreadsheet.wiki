@@ -168,43 +168,7 @@ create_kml_si.pl
 #files
 }}}
 
-----
 
-== Simple alert/process script control via spreadsheet ==
-
-{{{
-use LWP::Simple;
-
-#CONFIG BEGIN
-my $sheet_key = 'rmo6mOkVVsEN7fLqwN_7Qsg';
-#CONFIG END
-
-#get sheet from registry
-my $sheet_url = "http://spreadsheets.google.com/pub?key=$sheet_key&output=csv&gid=0";
-my $retval = getstore($sheet_url,"./sheet.csv");
-die "Couldn't get $sheet_url" unless defined $retval;
-
-open (FILE,"./sheet.csv");
-
-my $row_count = 0;
-my $flag_alert = 'no';
-foreach my $row (<FILE>) {
-        $row_count++;
-
-        #print $row;
-        my @element = (split(',',$row));
-        if ($element[0] eq 'hfradar_savannah') {
-                if ($element[1] eq 'yes') { $flag_alert = 'yes'; }
-                last;
-        }
-}
-
-close (FILE);
-
-if ($flag_alert eq 'yes') { print "flag_alert_yes\n"; } else { exit 0; }
-
-#rest of alert code proceeds here if alert set to 'yes'
-}}}
 ----
 
 Platforms KMZ file http://carocoops.org/spreadsheet/si.kmz
@@ -313,7 +277,43 @@ Captures basic metadata regarding
 Example http://spreadsheets.google.com/pub?key=rUevo3Uxo4Uyip3hLKWeA0Q
 
 Styled Google Map http://maps.google.com/?q=http://carocoops.org/spreadsheet/sm.kmz
+----
 
+== Simple alert/process script control via spreadsheet ==
+
+{{{
+use LWP::Simple;
+
+#CONFIG BEGIN
+my $sheet_key = 'rmo6mOkVVsEN7fLqwN_7Qsg';
+#CONFIG END
+
+#get sheet from registry
+my $sheet_url = "http://spreadsheets.google.com/pub?key=$sheet_key&output=csv&gid=0";
+my $retval = getstore($sheet_url,"./sheet.csv");
+die "Couldn't get $sheet_url" unless defined $retval;
+
+open (FILE,"./sheet.csv");
+
+my $row_count = 0;
+my $flag_alert = 'no';
+foreach my $row (<FILE>) {
+        $row_count++;
+
+        #print $row;
+        my @element = (split(',',$row));
+        if ($element[0] eq 'hfradar_savannah') {
+                if ($element[1] eq 'yes') { $flag_alert = 'yes'; }
+                last;
+        }
+}
+
+close (FILE);
+
+if ($flag_alert eq 'yes') { print "flag_alert_yes\n"; } else { exit 0; }
+
+#rest of alert code proceeds here if alert set to 'yes'
+}}}
 ----
 = google maps, javascript = 
 
