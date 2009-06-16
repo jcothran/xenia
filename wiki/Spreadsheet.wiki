@@ -281,6 +281,32 @@ Styled Google Map http://maps.google.com/?q=http://carocoops.org/spreadsheet/sm.
 
 == Simple alert/process script control via spreadsheet ==
 
+Trying the following to do some simple instrumentation email alert control and log some basic maintenance info as well.
+
+Created the public google spreadsheet at
+
+http://spreadsheets.google.com/pub?key=rmo6mOkVVsEN7fLqwN_7Qsg&gid=0
+
+This spreadsheet just has two sheets - the 'instrument' sheet and 'maintenance' sheet
+
+On the 'instrument' sheet I'm having my code look at the line with 'hfradar_savannah' at the 'alertEnabled' column to determine (yes or no) whether the alerts are enabled or not.  I've gone ahead and set it to 'no' for now and added a short line on the 'maintenance' sheet that could be used to add rows as the equipment is disabled/re-enabled.
+
+I would add the instrumentation staff google account(s) to the spreadsheet permissions so that they could edit the spreadsheet alert field to control the emails and leave maintenance notes.
+
+I can get a CSV dump of the sheets using the following commands
+
+#instrument (gid=0)
+
+http://spreadsheets.google.com/pub?key=rmo6mOkVVsEN7fLqwN_7Qsg&single=true&gid=0&output=csv
+
+#maintenance (gid=1)
+
+http://spreadsheets.google.com/pub?key=rmo6mOkVVsEN7fLqwN_7Qsg&single=true&gid=1&output=csv
+
+The google spreadsheets data/web API's allow me to plug my scripts in to automatically process/incorporate them with my data processing flows.
+
+Could also add additional status fields to describe the status of the instrumentation as it should be reflected to various feeds/services.
+
 {{{
 use LWP::Simple;
 
