@@ -16,6 +16,7 @@ Any personal/institutional information or passwords should not be included as pa
 #system
 users: root, user, xeniaprod
 files: /etc/hosts.allow
+applications: java/tomcat, geoserver
 
 #postgres
 users: postgres, xeniaprod
