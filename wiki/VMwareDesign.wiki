@@ -12,11 +12,27 @@ As an image or clone, any security weaknesses in one copy will be present in all
 
 Any personal/institutional information or passwords should not be included as part of the distributed image(remove/change before merge/distribution).
 
+
+#system
+users: root, user, xeniaprod
+files: 
+
+#postgres
+users: postgres, xeniaprod
+files: pg_hba.conf
+
+
 = Storage = 
 
 _Try to keep the distributed image physical disk size as small as possible._
 
 Relevant applications and software should be included on the image, but large associated datasets should be referenced off-image with documentation regarding access as a separate link or download.
+
+#system
+/usr2/data/xeniaprod
+
+#postgres
+/usr2/pg_data
 
 = Organization = 
 
