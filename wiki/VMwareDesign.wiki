@@ -15,7 +15,7 @@ Any personal/institutional information or passwords should not be included as pa
 
 #system
 users: root, user, xeniaprod
-files: 
+files: /etc/hosts.allow
 
 #postgres
 users: postgres, xeniaprod
