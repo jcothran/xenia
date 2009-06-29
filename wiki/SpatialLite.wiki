@@ -64,6 +64,7 @@ spatialite_DEPENDENCIES and LDADD
 3) also in /src/shell/Makefile added -liconv in the LDADD entry.
 
 For version2.3, the build is a little easier, however the directories on the ./configure script are still not used. The changes are as follows:
+
 1) Replace the paths for the libgeos libraries
 
 2) Replace the paths for the libproj libraries
