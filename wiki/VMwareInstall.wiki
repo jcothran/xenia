@@ -130,3 +130,57 @@ Per each virtual image instance/IP address as configured in the file /etc/networ
 vmware images can be referenced on the host machine vmware ui by placing or symbolically linking via the /var/lib/vmware/Virtual Machines folder
 
 Saw some notes regarding ethernet optimization/mishandling issues such as to run the command {{{ethtool -K eth1 sg off rx off tx off tso off}}} but did not utilize this command.
+----
+= VMware ESXi =
+
+Dan Ramage pointed me to the following article 
+http://bsd.slashdot.org/story/09/06/02/0043258/When-VMware-Performanc... 
+which 
+points out a variety of opinions comparing various virtualization issues - 
+one point that is highlighted by the opinions is the use in regards to 
+vmware products of the free 'ESXi' product instead of 'vmware server', the 
+main difference being that 'ESXi' runs directly on the server(bare-metal) 
+and does not suffer some of the performance penalties associated with 
+running on a host OS(Operating System).  I'll try the 'ESXi' install at some 
+point and glad to hear any feedback in regards to running 'ESXi' instead of 
+'vmware server' in regards to server virtualization. 
+
+== Update 2 = 
+Went through the VMware ESXi install process on one of the new Secoora 
+servers(Dell Poweredge 2950) here this week - it was very easy and 
+straightforward and proceeded the same as documented in the below 15 minute 
+video of the same. 
+http://vmwarevideos.govirtual.tv/vsphere-esxi-40-install-and-configure/
+ 
+ESXi is the recommended freeware 'bare metal' server install for the vmware 
+virtualization stuff.  VSphere is the related separate remote desktop 
+client(freeware download also) for managing the ESXi instance. 
+Should have a vmware image for analysis, redundancy/sharing that captures 
+most of the earlier aggregation and products scripts developed earlier for 
+Secoora http://code.google.com/p/xenia/wiki/VMwareProducts and moving 
+forward, still need possible redevelopment in regards to the earlier 
+'screen-scraping' moved to web-services(sara and vembu's scripts) and 
+Jesse's latest hourly maps as provided via the more recent database schema. 
+Also have refocused the scripts back towards a Postgresql database initial 
+use focus(due to multi-user/developer needs in-house between Dan and myself 
+and the popularity of Xenia/postgresql within the IOOS community) and Sqlite 
+more as a optional secondary or file archive purpose. 
+
+It was the ESXi 4.0 instance(64-bit) - after signing up with a vmware user
+account it will send you an email activation link with the license code.
+ The license code can be entered via the VSphere managment interface
+immediately or at the end of the 60 day evaluation (the full ESXi product I
+believe).
+The only snafus I ran into was installing ESXi to 'Disk1' controller first,
+the machine only wanted to boot off of 'Disk0' so reran with Disk0 as the
+option.
+
+Also having to work through getting the usual static IP, DNS issues
+and remote port access from my desktop subnet to the ESXi server IP.  Be sure to get your netmask and default gateway settings correct in the ESXi interface - I set my netmask to 255.255.0.0 so that I could manage the server(at 129.252.37.x) from a different subnet(129.252.139.x).
+
+The last two things to be aware of is that I needed to download the *vCenter converter* (VMware vCenter Converter Standalone 4.0.1 http://www.vmware.com/download/converter/ ) to my windows desktop and convert my earlier vmware server image to an ESXi image (the converter application supports a variety of other conversions as well).
+
+When moving my earlier vmware image to my desktop
+
+#2 GB file size limit for smbfs (use cifs)
+{{{mount -t cifs -o username=xxx,password=xxx,workgroup=xxx //xxx.xxx.xxx.xxx/temp /temp}}}
