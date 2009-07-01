@@ -151,7 +151,7 @@ running on a host OS(Operating System).  I'll try the 'ESXi' install at some
 point and glad to hear any feedback in regards to running 'ESXi' instead of 
 'vmware server' in regards to server virtualization. 
 
-== Update 2 = 
+== Update June 19 2009 = 
 Went through the VMware ESXi install process on one of the new Secoora 
 servers(Dell Poweredge 2950) here this week - it was very easy and 
 straightforward and proceeded the same as documented in the below 15 minute 
