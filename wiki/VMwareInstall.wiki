@@ -187,7 +187,7 @@ Also be aware of the need to download/install the *vCenter converter* (VMware vC
 
 When moving my earlier vmware image to my desktop I did run into a 2 gigabyte file size limitation with a samba mount(smbfs), which was addressed by mounting as 'cifs' instead which does not have the file size limitation
 
-#2 GB file size limit for smbfs (use cifs)
+#2 GB file size limit for smbfs (use cifs) <br/>
 {{{mount -t cifs -o username=xxx,password=xxx,workgroup=xxx //xxx.xxx.xxx.xxx/temp /temp}}}
 
 After migrating/converting and powering on the vmware image, I had to assign the correct IP as detailed earlier [http://code.google.com/p/xenia/wiki/VMwareInstall#static_ip here]   The vSphere application provides a variety of system metrics and a terminal/display console link for each vmware instance.
