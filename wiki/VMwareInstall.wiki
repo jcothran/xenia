@@ -2,7 +2,9 @@
 
 <wiki:toc max_depth="6" />
 
-= static IP, network bridge, iptables =
+= network bridge =
+
+*note - network bridge(this section instruction) only utilized for vmware player and server, not vmware ESXi *
 
 [http://code.google.com/p/xenia/wiki/XeniaUpdates#Additional_server_notes_-_static_IP,_network_bridge,_iptables original documentation]
 
@@ -13,6 +15,8 @@ For the 'virtual' server on the vmplayer menu at screen top, changed the 'Device
 You may also need to set the radio button 'wired network' from the top menu icon(circled in red) in the following image
 
 <img src="http://xenia.googlecode.com/files/screen_1.jpg" height=300 width=600>
+
+= static ip =
 
 The 'ifconfig' command will tell you which ethernet device the server is trying to communicate on.  For mine the host server was running 'eth0' and the virtual was running 'eth5'
 
@@ -42,6 +46,8 @@ Running 'ifconfig' command from virtual host listed ethernet as 'eth5' which is 
 I did not have to modify the defaulted dns file settings for host or virtual server files under /etc/resolv.conf 
 
 ----
+
+= iptables =
 
 With the network 'bridge' setting in the vmware player, any ports on the virtual server are bridged over the host server (use 'nmap' command to see open ports).  So with the gisvm image opened on the vmplayer I was able to see the apache web server sample webpage running on port 80 and J2EE/tomcat server sample webpage running on port 8080 from other machines.
 
