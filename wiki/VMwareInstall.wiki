@@ -159,8 +159,9 @@ video of the same.
 http://vmwarevideos.govirtual.tv/vsphere-esxi-40-install-and-configure/
  
 ESXi is the recommended freeware 'bare metal' server install for the vmware 
-virtualization stuff.  VSphere is the related separate remote desktop 
-client(freeware download also) for managing the ESXi instance. 
+virtualization stuff.  *vSphere* is the related separate remote desktop 
+client(freeware download also from the same ESXi download page) for managing the ESXi instance.  ESXi does not provide a management console *directly on the server* which means that you have to install/utilize *vSphere* to connect to and manage it.
+
 Should have a vmware image for analysis, redundancy/sharing that captures 
 most of the earlier aggregation and products scripts developed earlier for 
 Secoora http://code.google.com/p/xenia/wiki/VMwareProducts and moving 
@@ -186,7 +187,9 @@ and remote port access from my desktop subnet to the ESXi server IP.  Be sure to
 
 The last two things to be aware of is that I needed to download the *vCenter converter* (VMware vCenter Converter Standalone 4.0.1 http://www.vmware.com/download/converter/ ) to my windows desktop and convert my earlier vmware server image to an ESXi image (the converter application supports a variety of other conversions as well).
 
-When moving my earlier vmware image to my desktop
+When moving my earlier vmware image to my desktop I did run into a 2 gigabyte file size limitation with a samba mount(smbfs), which was addressed by mounting as 'cifs' instead which does not have the file size limitation
 
 #2 GB file size limit for smbfs (use cifs)
 {{{mount -t cifs -o username=xxx,password=xxx,workgroup=xxx //xxx.xxx.xxx.xxx/temp /temp}}}
+
+After migrating/converting and powering on the vmware image, I had to assign the correct IP as detailed at http://code.google.com/p/xenia/wiki/VMwareInstall#static_ip
