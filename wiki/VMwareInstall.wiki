@@ -131,7 +131,7 @@ Had a compile error on 'vmsock' but the install said this was not critical to th
 
 One problem I ran into was that VMware server configured vmnet0 (only shows up in the process list 'ps -auxf' not via 'ifconfig' command) to eth0 and eth0 was not bridging ('x' symbol in the server maintenance ui).  Switched vmnet0 over to eth1 via the {{{/usr/bin/vmware-config.pl}}} script which did bridge correctly.
 
-Per each virtual image instance/IP address as configured in the file /etc/network/interfaces, make sure to set your ethx (eth7,eth8,etc)  connection correctly the same as found in the 'ifconfig' listing  setting and restart via {{{/etc/init.d/networking restart}}}  The correct image IP listing should also show up in the vmware server maintenance ui.
+Per each virtual image instance/IP address as configured in the file /etc/network/interfaces, make sure to set your ethx (eth7,eth8,etc)  connection correctly the same as found in the 'ifconfig' listing  setting and restart via {{{/etc/init.d/networking restart}}}  See earlier notes [http://code.google.com/p/xenia/wiki/VMwareInstall#static_ip here]  The correct image IP listing should also show up in the vmware server maintenance ui.
 
 vmware images can be referenced on the host machine vmware ui by placing or symbolically linking via the /var/lib/vmware/Virtual Machines folder
 
@@ -190,4 +190,4 @@ When moving my earlier vmware image to my desktop I did run into a 2 gigabyte fi
 #2 GB file size limit for smbfs (use cifs)
 {{{mount -t cifs -o username=xxx,password=xxx,workgroup=xxx //xxx.xxx.xxx.xxx/temp /temp}}}
 
-After migrating/converting and powering on the vmware image, I had to assign the correct IP as detailed at http://code.google.com/p/xenia/wiki/VMwareInstall#static_ip  The vSphere application provides a variety of system metrics and a terminal/display console link for each vmware instance.
+After migrating/converting and powering on the vmware image, I had to assign the correct IP as detailed earlier [http://code.google.com/p/xenia/wiki/VMwareInstall#static_ip here]   The vSphere application provides a variety of system metrics and a terminal/display console link for each vmware instance.
