@@ -174,22 +174,20 @@ and the popularity of Xenia/postgresql within the IOOS community) and Sqlite
 more as a optional secondary or file archive purpose. 
 
 It was the ESXi 4.0 instance(64-bit) - after signing up with a vmware user
-account it will send you an email activation link with the license code.
- The license code can be entered via the VSphere managment interface
-immediately or at the end of the 60 day evaluation (the full ESXi product I
-believe).
+account it will send you an email activation link with the license code.  The license code can be entered via the VSphere managment interface immediately or at the end of the 60 day evaluation (the full ESXi product I believe).
+
 The only snafus I ran into was installing ESXi to 'Disk1' controller first,
 the machine only wanted to boot off of 'Disk0' so reran with Disk0 as the
 option.
 
-Also having to work through getting the usual static IP, DNS issues
+Also had to work through getting the usual static IP, DNS issues
 and remote port access from my desktop subnet to the ESXi server IP.  Be sure to get your netmask and default gateway settings correct in the ESXi interface - I set my netmask to 255.255.0.0 so that I could manage the server(at 129.252.37.x) from a different subnet(129.252.139.x).
 
-The last two things to be aware of is that I needed to download the *vCenter converter* (VMware vCenter Converter Standalone 4.0.1 http://www.vmware.com/download/converter/ ) to my windows desktop and convert my earlier vmware server image to an ESXi image (the converter application supports a variety of other conversions as well).
+Also be aware of the need to download/install the *vCenter converter* (VMware vCenter Converter Standalone 4.0.1 http://www.vmware.com/download/converter/ ) I downloaded/installed to my windows desktop and convert my earlier vmware server image to an ESXi image (the converter application supports a variety of other conversions as well).
 
 When moving my earlier vmware image to my desktop I did run into a 2 gigabyte file size limitation with a samba mount(smbfs), which was addressed by mounting as 'cifs' instead which does not have the file size limitation
 
 #2 GB file size limit for smbfs (use cifs)
 {{{mount -t cifs -o username=xxx,password=xxx,workgroup=xxx //xxx.xxx.xxx.xxx/temp /temp}}}
 
-After migrating/converting and powering on the vmware image, I had to assign the correct IP as detailed at http://code.google.com/p/xenia/wiki/VMwareInstall#static_ip
+After migrating/converting and powering on the vmware image, I had to assign the correct IP as detailed at http://code.google.com/p/xenia/wiki/VMwareInstall#static_ip  The vSphere application provides a variety of system metrics and a terminal/display console link for each vmware instance.
