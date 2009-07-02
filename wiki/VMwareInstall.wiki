@@ -18,7 +18,7 @@ You may also need to set the radio button 'wired network' from the top menu icon
 
 = static ip =
 
-The 'ifconfig' command will tell you which ethernet device the server is trying to communicate on.  For mine the host server was running 'eth0' and the virtual was running 'eth5'
+The {{{ifconfig}}} command will tell you which ethernet device the server is trying to communicate on({{{ifconfig -a}}} will show all available devices).  For mine the host server was running 'eth0' and the virtual was running 'eth5'
 
 from http://forums.techarena.in/operating-systems/1106661.htm
 
@@ -125,13 +125,79 @@ Successfully installed VMware Server 2.0.1 on Ubuntu 8.10
 
 The vmware server is installed via the vmware-install.pl script and starts the services at the end of a successful install.  The vmware server maintenance ui is accessed via browser at http://localhost:8222 or secure port https://localhost:8333
 
+If accessing the terminal console from a remote desktop via the vmware browser interface, you'll need a browser plug-in - the only one of which I found that worked was for Firefox.  See this related [http://www.google.com/support/forum/p/Chrome/thread?tid=1e2eceea54682f11&hl=en link] regarding the plug-in also.
+
+All connections are 'bridged',  see [http://communities.vmware.com/thread/89314 NAT versus Bridged]
+
 == Problems, workarounds ==
 
 Had a compile error on 'vmsock' but the install said this was not critical to the usual processes.  Not having it compiled does not seem to create any noticeable issue.
 
 One problem I ran into was that VMware server configured vmnet0 (only shows up in the process list 'ps -auxf' not via 'ifconfig' command) to eth0 and eth0 was not bridging ('x' symbol in the server maintenance ui).  Switched vmnet0 over to eth1 via the {{{/usr/bin/vmware-config.pl}}} script which did bridge correctly.
 
-Per each virtual image instance/IP address as configured in the file /etc/network/interfaces, make sure to set your ethx (eth7,eth8,etc)  connection correctly the same as found in the 'ifconfig' listing  setting and restart via {{{/etc/init.d/networking restart}}}  See earlier notes [http://code.google.com/p/xenia/wiki/VMwareInstall#static_ip here]  The correct image IP listing should also show up in the vmware server maintenance ui.
+----
+
+root@nwstwo:/usr/local/download/vmware-server-distrib/bin# vmware-config.pl 
+
+#accept default until...
+{{{
+The following virtual networks have been defined:
+
+. vmnet0 is bridged to eth0
+
+Do you wish to make any changes to the current virtual networks settings? 
+(yes/no) [no] yes
+
+Which virtual network do you wish to configure? (0-254) 0
+
+The network vmnet0 has been reserved for a bridged network.  You may change it,
+but it is highly recommended that you use it as a bridged network.  Are you 
+sure you want to modify it? (yes/no) [no] yes
+
+What type of virtual network do you wish to set vmnet0? 
+(bridged,hostonly,nat,none) [bridged] 
+
+Configuring a bridged network for vmnet0.
+
+Please specify a name for this network. 
+[Bridged] 
+
+Your computer has multiple ethernet network interfaces available: eth1, eth0. 
+Which one do you want to bridge to vmnet0? [eth0] eth1
+
+The following virtual networks have been defined:
+
+. vmnet0 is bridged to eth1
+
+Do you wish to make additional changes to the current virtual networks 
+settings? (yes/no) [yes] no
+}}}
+...
+accept defaults
+
+----
+from http://communities.vmware.com/thread/113990
+
+There's no vmnet0 device.
+To check if eth0 is bridged to vmnet0 check the output of
+{{{ps ax | grep bridge}}}
+
+it should be similar to
+{{{3175 ?        S      0:00 /usr/bin/vmnet-bridge -d /var/run/vmnet-bridge-0.pid /dev/vmnet0 eth0}}}
+----
+also ran into the following error/fix when trying to restart the network
+
+{{{SIOCADDRT: File exists}}}
+
+from http://techandit.com/?p=145
+
+{{{
+A common tactic used to clone a system running under VMWare, is to simply shut down the virtual server, make a copy of the files that form the virtual server, and register the copy with VMWare and boot the server, without networking and reconfigure the network interfaces.
+However when I clone Ubuntu 7.10 systems, I always find that the network interface doesn’t exist on the cloned machine. The fix for this problem is to delete the file /etc/udev/rules.d/70-persistent-net.rules , which is responsible for mapping network device names to physical (or virtual in this case) network devices. You then need to reboot the system to allow the change to take effect. Restarting the network service isn’t enough.
+I’ve also had some strange problems after trying to add persistent routes to the file /etc/network/interfaces on virtual guests, which would generate the error SIOCADDRT: File exists. Deleting the above file and restarting the system also resolves this issue.}}}
+
+
+Per each virtual image instance/IP address as configured in the file /etc/network/interfaces, make sure to set your ethx (eth7,eth8,etc)  connection correctly the same as found in the 'ifconfig' listing  setting and restart via {{{/etc/init.d/networking restart}}}  See earlier notes [http://code.google.com/p/xenia/wiki/VMwareInstall#static_ip here]  The correct image IP listing should also show up in the vmware server maintenance ui.  Also you may need to run your host on a separate IP than your vmware instances so there is not competition for the IP address resolution.
 
 vmware images can be referenced on the host machine vmware ui by placing or symbolically linking via the /var/lib/vmware/Virtual Machines folder
 
