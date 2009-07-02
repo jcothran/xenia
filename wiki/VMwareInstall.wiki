@@ -179,10 +179,10 @@ accept defaults
 from http://communities.vmware.com/thread/113990
 
 There's no vmnet0 device.
-To check if eth0 is bridged to vmnet0 check the output of
+To check if eth0 is bridged to vmnet0 check the output of <br/>
 {{{ps ax | grep bridge}}}
 
-it should be similar to
+it should be similar to <br/>
 {{{3175 ?        S      0:00 /usr/bin/vmnet-bridge -d /var/run/vmnet-bridge-0.pid /dev/vmnet0 eth0}}}
 ----
 also ran into the following error/fix when trying to restart the network
@@ -196,7 +196,7 @@ A common tactic used to clone a system running under VMWare, is to simply shut d
 However when I clone Ubuntu 7.10 systems, I always find that the network interface doesn’t exist on the cloned machine. The fix for this problem is to delete the file /etc/udev/rules.d/70-persistent-net.rules , which is responsible for mapping network device names to physical (or virtual in this case) network devices. You then need to reboot the system to allow the change to take effect. Restarting the network service isn’t enough.
 I’ve also had some strange problems after trying to add persistent routes to the file /etc/network/interfaces on virtual guests, which would generate the error SIOCADDRT: File exists. Deleting the above file and restarting the system also resolves this issue.
 }}}
-
+----
 
 Per each virtual image instance/IP address as configured in the file /etc/network/interfaces, make sure to set your ethx (eth7,eth8,etc)  connection correctly the same as found in the 'ifconfig' listing  setting and restart via {{{/etc/init.d/networking restart}}}  See earlier notes [http://code.google.com/p/xenia/wiki/VMwareInstall#static_ip here]  The correct image IP listing should also show up in the vmware server maintenance ui.  Also you may need to run your host on a separate IP than your vmware instances so there is not competition for the IP address resolution.
 
