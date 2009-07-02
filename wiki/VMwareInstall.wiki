@@ -127,7 +127,7 @@ The vmware server is installed via the vmware-install.pl script and starts the s
 
 If accessing the terminal console from a remote desktop via the vmware browser interface, you'll need a browser plug-in - the only one of which I found that worked was for Firefox.  See this related [http://www.google.com/support/forum/p/Chrome/thread?tid=1e2eceea54682f11&hl=en link] regarding the plug-in also.  The console may open to a black screen and you may need to gain window focus and press a key to see the display.
 
-All connections are 'bridged',  see [http://communities.vmware.com/thread/89314 NAT versus Bridged]
+All connections are 'bridged',  see [http://communities.vmware.com/thread/89314 NAT versus Bridged]  Note also that you can modify the 'Configuration' settings directly by modifying the .vmx file and rebooting the image.
 
 == Problems, workarounds ==
 
