@@ -125,7 +125,7 @@ Successfully installed VMware Server 2.0.1 on Ubuntu 8.10
 
 The vmware server is installed via the vmware-install.pl script and starts the services at the end of a successful install.  The vmware server maintenance ui is accessed via browser at http://localhost:8222 or secure port https://localhost:8333
 
-If accessing the terminal console from a remote desktop via the vmware browser interface, you'll need a browser plug-in - the only one of which I found that worked was for Firefox.  See this related [http://www.google.com/support/forum/p/Chrome/thread?tid=1e2eceea54682f11&hl=en link] regarding the plug-in also.
+If accessing the terminal console from a remote desktop via the vmware browser interface, you'll need a browser plug-in - the only one of which I found that worked was for Firefox.  See this related [http://www.google.com/support/forum/p/Chrome/thread?tid=1e2eceea54682f11&hl=en link] regarding the plug-in also.  The console may open to a black screen and you may need to gain window focus and press a key to see the display.
 
 All connections are 'bridged',  see [http://communities.vmware.com/thread/89314 NAT versus Bridged]
 
