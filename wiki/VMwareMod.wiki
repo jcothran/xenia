@@ -56,7 +56,11 @@ sudo apt-get install python-setuptools #Used to install the easy_install package
 sudo apt-get install python-pysqlite2  #SQLite python DB package.
 sudo apt-get install python2.5-psycopg2#PostGres python DB package.
 sudo apt-get install python2.5-lxml    #XML parser.
+sudo easy_install simplejson           #JSON parser used by the python-twitter package
+sudo easy_install python-twitter
 }}}
+
+
 {{{
 installed google earth to desktop, but slow display with only OpenGL
 == GE uses OpenGL so slow unless optimized for particular graphics card
