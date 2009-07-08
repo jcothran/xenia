@@ -22,6 +22,7 @@ applications: java/tomcat, geoserver
 users: postgres, xeniaprod
 files: pg_hba.conf
 
+/home/xeniaprod/config
 
 = Storage = 
 
