@@ -77,7 +77,7 @@ The username associated with the xenia development is *xeniaprod* with password 
 
 The username *user* has password *user999* although this user account is not utilized.  Modify this password as needed.
 
-Both users *xeniaprod* and *user* are part of the *admin* group {{{sudo vi /etc/group}}} which is a 'sudo' {{{sudo vi /etc/sudoers}}} enabled group.
+Both users *xeniaprod* and *user* are part of the *admin* group ({{{sudo vi /etc/group}}}) which is a 'sudo' ({{{sudo vi /etc/sudoers}}}) enabled group.
 
 See the other gisvm related passwords [http://www.vmware.com/appliances/directory/55606 here] and modify as needed.
 
