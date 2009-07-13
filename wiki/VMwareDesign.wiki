@@ -51,3 +51,58 @@ The folders/scripts under /home/xeniaprod should reflect the same xenia project 
 Try to make configuration easier by placing all configuration options and security information within the same or a few *config files* (say in XML format).  Failing this, try to use comment LABELS which are documented and easily seen and searched for in the code.
 
 Try to make common code *flexible enough for reuse in a variety of possible contexts*.  For instance, would prefer to have one script with a few database flag options (Oracle,SQL Server, PostgreSQL, MySQL, Sqlite, etc) than several scripts which only vary by their database connection method and small differences in SQL syntax.
+
+= Checklist =
+
+{{{
+search for #VM_CONFIG in effected files
+
+#stop crons - root, xeniaprod
+
+#enable #VM_CONFIG
+xeniaprod: crontab -e
+
+#enable feeds as needed
+/home/xeniaprod/cron/getObskml.sh
+/home/xeniaprod/cron/mk_xenia_all_latest.sh
+
+=
+#postgres
+optional - database size on /usr2, delete old records - vacuum
+
+user passwds - postgres,xeniaprod
+psql -U postgres -h xxx.xxx.xxx.xxx
+alter user postgres with password 'postgres99';
+alter user xeniaprod with password 'xeniaprod99';
+
+#enable #VM_CONFIG ip addresses
+sudo vi /usr2/pg_data/pg_hba.conf
+
+cd /home/xeniaprod/config #database user/password
+  dbConfig.ini
+  environment_xenia_default.xml
+
+/etc/hosts.allow  #ssh ip access
+
+=
+#reset user passwds to public defaults - user,root,xeniaprod,postgres - as root, passwd <username>
+
+#remove hidden log, history files
+cd /home/xeniaprod
+ls -la -sort
+
+rm .sqlite_history 
+rm .ssh/known_hosts 
+rm .gnuplot_history
+rm .bash_history 
+rm .psql_history 
+rm /var/lib/postgresql/.psql_history
+
+#remove old log, tmp files under /usr2
+
+=
+clear users history (history -c)
+
+=
+optional - reboot, check ps-auxf, top
+}}}
