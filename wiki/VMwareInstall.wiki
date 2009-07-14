@@ -49,6 +49,8 @@ I did not have to modify the defaulted dns file settings for host or virtual ser
 
 = iptables =
 
+*note - this section on iptables can be skipped*
+
 With the network 'bridge' setting in the vmware player, any ports on the virtual server are bridged over the host server (use 'nmap' command to see open ports).  So with the gisvm image opened on the vmplayer I was able to see the apache web server sample webpage running on port 80 and J2EE/tomcat server sample webpage running on port 8080 from other machines.
 
 Currently only have port 80 open to machines outside the university network and wanted to show the geoserver demo applications running on port 8080 so used the following iptables commands (on the virtual server) to port forward 80 to 8080.
