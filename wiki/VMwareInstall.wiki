@@ -79,6 +79,8 @@ sshd : ALL : deny
 
 == image default users, passwords ==
 
+#reset user passwds to public defaults - user,root,xeniaprod,postgres - as root, passwd <username>
+
 The *root* user has password *root99*.  Modify this password as needed.
 
 The *postgres* user has password *postgres99*.  Modify this password as needed.
@@ -103,6 +105,38 @@ find . -name "*.pl" -exec grep -H "129.252.37.90" {} \;
 find . -name "*.xml" -exec grep -H "129.252.37.90" {} \;
 }}}
 
+{{{
+search for #VM_CONFIG in effected files
+
+/etc/hosts.allow  #ssh ip access
+
+=
+#postgres
+optional - database size on /usr2, delete old records - vacuum
+
+user passwds - postgres,xeniaprod
+psql -U postgres -h xxx.xxx.xxx.xxx
+alter user postgres with password 'xxx';
+alter user xeniaprod with password 'xxx';
+
+#enable #VM_CONFIG ip addresses
+sudo vi /usr2/pg_data/pg_hba.conf
+
+cd /home/xeniaprod/config #database user/password
+  dbConfig.ini
+  environment_xenia_default.xml
+
+#enable feeds as needed
+/home/xeniaprod/cron/getObskml.sh
+/home/xeniaprod/cron/mk_xenia_all_latest.sh
+
+search for #VM_CONFIG in effected crons (crontab -e)
+#start crons - root, xeniaprod
+
+check output graphs(.png) under http://xxx.xxx.xxx.xxx/xenia/feeds after a few hours to verify feed processing/population
+
+}}}
+
 == postgresql or sqlite == 
 
 The latest version of the vmware image is configured to utilize a postgresql/postgis relational database while the earlier version utilized a sqlite file-based relational database.
@@ -115,7 +149,7 @@ Similarly the symbolic links(time_series, sos) under /var/www/xenia are linked t
 
 *sudo* all commands that need root access.
 
-To sudo between users, use the first user password(user999 in the below example) not the target user password
+To sudo between users, use the first user password(user99 in the below example) not the target user password
 {{{
 user@gisvm:~$ sudo su - xeniaprod
 [sudo] password for user:
