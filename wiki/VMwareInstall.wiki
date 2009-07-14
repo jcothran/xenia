@@ -1,7 +1,5 @@
 #summary running a server production instance
 
-see also http://code.google.com/p/xenia/wiki/VMwareDesign#Checklist
-
 <wiki:toc max_depth="6" />
 
 = Setup =
@@ -96,6 +94,8 @@ See the other gisvm related passwords [http://www.vmware.com/appliances/director
 == host substitutions, configuration ==
 
 If you plan to run a production xenia vmware instance accessible by others on the web, search the xeniaprod code from the following directory to see the necessary localhost substitutions(for your production machine http address) or other configuration options.
+
+see also http://code.google.com/p/xenia/wiki/VMwareDesign#Checklist
 
 {{{
 cd /home/xeniaprod
