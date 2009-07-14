@@ -1,6 +1,7 @@
 #summary taking the vmware image for a quick spin
 
 see also [VMwareHome]
+see also [VMwareInstall]
 
 <wiki:toc max_depth="6" /> 
 
