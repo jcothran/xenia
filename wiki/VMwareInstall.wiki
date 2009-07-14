@@ -2,7 +2,9 @@
 
 <wiki:toc max_depth="6" />
 
-= network bridge =
+= Setup =
+
+== network bridge ==
 
 *note - network bridge(this section instruction) only utilized for vmware player and server, not vmware ESXi *
 
@@ -16,7 +18,7 @@ You may also need to set the radio button 'wired network' from the top menu icon
 
 <img src="http://xenia.googlecode.com/files/screen_1.jpg" height=300 width=600>
 
-= static ip =
+== static ip ==
 
 The {{{ifconfig}}} command will tell you which ethernet device the server is trying to communicate on({{{ifconfig -a}}} will show all available devices).  For mine the host server was running 'eth0' and the virtual was running 'eth5'
 
@@ -47,7 +49,7 @@ I did not have to modify the defaulted dns file settings for host or virtual ser
 
 ----
 
-= iptables =
+== iptables ==
 
 *note - this section on iptables can be skipped*
 
@@ -62,7 +64,7 @@ iptables -t nat -A OUTPUT -d 129.252.37.90 -p tcp --dport 80 -j REDIRECT --to-po
 iptables -t nat -A PREROUTING -d 129.252.37.90 -p tcp --dport 80 -j REDIRECT --to-ports 8080
 }}}
 
-= openssh =
+== openssh ==
 
 The initial image runs an openssh daemon which accepts no outside connects via the /etc/hosts.allow file below.  Modify the hosts.allow,hosts.deny files as necessary for access/security purposes.
 
@@ -73,7 +75,7 @@ file /etc/hosts.allow
 sshd : ALL : deny
 }}}
 
-= image default users, passwords =
+== image default users, passwords ==
 
 The *root* user has password *root99*.  Modify this password as needed.
 
@@ -87,7 +89,7 @@ Both users *xeniaprod* and *user* are part of the *admin* group ({{{sudo vi /etc
 
 See the other gisvm related passwords [http://www.vmware.com/appliances/directory/55606 here] and modify as needed.
 
-= host substitutions, configuration =
+== host substitutions, configuration ==
 
 If you plan to run a production xenia vmware instance accessible by others on the web, search the xeniaprod code from the following directory to see the necessary localhost substitutions(for your production machine http address) or other configuration options.
 
@@ -99,7 +101,7 @@ find . -name "*.pl" -exec grep -H "localhost" {} \;
 find . -name "*.xml" -exec grep -H "localhost" {} \;
 }}}
 
-= postgresql or sqlite = 
+== postgresql or sqlite == 
 
 The latest version of the vmware image is configured to utilize a postgresql/postgis relational database while the earlier version utilized a sqlite file-based relational database.
 
@@ -107,7 +109,7 @@ These changes are reflected in the xeniaprod crontab with xeniaflow_postgresql.s
 
 Similarly the symbolic links(time_series, sos) under /var/www/xenia are linked to postgresql branch instead of sqlite one.
 
-= miscellaneous =
+== miscellaneous ==
 
 *sudo* all commands that need root access.
 
@@ -125,6 +127,11 @@ The file */home/xeniaprod/cron/xeniaflow.sh* creates all the subsequent related 
 Xenia related log files are at /home/xeniaprod/tmp and cleared nightly.
 
 Apache user(www-data) created related temporary files are at /home/xeniaprod/tmp_web and cleared nightly.
+
+== ObsKML ==
+
+If you are ready to start pulling new data into your system, see
+http://code.google.com/p/xenia/wiki/VMwareTest#Adding_a_new_ObsKML_feed
 
 ----
 = VMware Server =
