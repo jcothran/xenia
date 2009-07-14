@@ -27,7 +27,7 @@ see http://www.vmware.com/products/fusion
 
 = Download the vmware image instance =
 
-The latest vmware image(version 1.0, rar-compressed size 1.5 GB, uncompressed 6 GB) is available at http://neptune.baruch.sc.edu/xenia/vmware_dist/xeniavm20090213.rar
+The latest vmware image(version 20090713, compressed size 4 GB, uncompressed 16 GB) is available at http://neptune.baruch.sc.edu/xenia/vmware_dist/vmware/xeniavm20090713/
 
 This vmware image was developed on top of the FOSS geospatial vmware image(geostatistics package which includes 'R') available at http://gisvm.com ([http://www.vmware.com/appliances/directory/55606 appliance description]) - thanks to Ricardo Pinho.
 
@@ -43,7 +43,7 @@ The image being played may report in the player title the gisvm version 'gisvm20
 
 For the 'virtual' server on the vmplayer menu at screen top, changed the 'Devices->Network Adapter' setting to 'Bridged' which establishes network communication between the virtual server and host.
 
-The image should boot to a command line user login.  Login as user *xeniaprod* with password *xeniaprod999*
+The image should boot to a command line user login.  Login as user *xeniaprod* with password *xeniaprod99*
 
 I have the GUI display (gdm) disabled by default.  To start a GUI session enter the following command and wait for the GUI to display.
 {{{
