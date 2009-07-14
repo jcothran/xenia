@@ -73,9 +73,13 @@ sshd : ALL : deny
 
 = image default users, passwords =
 
-The username associated with the xenia development is *xeniaprod* with password *xeniaprod999*  Modify this password as needed.
+The *root* user has password *root99*.  Modify this password as needed.
 
-The username *user* has password *user999* although this user account is not utilized.  Modify this password as needed.
+The *postgres* user has password *postgres99*.  Modify this password as needed.
+
+The username associated with the xenia development is *xeniaprod* with password *xeniaprod99*  Modify this password as needed.
+
+The username *user* has password *user99* although this user account is not utilized.  Modify this password as needed.
 
 Both users *xeniaprod* and *user* are part of the *admin* group ({{{sudo vi /etc/group}}}) which is a 'sudo' ({{{sudo vi /etc/sudoers}}}) enabled group.
 
