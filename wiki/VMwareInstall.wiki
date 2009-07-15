@@ -320,7 +320,7 @@ Start the vCenter application (which can also be used to convert a variety of vm
 
 Click 'Convert Machine' button towards top of window menu
 
-==
+----
 On the 'Specify Source' tab window,
 
 'Select source type' : choose the last option 'Virtual appliance'
@@ -329,7 +329,7 @@ and 'Browse' to the folder which contains both the .ovf file and .vmdk file (xen
 
 click 'Next' button, and 'Next' again through 'Appliance details' window
 
-==
+----
 On the 'Specify Destination' tab window
 
 'Select destination type':'VMware Infrastructure virtual machine'
@@ -337,12 +337,12 @@ and then choose the IP address, root login/password for the ESXi server
 
 click 'Next' button, and 'Next' again through 'Host/Resource' window(note that the image will be transferred to one of the available 'datastore's which are the ESXi servers hard drive(s).
 
-==
+----
 On the 'View/Edit Options' tab window
 
 click 'Next' but note that the processor, memory and disk options can be edited here - I'm currently still using the default '1 processor, 512 MB memory' setup although it would probably be worth experimenting with '2 processor' and larger memory,etc to see if any large improvements in the image performance.
 
-==
+----
 On the 'Ready to Complete' tab window
 
 click 'Finish' and the image transfer process begins and should take about an hour or less(progress meter is shown in vCenter application).
@@ -354,5 +354,3 @@ From the vSphere application, you should be able to 'see' the new vmware image a
 The finishing configuration part is detailed at http://code.google.com/p/xenia/wiki/VMwareInstall#static_ip (skip the sections about 'ip tables' and 'postgresql or sqlite') through the 'miscellaneous' section.
 
 After that let the server run for a day and see that you're getting data and its generating the variety of formats/services detailed at http://code.google.com/p/xenia/wiki/VMwareProducts
-
-
