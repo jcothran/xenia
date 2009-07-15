@@ -269,7 +269,7 @@ running on a host OS(Operating System).  I'll try the 'ESXi' install at some
 point and glad to hear any feedback in regards to running 'ESXi' instead of 
 'vmware server' in regards to server virtualization. 
 
-== Update June 19 2009 = 
+== Update June 19 2009 ==
 Went through the VMware ESXi install process on one of the new Secoora 
 servers(Dell Poweredge 2950) here this week - it was very easy and 
 straightforward and proceeded the same as documented in the below 15 minute 
@@ -309,3 +309,50 @@ When moving my earlier vmware image to my desktop I did run into a 2 gigabyte fi
 {{{mount -t cifs -o username=xxx,password=xxx,workgroup=xxx //xxx.xxx.xxx.xxx/temp /temp}}}
 
 After migrating/converting and powering on the vmware image, I had to assign the correct IP as detailed earlier [http://code.google.com/p/xenia/wiki/VMwareInstall#static_ip here]   The vSphere application provides a variety of system metrics and a terminal/display console link for each vmware instance.
+
+== vCenter, vSphere image transfer/startup instructions ==
+
+If the final .vmdk file size is correct(4236256768 bytes), the next step is to get the image onto ESXi via the vCenter desktop tool.
+
+vCenter converter (VMware vCenter Converter Standalone 4.0.1http://www.vmware.com/download/converter/
+
+Start the vCenter application (which can also be used to convert a variety of vmware products or existing windows/linux servers into vmware images)
+
+Click 'Convert Machine' button towards top of window menu
+
+==
+On the 'Specify Source' tab window,
+
+'Select source type' : choose the last option 'Virtual appliance'
+'Location':'File System'
+and 'Browse' to the folder which contains both the .ovf file and .vmdk file (xeniavm20090713.ovf, xeniavm20090713.vmdk)
+
+click 'Next' button, and 'Next' again through 'Appliance details' window
+
+==
+On the 'Specify Destination' tab window
+
+'Select destination type':'VMware Infrastructure virtual machine'
+and then choose the IP address, root login/password for the ESXi server
+
+click 'Next' button, and 'Next' again through 'Host/Resource' window(note that the image will be transferred to one of the available 'datastore's which are the ESXi servers hard drive(s).
+
+==
+On the 'View/Edit Options' tab window
+
+click 'Next' but note that the processor, memory and disk options can be edited here - I'm currently still using the default '1 processor, 512 MB memory' setup although it would probably be worth experimenting with '2 processor' and larger memory,etc to see if any large improvements in the image performance.
+
+==
+On the 'Ready to Complete' tab window
+
+click 'Finish' and the image transfer process begins and should take about an hour or less(progress meter is shown in vCenter application).
+
+After the transfer is complete,
+
+From the vSphere application, you should be able to 'see' the new vmware image available for 'Power On' under the server inventory list in the left-hand column drop-down. you should be able to 'see' the new vmware image available for 'Power On' under the server inventory list in the left-hand column drop-down.  Go ahead select the 'xeniavm20090713' image and 'power on'(the play symbol in the menu) the image.  Click the 'Summary' tab in the right-side pane after the image is powered on and choose the 'Open Console' option under the 'Commands' section to bring up a terminal session.  You should be able to login to the server as user 'xeniaprod' with password 'xeniaprod99'.
+
+The finishing configuration part is detailed at http://code.google.com/p/xenia/wiki/VMwareInstall#static_ip (skip the sections about 'ip tables' and 'postgresql or sqlite') through the 'miscellaneous' section.
+
+After that let the server run for a day and see that you're getting data and its generating the variety of formats/services detailed at http://code.google.com/p/xenia/wiki/VMwareProducts
+
+
