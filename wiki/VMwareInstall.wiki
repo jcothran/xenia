@@ -314,7 +314,7 @@ After migrating/converting and powering on the vmware image, I had to assign the
 
 If the final .vmdk file size is correct(4236256768 bytes), the next step is to get the image onto ESXi via the vCenter desktop tool.
 
-vCenter converter (VMware vCenter Converter Standalone 4.0.1http://www.vmware.com/download/converter/
+vCenter converter - VMware vCenter Converter Standalone 4.0.1 http://www.vmware.com/download/converter/
 
 Start the vCenter application (which can also be used to convert a variety of vmware products or existing windows/linux servers into vmware images)
 
