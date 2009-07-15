@@ -1,0 +1,11 @@
+#summary vmware download instructions
+
+The current download location for the associated files for the latest vmware image are at 
+
+http://129.252.37.86/vmware/
+
+Due to the large filesize of the .vmdk image (4 Gigabyte compressed, 16 Gigabyte uncompressed), this file has been split into smaller files which can be rejoined using the Unix 'cat' command like below:
+
+{{{cat multi* > xeniavm20090713.vmdk}}}
+
+The 'cat' command for the Windows environment can be downloaded from http://unxutils.sourceforge.net/UnxUtils.zip
