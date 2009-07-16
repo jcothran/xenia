@@ -103,7 +103,7 @@ Would like to facilitate any additional ideas, discussion or code developments/b
 
 ----
 
-= Related links = 
+= Related technical links = 
 
 http://mapserver.gis.umn.edu <br/>
 http://geoserver.org <br/>
