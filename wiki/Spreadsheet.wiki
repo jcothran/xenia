@@ -343,6 +343,8 @@ if ($flag_alert eq 'yes') { print "flag_alert_yes\n"; } else { exit 0; }
 ----
 = google maps, javascript = 
 
+http://econym.org.uk/gmap/
+
 == !TimeMap ==
 !TimeMap includes a scrollable timeslider element to google maps that changes the placemarks according to the time window.
 
