@@ -105,27 +105,20 @@ Would like to facilitate any additional ideas, discussion or code developments/b
 
 = Related links = 
 
-http://mapserver.gis.umn.edu
-
-http://geoserver.org
-
-http://openlayers.org
-
-http://tilecache.org
-
-http://www.opengeospatial.org/standards
-
-http://postgresql.org
-
-http://postgis.refractions.net
-
+http://mapserver.gis.umn.edu <br/>
+http://geoserver.org <br/>
+http://openlayers.org <br/>
+http://tilecache.org <br/>
+http://www.opengeospatial.org/standards <br/>
+http://postgresql.org <br/>
+http://postgis.refractions.net <br/>
 http://sqlite.org
 
 ----
 = Related efforts = 
 
-http://ioos.noaa.gov/program/
-http://www.csc.noaa.gov/cir
+http://ioos.noaa.gov/program/ <br/>
+http://www.csc.noaa.gov/cir <br/>
 http://trac.secoora.org
 
 ----
