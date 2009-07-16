@@ -354,3 +354,25 @@ From the *vSphere* application, you should be able to 'see' the new vmware image
 The finishing configuration part is detailed at http://code.google.com/p/xenia/wiki/VMwareInstall#static_ip (skip the sections about 'ip tables' and 'postgresql or sqlite') through the 'miscellaneous' section.
 
 After that let the server run for a day and see that you're getting data and its generating the variety of formats/services detailed at http://code.google.com/p/xenia/wiki/VMwareProducts
+
+== Entering vmware license key == 
+
+To enter your ESXi license key (shown on the earlier vmware download page when logged into the vmware website with your vmware account)
+
+from the vSphere application:
+
+from http://communities.vmware.com/thread/220594;jsessionid=11B1C53FDBB3284777221D14AD00D6D9?tstart=0
+
+In order to enter the serial number in your ESX4i host
+
+Home -> Inventory -> top level (your ESXi Host)
+Configuration Tab
+Left-hand side - Licensed features
+Edit -> Assign new key to this host -> Enter Key
+Paste your key
+Confirm all the rest 
+Your ESXi Server is now fully licensed
+
+Please note - you will only have the basic functionality and all the enterprise features that came with the Evaluation License are no longer valid
+
+from http://communities.vmware.com/thread/220594;jsessionid=11B1C53FDBB3284777221D14AD00D6D9?tstart=0
