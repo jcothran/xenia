@@ -365,6 +365,7 @@ from http://communities.vmware.com/thread/220594;jsessionid=11B1C53FDBB328477722
 
 In order to enter the serial number in your ESX4i host
 
+{{{
 Home -> Inventory -> top level (your ESXi Host)
 Configuration Tab
 Left-hand side - Licensed features
@@ -372,7 +373,6 @@ Edit -> Assign new key to this host -> Enter Key
 Paste your key
 Confirm all the rest 
 Your ESXi Server is now fully licensed
+}}}
 
 Please note - you will only have the basic functionality and all the enterprise features that came with the Evaluation License are no longer valid
-
-from http://communities.vmware.com/thread/220594;jsessionid=11B1C53FDBB3284777221D14AD00D6D9?tstart=0
