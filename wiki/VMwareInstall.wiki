@@ -26,7 +26,7 @@ from http://forums.techarena.in/operating-systems/1106661.htm
 
 for the host the static IP is 129.252.37.90 
 
-In host file /etc/networking/interfaces
+In host file /etc/network/interfaces
 {{{
 auto lo
 iface lo inet loopback
