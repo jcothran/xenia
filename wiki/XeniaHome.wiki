@@ -125,15 +125,26 @@ http://sqlite.org
 = Related efforts = 
 
 http://ioos.noaa.gov/program/
-
 http://www.csc.noaa.gov/cir
-
-http://www.obsregistry.org
-
-http://oostethys.org http://code.google.com/p/oostethys/
-
-http://forecast.weather.gov/mwp/
-
-http://secoora.org/maps http://secoora.org/data
-
 http://trac.secoora.org
+
+----
+= Related projects = 
+
+http://www.ndbc.noaa.gov <br/>
+http://tidesandcurrents.noaa.gov <br/>
+http://nationalmap.gov <br/>
+
+https://ecowatch.ncddc.noaa.gov <br/>
+http://nowcoast.noaa.gov <br/>
+http://www.osmc.noaa.gov
+
+http://obsregistry.org <br/>
+
+http://openioos.org <br/>
+http://oostethys.org http://code.google.com/p/oostethys/<br/> 
+http://www.gomoos.org/gm/index.html http://www.gomodp.org/projects/ODP_IE
+http://www.gomodp.org/projects/exchange-network-project
+
+http://forecast.weather.gov/mwp/ <br/>
+http://secoora.org/maps http://secoora.org/data <br/>
