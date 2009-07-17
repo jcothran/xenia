@@ -97,12 +97,13 @@ If you plan to run a production xenia vmware instance accessible by others on th
 
 see also http://code.google.com/p/xenia/wiki/VMwareDesign#Checklist
 
+replace *your_ip* in the below line commands with your IP (xxx.xxx.xxx.xxx)
 {{{
 cd /home/xeniaprod
 find . -name "*" -exec grep -H "VM_CONFIG" {} \; 
-find . -name "*.sh" -exec grep -H "129.252.37.90" {} \; 
-find . -name "*.pl" -exec grep -H "129.252.37.90" {} \;  
-find . -name "*.xml" -exec grep -H "129.252.37.90" {} \;
+perl -p -i -e 's/129.252.37.90/your_ip/g' `find ./ -name *.pl`
+perl -p -i -e 's/129.252.37.90/your_ip/g' `find ./ -name *.sh`
+perl -p -i -e 's/129.252.37.90/your_ip/g' `find ./ -name *.xml`
 }}}
 
 {{{
