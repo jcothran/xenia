@@ -51,7 +51,7 @@ I did not have to modify the defaulted dns file settings for host or virtual ser
 
 == iptables ==
 
-*note - this section on iptables can be skipped*
+*optional section - this section on iptables is informational and can be skipped*
 
 With the network 'bridge' setting in the vmware player, any ports on the virtual server are bridged over the host server (use 'nmap' command to see open ports).  So with the gisvm image opened on the vmplayer I was able to see the apache web server sample webpage running on port 80 and J2EE/tomcat server sample webpage running on port 8080 from other machines.
 
@@ -89,13 +89,13 @@ The username *user* has password *user99* although this user account is not util
 
 Both users *xeniaprod* and *user* are part of the *admin* group ({{{sudo vi /etc/group}}}) which is a 'sudo' ({{{sudo vi /etc/sudoers}}}) enabled group.
 
-See the other gisvm related passwords [http://www.vmware.com/appliances/directory/55606 here] and modify as needed.
+*optional* see the other gisvm related passwords [http://www.vmware.com/appliances/directory/55606 here] and modify as needed.
 
 == host substitutions, configuration ==
 
 If you plan to run a production xenia vmware instance accessible by others on the web, search the xeniaprod code from the following directory to see the necessary localhost substitutions(for your production machine http address) or other configuration options.
 
-see also http://code.google.com/p/xenia/wiki/VMwareDesign#Checklist
+*optional* see also http://code.google.com/p/xenia/wiki/VMwareDesign#Checklist
 
 replace *your_ip* in the below line commands with your IP (xxx.xxx.xxx.xxx)
 {{{
@@ -140,6 +140,8 @@ check output graphs(.png) under http://xxx.xxx.xxx.xxx/xenia/feeds after a few h
 
 == postgresql or sqlite == 
 
+*optional section - this section can be skipped if default postgresql database is acceptable*
+
 The latest version of the vmware image is configured to utilize a postgresql/postgis relational database while the earlier version utilized a sqlite file-based relational database.
 
 These changes are reflected in the xeniaprod crontab with xeniaflow_postgresql.sh directing the aggregation and product generation towards the /home/xeniaprod/scripts/postgresql branch instead of the /home/xeniaprod/scripts/sqlite one.
@@ -147,6 +149,8 @@ These changes are reflected in the xeniaprod crontab with xeniaflow_postgresql.s
 Similarly the symbolic links(time_series, sos) under /var/www/xenia are linked to postgresql branch instead of sqlite one.
 
 == miscellaneous ==
+
+*informational section*
 
 *sudo* all commands that need root access.
 
@@ -166,6 +170,8 @@ Xenia related log files are at /home/xeniaprod/tmp and cleared nightly.
 Apache user(www-data) created related temporary files are at /home/xeniaprod/tmp_web and cleared nightly.
 
 == ObsKML ==
+
+*optional section*
 
 If you are ready to start pulling new data into your system, see
 http://code.google.com/p/xenia/wiki/VMwareTest#Adding_a_new_ObsKML_feed
