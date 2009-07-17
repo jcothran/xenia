@@ -2,21 +2,73 @@
 from pysqlite2 import dbapi2 as sqlite3      
 import psycopg2
 import psycopg2.extras
+from lxml import etree
+from collections import defaultdict  
+
+
+class recursivedefaultdict(defaultdict):
+    def __init__(self):
+        self.default_factory = type(self) 
 
 class dbTypes:
   undefined = 0
   SQLite = 1
   PostGRES = 2
+"""
+Class: qaqcTestFlags
+Purpose: This is more of an enumeration class that details out the various quality flags.
+"""    
+class qaqcTestFlags:
 
-class obsData:
-  def __init__(self):
-    self.obsName    = None
-    self.uom        = None
-    self.m_type_id  = None
-    self.m_value    = None
-    self.sensor_id  = None
-    self.s_order    = None
+  TQFLAG_DA = 0   #Data Availability               
+  TQFLAG_SR = 1   #Sensor Range
+  TQFLAG_GR = 2   #Gross Range
+  TQFLAG_CR = 3   #Climatological Range
+  TQFLAG_RC = 4  #Rate of Change
+  TQFLAG_NN = 5  #Nearest Neighbor
 
+  NO_TEST      = 0 # -1 in writeup Unable to perform the test  
+  TEST_FAILED  = 1 # 0 in writeup The test failed.
+  TEST_PASSED  = 2 #1 in writeup The test passed.
+  
+  
+  NO_DATA           = -9 #the data field is missing a value
+  DATA_QUAL_NO_EVAL = 0  #the data quality is not evaluated
+  DATA_QUAL_BAD     = 1  #the data quality is bad
+  DATA_QUAL_SUSPECT = 2  #the data quality is questionable or suspect
+  DATA_QUAL_GOOD    = 3  #the data quality is good
+  
+  def decodeQCFlag(self, qcFlag):
+    qcFlagList = []
+    qcFlagList.append( 'Data available ' + self.decodeQCFlagData( int(qcFlag[qaqcTestFlags.TQFLAG_DA]) ) )
+    qcFlagList.append( 'Sensor Range ' + self.decodeQCFlagData( int(qcFlag[qaqcTestFlags.TQFLAG_SR]) ) )
+    qcFlagList.append( 'Gross Range ' + self.decodeQCFlagData( int(qcFlag[qaqcTestFlags.TQFLAG_GR]) ) )
+    qcFlagList.append( 'Climatological Range ' + self.decodeQCFlagData( int(qcFlag[qaqcTestFlags.TQFLAG_CR]) ) )
+    qcFlagList.append( 'Rate of Change ' + self.decodeQCFlagData( int(qcFlag[qaqcTestFlags.TQFLAG_RC]) ) )
+    qcFlagList.append( 'Nearest Neighbor ' + self.decodeQCFlagData( int(qcFlag[qaqcTestFlags.TQFLAG_NN]) ) )
+    return( qcFlagList )
+
+  def decodeQCFlagData(self, qcTestResult):
+    if( qcTestResult == qaqcTestFlags.TEST_PASSED ):
+      return( 'Test passed' )
+    elif( qcTestResult == qaqcTestFlags.TEST_FAILED ):
+      return( 'Test failed' )
+    else:
+      return( 'Test not performed' )
+
+  def decodeQCLevel(self, qcLevel):
+    if( qcLevel == qaqcTestFlags.NO_DATA ):
+      return( 'No data' )
+    elif( qcLevel == qaqcTestFlags.DATA_QUAL_NO_EVAL ):
+      return( 'Data quality not evaluated' )
+    elif( qcLevel == qaqcTestFlags.DATA_QUAL_BAD ):
+      return( 'Data quality bad' )
+    elif( qcLevel == qaqcTestFlags.DATA_QUAL_SUSPECT ):
+      return( 'Data quality suspect' )
+    elif( qcLevel == qaqcTestFlags.DATA_QUAL_GOOD ):
+      return( 'Data quality good' )
+
+    
 class xeniaDB:
     def __init__ ( self ):
       self.dbType = dbTypes.undefined
@@ -26,7 +78,10 @@ class xeniaDB:
       msg = self.lastErrorMsg
       self.lastErrorMsg = ''
       return(msg)  
-    
+     
+    def connectDB(self, dbFilePath=None, user=None, passwd=None, host=None, dbName=None ):
+      return(False)
+
     def openXeniaSQLite(self, dbFilePath ):
       self.dbFilePath = dbFilePath
       self.dbType = dbTypes.SQLite
@@ -235,10 +290,315 @@ class xeniaDB:
         
       return(None)
     
-    #def updateMultiObsQC(self, date, platform, obsName, qc_flag, qc_level ):
+class __xeniaDB:
+    """
+    Function: __init__
+    Purpose: Initializes the class
+    Parameters: None
+    Return: None
+    """
+    def __init__ ( self ):
+      self.dbType = dbTypes.undefined
+      self.lastErrorMsg = ''
+      self.lastErrorCode = None
+      self.DB = None
+      
+    """
+    Function: getLastErrorMsg
+    Purpose: Returns the last error message
+    Parameters: None
+    Return: String with the last error message.
+    """
+    def getLastErrorMsg(self):
+      msg = self.lastErrorMsg
+      self.lastErrorMsg = ''
+      return(msg)  
+     
+    """
+    Function: connect
+    Purpose: Children classes should overload this function to provide the DB specific connection.
+    Parameters: 
+    Return: 
+    """
+    def connect(self, dbFilePath=None, user=None, passwd=None, host=None, dbName=None ):
+      return(False)
+   
+    def getMTypeFromObsName(self, obsName, platform, sOrder ):
+      mType = -1
+      sOrder = '';
+      if( len( sOrder ) ):
+        sOrder = "sensor.s_order = $iSOrder AND"
+        
+      sql = "SELECT DISTINCT(sensor.m_type_id) FROM m_type, m_scalar_type, obs_type, sensor, platform \
+                WHERE  sensor.m_type_id = m_type.row_id AND                                           \
+                m_scalar_type.row_id = m_type.m_scalar_type_id AND                                    \
+                obs_type.row_id = m_scalar_type.obs_type_id AND                                       \
+                platform.row_id = sensor.platform_id AND                                              \
+                %s                                                                            \
+                obs_type.standard_name = '%s' AND                                                     \
+                platform.platform_handle = '%s';" % (sOrder,obsName,platform )
+      try:                               
+        dbCursor = self.executeQuery( sql )
+        for row in dbCursor:
+          mType  = row[0]
+        dbCursor.close()
+      
+      except sqlite3.Error, e:        
+        self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
+      except Exception, E:
+        self.lastErrorMsg = str(E)                     
+      
+      return( mType )
     
+    def getSensorID(self, obsName, platform, sOrder ):
+      sensorID = -1
+      sOrder = '';
+      if( len( sOrder ) ):
+        sOrder = "sensor.s_order = $iSOrder AND"
+        
+      sql = "SELECT sensor.row_id FROM m_type, m_scalar_type, obs_type, sensor, platform \
+                WHERE  sensor.m_type_id = m_type.row_id AND                                           \
+                m_scalar_type.row_id = m_type.m_scalar_type_id AND                                    \
+                obs_type.row_id = m_scalar_type.obs_type_id AND                                       \
+                platform.row_id = sensor.platform_id AND                                              \
+                %s                                                                            \
+                obs_type.standard_name = '%s' AND                                                     \
+                platform.platform_handle = '%s';" % (sOrder,obsName,platform )
+      try:                               
+        dbCursor = self.executeQuery( sql )
+        row = dbCursor.fetchone()
+        if( row != None ):
+          sensorID  = int(row[0])
+        dbCursor.close()
+      
+      except sqlite3.Error, e:        
+        self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
+      except Exception, E:
+        self.lastErrorMsg = str(E)                     
+      return( sensorID )
+    
+    def getDataForSensorID(self,sensorID, startDate, endDate, timeZoneShift):
+      return(None)     
+    def getObservationDates(self, obsName, platform ):
+      return(None)       
+    def getObservationsForPlatform(self, platform):
+      return(None)      
+    def getDataForObs(self, obsName, platform, startDate, endDate, timeZoneShift):
+      return(None)
+    def getObsDataForPlatform(self, platform, lastNHours = None ):                 
+      return(None)
+
+class xeniaSQLite(__xeniaDB):
+  """
+  Function: __init__
+  Purpose: Initializes the class
+  Parameters: None
+  Return: None
+  """
+  def __init__(self):
+    self.dbType = dbTypes.SQLite
+
+  """
+  Function: connect
+  Purpose: Make a connection to the database
+  Parameters: 
+    dbFilePath is the path to the sqlite database to use.
+    user not used
+    passwd not used
+    host not used
+    dbName not used
+  Return: 
+    True if we successfully connected, otherwise false. Any error info
+    is stored in  self.lastErrorMsg
+  """
+  def connect(self, dbFilePath=None, user=None, passwd=None, host=None, dbName=None ):
+    self.dbFilePath = dbFilePath
+    try:
+      self.DB = sqlite3.connect( self.dbFilePath )
+      #This enables the ability to manipulate rows with the column name instead of an index.
+      self.DB.row_factory = sqlite3.Row
+      return(True)
+    except Exception, E:
+      self.lastErrorMsg = str(E)                     
+    return(False)
+
+  """
+  Function: executeQuery
+  Purpose: Executes the sql statement passed in.
+  Parameters: 
+    sqlQuery is a string containing the query to execute.
+  Return: 
+    If successfull, a cursor is returned, otherwise None is returned.
+  """
+  def executeQuery(self, sqlQuery):   
+    try:
+      dbCursor = self.DB.cursor()
+      dbCursor.execute( sqlQuery )        
+      return( dbCursor )
+    except sqlite3.Error, e:        
+      self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sqlQuery        
+    except Exception, E:
+      self.lastErrorMsg = str(E)                     
+    return(None)
+
+  def getDataForSensorID(self,sensorID, startDate, endDate, timeZoneShift):
+    data = []
+    sql = "SELECT multi_obs.m_date,multi_obs.m_value        \
+                  FROM multi_obs           \
+                  WHERE                    \
+                  multi_obs.sensor_id = %d                              AND   \
+                  ( m_date >= strftime( '%%Y-%%m-%%dT%%H:00:00',datetime('%s','%d hours') )   AND  \
+                  m_date < strftime( '%%Y-%%m-%%dT%%H:00:00', datetime('%s','%d hours') ) ) \
+                  ORDER BY multi_obs.m_date ASC;" % ( sensorID, startDate, timeZoneShift, endDate, timeZoneShift );                
+    try:                      
+      dbCursor = self.executeQuery( sql )
+      for row in dbCursor:
+        data.append( (row[0],row[1]) )       
+      dbCursor.close()
+    except sqlite3.Error, e:        
+      self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
+    except Exception, E:
+      self.lastErrorMsg = str(E)                     
+
+  def getObsDataForPlatform(self, platform, lastNHours = None ):      
+    
+    #Do we want to query from a datetime of now back lastNHours?
+    dateOffset = ''
+    if( lastNHours != None ):
+      dateOffset = "m_date > strftime('%%Y-%%m-%%dT%%H:%%M:%%S', 'now','-%d hours') AND" % (lastNHours)
+        
+    sql= "SELECT m_date \
+          ,multi_obs.platform_handle \
+          ,obs_type.standard_name \
+          ,uom_type.standard_name as uom \
+          ,multi_obs.m_type_id \
+          ,m_value \
+          ,qc_level \
+          ,sensor.row_id as sensor_id\
+          ,sensor.s_order \
+        FROM multi_obs \
+          left join sensor on sensor.row_id=multi_obs.sensor_id \
+          left join m_type on m_type.row_id=multi_obs.m_type_id \
+          left join m_scalar_type on m_scalar_type.row_id=m_type.m_scalar_type_id \
+          left join obs_type on obs_type.row_id=m_scalar_type.obs_type_id \
+          left join uom_type on uom_type.row_id=m_scalar_type.uom_type_id \
+          WHERE %s multi_obs.platform_handle = '%s' AND qc_level IS NULL AND sensor.row_id IS NOT NULL\
+          ORDER BY m_date DESC" \
+          % (dateOffset,platform)
+    try:
+      dbCursor = self.executeQuery( sql )       
+      return( dbCursor )
+    except sqlite3.Error, e:        
+      self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
+    except Exception, E:
+      self.lastErrorMsg = str(E)                           
+    return(None)
 
 
+class xeniaPostGres(__xeniaDB):
+  """
+  Function: __init__
+  Purpose: Initializes the class
+  Parameters: None
+  Return: None
+  """
+  def __init__(self):
+    self.dbType = dbTypes.PostGRES
+
+  """
+  Function: connect
+  Purpose: Make a connection to the database
+  Parameters: 
+    dbFilePath is not used for a PostGres connection
+    user is the user name to attempt to login with on the database.
+    passwd the password for the user acccount on the database
+    host is the address the host is located on. If locale, you still need to provide 127.0.0.1
+    dbName is the databse name we want to connect to.
+  
+  Return: 
+    True if we successfully connected, otherwise false. Any error info
+    is stored in  self.lastErrorMsg
+  """
+  def connect(self, dbFilePath=None, user=None, passwd=None, host=None, dbName=None ):
+    try:
+      connstring = "dbname=%s user=%s host=%s password=%s" % ( dbName,user,host,passwd) 
+      self.DB = psycopg2.connect( connstring )
+      return(True)       
+    except Exception, E:
+      self.lastErrorMsg = str(E)                     
+    return(False)
+
+  """
+  Function: executeQuery
+  Purpose: Executes the sql statement passed in.
+  Parameters: 
+    sqlQuery is a string containing the query to execute.
+  Return: 
+    If successfull, a cursor is returned, otherwise None is returned.
+  """
+  def executeQuery(self, sqlQuery):
+    dbCursor = None
+    try:
+      dbCursor = self.DB.cursor(cursor_factory=psycopg2.extras.DictCursor)     
+      dbCursor.execute( sqlQuery )        
+    except psycopg2.Error, E:
+      self.lastErrorMsg = E.pgerror
+      self.lastErrorCode = E.pgcode
+    except Exception, E:
+      self.lastErrorMsg = str(E)                     
+    
+    return( dbCursor )
+
+  def getDataForSensorID(self,sensorID, startDate, endDate, timeZoneShift):
+    data = []
+    sql = "SELECT multi_obs.m_date,multi_obs.m_value        \
+                  FROM multi_obs           \
+                  WHERE                    \
+                  multi_obs.sensor_id = %d                              AND   \
+                  ( m_date >= strftime( '%%Y-%%m-%%dT%%H:00:00',datetime('%s','%d hours') )   AND  \
+                  m_date < strftime( '%%Y-%%m-%%dT%%H:00:00', datetime('%s','%d hours') ) ) \
+                  ORDER BY multi_obs.m_date ASC;" % ( sensorID, startDate, timeZoneShift, endDate, timeZoneShift );                
+    try:                      
+      dbCursor = self.executeQuery( sql )
+      for row in dbCursor:
+        data.append( (row[0],row[1]) )       
+      dbCursor.close()
+    except Exception, E:
+      self.lastErrorMsg = str(E)                     
+
+  def getObsDataForPlatform(self, platform, lastNHours = None ):      
+    
+    #Do we want to query from a datetime of now back lastNHours?
+    dateOffset = ''
+    if( lastNHours != None ):
+      dateOffset = "m_date >  date_trunc('hour',( SELECT timezone('UTC', now()-interval '%d' ) ) ) AND" % (lastNHours)
+        
+    sql= "SELECT m_date \
+          ,multi_obs.platform_handle \
+          ,obs_type.standard_name \
+          ,uom_type.standard_name as uom \
+          ,multi_obs.m_type_id \
+          ,m_value \
+          ,qc_level \
+          ,sensor.row_id as sensor_id\
+          ,sensor.s_order \
+        FROM multi_obs \
+          left join sensor on sensor.row_id=multi_obs.sensor_id \
+          left join m_type on m_type.row_id=multi_obs.m_type_id \
+          left join m_scalar_type on m_scalar_type.row_id=m_type.m_scalar_type_id \
+          left join obs_type on obs_type.row_id=m_scalar_type.obs_type_id \
+          left join uom_type on uom_type.row_id=m_scalar_type.uom_type_id \
+          WHERE %s multi_obs.platform_handle = '%s' AND qc_level IS NULL AND sensor.row_id IS NOT NULL\
+          ORDER BY m_date DESC" \
+          % (dateOffset,platform)
+    try:
+      dbCursor = self.executeQuery( sql )       
+      return( dbCursor )
+    except Exception, E:
+      self.lastErrorMsg = str(E)                     
+      
+    return(None)
+            
 """
 Class: uomconversionFunctions
 Purpose: Uses a conversion XML file to look up a from units of measurement and to units of measurement conversion 
@@ -246,6 +606,7 @@ routine. If one is found, will evaluate the function and return the result. The 
 valid python code.
 """
 class uomconversionFunctions:
+  
   """
   Function: __init__
   Purpose: Initializes the class
@@ -301,5 +662,16 @@ class uomconversionFunctions:
         return('mph')
       elif(uom == 'mph'):
         return('knots')
+    else:
+      if( uom == 'ft'):
+        return('m' )
+      elif( uom == 'mph'):
+        return('m_s-1')
+      elif( uom == 'fahrenheit' ):
+        return('celsius')
+      elif(uom == 'mph'):
+        return('cm_s-1')
+      elif(uom == 'knots'):
+        return('mph')
+      
     return('')
-          
