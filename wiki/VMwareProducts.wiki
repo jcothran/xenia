@@ -2,9 +2,7 @@
 
 [VMwareHome]
 
-*If running/testing a local xenia vmware instance, see [VMwareProductsLocal] which replaces http://neptune.baruch.sc.edu with http://localhost in the below URLs to see the locally produced results.*
-
-If running a final production instance for reference by others via the web, replace http references with your web http production http address.
+*In the below URL's for running/testing a local xenia vmware instance, replace http://neptune.baruch.sc.edu with your IP/DNS or http://localhost(if directly on the server) to see the locally produced results.*
 
 <wiki:toc max_depth="4" />
 
@@ -117,7 +115,7 @@ documentation http://code.google.com/p/xenia/wiki/XeniaSOS
 
 Query page http://neptune.baruch.sc.edu/xenia/sos/difSOS.html
 
-http://129.252.37.90/cgi-bin/difSOS.cgi?REQUEST=GetObservation&SERVICE=SOS&VERSION=1.0.0&RESPONSEFORMAT=text/xml;schema%3D%2522ioos/0.6.0%2522&OBSERVEDPROPERTY=wind_speed&OFFERING=carocoops&BBOX=&EVENTTIME=
+http://neptune.baruch.sc.edu/cgi-bin/difSOS.cgi?REQUEST=GetObservation&SERVICE=SOS&VERSION=1.0.0&RESPONSEFORMAT=text/xml;schema%3D%2522ioos/0.6.0%2522&OBSERVEDPROPERTY=wind_speed&OFFERING=carocoops&BBOX=&EVENTTIME=
 
 XML responses should display correctly within Firefox, IE browsers
 
