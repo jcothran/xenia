@@ -20,6 +20,8 @@ You may also need to set the radio button 'wired network' from the top menu icon
 
 == static ip ==
 
+*required section for proper IP address bridging*
+
 The {{{ifconfig}}} command will tell you which ethernet device the server is trying to communicate on({{{ifconfig -a}}} will show all available devices).  For mine the host server was running 'eth0' and the virtual was running 'eth5'
 
 from http://forums.techarena.in/operating-systems/1106661.htm
@@ -66,6 +68,8 @@ iptables -t nat -A PREROUTING -d 129.252.37.90 -p tcp --dport 80 -j REDIRECT --t
 
 == openssh ==
 
+*required section if ssh access from other networks/IP's is needed*
+
 The initial image runs an openssh daemon which accepts no outside connects via the /etc/hosts.allow file below.  Modify the hosts.allow,hosts.deny files as necessary for access/security purposes.
 
 file /etc/hosts.allow
@@ -76,6 +80,8 @@ sshd : ALL : deny
 }}}
 
 == image default users, passwords ==
+
+*required section for security purposes*
 
 #reset user passwds to public defaults - user,root,xeniaprod,postgres - as root, passwd <username>
 
@@ -92,6 +98,8 @@ Both users *xeniaprod* and *user* are part of the *admin* group ({{{sudo vi /etc
 *optional* see the other gisvm related passwords [http://www.vmware.com/appliances/directory/55606 here] and modify as needed.
 
 == host substitutions, configuration ==
+
+*required section for configuring image to use local IP,database passwords and understanding data flow*
 
 If you plan to run a production xenia vmware instance accessible by others on the web, search the xeniaprod code from the following directory to see the necessary localhost substitutions(for your production machine http address) or other configuration options.
 
