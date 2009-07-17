@@ -103,6 +103,7 @@ rm /var/lib/postgresql/.psql_history
 =
 clear users history (history -c)
 
+clear apache/tomcat, application logs
 =
 optional - reboot, check ps-auxf, top
 }}}
