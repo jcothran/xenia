@@ -1,6 +1,6 @@
 #summary vmware download instructions
 
-The current download location for the associated files for the latest vmware image are at 
+The current download location for the associated files for the latest xeniavm vmware image are at 
 
 http://129.252.37.86/vmware/
 
