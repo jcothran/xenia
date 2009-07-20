@@ -17,6 +17,8 @@ if __name__ == '__main__':
                     help="The password for a PostGres db." )
   parser.add_option("-d", "--DBName", dest="dbName",
                     help="The database name for a PostGres db." )
+  parser.add_option("-o", "--DBHost", dest="dbHost",
+                    help="The host address for a PostGres db." )
   parser.add_option("-c", "--CommitEach", dest="commitEach",type="int",default=0,
                     help="If set to 1, will issue a commit after each SQL statement." )
   (options, args) = parser.parse_args()
@@ -36,8 +38,8 @@ if __name__ == '__main__':
   else:
     if( options.dbName != None and options.user != None and options.password != None ):
       db = xeniaPostGres()
-      if( db.connect( None, options.user, options.password, None, options.dbName ) == False ):
-        print( "ERROR: Failed to connect to PostGres DB. DBName: %s User: %s Pwd: %s Message: %s" %(options.dbName, options.user, options.password, db.lastErrorMsg) )
+      if( db.connect( None, options.user, options.password, options.dbHost, options.dbName ) == False ):
+        print( "ERROR: Failed to connect to PostGres DB. DBName: %s Host: %s User: %s Pwd: %s Message: %s" %(options.dbName, options.dbHost, options.user, options.password, db.lastErrorMsg) )
         sys.exit(-1)
       else:
         print( "Connected to PostGres DBName: %s User: %s" % (options.dbName, options.user) )
@@ -68,12 +70,17 @@ if __name__ == '__main__':
               print( "Retried: %d times due to database lock." %(retryCnt) )            
           except Exception, E:
             print( "ERROR: %s SQL: %s LineNum: %d" %( str(E),line,linesProcessed ) )
-            #Was the database locked, if so we can retry.
             if( str(E).find('lock') != -1 ):
                 success = 0
                 retryCnt += 1
                 continue
+            #If the SQL statement proves to be a duplicate, we can still continue.
+            if( str(E).find('duplicate') != -1 ):
+              success = 1
+              db.DB.rollback() 
+              print( "Duplicate found, skipping on to next record." )
             else:
+              db.DB.rollback() 
               sys.exit(-1)
       else:
         print( "Skipping blank line at row: %d" % ( linesProcessed ) )
