@@ -109,6 +109,8 @@ Sqlite file download for priming, analysis, etc of the latest 3 day time window 
 ----
 = SOS =
 
+note also earlier development with WFS at http://code.google.com/p/xenia/wiki/XeniaPackageSqlite#MicroWFS
+
 == DIF ==
 
 documentation http://code.google.com/p/xenia/wiki/XeniaSOS
