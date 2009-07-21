@@ -1,6 +1,6 @@
 #summary Description of various formats/products and services derived from a Xenia database instance
 
-*Note - this is an out-of-date wiki page, the latest Xenia features are listed at VMwareProducts*
+*Note - this is an out-of-date wiki page, the latest Xenia features are listed at [VMwareProducts]*
 
 <wiki:toc max_depth="6" />
 
