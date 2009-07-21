@@ -96,6 +96,8 @@ http://neptune.baruch.sc.edu/xenia/feeds/all_latest.csv
 
 http://neptune.baruch.sc.edu/xenia/feeds/all_latest.csv.zip
 
+see also see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate#Convert_from_ObsKML_to_other_for
+
 ----
 = Data source files - zipped ObsKML and SQL =
 
