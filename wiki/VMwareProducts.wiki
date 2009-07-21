@@ -169,16 +169,13 @@ http://129.252.37.90/xenia/feeds/qaqc/
 
 basic quality control webpage reports:
 
-range-test http://129.252.37.90/xenia/feeds/qaqc/test_results.html <br/>
-uptime http://129.252.37.90/xenia/feeds/qaqc/PlatformUptimePercentages.html <br>
-
 Geared by xml control file <br/>
 http://129.252.37.90/xenia/feeds/qaqc/test_profiles.xml
 
-Documentation
+range-test http://129.252.37.90/xenia/feeds/qaqc/test_results.html <br/>
+earlier documentation see http://trac.secoora.org/datamgmt/wiki/RangeTests <br/>
 
-observation quality control and notification <br/>
-see http://trac.secoora.org/datamgmt/wiki/RangeTests
+uptime http://129.252.37.90/xenia/feeds/qaqc/PlatformUptimePercentages.html <br>
+earlier documentation see http://trac.secoora.org/datamgmt/wiki/PercentageUptime
 
-data availability and metrics <br/>
-http://trac.secoora.org/datamgmt/wiki/PercentageUptime
+
