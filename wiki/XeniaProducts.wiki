@@ -1,5 +1,7 @@
 #summary Description of various formats/products and services derived from a Xenia database instance
 
+*Note - this is an out-of-date wiki page, the latest Xenia features are listed at VMwareProducts*
+
 <wiki:toc max_depth="6" />
 
 Xenia uses ObsKML as a default XML import/export format.  Some of the following products are derived purely via ObsKML which means that they are equally applicable to scripts which can supply ObsKML whether from a Xenia instance or otherwise.
