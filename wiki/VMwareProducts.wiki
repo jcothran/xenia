@@ -47,9 +47,12 @@ http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/ObsKMLGenerate/obskml_all_late
 
 http://xenia.googlecode.com/files/time_series.jpg
 
-Simple time-series graphs of the previous days observations are available as web links embedded within the KML and HTML table stub displays
-
+Simple time-series graphs of the previous days observations are available as web links embedded within the KML and HTML table stub displays <br/>
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastLite#a_description_of_the_graph_xml_f
+
+== vector graphs (ADCP) ==
+
+see [http://code.google.com/p/xenia/wiki/ADCPProfilerNotes ADCPProfilerNotes]
 
 ----
 = GeoRSS = 
@@ -177,5 +180,3 @@ earlier documentation see http://trac.secoora.org/datamgmt/wiki/RangeTests <br/>
 
 uptime http://129.252.37.90/xenia/feeds/qaqc/PlatformUptimePercentages.html <br>
 earlier documentation see http://trac.secoora.org/datamgmt/wiki/PercentageUptime
-
-
