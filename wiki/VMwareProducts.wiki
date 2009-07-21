@@ -85,7 +85,7 @@ HTML platform table stubs are suitable for dynamic webpage popups via AJAX type 
 
 [http://neptune.baruch.sc.edu/xenia/feeds/html_tables/html_content.db html_content.db sqlite table] also populated available for use.
 
-see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastNotesAjax
+see http://code.google.com/p/xenia/source/browse/trunk/obskml/products/html_tables, http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastNotesAjax
 
 ----
 = convert from ObsKML to other formats (CSV,shapefile) =
