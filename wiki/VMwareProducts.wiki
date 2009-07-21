@@ -168,15 +168,15 @@ http://carocoops.org/obskml/scripts/flow_archive.png
 
 *next vmware release*
 
-http://129.252.37.90/xenia/feeds/qaqc/
+http://neptune.baruch.sc.edu/xenia/feeds/qaqc/
 
 basic quality control webpage reports:
 
 Geared by xml control file <br/>
-http://129.252.37.90/xenia/feeds/qaqc/test_profiles.xml
+http://neptune.baruch.sc.edu/xenia/feeds/qaqc/test_profiles.xml
 
-range-test http://129.252.37.90/xenia/feeds/qaqc/test_results.html <br/>
+range-test http://neptune.baruch.sc.edu/xenia/feeds/qaqc/test_results.html <br/>
 earlier documentation see http://trac.secoora.org/datamgmt/wiki/RangeTests <br/>
 
-uptime http://129.252.37.90/xenia/feeds/qaqc/PlatformUptimePercentages.html <br>
+uptime http://neptune.baruch.sc.edu/xenia/feeds/qaqc/PlatformUptimePercentages.html <br>
 earlier documentation see http://trac.secoora.org/datamgmt/wiki/PercentageUptime
