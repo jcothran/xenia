@@ -155,3 +155,26 @@ http://carocoops.org/obskml/scripts/flow_low.png
 
 Archival database flow<br/>
 http://carocoops.org/obskml/scripts/flow_archive.png
+
+----
+= Quality Control (QC) reports =
+
+*next vmware release*
+
+http://129.252.37.90/xenia/feeds/qaqc/ <br/
+
+basic quality control webpage reports:
+
+range-test http://129.252.37.90/xenia/feeds/qaqc/test_results.html <br/>
+uptime http://129.252.37.90/xenia/feeds/qaqc/PlatformUptimePercentages.html <br>
+
+Geared by xml control file <br/>
+http://129.252.37.90/xenia/feeds/qaqc/test_profiles.xml
+
+Documentation
+
+observation quality control and notification <br/>
+see http://trac.secoora.org/datamgmt/wiki/RangeTests
+
+data availability and metrics <br/>
+http://trac.secoora.org/datamgmt/wiki/PercentageUptime
