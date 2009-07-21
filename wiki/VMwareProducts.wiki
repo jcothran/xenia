@@ -161,7 +161,7 @@ http://carocoops.org/obskml/scripts/flow_archive.png
 
 *next vmware release*
 
-http://129.252.37.90/xenia/feeds/qaqc/ <br/
+http://129.252.37.90/xenia/feeds/qaqc/
 
 basic quality control webpage reports:
 
