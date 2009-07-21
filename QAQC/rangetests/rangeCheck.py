@@ -2,11 +2,19 @@ import sys
 import array
 import time
 #from xenia import xeniaDB
-from xenia import xeniaSQLite
-from xenia import xeniaPostGres
-from xenia import qaqcTestFlags
-from xenia import uomconversionFunctions
-from xenia import recursivedefaultdict
+#from xenia import xeniaSQLite
+#from xenia import xeniaPostGres
+#from xenia import qaqcTestFlags
+#rom xenia import uomconversionFunctions
+#from xenia import recursivedefaultdict
+
+from xeniatools.xenia import xeniaDB
+from xeniatools.xenia import xeniaSQLite
+from xeniatools.xenia import xeniaPostGres
+from xeniatools.xenia import qaqcTestFlags
+from xeniatools.xenia import uomconversionFunctions
+from xeniatools.xenia import recursivedefaultdict
+
 from lxml import etree
 import logging
 import logging.handlers
@@ -335,55 +343,61 @@ class platformResultsTable(object):
     
   def createHTMLTable(self):
     htmlTable = None
-    for platformKey in self.platforms.keys():
-      htmlTable = "<table border=\"1\">\n"
-      #We want to sort the dates
-      dateKeys = self.platforms[platformKey].keys()
-      dateKeys.sort()
-      writeHeader = True
-      tableHeader = '<th>Platform</th><th>Date</th>'
-      for dateKey in dateKeys: 
-        tableRow = "<tr>\n<td>%s</td><td>%s</td>\n" %( platformKey, dateKey )
-        obsKeys = self.platforms[platformKey][dateKey].keys()
-        obsKeys.sort()
-        for obsKey in obsKeys:
-        #for obsKey in self.platforms[platformKey][dateKey]:
-          if( writeHeader ):
-            obsNfo = self.platforms[platformKey][dateKey][obsKey]['limits']
-            if( obsNfo != None ):
-              tableHeader += "<th>%s(%s)</th>" %( obsKey, ( ( obsNfo.uom != None ) and obsNfo.uom or '' ) )
+    try:
+      for platformKey in self.platforms.keys():
+        htmlTable = "<table border=\"1\">\n"
+        #We want to sort the dates
+        dateKeys = self.platforms[platformKey].keys()
+        dateKeys.sort()
+        writeHeader = True
+        tableHeader = '<th>Platform</th><th>Date</th>'
+        for dateKey in dateKeys: 
+          tableRow = "<tr>\n<td>%s</td><td>%s</td>\n" %( platformKey, dateKey )
+          obsKeys = self.platforms[platformKey][dateKey].keys()
+          obsKeys.sort()
+          for obsKey in obsKeys:
+          #for obsKey in self.platforms[platformKey][dateKey]:
+            if( writeHeader ):
+              if( 'limits' in self.platforms[platformKey][dateKey][obsKey] != False ):
+                obsNfo = self.platforms[platformKey][dateKey][obsKey]['limits']
+                if( obsNfo != None ):
+                  tableHeader += "<th>%s(%s)</th>" %( obsKey, ( ( obsNfo.uom != None ) and obsNfo.uom or '' ) )
+                else:
+                  tableHeader += "<th>%s()</th>" %( obsKey )
+              else:
+                tableHeader += "<th>%s()</th>" %( obsKey )
+                
+            qcLevel = self.platforms[platformKey][dateKey][obsKey]['qclevel']
+  
+            #The cell background colors are defined in the style sheet(http://carocoops.org/~dramage_prod/secoora/styles/main.css)
+            bgColor = "qcDEFAULT"
+            if( qcLevel == qaqcTestFlags.NO_DATA):
+              bgColor = "qcMISSING"
+            elif( qcLevel == qaqcTestFlags.DATA_QUAL_NO_EVAL):
+              bgColor = "qcNOEVAL"
+            elif( qcLevel == qaqcTestFlags.DATA_QUAL_BAD):
+              bgColor = "qcFAIL"
+            elif( qcLevel == qaqcTestFlags.DATA_QUAL_SUSPECT):
+              bgColor = "qcSUSPECT"
+            elif( qcLevel == qaqcTestFlags.DATA_QUAL_GOOD):
+              bgColor = "qcPASS"
+            if( qcLevel != qaqcTestFlags.NO_DATA ):
+              tableRow += "<td id=\"%s\">%4.2f</br>%d</br>%s</td>\n" \
+              % (bgColor,
+                 ( self.platforms[platformKey][dateKey][obsKey]['value'] != None ) and self.platforms[platformKey][dateKey][obsKey]['value'] or -9999.0,
+                 ( self.platforms[platformKey][dateKey][obsKey]['qclevel'] != None ) and self.platforms[platformKey][dateKey][obsKey]['qclevel'] or -9999.0,
+                 ( self.platforms[platformKey][dateKey][obsKey]['qcflag'] != None ) and self.platforms[platformKey][dateKey][obsKey]['qcflag'] or -9999.0 )
             else:
-              tableHeader += "<th>%s()</th>" %( obsKey )
-              
-          qcLevel = self.platforms[platformKey][dateKey][obsKey]['qclevel']
-
-          #The cell background colors are defined in the style sheet(http://carocoops.org/~dramage_prod/secoora/styles/main.css)
-          bgColor = "qcDEFAULT"
-          if( qcLevel == qaqcTestFlags.NO_DATA):
-            bgColor = "qcMISSING"
-          elif( qcLevel == qaqcTestFlags.DATA_QUAL_NO_EVAL):
-            bgColor = "qcNOEVAL"
-          elif( qcLevel == qaqcTestFlags.DATA_QUAL_BAD):
-            bgColor = "qcFAIL"
-          elif( qcLevel == qaqcTestFlags.DATA_QUAL_SUSPECT):
-            bgColor = "qcSUSPECT"
-          elif( qcLevel == qaqcTestFlags.DATA_QUAL_GOOD):
-            bgColor = "qcPASS"
-          if( qcLevel != qaqcTestFlags.NO_DATA ):
-            tableRow += "<td id=\"%s\">%4.2f</br>%d</br>%s</td>\n" \
-            % (bgColor,
-               ( self.platforms[platformKey][dateKey][obsKey]['value'] != None ) and self.platforms[platformKey][dateKey][obsKey]['value'] or -9999.0,
-               ( self.platforms[platformKey][dateKey][obsKey]['qclevel'] != None ) and self.platforms[platformKey][dateKey][obsKey]['qclevel'] or -9999.0,
-               ( self.platforms[platformKey][dateKey][obsKey]['qcflag'] != None ) and self.platforms[platformKey][dateKey][obsKey]['qcflag'] or -9999.0 )
-          else:
-            tableRow += "<td id=\"%s\">Data Missing</br>%d</br>000000</td></td>\n" % (bgColor,qaqcTestFlags.NO_DATA)
-        tableRow += "</tr>\n"
-        if( writeHeader ):
-          htmlTable += tableHeader
-          writeHeader = False          
-        htmlTable += tableRow
-      htmlTable += '</table>'
-      return( htmlTable )
+              tableRow += "<td id=\"%s\">Data Missing</br>%d</br>000000</td></td>\n" % (bgColor,qaqcTestFlags.NO_DATA)
+          tableRow += "</tr>\n"
+          if( writeHeader ):
+            htmlTable += tableHeader
+            writeHeader = False          
+          htmlTable += tableRow
+        htmlTable += '</table>'
+    except Exception, e:
+        self.lastErrorMessage = str(e) + ' Terminating script.'
+    return( htmlTable )
         
   def addObsQC(self, platform, obsName, date, value, qcLevel, qcFlag, qcLimits=None ):
     self.platforms[platform][date][obsName]['value'] = value
@@ -502,16 +516,18 @@ if __name__ == '__main__':
       name = xmlTree.xpath( '//environment/database/db/name' )
       user = xmlTree.xpath( '//environment/database/db/user' )
       pwd = xmlTree.xpath( '//environment/database/db/pwd' )
+      host = xmlTree.xpath( '//environment/database/db/host' )
       if( len(name) and len(user) and len(pwd) ):
         name = name[0].text
         user = user[0].text
         pwd = pwd[0].text
+        host = host[0].text
         db = xeniaPostGres()
         #if( db.openXeniaPostGres( None, name, user, pwd ) == False ):
-        if( db.connect( None, user, pwd, None, name ) == False ):
+        if( db.connect( None, user, pwd, host, name ) == False ):
           if( logger != None ):
-            logger.error( "Unable to connect to PostGres." )
-            sys.exit(-1)         
+            logger.error( "Unable to connect to PostGres. host: %s UDBName: %s user: %s pwd: %s ErrorMsg: %s" % (host,name,user,pwd,db.lastErrorMsg) )
+            sys.exit(-1)
       else:
         if( logger != None ):
           logger.error( "Missing configuration info for PostGres setup." )
@@ -647,7 +663,7 @@ if __name__ == '__main__':
           fill = fill.zfill(qaqcTestFlags.TQFLAG_NN+1)   
           qcFlag.fromstring(fill)
 
-
+          qcLevel = qaqcTestFlags.DATA_QUAL_NO_EVAL
           if( obsNfo != None ):
             if( obsNfo.sensorID == None ):
               obsNfo.sensorID = sensor_id            
@@ -657,44 +673,43 @@ if __name__ == '__main__':
               convertedVal = uomConvert.measurementConvert( m_value, obsNfo.uom, uom)
               if(convertedVal != None ):
                 m_value = convertedVal
-                
-            #Get the numeric representation of the month(1...12)
-            dateformat = "%Y-%m-%dT%H:%M:%S"
-            if( dateVal.find("T") == -1 ):
-              dateformat = "%Y-%m-%d %H:%M:%S"
-              
-            month = int(time.strftime( "%m", time.strptime(dateVal, dateformat) ))
-            dataTests.runRangeTests(obsNfo, m_value, month)
-            
-            #The qcFlag string is interpreted as follows. The leftmost byte is the first test, which is the data available test,
-            #each preceeding byte is another test of lesser importance. We store the values in a string which is to always contain
-            #the same number of bytes for consistency. Some examples:
-            #"000000" would represent no tests were done
-            #"200000" represents the data available test was done and passed(0 = no test, 1 = failed, 2 = passed)
-            #"220000" data available, sensor range tests performed.
-            qcFlag[qaqcTestFlags.TQFLAG_DA] = ( "%d" % dataTests.dataAvailable )
-            qcFlag[qaqcTestFlags.TQFLAG_SR] = ( "%d" % dataTests.sensorRangeCheck )
-            qcFlag[qaqcTestFlags.TQFLAG_GR] = ( "%d" % dataTests.grossRangeCheck )
-            qcFlag[qaqcTestFlags.TQFLAG_CR] = ( "%d" % dataTests.climateRangeCheck )
-            qcLevel = dataTests.calcQCLevel()
-            
-            if( htmlResultsFile != None ):
-              htmlTable.addObsQC(platformKey, obsName, dateVal, m_value, qcLevel, qcFlag.tostring(), obsNfo)
-                                
-            if( qcLevel != qaqcTestFlags.DATA_QUAL_GOOD and logger != None ):
-              logger.debug( "QCTest Failed: Date %s Platform: %s obsName: %s value: %f(%s) qcFlag: %s qcLevel: %d" % (dateVal, platformKey, obsName, ( m_value != None ) and m_value or -9999.0, uom, qcFlag.tostring(), qcLevel) )
-              qcFailCnt += 1
-  
-            sql = "UPDATE multi_obs SET \
-                    qc_flag='%s',qc_level=%d WHERE \
-                    m_date='%s' AND sensor_id=%d" \
-                    %(qcFlag.tostring(), qcLevel, dateVal, sensor_id)
-            sqlUpdateFile.write(sql+"\n")
           else:
             qcMissingLimitsCnt += 1
             if( logger != None ):
               logger.error( "%s No limit set for Platform: %s obsName: %s" % (dateVal, platformKey,obsName) )
-
+              
+          #Get the numeric representation of the month(1...12)
+          dateformat = "%Y-%m-%dT%H:%M:%S"
+          if( dateVal.find("T") == -1 ):
+            dateformat = "%Y-%m-%d %H:%M:%S"
+            
+          month = int(time.strftime( "%m", time.strptime(dateVal, dateformat) ))
+          dataTests.runRangeTests(obsNfo, m_value, month)
+          
+          #The qcFlag string is interpreted as follows. The leftmost byte is the first test, which is the data available test,
+          #each preceeding byte is another test of lesser importance. We store the values in a string which is to always contain
+          #the same number of bytes for consistency. Some examples:
+          #"000000" would represent no tests were done
+          #"200000" represents the data available test was done and passed(0 = no test, 1 = failed, 2 = passed)
+          #"220000" data available, sensor range tests performed.
+          qcFlag[qaqcTestFlags.TQFLAG_DA] = ( "%d" % dataTests.dataAvailable )
+          qcFlag[qaqcTestFlags.TQFLAG_SR] = ( "%d" % dataTests.sensorRangeCheck )
+          qcFlag[qaqcTestFlags.TQFLAG_GR] = ( "%d" % dataTests.grossRangeCheck )
+          qcFlag[qaqcTestFlags.TQFLAG_CR] = ( "%d" % dataTests.climateRangeCheck )
+          qcLevel = dataTests.calcQCLevel()
+          
+          if( htmlResultsFile != None ):
+            htmlTable.addObsQC(platformKey, obsName, dateVal, m_value, qcLevel, qcFlag.tostring(), obsNfo)
+                              
+          if( qcLevel != qaqcTestFlags.DATA_QUAL_GOOD and logger != None ):
+            logger.debug( "QCTest Failed: Date %s Platform: %s obsName: %s value: %f(%s) qcFlag: %s qcLevel: %d" % (dateVal, platformKey, obsName, ( m_value != None ) and m_value or -9999.0, ( uom != None ) and uom or '', qcFlag.tostring(), qcLevel) )
+            qcFailCnt += 1
+  
+          sql = "UPDATE multi_obs SET \
+                  qc_flag='%s',qc_level=%d WHERE \
+                  m_date='%s' AND sensor_id=%d" \
+                  %(qcFlag.tostring(), qcLevel, dateVal, sensor_id)
+          sqlUpdateFile.write(sql+"\n")
           row = dbCursor.fetchone()
             
           
