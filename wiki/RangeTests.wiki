@@ -75,15 +75,3 @@ This wiki will discuss running data validation against data stored in a Xenia sc
         * `<timeLagLimit>` tag sets the number of seconds deviation allowed from the current time of the system compared to the measurement time in the database before the data is flagged as lagging.
 
   === Output ===
-  The output of this processing is a csv file: [http://carocoops.org/~dramage_prod/seacoos/test_results.csv test_results.csv]. The file is written 
-  into the provider specific directory. The contents of the csv are variable depending on how many test profiles are present as well as the sensors 
-  present in the obsList for each test profile. The basic columns for each test profile will be: 
-  _Test_Profile_ProfileName,platform_url,time,..._
-  After the time entry, there can be multiple observation columns in the format of: 
-  _!SensorName.!UnitOfMeasurement,range !RangeHighValue < x <!RangeLowValue_. For each test profile there will be a new header line created in the
-  csv file.
-  This file is then used to create an HTML status page, described in section 2.
- == Status Page Script ==
- Once the test_results.csv file is generated, we then run the [http://trac.secoora.org/datamgmt/browser/obskml/trunk/QAQC/gen_webpage.pl gen_webpage.pl] script against it.
- There is one required command line option for this script, --!WorkingDir. This script generates a simple set of HTML tables, one per test profile. A
- sample can be seen [http://carocoops.org/~dramage_prod/seacoos/test_results.html here].
