@@ -99,7 +99,9 @@ Both users *xeniaprod* and *user* are part of the *admin* group ({{{sudo vi /etc
 
 == host substitutions, configuration ==
 
-*required section for configuring image to use local IP,database passwords and understanding data flow*
+*Required section for configuring image to use local IP,system/database passwords and understanding data flow*
+
+*By default as a test, on initial image startup this image will begin trying to hourly access over the web a few kmz files(usgs,nerrs,ndbc) for aggregation to the xenia database and production of several output formats and services.  Check output graphs(.png) under http://xxx.xxx.xxx.xxx/xenia/feeds after a few hours to verify feed processing/population.*
 
 If you plan to run a production xenia vmware instance accessible by others on the web, search the xeniaprod code from the following directory to see the necessary localhost substitutions(for your production machine http address) or other configuration options.
 
