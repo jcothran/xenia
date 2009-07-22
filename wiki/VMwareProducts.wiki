@@ -166,8 +166,6 @@ http://carocoops.org/obskml/scripts/flow_archive.png
 ----
 = Quality Control (QC) reports =
 
-*next vmware release*
-
 http://neptune.baruch.sc.edu/xenia/feeds/qaqc/
 
 basic quality control webpage reports:
@@ -178,5 +176,6 @@ http://neptune.baruch.sc.edu/xenia/feeds/qaqc/test_profiles.xml
 range-test http://neptune.baruch.sc.edu/xenia/feeds/qaqc/test_results.html <br/>
 earlier documentation see http://trac.secoora.org/datamgmt/wiki/RangeTests <br/>
 
-uptime http://neptune.baruch.sc.edu/xenia/feeds/qaqc/PlatformUptimePercentages.html <br>
-earlier documentation see http://trac.secoora.org/datamgmt/wiki/PercentageUptime
+uptime http://neptune.baruch.sc.edu/xenia/feeds/qaqc/PlatformUptimePercentages.html <br/>
+documentation http://code.google.com/p/xenia/wiki/PlatformUptime
+earlier documentation http://trac.secoora.org/datamgmt/wiki/PercentageUptime
