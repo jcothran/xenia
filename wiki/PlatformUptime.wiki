@@ -72,12 +72,12 @@ To populate this table when running the script, the command line parameter, --!U
 
  == !GenPlatformUptimeWebpage.pl ==
  This script builds an html webpage to display the uptime results. The script uses the !PlatformUptimePercentages.csv as the source data and creates an html file [http://carocoops.org/~dramage_prod/seacoos/PlatformUptimePercentages.html PlatformUptimePercentages.html].
- === GenPlatformUptimeWebpage_Inputs ===
+ === !GenPlatformUptimeWebpage_Inputs ===
  * ''Command Line Parameters''
  --!WorkingDir provides the path to the directory where the !PlatformUptimePercentages.csv resides for a given data provider. The HTML file, !PlatformUptimePercentages.html,  created will be created here as well.
  - ''!PlatformUptimePercentages.csv''
  This file is the output of the !CalcPlatformUptimePercentage.pl. The script uses this file for the data source to generated the HTML table.
-=== GenPlatformUptimeWebpage_Outputs === 
+=== !GenPlatformUptimeWebpage_Outputs === 
  The sole output of this script is the !PlatformUptimePercentages.html file. This file is an HTML table representation of our percentage data. A live feed can be seen [http://carocoops.org/~dramage_prod/secoora/PlatformUptimePercentages.html here]. Currently this file is produced once per day and represents the previous days results. 
 The data is categorized by color as follows:
   * Green represents 90% and up. 
