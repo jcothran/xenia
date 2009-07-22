@@ -1,0 +1,75 @@
+#!/usr/bin/perl
+
+=comment
++-------------+--------------------------------------------------------------+
+ |  Format     |                Explanation                                   |
+ +-------------+--------------------------------------------------------------+
+ |    %a       |   abbreviated name of day of the week                        |
+ |    %A       |   full name of day of the week                               |
+ |    %b or %h |   abbreviated name of the month                              |
+ |    %B       |   full name of the month                                     |
+ |    %D       |   shorthand for "%m/%d/%y"                                   |
+ |    %H or %k |   hour, 0--24                                                |
+ |    %I or %l |   hour, 0--12                                                |
+ |    %p       |   "am" or "pm"                                               |
+ |    %r       |   shorthand for "%I:%M:%S %p"                                |
+ |    %R       |   shorthand for %H:%M"                                       |
+ |    %T       |   shorthand for "%H:%M:%S"                                   |
+ |    %U       |   week of the year (week starts on Sunday)                   |
+ |    %w       |   day of the week, 0--6 (Sunday = 0)                         |
+ |    %W       |   week of the year (week starts on Monday)                   |
+ +-------------+--------------------------------------------------------------+
+
+#to create line breaks in a multi-column file substitute 'x' for missing values
+
+set missing 'x'
+plot 'myfile' using 1:($5) t 'mytitle' with lines lt 1
+
+=cut
+
+sub my_graph
+{
+my ($graph_data_file, $title, $y_units, $with_clause, $dir_path, $time_zone, $size_x, $size_y) = @_;
+
+if (!($size_x)) { $size_x = 600; }
+if (!($size_y)) { $size_y = 300; }
+
+$size_x = $size_x*0.001562499;
+$size_y = $size_y*0.00205;
+
+open (SCRIPT,">$graph_data_file.script");
+
+print SCRIPT "
+set terminal png
+set output \"$dir_path\"
+#640x480 default
+#set size 0.9375,0.625
+set size $size_x,$size_y
+set title \"$title\"
+set autoscale xy
+set data style lines
+#set xlabel \"Date/Time (UTC (GMT))\"
+#set xlabel \"Time (EST)\" 0,-1 
+set xlabel \"Date/Time ($time_zone)\"  
+set timefmt \"%m-%d-%Y %H:%M\"
+set xdata time
+#set xtics rotate
+set ylabel \"$y_units\"
+#set format x \"%m/%d\\n%H:%M\"
+#set format x \"%b %d %l:%M %p\"
+set format x \"%b%d\\n%l%p\"
+set grid
+#set key right
+set nokey
+plot '$graph_data_file' using 1:3 with $with_clause
+#show grid
+reset
+quit";
+close SCRIPT;
+
+`gnuplot $graph_data_file.script`;
+#`rm $graph_data_file.script`;
+#`rm $graph_data_file`;
+}
+
+1;
