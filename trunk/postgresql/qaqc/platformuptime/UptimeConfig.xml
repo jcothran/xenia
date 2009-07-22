@@ -1,0 +1,12 @@
+<Environment>
+  <Database>
+    <DB>
+      <type>sqlite</type>
+      <name>\Program Files\sqlite-3_5_6\microwfs\microwfs.db</name>
+    </DB>
+    <Settings>
+    <tmpdir>/tmp/ms_tmp</tmpdir>
+    <sensorgraphlink></sensorgraphlink>
+    </Settings>
+  </Database>
+</Environment>
