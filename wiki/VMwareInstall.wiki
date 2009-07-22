@@ -139,7 +139,7 @@ cd /home/xeniaprod/config #database user/password
 /home/xeniaprod/cron/getObskml.sh
 /home/xeniaprod/cron/mk_xenia_all_latest.sh
 
-search for #VM_CONFIG in effected crons (crontab -e)
+search for #VM_CONFIG in effected crons (as user 'xeniaprod', crontab -e)
 #start crons - root, xeniaprod
 
 check output graphs(.png) under http://xxx.xxx.xxx.xxx/xenia/feeds after a few hours to verify feed processing/population
