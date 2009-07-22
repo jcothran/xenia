@@ -20,9 +20,10 @@ For each platform we know to expect N updates per day. The analysis scripts use 
 
   --Date specifies the day, in YYYY-MM-DD format, to get the stats for, this is optional and if not provided the default is the last full day( date '1 day ago')
 
+  --XMLConfigFile optional parameter that specifies an XML configuration file. If not provided, the default assumption is we are connecting to a SQLite xenia database. See the section
   - *test_profiles.xml*
 
-  The tag which drives our percentage calculations is <UpdateInterval>. The script uses this tag to determine the maximum updates in a 24 hour period an observation from a platform is expected. Currently platforms report all observations together in one telemetry data stream, however it is conceivable that individual observations may report independently in the future. The interval is simple a count of how many times during a 24 hour period the database should have entries for the observations of a given platform. It is important to have the correct update interval otherwise the percentages will be skewed. 
+  The tag which drives our percentage calculations is <UpdateInterval>. The script uses this tag to determine the maximum updates in an 24 hour period an observation from a platform is expected. Currently platforms report all observations together in one telemetry data stream, however it is conceivable that individual observations may report independently in the future. The interval is simple a count of how many times during a 24 hour period the database should have entries for the observations of a given platform. It is important to have the correct update interval otherwise the percentages will be skewed. 
 
  1.1.2 *Outputs*
  There are two outputs of this script, the !PlatformUptimePercentages.csv and optionally entries into the metric_sensor_daily table of the database. 
