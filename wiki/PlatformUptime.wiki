@@ -1,3 +1,4 @@
+<wiki:toc max_depth="4" />
 == Overview ==
 Observations from various platforms and various provider feeds are written into our [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackage Xenia] schema database, currently running under SQLite3. 
 For each platform we know to expect N updates per day. The analysis scripts use a control file to determine what platforms and observations to query information for as well as how often the platform should be reporting the data. We can then use these percentages to gauge how well our infrastructure is working. If we begin seeing low yields, we can begin looking for problems somewhere in our collection chain.
@@ -20,7 +21,7 @@ For each platform we know to expect N updates per day. The analysis scripts use 
 
   --Date specifies the day, in YYYY-MM-DD format, to get the stats for, this is optional and if not provided the default is the last full day( date '1 day ago')
 
-  --XMLConfigFile optional parameter that specifies an XML configuration file. If not provided, the default assumption is we are connecting to a SQLite xenia database. See the [XMLConfigFile section]
+  --XMLConfigFile optional parameter that specifies an XML configuration file. If not provided, the default assumption is we are connecting to a SQLite xenia database. See the [section#XMLConfigFile]
 
   = test_profiles.xml =
 
