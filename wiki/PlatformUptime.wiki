@@ -6,7 +6,7 @@ For each platform we know to expect N updates per day. The analysis scripts use 
 
  ==!CalcPlatformUptimePercentage.pl==
 
- This script, found [http://code.google.com/p/xenia/source/browse/trunk/postgresql/qaqc/platformuptime/CalcPlatformUptimePercentage.pl here], runs against the Xenia database, currently the microwfs.db,  to generate our percentage uptime calculations. As an input, the script uses an http feed for a test_profiles.xml file. The test_profiles.xml file is described [http://trac.secoora.org/datamgmt/wiki/RangeTests here] in section 1.1.  The output of this file is a .csv file with the percentages. Optionally, as described below, the Xenia database can also be updated to contain the percentages found.
+ This script, found [http://code.google.com/p/xenia/source/browse/trunk/postgresql/qaqc/platformuptime/CalcPlatformUptimePercentage.pl here], runs against a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] schema database, either running on a PostGres or SQLite instance, to generate our percentage uptime calculations. As an input, the script uses an http feed for a test_profiles.xml file. The test_profiles.xml file is described [http://trac.secoora.org/datamgmt/wiki/RangeTests here] in section 1.1.  The output of this file is a .csv file with the percentages. Optionally, as described below, the Xenia database can also be updated to contain the percentages found.
 
  == Inputs ==
 
