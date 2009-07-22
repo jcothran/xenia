@@ -56,13 +56,15 @@ For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] 
        * `<file>` is the full filepath to the limits file. Current used is the test_profiles.xml type file.
      * `<unitsCoversion>`
        * `<file>` full filepath to the xml file that contains the units conversion formulas used.
-     * `<logging>`
-       * `<logMsgs>`
-       * `<maxBytes>`
-       * `<backupCount>`
-       * `<logDir>`
+     * `<logging>` 
+       This section defines various logging parameters.
+       * `<logMsgs>` flag, 0 or 1, to specify whether or not to log to file. 
+       * `<maxBytes>` the size a log file is allowed to grow until it is closed and a new one begun.
+       * `<backupCount>` the number of backup log files to keep. A backup file is created each time its size exceeds the amount in `<maxBytes>`.
+       * `<logDir>` the path to store the log files in.
      * `<outputs>`
-       * `<qcResultsTable>`
+     Deals with the various outputs from the script.
+       * `<qcResultsTable>` the path to an HTML file which shows the results, grouped by platform, of the range tests. A live example can be found [http://129.252.37.90/xenia/feeds/qaqc/test_results.html here]. Each platform row will have a column for a measurement tested, defined in the test_profiles.xml file. 
  
    * test_profiles.xml
    The following is an example of a simple test_profiles.xml file which contains only one platform with one sensor for QC validation:
