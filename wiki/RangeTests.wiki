@@ -58,10 +58,20 @@ This wiki will discuss running data validation against data stored in a Xenia sc
     Begins the list of each observation type the `<testProfile>` will run data range checks on.
       * `<obs>` is the starting tag for an individual observation type definition. 
         * `<obsHandle>` defines the observation type. The format for an `<obsHandle>` entry is "sensor name.unit of measurement", for example: "air_temperature.farenheit".   The sensor name must be defined in the databases sensor table. The unit of measurement must be defined in the uom_type table. 
-        * `<UpdateInterval>` defines how many times a day a sensor transmits its data from the platform to the outside world. The sample above shows an interval 
-  of 24, which would be every hour. This could be considered more of a platform configuration.
-        * `<rangeHigh>` tag defines the upper acceptable range of a measurement. This is given as a floating point number.
-        * `<rangeLow>` tag defines the lower acceptable range of a measurement. This is given as a floating point number.
+        * `<UpdateInterval>` defines how many times a day a sensor transmits its data from the platform to the outside world. The sample above shows an interval of 24, which would be every hour. This could be considered more of a platform configuration.
+        * `<rangeHigh>` defines the upper acceptable range of a sensor. This is given as a floating point number.
+        * `<rangeLow>` defines the lower acceptable range of a sensor. This is given as a floating point number.
+        * <grossRangeHigh> defines the upper range the measurement the sensor makes can be.
+        * <grossRangeLo> defines the lower range the measurement the sensor makes can be.
+        * <climatologicalRangeList>
+        Begins a section defining climatological ranges. Can have up to 12, 1 per month. 
+          * <climateRange>
+          Section will contain a range limit over a given month timeperiod.
+            * <startMonth> the month, abbreviate unix style, the range begins on.
+            * <endMonth> the month, abbreviate unix style, the range ends on.
+            * <rangeLow> the low climatological test range.
+            * <rangeHigh> the high climatological test range.
+
         * `<timeLagLimit>` tag sets the number of seconds deviation allowed from the current time of the system compared to the measurement time in the database before the data is flagged as lagging.
 
   === Output ===
