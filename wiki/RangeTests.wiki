@@ -1,13 +1,12 @@
-#Range Tests
+      #Range Tests
 
 = Overview = 
 This wiki will discuss running data validation against data stored in a Xenia schema database.<br>
 
 == Sensor Data QC ==
 
- 1.1. Input<br>
- The details of the KML file can be studied following the links above, we will discuss the test_profiles.xml file in detail here.<br>
- The following is an example of a simple test_profiles.xml file which contains only one platform with one sensor for QC validation:<br>
+  * Input<br>
+   The following is an example of a simple test_profiles.xml file which contains only one platform with one sensor for QC validation:<br>
  {{{
  <xml>
   <testProfileList>
@@ -22,6 +21,16 @@ This wiki will discuss running data validation against data stored in a Xenia sc
       <UpdateInterval>24</UpdateInterval>
       <rangeHigh>32</rangeHigh>
       <rangeLow>0</rangeLow>
+      <grossRangeHigh></grossRangeHigh>
+      <grossRangeLo></grossRangeLo>
+      <climatologicalRangeList> 
+        <climateRange>
+          <startMonth></startMonth>
+          <endMonth></endMonth>
+          <rangeLow></rangeLow>
+          <rangeHigh></rangeHigh>
+        </climateRange>  
+      </climatologicalRangeList>
      </obs>
     </obsList>
     <notify>
@@ -38,40 +47,30 @@ This wiki will discuss running data validation against data stored in a Xenia sc
 <br>
   A file may contain multiple test profiles, each of which can be used to group like platforms together. Like platforms would be platforms that have
   the same sensor array on board. <br>
-  * <testProfileList><br>
+  * `<testProfileList>`<br>
   This tag denotes the start of a list of one or more <testProfile> entries.<br>
-  * <testProfile><br>
-  The <testProfile> tag uses the <id> child tag to name the test profile grouping that follows.<br>
-  * <platformList><br>
-  The <platformList> can contain one or more <platform> child tags which provide the name of the platform to be tested in the <testProfile>. This 
-  name must match the name found in the KML file in the <Placemark id....> tag. For instance, in the sample above we must have the following entry in   
-  the KML file <Placemark id="carocoops.CAP3.buoy">. Otherwise when the script is run, it will not find a match and no validation will be performed 
-  on the platform listed in the test_profiles.xml file.<br>
-  * <obsList><br>
-  The <obsList> tag begins the list of each observation type the <testProfile> will run data range checks on.<br>
-  <obs> is the starting tag for an individual observation type definition. The <obsHandle> defines the observation type. The format for an 
-  <obsHandle> entry is !SensorName.!UnitofMeasurement. The Sensor Name and Unit of Measurement must match up with the name provided in the KML file
-  under the tags <obsType> and <uomType>. <br>
-  <UpdateInterval> defines how many times a day a sensor transmits its data from the platform to the outside world. The sample above shows an interval 
+  * `<testProfile>`<br>
+  The `<testProfile>` tag uses the <id> child tag to name the test profile grouping that follows.<br>
+  * `<platformList>`<br>
+  The `<platformList>` can contain one or more `<platform>` child tags which provide the name of the platform to be tested in the `<testProfile>`. 
+  * `<obsList>`<br>
+  The `<obsList>` tag begins the list of each observation type the `<testProfile>` will run data range checks on.<br>
+  `<obs>` is the starting tag for an individual observation type definition. The `<obsHandle>` defines the observation type. The format for an 
+  `<obsHandle>` entry is !SensorName.!UnitofMeasurement.  <br>
+  `<UpdateInterval>` defines how many times a day a sensor transmits its data from the platform to the outside world. The sample above shows an interval 
   of 24, which would be every hour. This could be considered more of a platform configuration.<br>
-  The <rangeHigh> tag defines the upper acceptable range of a measurement. This is given as a floating point number.<br>
-  The <rangeLow> tag defines the lower acceptable range of a measurement. This is given as a floating point number.<br>
-  The measurement values are taken from the <value> tag in the KML file.<br>
-  * <notify><br>
-  This tag begins the section defining the who, what and when of failure notification. <br>
-  The <timeLagLimit> tag sets the number of seconds deviation allowed from the current time of the system compared to the measurement time in the KML     
+  The `<rangeHigh>` tag defines the upper acceptable range of a measurement. This is given as a floating point number.<br>
+  The `<rangeLow>` tag defines the lower acceptable range of a measurement. This is given as a floating point number.<br>
+  The `<timeLagLimit>` tag sets the number of seconds deviation allowed from the current time of the system compared to the measurement time in the KML     
   file, <TimeStamp><when>,  before the data is flagged as lagging.<br>
-  <wait> defines how many seconds must pass for an email to be sent out. This is used to keep the emails to a low nag threshold.
-  <emailGroup> is an ID used to select who receives an email notification. This ID is defined in the [http://trac.secoora.org/datamgmt/browser/obskml/trunk/QAQC/email_list.xml email_list.xml] file. This field is used later during the email generation phase.<br>
-  <emailMessage> is an ID used to select what the person on the email notification list receives. This ID is defined in the [http://trac.secoora.org/datamgmt/browser/obskml/trunk/QAQC/message_list.xml message_list.xml] file.This field is used later during the email generation phase.<br>
 
   1.2. Output<br>
   The output of this processing is a csv file: [http://carocoops.org/~dramage_prod/seacoos/test_results.csv test_results.csv]. The file is written 
   into the provider specific directory. The contents of the csv are variable depending on how many test profiles are present as well as the sensors 
   present in the obsList for each test profile. The basic columns for each test profile will be: <br>
-  ''Test_Profile_ProfileName,platform_url,time,...''<br>
+  _Test_Profile_ProfileName,platform_url,time,..._<br>
   After the time entry, there can be multiple observation columns in the format of: 
-  ''!SensorName.!UnitOfMeasurement,range !RangeHighValue < x <!RangeLowValue''. For each test profile there will be a new header line created in the
+  _!SensorName.!UnitOfMeasurement,range !RangeHighValue < x <!RangeLowValue_. For each test profile there will be a new header line created in the
   csv file.<br>
   This file is then used to create an HTML status page, described in section 2.<br>
  2. Status Page Script<br>
