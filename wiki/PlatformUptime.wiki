@@ -2,15 +2,15 @@
 Observations from various platforms and various provider feeds are written into our [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackage Xenia] schema database, currently running under SQLite3. 
 For each platform we know to expect N updates per day. The analysis scripts use a control file to determine what platforms and observations to query information for as well as how often the platform should be reporting the data. We can then use these percentages to gauge how well our infrastructure is working. If we begin seeing low yields, we can begin looking for problems somewhere in our collection chain.
 
- 1. *Scripts*
+ ==Scripts==
 
- 1.1 *!CalcPlatformUptimePercentage.pl*
+ ==!CalcPlatformUptimePercentage.pl==
 
  This script, found [http://code.google.com/p/xenia/source/browse/trunk/postgresql/qaqc/platformuptime/CalcPlatformUptimePercentage.pl here], runs against the Xenia database, currently the microwfs.db,  to generate our percentage uptime calculations. As an input, the script uses an http feed for a test_profiles.xml file. The test_profiles.xml file is described [http://trac.secoora.org/datamgmt/wiki/RangeTests here] in section 1.1.  The output of this file is a .csv file with the percentages. Optionally, as described below, the Xenia database can also be updated to contain the percentages found.
 
- 1.1.1 *Inputs*
+ == Inputs ==
 
-  - *Command Line Parameters*
+  = Command Line Parameters =
 
   --!WorkingDir provides the directory used to store the results file, !PlatformUptimePercentages.csv Should provide a unique name, such as carocoops to denote where the data originated.
 
@@ -22,11 +22,11 @@ For each platform we know to expect N updates per day. The analysis scripts use 
 
   --XMLConfigFile optional parameter that specifies an XML configuration file. If not provided, the default assumption is we are connecting to a SQLite xenia database. See the [http://code.google.com/p/xenia/wiki/PlatformUptime#XMLConfigFile section]
 
-  = test_profiles.xml =
+  === test_profiles.xml ===
 
   The tag which drives our percentage calculations is <UpdateInterval>. The script uses this tag to determine the maximum updates in an 24 hour period an observation from a platform is expected. Currently platforms report all observations together in one telemetry data stream, however it is conceivable that individual observations may report independently in the future. The interval is simple a count of how many times during a 24 hour period the database should have entries for the observations of a given platform. It is important to have the correct update interval otherwise the percentages will be skewed. 
 
- = XMLConfigFile =
+ === XMLConfigFile ===
  {{{
 <Environment>
   <Database>
@@ -42,7 +42,8 @@ For each platform we know to expect N updates per day. The analysis scripts use 
   </Database>
 </Environment>
  }}}
- 1.1.2 *Outputs*
+
+== Outputs ==
  There are two outputs of this script, the !PlatformUptimePercentages.csv and optionally entries into the metric_sensor_daily table of the database. 
   - *!PlatformUptimePercentages.csv*
  For each <testProfile> group in the test_profiles.xml file, there will be a header denoting the PlatformID, URL, Date, then a column per observation defined in the test_profiles.xml file. The observation headers have the name of the observation as well as the <UpdateInterval> value. The data for each observation is the percentage calculated. The script is currently run once a day and queries the previous days data.
@@ -55,7 +56,7 @@ carocoops.SUN1.wls,,2008-02-19,0.00,0.00,0.00,0.00,0.00,0.00
 }}}
  Currently this file is used as the source for our script that generates the webpage to display the data. The idea behind generating a .csv file is that it could be post-processed easily.
 
-  - *Database table, metric_sensor_daily*
+  = Database table, metric_sensor_daily =
  This table is a new entry into the Xenia schema. The purpose is to create a repository of the data and then be able to trend the data. This could be useful in determining if there are certain time periods more apt to have data losses or to find certain observations which are chronically low yielding. As we expand the functionality, implementing the use of the Secoora QAQC flags, ythe user will be able to drill down into the data to determine what the percentage represents. For instance, if you have a sensor reporting at 75%, you could drill down and see that the platform was not reporting the data. This would also be tied into our dnamic inventory to allow the type of sensor on the platform to be determined. One might see that manufacturer XYZ has sensors which have 100% uptime where manufacturer ABC's sensors fail routinely. 
 To populate this table when running the script, the command line parameter, --!UpdateDatabase, must be present and set to "yes". 
  The structure is: 
@@ -63,14 +64,14 @@ To populate this table when running the script, the command line parameter, --!U
   ''sensor_id'', type INTEGER. This represents the sensor_id from a specific platform.
   ''percentage_uptime'', type FLOAT. This is the calculated uptime percentage for the sensor.
 
- 1.2 *!GenPlatformUptimeWebpage.pl*
+ == !GenPlatformUptimeWebpage.pl ==
  This script builds an html webpage to display the uptime results. The script uses the !PlatformUptimePercentages.csv as the source data and creates an html file [http://carocoops.org/~dramage_prod/seacoos/PlatformUptimePercentages.html PlatformUptimePercentages.html].
- 1.2.1 *Inputs*
- - ''Command Line Parameters''
+ === Inputs ===
+ * ''Command Line Parameters''
  --!WorkingDir provides the path to the directory where the !PlatformUptimePercentages.csv resides for a given data provider. The HTML file, !PlatformUptimePercentages.html,  created will be created here as well.
  - ''!PlatformUptimePercentages.csv''
  This file is the output of the !CalcPlatformUptimePercentage.pl as described in section 1.1.2. The script uses this file for the data source to generated the HTML table.
- 1.2.2 *Outputs* 
+=== Outputs === 
  The sole output of this script is the !PlatformUptimePercentages.html file. This file is an HTML table representation of our percentage data. A live feed can be seen [http://carocoops.org/~dramage_prod/seacoos/PlatformUptimePercentages.html here]. Currently this file is produced once per day and represents the previous days results. 
 The data is categorized by color as follows:
  Green represents 90% and up. 
