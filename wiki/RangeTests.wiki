@@ -19,16 +19,16 @@ This wiki will discuss running data validation against data stored in a Xenia sc
      <obs>
       <obsHandle>wind_speed.m_s-1</obsHandle>
       <UpdateInterval>24</UpdateInterval>
-      <rangeHigh>32</rangeHigh>
-      <rangeLow>0</rangeLow>
-      <grossRangeHigh></grossRangeHigh>
-      <grossRangeLo></grossRangeLo>
+      <rangeHigh>32565</rangeHigh>
+      <rangeLow>-32565</rangeLow>
+      <grossRangeHigh>30</grossRangeHigh>
+      <grossRangeLo>0</grossRangeLo>
       <climatologicalRangeList> 
         <climateRange>
-          <startMonth></startMonth>
-          <endMonth></endMonth>
-          <rangeLow></rangeLow>
-          <rangeHigh></rangeHigh>
+          <startMonth>Jan</startMonth>
+          <endMonth>Mar</endMonth>
+          <rangeLow>30</rangeLow>
+          <rangeHigh>27</rangeHigh>
         </climateRange>  
       </climatologicalRangeList>
      </obs>
@@ -61,16 +61,16 @@ This wiki will discuss running data validation against data stored in a Xenia sc
         * `<UpdateInterval>` defines how many times a day a sensor transmits its data from the platform to the outside world. The sample above shows an interval of 24, which would be every hour. This could be considered more of a platform configuration.
         * `<rangeHigh>` defines the upper acceptable range of a sensor. This is given as a floating point number.
         * `<rangeLow>` defines the lower acceptable range of a sensor. This is given as a floating point number.
-        * <grossRangeHigh> defines the upper range the measurement the sensor makes can be.
-        * <grossRangeLo> defines the lower range the measurement the sensor makes can be.
-        * <climatologicalRangeList>
+        * `<grossRangeHigh>` defines the upper range the measurement the sensor makes can be.
+        * `<grossRangeLo>` defines the lower range the measurement the sensor makes can be.
+        * `<climatologicalRangeList>`
         Begins a section defining climatological ranges. Can have up to 12, 1 per month. 
-          * <climateRange>
+          * `<climateRange>`
           Section will contain a range limit over a given month timeperiod.
-            * <startMonth> the month, abbreviate unix style, the range begins on.
-            * <endMonth> the month, abbreviate unix style, the range ends on.
-            * <rangeLow> the low climatological test range.
-            * <rangeHigh> the high climatological test range.
+            * `<startMonth>` the month, abbreviate unix style, the range begins on.
+            * `<endMonth>` the month, abbreviate unix style, the range ends on.
+            * `<rangeLow>` the low climatological test range.
+            * `<rangeHigh>` the high climatological test range.
 
         * `<timeLagLimit>` tag sets the number of seconds deviation allowed from the current time of the system compared to the measurement time in the database before the data is flagged as lagging.
 
