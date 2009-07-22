@@ -1,0 +1,154 @@
+#Range Tests
+
+= '''Overview''' = 
+This wiki will discuss running data validation against data stored in an ObsKML file.[[BR]]
+An overview of what ObsKML is can be found [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML here].[[BR]]
+In short, it is a data source independent file format based on an XML/KML schema. KML is the Google centric approach to XML using their own unique tags and metadata.[[BR]]
+A Perl script is executed via cron jobs to create an [http://carocoops.org/gearth/oostech.xml oostech.xml] file. This file is a first generation implementation of a file schema using XML. Another Perl script is then executed via cron to create an[http://carocoops.org/obskml/feeds/seacoos/seacoos_metadata_latest.kmz Seacoos KMZ] file. A KMZ file is a zipped KML file or files. A tutorial on KML can be found [http://code.google.com/apis/kml/documentation/kml_tut.html here] on Google. The schema of the ObsKML file used can be found [http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML#Schema_simple here].[[BR]]
+[[BR]]
+Currently USC generates a number of ObsKML files for different data feeds, there is one for [http://carocoops.org/obskml/feeds/carocoops/ CaroCOOPS], [http://carocoops.org/obskml/feeds/seacoos/ SeaCOOS], [http://carocoops.org/obskml/feeds/nerrs/ NERRS], and [http://carocoops.org/obskml/feeds/scdnr/ SCDNR]. The validation process takes the KML file(s) in the KMZ file and runs a range check against each platform and observation types setup in the test profile xml configuration file. Any observations that are either outside of the range or missing will trigger a notification email to one or more interested parties. The email will contain a link to an HTML page which details the platforms and observations tested. 
+
+
+
+== '''Sensor Data QC''' ==
+[[BR]]
+Once the KMZ files are generated, we have another set of scripts which carry out several tasks.[[BR]]
+There are 4 scripts which encompass the whole process: [http://trac.secoora.org/datamgmt/browser/obskml/trunk/QAQC/test_profiles.pl test_profiles.pl], [http://trac.secoora.org/datamgmt/browser/obskml/trunk/QAQC/gen_webpage.pl gen_webpage.pl], [http://trac.secoora.org/datamgmt/browser/obskml/trunk/QAQC/gen_notify.pl gen_notify.pl] and [http://trac.secoora.org/datamgmt/browser/obskml/trunk/QAQC/send_email.pl send_email.pl].
+ 1. '''Testing Script'''[[BR]]
+The script, [http://trac.secoora.org/datamgmt/browser/obskml/trunk/QAQC/test_profiles.pl test_profile.pl], does the lions share of the processing. It works from two data sources, the KMZ file which can have one or more obsKML files and a [http://carocoops.org/~dramage_prod/seacoos/test_profiles.xml test_profiles.xml] configuration file.[[BR]] 
+The testing environment is setup is currently geared to a specific directory structure. The parent directory contains the scripts we use to do the processing, then each regional association has a directory, seacoos for example, that contains the test_profiles.xml file geared towards that provider.[[BR]] 
+There are three command line arguments, each is required:[[BR]] 
+--!WorkingDir provides the directory used to store the results file, test_results.csv Should provide a unique name, such as carocoops to denote where the data originated.[[BR]] 
+--KMZFeed provides the url where the KMZ file resides.[[BR]] 
+--!TstProfFeed provides the url where the test_profiles.xml file resides.[[BR]] 
+
+A command line might look something like this: [[BR]] 
+perl test_profile.pl --!WorkingDir seacoos --KMZFeed http://carocoops.org/obskml/feeds/seacoos/seacoos_metadata_latest.kmz --!TstProfFeed http://carocoops.org/~dramage_prod/seacoos/test_profiles.xml [[BR]] 
+
+ 1.1. '''Input'''[[BR]]
+ The details of the KML file can be studied following the links above, we will discuss the test_profiles.xml file in detail here.[[BR]]
+ The following is an example of a simple test_profiles.xml file which contains only one platform with one sensor for QC validation:[[BR]]
+ {{{
+ <xml>
+  <testProfileList>
+   <testProfile>
+    <id>CaroCoopsBuoys</id>
+    <platformList>
+     <platform>carocoops.CAP3.buoy</platform>
+    </platformList>
+    <obsList>
+     <obs>
+      <obsHandle>wind_speed.m_s-1</obsHandle>
+      <UpdateInterval>24</UpdateInterval>
+      <rangeHigh>32</rangeHigh>
+      <rangeLow>0</rangeLow>
+     </obs>
+    </obsList>
+    <notify>
+     <timeLagLimit>14400</timeLagLimit>
+     <wait>10</wait>
+     <emailGroup>1</emailGroup>
+     <emailMessage>5</emailMessage>
+    </notify>
+   </testProfile>
+  </testProfileList>
+ </xml>
+ }}}
+[[BR]]
+[[BR]]
+  A file may contain multiple test profiles, each of which can be used to group like platforms together. Like platforms would be platforms that have
+  the same sensor array on board. [[BR]]
+  * '''<testProfileList>'''[[BR]]
+  This tag denotes the start of a list of one or more <testProfile> entries.[[BR]]
+  * '''<testProfile>'''[[BR]]
+  The <testProfile> tag uses the <id> child tag to name the test profile grouping that follows.[[BR]]
+  * '''<platformList>'''[[BR]]
+  The <platformList> can contain one or more <platform> child tags which provide the name of the platform to be tested in the <testProfile>. This 
+  name must match the name found in the KML file in the <Placemark id....> tag. For instance, in the sample above we must have the following entry in   
+  the KML file <Placemark id="carocoops.CAP3.buoy">. Otherwise when the script is run, it will not find a match and no validation will be performed 
+  on the platform listed in the test_profiles.xml file.[[BR]]
+  * '''<obsList>'''[[BR]]
+  The <obsList> tag begins the list of each observation type the <testProfile> will run data range checks on.[[BR]]
+  <obs> is the starting tag for an individual observation type definition. The <obsHandle> defines the observation type. The format for an 
+  <obsHandle> entry is !SensorName.!UnitofMeasurement. The Sensor Name and Unit of Measurement must match up with the name provided in the KML file
+  under the tags <obsType> and <uomType>. [[BR]]
+  <UpdateInterval> defines how many times a day a sensor transmits its data from the platform to the outside world. The sample above shows an interval 
+  of 24, which would be every hour. This could be considered more of a platform configuration.[[BR]]
+  The <rangeHigh> tag defines the upper acceptable range of a measurement. This is given as a floating point number.[[BR]]
+  The <rangeLow> tag defines the lower acceptable range of a measurement. This is given as a floating point number.[[BR]]
+  The measurement values are taken from the <value> tag in the KML file.[[BR]]
+  * '''<notify>'''[[BR]]
+  This tag begins the section defining the who, what and when of failure notification. [[BR]]
+  The <timeLagLimit> tag sets the number of seconds deviation allowed from the current time of the system compared to the measurement time in the KML     
+  file, <TimeStamp><when>,  before the data is flagged as lagging.[[BR]]
+  <wait> defines how many seconds must pass for an email to be sent out. This is used to keep the emails to a low nag threshold.
+  <emailGroup> is an ID used to select who receives an email notification. This ID is defined in the [http://trac.secoora.org/datamgmt/browser/obskml/trunk/QAQC/email_list.xml email_list.xml] file. This field is used later during the email generation phase.[[BR]]
+  <emailMessage> is an ID used to select what the person on the email notification list receives. This ID is defined in the [http://trac.secoora.org/datamgmt/browser/obskml/trunk/QAQC/message_list.xml message_list.xml] file.This field is used later during the email generation phase.[[BR]]
+
+  1.2. '''Output'''[[BR]]
+  The output of this processing is a csv file: [http://carocoops.org/~dramage_prod/seacoos/test_results.csv test_results.csv]. The file is written 
+  into the provider specific directory. The contents of the csv are variable depending on how many test profiles are present as well as the sensors 
+  present in the obsList for each test profile. The basic columns for each test profile will be: [[BR]]
+  ''Test_Profile_ProfileName,platform_url,time,...''[[BR]]
+  After the time entry, there can be multiple observation columns in the format of: 
+  ''!SensorName.!UnitOfMeasurement,range !RangeHighValue < x <!RangeLowValue''. For each test profile there will be a new header line created in the
+  csv file.[[BR]]
+  This file is then used to create an HTML status page, described in section 2.[[BR]]
+ 2. '''Status Page Script'''[[BR]]
+ Once the test_results.csv file is generated, we then run the [http://trac.secoora.org/datamgmt/browser/obskml/trunk/QAQC/gen_webpage.pl gen_webpage.pl] script against it.
+ There is one required command line option for this script, --!WorkingDir. This script generates a simple set of HTML tables, one per test profile. A
+ sample can be seen [http://carocoops.org/~dramage_prod/seacoos/test_results.html here].
+ 3. '''Notification Script'''[[BR]]
+ The final step is notifying the concerned parties of any problems from the testing script. The notification process uses two scripts, [http://trac.secoora.org/datamgmt/browser/obskml/trunk/QAQC/gen_notify.pl gen_notify.pl] and [http://trac.secoora.org/datamgmt/browser/obskml/trunk/QAQC/send_email.pl send_email.pl] to determine if a notification is necessary and to then generate and send the email.[[BR]]
+The gen_notify.pl script requires the following command line arguments: --!WorkingDir --!EmailList --!MsgList.[[BR]]
+* --!WorkingDir is the provider specific directory to work in.[[BR]]
+* --!EmailList provides the [http://trac.secoora.org/datamgmt/browser/obskml/trunk/QAQC/email_list.xml email_list.xml] file used for determining the people to be sent an email upon failure.[[BR]]
+* --!MsgList provides the [http://trac.secoora.org/datamgmt/browser/obskml/trunk/QAQC/message_list.xml message_list.xml] file used for determining what contents of the email sent to the people in the email list.[[BR]]
+ This script uses as inputs the test_results.csv file output by the test_profiles.pl script. A test_results_notify.csv file is created/modified by this script to track when the last notification was sent. The file contains two columns, the first is the test profile id, the second is the last notification time in seconds.[[BR]]
+ 3.1 '''!EmailList Configuration File'''
+ The email_list.xml file gives the user the ability to configure one or more contacts for when a failure occurs. Below is a sample file:
+
+{{{
+<email_list id="1">
+ <group id="1">
+  <domain>inlet.geol.sc.edu</domain>
+  <sender>dan@inlet.geol.sc.edu</sender>
+  <user id="1">
+   <full_name>Dan Ramage</full_name>
+   <email>dan@inlet.geol.sc.edu</email>
+  </user>
+ </group>
+</email_list>
+
+}}}
+ Multiple lists can be defined in an email_list.xml file. These groupings are identified using the <group id=...> tag. This is the value set in 
+ <emailGroup> tag in the test_profiles.xml file.
+
+ 3.2 '''Message List Configuration File'''
+ This file defines the messages which are sent out on when a failure occurs during the testing phase. A sample of a message_list.xml file is provided below:
+{{{
+<message_list id="1">
+ <message id="1">
+  <importance>High</importance>
+  <subject>
+   Alert: Platform observed values missing,late or out of range
+  </subject>
+  <body>
+  Alert: This is an automated email alert that the expected platform measurements shown at  
+  http://www.carocoops.org/~dramage_prod/seacoos/test_results.html#Test_Profile_CaroCoopsBuoys are having problems with either:
+  Delays in transmission(lagging - highlighted violet)
+  Missing measurement values(missing, missing all - highlighted blue)
+  Measurement values outside of a predefined test range(fail low, fail high - highlighted red)
+  The above issues may need to be addressed and resolved by the instrumentation, telemetry or data management staff.
+  </body>
+ </message>
+</message_list>
+}}}
+
+The <message id=...> field specifies which message is sent by using the <emailMessage> tag in the test_profiles.xml file. Both the <subject> and <body> tags are for free form text. Currently the messages are non specific as to which sensor is at fault, however we provide an anchor in the link to the specific test profile which is at fault.
+ 4. '''Enhancements'''
+ * A useful feature would be to have some statistics kept of platform uptime, sensor failures, etc. 
+ * Create entry forms to edit/modify/delete the various configuration files, test_profiles.xml, email_list.xml and message_list.xml.
+ * For bulk entering of platforms/observations for test_profiles.xml, come up with a csv format file that could be imported.
+ * Have the test_profiles.xml file live on the platform(s) owner's site. This would aid us in keeping the platform inventory update to date since the
+ owners would have the ability to edit the file in an effort to stop emails coming through that were caused by a sensor change.
