@@ -42,7 +42,7 @@ For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] 
 </environment>
 
    }}}
-   * <environment><database><db>
+   * `<environment><database><db>`
      * `<type>` defines the type of database engine the Xenia database is hosted on. Can be either, sqlite or postgres currently.
      * `<name>` for a SQLite database, this is the path to the database file. For !PostGres this is the database name to connect to.
      * `<user>` is not used in SQLite. For !PostGres, this is the user name used to login to the database.
