@@ -14,7 +14,7 @@ For each platform we know to expect N updates per day. The analysis scripts use 
 
   --!WorkingDir provides the directory used to store the results file, !PlatformUptimePercentages.csv Should provide a unique name, such as carocoops to denote where the data originated.
 
-  --!TstProfFeed provides the url where the test_profiles.xml file resides. For example, http://www.carocoops.org/~dramage_prod/seacoos/test_profiles.xml.
+  --!TstProfFeed provides the url where the test_profiles.xml file resides. For example, [http://www.carocoops.org/~dramage_prod/seacoos/test_profiles.xml test_profiles.xml].
 
   --!UpdateDatabase specifies if the metrics table in the database is to be updated. Values are "yes" to update, or "no". This value is optional, default is "no".
 
