@@ -136,3 +136,13 @@ For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] 
         * `<timeLagLimit>` tag sets the number of seconds deviation allowed from the current time of the system compared to the measurement time in the database before the data is flagged as lagging.
 
   === Output ===
+  * Database
+    * From the configuration file, we defined `<sqlQCUpdateFile>` which contains the SQL UPDATES to run against the database to set the values for the qc_level and qc_flag columns in the multi_obs table.
+      * qc_flag
+      This is interpreted as follows. The leftmost byte is the first test, which is the data available test, each preceeding byte is another test of lesser importance. We store the values in a string which is to always contain the same number of bytes for consistency. The flags from left to right: Data available, sensor range check, gross range check, climate range check, rate of change, nearest neighbor. Currently rate of change and nearest neighbor are not implemented.
+      Some examples:
+{{{
+          "000000" would represent no tests were done
+          "200000" represents the data available test was done and passed(0 = no test, 1 = failed, 2 = passed)
+          "220000" data available, sensor range tests performed.
+}}}
