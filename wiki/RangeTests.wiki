@@ -50,8 +50,20 @@ For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] 
           * `<user>` is not used in SQLite. For !PostGres, this is the user name used to login to the database.
           * `<pwd>` is not used in SQLite. For !PostGres, this is the password for the user.
           * `<host>` is not used in SQLite. For !PostGres, this is the IP address the database engine is hosted on.
-        * `<sqlQCUpdateFile>` the output of the script is a SQL file which can then be used to update the database. A sample SQL line is: "UPDATE multi_obs SET qc_flag='222200',qc_level=3 WHERE m_date='2009-03-23T01:36:00' AND sensor_id=4099"
-
+        * `<sqlQCUpdateFile>` the full path to the SQL file the scripts creates upon execution. A sample SQL line is: "UPDATE multi_obs SET qc_flag='222200',qc_level=3 WHERE m_date='2009-03-23T01:36:00' AND sensor_id=4099"
+     * `<qcLimits>`
+       * `<fileType>` defines the format the range limits are stored in. Currently the only valid entry is test_profiles. The idea behind this setting is to allow different sources for the range limits, perhaps in a database or spreadsheet. 
+       * `<file>` is the full filepath to the limits file. Current used is the test_profiles.xml type file.
+     * `<unitsCoversion>`
+       * `<file>` full filepath to the xml file that contains the units conversion formulas used.
+     * `<logging>`
+       * `<logMsgs>`
+       * `<maxBytes>`
+       * `<backupCount>`
+       * `<logDir>`
+     * `<outputs>`
+       * `<qcResultsTable>`
+ 
    * test_profiles.xml
    The following is an example of a simple test_profiles.xml file which contains only one platform with one sensor for QC validation:
  {{{
