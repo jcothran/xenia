@@ -1,8 +1,11 @@
 <environment>
   <database>
     <db>
-      <type>sqlite</type>
-      <name>C:\Program Files\sqlite-3_5_6\microwfs\microwfs.db</name>
+      <type>postgres</type>
+      <name>xenia</name>
+      <user>xeniaprod</user>
+      <pwd>xeniaprod!99</pwd>
+      <host>129.252.37.90</host>
     </db>
     <sqlQCUpdateFile>C:\Program Files\sqlite-3_5_6\microwfs\sql_qc_update.sql</sqlQCUpdateFile>
   </database>
@@ -24,4 +27,8 @@
       <logDir>c:\temp\nws_precip\fetchlog\</logDir>
     </fetchLogging>    
   </logging> 
+  <outputs>
+    <qcResultsTable>C:\Documents and Settings\dramage\workspace\QAQC-ControlChart\test_results.html</qcResultsTable>
+  </outputs>
+  
 </environment>
