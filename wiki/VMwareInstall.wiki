@@ -1,5 +1,7 @@
 #summary running a server production instance
 
+see also [VMwareHome]
+
 <wiki:toc max_depth="6" />
 
 = Setup =
