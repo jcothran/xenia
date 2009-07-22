@@ -8,8 +8,7 @@ For each platform we know to expect N updates per day. The analysis scripts use 
 
  This script, found [http://code.google.com/p/xenia/source/browse/trunk/postgresql/qaqc/platformuptime/CalcPlatformUptimePercentage.pl here], runs against a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] schema database, either running on a !PostGres or SQLite instance, to generate our percentage uptime calculations. As an input, the script uses an http feed for a test_profiles.xml file. The test_profiles.xml file is described [http://trac.secoora.org/datamgmt/wiki/RangeTests here] in section 1.1.  The output of this file is a .csv file with the percentages. Optionally, as described below, the Xenia database can also be updated to contain the percentages found.
 
-  * Inputs *
-
+  * Inputs
     * Command Line Parameters
       * --!WorkingDir provides the directory used to store the results file, !PlatformUptimePercentages.csv Should provide a unique name, such as carocoops to denote where the data originated.
       * --!TstProfFeed provides the url where the test_profiles.xml file resides. For example, [http://www.carocoops.org/~dramage_prod/seacoos/test_profiles.xml test_profiles.xml].
@@ -67,16 +66,15 @@ To populate this table when running the script, the command line parameter, --!U
   ''sensor_id'', type INTEGER. This represents the sensor_id from a specific platform.
   ''percentage_uptime'', type FLOAT. This is the calculated uptime percentage for the sensor.
 
- == !GenPlatformUptimeWebpage.pl ==
- This script builds an html webpage to display the uptime results. The script uses the !PlatformUptimePercentages.csv as the source data and creates an html file [http://carocoops.org/~dramage_prod/seacoos/PlatformUptimePercentages.html PlatformUptimePercentages.html].
-  === !GenPlatformUptimeWebpage_Inputs ===
-  * Command Line Parameters
-    * --!WorkingDir provides the path to the directory where the PlatformUptimePercentages.csv resides for a given data provider. The HTML file, !PlatformUptimePercentages.html,  created will be created here as well.
-  * !PlatformUptimePercentages.csv
-  This file is the output of the !CalcPlatformUptimePercentage.pl. The script uses this file for the data source to generated the HTML table.
-  === !GenPlatformUptimeWebpage_Outputs === 
-   The sole output of this script is the !PlatformUptimePercentages.html file. This file is an HTML table representation of our percentage data. A live feed can be seen [http://carocoops.org/~dramage_prod/secoora/PlatformUptimePercentages.html here]. Currently this file is produced once per day and represents the previous days results. 
-  The data is categorized by color as follows:
+  * !GenPlatformUptimeWebpage.pl
+  This script builds an html webpage to display the uptime results. The script uses the !PlatformUptimePercentages.csv as the source data and creates an html file [http://carocoops.org/~dramage_prod/seacoos/PlatformUptimePercentages.html PlatformUptimePercentages.html].
+    * !GenPlatformUptimeWebpage_Inputs
+      * Command Line Parameters
+        * --!WorkingDir provides the path to the directory where the PlatformUptimePercentages.csv resides for a given data provider. The HTML file, !PlatformUptimePercentages.html,  created will be created here as well.
+    * !PlatformUptimePercentages.csv
+    This file is the output of the !CalcPlatformUptimePercentage.pl. The script uses this file for the data source to generated the HTML table.
+    * !GenPlatformUptimeWebpage_Outputs
+    The sole output of this script is the !PlatformUptimePercentages.html file. This file is an HTML table representation of our percentage data. A live feed can be seen [http://carocoops.org/~dramage_prod/secoora/PlatformUptimePercentages.html here]. Currently this file is produced once per day and represents the previous days results. The data is categorized by color as follows:
     * Green represents 90% and up. 
     * Yellow represents 70% to 90%. 
     * Red represents 0% to 70%. 
