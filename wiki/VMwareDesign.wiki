@@ -107,3 +107,34 @@ clear apache/tomcat, application logs
 =
 optional - reboot, check ps-auxf, top
 }}}
+
+= Shortlist =
+
+{{{
+#within server image
+
+1)stop xeniaprod crontab
+
+2)comment out 'extra' data flow inputs
+
+3)change db passwords, config file references
+
+4)pg.hba access, hosts.allow access
+
+5)user passwords default/neutral set
+
+6)clear user home history files, history
+
+7)re-enable sample crontab flow
+
+#from vSphere power off image
+
+#from vCenter select image as source, destination as 'virtual appliance' and begin image copy
+
+#split image, edit version reference,etc to download wiki page
+
+E:\accord_backup\vmware\xeniavm20090722>c:\unxutils\usr\local\wbin\split.exe --b
+ytes=2000m xeniavm20090722.vmdk multi
+
+#move large single image to archive desktop folder, upload split image to torino via scp
+}}}
