@@ -48,7 +48,7 @@ This wiki will discuss running data validation against data stored in a Xenia sc
   A file may contain multiple test profiles, each of which can be used to group like platforms together. Like platforms would be platforms that have
   the same sensor array on board. <br>
   * `<testProfileList>`<br>
-  This tag denotes the start of a list of one or more <testProfile> entries.<br>
+  This tag denotes the start of a list of one or more `<testProfile>` entries.<br>
   * `<testProfile>`<br>
   The `<testProfile>` tag uses the <id> child tag to name the test profile grouping that follows.<br>
   * `<platformList>`<br>
