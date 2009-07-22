@@ -46,13 +46,13 @@ For each platform we know to expect N updates per day. The analysis scripts use 
  }}}
   # `<Environment><Database><DB>` Configuration tags
     * `<type>` defines the type of database engine the Xenia database is hosted on. Can be either, sqlite or postgres currently.
-    * <name> for a SQLite database, this is the path to the database file. For PostGres this is the database name to connect to.
-    * <user> is not used in SQLite. For PostGres, this is the user name used to login to the database.
-    * <pwd> is not used in SQLite. For PostGres, this is the password for the user.
-    * <host> is not used in SQLite. For PostGres, this is the IP address the database engine is hosted on.
-  # <Environment><Database><Settings> Configuration tags
-    * <tmpdir> is the directory used to store the file outputs.
-  
+    * `<name>` for a SQLite database, this is the path to the database file. For PostGres this is the database name to connect to.
+    * `<user>` is not used in SQLite. For PostGres, this is the user name used to login to the database.
+    * `<pwd>` is not used in SQLite. For PostGres, this is the password for the user.
+    * `<host>` is not used in SQLite. For PostGres, this is the IP address the database engine is hosted on.
+  # `<Environment><Database><Settings>` Configuration tags
+    * `<tmpdir>` is the directory used to store the file outputs.
+    * `<senorplotphp>` is the url for the link created in the HTML output for each sensor. This is to allow other statistics to be "drilled down" to.
  == Outputs ==
  There are two outputs of this script, the !PlatformUptimePercentages.csv and optionally entries into the metric_sensor_daily table of the database. 
   - *!PlatformUptimePercentages.csv*
