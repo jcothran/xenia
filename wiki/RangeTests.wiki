@@ -8,6 +8,41 @@ For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] 
     * Command Line Parameters
     The script uses an XMLConfigFile for its various configurations. The full path to the xml config file must be given as a command line argument. 
     For example: rangeTests.py "path\to\XMLConfigFile.xml"
+    [Here ] is a sample config file.
+
+   * XML Configuration File
+   {{{
+<environment>
+  <database>
+    <db>
+      <type></type>
+      <name></name>
+      <user></user>
+      <pwd></pwd>
+      <host></host>
+    </db>
+    <sqlQCUpdateFile></sqlQCUpdateFile>
+  </database>
+  <qcLimits>
+    <fileType></fileType>
+    <file></file>
+  </qcLimits>
+  <unitsCoversion>
+    <file></file>
+  </unitsCoversion>
+  <logging>    
+    <logMsgs></logMsgs>
+    <maxBytes></maxBytes>
+    <backupCount></backupCount>       
+    <logDir></logDir>
+  </logging> 
+  <outputs>
+    <qcResultsTable></qcResultsTable>
+  </outputs>
+</environment>
+
+   }}}
+   * test_profiles.xml
    The following is an example of a simple test_profiles.xml file which contains only one platform with one sensor for QC validation:
  {{{
  <xml>
