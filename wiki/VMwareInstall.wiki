@@ -113,9 +113,9 @@ replace *your_ip* in the below line commands with your IP (xxx.xxx.xxx.xxx)
 {{{
 cd /home/xeniaprod
 find . -name "*" -exec grep -H "VM_CONFIG" {} \; 
-perl -p -i -e 's/129.252.37.90/your_ip/g' `find ./ -name *.pl`
-perl -p -i -e 's/129.252.37.90/your_ip/g' `find ./ -name *.html`
-perl -p -i -e 's/129.252.37.90/your_ip/g' `find ./ -name *.xml`
+perl -p -i -e 's/129.252.37.90/your_ip/g' `find ./ -name "*.pl"`
+perl -p -i -e 's/129.252.37.90/your_ip/g' `find ./ -name "*.html"`
+perl -p -i -e 's/129.252.37.90/your_ip/g' `find ./ -name "*.xml"`
 }}}
 
 {{{
