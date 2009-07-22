@@ -141,3 +141,16 @@ http://www.gomodp.org/projects/exchange-network-project
 
 http://forecast.weather.gov/mwp/ <br/>
 http://secoora.org/maps http://secoora.org/data <br/>
+
+== marinemap ==
+website http://marinemap.org/
+tour http://marinemap.org/tour.html
+GIS http://marinemap.org/marinemap/
+FAQ http://marinemap.org/faq.html
+technology http://marinemap.org/poster.pdf
+code project site http://code.google.com/p/marinemap/
+----
+
+geonetwork http://geonetwork-opensource.org
+
+FOSS4G 2009 projects http://groups.google.com/group/xeniavm/t/b7358b9348b276d
