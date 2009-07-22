@@ -48,7 +48,7 @@ For each platform we know to expect N updates per day. The analysis scripts use 
     * `<host>` is not used in SQLite. For PostGres, this is the IP address the database engine is hosted on.
   # `<Environment><Database><Settings>` Configuration tags
     * `<tmpdir>` is the directory used to store the file outputs.
-    * `<senorplotphp>` if this is provided, during the generation of the [[http://code.google.com/p/xenia/wiki/PlatformUptime#GenPlatformUptimeWebpage_Outputs HTML] page the url provided here will be encoded into the sensor report results. When clicked, the PHP script generates a plot showing the updates.
+    * `<senorplotphp>` if this is provided, during the generation of the [[http://code.google.com/p/xenia/wiki/PlatformUptime#GenPlatformUptimeWebpage_Outputs HTML] page the url provided here will be encoded into the sensor report results. When clicked, the PHP script generates a plot showing the updates. [http://xenia.googlecode.com/files/uptimeplot.JPG Example]
  == Outputs ==
  There are two outputs of this script, the !PlatformUptimePercentages.csv and optionally entries into the metric_sensor_daily table of the database. 
   - *!PlatformUptimePercentages.csv*
