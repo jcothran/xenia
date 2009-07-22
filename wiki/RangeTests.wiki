@@ -42,12 +42,14 @@ For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] 
 </environment>
 
    }}}
-   * `<environment><database><db>`
-     * `<type>` defines the type of database engine the Xenia database is hosted on. Can be either, sqlite or postgres currently.
-     * `<name>` for a SQLite database, this is the path to the database file. For !PostGres this is the database name to connect to.
-     * `<user>` is not used in SQLite. For !PostGres, this is the user name used to login to the database.
-     * `<pwd>` is not used in SQLite. For !PostGres, this is the password for the user.
-     * `<host>` is not used in SQLite. For !PostGres, this is the IP address the database engine is hosted on.
+   * `<environment>`
+      * `<database>` 
+        * `<db>`
+          * `<type>` defines the type of database engine the Xenia database is hosted on. Can be either, sqlite or postgres currently.
+          * `<name>` for a SQLite database, this is the path to the database file. For !PostGres this is the database name to connect to.
+          * `<user>` is not used in SQLite. For !PostGres, this is the user name used to login to the database.
+          * `<pwd>` is not used in SQLite. For !PostGres, this is the password for the user.
+          * `<host>` is not used in SQLite. For !PostGres, this is the IP address the database engine is hosted on.
 
    * test_profiles.xml
    The following is an example of a simple test_profiles.xml file which contains only one platform with one sensor for QC validation:
