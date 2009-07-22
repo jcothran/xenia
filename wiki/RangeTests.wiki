@@ -1,10 +1,10 @@
       #Range Tests
 
 = Overview = 
-This wiki will discuss running data validation against data stored in a Xenia schema database.
-
-== Sensor Data QC ==
-
+For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] schema database, the [http://code.google.com/p/xenia/source/browse/trunk/postgresql/qaqc/rangetests/rangeCheck.py rangeTest.py] can process check observations to determine if they fall within defined limits. The script will then populate the qc_level and qc_flag columns in the multi_obs table.
+= Scripts =
+  == rangeTests.py ==
+  
   === Input ===
    The following is an example of a simple test_profiles.xml file which contains only one platform with one sensor for QC validation:
  {{{
