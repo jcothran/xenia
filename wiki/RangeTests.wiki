@@ -3,14 +3,14 @@
 = Overview = 
 For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] schema database, the [http://code.google.com/p/xenia/source/browse/trunk/postgresql/qaqc/rangetests/rangeCheck.py rangeTest.py] script will test observations to determine if they fall within defined limits. The script will then populate the qc_level and qc_flag columns in the multi_obs table.
   == Scripts ==
-    == rangeTests.py ==
+  == rangeTests.py ==
     === Input ===
-     ==== Command Line Parameters ====
-     The script uses an XMLConfigFile for its various configurations. The full path to the xml config file must be given as a command line argument. 
+      ==== Command Line Parameters ====
+      The script uses an XMLConfigFile for its various configurations. The full path to the xml config file must be given as a command line argument. 
     For example: rangeTests.py "path\to\XMLConfigFile.xml"
     [Here ] is a sample config file.
-   ==== XML Configuration File ====
-   {{{
+      ==== XML Configuration File ====
+      {{{
 <environment>
   <database>
     <db>
@@ -39,8 +39,7 @@ For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] 
     <qcResultsTable></qcResultsTable>
   </outputs>
 </environment>
-
-   }}}
+      }}}
    * `<environment>`
       * `<database>` 
         * `<db>`
