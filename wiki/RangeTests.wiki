@@ -9,7 +9,7 @@ For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] 
     The script uses an XMLConfigFile for its various configurations. The full path to the xml config file must be given as a command line argument. 
     For example: rangeTests.py "path\to\XMLConfigFile.xml"
     [Here ] is a sample config file.
-   === XML Configuration File ===
+   ==== XML Configuration File ====
    {{{
 <environment>
   <database>
