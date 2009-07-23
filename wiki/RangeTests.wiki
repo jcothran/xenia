@@ -65,7 +65,7 @@ For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] 
      Deals with the various outputs from the script.
        * `<qcResultsTable>` the path to an HTML file which shows the results, grouped by platform, of the range tests. A live example can be found [http://129.252.37.90/xenia/feeds/qaqc/test_results.html here]. Each platform row will have a column for a measurement tested, defined in the test_profiles.xml file. 
  
-   === test_profiles.xml ===
+   ==== test_profiles.xml ====
    The following is an example of a simple test_profiles.xml file which contains only one platform with one sensor for QC validation:
   {{{
  <xml>
@@ -133,7 +133,7 @@ For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] 
         * `<timeLagLimit>` tag sets the number of seconds deviation allowed from the current time of the system compared to the measurement time in the database before the data is flagged as lagging.
 
   === Output ===
-  === Database ===
+  ==== Database ====
   * From the configuration file, we defined `<sqlQCUpdateFile>` which contains the SQL UPDATES to run against the database to set the values for the qc_level and qc_flag columns in the multi_obs table.
       * qc_flag
       The leftmost byte is the first test, which is the data available test, each preceeding byte is another test of lesser importance. We store the values in a string which is to always contain the same number of bytes for consistency. The flags from left to right: Data available, sensor range check, gross range check, climate range check, rate of change, nearest neighbor. Currently rate of change and nearest neighbor are not implemented. The values can be: 0 = No test, 1 = Test Failed, 2 = Test Passed.
