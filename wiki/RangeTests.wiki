@@ -50,7 +50,7 @@ For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] 
           * `<user>` is not used in SQLite. For !PostGres, this is the user name used to login to the database.
           * `<pwd>` is not used in SQLite. For !PostGres, this is the password for the user.
           * `<host>` is not used in SQLite. For !PostGres, this is the IP address the database engine is hosted on.
-        * `<sqlQCUpdateFile>` the full path to the SQL file the scripts creates upon execution. A sample SQL line is: "UPDATE multi_obs SET qc_flag='222200',qc_level=3 WHERE m_date='2009-03-23T01:36:00' AND sensor_id=4099"
+        * `<sqlQCUpdateFile>` the full path to the SQL file the scripts creates upon execution. A sample can be seen [here] 
      * `<qcLimits>`
        * `<fileType>` defines the format the range limits are stored in. Currently the only valid entry is test_profiles. The idea behind this setting is to allow different sources for the range limits, perhaps in a database or spreadsheet. 
        * `<file>` is the full filepath to the limits file. Current used is the test_profiles.xml type file.
@@ -134,8 +134,11 @@ For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] 
         * `<timeLagLimit>` tag sets the number of seconds deviation allowed from the current time of the system compared to the measurement time in the database before the data is flagged as lagging.
 
   === Output ===
-  ==== Database ====
-  * From the configuration file, we defined `<sqlQCUpdateFile>` which defines the SQL file will contain the SQL UPDATES to run against the database to set the values for the qc_level and qc_flag columns in the multi_obs table.
+  ==== SQL File====
+  * From the configuration file, we defined `<sqlQCUpdateFile>` which defines the SQL file will contain the SQL UPDATES to run against the database to set the values for the qc_level and qc_flag columns in the multi_obs table. 
+  The following is a sample row from the SQL file:
+  {{{  SQL line is: "UPDATE multi_obs SET qc_flag='222200',qc_level=3 WHERE  m_date='2009-03-23T01:36:00' AND sensor_id=4099"
+   }}}
       * qc_flag
       The leftmost byte is the first test, which is the data available test, each preceding byte is another test of lesser importance. We store the values in a string which is will always contain the same number of bytes for consistency. The flags from left to right: Data available, sensor range check, gross range check, climate range check, rate of change, nearest neighbor. Currently rate of change and nearest neighbor are not implemented. The values can be: 0 = No test, 1 = Test Failed, 2 = Test Passed.
       Some examples:
@@ -152,3 +155,4 @@ For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] 
      || 1     || the data quality is bad                     ||
      || 2     || the data quality is questionable or suspect ||
      || 3     ||  the data quality is good                   ||
+  
