@@ -6,9 +6,10 @@ For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] 
 == rangeTests.py ==
   === Input ===
     ==== Command Line Parameters ====
-    The script uses an XMLConfigFile for its various configurations. The full path to the xml config file must be given as a command line argument. 
+    The script uses an XML configuration file to set the required working parameters. The full path to the xml config file must be given as a command line argument. 
     For example: rangeTests.py "path\to\XMLConfigFile.xml"
     ==== XML Configuration File ====
+    The following is an example of the XML file, with tag explanations below.
     {{{
 <environment>
   <database>
