@@ -150,9 +150,10 @@ For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] 
       }}}
      * qc_level 
      This is an integer which represents the aggregate of the range tests done which produce the qc_flag result.
-     || Value || Definition                                  || || -9    || the data field is missing a value           ||
-     || 0     || the data quality is not evaluated           ||
-     || 1     || the data quality is bad                     ||
-     || 2     || the data quality is questionable or suspect ||
-     || 3     ||  the data quality is good                   ||
+|| Value || Definition                                  || 
+|| -9    || the data field is missing a value           ||
+|| 0     || the data quality is not evaluated           ||
+|| 1     || the data quality is bad                     ||
+|| 2     || the data quality is questionable or suspect ||
+|| 3     ||  the data quality is good                   ||
   
