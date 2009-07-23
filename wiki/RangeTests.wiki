@@ -38,8 +38,8 @@ For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] 
     <qcResultsTable></qcResultsTable>
   </outputs>
 </environment>
-      }}}
-   * `<environment>`
+    }}}
+    * `<environment>`
       * `<database>` 
         * `<db>`
           * `<type>` defines the type of database engine the Xenia database is hosted on. Can be either, sqlite or postgres currently.
