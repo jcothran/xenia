@@ -135,7 +135,7 @@ For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] 
 
   === Output ===
   ==== SQL File====
-  * From the configuration file, we defined `<sqlQCUpdateFile>` which defines the SQL file will contain the SQL UPDATES to run against the database to set the values for the qc_level and qc_flag columns in the multi_obs table. 
+  * From the configuration file, we defined `<sqlQCUpdateFile>` which defines the SQL file to write the SQL UPDATE statements into. These UPDATES set the qc_level and qc_flag columns in the multi_obs table. 
   The following is a sample row from the SQL file:
   {{{  
   SQL line is: "UPDATE multi_obs SET qc_flag='222200',qc_level=3 WHERE  m_date='2009-03-23T01:36:00' AND sensor_id=4099"
