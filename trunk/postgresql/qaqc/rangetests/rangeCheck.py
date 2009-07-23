@@ -342,17 +342,23 @@ class platformResultsTable(object):
     self.platforms.clear()
     
   def createHTMLTable(self):
-    htmlTable = None
+    htmlTable = ''
     try:
-      for platformKey in self.platforms.keys():
-        htmlTable = "<table border=\"1\">\n"
+      platformKeys = self.platforms.keys()
+      platformKeys.sort() 
+      #for platformKey in self.platforms.keys():
+      for platformKey in platformKeys:    
+        if( len(htmlTable) ):
+          htmlTable += "<br>"
+        htmlTable += "<table border=\"1\">\n"
         #We want to sort the dates
         dateKeys = self.platforms[platformKey].keys()
         dateKeys.sort()
         writeHeader = True
-        tableHeader = '<th>Platform</th><th>Date</th>'
+        tableHeader = '<th>Platform</th><th>Date</th><th>Value Labels</th>'
         for dateKey in dateKeys: 
-          tableRow = "<tr>\n<td>%s</td><td>%s</td>\n" %( platformKey, dateKey )
+          valuesLabel = "Value</br>QC Flag</br>QC Level"
+          tableRow = "<tr>\n<td>%s</td><td>%s</td><td NOWRAP>%s</td>\n" %( platformKey, dateKey, valuesLabel )
           obsKeys = self.platforms[platformKey][dateKey].keys()
           obsKeys.sort()
           for obsKey in obsKeys:
@@ -397,6 +403,9 @@ class platformResultsTable(object):
         htmlTable += '</table>'
     except Exception, e:
         self.lastErrorMessage = str(e) + ' Terminating script.'
+
+    if( len(htmlTable) == 0 ):
+      htmlTable = None
     return( htmlTable )
         
   def addObsQC(self, platform, obsName, date, value, qcLevel, qcFlag, qcLimits=None ):
@@ -574,6 +583,7 @@ if __name__ == '__main__':
         processingStart = time.clock()
       else:
         processingStart = time.time()            
+      
       dbCursor = db.getObsDataForPlatform( platformKey )
       
       if( dbCursor == None ):
@@ -729,16 +739,16 @@ if __name__ == '__main__':
         logger.info( "%s getObsDataForPlatform QAQC Proc'd: %d rows in time: %f(ms)" %(platformKey, rowCnt, ((processingEnd-processingStart)*1000.0 )) )
         logger.info( "%s QAQC suspect or bad count: %d QAQC no limits count: %d" %(platformKey,qcFailCnt,qcMissingLimitsCnt) )
       
-      if( htmlResultsFile != None ):
-        htmlResults = htmlTable.createHTMLTable()
-        if( htmlResults != None ):
-          htmlResultsFile.writelines( htmlResults )
-          htmlResultsFile.write( '<br>' )
-          htmlResultsFile.flush()
-          htmlTable.clear()
-          logger.info( "Creating HTML Results Table: %s" % ( htmlResultsFile.name ) )
-        else:
-          logger.info( "No results to create HTML Table."  )
+    if( htmlResultsFile != None ):
+      htmlResults = htmlTable.createHTMLTable()
+      if( htmlResults != None ):
+        htmlResultsFile.writelines( htmlResults )
+        htmlResultsFile.write( '<br>' )
+        htmlResultsFile.flush()
+        htmlTable.clear()
+        logger.info( "Creating HTML Results Table: %s" % ( htmlResultsFile.name ) )
+      else:
+        logger.info( "No results to create HTML Table."  )
           
     if( sys.platform == 'win32'):
       endProcess = time.clock()
