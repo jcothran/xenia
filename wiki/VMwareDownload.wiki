@@ -1,5 +1,8 @@
 #summary vmware download instructions
 
+<wiki:toc max_depth="6" /> 
+
+----
 = Download vmware image (xeniavm) =
 
 The current download location for the associated files for the latest xeniavm vmware image are at 
@@ -16,6 +19,7 @@ On a side note, apache can be configured to display/share file links larger than
 
 The vmware appliance page reference for this download is http://www.vmware.com/appliances/directory/233143
 
+----
 = Next Steps =
 
 [VMwareInstall] describes image setup and configuration info depending on your vmware version
