@@ -23,5 +23,7 @@ The vmware appliance page reference for this download is http://www.vmware.com/a
 = Next Steps =
 
 [VMwareInstall] describes image setup and configuration info depending on your vmware version
+
 [VMwareProducts] describes the output formats and services which should be available from the vmware server image
+
 [http://code.google.com/p/xenia/wiki/VMwareTest#Adding_a_new_ObsKML_feed ObsKML] describes adding new in-situ data to the Xenia database for aggregation and sharing via the output formats and services
