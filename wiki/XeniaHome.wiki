@@ -130,7 +130,8 @@ http://nationalmap.gov <br/>
 
 https://ecowatch.ncddc.noaa.gov <br/>
 http://nowcoast.noaa.gov <br/>
-http://www.osmc.noaa.gov
+http://www.osmc.noaa.gov <br/>
+ERDDAP http://coastwatch.pfeg.noaa.gov/erddap/index.html
 
 http://obsregistry.org <br/>
 
@@ -143,12 +144,17 @@ http://forecast.weather.gov/mwp/ <br/>
 http://secoora.org/maps http://secoora.org/data <br/>
 
 == marinemap ==
-website http://marinemap.org/
-tour http://marinemap.org/tour.html
+website http://marinemap.org/ <br/>
+tour http://marinemap.org/tour.html <br/>
 GIS http://marinemap.org/marinemap/
 FAQ http://marinemap.org/faq.html
 technology http://marinemap.org/poster.pdf
 code project site http://code.google.com/p/marinemap/
+
+== sciscope ==
+http://www.sciscope.org/ <br/>
+http://sciscope.codeplex.com/
+
 ----
 
 geonetwork http://geonetwork-opensource.org
