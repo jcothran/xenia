@@ -1,0 +1,19 @@
+<environment>
+  <database>
+    <type></type>
+    <name></name>
+    <user></user>
+    <pwd></pwd>
+    <host></host>
+  </database> 
+  <unitsCoversion>
+    <file></file>
+  </unitsCoversion>
+  <twitterList>
+    <platform>
+      <handle></handle>
+      <twitterAccount></twitterAccount>
+      <twitterPwd></twitterPwd>
+    </platform>
+  </twitterList>
+</environment>
