@@ -126,7 +126,7 @@ if __name__ == '__main__':
               print( "Error from PostUpdate call: %s" % (str(E)) )
               continue
           else:
-            print( "Nothing to tweet, data returned for platform: %s." % (platform) )            
+            print( "Nothing to tweet, no data returned for platform: %s." % (platform) )            
         else:
           print( "No data returned for platform: %s." % (platform) )
       else:
