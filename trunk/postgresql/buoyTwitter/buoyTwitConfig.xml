@@ -1,10 +1,12 @@
 <environment>
   <database>
-    <type></type>
-    <name></name>
-    <user></user>
-    <pwd></pwd>
-    <host></host>
+    <db>
+      <type></type>
+      <name></name>
+      <user></user>
+      <pwd></pwd>
+      <host></host>
+    </db>
   </database> 
   <unitsCoversion>
     <file></file>

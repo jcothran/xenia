@@ -6,6 +6,7 @@ from lxml import etree
 #from xenia import uomconversionFunctions
 from xeniatools.xenia import xeniaPostGres
 from xeniatools.xenia import uomconversionFunctions
+from xeniatools.xmlConfigFile import xmlConfigFile
 
 if __name__ == '__main__':
 
@@ -19,40 +20,37 @@ if __name__ == '__main__':
     sys.exit(-1)
   try:  
     #Get the various settings we need from out xml config file.
-    xmlTree = etree.parse(options.xmlConfigFile)
-    dbName= xmlTree.xpath( '//environment/database/name' )
-    user = xmlTree.xpath( '//environment/database/user' )
-    pwd = xmlTree.xpath( '//environment/database/pwd' )
-    host = xmlTree.xpath( '//environment/database/host' )
-    if( len(host) and len(user) and len(pwd) and len(dbName)):
-      dbName  = dbName[0].text
-      host    = host[0].text
-      user    = user[0].text
-      pwd     = pwd[0].text
+    configFile = xmlConfigFile( options.xmlConfigFile )
+    dbSettings = configFile.getDatabaseSettings()
+    if( dbSettings['dbHost'] != None and
+        dbSettings['dbName'] != None and
+        dbSettings['dbUser'] != None and
+        dbSettings['dbPwd'] != None ):
       db      = xeniaPostGres()
-      if( db.connect( None, user, pwd, host, dbName ) == False ):
+      if( db.connect( None, dbSettings['dbUser'], dbSettings['dbPwd'], dbSettings['dbHost'], dbSettings['dbName'] ) == False ):
         print( "Unable to connect to PostGres." )
         sys.exit(-1)
       else:
-        print( "Connect to PostGres: %s %s" % (host,dbName))         
+        print( "Connect to PostGres: %s %s" % (dbSettings['dbHost'],dbSettings['dbName']))         
     else:
       print( "Missing configuration info for PostGres setup." )
       sys.exit(-1)        
    
     #Get the conversion xml file
-    convertFile = xmlTree.xpath( '//environment/unitsCoversion/file' )
-    if( len(convertFile) ):
-      uomConverter = uomconversionFunctions(convertFile[0].text)
+    convertFile = configFile.getEntry( '//environment/unitsCoversion/file' )
+    if( convertFile != None ):
+      uomConverter = uomconversionFunctions(convertFile)
+    else:
+      print( "Unable to find XML conversion file given in the configuration file.")
 
-    twitList = xmlTree.xpath( '//environment/twitterList')
-    for child in twitList[0].getchildren():
-      platform        = child.xpath( 'handle' ) 
-      twitterAccount  = child.xpath( 'twitterAccount' )
-      twitterPwd      = child.xpath( 'twitterPwd' )
-      if( len(platform) and len(twitterAccount) and len(twitterPwd) ):
-        platform        = platform[0].text
-        twitterAccount  = twitterAccount[0].text
-        twitterPwd      = twitterPwd[0].text
+    twitList = configFile.getListHead( '//environment/twitterList' )
+    for child in configFile.getNextInList(twitList):
+      platform        = configFile.getEntry( 'handle',child ) 
+      twitterAccount  = configFile.getEntry( 'twitterAccount',child )
+      twitterPwd      = configFile.getEntry( 'twitterPwd',child )
+      if( platform != None and 
+          twitterAccount != None and 
+          twitterPwd != None ):
         #Connect to the Twitter api.
         try:
           client = twitter.Api(twitterAccount, twitterPwd)
