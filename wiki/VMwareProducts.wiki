@@ -179,3 +179,53 @@ earlier documentation see http://trac.secoora.org/datamgmt/wiki/RangeTests <br/>
 uptime http://neptune.baruch.sc.edu/xenia/feeds/qaqc/PlatformUptimePercentages.html <br/>
 documentation http://code.google.com/p/xenia/wiki/PlatformUptime
 earlier documentation http://trac.secoora.org/datamgmt/wiki/PercentageUptime
+
+= Support Tables, columns, triggers =
+
+An optional set of support tables to support display products, display listing order(m_type_display_order) or keeping track timestamps(timestamp_lkp) for remote sensing products or other irregularly timed products.
+
+_more documentation later_
+
+== multi_obs ==
+
+The following support columns have been added to the multi_obs table to support some common display needs. They are prefixed with 'd_' for 'display'.
+
+=== d_label_theta integer ===
+
+For MapServer? directional font libraries, the direction is negative of the true direction(degrees from North), so 90 (degrees) becomes -90 for display purposes.
+
+=== set_top_of_hour trigger ===
+
+fields used: d_top_of_hour integer, d_report_hour timestamp without time zone
+
+These two columns work together to label new observations as they are inserted with their d_report_hour and whether the new observation should be used for a top of the hour report(d_top_of_hour). The d_report_hour is associated with all observations a half hour before and after a given hour. So a d_report_hour of 12:00 would apply to all observations between 11:31 and 12:30. The d_top_of_hour indicator of '1' indicates that an observation is closest to the top of the hour among a group of observations for the same d_report_hour. Time comparisons between observations for the top of hour designation are made at the minute level, so 11:01:18 might be ignored for d_top_of_hour against an earlier 11:01:28.
+
+The d_report_hour label can be used to group observations within the same corresponding hour period.  Within a d_report_hour grouping the d_top_of_hour flag can be used to identify a single measurement point closest to the top of hour for all given sensor_id's. This can be utilized to produce an hourly 'top of hour' product such as a shapefile/map of sst, etc.
+
+If querying the database for d_report_hour and d_top_of_hour, try to use the same column-order as the table index(d_report_hour,d_top_of_hour) to invoke the index usage by the query.
+ 
+{{{"i_multi_obs_top_hour" btree (d_report_hour, d_top_of_hour)}}}
+
+There is no table-column search index currently on column d_report_hour - the suggested query method would be to request an m_date range interval first to trigger the 
+
+=== mk_the_geom trigger ===
+
+mk_the_geom trigger is used to automatically populate PostGIS multi_obs.the_geom column for a given lat/long pair.
+
+on table multi_obs
+{{{
+Indexes:
+    "multi_obs_pkey" PRIMARY KEY, btree (row_id)
+    "i_multi_obs" UNIQUE, btree (m_date, m_type_id, sensor_id)
+    "i_multi_obs_top_hour" btree (d_report_hour, d_top_of_hour)
+Check constraints:
+    "enforce_dims_the_geom" CHECK (ndims(the_geom) = 2)
+    "enforce_geotype_the_geom" CHECK (geometrytype(the_geom) = 'POINT'::text OR the_geom IS NULL)
+    "enforce_srid_the_geom" CHECK (srid(the_geom) = (-1))
+Foreign-key constraints:
+    "multi_obs_m_type_id_fkey" FOREIGN KEY (m_type_id) REFERENCES m_type(row_id)
+    "multi_obs_sensor_id_fkey" FOREIGN KEY (sensor_id) REFERENCES sensor(row_id)
+Triggers:
+    mk_the_geom BEFORE INSERT ON multi_obs FOR EACH ROW EXECUTE PROCEDURE mk_the_geom()
+    set_top_of_hour AFTER INSERT ON multi_obs FOR EACH ROW EXECUTE PROCEDURE set_top_of_hour()
+}}}
