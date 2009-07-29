@@ -304,7 +304,7 @@ If you want very good networking performance without tools, do make sure you are
 Paravirtualized SCSI is fairly new, but from benchmarks I've seen it gives a fairly significant performance boost. But again, most probably you do not need it, unless you are running a very disk I/O heavy VM, such as an Oracle database server.
 If you are consolidating underutilized physical machines which don't ever use 100% CPU/Network/Disk, then tools are probably a waste of time. But if you want as close as possible to native performance and CPU usage during intensive I/O, then tools are worth it.
 ----
-== Memory(MMU) optimazation == 
+== Memory(MMU) optimization == 
 
 AMD RVI(Rapid Virtualization Indexing) <br/>
 Intel EPT (Extended Page Tables)
