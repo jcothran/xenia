@@ -27,6 +27,9 @@ sudo apt-get install subversion
 #svn not currently in sync with latest vmware image so skip following step for now
 svn checkout http://xenia.googlecode.com/svn/trunk/ /home/xeniaprod/scripts
 
+#For imageprocessing, use the Imagemagick package.
+sudo apt-get install imagemagick
+
 #install cpan
 perl -MCPAN -e install "Bundle::CPAN"
 
