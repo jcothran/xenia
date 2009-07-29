@@ -293,7 +293,7 @@ point and glad to hear any feedback in regards to running 'ESXi' instead of
 Install video(15 minutes) http://vmwarevideos.govirtual.tv/vsphere-esxi-40-install-and-configure <br>
 Review http://windowsitpro.com/article/articleid/101039/vmware-esxi.html <br/>
 
-== VMTools ==
+== VMTools (Disk, I/O Optimization) ==
 Provides performance improvements for disk, I/O intensive workloads.<br/>
 ----
 from http://communities.vmware.com/thread/212322
