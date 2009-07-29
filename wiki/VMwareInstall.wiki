@@ -288,6 +288,51 @@ running on a host OS(Operating System).  I'll try the 'ESXi' install at some
 point and glad to hear any feedback in regards to running 'ESXi' instead of 
 'vmware server' in regards to server virtualization. 
 
+== ESXi links ==
+
+Install video(15 minutes) http://vmwarevideos.govirtual.tv/vsphere-esxi-40-install-and-configure <br>
+http://windowsitpro.com/article/articleid/101039/vmware-esxi.html <br/>
+
+== VMTools ==
+Provides performance improvements for disk, I/O intensive workloads.<br/>
+http://communities.vmware.com/thread/212322
+
+_Tools will only help I/O performance (besides generally making things like graphics and time synchronization work better). If your VM has no significant networking or storage requirements, then you probably don't need tools. I usually don't bother.
+
+If you want very good networking performance without tools, do make sure you are using e1000 virtual device. You can set ethernet0.virtualDev="e1000". This is not quite as good as real vmxnet (or new vmxnet3) but is a lot better than the default vlance. If you are regularly pushing 1Gbit or more actual traffic to your VMs, I would consider doing this. 
+Paravirtualized SCSI is fairly new, but from benchmarks I've seen it gives a fairly significant performance boost. But again, most probably you do not need it, unless you are running a very disk I/O heavy VM, such as an Oracle database server.
+If you are consolidating underutilized physical machines which don't ever use 100% CPU/Network/Disk, then tools are probably a waste of time. But if you want as close as possible to native performance and CPU usage during intensive I/O, then tools are worth it._
+
+== Memory(MMU) optimazation == 
+
+AMD RVI(Rapid Virtualization Indexing)
+Intel EPT (Extended Page Tables)
+
+http://www.boche.net/blog/index.php/tag/esxi/page/2/
+
+_I’m mildly excited for the upcoming week. If all goes well, I’ll be upgrading to AMD Opteron processors which support a virtualization assist technology called Rapid Virtualization Indexing (or RVI for short).
+
+There is overhead introduced in VMware virtualization via the virtual machine monitor (VMM) and comes in three forms:
+  * Virtualization of the CPU (using software based binary translation or BT for short)
+  * Virtualization of the MMU (using software based shadow paging)
+  * Virtualization of the I/O devices (using software based device emulation)
+RVI is found in AMD’s second generation of virtualization hardware support and it incorporates MMU (Memory Management Unit) virtualization. This new technology is designed to eliminate traditional software based shadow paging methods for MMU virtualization thereby reducing the overhead in bullet #2 above. VMware lab tests show that RVI provides performance gains of up to 42% for MMU-intensive benchmarks and up to 500% for MMU-intensive microbenchmarks.
+
+How it works:
+
+Software based shadow page tables store information about the guest VM’s physical memory location on the host. The VMM had to intercept guest VM page table updates to keep guest page tables and shadow page tables in sync. By now you can probably see where this is going: applications and VMs which had frequent guest page table updates were not as efficient as those with less frequent guest page table updates.
+
+The above is similar to guest VM kernel mode calls/context switching to access CPU ring 0. Previously, the architecture wouldn’t allow it directly via the hardware so the VMKernel had to intercept these calls and hand-hold each and every ring 0 transaction. Throw 10,000+ ring 0 system calls at the VMKernel per second and the experience starts to become noticeably slower. Both Intel and AMD resolved this issue specifically for virtualized platforms by introducing a ring -1 (a pseudo ring 0) which guest VMs will be able to access directly.
+
+VMware introduced support for RVI in ESX 3.5.0. RVI eliminates MMU related overhead in the VMM by relying on the technology built into the newer RVI capable processors to determine the physical location of guest memory by walking an extra level of page tables maintained by the VMM. RVI is AMD’s nested page table technology. The Intel version of the technology is called Extended Page Tables (EPT) and is expected sometime this year.
+One of the applications of RVI that interests me directly is Citrix XenApp (Presentation Server). XenApp receives a direct performance benefit from RVI because it is an MMU-intensive workload. VMware’s conclusion in lab testing was that XenApp performance increased by approximately 29% using RVI. By way of the performance increase, we can increase the number of concurrent users on each virtualized XenApp box. There are two wins here: We increase our consolidation ratios on XenApp and we reduce the aggregate number of XenApp boxes we have to manage due to more densely populated XenApp servers. This is great stuff!
+
+There is a caveat. VMware observed some memory access latency increases for a few workloads, however, they tell us there is a workaround. Use large pages in the guest and the hypervisor to reduce the stress on the Translation Lookaside Buffer (TLB). VMware recommends that TLB-intensive workloads make extensive use of large pages to mitigate the higher cost of a TLB miss. For optimal performance, the ESX VMM and VMKernel aggressively try to use large pages for their own memory when RVI is used.
+
+For more information and deeper technical jibber jabber, please see VMware’s white paper Performance of Rapid Virtualization Indexing (RVI). Something to note is that all testing was performed on ESX 3.5.0 Update 2 with 64 bit guest VMs. I give credit to this document for the information provided in this blog post, including two directly quoted sentences.
+
+For some more good reading, take a look at Duncan Epping’s experience with a customer last week involving MMU, RVI, and memory over commit._
+
 == Update June 19 2009 ==
 Went through the VMware ESXi install process on one of the new Secoora 
 servers(Dell Poweredge 2950) here this week - it was very easy and 
@@ -368,7 +413,11 @@ click 'Finish' and the image transfer process begins and should take about an ho
 
 After the transfer is complete,
 
-From the *vSphere* application, you should be able to 'see' the new vmware image available for 'Power On' under the server inventory list in the left-hand column drop-down. you should be able to 'see' the new vmware image available for 'Power On' under the server inventory list in the left-hand column drop-down.  Go ahead select the 'xeniavm20090713' image and 'power on'(the play symbol in the menu) the image.  Click the 'Summary' tab in the right-side pane after the image is powered on and choose the 'Open Console' option under the 'Commands' section to bring up a terminal session.  You should be able to login to the server as user 'xeniaprod' with password 'xeniaprod99'.
+From the *vSphere* application, you should be able to see the new vmware image available under the server inventory list in the left-hand column drop-down.
+
+If you would like to configure or need to reconfigure your image to match the host server hardware (CPU,memory,disk,network,etc), you can right-click on the image name and choose the 'Edit Settings' to change these settings to that of the host server.  The image must be in a powered off state to make these edits.
+
+If you are ready to power on(start) your image, right-click on the 'xeniavm20090713' image and 'power on'(the play symbol in the menu) the image.  Click the 'Summary' tab in the right-side pane after the image is powered on and choose the 'Open Console' option under the 'Commands' section to bring up a terminal session.  You should be able to login to the server as user 'xeniaprod' with password 'xeniaprod99'.
 
 The finishing configuration part is detailed at http://code.google.com/p/xenia/wiki/VMwareInstall#static_ip (skip the sections about 'ip tables' and 'postgresql or sqlite') through the 'miscellaneous' section.
 
