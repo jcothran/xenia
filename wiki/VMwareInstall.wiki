@@ -297,11 +297,13 @@ http://windowsitpro.com/article/articleid/101039/vmware-esxi.html <br/>
 Provides performance improvements for disk, I/O intensive workloads.<br/>
 http://communities.vmware.com/thread/212322
 
-_Tools will only help I/O performance (besides generally making things like graphics and time synchronization work better). If your VM has no significant networking or storage requirements, then you probably don't need tools. I usually don't bother.
+{{{
+Tools will only help I/O performance (besides generally making things like graphics and time synchronization work better). If your VM has no significant networking or storage requirements, then you probably don't need tools. I usually don't bother.
 
 If you want very good networking performance without tools, do make sure you are using e1000 virtual device. You can set ethernet0.virtualDev="e1000". This is not quite as good as real vmxnet (or new vmxnet3) but is a lot better than the default vlance. If you are regularly pushing 1Gbit or more actual traffic to your VMs, I would consider doing this. 
 Paravirtualized SCSI is fairly new, but from benchmarks I've seen it gives a fairly significant performance boost. But again, most probably you do not need it, unless you are running a very disk I/O heavy VM, such as an Oracle database server.
-If you are consolidating underutilized physical machines which don't ever use 100% CPU/Network/Disk, then tools are probably a waste of time. But if you want as close as possible to native performance and CPU usage during intensive I/O, then tools are worth it._
+If you are consolidating underutilized physical machines which don't ever use 100% CPU/Network/Disk, then tools are probably a waste of time. But if you want as close as possible to native performance and CPU usage during intensive I/O, then tools are worth it.
+}}}
 
 == Memory(MMU) optimazation == 
 
@@ -310,7 +312,8 @@ Intel EPT (Extended Page Tables)
 
 http://www.boche.net/blog/index.php/tag/esxi/page/2/
 
-_I’m mildly excited for the upcoming week. If all goes well, I’ll be upgrading to AMD Opteron processors which support a virtualization assist technology called Rapid Virtualization Indexing (or RVI for short).
+{{{
+I’m mildly excited for the upcoming week. If all goes well, I’ll be upgrading to AMD Opteron processors which support a virtualization assist technology called Rapid Virtualization Indexing (or RVI for short).
 
 There is overhead introduced in VMware virtualization via the virtual machine monitor (VMM) and comes in three forms:
   * Virtualization of the CPU (using software based binary translation or BT for short)
@@ -331,7 +334,8 @@ There is a caveat. VMware observed some memory access latency increases for a fe
 
 For more information and deeper technical jibber jabber, please see VMware’s white paper Performance of Rapid Virtualization Indexing (RVI). Something to note is that all testing was performed on ESX 3.5.0 Update 2 with 64 bit guest VMs. I give credit to this document for the information provided in this blog post, including two directly quoted sentences.
 
-For some more good reading, take a look at Duncan Epping’s experience with a customer last week involving MMU, RVI, and memory over commit._
+For some more good reading, take a look at Duncan Epping’s experience with a customer last week involving MMU, RVI, and memory over commit.
+}}}
 
 == Update June 19 2009 ==
 Went through the VMware ESXi install process on one of the new Secoora 
