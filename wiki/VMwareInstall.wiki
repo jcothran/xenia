@@ -306,7 +306,7 @@ If you are consolidating underutilized physical machines which don't ever use 10
 ----
 == Memory(MMU) optimazation == 
 
-AMD RVI(Rapid Virtualization Indexing)
+AMD RVI(Rapid Virtualization Indexing) <br/>
 Intel EPT (Extended Page Tables)
 
 ----
@@ -417,7 +417,7 @@ After the transfer is complete,
 
 From the *vSphere* application, you should be able to see the new vmware image available under the server inventory list in the left-hand column drop-down.
 
-If you would like to configure or need to reconfigure your image to match the host server hardware (CPU,memory,disk,network,etc), you can right-click on the image name and choose the 'Edit Settings' to change these settings to that of the host server.  The image must be in a powered off state to make these edits.
+If you would like to *configure or need to reconfigure your image to match the host server hardware (CPU,memory,disk,network,etc)*, you can right-click on the image name and choose '*Edit Settings*' to change these settings to that of the host server.  The image must be in a powered off state to make these edits.
 
 If you are ready to power on(start) your image, right-click on the 'xeniavm20090713' image and 'power on'(the play symbol in the menu) the image.  Click the 'Summary' tab in the right-side pane after the image is powered on and choose the 'Open Console' option under the 'Commands' section to bring up a terminal session.  You should be able to login to the server as user 'xeniaprod' with password 'xeniaprod99'.
 
