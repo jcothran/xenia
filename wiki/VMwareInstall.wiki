@@ -122,6 +122,7 @@ perl -p -i -e 's/129.252.37.90/your_ip/g' `find ./ -name "*.xml"`
 search for #VM_CONFIG in effected files
 
 /etc/hosts.allow  #ssh ip access
+/etc/exports #nfs remote mount access
 
 =
 #postgres
