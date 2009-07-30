@@ -30,6 +30,10 @@ svn checkout http://xenia.googlecode.com/svn/trunk/ /home/xeniaprod/scripts
 #For imageprocessing, use the Imagemagick package.
 sudo apt-get install imagemagick
 
+#nfs remote mount
+#see http://www.daryl.mu/2009/03/02/howto-set-up-nfs-remote-file-shariing-and-mounting-in-ubuntu
+sudo apt-get install nfs-kernel-server nfs-common portmap
+
 #install cpan
 perl -MCPAN -e install "Bundle::CPAN"
 
