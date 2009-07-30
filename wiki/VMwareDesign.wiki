@@ -83,6 +83,7 @@ cd /home/xeniaprod/config #database user/password
   environment_xenia_default.xml
 
 /etc/hosts.allow  #ssh ip access
+/etc/exports #nfs remote mount access
 
 =
 #reset user passwds to public defaults - user,root,xeniaprod,postgres - as root, passwd <username>
@@ -119,7 +120,7 @@ optional - reboot, check ps-auxf, top
 
 3)change db passwords, config file references
 
-4)pg.hba access, hosts.allow access
+4)access - /etc/hosts.allow,/etc/exports,pg.hba
 
 5)user passwords default/neutral set
 
