@@ -1,0 +1,4 @@
+#!/bin/sh
+MS_MAPFILE=/home/rcoos/mapserver/maps/rs/rs.map
+export MS_MAPFILE
+/usr/lib/cgi-bin/mapserv
