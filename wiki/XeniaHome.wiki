@@ -144,6 +144,7 @@ http://q2o.whoi.edu
 
 http://forecast.weather.gov/mwp/ <br/>
 http://secoora.org/maps http://secoora.org/data <br/>
+http://carolinasrcoos.org
 
 == marinemap ==
 website http://marinemap.org/ <br/>
