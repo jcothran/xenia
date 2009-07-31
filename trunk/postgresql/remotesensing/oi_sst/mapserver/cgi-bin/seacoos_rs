@@ -1,0 +1,630 @@
+#!/usr/bin/perl -w
+
+#disabling warnings for CGI since it bloats/maxes out the apache error_log
+use warnings;
+no warnings;
+
+use CGI qw(:standard);
+use DBI;
+
+do('/usr2/maps/seacoos/util/mk_contour.pl');
+do('/usr2/maps/seacoos/util/check_table_in_db.pl');
+
+my $query = new CGI;
+
+# database particulars
+my $db_name    = 'xenia';
+my $user_name  = 'xeniaprod';
+my $user_pass  = 'xeniaprod!99';
+my $host_name  = '129.252.37.90';
+
+# establish database connection
+my $dbh = DBI->connect ( "dbi:Pg:dbname=$db_name;host=$host_name", "$user_name", "$user_pass");
+# if ( !defined $dbh ) {
+#   die "Cannot connect to database!\n";
+# }
+
+# look at an 1.5 hours ago as default time
+my $this_time_stamp = gmtime(time-60*60*1.5);
+
+# see if an offset from now was passed
+$this_time_offset_hours = $query->param('time_offset_hours');
+if (length($this_time_offset_hours) > 0) {
+ $this_time_offset_hours = $query->param('time_offset_hours');
+ $this_time_stamp = gmtime(time-60*60*$this_time_offset_hours);
+}
+
+# get the passed time_stamp
+if ($query->param('time')) {
+  $this_time_stamp = $query->param('time');
+}
+elsif ($query->param('TIME')) {
+  $this_time_stamp = $query->param('TIME');
+}
+elsif ($query->param('Time')) {
+  $this_time_stamp = $query->param('Time');
+}
+if ($this_time_stamp eq 'current') {
+  $this_time_stamp = gmtime;
+}
+
+my $this_time_stamp_y_m_d_h;
+# create an hour-trunced timestamp
+if ($this_time_stamp =~ /_/) { 
+  $this_time_stamp_y_m_d_h = $this_time_stamp;
+  $this_time_stamp = substr($this_time_stamp,0,4).'-'.substr($this_time_stamp,5,2).'-'.substr($this_time_stamp,8,2).' '.substr($this_time_stamp,11,2).':'.substr($this_time_stamp,14,2).':'.substr($this_time_stamp,17,2);
+}
+else {
+  $this_time_stamp_y_m_d_h = `date +%Y_%m_%d_%H_00_00 -d "$this_time_stamp"`;
+  chop($this_time_stamp_y_m_d_h);
+}
+
+# get all the layers
+my $this_layers = $query->param('layers');
+if (length($this_layers) < 1) {
+  $this_layers = $query->param('LAYERS');
+}
+
+# get map size (set to 0,0 if none)
+my $this_map_width = $query->param('width');
+if (length($this_map_width) < 1) {
+  $this_map_width = $query->param('WIDTH');
+}
+if (length($this_map_width) < 1) {
+  $this_map_width = 0;
+}
+my $this_map_height = $query->param('height');
+if (length($this_map_height) < 1) {
+  $this_map_height = $query->param('HEIGHT');
+}
+if (length($this_map_height) < 1) {
+  $this_map_height = 0;
+}
+
+# get bbox
+my $this_bbox_param = $query->param('bbox');
+if (length($this_bbox_param) < 1) {
+  $this_bbox_param = $query->param('BBOX');
+}
+if (length($this_bbox_param) < 1) {
+  $this_bbox_param = '0,0,0,0';
+}
+my @this_bbox = split(/,/,$this_bbox_param);
+
+# get optional temperature_units and set the target label var (used for legend labels)
+my $temperature_units_param = $query->param('temperature_units');
+if ($temperature_units_param =~ /F|f/) {
+  $temperature_legend_label = 'degrees_label_fahrenheit';
+}
+else {
+  $temperature_legend_label = 'degrees_label';
+}
+
+# get optional velocity_units and set the target label var (used for legend labels)
+my $velocity_units_param = $query->param('velocity_units');
+if ($velocity_units_param =~ /knots|KNOTS/) {
+  $velocity_legend_label = 'speed_label_knots';
+}
+elsif ($velocity_units_param =~ /mph|MPH/) {
+  $velocity_legend_label = 'speed_label_mph';
+}
+else {
+  $velocity_legend_label = 'speed_label';
+}
+
+# get optional elevation_units and set the target label var (used for legend labels)
+my $elevation_units_param = $query->param('elevation_units');
+if ($elevation_units_param =~ /ft|FT/) {
+  $elevation_legend_label = 'water_level_label_ft';
+}
+else {
+  $elevation_legend_label = 'water_level_label';
+}
+
+# get optional legend offsets
+my $sst_legend_full_range_x_offset = $query->param('sst_legend_full_range_x_offset');
+if (length($sst_legend_full_range_x_offset) < 1) {
+  $sst_legend_full_range_x_offset = 0;
+}
+my $sst_legend_full_range_y_offset = $query->param('sst_legend_full_range_y_offset');
+if (length($sst_legend_full_range_y_offset) < 1) {
+  $sst_legend_full_range_y_offset = 0;
+}
+my $water_level_legend_x_offset = $query->param('water_level_legend_x_offset');
+if (length($water_level_legend_x_offset) < 1) {
+  $water_level_legend_x_offset = 0;
+}
+my $water_level_legend_y_offset = $query->param('water_level_legend_y_offset');
+if (length($water_level_legend_y_offset) < 1) {
+  $water_level_legend_y_offset = 0;
+}
+
+my $current_velocity_legend_x_offset = $query->param('current_velocity_legend_x_offset');
+if (length($current_velocity_legend_x_offset) < 1) {
+  $current_velocity_legend_x_offset = 0;
+}
+my $current_velocity_legend_y_offset = $query->param('current_velocity_legend_y_offset');
+if (length($current_velocity_legend_y_offset) < 1) {
+  $current_velocity_legend_y_offset = 0;
+} 
+
+
+# calculate SCALE (used for quikscat and depth_averaged_currents right now)
+my $gd = $this_bbox[2] - $this_bbox[0];
+my $md = ($this_map_width-1) / (72 * 39.3701);
+my $map_scale = abs($gd / $md);
+
+# logging stuff
+my $log_map_name = 'wms_seacoos_rs';
+my $log_map_file = '/tmp/ms_tmp/map_log.sql';
+my $log_map_time_stamp = "timestamp with time zone '$this_time_stamp UTC'";
+my $log_remote_ip = $query->remote_addr();
+my $log_referer = $query->referer();
+if ( $log_referer =~ /^(http:\/\/)?([^\/]+)/i ) {
+  $log_referer = $2;
+}
+my $log_extents = 'GeometryFromText(\'POLYGON(('
+  .$this_bbox[0]
+  .' '.$this_bbox[1]
+  .', '.$this_bbox[0]
+  .' '.$this_bbox[3]
+  .', '.$this_bbox[2]
+  .' '.$this_bbox[3]
+  .', '.$this_bbox[2]
+  .' '.$this_bbox[1]
+  .', '.$this_bbox[0]
+  .' '.$this_bbox[1]
+  .'))\',-1)';
+my $log_center_point = 'GeometryFromText(\'POINT('
+  .(($this_bbox[2] + $this_bbox[0])/2)
+  .' '.(($this_bbox[3] + $this_bbox[1])/2)
+  .', '.$this_bbox[0]
+  .')\',-1)';
+  
+sub log_layer {
+  $this_layer_name = shift @_;
+  $log_sql = 'insert into map_log ('
+    .'access_time_stamp'
+    .',map_time_stamp'
+    .',source_ip'
+    .',referer'
+    .',layer_name'
+    .',map_name'
+    .',extents'
+    .',center_point'
+    .')'
+    .' select'
+    .' timestamp with time zone \''
+    .gmtime.' UTC'
+    .'\''
+    .','.$log_map_time_stamp
+    .',\''.$log_remote_ip.'\''
+    .',\''.$log_referer.'\''
+    .',\''.$this_layer_name.'\''
+    .",'$log_map_name'"
+    .','.$log_extents
+    .','.$log_center_point
+   .';';
+  $log_cmd = "echo \"$log_sql\" >> $log_map_file";
+  `$log_cmd`;
+}
+  
+# check for any RS layers for which we'll have to ping the DB for a pass_time_stamp
+my $raster_file_params = "&map_width=$this_map_width&map_height=$this_map_height";
+
+if ($this_layers =~ /oi_sst/) {
+#  $querystr = "select local_filename from raster_oi_sst"
+#    ." where abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+#    ." - extract(epoch from pass_timestamp))"
+#   ." = (select min(abs((extract(epoch from timestamp without time zone '$this_time_stamp'))"
+#   ." - extract(epoch from pass_timestamp)))"
+#    ." from raster_oi_sst)"
+#    ." and abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+#    ." - extract(epoch from pass_timestamp))"
+#    ." <= 60*60*24*3";
+  $querystr = "select filepath from timestamp_lkp"
+    ." where abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+   ." = (select min(abs((extract(epoch from timestamp without time zone '$this_time_stamp'))"
+   ." - extract(epoch from pass_timestamp)))"
+    ." from timestamp_lkp)"
+    ." and abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." <= 60*60*24*3";
+  my $sth = $dbh->prepare($querystr);
+  $sth->execute();
+  $sth->bind_columns(undef,\$this_path);
+  $sth->fetch();
+  $sth->finish;
+  $raster_file_params .= '&oi_sst_file='.$this_path;
+  log_layer('oi_sst');
+}
+
+if ($this_layers =~ /avhrr_sst/) {
+  $querystr = "select local_filename from raster_avhrr_sst"
+    ." where abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." = (select min(abs((extract(epoch from timestamp without time zone '$this_time_stamp'))"
+    ." - extract(epoch from pass_timestamp)))"
+    ." from raster_avhrr_sst)"
+    ." and abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." <= 60*60*24*2";
+  my $sth = $dbh->prepare($querystr);
+  $sth->execute();
+  $sth->bind_columns(undef,\$this_path);
+  $sth->fetch();
+  $sth->finish;
+  $raster_file_params .= '&avhrr_sst_file='.$this_path;
+  log_layer('avhrr_sst');
+}
+
+if ($this_layers =~ /modis_sst/) {
+  $querystr = "select local_filename from raster_modis_sst"
+    ." where abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." = (select min(abs((extract(epoch from timestamp without time zone '$this_time_stamp'))"
+    ." - extract(epoch from pass_timestamp)))"
+    ." from raster_modis_sst)"
+    ." and abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." <= 60*60*24*2";
+  my $sth = $dbh->prepare($querystr);
+  $sth->execute();
+  $sth->bind_columns(undef,\$this_path);
+  $sth->fetch();
+  $sth->finish;
+  $raster_file_params .= '&modis_sst_file='.$this_path;
+  log_layer('modis_sst');
+}
+
+if ($this_layers =~ /modis_chl/) {
+  $querystr = "select local_filename from raster_modis_chl"
+    ." where abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." = (select min(abs((extract(epoch from timestamp without time zone '$this_time_stamp'))"
+    ." - extract(epoch from pass_timestamp)))"
+    ." from raster_modis_chl)"
+    ." and abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." <= 60*60*24*2";
+  my $sth = $dbh->prepare($querystr);
+  $sth->execute();
+  $sth->bind_columns(undef,\$this_path);
+  $sth->fetch();
+  $sth->finish;
+  $raster_file_params .= '&modis_chl_file='.$this_path;
+  log_layer('modis_chl');
+}
+
+if ($this_layers =~ /tamu_level_III/) {
+  $querystr = "select local_filename from raster_tamu_level_III"
+    ." where abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." = (select min(abs((extract(epoch from timestamp without time zone '$this_time_stamp'))"
+    ." - extract(epoch from pass_timestamp)))"
+    ." from raster_tamu_level_III)"
+    ." and abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." <= 60*60*24*2";
+  my $sth = $dbh->prepare($querystr);
+  $sth->execute();
+  $sth->bind_columns(undef,\$this_path);
+  $sth->fetch();
+  $sth->finish;
+  $raster_file_params .= '&tamu_level_III_file='.$this_path;
+  log_layer('tamu_level_III');
+}
+
+if ($this_layers =~ /tamu_usrad/) {
+  $querystr = "select local_filename from raster_tamu_usrad"
+    ." where abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." = (select min(abs((extract(epoch from timestamp without time zone '$this_time_stamp'))"
+    ." - extract(epoch from pass_timestamp)))"
+    ." from raster_tamu_usrad)"
+    ." and abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." <= 60*60*24*2";
+
+  my $sth = $dbh->prepare($querystr);
+  $sth->execute();
+  $sth->bind_columns(undef,\$this_path);
+  $sth->fetch();
+  $sth->finish;
+  $raster_file_params .= '&tamu_usrad_file='.$this_path;
+  log_layer('tamu_usrad');
+}
+
+if ($this_layers =~ /modis_ergb_low/) {
+  $querystr = "select local_filename from raster_modis_ergb"
+    ." where abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." = (select min(abs((extract(epoch from timestamp without time zone '$this_time_stamp'))"
+    ." - extract(epoch from pass_timestamp)))"
+    ." from raster_modis_ergb)"
+    ." and abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." <= 60*60*24*2";
+  my $sth = $dbh->prepare($querystr);
+  $sth->execute();
+  $sth->bind_columns(undef,\$this_path);
+  $sth->fetch();
+  $sth->finish;
+  $raster_file_params .= '&modis_ergb_low_file='.$this_path;
+  log_layer('modis_ergb_low');
+}
+
+if ($this_layers =~ /modis_rgb_composite_low/) {
+  $querystr = "select local_filename from raster_modis_rgb_composite"
+    ." where abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." = (select min(abs((extract(epoch from timestamp without time zone '$this_time_stamp'))"
+    ." - extract(epoch from pass_timestamp)))"
+    ." from raster_modis_rgb_composite)"
+    ." and abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." <= 60*60*24*2";
+  my $sth = $dbh->prepare($querystr);
+  $sth->execute();
+  $sth->bind_columns(undef,\$this_path);
+  $sth->fetch();
+  $sth->finish;
+  $raster_file_params .= '&modis_rgb_composite_low_file='.$this_path;
+  log_layer('modis_rgb_composite_low');
+}
+
+if ($this_layers =~ /modis_rgb_low/) {
+  $querystr = "select local_filename from raster_modis_rgb"
+    ." where abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." = (select min(abs((extract(epoch from timestamp without time zone '$this_time_stamp'))"
+    ." - extract(epoch from pass_timestamp)))"
+    ." from raster_modis_rgb)"
+    ." and abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." <= 60*60*24*2";
+  my $sth = $dbh->prepare($querystr);
+  $sth->execute();
+  $sth->bind_columns(undef,\$this_path);
+  $sth->fetch();
+  $sth->finish;
+  $raster_file_params .= '&modis_rgb_low_file='.$this_path;
+  log_layer('modis_rgb_low');
+}
+
+if ($this_layers =~ /modis_rgb_hi_chesapeake_bay/) {
+  $querystr = "select local_filename from raster_modis_rgb_chesapeake_bay"
+    ." where abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." = (select min(abs((extract(epoch from timestamp without time zone '$this_time_stamp'))"
+    ." - extract(epoch from pass_timestamp)))"
+    ." from raster_modis_rgb_chesapeake_bay)"
+    ." and abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." <= 60*60*24*2";
+  my $sth = $dbh->prepare($querystr);
+  $sth->execute();
+  $sth->bind_columns(undef,\$this_path);
+  $sth->fetch();
+  $sth->finish;
+  $raster_file_params .= '&modis_rgb_hi_chesapeake_bay_file='.$this_path;
+  log_layer('modis_rgb_hi_chesapeake_bay');
+}
+
+if ($this_layers =~ /modis_rgb_hi_florida_bay/) {
+  $querystr = "select local_filename from raster_modis_rgb_florida_bay"
+    ." where abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." = (select min(abs((extract(epoch from timestamp without time zone '$this_time_stamp'))"
+    ." - extract(epoch from pass_timestamp)))"
+    ." from raster_modis_rgb_florida_bay)"
+    ." and abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." <= 60*60*24*2";
+  my $sth = $dbh->prepare($querystr);
+  $sth->execute();
+  $sth->bind_columns(undef,\$this_path);
+  $sth->fetch();
+  $sth->finish;
+  $raster_file_params .= '&modis_rgb_hi_florida_bay_file='.$this_path;
+  log_layer('modis_rgb_hi_florida_bay');
+}
+
+if ($this_layers =~ /modis_rgb_hi_miss_plume/) {
+  $querystr = "select local_filename from raster_modis_rgb_miss_plume"
+    ." where abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." = (select min(abs((extract(epoch from timestamp without time zone '$this_time_stamp'))"
+    ." - extract(epoch from pass_timestamp)))"
+    ." from raster_modis_rgb_miss_plume)"
+    ." and abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." <= 60*60*24*2";
+  my $sth = $dbh->prepare($querystr);
+  $sth->execute();
+  $sth->bind_columns(undef,\$this_path);
+  $sth->fetch();
+  $sth->finish;
+  $raster_file_params .= '&modis_rgb_hi_miss_plume_file='.$this_path;
+  log_layer('modis_rgb_hi_miss_plume');
+}
+
+if ($this_layers =~ /modis_rgb_hi_suwannee_river/) {
+  $querystr = "select local_filename from raster_modis_rgb_suwannee_river"
+    ." where abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." = (select min(abs((extract(epoch from timestamp without time zone '$this_time_stamp'))"
+    ." - extract(epoch from pass_timestamp)))"
+    ." from raster_modis_rgb_suwannee_river)"
+    ." and abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." <= 60*60*24*2";
+  my $sth = $dbh->prepare($querystr);
+  $sth->execute();
+  $sth->bind_columns(undef,\$this_path);
+  $sth->fetch();
+  $sth->finish;
+  $raster_file_params .= '&modis_rgb_hi_suwannee_river_file='.$this_path;
+  log_layer('modis_rgb_hi_suwannee_river');
+}
+
+if ($this_layers =~ /modis_rgb_hi_tampa_bay/) {
+  $querystr = "select local_filename from raster_modis_rgb_tampa_bay"
+    ." where abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." = (select min(abs((extract(epoch from timestamp without time zone '$this_time_stamp'))"
+    ." - extract(epoch from pass_timestamp)))"
+    ." from raster_modis_rgb_tampa_bay)"
+    ." and abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." <= 60*60*24*2";
+  my $sth = $dbh->prepare($querystr);
+  $sth->execute();
+  $sth->bind_columns(undef,\$this_path);
+  $sth->fetch();
+  $sth->finish;
+  $raster_file_params .= '&modis_rgb_hi_tampa_bay_file='.$this_path;
+  log_layer('modis_rgb_hi_tampa_bay');
+}
+
+if ($this_layers =~ /etopo2_bathy_contour/) {
+  $viz_scale = $map_scale * 4 / 140;
+  if ($viz_scale > 3) {
+    $contour_depths = '8000,7000,6000,5000,4000,3000,2000,1000,500,100';
+  }
+  else {
+    $contour_depths = '8000,7000,6000,5000,4000,3000,2000,1000,500,400,300,200,100,50,25,10';
+  }
+    
+  $raster_file_params .= '&etopo2_bathy_contour_depths='.$contour_depths;
+  log_layer('etopo2_bathy_contour');
+}
+
+if ($this_layers =~ /etopo2_bathy_relief/) {
+  $viz_scale = $map_scale * 4 / 140;
+  $contour_incr = '/usr2/maps/seacoos/data/etopo2_atlantic.contour_incrs';
+  if ($viz_scale <= 3) {
+    $contour_incr .= '_detail';
+  }
+  else {
+    $contour_incr .= '_coarse';
+  }
+  $this_raster_path = mk_contour($this_bbox_param,
+    $this_map_width.','.$this_map_height,
+    'etopo2_bathy_relief',
+    $contour_incr,     # contour_incr
+    '-8000/0', # contour_limits
+     's',     # annotation_incr
+    '/usr2/maps/seacoos/data/etopo2_atlantic.cpt', # color_table
+    '/usr2/maps/seacoos/data/etopo2_atlantic.grd',
+    time().'_'.rand(10000)
+  );
+
+  $raster_file_params .= '&etopo2_bathy_file='.$this_raster_path;
+  log_layer('etopo2_bathy_relief');
+}
+
+if ($this_layers =~ /jpl_sea_surface_height_composite/) {
+  $querystr = "select to_char(pass_timestamp,'YYYY_MM_DD_HH24_MI_SS')"
+    ." from grid_jpl_sea_surface_height_composite"
+    ." where abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." = (select min(abs((extract(epoch from timestamp without time zone '$this_time_stamp'))"
+    ." - extract(epoch from pass_timestamp)))"
+    ." from grid_jpl_sea_surface_height_composite)"
+    ." and abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." <= 60*60*24*2";
+  $sth = $dbh->prepare($querystr);
+  $sth->execute();
+  $sth->bind_columns(undef,\$this_pass_time_stamp);
+  $sth->fetch();
+  $sth->finish;
+  if (length($this_pass_time_stamp) < 1) {
+    $this_pass_time_stamp = '1999-01-01 00:00:00';
+  }
+
+  $this_raster_path = mk_contour($this_bbox_param,
+    $this_map_width.','.$this_map_height,
+    'jpl_sea_surface_height_composite',
+     100,     # contour_incr
+    '0/3500', # contour_limits
+     500,     # annotation_incr
+    '/usr2/maps/ref/jpl_sea_surface_height_composite.cpt', # color_table
+    '/usr2/maps/seacoos/data/obs_gmt_grids/jpl_sea_surface_height_composite_'
+      .$this_pass_time_stamp.'.grd',
+    time().'_'.rand(10000)
+  );
+    
+  $raster_file_params .= '&jpl_sea_surface_height_composite_file='.$this_raster_path;
+  log_layer('jpl_sea_surface_height_composite');
+}
+
+if ($this_layers =~ /depth_averaged_currents/) {
+  $depth_averaged_currents_table_name = 'bari_unc_'.$this_time_stamp_y_m_d_h;
+  if (!(check_table_in_db('ioos_model','postgres','nemo',
+      $depth_averaged_currents_table_name) > 0)) {
+    $depth_averaged_currents_table_name = 'bari_unc_empty';
+  }
+
+  # scaling to keep arrows from being too cluttered
+  # will want to pull this from the DB eventually
+  $raster_file_params .= '&depth_averaged_currents_incr=0.25';
+  $raster_file_params .= '&depth_averaged_currents_min_lon=-100';
+  $raster_file_params .= '&depth_averaged_currents_min_lat=10';
+  my $depth_averaged_currents_scale = int($map_scale * 4 / 140);
+  if ($depth_averaged_currents_scale <= 1) {
+    $depth_averaged_currents_scale = 1;
+  }
+  elsif ($depth_averaged_currents_scale >= 5) {
+    $depth_averaged_currents_scale = 5;
+  }
+
+  $raster_file_params .= '&depth_averaged_currents_table_name='
+    .$depth_averaged_currents_table_name
+    .'&depth_averaged_currents_scale='
+    .$depth_averaged_currents_scale;
+
+  log_layer('depth_averaged_currents');
+}
+
+if ($this_layers =~ /sea_surface_elevation/) {
+  $sea_surface_elevation_table_name = 'zetai_unc_'.$this_time_stamp_y_m_d_h;
+  if (!(check_table_in_db('ioos_model','postgres','nemo',
+      $sea_surface_elevation_table_name) > 0)) {
+    $sea_surface_elevation_table_name = 'zetai_unc_empty';
+  }
+
+  $raster_file_params .= '&sea_surface_elevation_table_name='
+    .$sea_surface_elevation_table_name;
+
+  log_layer('sea_surface_elevation');
+}
+
+$dbh->disconnect();
+
+# get only the params (subtract the URL)
+my $orig_url_params = substr($query->url(-path_info=>0,-query=>1),length($query->url()));
+
+# build complete target URL
+my $target_url = 'http://129.252.37.86/wms/rs/rs?'
+  .$orig_url_params
+  .$raster_file_params
+  .'&formatted_time_stamp='.$this_time_stamp
+  .'&temperature_legend_label='.$temperature_legend_label
+  .'&velocity_legend_label='.$velocity_legend_label
+  .'&elevation_legend_label='.$elevation_legend_label
+  .'&sst_legend_full_range_x_offset='.$sst_legend_full_range_x_offset
+  .'&sst_legend_full_range_y_offset='.$sst_legend_full_range_y_offset
+  .'&water_level_legend_x_offset='.$water_level_legend_x_offset
+  .'&water_level_legend_y_offset='.$water_level_legend_y_offset
+  .'&current_velocity_legend_x_offset='.$current_velocity_legend_x_offset
+  .'&current_velocity_legend_y_offset='.$current_velocity_legend_y_offset;
+# replace ; w/ & (don't know why ;'s are done by default)
+$target_url =~ s/;/&/g;
+# url-encode (sort of) a space
+$target_url =~ s/ /%20/g;
+
+# redirect to the target URL w/ the completed raster filenames
+print redirect($target_url);
