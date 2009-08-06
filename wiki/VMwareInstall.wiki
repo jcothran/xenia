@@ -454,6 +454,6 @@ Please note - you will only have the basic functionality and all the enterprise 
 
 Had a development image give a kernel panic, resulting in the image not rebooting.  Trying to use knoppix boot CD to diagnose/remedy the image which is failing to boot
 
-To CD boot a knoppix or other .iso image, power off the image and under the image 'Edit Settings->Options' tab, you can force the system BIOS to be displayed which will allow you to configure the CD as the first option boot device and then set the start-up delay to around 20 seconds(20,000 milliseconds) to allow yourself time to connect the CD device to your desktop local .iso file copy from vSphere after powering the image back on.  The image should .iso boot off your local desktop .iso copy.
+To CD boot a knoppix or other .iso image, power off the image and under the image 'Edit Settings->Options->Boot options' tab, you can force the system BIOS to be displayed on the next boot which will allow you to configure the CD as the first option boot device and then set the start-up delay to around 20 seconds(20,000 milliseconds) to allow yourself time to connect the CD device to your desktop local .iso file copy from vSphere after powering the image back on.  The image should .iso boot off your local desktop .iso copy.
 
 It's also possible to move .iso images to vmware datastores using some third-party freeware(Veeam RootAccess, FastSCP) listed in the following link http://communities.vmware.com/message/664149#664149
