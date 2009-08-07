@@ -8,7 +8,6 @@ import time
 #rom xenia import uomconversionFunctions
 #from xenia import recursivedefaultdict
 
-from xeniatools.xenia import xeniaDB
 from xeniatools.xenia import xeniaSQLite
 from xeniatools.xenia import xeniaPostGres
 from xeniatools.xenia import qaqcTestFlags
@@ -564,13 +563,20 @@ if __name__ == '__main__':
     if( logger != None ):
       logger.debug("No units conversion file specified in config file." % (uomConvertFile) )
   
+  #Are we writing out an HTML file showing the results of the range tests?
   htmlResultsFile = None
-  xmlTag = xmlTree.xpath( '//environment/outputs/qcResultsTable' )
-  if(len(xmlTag) ):
+  xmlTag = xmlTree.xpath( '//environment/outputs/qcResultsTable/file' )
+  if(len(xmlTag) ):    
     htmlResultsFile = open( xmlTag[0].text, 'w' )
+    xmlTag = xmlTree.xpath( '//environment/outputs/qcResultsTable/styleSheet' )    
+    if( len(xmlTag) ):  
+      styleSheet = xmlTag[0].text
+    if( styleSheet == None ):
+      styleSheet = 'http://carocoops.org/~dramage_prod/styles/main.css'
+
     htmlResultsFile.write( "<html>\n" )
     htmlResultsFile.write( "<BODY id=\"RGB_BODY_BG\" >\n" )    
-    htmlResultsFile.write( "<link href=\"%s\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\" />\n"  % ( 'http://carocoops.org/~dramage_prod/styles/main.css' ) )
+    htmlResultsFile.write( "<link href=\"%s\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\" />\n"  % ( styleSheet ) )
   
   #rangeCheck = obsRangeCheck( '' )
   htmlTable = platformResultsTable()
@@ -584,7 +590,7 @@ if __name__ == '__main__':
       else:
         processingStart = time.time()            
       
-      dbCursor = db.getObsDataForPlatform( platformKey )
+      dbCursor = db.getObsDataForPlatform( platformKey, 72 )
       
       if( dbCursor == None ):
         length = len(db.lastErrorMsg) 
