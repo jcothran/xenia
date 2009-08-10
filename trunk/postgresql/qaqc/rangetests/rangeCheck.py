@@ -590,7 +590,7 @@ if __name__ == '__main__':
       else:
         processingStart = time.time()            
       
-      dbCursor = db.getObsDataForPlatform( platformKey, 72 )
+      dbCursor = db.getObsDataForPlatform( platformKey, 168 )
       
       if( dbCursor == None ):
         length = len(db.lastErrorMsg) 
