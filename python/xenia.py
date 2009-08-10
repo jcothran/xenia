@@ -67,316 +67,520 @@ class qaqcTestFlags:
       return( 'Data quality suspect' )
     elif( qcLevel == qaqcTestFlags.DATA_QUAL_GOOD ):
       return( 'Data quality good' )
-
+      
+class __xeniaDB:
+  """
+  Function: __init__
+  Purpose: Initializes the class
+  Parameters: None
+  Return: None
+  """
+  def __init__ ( self ):
+    self.dbType = dbTypes.undefined
+    self.lastErrorMsg = ''
+    self.lastErrorCode = None
+    self.DB = None
     
-class xeniaDB:
-    def __init__ ( self ):
-      self.dbType = dbTypes.undefined
-      self.lastErrorMsg = ''
-    
-    def getLastErrorMsg(self):
-      msg = self.lastErrorMsg
-      self.lastErrorMsg = ''
-      return(msg)  
-     
-    def connectDB(self, dbFilePath=None, user=None, passwd=None, host=None, dbName=None ):
-      return(False)
-
-    def openXeniaSQLite(self, dbFilePath ):
-      self.dbFilePath = dbFilePath
-      self.dbType = dbTypes.SQLite
-      try:
-        self.DB = sqlite3.connect( self.dbFilePath )
-        #This enables the ability to manipulate rows with the column name instead of an index.
-        self.DB.row_factory = sqlite3.Row
-        return(True)
-      except Exception, E:
-        self.lastErrorMsg = str(E)                     
-      return(False)
-      
-    def openXeniaPostGres( self, host, dbName, user, passwd ):
-      self.dbType = dbTypes.PostGRES
-      try:
-        self.DB = psycopg2.connect( "dbname='%s' user='%s' password='%s'" % ( dbName,user,passwd) )
-        return(True)       
-      except Exception, E:
-        self.lastErrorMsg = str(E)                     
-      return(False)
-
-    def executeQuery(self, sqlQuery):
-      
-      if( self.dbType == dbTypes.SQLite ):
-        dbCursor = self.DB.cursor()
-      
-      elif( self.dbType == dbTypes.PostGRES ):
-        dbCursor = self.DB.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        
-      dbCursor.execute( sqlQuery )        
-      return( dbCursor )
-    
-    def getMTypeFromObsName(self, obsName, platform, sOrder ):
-      mType = -1
-      sOrder = '';
-      if( len( sOrder ) ):
-        sOrder = "sensor.s_order = $iSOrder AND"
-        
-      sql = "SELECT DISTINCT(sensor.m_type_id) FROM m_type, m_scalar_type, obs_type, sensor, platform \
-                WHERE  sensor.m_type_id = m_type.row_id AND                                           \
-                m_scalar_type.row_id = m_type.m_scalar_type_id AND                                    \
-                obs_type.row_id = m_scalar_type.obs_type_id AND                                       \
-                platform.row_id = sensor.platform_id AND                                              \
-                %s                                                                            \
-                obs_type.standard_name = '%s' AND                                                     \
-                platform.platform_handle = '%s';" % (sOrder,obsName,platform )
-      try:                               
-        dbCursor = self.executeQuery( sql )
-        for row in dbCursor:
-          mType  = row[0]
-        dbCursor.close()
-      
-      except sqlite3.Error, e:        
-        self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
-      except Exception, E:
-        self.lastErrorMsg = str(E)                     
-      
-      return( mType )
-    
-    def getSensorID(self, obsName, platform, sOrder ):
-      sensorID = -1
-      sOrder = '';
-      if( len( sOrder ) ):
-        sOrder = "sensor.s_order = $iSOrder AND"
-        
-      sql = "SELECT sensor.row_id FROM m_type, m_scalar_type, obs_type, sensor, platform \
-                WHERE  sensor.m_type_id = m_type.row_id AND                                           \
-                m_scalar_type.row_id = m_type.m_scalar_type_id AND                                    \
-                obs_type.row_id = m_scalar_type.obs_type_id AND                                       \
-                platform.row_id = sensor.platform_id AND                                              \
-                %s                                                                            \
-                obs_type.standard_name = '%s' AND                                                     \
-                platform.platform_handle = '%s';" % (sOrder,obsName,platform )
-      try:                               
-        dbCursor = self.executeQuery( sql )
-        row = dbCursor.fetchone()
-        if( row != None ):
-          sensorID  = int(row[0])
-        dbCursor.close()
-      
-      except sqlite3.Error, e:        
-        self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
-      except Exception, E:
-        self.lastErrorMsg = str(E)                     
-      return( sensorID )
-    
-    def getDataForSensorID(self,sensorID, startDate, endDate, timeZoneShift):
-      data = []
-      if(self.dbType == dbTypes.SQLite):
-        sql = "SELECT multi_obs.m_date,multi_obs.m_value        \
-                      FROM multi_obs           \
-                      WHERE                    \
-                      multi_obs.sensor_id = %d                              AND   \
-                      ( m_date >= strftime( '%%Y-%%m-%%dT%%H:00:00',datetime('%s','%d hours') )   AND  \
-                      m_date < strftime( '%%Y-%%m-%%dT%%H:00:00', datetime('%s','%d hours') ) ) \
-                      ORDER BY multi_obs.m_date ASC;" % ( sensorID, startDate, timeZoneShift, endDate, timeZoneShift );                
-      try:                      
-        dbCursor = self.executeQuery( sql )
-        for row in dbCursor:
-          data.append( (row[0],row[1]) )       
-        dbCursor.close()
-      except sqlite3.Error, e:        
-        self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
-      except Exception, E:
-        self.lastErrorMsg = str(E)                     
-      
-      return( data )
-      
-    
-    def getObservationDates(self, obsName, platform ):
-      dates = []
-      sensorID = self.getSensorID(obsName, platform, '')     
-      if(sensorID != -1):
-        sql = "SELECT DISTINCT(strftime( '%%Y-%%m-%%d', datetime(m_date))), m_type_id,platform_handle FROM multi_obs \
-              WHERE multi_obs.sensor_id = %d \
-              ORDER BY m_date ASC;" % ( sensorID )
-      try:              
-        dbCursor = self.executeQuery( sql )
-        for row in dbCursor:
-          dates.append( row[0] )
-        dbCursor.close()
-      except sqlite3.Error, e:        
-        self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
-      except Exception, E:
-        self.lastErrorMsg = str(E)                     
-                     
-      return( dates )
-    
+  """
+  Function: getLastErrorMsg
+  Purpose: Returns the last error message
+  Parameters: None
+  Return: String with the last error message.
+  """
+  def getLastErrorMsg(self):
+    msg = self.lastErrorMsg
+    self.lastErrorMsg = ''
+    return(msg)  
    
-    def getObservationsForPlatform(self, platform):
-      obsList = {}
-      """
-      SELECT platform.platform_handle,obs_type.standard_name,obs_type.row_id,sensor.platform_id FROM  platform 
-                      LEFT JOIN sensor on sensor.platform_id = platform.row_id 
-                      LEFT JOIN m_type on sensor.m_type_id= m_type.row_id
-                     LEFT JOIN m_scalar_type on m_type.m_scalar_type_id=m_scalar_type.row_id
-                     LEFT JOIN uom_type on m_scalar_type.uom_type_id=uom_type.row_id
-                     LEFT JOIN obs_type on m_scalar_type.obs_type_id=obs_type.row_id
-                    WHERE 
-                      platform.platform_handle = 'carocoops.SUN2.buoy'       
-      """
-      sql = "SELECT obs_type.standard_name,obs_type.row_id,sensor.platform_id FROM obs_type, m_type, m_scalar_type, sensor, platform \
-              WHERE \
-                obs_type.row_id = m_scalar_type.obs_type_id AND \
-                sensor.m_type_id = m_type.row_id AND             \
-                m_scalar_type.row_id = m_type.m_scalar_type_id AND \
-                platform.platform_handle = '%s'" % platform;
-      try:
-        dbCursor = self.executeQuery( sql )
-        row = dbCursor.fetchone()
-        #for row in dbCursor:
-        while( row != None ):
-          obsList[ row['standard_name'] ] = row['row_id']  
-          row = dbCursor.fetchone()
-        dbCursor.close()
-      except sqlite3.Error, e:        
-        self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
-      except Exception, E:
-        self.lastErrorMsg = str(E)                     
-      
-      return( obsList )
-    
-    def getDataForObs(self, obsName, platform, startDate, endDate, timeZoneShift):
-      data = {}
-      #mType = self.getMTypeFromObsName( obsName, platform, '' )
-      sensorID = self.getSensorID(obsName, platform, '')     
-      if(sensorID != -1):
-        data = self.getDataForSensorID( sensorID,startDate,endDate,timeZoneShift)        
-      return( data)
+  """
+  Function: connect
+  Purpose: Children classes should overload this function to provide the DB specific connection.
+  Parameters: 
+  Return: 
+  """
+  def connect(self, dbFilePath=None, user=None, passwd=None, host=None, dbName=None ):
+    return(False)
  
-    def getObsDataForPlatform(self, platform, lastNHours = None ):      
+  def getMTypeFromObsName(self, obsName, uom, platform, sOrder=1 ):
+    sql = "SELECT m_type.row_id FROM m_type "\
+          "left join sensor on sensor.m_type_id = m_type.row_id "\
+          "left join platform on platform.row_id=sensor.platform_id "\
+          "left join m_scalar_type on m_scalar_type.row_id=m_type.m_scalar_type_id "\
+          "left join obs_type on obs_type.row_id=m_scalar_type.obs_type_id "\
+          "left join uom_type on uom_type.row_id=m_scalar_type.uom_type_id "\
+          "WHERE platform.platform_handle='%s' AND obs_type.standard_name='%s' AND uom_type.standard_name='%s' AND sensor.s_order=%d"\
+                    %(platform,obsName,uom,sOrder)
+    try:                               
+      dbCursor = self.executeQuery( sql )
+      if( dbCursor != None ):
+        row = dbCursor.fetchone()
+        mType  = row[0]
+        dbCursor.close()
+        return( mType )
+    except psycopg2.Error, E:
+      if( E.pgerror != None ):
+        self.lastErrorMsg = E.pgerror
+      else:
+        self.lastErrorMsg = E.message             
+      self.lastErrorCode = E.pgcode
+    except sqlite3.Error, e:        
+      self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
+    except Exception, e:        
+      self.lastErrorMsg = str(e)           
+    return( None )
+    
+
+  """
+  Function: rowidExists
+  Purpose: Checks to see if a row_id exists for a given SQL query. What this should tell us is
+  if what we are looking for, for example a platform, exists in the table.
+  Parameters:
+    sql is the string containing the SQL statement.
+  Returns:
+    If found, the row_id, -1 if not found, or None if an error occured.
+  """
+  def rowidExists(self, sql ):
+    dbCursor = self.executeQuery( sql )
+    if( dbCursor != None ):
+      row = dbCursor.fetchone()
+      if( row != None ):
+        return(row['row_id'])
+      else:
+        return( -1 )
+    return(None)
+ 
+  """
+  Function: obsTypeExists
+  Purpose: Checks to see if the passed in obsName exists in the obs_type table.
+  Parameters: 
+    obsName is the sensor(observation) we are testing for.
+  Returns:
+    The obs_type(row_id) if it exists, -1 if it does not exists, or None if an error occured. If there was an error
+    lastErrorMsg can be checked for the error message.
+  """
+  def obsTypeExists(self, obsName):
+    #Does the observation exist in the obs_type table?
+    sql = "SELECT row_id FROM obs_type WHERE standard_name = '%s';" % ( obsName )    
+    return( self.rowidExists( sql ) )
+  
+  """
+  Function: addObsType
+  Purpose: Adds the given obsName into the obs_type table.
+    obsName is the sensor(observation) we are adding.
+  Returns:
+    The obs_type(row_id) if it is successfully created, -1 if it does not exists, or None if an error occured. If there was an error
+    lastErrorMsg can be checked for the error message.
+  """
+  def addObsType(self, obsName):
+    sql = "INSERT INTO obs_type (standard_name) VALUES ('%s');" %( obsName )
+    dbCursor = self.executeQuery(sql)
+    if( dbCursor != None ):
+      return( self.obsTypeExists(obsName) )
+    return(None)
+  
+  """
+  Function: uomTypeExists
+  Purpose: Checks to see if the passed in uom exists in the uom_type table.
+  Parameters: 
+    uom is the unit of measure we are testing for.
+  Returns:
+    The uom_type(row_id) if it exists, -1 if it does not exists, or None if an error occured. If there was an error
+    lastErrorMsg can be checked for the error message.
+  """
+  def uomTypeExists(self, uom):
+    #Check if our UOM exists.        
+    sql = "SELECT row_id FROM uom_type WHERE standard_name = '%s';" % ( uom )
+    return( self.rowidExists( sql ) )
+
+  """
+  Function: addUOMType
+  Purpose: Adds the given uom into the uom_type table.
+  Parameters:
+    uom is the unit of measure we are adding.
+  Returns:
+    The uom_type(row_id) if it is successfully created, -1 if it does not exists, or None if an error occured. If there was an error
+    lastErrorMsg can be checked for the error message.
+  """
+  def addUOMType(self, uom):
+    sql = "INSERT INTO uom_type (standard_name) VALUES ('%s');" %( uom )
+    dbCursor = self.executeQuery(sql)
+    if( dbCursor != None ):
+      return( self.uomTypeExists(uom) )
+    return(None)
+  
+  """
+  Function: existsScalarType
+  Purpose: Checks to see if the passed in obsTypeID and uomTypeID exists in the scalar_type table. This function is not
+  "user friendly" since it requires knowledge of the obs type id and uom type id. Most likely you wouldn't call this directly
+  but would be using the addSensor function to do it automagically.
+  Parameters: 
+    obsTypeID is the row_id of the observation from the obs_type table to check.
+    uomTypeID is the row_id of the unit of measure from the uom_type table to check.
+  Returns:
+    The m_scalar_type_id(row_id) if it exists, -1 if it does not exists, or None if an error occured. If there was an error
+    lastErrorMsg can be checked for the error message.
+  """
+  def scalarTypeExists(self, obsTypeID, uomTypeID):
+    sql = "SELECT row_id FROM m_scalar_type WHERE obs_type_id = %d AND uom_type_id = %d;" % ( obsTypeID,uomTypeID )
+    return(self.rowidExists(sql))
+  
+  """
+  Function: addScalarType
+  Purpose: Adds a new scalar type into the scalar_type table. This function is not
+  "user friendly" since it requires knowledge of the obs type id and uom type id. Most likely you wouldn't call this directly
+  but would be using the addSensor function to do it automagically.
+  Parameters: 
+    obsTypeID is the row_id of the observation from the obs_type table to add.
+    uomTypeID is the row_id of the unit of measure from the uom_type table.
+  Returns:
+    The m_scalar_type_id(row_id) if it exists, -1 if it does not exists, or None if an error occured. If there was an error
+    lastErrorMsg can be checked for the error message.
+  """
+  def addScalarType(self, obsTypeID, uomTypeID):
+    sql = "INSERT INTO m_scalar_type (obs_type_id,uom_type_id) VALUES (%d,%d);" %( obsTypeID,uomTypeID )
+    dbCursor = self.executeQuery(sql)
+    if( dbCursor != None ):
+      return( self.existsScalarType(obsTypeID,uomTypeID) )
+    return(None)
+ 
+  """
+  Function: mTypeExists
+  Purpose: Checks to see if the passed in uom exists in the uom_type table.
+  Parameters: 
+    uom is the unit of measure we are testing for.
+  Returns:
+    The uom_type(row_id) if it exists, -1 if it does not exists, or None if an error occured. If there was an error
+    lastErrorMsg can be checked for the error message.
+  """
+  def mTypeExists(self, scalarID):
+    sql = "SELECT row_id FROM m_type WHERE m_scalar_type_id=%d;" %( scalarID )
+    return(self.rowidExists(sql))
+  
+  """
+  Function: addMType
+  Purpose: Adds a new m_type into the m_type table. This function is not
+  "user friendly" since it requires knowledge of the obs type id and uom type id. Most likely you wouldn't call this directly
+  but would be using the addSensor function to do it automagically.
+  Parameters: 
+    scalarID is the row_id of the scalar_type to add.
+  Returns:
+    The m_type_id(row_id) if it exists, -1 if it does not exists, or None if an error occured. If there was an error
+    lastErrorMsg can be checked for the error message.
+  """
+  def addMType(self, scalarID):    
+    sql = "INSERT INTO m_type (m_scalar_type_id) VALUES (%d)" %( scalarID )
+    dbCursor = self.executeQuery(sql)
+    if( dbCursor != None ):
+      return( self.existsMType(scalarID) )
+    return(None)
+    
+  """
+  Function: sensorExists
+  Purpose: Checks to see if the passed in obsName on the platform.
+  Parameters: 
+    obsName is the sensor(observation) we are testing for.
+    platform is the platform on which we search for the obsName.
+    sOrder, if provided specifies the specific sensor if there are multiples of the same on a platform.
+  Returns:
+    The sensor id(row_id) if it exists, -1 if it does not exists, or None if an error occured. If there was an error
+    lastErrorMsg can be checked for the error message.
+  """
+  def sensorExists(self, obsName, uom, platform, sOrder=1 ):
       
-      #Do we want to query from a datetime of now back lastNHours?
-      dateOffset = ''
-      if( lastNHours != None ):
-        if( self.dbType == dbTypes.SQLite ):
-          dateOffset = "m_date > strftime('%%Y-%%m-%%dT%%H:%%M:%%S', 'now','-%d hours') AND" % (lastNHours)
-        elif( self.dbType == dbTypes.PostGRES ):
-          dateOffset = "m_date > ( now() - interval '%d hours' ) AND" % (lastNHours)
-          
-      sql= "SELECT m_date \
-            ,multi_obs.platform_handle \
-            ,obs_type.standard_name \
-            ,uom_type.standard_name as uom \
-            ,multi_obs.m_type_id \
-            ,m_value \
-            ,qc_level \
-            ,sensor.row_id as sensor_id\
-            ,sensor.s_order \
-          FROM multi_obs \
-            left join sensor on sensor.row_id=multi_obs.sensor_id \
-            left join m_type on m_type.row_id=multi_obs.m_type_id \
-            left join m_scalar_type on m_scalar_type.row_id=m_type.m_scalar_type_id \
-            left join obs_type on obs_type.row_id=m_scalar_type.obs_type_id \
-            left join uom_type on uom_type.row_id=m_scalar_type.uom_type_id \
-            WHERE %s multi_obs.platform_handle = '%s' AND qc_level IS NULL AND sensor.row_id IS NOT NULL\
-            ORDER BY m_date DESC" \
-            % (dateOffset,platform)
-      try:
-        dbCursor = self.executeQuery( sql )       
-        return( dbCursor )
-      except sqlite3.Error, e:        
-        self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
-      except Exception, E:
-        self.lastErrorMsg = str(E)                     
-        
+    sql = "SELECT sensor.row_id as row_id FROM sensor "\
+            "left join platform on platform.row_id=sensor.platform_id "\
+            "left join m_type on m_type.row_id=sensor.m_type_id "\
+            "left join m_scalar_type on m_scalar_type.row_id=m_type.m_scalar_type_id "\
+            "left join obs_type on obs_type.row_id=m_scalar_type.obs_type_id "\
+            "left join uom_type on uom_type.row_id=m_scalar_type.uom_type_id "\
+            "WHERE " \
+            "sensor.s_order=%d AND platform.platform_handle='%s' AND obs_type.standard_name='%s' AND uom_type.standard_name='%s'"\
+            %(sOrder,platform,obsName,uom)
+    return( self.rowidExists( sql ) )
+  """
+  Function: addSensor
+  Purpose: Adds the obsName on the platform given in platformHandle. The flag addObsAndUOM controls whether or not'
+    a non existant obsName/uom pair will be added if they do not exist. 
+  Parameters:
+    obsName is the sensor we want to add.
+    uom is the unit of measure we are adding for the sensor.
+    active specifies if the sensor is active or not. 1 = active, 0 = not active
+    platformHandle is the name of the platform we are adding the sensor for.
+    fixedZ is the height on or below the platform the sensor is installed.
+    sOrder if there are multiple sensors of the same type on the platform, this specifies where it is. 1 is closest to the surface.
+    addObsAndUOM specifies if the obsName or the uom do not exist, if this function will automatically add them. If this flag
+      is False and a uom or obsName doesn't exist an error is generated and we return None.
+  Returns:
+    The uom_type(row_id) if it is successfully created, -1 if it does not exists, or None if an error occured. If there was an error
+    lastErrorMsg can be checked for the error message.
+  """
+  def addSensor(self, obsName, uom, platformHandle, active=1, fixedZ=0, sOrder=1, addObsAndUOM=False):    
+    obsTypeID = self.obsTypeExists( obsName )
+    if( obsTypeID == -1 ):
+      if( addObsAndUOM ):
+        obsTypeID = self.addObsType(obsName)
+        #Error occured so return.
+        if( obsTypeID == None ):
+          self.lastErrorMsg += "\nUnable to add obs_type: %s" % (obsName)
+          return(None)
+      #If we do not want to add a missing observation type, we must error out.
+      else:
+        self.lastErrorMsg = "obs_type: %s does not exist. Must be added to obs_type table." %(obsName)
+        return(None)
+    elif(obsTypeID == None):
+      self.lastErrorMsg = "\n obs_type.standard_name: %s does not exist." % (obsName)
+      
+    #Now let's check if our UOM exists.        
+    uomTypeID = self.uomTypeExists( uom )
+    if( uomTypeID == -1 ):
+      if( addObsAndUOM ):
+        uomTypeID = self.addUOMType(uom)
+        #Error occured so return.
+        if( uomTypeID == None ):
+          self.lastErrorMsg += "\nUnable to add uom_type: %s" % (uom)
+          return(None)
+      #If we do not want to add a missing uom type, we must error out.
+      else:
+        self.lastErrorMsg = "uom_type: %s does not exist. Must be added to uom_type table." %(uom)
+        return(None)
+    elif(uomTypeID == None):
+      self.lastErrorMsg = "\n uom_type.standard_name: %s does not exist." % (uom)
+            
+    #Now check the scalar type.
+    scalarID = self.scalarTypeExists(obsTypeID,uomTypeID)
+    if( scalarID == -1 ):
+      scalarID = self.addScalarType(obsTypeID,uomTypeID)
+      #Error occured so return.
+      if( scalarID == None ):
+        self.lastErrorMsg += "\nUnable to add scalar_type with obs_type_id: %d and uom_type_id: %d" % (obsTypeID,uomTypeID)
+        return(None)
+    elif( scalarID == None ):
+      return( None )
+    
+    #Now we need to add a new m_type
+    mTypeID = self.mTypeExists(scalarID)
+    if( mTypeID == -1 ):
+      mTypeID = self.addMType(scalarID)
+      #Error occured so return.
+      if( mTypeID == None ):
+        self.lastErrorMsg += "\nUnable to add m_type with scalar_type_id: %d" % (scalarID)
+        return(None)
+    elif( mTypeID == None ):
       return(None)
     
-class __xeniaDB:
-    """
-    Function: __init__
-    Purpose: Initializes the class
-    Parameters: None
-    Return: None
-    """
-    def __init__ ( self ):
-      self.dbType = dbTypes.undefined
-      self.lastErrorMsg = ''
-      self.lastErrorCode = None
-      self.DB = None
-      
-    """
-    Function: getLastErrorMsg
-    Purpose: Returns the last error message
-    Parameters: None
-    Return: String with the last error message.
-    """
-    def getLastErrorMsg(self):
-      msg = self.lastErrorMsg
-      self.lastErrorMsg = ''
-      return(msg)  
-     
-    """
-    Function: connect
-    Purpose: Children classes should overload this function to provide the DB specific connection.
-    Parameters: 
-    Return: 
-    """
-    def connect(self, dbFilePath=None, user=None, passwd=None, host=None, dbName=None ):
-      return(False)
-   
-    def getMTypeFromObsName(self, obsName, platform, sOrder ):
-      mType = -1
-      sOrder = '';
-      if( len( sOrder ) ):
-        sOrder = "sensor.s_order = $iSOrder AND"
-        
-      sql = "SELECT DISTINCT(sensor.m_type_id) FROM m_type, m_scalar_type, obs_type, sensor, platform \
-                WHERE  sensor.m_type_id = m_type.row_id AND                                           \
-                m_scalar_type.row_id = m_type.m_scalar_type_id AND                                    \
-                obs_type.row_id = m_scalar_type.obs_type_id AND                                       \
-                platform.row_id = sensor.platform_id AND                                              \
-                %s                                                                            \
-                obs_type.standard_name = '%s' AND                                                     \
-                platform.platform_handle = '%s';" % (sOrder,obsName,platform )
-      try:                               
-        dbCursor = self.executeQuery( sql )
-        for row in dbCursor:
-          mType  = row[0]
-        dbCursor.close()
-      
+    #Now we can finally add the sensor to the sensor table.
+    platformID = self.platformExists(platformHandle)
+    if( platformID != None):
+      if( platformID != -1 ):
+        sql = "INSERT INTO sensor (platform_id,m_type_id,fixed_z,active,s_order) "\
+              "VALUES(%d,%d,%d,%d,%d)"\
+              %(platformID,mTypeID,fixedZ,active,sOrder)
+        dbCursor = self.executeQuery(sql)
+        if( dbCursor != None ):
+          try:
+            self.DB.commit()
+            return( self.sensorExists(obsName, uom, platformHandle, sOrder) )
+          except psycopg2.Error, E:
+            if( E.pgerror != None ):
+              self.lastErrorMsg = E.pgerror
+            else:
+              self.lastErrorMsg = E.message             
+            self.lastErrorCode = E.pgcode
+          except sqlite3.Error, e:        
+            self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
+          except Exception, e:        
+            self.lastErrorMsg = str(e)       
+
+    else:
+      self.lastErrorMsg = "Platform: %s does not exist. Cannot add sensor." % (platformHandle)
+    return( None )  
+  
+  """
+  Function: organizationExists
+  Purpose: Checks to see if the organization exists
+  Parameters: 
+    orgName is the organization short_name we are searching for.
+  Returns:
+    The row_id if it exists, -1 if it does not exists, or None if an error occured. If there was an error
+    lastErrorMsg can be checked for the error message.
+  """
+  def organizationExists(self, orgName):
+    sql = "SELECT row_id FROM organization WHERE short_name = '%s';" % ( orgName )
+    return( self.rowidExists(sql) )
+  
+  """
+  Function: addOrganization
+  Purpose: Adds a new organization into the organization table.
+  Parameters: 
+    orgInfo is a dictionary keyed on the column names of the table. The only required key/values are:
+      short_name
+    Optional columns are:
+      active specifies if the organization is active.         
+      long_name a longer name for the organization
+      description the description of the org.
+      url HTTP address for the org.
+      opendap_url Addy for the opendap server.
+
+  Returns:
+    The row_id if it exists, -1 if it does not exists, or None if an error occured. If there was an error
+    lastErrorMsg can be checked for the error message.
+  """
+  def addOrganization(self, orgInfo):
+    columns = ''
+    values = ''
+    for column in orgInfo:
+      if(len(columns)):
+        columns += ","
+      columns += column
+      if(len(values)):
+        values += ","
+      if( column == 'active' ):
+        values += ("%d" %( int(orgInfo[column]) ))
+      else:
+        values += ("'%s'" %( orgInfo[column] ))            
+    
+    if( len(columns) ):
+      sql = "INSERT INTO organization (%s) VALUES (%s)" %( columns, values )
+      dbCursor = self.executeQuery(sql)
+      #If we successfully added the org, let's get it's row_id.
+      if( dbCursor != None ):
+        try:
+          self.DB.commit()
+          return( self.organizationExists(orgInfo['short_name']))
+        except psycopg2.Error, E:
+          if( E.pgerror != None ):
+            self.lastErrorMsg = E.pgerror
+          else:
+            self.lastErrorMsg = E.message             
+          self.lastErrorCode = E.pgcode
+        except sqlite3.Error, e:        
+          self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
+        except Exception, e:        
+          self.lastErrorMsg = str(e)       
+    return(None)
+
+  """
+  Function: platformExists
+  Purpose: Checks to see if the platform exists
+  Parameters: 
+    platformHandle is the handle of the platform we are searching for.
+  Returns:
+    The row_id if it exists, -1 if it does not exists, or None if an error occured. If there was an error
+    lastErrorMsg can be checked for the error message.
+  """
+  def platformExists(self, platformHandle):
+    sql = "SELECT row_id FROM platform WHERE platform_handle = '%s'" % ( platformHandle )
+    return( self.rowidExists(sql) )
+  
+  """
+  Function: addPlatform
+  Purpose: Adds a new platform into the platform table.
+  Parameters: 
+    platformInfo is a dictionary keyed on the column names of the table. The only required key/values are:
+      organization_id is the associated organization id.
+      platform_handle is the handle for the platform.
+    Optional columns are:
+      type_id         
+      short_name      
+      fixed_longitude 
+      fixed_latitude  
+      active          
+      begin_date      
+      end_date        
+      project_id      
+      app_catalog_id  
+      long_name       
+      description     
+      url             
+      metadata_id     
+  Returns:
+    The row_id if it exists, -1 if it does not exists, or None if an error occured. If there was an error
+    lastErrorMsg can be checked for the error message.
+  """
+  def addPlatform(self, platformInfo):
+    columns = ''
+    values = ''
+    for column in platformInfo:
+      if(len(columns)):
+        columns += ","
+      columns += column
+      if(len(values)):
+        values += ","
+      if( column == 'active' or column == 'organization_id' ):
+        values += ("%d" %( int(platformInfo[column]) ))
+      elif( column == 'fixed_latitude' or column == 'fixed_longitude' ):
+        values += ("%f" %( float(platformInfo[column]) ))
+      else:
+        values += ("'%s'" %( platformInfo[column] ))            
+    
+    if( len(columns) ):
+      sql = "INSERT INTO platform (%s) VALUES (%s)" %( columns, values )
+      dbCursor = self.executeQuery(sql)
+      #If we successfully added the org, let's get it's row_id.
+      if( dbCursor != None ):
+        try:
+          self.DB.commit()
+          return( self.platformExists(platformInfo['platform_handle']))
+        except psycopg2.Error, E:
+          if( E.pgerror != None ):
+            self.lastErrorMsg = E.pgerror
+          else:
+            self.lastErrorMsg = E.message             
+          self.lastErrorCode = E.pgcode
+        except sqlite3.Error, e:        
+          self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
+        except Exception, e:        
+          self.lastErrorMsg = str(e)       
+    return(None)
+
+  """
+  Function: addMeasurement
+  Purpose: Adds a new entry into the multi_obs table.
+  """
+  def addMeasurement(self, obsName, uom, platformHandle, date, lat, lon, z, mValues, sOrder=1 ):
+    sensorID = self.sensorExists(obsName, uom, platformHandle, sOrder)
+    if(sensorID == -1 ):
+      self.lastErrorMsg = "Unable to add measurement. Sensor: %s(%s) does not exist on platform: %s. No entry in sensor table." %(obsName,uom,platformHandle)
+      return(None) 
+    elif(sensorID == None):
+      return(None) 
+    mTypeID = self.getMTypeFromObsName(obsName, uom, platformHandle, sOrder)
+    if(mTypeID == -1 ):
+      self.lastErrorMsg = "Unable to add measurement. Sensor: %s(%s) does not exist on platform: %s. No entry in m_type table." %(obsName,uom,platformHandle)
+      return(None) 
+    elif(mTypeID == None):
+      return(None)
+    columns = "platform_handle,sensor_id,m_type_id,m_date,m_lat,m_lon,m_z"
+    values = "'%s',%d,%d,'%s',%f,%f,%f" % (platformHandle,sensorID,mTypeID,date,lat,lon,z)
+    #There are multiple m_value columns in multi_obs. The values parameter is a list whose index
+    #represents the m_value column to be populated.
+    valID = 1
+    for value in mValues:
+      if( valID != 1):
+        columns += (",m_value_%d" % ( valID ) )
+      else:
+        columns += ",m_value"          
+      values += (",%f" %(value))
+      valID += 1
+    sql = "INSERT INTO multi_obs (%s) VALUES (%s)" %( columns, values )
+    dbCursor = self.executeQuery(sql)
+    #If we successfully added the org, let's get it's row_id.
+    if( dbCursor != None ):
+      try:
+        self.DB.commit()
+        return( True )
+      except psycopg2.Error, E:
+        if( E.pgerror != None ):
+          self.lastErrorMsg = E.pgerror
+        else:
+          self.lastErrorMsg = E.message             
+        self.lastErrorCode = E.pgcode
       except sqlite3.Error, e:        
         self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
-      except Exception, E:
-        self.lastErrorMsg = str(E)                     
-      
-      return( mType )
-    
-    def getSensorID(self, obsName, platform, sOrder ):
-      sensorID = -1
-      sOrder = '';
-      if( len( sOrder ) ):
-        sOrder = "sensor.s_order = $iSOrder AND"
-        
-      sql = "SELECT sensor.row_id FROM m_type, m_scalar_type, obs_type, sensor, platform \
-                WHERE  sensor.m_type_id = m_type.row_id AND                                           \
-                m_scalar_type.row_id = m_type.m_scalar_type_id AND                                    \
-                obs_type.row_id = m_scalar_type.obs_type_id AND                                       \
-                platform.row_id = sensor.platform_id AND                                              \
-                %s                                                                            \
-                obs_type.standard_name = '%s' AND                                                     \
-                platform.platform_handle = '%s';" % (sOrder,obsName,platform )
-      try:                               
-        dbCursor = self.executeQuery( sql )
-        row = dbCursor.fetchone()
-        if( row != None ):
-          sensorID  = int(row[0])
-        dbCursor.close()
-      
-      except sqlite3.Error, e:        
-        self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
-      except Exception, E:
-        self.lastErrorMsg = str(E)                     
-      return( sensorID )
-    
+      except Exception, e:        
+        self.lastErrorMsg = str(e)             
+    return(False)
+  
     def getDataForSensorID(self,sensorID, startDate, endDate, timeZoneShift):
       return(None)     
     def getObservationDates(self, obsName, platform ):
@@ -521,9 +725,22 @@ class xeniaPostGres(__xeniaDB):
   """
   def connect(self, dbFilePath=None, user=None, passwd=None, host=None, dbName=None ):
     try:
-      connstring = "dbname=%s user=%s host=%s password=%s" % ( dbName,user,host,passwd) 
+      connstring = "dbname=%s user=%s" % (dbName,user)
+      if(host != None):
+        connstring += " host=%s" %(host)
+      if(passwd != None):
+        connstring += " password=%s" % (passwd)
+        
+      #connstring = "dbname=%s user=%s host=%s password=%s" % ( dbName,user,host,passwd) 
       self.DB = psycopg2.connect( connstring )
       return(True)       
+    except psycopg2.Error, E:
+      if( E.pgerror != None ):
+        self.lastErrorMsg = E.pgerror
+      else:
+        self.lastErrorMsg = E.message             
+      self.lastErrorCode = E.pgcode
+
     except Exception, E:
       self.lastErrorMsg = str(E)                     
     return(False)
@@ -537,17 +754,21 @@ class xeniaPostGres(__xeniaDB):
     If successfull, a cursor is returned, otherwise None is returned.
   """
   def executeQuery(self, sqlQuery):
-    dbCursor = None
     try:
       dbCursor = self.DB.cursor(cursor_factory=psycopg2.extras.DictCursor)     
       dbCursor.execute( sqlQuery )        
+      return( dbCursor )
     except psycopg2.Error, E:
-      self.lastErrorMsg = E.pgerror
+      if( E.pgerror != None ):
+        self.lastErrorMsg = E.pgerror
+      else:
+        self.lastErrorMsg = E.message             
       self.lastErrorCode = E.pgcode
     except Exception, E:
       self.lastErrorMsg = str(E)                     
+    return( None )
+  
     
-    return( dbCursor )
 
   def getDataForSensorID(self,sensorID, startDate, endDate, timeZoneShift):
     data = []
@@ -571,7 +792,7 @@ class xeniaPostGres(__xeniaDB):
     #Do we want to query from a datetime of now back lastNHours?
     dateOffset = ''
     if( lastNHours != None ):
-      dateOffset = "m_date >  date_trunc('hour',( SELECT timezone('UTC', now()-interval '%d' ) ) ) AND" % (lastNHours)
+      dateOffset = "m_date >  date_trunc('hour',( SELECT timezone('UTC', now()-interval '%d hours' ) ) ) AND" % (lastNHours)
         
     sql= "SELECT m_date \
           ,multi_obs.platform_handle \
