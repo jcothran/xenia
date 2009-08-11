@@ -568,7 +568,8 @@ if __name__ == '__main__':
   xmlTag = xmlTree.xpath( '//environment/outputs/qcResultsTable/file' )
   if(len(xmlTag) ):    
     htmlResultsFile = open( xmlTag[0].text, 'w' )
-    logger.info( "Opened HTML Results file: %s" % (xmlTag[0].text) )
+    if( logger != None ):
+      logger.info( "Opened HTML Results file: %s" % (xmlTag[0].text) )
     xmlTag = xmlTree.xpath( '//environment/outputs/qcResultsTable/styleSheet' )    
     if( len(xmlTag) ):  
       styleSheet = xmlTag[0].text
@@ -579,7 +580,8 @@ if __name__ == '__main__':
     htmlResultsFile.write( "<BODY id=\"RGB_BODY_BG\" >\n" )    
     htmlResultsFile.write( "<link href=\"%s\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\" />\n"  % ( styleSheet ) )
   else:
-    logger.debug( "No HTML results file specified in config file parameter: //environment/outputs/qcResultsTable/file" )
+    if( logger != None ):
+      logger.debug( "No HTML results file specified in config file parameter: //environment/outputs/qcResultsTable/file" )
   
   #rangeCheck = obsRangeCheck( '' )
   htmlTable = platformResultsTable()
@@ -775,7 +777,8 @@ if __name__ == '__main__':
       htmlResultsFile.write( "</BODY>\n" )    
       htmlResultsFile.write( "</html>\n" )    
       htmlResultsFile.close()  
-      logger.info( "Closed HTML Results file: %s" % (htmlResultsFile.name) )
+      if( logger != None ):
+        logger.info( "Closed HTML Results file: %s" % (htmlResultsFile.name) )
 
       
   except IOError, e:
