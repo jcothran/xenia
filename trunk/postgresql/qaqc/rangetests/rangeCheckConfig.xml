@@ -21,14 +21,13 @@
     <maxBytes>1000000</maxBytes>
     <backupCount>5</backupCount>       
     <logDir>C:\Documents and Settings\dramage\workspace\QAQC-ControlChart\qaqc.log</logDir>
-    <fetchLogging>
-      <use>1</use>
-      <checkModDate>0</checkModDate>
-      <logDir>c:\temp\nws_precip\fetchlog\</logDir>
-    </fetchLogging>    
   </logging> 
   <outputs>
-    <qcResultsTable>C:\Documents and Settings\dramage\workspace\QAQC-ControlChart\test_results.html</qcResultsTable>
+    <qcResultsTable>
+      <file>C:\Documents and Settings\dramage\workspace\QAQC-ControlChart\test_results.html</file>
+      <styleSheet></styleSheet>
+    </qcResultsTable>
+    
   </outputs>
   
 </environment>
