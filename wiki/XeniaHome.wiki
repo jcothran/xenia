@@ -163,6 +163,8 @@ http://sciscope.codeplex.com/
 http://motherlode.ucar.edu:8080/thredds/catalog/station/metar/catalog.html <br/>
 http://www.unidata.ucar.edu/software/idd/ <br/>
 http://www.unidata.ucar.edu/software/ldm/ <br/>
+http://ernie.tamu.edu/repository <br/>
+http://motherlode.ucar.edu/repository
 
 ----
 
