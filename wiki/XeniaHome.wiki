@@ -159,6 +159,11 @@ code project site http://code.google.com/p/marinemap/
 http://www.sciscope.org/ <br/>
 http://sciscope.codeplex.com/
 
+== Unidata ==
+http://motherlode.ucar.edu:8080/thredds/catalog/station/metar/catalog.html <br/>
+http://www.unidata.ucar.edu/software/idd/ <br/>
+http://www.unidata.ucar.edu/software/ldm/ <br/>
+
 ----
 
 geonetwork http://geonetwork-opensource.org
