@@ -1,0 +1,196 @@
+/* CSS Document */
+body {
+	color: #000000;
+	font: 69% Trebuchet MS;
+	/*font: 69% "Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-serif;*/
+	/*font-family: Verdana, Arial, Helvetica, sans-serif;*/
+	margin: 0px;
+	}
+a:link {
+	color: rgb(0,102,187);
+	}
+a:visited {
+	color: rgb(102,102,187);
+	}
+a:hover {
+	color: rgb(0,132,187);
+	}
+h1 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 2em;
+	margin-top: 0px;
+	color: rgb(0,65,21);
+	}
+h2 {
+	font-size: 1em;
+	color: rgb(0,65,21);
+	margin-bottom: 5px;
+	margin-top: 15px;
+	}
+h3 {
+	font-size: 1em;
+	color: rgb(0,65,21);
+	}
+h4 {
+	font-size: .75em;
+	}
+table {
+	font-size: 100%;
+	border-collapse: collapse;
+	}
+table, th, td {
+	border: 2px solid #808080;
+	}
+caption {
+	color: #808080;
+	padding-bottom: 4px;
+	}
+	
+/*These are the colors used for the percentage uptime table*/	
+#RGB_DEFAULT {
+    background-color: rgb( 255, 255, 255 );
+}
+#RGB_90THPERCENTILE {
+    background-color: #9AF248;
+}
+#RGB_70THPERCENTILE {
+    background-color: #F0F248;
+}
+#RGB_UNDER70TH {
+    background-color: #FF5C5C;
+}
+#RGB_MISSING {
+    background-color: rgb( 65, 105, 225 );
+}
+/*These are the colors used for the qc Results  table*/	
+#qcDEFAULT {
+    background-color: #FFFFFF;
+}
+#qcFAIL {
+    background-color: #FF0000;
+}
+#qcPASS {
+    background-color: #00FF00;
+}
+#qcSUSPECT {
+    background-color: #F0F248;
+}
+#qcLAGGING {
+    background-color: #a020f0;
+}
+#qcMISSING {
+    background-color: #4169e1;
+}
+#qcNOEVAL {
+    background-color: #000000;
+    color: #FF0000;
+    
+}
+
+
+/* Page Sections */
+#header {
+	width: 100%;
+	height: 60px;
+	background: rgb(189,201,249) url("../images/header_bkg.jpg") repeat-x;
+	}
+#header p {
+	margin-top: -27px;
+	margin-left: 400px;
+	}
+#container {
+	width: 100%;
+	float:left;
+	}
+#menu {
+	width: 180px;
+	float: left;
+	padding: 0px;
+	margin-top: 0px;
+	background: rgb(189,201,249) url("../images/sidebar_bkg.gif") no-repeat;
+	}
+#content {
+	width: 600px; 
+	padding: 15px 10px 10px 15px;
+	float: left;
+	font-size: 1em;
+	background: #ffffff url("../images/round_corner.gif") no-repeat;
+	}
+#footer {
+	width: 97%;
+	clear: both;
+	font-size: .8em;
+	padding: 10px;
+	text-indent: 180px;
+	}
+
+/* Menu Styles */
+#menu ul, #menu li {
+	list-style-type: none;
+	display: inline;
+	margin: 0px;
+	padding: 0px;
+	}
+#menu ul {
+	display: block;
+	margin-top: 30px;
+	}
+#menu a {
+	display: block;
+	margin-bottom: 3px;
+	width: 148px;
+	height: 18px;
+	margin-left: 16px;
+	background-image: url("../images/menuitem_bkg.gif");
+	padding-left: 6px;
+	color: rgb(0,51,85);
+	text-decoration: none;
+	}
+#menu a:hover {
+	color: rgb(0,102,187);
+	background-image: url("../images/menuitem_ro.gif");
+	}
+#menu .sub {
+	margin-top: 5px;
+	}
+#menu .sub a {
+	margin-left: 28px;
+	font-size: .9em;
+	background-image: none;
+	height: auto;
+	width: auto;
+	padding: 0px;
+	}
+/* all other styles */
+#content li {
+	margin-bottom: 4px;
+	}	
+.credit {
+	color: #888;
+	font-size: 90%;
+	}
+.small {
+	font-size: 90%;
+	}
+.timestamp {
+	font-style:italic;
+	}
+.label { /* for non-form labels */
+	font-weight: bold;
+	}
+sup, sub {
+	font-size: .9em;
+	}
+.error {
+	color: #ff0000;
+	font-weight:bold;
+	}
+/* form styles */
+label {
+	display: block;
+	margin: 5px 0px;
+	}
+input.button {
+	font-weight: bold;
+	}
+
