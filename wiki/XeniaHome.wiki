@@ -86,9 +86,9 @@ http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
 ----
 = Notes =
 
-Would recommend using the *version 2* schema, I have listed the version 1 as a point of historical reference but am not developing any more against it.
+Would recommend using the [http://code.google.com/p/xenia/source/browse/trunk/postgresql/sql/db_xenia_v3.1_postgresql.sql *version 3.1* schema], I have listed the earlier versions(including sqlite) as a point of historical reference but am not developing any more against it.
 
-Would also recommend taking a look at the *sqlite* version which should hopefully be very compact and easy to set up.
+Although I'm no longer developing against the *sqlite* version, it may be of interest to folks running more compact, single-user embedded systems.
  
 
 For notes on using *subversion* for this project, see the notes at http://code.google.com/p/rcoos/wiki/SubversionNotes which should apply the same for this project except that the project name is 'xenia' instead of 'rcoos'
