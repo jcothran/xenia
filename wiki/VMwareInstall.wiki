@@ -465,7 +465,7 @@ It's also possible to move .iso images to vmware datastores using some third-par
   * removing time spent in setup/configuration for hardware/software
   * some separation between hardware and software concerns - maintaining portability between older software on newer hardware
   * dedicated server(spec) for known performance, bare-metal, low-cost($1-2K) servers 
-  * side benefits - separating software from storage, CPU/memory, not disk space
+  * side benefits - separating software from storage, CPU/memory
   * keywords - turnkey,appliance,node,package
     * application/appliance types/profiles
   * more operationally,production,distribution focused
