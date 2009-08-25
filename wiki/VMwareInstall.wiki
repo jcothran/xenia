@@ -461,17 +461,17 @@ It's also possible to move .iso images to vmware datastores using some third-par
 = Virtualization - talking points = 
 
   * no silver bullets - but close
-  * virtualization continues industry trend(mainframes originally) to maximize hardware usage (allow multiple workload/systems on same hardware)
-  * hardware manufacturers better supporting virtualization technologies to help reduce virtualization performance tax/penalty
-  * appliances/packages can be developed for multiple end purposes swiss army knife, stem cell - many end configurations/functions from single package
-  * keywords - turnkey,appliance,node,package
-    * application/appliance types/profiles
-  * more operationally,production,distribution focused
   * backup,versioning, sharing(server to desktop), scaling
   * removing time spent in setup/configuration for hardware/software
   * some separation between hardware and software concerns - maintaining portability between older software on newer hardware
   * dedicated server(spec) for known performance, bare-metal, low-cost($1-2K) servers 
   * side benefits - separating software from storage, CPU/memory, not disk space
+  * keywords - turnkey,appliance,node,package
+    * application/appliance types/profiles
+  * more operationally,production,distribution focused
+  * virtualization continues industry trend(mainframes originally) to maximize hardware usage (allow multiple workload/systems on same hardware)
+  * hardware manufacturers better supporting virtualization technologies to help reduce virtualization performance tax/penalty
+  * appliances/packages can be developed for multiple end purposes swiss army knife, stem cell - many end configurations/functions from single package
   * should be technically possible if desired or necessary to port images to other virtualization hosts/vendors(avoiding vendor lock-in) and to remote/'cloud' based servers(don't own the hardware, just payment for processing/storage/bandwidth usage) - dynamic cloud usage more appealing to workloads with highly dynamic workloads(extra servers only needed during peak workloads).
   * security - depends on trust/testing between provider of software/system and consumer/host, and also feedback where security or performance could be improved
   * possibly run appliance outside of consumer firewall(or quarantined) until level of trust/confidence established
