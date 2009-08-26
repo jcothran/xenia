@@ -470,7 +470,7 @@ It's also possible to move .iso images to vmware datastores using some third-par
     * application/appliance types/profiles
   * more operationally,production,distribution focused
   * virtualization continues industry trend(mainframes originally) to maximize hardware usage (allow multiple workload/systems on same hardware)
-  * hardware manufacturers better supporting virtualization technologies to help reduce virtualization performance tax/penalty
+  * hardware manufacturers better supporting virtualization technologies to help reduce virtualization performance tax/penalty - general rule of thumb is 30% cost in supporting virtualization
   * appliances/packages can be developed for multiple end purposes swiss army knife, stem cell - many end configurations/functions from single package
   * should be technically possible if desired or necessary to port images to other virtualization hosts/vendors(avoiding vendor lock-in) and to remote/'cloud' based servers(don't own the hardware, just payment for processing/storage/bandwidth usage) - dynamic cloud usage more appealing to workloads with highly dynamic workloads(extra servers only needed during peak workloads).
   * security - depends on trust/testing between provider of software/system and consumer/host, and also feedback where security or performance could be improved
