@@ -69,6 +69,11 @@ http://googleenterprise.blogspot.com/2009/05/old-tool-new-tricks.html
 Google Squared
 http://radar.oreilly.com/2009/06/google-squared-is-an-exponenti.html
 
+== Troubleshooting ==
+
+Google spreadsheets may become *slow* for imports from Excel spreadsheets(strange cell values), color coding, empty columns, browser issues, etc
+http://www.mail-archive.com/chromium-bugs@googlegroups.com/msg53650.html
+
 = examples = 
 
 == spreadsheet design ==
