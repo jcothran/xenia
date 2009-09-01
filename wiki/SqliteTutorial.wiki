@@ -112,3 +112,9 @@ GROUP BY date
 HAVING ( COUNT(date) > 1 )
 }}}
 ----
+----
+For concatenating strings when building, for example, an on the fly wkt_geometry statement:
+SELECT 'POINT(' || fixed_latitude || ' ' || fixed_longitude || ')',platform_handle FROM platform;
+
+The '||' is the concatenate operator.
+----
