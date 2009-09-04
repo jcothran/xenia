@@ -14,9 +14,9 @@ use strict;
 #config
 my $temp_dir = '.';
 
-my $feed_name = 'secoora';
+my $feed_name = 'xenia';
 
-my $dbname = '/var/www/cgi-bin/microwfs/microwfs.db';
+my $dbname = '/home/xeniaprod/scripts/sqlite/db/xenia.db';
 
 #####################
 
