@@ -96,18 +96,11 @@ http://carocoops.org/obskml/feeds/nws/nws_latest_obskml.zip
 
 All the following steps are done as user *xeniaprod*
 
-=== Create necessary organization import, archive folders ===
+=== Create necessary organization folder ===
 {{{
 mkdir /home/xeniaprod/feeds/nws
-mkdir /home/xeniaprod/feeds/nws/archive
 }}}
-=== Edit xeniaprod crontab to nightly cleanup archive files ===
-As user xeniaprod run the following command to edit xeniaprod crontab in 'nano' editor
-{{{crontab -e}}}
-add line
-{{{
-2 0 * * * find /home/xeniaprod/feeds/ndbc/archive/* -maxdepth 1 -cmin +1400 -exec rm -f {} \;
-}}}
+
 === Edit /home/xeniaprod/cron/getObskml.sh ==
 add line to retrieve obskml files(one or several as .kmz,.zip) to local folder
 {{{
@@ -118,21 +111,41 @@ add line to unzip one or several input obskml files(.kmz,.zip) to common tempora
 {{{
 unzip -q "../nws/nws_metadata_latest.kmz" >> /home/xeniaprod/tmp/cron.log 2>&1    
 }}}
+
+=== Add organization name to be included in status graphs, email notification ===
+file /home/xeniaprod/config/config.xml
+{{{
+  <Organizations>
+    <org>
+      <name>nws</name>
+      <count>1</count>  <!-- lowest expected count/email alert threshold -->
+    </org>
+...
+}}}
+
+utilized by file(as $XMLConfigFile, no changes) /home/xeniaprod/scripts/sqlite/flow_monitor/check_status.pl
+{{{
+my ($dbname,$email_flag,$hour_offset,$status_file,$status_file_latest,$image_file,$title,$range_top,$XMLConfigFile) = @ARGV;
+}}}
+
+== optional ==
+
 === add organization to styled KMZ /home/xeniaprod/cron/styleLatest.sh ===
 add org name to array list
 {{{
 my @org_array = qw(usgs nerrs ndbc nws);
 }}}
-=== add organization name to be included in status graphs, email notification ===
-file /home/xeniaprod/scripts/sqlite/flow_monitor/check_status.pl
+
 {{{
-my @org_array = qw(usgs nerrs ndbc nws);  #VM_CONFIG
+mkdir /home/xeniaprod/feeds/nws/archive
 }}}
-additional line plot
-file /home/xeniaprod/scripts/sqlite/flow_monitor/status.lib
+
+==== Edit xeniaprod crontab to nightly cleanup archive files ====
+As user xeniaprod run the following command to edit xeniaprod crontab in 'nano' editor
+{{{crontab -e}}}
+add line
 {{{
-     '$graph_data_file' using 1:7 t '$legend[2]' with lines lt 3, \\
-     '$graph_data_file' using 1:8 t '$legend[3]' with lines lt 4
+2 0 * * * find /home/xeniaprod/feeds/ndbc/archive/* -maxdepth 1 -cmin +1400 -exec rm -f {} \;
 }}}
 
 == ObsKML simple example ==
