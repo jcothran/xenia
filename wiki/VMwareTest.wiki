@@ -130,7 +130,8 @@ my ($dbname,$email_flag,$hour_offset,$status_file,$status_file_latest,$image_fil
 
 == optional ==
 
-=== add organization to styled KMZ /home/xeniaprod/cron/styleLatest.sh ===
+=== add organization to styled KMZ ===
+file /home/xeniaprod/cron/styleLatest.sh <br/>
 add org name to array list
 {{{
 my @org_array = qw(usgs nerrs ndbc nws);
