@@ -1,0 +1,66 @@
+<environment>
+  <ysiSettingsList>
+    <ysiSetting>
+      <name>nerrs_bangslake_wq</name>
+      <geoLoc>30.3571,-88.4629</geoLoc>
+      <platformURL>http://www.ysieconet.com/public/WebUI/Default.aspx?hidCustomerID=74</platformURL>
+      <paramScrapeURL>http://www.ysieconet.com/public/WebUI/DataPlotsDetails.aspx?hidNodeID=550&amp;hidCustomerID=74</paramScrapeURL>
+      <dataQueryURL>http://www.ysieconet.com/public/WebUI/ParameterHistory.aspx?hidCustomerID=%d&amp;hidParameterID=%d&amp;hidNodeID=%d&amp;hidAVIID=%d&amp;hidChanID=%d</dataQueryURL>
+      
+      <outputs>
+        <output>
+          <type>csv</type>
+          <filename>/home/xeniaprod/feeds/nerrs/BangsLake.csv</filename>
+        </output>
+      </outputs>
+    </ysiSetting>      
+    
+    <ysiSetting>
+      <name>nerrs_bayoucumbest_wq</name>
+      <geoLoc>30.3836,-88.4364</geoLoc>
+      <platformURL>http://www.ysieconet.com/public/WebUI/Default.aspx?hidCustomerID=74</platformURL>
+      <paramScrapeURL>http://www.ysieconet.com/public/WebUI/DataPlotsDetails.aspx?hidNodeID=551&amp;hidCustomerID=74</paramScrapeURL>
+      <dataQueryURL>http://www.ysieconet.com/public/WebUI/ParameterHistory.aspx?hidCustomerID=%d&amp;hidParameterID=%d&amp;hidNodeID=%d&amp;hidAVIID=%d&amp;hidChanID=%d</dataQueryURL>
+      
+      <outputs>
+        <output>
+          <type>csv</type>
+          <filename>/home/xeniaprod/feeds/nerrs/BayouCumbest.csv</filename>
+        </output>
+      </outputs>
+    </ysiSetting>      
+
+    <ysiSetting>
+      <name>nerrs_bayouheron_wq</name>
+      <geoLoc>30.4178,-88.4054</geoLoc>
+      <platformURL>http://www.ysieconet.com/public/WebUI/Default.aspx?hidCustomerID=74</platformURL>
+      <paramScrapeURL>http://www.ysieconet.com/public/WebUI/DataPlotsDetails.aspx?hidNodeID=553&amp;hidCustomerID=74</paramScrapeURL>
+      <dataQueryURL>http://www.ysieconet.com/public/WebUI/ParameterHistory.aspx?hidCustomerID=%d&amp;hidParameterID=%d&amp;hidNodeID=%d&amp;hidAVIID=%d&amp;hidChanID=%d</dataQueryURL>
+      
+      <outputs>
+        <output>
+          <type>csv</type>
+          <filename>/home/xeniaprod/feeds/nerrs/BayouHeron.csv</filename>
+        </output>
+      </outputs>
+    </ysiSetting>      
+
+    <ysiSetting>
+      <name>nerrs_pointeauxchene_wq</name>
+      <geoLoc>30.3486,-88.4185</geoLoc>
+      <platformURL>http://www.ysieconet.com/public/WebUI/Default.aspx?hidCustomerID=74</platformURL>
+      <paramScrapeURL>http://www.ysieconet.com/public/WebUI/DataPlotsDetails.aspx?hidNodeID=549&amp;hidCustomerID=74</paramScrapeURL>
+      <dataQueryURL>http://www.ysieconet.com/public/WebUI/ParameterHistory.aspx?hidCustomerID=%d&amp;hidParameterID=%d&amp;hidNodeID=%d&amp;hidAVIID=%d&amp;hidChanID=%d</dataQueryURL>
+      
+      <outputs>
+        <output>
+          <type>csv</type>
+          <filename>/home/xeniaprod/feeds/nerrs/PointeauxChene.csv</filename>
+        </output>
+      </outputs>
+    </ysiSetting>      
+  </ysiSettingsList>
+  <unitsConversion>
+    <file>/home/xeniaprod/scripts/postgresql/qaqc/rangetests/UnitsConversionPython.xml</file>
+  </unitsConversion>
+</environment>
