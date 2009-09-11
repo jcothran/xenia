@@ -1,0 +1,114 @@
+<parameters>
+  <parameter>
+      <customerID>131</customerID>
+      <nodeID>270</nodeID>
+      <aviID>2211</aviID>
+      <paramID>2</paramID>
+      <altName>Surface Temp. [F]</altName>
+      <chanNDX>0</chanNDX>
+  </parameter>
+  <parameter>
+      <customerID>131</customerID>
+      <nodeID>270</nodeID>
+      <aviID>2211</aviID>
+      <paramID>12</paramID>
+      <altName>Surface Salinity [ppt]</altName>
+      <chanNDX>0</chanNDX>
+  </parameter>
+  <parameter>
+      <customerID>131</customerID>
+      <nodeID>270</nodeID>
+      <aviID>2211</aviID>
+      <paramID>14</paramID>
+      <altName>Surface DO [%]</altName>
+      <chanNDX>0</chanNDX>
+  </parameter>
+  <parameter>
+      <customerID>131</customerID>
+      <nodeID>270</nodeID>
+      <aviID>2210</aviID>
+      <paramID>2</paramID>
+      <altName>Bottom Temp. [F]</altName>
+      <chanNDX>0</chanNDX>
+  </parameter>
+  <parameter>
+      <customerID>131</customerID>
+      <nodeID>270</nodeID>
+      <aviID>2210</aviID>
+      <paramID>12</paramID>
+      <altName>Bottom Salinity [ppt]</altName>
+      <chanNDX>0</chanNDX>
+  </parameter>
+  <parameter>
+      <customerID>131</customerID>
+      <nodeID>270</nodeID>
+      <aviID>2210</aviID>
+      <paramID>14</paramID>
+      <altName>Bottom DO [%]</altName>
+      <chanNDX>0</chanNDX>
+  </parameter>
+  <parameter>
+      <customerID>131</customerID>
+      <nodeID>270</nodeID>
+      <aviID>2211</aviID>
+      <paramID>15</paramID>
+      <altName>Surface DO Conc [mg/L]</altName>
+      <chanNDX>0</chanNDX>
+  </parameter>
+  <parameter>
+      <customerID>131</customerID>
+      <nodeID>270</nodeID>
+      <aviID>2210</aviID>
+      <paramID>15</paramID>
+      <altName>Bottom DO Conc [mg/L]</altName>
+      <chanNDX>0</chanNDX>
+  </parameter>
+  <parameter>
+      <customerID>131</customerID>
+      <nodeID>270</nodeID>
+      <aviID>2212</aviID>
+      <paramID>27</paramID>
+      <altName>BP [inHg]</altName>
+      <chanNDX>0</chanNDX>
+  </parameter>
+  <parameter>
+      <customerID>131</customerID>
+      <nodeID>270</nodeID>
+      <aviID>2212</aviID>
+      <paramID>42</paramID>
+      <altName>RH [%]</altName>
+      <chanNDX>0</chanNDX>
+  </parameter>
+  <parameter>
+      <customerID>131</customerID>
+      <nodeID>270</nodeID>
+      <aviID>2212</aviID>
+      <paramID>57</paramID>
+      <altName>Air Temp [F]</altName>
+      <chanNDX>0</chanNDX>
+  </parameter>
+  <parameter>
+      <customerID>131</customerID>
+      <nodeID>270</nodeID>
+      <aviID>2212</aviID>
+      <paramID>84</paramID>
+      <altName>Wind Speed [mph]</altName>
+      <chanNDX>0</chanNDX>
+  </parameter>
+  <parameter>
+      <customerID>131</customerID>
+      <nodeID>270</nodeID>
+      <aviID>2212</aviID>
+      <paramID>511</paramID>
+      <altName>Rainfall [in]</altName>
+      <chanNDX>0</chanNDX>
+  </parameter>
+  <parameter>
+      <customerID>131</customerID>
+      <nodeID>270</nodeID>
+      <aviID>2212</aviID>
+      <paramID>10002</paramID>
+      <altName>Wind Direction []</altName>
+      <chanNDX>0</chanNDX>
+  </parameter>
+</parameters>

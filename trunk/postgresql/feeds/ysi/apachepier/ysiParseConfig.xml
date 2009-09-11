@@ -1,0 +1,23 @@
+<environment>
+  <ysiSettingsList>
+    <ysiSetting>
+      <name>scdnr_apachepier_pier</name>
+      <geoLoc>33.76152,-78.779878</geoLoc>
+      <platformURL>http://www.ysieconet.com/public/WebUI/Default.aspx?hidCustomerID=131</platformURL>
+      <paramScrapeURL>http://www.ysieconet.com/public/WebUI/DashboardDetails.aspx?hidCustomerID=131&amp;hidElementID=225&amp;hidElementType=S&amp;hidNodeID=270</paramScrapeURL>
+
+      <dataQueryURL>http://www.ysieconet.com/public/WebUI/ParameterHistory.aspx?hidCustomerID=%d&amp;hidParameterID=%d&amp;hidNodeID=%d&amp;hidAVIID=%d&amp;hidChanID=%d</dataQueryURL>
+      
+      <outputs>
+        <output>
+          <type>kml</type>
+          <filename>/home/xeniaprod/feeds/scdnr/apachepier.kml</filename>
+        </output>
+      </outputs>
+    </ysiSetting>   
+   
+  </ysiSettingsList>
+  <unitsConversion>
+    <file>/home/xeniaprod/scripts/postgresql/qaqc/rangetests/UnitsConversionPython.xml</file>
+  </unitsConversion>  
+</environment>
