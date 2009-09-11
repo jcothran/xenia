@@ -409,13 +409,13 @@ class ysiDataCollection(object):
       doc = ysiKML.createDocument(siteName)
               
       #Now let's run through the hash to build the KML file.    
-      platformKeys = obsHash.keys()
+      platformKeys = obsHash['platform'].keys()
       for platform in platformKeys:
-        latitude    = obsHash[platform]['latitude']
-        longitude   = obsHash[platform]['longitude']
-        platformUrl = obsHash[platform]['url']
+        latitude    = float(obsHash['platform'][platform]['latitude'])
+        longitude   = float(obsHash['platform'][platform]['longitude'])
+        platformUrl = obsHash['platform'][platform]['url']
         
-        dateKeys = obsHash['platform'][platform].keys()
+        dateKeys = obsHash['platform'][platform]['date'].keys()
         #We want to sort the dates
         dateKeys.sort()
         for dateKey in dateKeys:       
@@ -431,11 +431,11 @@ class ysiDataCollection(object):
           obslistTag.appendChild(urlTag)
               
           #Sort the observation names.
-          obsKeys = obsHash['platform'][platform]['date'][dateKey].keys()
+          obsKeys = obsHash['platform'][platform]['date'][dateKey]['obsuom'].keys()
           obsKeys.sort()
           for obsKey in obsKeys:
-            for elev in obsHash['platform'][platform]['date'][dateKey]['obsuom'][obsKey]:
-              for sorder in obsHash['platform'][platform]['date'][dateKey]['obsuom'][obsKey]['elev'][elev]:
+            for elev in obsHash['platform'][platform]['date'][dateKey]['obsuom'][obsKey]['elev']:
+              for sorder in obsHash['platform'][platform]['date'][dateKey]['obsuom'][obsKey]['elev'][elev]['sorder']:
                 value = ("%f" % (obsHash['platform'][platform]['date'][dateKey]['obsuom'][obsKey]['elev'][elev]['sorder'][sorder]['value']))       
                 obsUOM = obsKey.split('.')
                 obsName = obsUOM[0]
