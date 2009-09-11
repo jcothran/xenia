@@ -22,7 +22,7 @@ class nerrsYSIData(ysiDataCollection):
         
       csvFile = open(csvFilename, "w")
       #Write the header line
-      csvFile.write("Date,Time,Temp,SpCond,Sal,DO_pct,DO_mgl,Depth,pH,Turb,BVolt,GOESID,SWMPStation\n")
+      csvFile.write("Date,Time,Temp,SpCond,Sal,DO_pct,DO_mgl,Depth,pH,Turb,BVolt,SWMPStation\n")
       
       #Now let's run through the hash to build the CSV file.    
       platformKeys = obsHash['platform'].keys()
@@ -63,7 +63,7 @@ class nerrsYSIData(ysiDataCollection):
             elif( 'salinity' == obsName ):
               salinity = obsHash['platform'][platform]['date'][dateKey]['obsuom'][obsKey]['elev']['0']['sorder']['1']['value']
             
-            elif( 'oxygen_concentration' == obsName and '%' == uom):
+            elif( 'oxygen_concentration' == obsName and 'percent' == uom):
               oxygen_concentration_percent = obsHash['platform'][platform]['date'][dateKey]['obsuom'][obsKey]['elev']['0']['sorder']['1']['value']
 
             elif( 'oxygen_concentration' == obsName and 'mg_L-1' == uom):
@@ -81,19 +81,18 @@ class nerrsYSIData(ysiDataCollection):
             elif( 'battery_voltage' == obsName ):
               battery_voltage = obsHash['platform'][platform]['date'][dateKey]['obsuom'][obsKey]['elev']['0']['sorder']['1']['value']
               
-          #Date,Time,Temp,SpCond,Sal,DO_pct,DO_mgl,Depth,pH,Turb,BVolt,GOESID,SWMPStation
+          #Date,Time,Temp,SpCond,Sal,DO_pct,DO_mgl,Depth,pH,Turb,BVolt,SWMPStation
           csvFile.write("%s,"  #date
                          "%s," #timeVal
-                         "%f," #waterTemp
-                         "%f," #water_conductivity
-                         "%f," #salinity
-                         "%f," #oxygen_concentration_percent
-                         "%f," #oxygen_concentration_mgL
-                         "%f," #depth
-                         "%f," #ph
-                         "%f," #turbidity
-                         "%f," #battery_voltage
-                         ","   
+                         "%.2f," #waterTemp
+                         "%.2f," #water_conductivity
+                         "%.2f," #salinity
+                         "%.2f," #oxygen_concentration_percent
+                         "%.2f," #oxygen_concentration_mgL
+                         "%.2f," #depth
+                         "%.2f," #ph
+                         "%.2f," #turbidity
+                         "%.2f," #battery_voltage
                          "%s\n"#swmpStation
                         %(date,timeVal,waterTemp,water_conductivity,salinity,oxygen_concentration_percent,oxygen_concentration_mgL,depth,ph,turbidity,battery_voltage,swmpStation))    
       csvFile.close()
