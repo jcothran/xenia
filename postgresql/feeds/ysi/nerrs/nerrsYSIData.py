@@ -8,7 +8,7 @@ class nerrsYSIData(ysiDataCollection):
     ysiDataCollection.__init__(self,xmlConfiFile)
     
   def createCSV(self, siteName, csvFilename, obsHash):
-    print( "Creating CSV file for: %s" %(siteName))    
+    print( "Site: %s CSV file: %s" %(siteName,csvFilename))    
     try:
       swmpStation = ''
       if(siteName == 'nerrs_bayoucumbest_wq'):
