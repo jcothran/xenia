@@ -149,6 +149,8 @@ class ysiObsSettings(object):
         param.altName   = parmList[3]
         param.altName   = param.altName.replace("'", "")
         param.chanNDX   = int(parmList[4])
+        print( "altName: %s customerID: %d nodeID: %d aviID; %d paramID: %d chanNDX: %d"\
+                %(param.altName,param.customerID,param.nodeID,param.aviID,param.paramID,param.chanNDX) )
         self.paramList.append(param)              
     return(True)
   """
@@ -347,7 +349,7 @@ class ysiDataCollection(object):
     obsHash is a hash with all the measurement data.
   """
   def createCSV(self, siteName, csvFilename, obsHash):
-    print( "Creating CSV file for: %s" %(siteName))    
+    print( "Site: %s CSV file: %s" %(siteName,csvFilename))    
     try:
       csvFile = open(csvFilename, "w")
       #Write the header line
@@ -402,7 +404,7 @@ class ysiDataCollection(object):
     obsHash is a hash with all the measurement data.
   """
   def createKML(self, siteName, kmlFilename, obsHash):
-    print( "Creating KML file for: %s" %(siteName))
+    print( "Site: %s KML file: %s" %(siteName,kmlFilename))
     try:    
       #Create kml document.
       ysiKML = kml.KML()
