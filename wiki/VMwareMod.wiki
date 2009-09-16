@@ -47,6 +47,7 @@ sudo apt-get install gnuplot-nox #no X11 windows support
 sudo cpan -i "XML::XPath"
 sudo cpan -i "Config::IniFiles"
 sudo cpan -i Geo::WeatherNWS    #Package for retrieving NWS data.
+sudo cpan -i SOAP::Lite
 }}}
 
 #NetCDf Perl
