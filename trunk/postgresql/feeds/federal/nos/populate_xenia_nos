@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ ! -f /tmp/lock_populate_xenia_nos ]; then
+  touch /tmp/lock_populate_xenia_nos
+  /home/xeniaprod/scripts/postgresql/feeds/federal/mk_sql_for_xenia.pl nos 24 /home/xeniaprod/tmp/sqlfiles/nos.sql debug
+  psql -U xeniaprod -d xenia -f /home/xeniaprod/tmp/sqlfiles/nos.sql  
+  rm -f /tmp/lock_populate_xenia_nos
+ # cd ../tides ; ./do_tide_graphs.sh &
+fi
