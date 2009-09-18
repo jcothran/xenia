@@ -89,7 +89,7 @@ $dbh->disconnect();
 # Go get 'em!
 ##############
 
-my %obs = %{eval('&ObsUtils::get_'.$target_obs.'_obs(@stations,\%local_setup)')};
+my %obs = %{eval('&ObsUtils::get_'.$target_obs.'_obs(@stations)')};
 
 #############################################################################################
 # Make SQL!
