@@ -454,7 +454,7 @@ class ysiDataCollection(object):
       ysiKML.root.appendChild(doc)
   
       kmlFile = open(kmlFilename, "w")
-      kmlFile.writelines(ysiKML.writepretty())
+      kmlFile.writelines(ysiKML.toxml())
       kmlFile.close()
     except Exception, e:
       import sys
@@ -502,10 +502,12 @@ class ysiDataCollection(object):
     The database date string.
   """
   def formDBDate(self, date):
-    try:
-
+    try:      
       datetime = time.strptime(date, "%m/%d/%Y %H:%M %p")
-      dbDateTime = time.strftime("%Y-%m-%d %H:%M:00", datetime)
+      datetime = time.mktime(datetime)
+      #We are assuming the date is not in UTC, so we convert it.
+      datetime = time.gmtime(datetime)
+      dbDateTime = time.strftime("%Y-%m-%dT%H:%M:00", datetime)
       return(dbDateTime)
     
     except Exception, e:
@@ -541,24 +543,24 @@ class ysiDataCollection(object):
       sOrder = "1"
     elif( ysiObsName == 'Salinity [ppt]' ):
       obs = "salinity"
-      uom = "ppt"
+      uom = "psu"
       sOrder = "1"
     elif( ysiObsName == 'Surface Salinity [ppt]' ):
       obs = "salinity"
-      uom = "ppt"
+      uom = "psu"
       sOrder = "1"
     elif( ysiObsName == 'Surface DO [%]' ):
       obs = "oxygen_concentration"
       uom = "percent"
       sOrder = "1"
     elif( ysiObsName == 'Bottom Temp. [F]' ):
-      obs = "oxygen_concentration"
-      uom = "percent"
-      sOrder = "1"
+      obs = "water_temperature"
+      uom = "fahrenheit"
+      sOrder = "2"
     elif( ysiObsName == 'Bottom Salinity [ppt]' ):
-      obs = "oxygen_concentration"
-      uom = "percent"
-      sOrder = "1"
+      obs = "salinity"
+      uom = "psu"
+      sOrder = "2"
     elif( ysiObsName == 'DO% [%]' ):
       obs = "oxygen_concentration"
       uom = "percent"
@@ -566,7 +568,7 @@ class ysiDataCollection(object):
     elif( ysiObsName == 'Bottom DO [%]' ):
       obs = "oxygen_concentration"
       uom = "percent"
-      sOrder = "1"
+      sOrder = "2"
     elif( ysiObsName == 'Surface DO Conc [mg/L]' ):
       obs = "oxygen_concentration"
       uom = "mg_L-1"
