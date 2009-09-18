@@ -6,6 +6,25 @@ from getYSIData import ysiDataCollection
 class nerrsYSIData(ysiDataCollection):
   def __init__(self, xmlConfiFile):
     ysiDataCollection.__init__(self,xmlConfiFile)
+
+  def formDBDate(self, date):
+    try:      
+      datetime = time.strptime(date, "%m/%d/%Y %H:%M %p")
+      dbDateTime = time.strftime("%Y-%m-%dT%H:%M:00", datetime)
+      return(dbDateTime)
+    
+    except Exception, e:
+      import sys
+      import traceback
+      
+      info = sys.exc_info()        
+      excNfo = traceback.extract_tb(info[2], 1)
+      items = excNfo[0]
+      lastErrorFile = items[0]    
+      lastErrorLineNo = items[1]    
+      lastErrorFunc = items[2]        
+      print("%s Function: %s Line: %s File: %s" % (str(e), lastErrorFunc, lastErrorLineNo, lastErrorFile)) 
+      sys.exit(- 1)
     
   def createCSV(self, siteName, csvFilename, obsHash):
     print( "Site: %s CSV file: %s" %(siteName,csvFilename))    
@@ -32,7 +51,7 @@ class nerrsYSIData(ysiDataCollection):
         dateKeys.sort()
         for dateKey in dateKeys:      
           #Make nerrs specific date/time
-          dateTime = time.strptime(dateKey,"%Y-%m-%d %H:%M:%S")
+          dateTime = time.strptime(dateKey,"%Y-%m-%dT%H:%M:%S")
           date = time.strftime("%m/%d/%Y", dateTime)
           timeVal = time.strftime("%H:%M", dateTime)
           waterTemp = -1
