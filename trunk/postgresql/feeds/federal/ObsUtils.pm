@@ -56,8 +56,7 @@ my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime($now_time);
 ################################################################################
 
 sub get_nws_obs {
-  #my @stations = @_;
-  my( @stations, %local_setup ) = @_;
+  my @stations = @_;
   my %latest_obs;
 
   use Geo::WeatherNWS;
@@ -83,23 +82,12 @@ sub get_nws_obs {
   my $rpt = Geo::WeatherNWS::new();
   $rpt->setservername('tgftp.nws.noaa.gov');
   
-  my $nwsOutFile;
-  my $outfilename = "/home/xeniaprod/scripts/postgresql/feeds/federal/nws/$year-$mon-$mday-$hour-$min-$sec.csv";
-  open( $nwsOutFile, ">$outfilename");
-
   foreach my $s (@stations) {
     (my $system_station_id,my $provider_station_id) = split(/\|/,$s);
     $rpt->getreport($provider_station_id);
     if ($debug)
     {
       print STDERR "NWS $system_station_id\n";
-      #print "NWS $system_station_id\n";
-      #print( "\n" );
-      #while ( my ($key, $value) = each(%$rpt) ) 
-      #{
-      #  print "$key: $value,";
-      #}
-      #print( "\n" );
     }
     my $date = sprintf "%4d%02d%02dT%02d%02dZ",$year+1900,$mon+1,$rpt->{day},substr($rpt->{time},0,2),substr($rpt->{time},2,2);
     my %d = (
@@ -109,7 +97,6 @@ sub get_nws_obs {
       ,air_temperature     => $rpt->{temperature_c}
       ,air_pressure        => $rpt->{pressure_mb}
     );
-    print( $nwsOutFile "$system_station_id,$date," . $rpt->{windspeedkts}  * 0.514444444 . ",$rpt->{winddir}," . $rpt->{windgustkts} * 0.514444444 . ",$rpt->{temperature_c},$rpt->{pressure_mb}\n");
     #print( "$rpt->{windspeedkts} $rpt->{winddir} $rpt->{temperature_c} $rpt->{pressure_mb}\n" );
 
     #print $rpt->{pressure_mb};
@@ -118,7 +105,6 @@ sub get_nws_obs {
       $latest_obs{$system_station_id}{$date} = \%d;
     }
   }
-  close($nwsOutFile);
   return \%latest_obs;
 }
 
@@ -410,16 +396,19 @@ sub get_nos_obs {
         # Get the date in the right format.
         my @dt = split(/\/| |\:|-/,$v->{timeStamp});
         my $date = sprintf "%04d%02d%02dT%02d%02dZ",$dt[0],$dt[1],$dt[2],$dt[3],$dt[4];
+        #NOTE!
+        #Currently in the Xenia database, we have a generic water_level entry that is mllw. We change the key below from water_level_in_mllw to water_level
+        #since we are not using two seperate entries. The calling script queries the database to get all the senors per platform. NOS platforms
+        #simply have a water_level entry, not water_level_in_mllw. In the future, this may change.
         my %d = (
-          water_level_in_mllw => $v->{WL}
+          #water_level_in_mllw => $v->{WL}
+          water_level => $v->{WL}
         );
-                                                                                
         # Add it to the hash.
         $latest_obs{$system_station}{$date} = \%d;
       }
-    }
+    }       
   }
-
 
   foreach my $s (@stations) {
     my $station_id = substr($s,index($s,'|')+1);
@@ -439,7 +428,7 @@ sub get_nos_obs {
         my %d = (
           water_level_in_msl => $v->{WL}
         );
-
+        
         # It's likely that a record already exists in the system hash.  So simply append to it . . .
         if (exists $latest_obs{$system_station}{$date}) {
           $latest_obs{$system_station}{$date}{water_level_in_msl} = $d{water_level_in_msl};
