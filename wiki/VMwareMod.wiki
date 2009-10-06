@@ -1,5 +1,4 @@
 #summary modifications list (installed software, packages, etc) and distribution checklist
-#labels a
 
 <wiki:toc max_depth="6" />
 
@@ -68,6 +67,7 @@ sudo apt-get install python2.5-psycopg2#PostGres python DB package.
 sudo apt-get install python2.5-lxml    #XML parser.
 sudo easy_install simplejson           #JSON parser used by the python-twitter package
 sudo easy_install python-twitter
+sudo easy_install virtualenv           #Used for setting up virtual python environments.
 
 Created direction: /usr/lib/python2.5/site-packages/xeniatools where all of our python libraries go.
 }}}
