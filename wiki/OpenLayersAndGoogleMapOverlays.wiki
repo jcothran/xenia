@@ -24,3 +24,28 @@ Getting Google Maps to work inside of !OpenLayers take a few tweaks to the OL ja
 <900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs
 }}}
   The epsg is the project file used by the PROJ4 projection library. You'll need to "locate" your working epsg file. For instance I have installed the PROJ4 into my home directory, so my epsg file is located /home/dramage/src/proj-4.6.0/nad/epsg. Note that the file has no extension.
+
+=== Tilecache ===
+  * Tilecache.cfg
+    We have to make a couple of changes to the layers hosted up by Tilecache to reflect the Spherical Mercator projection. The following is a sample layer from my config file:
+{{{
+[WMSBathymetryRev2]
+type=WMSLayer
+url=http://129.252.37.86/cgi-bin/mapserv?MAP=/home/rcoos/mapserver/RCOOSRev2.map&transparent=true
+layers=Bathymetry
+levels=20
+maxResolution=156543.0339
+size=512,512
+bbox=-10074413.915389,2814454.731918,-6734829.1920556,4467020.9930062
+srs=EPSG:900913
+extension=png
+extent_type=loose
+}}}
+  The config parameters of note are levels, maxResolution, bbox and srs.
+    * levels are the number of zoom levels to support. 20 appears to be the max Google Supports from what I can tell.
+    * maxResolution is the maximum resolution for the map. As an FYI as of now the following are all the resolutions for a Google Map overlay: 
+{{{
+156543.033900000,78271.516950000,39135.758475000,19567.879237500,9783.939618750,4891.969809375,2445.984904688,1222.992452344,611.496226172,305.748113086,152.874056543,76.437028271,38.218514136,19.109257068,9.554628534,4.777314267,2.388657133,1.194328567,0.59716428337097171575,0.298582142
+}}}
+    * bbox is the bounding box. I needed to convert from lats/longs into Spherical Mercator coordinates. 
+    * srs is the source projection Tilecache will ask Mapserver to render when Tilecache builds its cache.
