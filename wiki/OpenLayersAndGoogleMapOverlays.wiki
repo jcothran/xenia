@@ -81,10 +81,24 @@ extent_type=loose
       melrLL.transform( proj4326, proj900913 );
 }}}
   To reduce code, I could just do all the conversions in the OpenLayers.Bounds() calls, but for debugging/clarity  I've pulled them out.
-    * !maxResolution 
+    * maxResolution 
     I've also set the maxResolution for the map using the largest resolution for Google overlays.
     * projection 
     This sets the default projection for the map. If I did not set this parameter for the Map object, I would need to call it out on for each map layer.
     * displayProjection
     This sets how data is displayed, for this project we want to show the user coordinates in lats/longs.
-  
+  * Sample Google layer
+  !OpenLayers provides an object to deal specifically with the Google map overlays. Here is a snippet to configure the Google Terrain overlay:
+{{{
+      var googlet = new OpenLayers.Layer.Google
+                        (
+                          "Google Terrain", 
+                          { 
+                            'sphericalMercator': true,
+                            'type': G_PHYSICAL_MAP,
+                          },
+                          {
+                            displayInLayerSwitcher: true,
+                          }
+                        );
+}}}
