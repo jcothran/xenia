@@ -10,7 +10,7 @@ Getting Google Maps to work inside of !OpenLayers take a few tweaks to the OL ja
 
 === !MapServer ===
   * !MapFile
-    In the global PROJECTION section of the mapfile, you'll need to add "init=epsg:900913" to tell MapServer it can host up layers and re-project them into Spherical Mercator. The following is an example of my mapfile section:
+    In the global PROJECTION section of the mapfile, you'll need to add "init=epsg:900913" to tell !MapServer it can host up layers and re-project them into Spherical Mercator. The following is an example of my mapfile section:
 {{{
   PROJECTION
     "init=epsg:4326"
@@ -18,3 +18,9 @@ Getting Google Maps to work inside of !OpenLayers take a few tweaks to the OL ja
     "init=epsg:900913"
   END
 }}}
+  You most likely will also need to modify your epsg file and add the following line:
+{{{
+# For Google maps
+<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs
+}}}
+  The epsg is the project file used by the PROJ4 projection library.
