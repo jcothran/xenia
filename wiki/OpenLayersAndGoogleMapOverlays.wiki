@@ -2,11 +2,19 @@
 
 = Overview =
 For the new CarolinasRCOOS site, we decided to use [http://mapfish.org MapFish] since it rolls [http://openlayers.org OpenLayers], [http://extjs.com ExtJS] and [http://geoext.org GeoExt] all into one package. 
-
-
+Google Maps are projected in Spherical Mercator and you cannot request any other projection, therefore you are stuck making your map work with that projection. Luckily !OpenLayers and !Mapserver use !Proj4s to handle the projection conversions for you, however you've got to do some setup to get it working.
 
 
 == Using Google Map Overlays ==
 Getting Google Maps to work inside of !OpenLayers take a few tweaks to the OL javascript as well as the !MapServer map file so WMS layers can be overlayed on the Google map and the Tilecache configuration file. 
 
-=== MapServer MapFile ===
+=== !MapServer ===
+  * !MapFile
+    In the global PROJECTION section of the mapfile, you'll need to add "init=epsg:900913" to tell MapServer it can host up layers and re-project them into Spherical Mercator. The following is an example of my mapfile section:
+{{{
+  PROJECTION
+    "init=epsg:4326"
+    "init=epsg:4269"
+    "init=epsg:900913"
+  END
+}}}
