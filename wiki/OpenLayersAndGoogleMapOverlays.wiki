@@ -1,13 +1,4 @@
-#Some pointers on getting Google Map overlays working with OpenLayers and Tilecache
+#summary Some pointers on getting Google Map overlays working with OpenLayers and Tilecache
 
-= Introduction =
-
-Add your content here.
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= Overview =
+For the new CarolinasRCOOS site, we decided to use MapFish since it rolls [http://openlayers.org OpenLayers], [http://extjs.com ExtJS] and [http://geoext.org GeoExt] all into one package. 
