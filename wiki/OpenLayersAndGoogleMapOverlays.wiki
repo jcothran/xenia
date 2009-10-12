@@ -18,12 +18,13 @@ Getting Google Maps to work inside of !OpenLayers take a few tweaks to the OL ja
     "init=epsg:900913"
   END
 }}}
-  You most likely will also need to modify your epsg file and add the following line:
+  * epsg File
+  The epsg is the project file used by the PROJ4 projection library. You'll need to "locate" your working epsg file. For instance I have installed the PROJ4 into my home directory, so my epsg file is located /home/dramage/src/proj-4.6.0/nad/epsg. Note that the file has no extension.
 {{{
 # For Google maps
 <900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs
 }}}
-  The epsg is the project file used by the PROJ4 projection library. You'll need to "locate" your working epsg file. For instance I have installed the PROJ4 into my home directory, so my epsg file is located /home/dramage/src/proj-4.6.0/nad/epsg. Note that the file has no extension.
+
 
 === Tilecache ===
   * Tilecache.cfg
