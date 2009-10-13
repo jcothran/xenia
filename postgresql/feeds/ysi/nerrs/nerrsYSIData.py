@@ -55,7 +55,7 @@ class nerrsYSIData(ysiDataCollection):
       for platform in platformKeys:       
         dateKeys = obsHash['platform'][platform]['date'].keys()
         #We want to sort the dates
-        dateKeys.sort()
+        dateKeys.sort(reverse=True)
         for dateKey in dateKeys:      
           #Make nerrs specific date/time
           dateTime = time.strptime(dateKey,"%Y-%m-%dT%H:%M")
