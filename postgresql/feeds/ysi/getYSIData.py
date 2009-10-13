@@ -503,7 +503,7 @@ class ysiDataCollection(object):
   """
   def formDBDate(self, date):
     try:      
-      datetime = time.strptime(date, "%m/%d/%Y %H:%M %p")
+      datetime = time.strptime(date, "%m/%d/%Y %I:%M %p")
       datetime = time.mktime(datetime)
       #We are assuming the date is not in UTC, so we convert it.
       datetime = time.gmtime(datetime)
@@ -564,6 +564,14 @@ class ysiDataCollection(object):
     elif( ysiObsName == 'DO% [%]' ):
       obs = "oxygen_concentration"
       uom = "percent"
+      sOrder = "1"
+    elif( ysiObsName == 'ODO% [%]' ):
+      obs = "oxygen_concentration"
+      uom = "percent"
+      sOrder = "1"
+    elif( ysiObsName == 'ODO Conc [mg/L]' ):
+      obs = "oxygen_concentration"
+      uom = "mg_L-1"
       sOrder = "1"
     elif( ysiObsName == 'Bottom DO [%]' ):
       obs = "oxygen_concentration"
