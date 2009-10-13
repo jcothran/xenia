@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 sys.path.append("C:\\Documents and Settings\\dramage\\workspace\\PythonTest")
@@ -9,8 +10,14 @@ class nerrsYSIData(ysiDataCollection):
 
   def formDBDate(self, date):
     try:      
-      datetime = time.strptime(date, "%m/%d/%Y %H:%M %p")
-      dbDateTime = time.strftime("%Y-%m-%dT%H:%M:00", datetime)
+      datetime = time.strptime(date, "%m/%d/%Y %I:%M %p")
+      #As per Jay's instruction, we leave the date/time in local time zone.
+      #datetime = time.mktime(datetime)
+      #Time is in CST since station is in MS, so we add an hour to make it EST.
+      #datetime += (60*60)
+      #We are assuming the date is not in UTC, so we convert it.
+      #datetime = time.gmtime(datetime)
+      dbDateTime = time.strftime("%Y-%m-%dT%H:%M", datetime)
       return(dbDateTime)
     
     except Exception, e:
@@ -51,9 +58,9 @@ class nerrsYSIData(ysiDataCollection):
         dateKeys.sort()
         for dateKey in dateKeys:      
           #Make nerrs specific date/time
-          dateTime = time.strptime(dateKey,"%Y-%m-%dT%H:%M:%S")
+          dateTime = time.strptime(dateKey,"%Y-%m-%dT%H:%M")
           date = time.strftime("%m/%d/%Y", dateTime)
-          timeVal = time.strftime("%H:%M", dateTime)
+          timeVal = time.strftime("%H:%M:00", dateTime)
           waterTemp = -1
           water_conductivity = -1
           salinity = -1
@@ -130,7 +137,7 @@ class nerrsYSIData(ysiDataCollection):
 
 if __name__ == '__main__':
   try:
-    ysiConvert = nerrsYSIData(sys.argv[1])
+    ysiConvert = nerrsYSIData(sys.argv[1])    
     ysiConvert.processSites()
   except Exception, e:
     import sys
