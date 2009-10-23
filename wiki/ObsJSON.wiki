@@ -403,9 +403,7 @@ Pete ?
 {{{
 json_callback({
 "type": "FeatureCollection",
-"properties": {
     "stationId": "urn:x-noaa:def:station:ndbc::41012",
-
     "features": [        {"type": "Feature",
             "geometry": {
                 "type": "MultiPoint",
