@@ -27,10 +27,17 @@ def createFriends( configFile ):
       pwd = twitAccountList[platform]['password']
       client = twitter.Api(account, pwd)
       for friendPlatform in twitAccountList:
-        if( friendPlatform != platform ):
-          account = twitAccountList[friendPlatform]['account']
-          user = client.CreateFriendship( account )
-          print( "%s friended user: %s" %( platform, user.screen_name ) )
+        try:
+          if( friendPlatform != platform ):
+            account = twitAccountList[friendPlatform]['account']
+            user = client.CreateFriendship( account )
+            print( "%s friended user: %s" %( platform, user.screen_name ) )
+        except twitter.TwitterError,e:
+          print("Twitter Error: %s" %(e.message))
+          continue
+        except Exception, E:
+          print( "Error from twitter call: %s" % (str(E)) )
+          continue
     except twitter.TwitterError,e:
       print("Twitter Error: %s" %(e.message))
       continue
