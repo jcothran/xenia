@@ -19,7 +19,7 @@ Or optionally on Windows, as suggested by Ricardo Pinho(thanks Ricardo!) use the
 
 On a side note, apache can be configured to display/share file links larger than 2 Gigabytes but must be compiled with that option(CFLAGS="-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64" ./configure --prefix=/usr/local/www) see http://yoebaik.blogspot.com/2007/11/large-file-support-for-apache.html
 
-The unix *[http://www.techiecorner.com/107/how-to-split-large-file-into-several-smaller-files-linux/ split]* command(shown below) was used to generate the smaller sized files
+The unix *[http://www.techiecorner.com/107/how-to-split-large-file-into-several-smaller-files-linux/ split]* command(shown below) was used to generate the smaller sized files<br/>
 {{{split --bytes=2000m xeniavm20090722.vmdk multi}}}
 
 The vmware appliance page reference for this download is http://www.vmware.com/appliances/directory/233143
