@@ -49,6 +49,7 @@ sudo cpan -i Geo::WeatherNWS    #Package for retrieving NWS data.
 sudo cpan -i SOAP::Lite
 
 sudo apt-get install ruby
+sudo apt-get install rpm
 }}}
 
 #NetCDf Perl
