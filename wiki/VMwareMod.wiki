@@ -48,8 +48,22 @@ sudo cpan -i "Config::IniFiles"
 sudo cpan -i Geo::WeatherNWS    #Package for retrieving NWS data.
 sudo cpan -i SOAP::Lite
 
+######################################
+#ec2 ami command tools - begin
+#mainly interested in ec2-bundle-image for converting/uploading vmware image
+#see http://developer.amazonwebservices.com/connect/entry.jspa?externalID=368&categoryID=88
+
+#see http://developer.amazonwebservices.com/connect/message.jspa?messageID=76635
+sudo apt-get install libruby1.8-extras
+
+#purge begin ?
 sudo apt-get install ruby
 sudo apt-get install rpm
+#purge end ?
+
+#ec2 ami command tools - end
+######################################
+
 }}}
 
 #NetCDf Perl
