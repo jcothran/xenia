@@ -56,6 +56,8 @@ sudo cpan -i SOAP::Lite
 #see http://developer.amazonwebservices.com/connect/message.jspa?messageID=76635
 sudo apt-get install libruby1.8-extras
 
+sudo apt-get install curl
+
 #purge begin ?
 sudo apt-get install ruby
 sudo apt-get install rpm
