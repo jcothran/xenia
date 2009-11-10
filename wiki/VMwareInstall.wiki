@@ -462,7 +462,7 @@ It's also possible to move .iso images to vmware datastores using some third-par
 
 Interested in converting from a vmware .vmdk server image to an amazon machine image(AMI) for running our setup on [http://aws.amazon.com/ amazon web services]
 
-Initial ideas from http://thewebfellas.com/blog/2008/9/1/creating-an-new-ec2-ami-from-within-vmware-or-from-vmdk-files , but believe skipping qemu conversion step based on comment section and notice that some options like --no-inherit,etc listed in the article no longer seem to be available.  Comments section also lists problem with UUID and kernel panic with no answers.
+Initial ideas from http://thewebfellas.com/blog/2008/9/1/creating-an-new-ec2-ami-from-within-vmware-or-from-vmdk-files , but believe skipping qemu image conversion step based on comment section and notice that some options like --no-inherit,etc listed in the article no longer seem to be available.  Comments section also lists problem with UUID and kernel panic with no answers.
 
 ----
 [http://docs.amazonwebservices.com/AWSEC2/latest/CommandLineReference/index.html?ami-tools.html ec2 ami command-line tools] <br/>
