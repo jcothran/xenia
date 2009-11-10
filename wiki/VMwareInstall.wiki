@@ -488,7 +488,7 @@ export EC2_HOME=/home/xeniaprod/temp/ec2-ami-tools-1.3-34544
 #make sure enough space on target directory <br/>
 command splits given image into 10 MB partition files
 
-./ec2-bundle-image -k pk-<xxx...>.pem -c cert-<xxx...>.pem -u <xxxx-xxxx-xxxx-xxxx> -i /taurus/archive/vmware/xeniavm20091029/xeniavm20091029.vmdk -d /taurus/archive/aws/xeniavm -r x86_6
+./ec2-bundle-image -k pk-&lt;xxx...&gt;.pem -c cert-<xxx...>.pem -u <xxxx-xxxx-xxxx-xxxx> -i /taurus/archive/vmware/xeniavm20091029/xeniavm20091029.vmdk -d /taurus/archive/aws/xeniavm -r x86_6
 
 ./ec2-upload-bundle -b aws-xeniavm-bucket -m /taurus/archive/aws/xeniavm/xeniavm20091029.vmdk.manifest.xml -a <access_key> -s <secret_key>
 
@@ -504,7 +504,7 @@ http://developer.amazonwebservices.com/connect/thread.jspa?messageID=152282&#152
 
 _I'm trying to convert a .vmdk file to ec2 ami and also running into issues with a kernel panic from not being able to map to devices. The .vmdk fstab file references UUID names for root and swap partitions which I've tried substituting into the block-device-mapping paramter for ec2-bundle-image, but the AMI register step does not recognize UUID as a valid device name._
 
-existing fstab for ubunto OS on vmware
+existing fstab for ubuntu OS on vmware
 {{{
 root@gisvm:/home/xeniaprod/temp/ec2-ami-tools-1.3-34544/bin# vi /etc/fstab
 # /etc/fstab: static file system information.
