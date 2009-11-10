@@ -468,7 +468,7 @@ Initial ideas from http://thewebfellas.com/blog/2008/9/1/creating-an-new-ec2-ami
 [http://docs.amazonwebservices.com/AWSEC2/latest/CommandLineReference/index.html?ami-tools.html ec2 ami command-line tools] <br/>
 mainly interested in ec2-bundle-image for converting/uploading vmware image <br/>
 see http://developer.amazonwebservices.com/connect/entry.jspa?externalID=368&categoryID=88 <br/>
-download command-line tools [http://s3.amazonaws.com/ec2-downloads/ec2-ami-tools.zip zip file] to /home/xeniaprod/temp/ec2-ami-tools-1.3-34544
+download linux/unix command-line tools [http://s3.amazonaws.com/ec2-downloads/ec2-ami-tools.zip zip file] to /home/xeniaprod/temp/ec2-ami-tools-1.3-34544
 
 installed packages(ruby,curl) to support command tools
 {{{
