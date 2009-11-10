@@ -481,7 +481,7 @@ sudo apt-get install curl
 ----
 
 To generate pk-... and cert-... keys <br/>
-aws home,your account->security credentials, x509, create new certificate
+Goto [http://aws.amazon.com/ aws home],your account->security credentials, x509, create new certificate
 
 export EC2_HOME=/home/xeniaprod/temp/ec2-ami-tools-1.3-34544
 
