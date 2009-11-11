@@ -528,6 +528,10 @@ UUID=9662f62e-1074-46c9-bdf5-68ba4d8971e3 none            swap    sw            
 Also tried converting the following simpler redhat 6.2 vmdk to ami
 http://www.vmware.com/appliances/directory/490 but couldn't get a System Log or connection.
 
+Connection notes: the 'Public DNS' should be accessible by port 80(http) and port 22(ssh) if enabled in the AMI security profile setup and used during the AMI launch.  See the directions under 'Connect' from the 'Public DNS' field right-click options - basically ssh command looks like following:
+
+{{{ssh -i <xxx>.pem root@<amazon public DNS>}}}
+
 = Virtualization - talking points = 
 
   * no silver bullets - but close
