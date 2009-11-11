@@ -504,6 +504,9 @@ http://developer.amazonwebservices.com/connect/thread.jspa?messageID=152282&#152
 
 _I'm trying to convert a .vmdk file to ec2 ami and also running into issues with a kernel panic from not being able to map to devices. The .vmdk fstab file references UUID names for root and swap partitions which I've tried substituting into the block-device-mapping paramter for ec2-bundle-image, but the AMI register step does not recognize UUID as a valid device name._
 
+tried adding below parameter to ec2-bundle-image, but UUID not valid device name
+{{{ --block-device-mapping ami=UUID=f5c2a44e-2919-4533-94a3-b40a1b4edaa1,root=UUID=f5c2a44e-2919-4533-94a3-b40a1b4edaa1,swap=UUID=9662f62e-1074-46c9-bdf5-68ba4d8971e3}}}
+
 existing fstab for ubuntu OS on vmware
 {{{
 root@gisvm:/home/xeniaprod/temp/ec2-ami-tools-1.3-34544/bin# vi /etc/fstab
