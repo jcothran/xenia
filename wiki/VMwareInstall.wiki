@@ -496,7 +496,7 @@ Goto AWS management console->AMIs->register new AMI
 #enter after register http://s3...
 aws-xeniavm-bucket/xeniavm20091029.vmdk.manifest.xml
 
-Start instance and mouseover 'Public DNS' field, look at 'Boot Log' to see kernel panic at bottom of file(can't mount os partitions)
+Start instance and mouseover 'Public DNS' field, look at 'System Log' to see kernel panic at bottom of file(can't mount os partitions)
 
 {{{Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(8,1)}}}
 
@@ -525,7 +525,8 @@ UUID=9662f62e-1074-46c9-bdf5-68ba4d8971e3 none            swap    sw            
 # End of the block added by the VMware software
 }}}
 
-
+Also tried converting the following simpler redhat 6.2 vmdk to ami
+http://www.vmware.com/appliances/directory/490 but couldn't get a System Log or connection.
 
 = Virtualization - talking points = 
 
