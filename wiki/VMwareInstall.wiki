@@ -532,6 +532,13 @@ Connection notes: the 'Public DNS' should be accessible by port 80(http) and por
 
 {{{ssh -i <xxx>.pem root@<amazon public DNS>}}}
 
+== Update 2009-11-18 ==
+
+I was able to generate a working image I believe using the following command ec2-bundle-vol which takes a snapshot of the existing server system from which it is run and includes a --generate-fstab option.  The 'System log' showed a command prompt login.  Still unable to ssh into it which may be more related to how the original server ssh,dns,etc are configured.
+
+{{{./ec2-bundle-vol -k -k pk-<xxx...>.pem -c cert-<xxx...>.pem -u <xxxx-xxxx-xxxx-xxxx> -d /taurus/archive/aws/xeniavm/try3 -r x86_64 --no-inherit --generate-fstab -e /usr2}}}
+
+
 = Virtualization - talking points = 
 
   * no silver bullets - but close
