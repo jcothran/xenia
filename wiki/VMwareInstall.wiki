@@ -538,7 +538,7 @@ I was able to generate an closer-to-working image I believe using the following 
 
 {{{./ec2-bundle-vol -k pk-<xxx...>.pem -c cert-<xxx...>.pem -u <xxxx-xxxx-xxxx-xxxx> -d /taurus/archive/aws/xeniavm/try3 -r x86_64 --no-inherit --generate-fstab -e /usr2}}}
 
-I believe the image is having issues with the filesystem and libraries still and probably the better route at this point is to use a working ubuntu ami and install on top of that(as painful as that is) - the following link contains 'canonical' ubunty ec2 reference ami's as well as much other good information such as connectivity issues
+I believe the image is having issues with the filesystem and libraries still and probably the better route at this point is to use a working ubuntu ami and install on top of that(as painful as that is) - the following link contains 'canonical' ubuntu ec2 reference ami's as well as much other good information such as connectivity issues
 
 http://alestic.com/2009/08/ec2-connectivity
 
