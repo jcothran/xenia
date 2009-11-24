@@ -53,6 +53,9 @@ sudo cpan -i SOAP::Lite
 #mainly interested in ec2-bundle-image for converting/uploading vmware image
 #see http://developer.amazonwebservices.com/connect/entry.jspa?externalID=368&categoryID=88
 
+#download and unzipped
+ec2-ami-tools.zip
+
 #see http://developer.amazonwebservices.com/connect/message.jspa?messageID=76635
 sudo apt-get install libruby1.8-extras
 
@@ -62,6 +65,11 @@ sudo apt-get install curl
 sudo apt-get install ruby
 sudo apt-get install rpm
 #purge end ?
+
+#download,unzipped,installed
+rsync-3.0.6.tar
+#download, unzipped
+kernel-modules-261633-xenu.tar
 
 #ec2 ami command tools - end
 ######################################
