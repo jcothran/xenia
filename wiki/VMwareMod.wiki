@@ -68,7 +68,7 @@ sudo apt-get install rpm
 
 #download,unzipped,installed
 rsync-3.0.6.tar
-#download, unzipped
+#download, unzipped from http://www.philchen.com/wp-content/uploads/2009/05/kernel-modules2616-xenu.tgz
 kernel-modules-261633-xenu.tar
 
 #ec2 ami command tools - end
