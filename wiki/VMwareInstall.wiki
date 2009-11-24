@@ -577,7 +577,7 @@ iface eth0 inet dhcp
 
 Making the above fixes allowed me to successfully ssh into my Amazon server instance and see the default webserver page displayed via http at the Amazon published DNS for the instance.
 
-The next part of the puzzle involves Amazon's Elastic Block Storage (ESB) which essentially is a permanent data storage area for database or other generated data(logs,etc) which might need to persist in the event that the AMI needs to be re-booted.  The following two part article does an excellent job of walking through this process.
+The next part of the puzzle involves Amazon's Elastic Block Storage (EBS) which essentially is a permanent data storage area for database or other generated data(logs,etc) which might need to persist in the event that the AMI needs to be re-booted.  The following two part article does an excellent job of walking through this process.
 
 http://deadprogrammersociety.blogspot.com/2009/08/postgresql-on-ubuntu-on-ec2.html
 
