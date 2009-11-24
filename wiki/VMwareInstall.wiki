@@ -532,6 +532,8 @@ Connection notes: the 'Public DNS' should be accessible by port 80(http) and por
 
 {{{ssh -i <xxx>.pem root@<amazon public DNS>}}}
 
+The .pem access key was also generated in an earlier step and {{{chmod 400}}} as suggested to make it readable during ssh access.
+
 == Update 2009-11-18 ==
 
 I was able to generate an closer-to-working image I believe using the following command ec2-bundle-vol which takes a snapshot of the existing server system from which it is run and includes a --generate-fstab option.  The 'System log' showed a command prompt login.  Still unable to ssh into it which may be more related to how the original server ssh,dns,etc are configured.  Had to exclude the storage directory {{{-e /usr2}}} to allow the image to fit under the 10GB limit beyond which a rsync error is received when trying to create the image.
