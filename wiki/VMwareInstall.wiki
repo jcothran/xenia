@@ -542,6 +542,50 @@ I believe the image is having issues with the filesystem and libraries still and
 
 http://alestic.com/2009/08/ec2-connectivity
 
+== Update 2009-11-23 ==
+
+I was finally able to get a working AMI image from my converted VMware .vmdk file
+
+To fix an error that I was getting in the Amazon 'System Log' link after boot up about a missing xen module, I was able to find the missing module and other instructions of interest at 
+
+http://www.philchen.com/2009/02/14/how-to-create-an-amazon-elastic-compute-cloud-ec2-machine-image-ami
+
+The key lines was the download of the missing xen kernel library at http://www.philchen.com/wp-content/uploads/2009/05/kernel-modules2616-xenu.tgz
+
+which I simply unzipped/untarred and moved to my /lib/modules directory
+
+I also added following configuration lines to my sshd_config file
+
+{{{
+UseDNS no
+PermitRootLogin without-password
+}}}
+
+and changed my network setting to dhcp in my /etc/network/interfaces file
+
+{{{
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+auto eth0
+iface eth0 inet dhcp
+}}}
+
+Making the above fixes allowed me to successfully ssh into my Amazon server instance and see the default webserver page displayed via http at the Amazon published DNS for the instance.
+
+The next part of the puzzle involves Amazon's Elastic Block Storage (ESB) which essentially is a permanent data storage area for database or other generated data(logs,etc) which might need to persist in the event that the AMI needs to be re-booted.  The following two part article does an excellent job of walking through this process.
+
+http://deadprogrammersociety.blogspot.com/2009/08/postgresql-on-ubuntu-on-ec2.html
+
+http://deadprogrammersociety.blogspot.com/2009/10/postgresql-on-ubuntu-on-ec2-backing-it.html
+
+== Additional links ==
+
+http://www.slideshare.net/ajturner/scaling-mapufacture-on-amazon-web-services <br/>
+http://www.dedoimedo.com/computers/amazon-ec2.html
+
 = Virtualization - talking points = 
 
   * no silver bullets - but close
