@@ -1,0 +1,7 @@
+<Environment>
+  <Database>
+    <type>sqlite</type>
+    <name>\Program Files\sqlite-3_5_6\microwfs\microwfs.db</name>
+  </Database>
+  <DestDir>C:\Documents and Settings\dramage\workspace\SVNSandbox\Secoora\datamgmt\trunk\drifters</DestDir>
+</Environment>

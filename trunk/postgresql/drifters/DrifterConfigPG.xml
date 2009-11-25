@@ -1,0 +1,9 @@
+<Environment>
+  <Database>
+    <type>postgres</type>
+    <name>xenia_moving</name>
+    <user>xeniaprod</user>
+    <pwd>123rcoos</pwd>
+  </Database>
+  <DestDir>/home/xeniaprod/tmp/drifter/</DestDir>
+</Environment>
