@@ -67,8 +67,16 @@ xeniaprod: crontab -e
 /home/xeniaprod/cron/mk_xenia_all_latest.sh
 
 =
+
+#bootup
+/etc/rc.local - mountpoints, postgres
+
+#amazon ec2
+dhcp
+sshd_config
+
 #postgres
-optional - database size on /usr2, delete old records - vacuum
+optional - database size on /usr2, delete old records - backup(pg_dump),vacuum,reindex
 
 user passwds - postgres,xeniaprod
 psql -U postgres -h xxx.xxx.xxx.xxx
