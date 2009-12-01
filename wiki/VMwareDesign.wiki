@@ -78,7 +78,7 @@ sshd_config
 #postgres
 optional - database size on /usr2, delete old records - backup(pg_dump),vacuum,reindex
 
-user passwds - postgres,xeniaprod
+user passwds - root,postgres,xeniaprod
 psql -U postgres -h xxx.xxx.xxx.xxx
 alter user postgres with password 'postgres99';
 alter user xeniaprod with password 'xeniaprod99';
