@@ -53,6 +53,8 @@ sudo cpan -i SOAP::Lite
 #mainly interested in ec2-bundle-image for converting/uploading vmware image
 #see http://developer.amazonwebservices.com/connect/entry.jspa?externalID=368&categoryID=88
 
+#amazon ec2 command tools, xen kernel, rsync downloaded to /root/tools
+
 #download and unzipped
 ec2-ami-tools.zip
 
