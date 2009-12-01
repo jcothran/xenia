@@ -129,7 +129,7 @@ sudo apt-get install rdate
 
 = Distribution checklist = 
 
-see VMwareDesign
+see [[VMwareDesign]]
 
   * Organization
     * include any image application type installs to mod list
