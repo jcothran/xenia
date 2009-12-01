@@ -129,6 +129,8 @@ sudo apt-get install rdate
 
 = Distribution checklist = 
 
+see VMwareDesign
+
   * Organization
     * include any image application type installs to mod list
     * include any script/database changes to project svn
