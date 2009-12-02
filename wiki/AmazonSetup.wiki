@@ -1,0 +1,9 @@
+#summary server setup steps for new Amazon server instance
+
+These steps mostly follow the same as the earlier documentation for the VMware .vmdk server image setup steps documented earlier at
+
+http://code.google.com/p/xenia/wiki/VMwareInstall#Setup
+
+With the differences being:
+  * skip the initial sections regarding network bridge,static ip(amazon uses loopback method),iptables
+  * 
