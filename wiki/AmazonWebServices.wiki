@@ -18,7 +18,7 @@ Eric Bridger's RDB to Oostethys SOS script http://code.google.com/p/xenia/wiki/X
 IOOS DIF SOS http://code.google.com/p/xenia/wiki/XeniaSOS#DIF_SOS <br/>
 GeoJSON http://code.google.com/p/xenia/wiki/VMwareProducts#GeoJSON
 
-The intent would be that a data provider would only have to provide a server resource on which to install the vmware appliance image(local physically or via remote cloud,etc) and know how to get data into the database via ObsKML(XML) or SQL directly and would automatically have several formats and services readily available for data management and sharing.  The vmware server image(s)/appliances should be an ongoing production development snapshot of what we're doing within Secoora http://secoora.org made available to the observing community.  Glad to incorporate scripts/documentation which leverage the xenia RDB schema directly or more generally abstracted database view/resultset scripts which utilize those data elements captured by the xenia schema.
+The intent would be that a data provider would only have know how to get data into the database via ObsKML(XML) or SQL directly and would automatically have several formats and services readily available for data management and sharing.  The image(s)/appliances should be an ongoing production development snapshot of what we're doing within Secoora http://secoora.org made available to the observing community.  Glad to incorporate scripts/documentation which leverage the xenia RDB schema directly or more generally abstracted database view/resultset scripts which utilize those data elements captured by the xenia schema.
 
 Would be interested to see more appliance/turn-key type approaches and further appliance type 'remixes' of various community tools to fit various audience needs.
 
