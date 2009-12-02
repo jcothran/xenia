@@ -6,7 +6,9 @@ The lead-in to this wikipage is related to the initial effort documented [http:/
 
 = Xenia Amazon Machine Instance(AMI) = 
 
-The latest server image of our production development environment is available as a publicly shared AMI at [http://aws.amazon.com Amazon Web Services] with AMI ID = *ami-9028caf9*
+The latest server image of our production development environment is available as a publicly shared AMI at [http://aws.amazon.com Amazon Web Services] with <br/>
+
+AMI ID = *ami-9028caf9*
 
 To instantiate this server instance, you will need to create a credit-card based account which Amazon can bill the server charges to.  The pricing fees are listed at http://aws.amazon.com/ec2/#pricing and the default basic server is currently billed at 8.5 cents per hour or about $2 per day.  Server monitoring can also be enabled for 1.5 cents per hour.
 
