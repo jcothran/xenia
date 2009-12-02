@@ -174,10 +174,11 @@ http://motherlode.ucar.edu/repository
 
 http://sosa.ucsd.edu
 
-[https://sosa.ucsd.edu/index.php?menu=Projects&section=On-going#OOI Ocean Observing Initiative(OOI) project]
-[http://sosa.ucsd.edu/index.php?menu=Publications Publications] <br/>
-  * [https://sosa.ucsd.edu/ResearchCentral/download.jsp?id=174 Cyberinfrastructure for the US Ocean Observatories Initiative: Enabling Interactive Observation in the Ocean]
-  * [https://sosa.ucsd.edu/ResearchCentral/download.jsp?id=169 Integrating Data Distribution and Data Assimilation Between the OOI CI and the NOAA DIF]
+[http://sosa.ucsd.edu/index.php?menu=Project Projects]
+  * [http://sosa.ucsd.edu/index.php?menu=Projects&section=On-going#OOI Ocean Observing Initiative(OOI) project]
+[http://sosa.ucsd.edu/index.php?menu=Publications Publications]
+  * [http://sosa.ucsd.edu/ResearchCentral/download.jsp?id=174 Cyberinfrastructure for the US Ocean Observatories Initiative: Enabling Interactive Observation in the Ocean]
+  * [http://sosa.ucsd.edu/ResearchCentral/download.jsp?id=169 Integrating Data Distribution and Data Assimilation Between the OOI CI and the NOAA DIF]
 
 ----
 
