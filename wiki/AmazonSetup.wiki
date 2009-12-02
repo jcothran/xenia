@@ -6,4 +6,4 @@ http://code.google.com/p/xenia/wiki/VMwareInstall#Setup
 
 With the differences being:
   * skip the initial sections regarding network bridge,static ip(amazon uses loopback method),iptables
-  * 
+  * for openssh, all lines have been commented out for /etc/hosts.allow - set this file for IP based access as needed - alternatively Amazon lists the recommended method of using security keys only [ttp://developer.amazonwebservices.com/connect/entry.jspa?externalID=1233 here]
