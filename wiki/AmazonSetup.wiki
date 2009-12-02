@@ -16,3 +16,5 @@ cp -r -d -p /usr2 /usr3
 }}}
 
 Elastic Block Storage links <br/>
+http://deadprogrammersociety.blogspot.com/2009/08/postgresql-on-ubuntu-on-ec2.html <br/>
+http://deadprogrammersociety.blogspot.com/2009/10/postgresql-on-ubuntu-on-ec2-backing-it.html
