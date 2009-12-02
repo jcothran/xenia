@@ -107,7 +107,7 @@ Both users *xeniaprod* and *user* are part of the *admin* group ({{{sudo vi /etc
 
 If you plan to run a production xenia vmware instance accessible by others on the web, search the xeniaprod code from the following directory to see the necessary localhost substitutions(for your production machine http address) or other configuration options.
 
-*optional* see also http://code.google.com/p/xenia/wiki/VMwareDesign#Checklist
+see also http://code.google.com/p/xenia/wiki/VMwareDesign#Checklist , http://code.google.com/p/xenia/wiki/VMwareDesign##VM_CONFIG_notes
 
 replace *your_ip* in the below line commands with your IP (xxx.xxx.xxx.xxx)
 {{{
