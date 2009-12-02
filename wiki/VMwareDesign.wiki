@@ -61,6 +61,8 @@ search for #VM_CONFIG in effected files
 
 #enable #VM_CONFIG
 xeniaprod: crontab -e
+#possible federal(nos,nws,etc) or other feeds in xeniaprod crontab
+
 
 #enable feeds as needed
 /home/xeniaprod/cron/getObskml.sh
@@ -78,7 +80,7 @@ sshd_config
 #postgres
 optional - database size on /usr2, delete old records - backup(pg_dump),vacuum,reindex
 
-user passwds - root,postgres,xeniaprod
+user passwds - user,root,postgres,xeniaprod - passwd <username>
 psql -U postgres -h xxx.xxx.xxx.xxx
 alter user postgres with password 'postgres99';
 alter user xeniaprod with password 'xeniaprod99';
@@ -87,6 +89,9 @@ alter user xeniaprod with password 'xeniaprod99';
 sudo vi /usr2/pg_data/pg_hba.conf
 
 cd /home/xeniaprod/config #database user/password
+  grep '99' *
+  grep 'VM_CONFIG' *
+
   dbConfig.ini
   environment_xenia_default.xml
 
@@ -94,7 +99,6 @@ cd /home/xeniaprod/config #database user/password
 /etc/exports #nfs remote mount access
 
 =
-#reset user passwds to public defaults - user,root,xeniaprod,postgres - as root, passwd <username>
 
 #remove hidden log, history files
 cd /home/xeniaprod
@@ -112,9 +116,88 @@ rm /var/lib/postgresql/.psql_history
 =
 clear users history (history -c)
 
-clear apache/tomcat, application logs
+clear apache/tomcat, application logs (access_log)
+  ls -sort -h /var/log/apache2/
+
 =
 optional - reboot, check ps-auxf, top
+}}}
+
+= #VM_CONFIG notes ==
+
+{{{
+root@gisvm:/# cd /home/xeniaprod/
+root@gisvm:/home/xeniaprod# grep -r 'VM_CONFIG' *
+
+cron/getObskml.sh:#VM_CONFIG add wget of additional ObsKML files here
+cron/getObskml.sh:#VM_CONFIG start
+cron/getObskml.sh:#VM_CONFIG end
+
+cron/mk_xenia_all_latest.sh:#VM_CONFIG start - add org name ObsKML metadata file reference below
+cron/mk_xenia_all_latest.sh:#VM_CONFIG end
+
+cron/styleLatest.pl:#VM_CONFIG add additional org names to below array to create styled KMZ
+
+config/environment_xenia_default.xml:           <!-- #VM_CONFIG --> <http_xenia_graph>http://129.252.37.90/xenia/time_series/get_graph.php?</http_xenia_graph>
+config/emailAlertsConfig.xml:      <host>129.252.37.90</host> <!-- #VM_CONFIG -->
+config/emailAlertsConfig.xml:  <unsubscribeURL>http://neptune.baruch.sc.edu/xenia/rcoos/alerts/AlertsUnsubscribeRev2.php?</unsubscribeURL> <!-- #VM_CONFIG -->
+config/emailAlertsConfig.xml:  <geoRSSURL>http://carocoops.org/~dramage_prod/seacoos/georss/</geoRSSURL> <!-- #VM_CONFIG -->
+config/emailAlertsConfig.xml:  <surveyURL>http://carolinasrcoos.org/survey.php</surveyURL> <!-- #VM_CONFIG -->
+config/UptimeConfigPostgres.xml:      <sensorplotphp>http://129.252.37.90/xenia/sensorgraph/DumpPlatformSensorReport.php?</sensorplotphp> <!-- #VM_CONFIG -->
+
+scripts/obskml/products/gearth/genPlacemarksObsKML.pl:my $host_http = 'http://129.252.37.90'; #VM_CONFIG
+scripts/obskml/products/html_tables/obskml_to_html_content_sqlite.pl:my $host_http = 'http://129.252.37.90'; #VM_CONFIG
+scripts/obskml/products/georss/ObsKMLToGeoRSS.pl:    #VM_CONFIG $strDesc .= '<table><tr></br></tr><tr>Please fill out our survey and let us know your who/what/wheres and how we can improve the information to better serve you.<tr><a href="http://carolinasrcoos.org/survey.php">Survey</a></tr></table>';
+scripts/postgresql/sos/difSOS.html:<!-- #VM_CONFIG http address -->
+scripts/postgresql/sos/difSOS.html:<!-- #VM_CONFIG http address -->
+scripts/postgresql/sos/difSOS.html:<!-- #VM_CONFIG http address where '129.252.37.90' -->
+
+scripts/postgresql/time_series/get_graph.php:$host_http = 'http://129.252.37.90'; #VM_CONFIG
+}}}
+
+#optional
+{{{
+cron/checkStatus.sh:#VM_CONFIG number of hour offset is 4th parameter(0 hours) in the examples below
+cron/checkStatus.sh:#VM_CONFIG number of max range for a magnified graph is 9th parameter(200) in the examples below
+cron/checkStatus.sh:#VM_CONFIG modify hour_offset from -3 to -30 hours depending on quickness of backfilling to archive file
+}}}
+#ignore
+{{{
+scripts/postgresql/import_export/xenia_to_obskml.pl:#VM_CONFIG START
+scripts/postgresql/import_export/xenia_to_obskml.pl:#VM_CONFIG END
+scripts/postgresql/import_export/obskml_to_xenia_postgresql.pl:#VM_CONFIG_START
+scripts/postgresql/import_export/obskml_to_xenia_postgresql.pl:#VM_CONFIG_END
+
+scripts/sqlite/sos/difSOS.html:<!-- #VM_CONFIG http address -->
+scripts/sqlite/sos/difSOS.html:<!-- #VM_CONFIG http address -->
+scripts/sqlite/sos/difSOS.html:<!-- #VM_CONFIG http address where 'carocoops' -->
+scripts/sqlite/archive/pop_archive_db.pl:my $source_url = 'http://localhost/xenia/feeds/latest_raw.sql';  #VM_CONFIG
+scripts/sqlite/flow_monitor/check_status.pl:my @org_array = qw(usgs nerrs ndbc nws);  #VM_CONFIG
+scripts/sqlite/flow_monitor/check_status.pl:my $host_http = 'http://129.252.37.90';  #VM_CONFIG
+scripts/sqlite/flow_monitor/check_status.pl:my $smtp = Net::SMTP->new("xxx.xxx.xxx.xxx");  #VM_CONFIG substitute your SMTP mail server
+scripts/sqlite/flow_monitor/check_status.pl:@to_array = qw(name\@somewhere.com name_2\@somewhere.com);  #VM_CONFIG emails to notify if low sensor count
+scripts/sqlite/flow_monitor/check_status.pl:@to_array = qw(name\@somewhere.com);  #VM_CONFIG
+scripts/sqlite/flow_monitor/status.lib:#VM_CONFIG in 'plot' statement below - if adding/removing org sensor counts, add a corresponding line to plot in graph
+scripts/sqlite/time_series/get_graph.php:$host_http = 'http://129.252.37.90'; #VM_CONFIG
+
+grep: scripts/postgresql/qaqc/platformuptime/graphsensorupdates/cgi-bin/sensorgraph: Too many levels of symbolic links
+
+grep: src/mapfishtrunk/client/build/venv/include/python2.5/numpy: No such file or directory
+grep: src/venv/include/python2.5/numpy: No such file or directory
+}}}
+
+#/home/xeniaprod/config
+{{{
+root@gisvm:/home/xeniaprod/config# grep -r '99' *
+config_moving.xml:      <pwd>xeniaprod99</pwd>
+config.xml:      <pwd>xeniaprod99</pwd>
+dbConfig.ini:password = xeniaprod99
+dbConfig.ini:password = xeniaprod99
+DrifterConfigPG.xml:    <pwd>xeniaprod99</pwd>
+emailAlertsConfig.xml:      <pwd>xeniaprod99</pwd>
+environment_xenia_default.xml:                <passwd>xeniaprod99</passwd>
+rangeCheckConfig.xml:      <pwd>xeniaprod99</pwd>
+UptimeConfigPostgres.xml:      <pwd>xeniaprod99</pwd>
 }}}
 
 = Shortlist =
