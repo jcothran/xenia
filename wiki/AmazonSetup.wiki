@@ -10,7 +10,7 @@ With the differences being:
 
 = Image size limit, Elastic Block Storage = 
 
-Be aware that the initial server image is 6.8 Gigabytes in size, leaving a little over 2 Gigabytes of space on a maximum 10 Gigabyte Amazon image limit.  Note that any changes or data gathered to the image will not persist on a reboot of the image.  It should be possible if needed to take a snapshot of a changed live image using the *ec2-bundle-vol* command as the root user and storing generated server image to a mounted Elastic Block Storage(EBS).  The ec2 commands are under /root/tools and documented earlier [http://code.google.com/p/xenia/wiki/VMwareInstall#Update_2009-11-18  here]
+Be aware that the initial server image is 6.8 Gigabytes in size, leaving a little over 2 Gigabytes of space on a maximum 10 Gigabyte Amazon image limit.  Note that any changes or data gathered to the image will not persist on a reboot of the image.  It should be possible if needed to take a snapshot of a changed live image using the *ec2-bundle-vol* command as the root user and storing the generated server image to a mounted Elastic Block Storage(EBS).  The ec2 commands are under /root/tools and documented earlier [http://code.google.com/p/xenia/wiki/VMwareInstall#Update_2009-11-18  here]
 
 The initial image is also setup with the '/usr2' directory being the 'data' directory where the postgres database and any log or data files should be stored.  The instance is configured to immediately begin aggregating data to the database when started and you will need to either:
   * 'comment out' the existing feed requests so they will not be pulled(the database won't grow in size)
