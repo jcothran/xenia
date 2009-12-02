@@ -21,3 +21,15 @@ GeoJSON http://code.google.com/p/xenia/wiki/VMwareProducts#GeoJSON
 The intent would be that a data provider would only have to provide a server resource on which to install the vmware appliance image(local physically or via remote cloud,etc) and know how to get data into the database via ObsKML(XML) or SQL directly and would automatically have several formats and services readily available for data management and sharing.  The vmware server image(s)/appliances should be an ongoing production development snapshot of what we're doing within Secoora http://secoora.org made available to the observing community.  Glad to incorporate scripts/documentation which leverage the xenia RDB schema directly or more generally abstracted database view/resultset scripts which utilize those data elements captured by the xenia schema.
 
 Would be interested to see more appliance/turn-key type approaches and further appliance type 'remixes' of various community tools to fit various audience needs.
+
+----
+= Next Steps =
+
+[VMwareProducts] describes the output formats and services which should be available from the server image
+
+[http://code.google.com/p/xenia/wiki/VMwareTest#Adding_a_new_ObsKML_feed ObsKML] describes adding new in-situ data to the Xenia database for aggregation and sharing via the output formats and services
+
+A google groups has been setup for questions/discussion at http://groups.google.com/group/xeniavm
+
+see also
+  * http://code.google.com/p/xenia/wiki/XeniaHome
