@@ -2,7 +2,8 @@
 
 for further information or discussion regarding *Xenia* or *ObsKML* send email to jeremy.cothran 'at' gmail.com 
 
-See also [VMwareHome] regarding a vmware image for testing/development purposes.
+See also [VMwareHome] regarding a vmware .vmdk image for testing/development purposes.
+See also [AmazonWebServices] regarding a Amazon Machine Image(AMI) for test/development purposes.
 
 <wiki:toc max_depth="6">
 
