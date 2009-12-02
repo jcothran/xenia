@@ -14,8 +14,7 @@ To instantiate this server instance, you will need to create a credit-card based
 
 This server instance is an Ubuntu 8.10 version based OS, which uses previously developed scripts(perl mostly) to support a variety of output formats and web services http://code.google.com/p/xenia/wiki/VMwareProducts from a source relational database(PostgreSQL+PostGIS, schema label is 'Xenia').  The current aggregation datatype focus is in-situ data(buoys,stations,drifters,gliders,etc).  This vm was was developed on top of 'gisvm' http://gisvm.com (November 2008 version) which includes many popular open source geospatial tools.  The scripts developed include/support:
 
-Eric Bridger's RDB to Oostethys SOS script<br/>
-http://code.google.com/p/xenia/wiki/XeniaSOS#Oostethys_SOS <br/>
+Eric Bridger's RDB to Oostethys SOS script http://code.google.com/p/xenia/wiki/XeniaSOS#Oostethys_SOS <br/>
 IOOS DIF SOS http://code.google.com/p/xenia/wiki/XeniaSOS#DIF_SOS <br/>
 GeoJSON http://code.google.com/p/xenia/wiki/VMwareProducts#GeoJSON
 
