@@ -1,6 +1,6 @@
 #summary vmware download instructions
 
-note that this VMware .vmdk server image is also available for running on Amazon Web Services as an AMI(Amazon Machine Instance) as documented at [AmazonWebServices]
+Note that this VMware .vmdk server image is also available for running on Amazon Web Services as an AMI(Amazon Machine Instance) as documented at [AmazonWebServices]
 
 <wiki:toc max_depth="6" /> 
 
