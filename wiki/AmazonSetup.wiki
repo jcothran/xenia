@@ -6,4 +6,13 @@ http://code.google.com/p/xenia/wiki/VMwareInstall#Setup
 
 With the differences being:
   * skip the initial sections regarding network bridge,static ip(amazon uses loopback method),iptables
-  * for openssh, all lines have been commented out for /etc/hosts.allow - set this file for IP based access as needed - alternatively Amazon lists the recommended method of using security keys only [ttp://developer.amazonwebservices.com/connect/entry.jspa?externalID=1233 here]
+  * for openssh, all lines have been commented out for /etc/hosts.allow - set this file for IP based access as needed - alternatively Amazon lists the recommended method of using security keys only [http://developer.amazonwebservices.com/connect/entry.jspa?externalID=1233 here]
+
+Be aware that the initial server image is 6.8 Gigabytes in size, leaving a little over 2 Gigabytes of space on a maximum 10 Gigabyte Amazon image limit.  The initial image is also setup with the '/usr2' directory being the 'data' directory where the postgres database and any log or data files should be stored.  The instance is configured to immediately begin aggregating data to the database when started and you will need to either 'comment out' the existing feed requests so they will not be pulled or copy the existing '/usr2' directory(see command below) to an Amazon Elastic Block Storage(EBS) which is Amazon's persistent storage solution.
+
+{{{
+#copy data dir recursively, preserving symbolic links and ownership
+cp -r -d -p /usr2 /usr3
+}}}
+
+Elastic Block Storage links <br/>
