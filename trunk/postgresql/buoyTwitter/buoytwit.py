@@ -134,7 +134,7 @@ if __name__ == '__main__':
             hasData = False
             for row in cursor:
               if( hasData == False):
-                tweet = "Offshore Weather "
+                tweet = "Buoy Offshore Weather "
                 hasData = True
               processOb = False
               obsName = row['standard_name']
