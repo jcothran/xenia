@@ -68,7 +68,7 @@ class qaqcTestFlags:
     elif( qcLevel == qaqcTestFlags.DATA_QUAL_GOOD ):
       return( 'Data quality good' )
       
-class __xeniaDB:
+class xeniaDB:
   """
   Function: __init__
   Purpose: Initializes the class
@@ -77,21 +77,38 @@ class __xeniaDB:
   """
   def __init__ ( self ):
     self.dbType = dbTypes.undefined
-    self.lastErrorMsg = ''
-    self.lastErrorCode = None
+    self.lastErrorMsg   = ''
+    self.lastErrorCode  = None
+    self.lastErrorFile      = None  
+    self.lastErrorLineNo    = None    
+    self.lastErrorFunc      = None    
+    
     self.DB = None
     
-  """
-  Function: getLastErrorMsg
-  Purpose: Returns the last error message
-  Parameters: None
-  Return: String with the last error message.
-  """
-  def getLastErrorMsg(self):
-    msg = self.lastErrorMsg
-    self.lastErrorMsg = ''
-    return(msg)  
-   
+  
+  def procTraceback(self):
+    import sys
+    import traceback
+    
+    info = sys.exc_info()        
+    excNfo = traceback.extract_tb(info[2],1)
+    items = excNfo[0]
+    self.lastErrorFile = items[0]    
+    self.lastErrorLineNo = items[1]    
+    self.lastErrorFunc = items[2]    
+
+  def getErrorInfo(self):
+    errorMsg = self.lastErrorMsg
+    if(self.lastErrorFile != None and self.lastErrorLineNo != None and self.lastErrorFunc != None):
+      errorMsg += " Function: %s Line: %s File: %s" %(self.lastErrorFunc,self.lastErrorLineNo,self.lastErrorFile)
+    return(errorMsg)
+  
+  def clearErrorInfo(self):
+    self.lastErrorMsg   = ''
+    self.lastErrorCode  = None
+    self.lastErrorFile      = None  
+    self.lastErrorLineNo    = None    
+    self.lastErrorFunc      = None    
   """
   Function: connect
   Purpose: Children classes should overload this function to provide the DB specific connection.
@@ -101,6 +118,32 @@ class __xeniaDB:
   def connect(self, dbFilePath=None, user=None, passwd=None, host=None, dbName=None ):
     return(False)
  
+  def loadSpatiaLiteLib(self, spatiaLiteLibFile):
+    self.DB.enable_load_extension(True)
+    sql = 'SELECT load_extension("%s");' % (spatiaLiteLibFile)
+    cursor = self.executeQuery(sql)
+    if(cursor != None):
+      return(True)    
+    return(False)
+  
+  def commit(self):
+    try:
+      self.DB.commit()
+      return(True)
+    except psycopg2.Error, E:
+      if( E.pgerror != None ):
+        self.lastErrorMsg = E.pgerror
+      else:
+        self.lastErrorMsg = E.message             
+      self.lastErrorCode = E.pgcode
+      self.procTraceback()
+    except sqlite3.Error, e:        
+      self.lastErrorMsg = e.args[0]        
+      self.procTraceback()
+    except Exception, e:        
+      self.lastErrorMsg = str(e)       
+      self.procTraceback()
+    return(False)
   def getMTypeFromObsName(self, obsName, uom, platform, sOrder=1 ):
     sql = "SELECT m_type.row_id FROM m_type "\
           "left join sensor on sensor.m_type_id = m_type.row_id "\
@@ -123,10 +166,13 @@ class __xeniaDB:
       else:
         self.lastErrorMsg = E.message             
       self.lastErrorCode = E.pgcode
+      self.procTraceback()
     except sqlite3.Error, e:        
-      self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
+      self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql
+      self.procTraceback()        
     except Exception, e:        
-      self.lastErrorMsg = str(e)           
+      self.lastErrorMsg = str(e)
+      self.procTraceback()           
     return( None )
     
 
@@ -175,7 +221,8 @@ class __xeniaDB:
     sql = "INSERT INTO obs_type (standard_name) VALUES ('%s');" %( obsName )
     dbCursor = self.executeQuery(sql)
     if( dbCursor != None ):
-      return( self.obsTypeExists(obsName) )
+      if(self.commit()):
+        return( self.obsTypeExists(obsName) )
     return(None)
   
   """
@@ -205,7 +252,8 @@ class __xeniaDB:
     sql = "INSERT INTO uom_type (standard_name) VALUES ('%s');" %( uom )
     dbCursor = self.executeQuery(sql)
     if( dbCursor != None ):
-      return( self.uomTypeExists(uom) )
+      if(self.commit()):
+        return( self.uomTypeExists(uom) )
     return(None)
   
   """
@@ -240,7 +288,8 @@ class __xeniaDB:
     sql = "INSERT INTO m_scalar_type (obs_type_id,uom_type_id) VALUES (%d,%d);" %( obsTypeID,uomTypeID )
     dbCursor = self.executeQuery(sql)
     if( dbCursor != None ):
-      return( self.existsScalarType(obsTypeID,uomTypeID) )
+      if(self.commit()):
+        return( self.scalarTypeExists(obsTypeID,uomTypeID) )
     return(None)
  
   """
@@ -271,7 +320,8 @@ class __xeniaDB:
     sql = "INSERT INTO m_type (m_scalar_type_id) VALUES (%d)" %( scalarID )
     dbCursor = self.executeQuery(sql)
     if( dbCursor != None ):
-      return( self.existsMType(scalarID) )
+      if(self.commit()):
+        return( self.mTypeExists(scalarID) )
     return(None)
     
   """
@@ -300,7 +350,8 @@ class __xeniaDB:
   """
   Function: addSensor
   Purpose: Adds the obsName on the platform given in platformHandle. The flag addObsAndUOM controls whether or not'
-    a non existant obsName/uom pair will be added if they do not exist. 
+    a non existant obsName/uom pair will be added if they do not exist. Used for "simple" sensor entries where there
+    is only one measurement being stored.
   Parameters:
     obsName is the sensor we want to add.
     uom is the unit of measure we are adding for the sensor.
@@ -308,89 +359,80 @@ class __xeniaDB:
     platformHandle is the name of the platform we are adding the sensor for.
     fixedZ is the height on or below the platform the sensor is installed.
     sOrder if there are multiple sensors of the same type on the platform, this specifies where it is. 1 is closest to the surface.
+    mTypeID if we already know the m_type_id, we pass it in via this parameter.
     addObsAndUOM specifies if the obsName or the uom do not exist, if this function will automatically add them. If this flag
       is False and a uom or obsName doesn't exist an error is generated and we return None.
   Returns:
     The uom_type(row_id) if it is successfully created, -1 if it does not exists, or None if an error occured. If there was an error
     lastErrorMsg can be checked for the error message.
   """
-  def addSensor(self, obsName, uom, platformHandle, active=1, fixedZ=0, sOrder=1, addObsAndUOM=False):    
-    obsTypeID = self.obsTypeExists( obsName )
-    if( obsTypeID == -1 ):
-      if( addObsAndUOM ):
-        obsTypeID = self.addObsType(obsName)
-        #Error occured so return.
-        if( obsTypeID == None ):
-          self.lastErrorMsg += "\nUnable to add obs_type: %s" % (obsName)
+  def addSensor(self, obsName, uom, platformHandle, active=1, fixedZ=0, sOrder=1, mTypeID=None, addObsAndUOM=False):
+    #If the mTypeID is passed in, we already have a complete set of obs ids, uoms, scalar types.
+    if(mTypeID == None):      
+      obsTypeID = self.obsTypeExists( obsName )
+      if( obsTypeID == -1 ):
+        if( addObsAndUOM ):
+          obsTypeID = self.addObsType(obsName)
+          #Error occured so return.
+          if( obsTypeID == None ):
+            self.lastErrorMsg += "\nUnable to add obs_type: %s" % (obsName)
+            return(None)
+        #If we do not want to add a missing observation type, we must error out.
+        else:
+          self.lastErrorMsg = "obs_type: %s does not exist. Must be added to obs_type table." %(obsName)
           return(None)
-      #If we do not want to add a missing observation type, we must error out.
-      else:
-        self.lastErrorMsg = "obs_type: %s does not exist. Must be added to obs_type table." %(obsName)
-        return(None)
-    elif(obsTypeID == None):
-      self.lastErrorMsg = "\n obs_type.standard_name: %s does not exist." % (obsName)
+      elif(obsTypeID == None):
+        self.lastErrorMsg = "\n obs_type.standard_name: %s does not exist." % (obsName)
+          
+      #Now let's check if our UOM exists.        
+      uomTypeID = self.uomTypeExists( uom )
+      if( uomTypeID == -1 ):
+        if( addObsAndUOM ):
+          uomTypeID = self.addUOMType(uom)
+          #Error occured so return.
+          if( uomTypeID == None ):
+            self.lastErrorMsg += "\nUnable to add uom_type: %s" % (uom)
+            return(None)
+        #If we do not want to add a missing uom type, we must error out.
+        else:
+          self.lastErrorMsg = "uom_type: %s does not exist. Must be added to uom_type table." %(uom)
+          return(None)
+      elif(uomTypeID == None):
+        self.lastErrorMsg = "\n uom_type.standard_name: %s does not exist." % (uom)
+              
+      #Now check the scalar type.
+      scalarID = self.scalarTypeExists(obsTypeID,uomTypeID)
+      if( scalarID == -1 ):
+        scalarID = self.addScalarType(obsTypeID,uomTypeID)
+        #Error occured so return.
+        if( scalarID == None ):
+          self.lastErrorMsg += "\nUnable to add scalar_type with obs_type_id: %d and uom_type_id: %d" % (obsTypeID,uomTypeID)
+          return(None)
+      elif( scalarID == None ):
+        return( None )
       
-    #Now let's check if our UOM exists.        
-    uomTypeID = self.uomTypeExists( uom )
-    if( uomTypeID == -1 ):
-      if( addObsAndUOM ):
-        uomTypeID = self.addUOMType(uom)
+      #Now we need to add a new m_type
+      mTypeID = self.mTypeExists(scalarID)
+      if( mTypeID == -1 ):
+        mTypeID = self.addMType(scalarID)
         #Error occured so return.
-        if( uomTypeID == None ):
-          self.lastErrorMsg += "\nUnable to add uom_type: %s" % (uom)
+        if( mTypeID == None ):
+          self.lastErrorMsg += "\nUnable to add m_type with scalar_type_id: %d" % (scalarID)
           return(None)
-      #If we do not want to add a missing uom type, we must error out.
-      else:
-        self.lastErrorMsg = "uom_type: %s does not exist. Must be added to uom_type table." %(uom)
+      elif( mTypeID == None ):
         return(None)
-    elif(uomTypeID == None):
-      self.lastErrorMsg = "\n uom_type.standard_name: %s does not exist." % (uom)
-            
-    #Now check the scalar type.
-    scalarID = self.scalarTypeExists(obsTypeID,uomTypeID)
-    if( scalarID == -1 ):
-      scalarID = self.addScalarType(obsTypeID,uomTypeID)
-      #Error occured so return.
-      if( scalarID == None ):
-        self.lastErrorMsg += "\nUnable to add scalar_type with obs_type_id: %d and uom_type_id: %d" % (obsTypeID,uomTypeID)
-        return(None)
-    elif( scalarID == None ):
-      return( None )
-    
-    #Now we need to add a new m_type
-    mTypeID = self.mTypeExists(scalarID)
-    if( mTypeID == -1 ):
-      mTypeID = self.addMType(scalarID)
-      #Error occured so return.
-      if( mTypeID == None ):
-        self.lastErrorMsg += "\nUnable to add m_type with scalar_type_id: %d" % (scalarID)
-        return(None)
-    elif( mTypeID == None ):
-      return(None)
     
     #Now we can finally add the sensor to the sensor table.
     platformID = self.platformExists(platformHandle)
     if( platformID != None):
       if( platformID != -1 ):
-        sql = "INSERT INTO sensor (platform_id,m_type_id,fixed_z,active,s_order) "\
-              "VALUES(%d,%d,%d,%d,%d)"\
-              %(platformID,mTypeID,fixedZ,active,sOrder)
+        sql = "INSERT INTO sensor (platform_id,m_type_id,short_name,fixed_z,active,s_order) "\
+              "VALUES(%d,%d,'%s',%d,%d,%d)"\
+              %(platformID,mTypeID,obsName,fixedZ,active,sOrder)
         dbCursor = self.executeQuery(sql)
         if( dbCursor != None ):
-          try:
-            self.DB.commit()
-            return( self.sensorExists(obsName, uom, platformHandle, sOrder) )
-          except psycopg2.Error, E:
-            if( E.pgerror != None ):
-              self.lastErrorMsg = E.pgerror
-            else:
-              self.lastErrorMsg = E.message             
-            self.lastErrorCode = E.pgcode
-          except sqlite3.Error, e:        
-            self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
-          except Exception, e:        
-            self.lastErrorMsg = str(e)       
-
+          self.commit()
+          return( self.sensorExists(obsName, uom, platformHandle, sOrder) )
     else:
       self.lastErrorMsg = "Platform: %s does not exist. Cannot add sensor." % (platformHandle)
     return( None )  
@@ -453,10 +495,13 @@ class __xeniaDB:
           else:
             self.lastErrorMsg = E.message             
           self.lastErrorCode = E.pgcode
+          self.procTraceback()          
         except sqlite3.Error, e:        
           self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
+          self.procTraceback()
         except Exception, e:        
           self.lastErrorMsg = str(e)       
+          self.procTraceback()
     return(None)
 
   """
@@ -527,29 +572,20 @@ class __xeniaDB:
           else:
             self.lastErrorMsg = E.message             
           self.lastErrorCode = E.pgcode
+          self.procTraceback()          
         except sqlite3.Error, e:        
           self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
+          self.procTraceback()
         except Exception, e:        
           self.lastErrorMsg = str(e)       
+          self.procTraceback()
     return(None)
 
   """
   Function: addMeasurement
   Purpose: Adds a new entry into the multi_obs table.
   """
-  def addMeasurement(self, obsName, uom, platformHandle, date, lat, lon, z, mValues, sOrder=1 ):
-    sensorID = self.sensorExists(obsName, uom, platformHandle, sOrder)
-    if(sensorID == -1 ):
-      self.lastErrorMsg = "Unable to add measurement. Sensor: %s(%s) does not exist on platform: %s. No entry in sensor table." %(obsName,uom,platformHandle)
-      return(None) 
-    elif(sensorID == None):
-      return(None) 
-    mTypeID = self.getMTypeFromObsName(obsName, uom, platformHandle, sOrder)
-    if(mTypeID == -1 ):
-      self.lastErrorMsg = "Unable to add measurement. Sensor: %s(%s) does not exist on platform: %s. No entry in m_type table." %(obsName,uom,platformHandle)
-      return(None) 
-    elif(mTypeID == None):
-      return(None)
+  def addMeasurementWithMType(self, mTypeID, sensorID, platformHandle, date, lat, lon, z, mValues, sOrder=1, autoCommit=True ):
     columns = "platform_handle,sensor_id,m_type_id,m_date,m_lat,m_lon,m_z"
     values = "'%s',%d,%d,'%s',%f,%f,%f" % (platformHandle,sensorID,mTypeID,date,lat,lon,z)
     #There are multiple m_value columns in multi_obs. The values parameter is a list whose index
@@ -566,33 +602,45 @@ class __xeniaDB:
     dbCursor = self.executeQuery(sql)
     #If we successfully added the org, let's get it's row_id.
     if( dbCursor != None ):
-      try:
-        self.DB.commit()
-        return( True )
-      except psycopg2.Error, E:
-        if( E.pgerror != None ):
-          self.lastErrorMsg = E.pgerror
-        else:
-          self.lastErrorMsg = E.message             
-        self.lastErrorCode = E.pgcode
-      except sqlite3.Error, e:        
-        self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
-      except Exception, e:        
-        self.lastErrorMsg = str(e)             
+      if(autoCommit):
+        return(self.commit())
+      return(True)
     return(False)
-  
-    def getDataForSensorID(self,sensorID, startDate, endDate, timeZoneShift):
-      return(None)     
-    def getObservationDates(self, obsName, platform ):
-      return(None)       
-    def getObservationsForPlatform(self, platform):
-      return(None)      
-    def getDataForObs(self, obsName, platform, startDate, endDate, timeZoneShift):
-      return(None)
-    def getObsDataForPlatform(self, platform, lastNHours = None ):                 
-      return(None)
 
-class xeniaSQLite(__xeniaDB):
+  def addMeasurement(self, obsName, uom, platformHandle, date, lat, lon, z, mValues, sOrder=1, autoCommit=True ):
+    sensorID = self.sensorExists(obsName, uom, platformHandle, sOrder)
+    if(sensorID == -1 ):
+      self.lastErrorMsg = "Unable to add measurement. Sensor: %s(%s) does not exist on platform: %s. No entry in sensor table." %(obsName,uom,platformHandle)
+      return(None) 
+    elif(sensorID == None):
+      return(None) 
+    mTypeID = self.getMTypeFromObsName(obsName, uom, platformHandle, sOrder)
+    if(mTypeID == -1 ):
+      self.lastErrorMsg = "Unable to add measurement. Sensor: %s(%s) does not exist on platform: %s. No entry in m_type table." %(obsName,uom,platformHandle)
+      return(None) 
+    elif(mTypeID == None):
+      return(None)
+    return( self.addMeasurementWithMType( mTypeID, sensorID, platformHandle, date, lat, lon, z, mValues, sOrder, autoCommit ) )
+  
+  def getPlatformInfo(self,platformHandle):
+    id = self.platformExists(platformHandle)
+    if(id != -1 and id != None):
+      sql = "SELECT * FROM platform WHERE platform_handle = '%s';" % (platformHandle)
+      return(self.executeQuery(sql))
+    return(False)
+        
+  def getDataForSensorID(self,sensorID, startDate, endDate, timeZoneShift):
+    return(None)     
+  def getObservationDates(self, obsName, platform ):
+    return(None)       
+  def getObservationsForPlatform(self, platform):
+    return(None)      
+  def getDataForObs(self, obsName, platform, startDate, endDate, timeZoneShift):
+    return(None)
+  def getObsDataForPlatform(self, platform, lastNHours = None ):                 
+    return(None)
+
+class xeniaSQLite(xeniaDB):
   """
   Function: __init__
   Purpose: Initializes the class
@@ -601,6 +649,7 @@ class xeniaSQLite(__xeniaDB):
   """
   def __init__(self):
     self.dbType = dbTypes.SQLite
+    xeniaDB.__init__(self)
 
   """
   Function: connect
@@ -624,6 +673,7 @@ class xeniaSQLite(__xeniaDB):
       return(True)
     except Exception, E:
       self.lastErrorMsg = str(E)                     
+      self.procTraceback()
     return(False)
 
   """
@@ -641,8 +691,10 @@ class xeniaSQLite(__xeniaDB):
       return( dbCursor )
     except sqlite3.Error, e:        
       self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sqlQuery        
+      self.procTraceback()
     except Exception, E:
       self.lastErrorMsg = str(E)                     
+      self.procTraceback()
     return(None)
 
   def getDataForSensorID(self,sensorID, startDate, endDate, timeZoneShift):
@@ -661,8 +713,10 @@ class xeniaSQLite(__xeniaDB):
       dbCursor.close()
     except sqlite3.Error, e:        
       self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
+      self.procTraceback()
     except Exception, E:
       self.lastErrorMsg = str(E)                     
+      self.procTraceback()
 
   def getObsDataForPlatform(self, platform, lastNHours = None ):      
     
@@ -694,12 +748,14 @@ class xeniaSQLite(__xeniaDB):
       return( dbCursor )
     except sqlite3.Error, e:        
       self.lastErrorMsg = 'SQL ERROR: ' + e.args[0] + ' SQL: ' + sql        
+      self.procTraceback()
     except Exception, E:
       self.lastErrorMsg = str(E)                           
+      self.procTraceback()
     return(None)
 
 
-class xeniaPostGres(__xeniaDB):
+class xeniaPostGres(xeniaDB):
   """
   Function: __init__
   Purpose: Initializes the class
@@ -707,6 +763,7 @@ class xeniaPostGres(__xeniaDB):
   Return: None
   """
   def __init__(self):
+    xeniaDB.__init__(self)
     self.dbType = dbTypes.PostGRES
 
   """
@@ -740,9 +797,10 @@ class xeniaPostGres(__xeniaDB):
       else:
         self.lastErrorMsg = E.message             
       self.lastErrorCode = E.pgcode
-
+      self.procTraceback()
     except Exception, E:
       self.lastErrorMsg = str(E)                     
+      self.procTraceback()
     return(False)
 
   """
@@ -764,28 +822,13 @@ class xeniaPostGres(__xeniaDB):
       else:
         self.lastErrorMsg = E.message             
       self.lastErrorCode = E.pgcode
+      self.procTraceback()
     except Exception, E:
       self.lastErrorMsg = str(E)                     
+      self.procTraceback()
     return( None )
   
     
-
-  def getDataForSensorID(self,sensorID, startDate, endDate, timeZoneShift):
-    data = []
-    sql = "SELECT multi_obs.m_date,multi_obs.m_value        \
-                  FROM multi_obs           \
-                  WHERE                    \
-                  multi_obs.sensor_id = %d                              AND   \
-                  ( m_date >= strftime( '%%Y-%%m-%%dT%%H:00:00',datetime('%s','%d hours') )   AND  \
-                  m_date < strftime( '%%Y-%%m-%%dT%%H:00:00', datetime('%s','%d hours') ) ) \
-                  ORDER BY multi_obs.m_date ASC;" % ( sensorID, startDate, timeZoneShift, endDate, timeZoneShift );                
-    try:                      
-      dbCursor = self.executeQuery( sql )
-      for row in dbCursor:
-        data.append( (row[0],row[1]) )       
-      dbCursor.close()
-    except Exception, E:
-      self.lastErrorMsg = str(E)                     
 
   def getObsDataForPlatform(self, platform, lastNHours = None ):      
     
@@ -817,6 +860,7 @@ class xeniaPostGres(__xeniaDB):
       return( dbCursor )
     except Exception, E:
       self.lastErrorMsg = str(E)                     
+      self.procTraceback()
       
     return(None)
             
@@ -862,6 +906,27 @@ class uomconversionFunctions:
       convertedVal = float(eval( conversionString ))
       return(convertedVal)
     return(None)
+
+  """
+  Function: getUnits
+  Purpose: For a given conversion from/to pair, this returns the to units to display.
+  Parameters: 
+    fromUOM is the units of measurement the value is currently in.
+    toUOM is the units of measurement we want to value to be converted to.
+  Return:
+    If a units string is found, then the string is returned, otherwise None is returned.
+  
+  """
+  def getUnits(self, fromUOM, toUOM):
+    xmlTree = etree.parse(self.xmlConversionFile)
+    
+    xmlTag = "//unit_conversion_list/unit_conversion[@id=\"%s_to_%s\"]/units" % (fromUOM, toUOM)
+    units = xmlTree.xpath(xmlTag)
+    if( len(units) ):     
+      units = units[0].text
+      return(units)
+    return(None)
+
   """
   Function: getConversionUnits
   Purpose: Given a unit of measurement in a differing measurement system and the desired measurement system, returns uom in the desired measurement system.
@@ -886,6 +951,8 @@ class uomconversionFunctions:
     else:
       if( uom == 'ft'):
         return('m' )
+      if( uom == 'inches'):
+        return('millimeter' )
       elif( uom == 'mph'):
         return('m_s-1')
       elif( uom == 'fahrenheit' ):
@@ -894,5 +961,7 @@ class uomconversionFunctions:
         return('cm_s-1')
       elif(uom == 'knots'):
         return('mph')
+      elif(uom == 'inches_mercury'):
+        return('mb')
       
     return('')
