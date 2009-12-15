@@ -6,7 +6,7 @@ The lead-in to this wikipage is related to the initial effort documented [http:/
 
 = Xenia Amazon Machine Instance(AMI) = 
 
-The latest server image of our production development environment is available as a publicly shared AMI at [http://aws.amazon.com Amazon Web Services] with <br/>
+The latest server image of our production development environment is available as a [https://developer.amazonwebservices.com/connect/entry.jspa?externalID=3107 publicly shared AMI] at [http://aws.amazon.com Amazon Web Services] with <br/>
 
 AMI ID = *ami-9028caf9*
 
