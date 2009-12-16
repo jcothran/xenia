@@ -2,8 +2,8 @@
 
 [VMwareHome]
 
-for a VMware .vmdk server image download see [VMwareDownload]<br/>
-for a Amazon Web Services .ami server image download see [AmazonWebServices]
+see [VMwareDownload] for a VMware .vmdk server image download <br/>
+see [AmazonWebServices] for a Amazon Web Services .ami server image download 
 
 *In the below URL's for running/testing a local xenia vmware instance, replace http://neptune.baruch.sc.edu with your IP/DNS or http://localhost (if directly on the server) to see the locally produced results.*
 
