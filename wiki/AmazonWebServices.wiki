@@ -1,5 +1,7 @@
 #summary Xenia image as run using Amazon Web Services
 
+see also VMwareHome
+
 The lead-in to this wikipage is related to the initial effort documented [http://code.google.com/p/xenia/wiki/VMwareInstall#Amazon_Web_Services here] regarding converting our existing [http://code.google.com/p/xenia/wiki/VMwareDownload VMware based .vmdk image] into an Amazon Machine Image(AMI) for running on [http://aws.amazon.com Amazon Web Services] (Amazon's web server cloud).
 
 <wiki:toc max_depth="6" />
