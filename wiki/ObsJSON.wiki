@@ -349,10 +349,10 @@ Date: April 29, 2009
 == Links ==
 
 Latest 24 hour file folder
-http://carocoops.org/obsjson/feeds/all/latest_hours_24/
+http://neptune.baruch.sc.edu/xenia/feeds/obsjson/all/latest_hours_24/
 
 Latest 24 hour dynamic javascript styled kmz
-http://carocoops.org/obsjson/feeds/all/latest_hours_24/all_latest.kmz
+http://neptune.baruch.sc.edu/xenia/feeds/obsjson/all/latest_hours_24/all_latest.kmz
 
 
 == Known issues ==
