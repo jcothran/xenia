@@ -1,6 +1,7 @@
 import twitter
 import optparse
 import sys
+import re
 from lxml import etree
 #from xenia import xeniaPostGres
 #from xenia import uomconversionFunctions
@@ -107,7 +108,7 @@ if __name__ == '__main__':
             print( "Error from twitter.Api call: %s" % (str(E)) )
             continue
       
-          dateOffset = "m_date >= date_trunc('hour',( SELECT timezone('UTC', now() - interval '1 hour') ) ) AND d_top_of_hour = 1 AND"
+          dateOffset = "m_date >= date_trunc('hour',( SELECT timezone('UTC', now() - interval '6 hour') ) ) AND d_top_of_hour = 1 AND"
                   
           sql= "SELECT m_date \
                 ,multi_obs.platform_handle \
@@ -118,8 +119,10 @@ if __name__ == '__main__':
                 ,qc_level \
                 ,sensor.row_id as sensor_id\
                 ,sensor.s_order \
+                ,platform.description\
               FROM multi_obs \
                 left join sensor on sensor.row_id=multi_obs.sensor_id \
+                left join platform on platform.row_id=sensor.platform_id\
                 left join m_type on m_type.row_id=multi_obs.m_type_id \
                 left join m_scalar_type on m_scalar_type.row_id=m_type.m_scalar_type_id \
                 left join obs_type on obs_type.row_id=m_scalar_type.obs_type_id \
@@ -127,42 +130,72 @@ if __name__ == '__main__':
                 WHERE %s multi_obs.platform_handle = '%s' AND sensor.row_id IS NOT NULL\
                 ORDER BY m_date DESC;" \
                 % (dateOffset,platform)
-           
           cursor = db.executeQuery(sql)
           if( cursor != None ):
             tweet = ''
+            desc = ''
             hasData = False
+            latestDate = None
             for row in cursor:
               if( hasData == False):
+                desc = row['description']
+                desc = desc.replace("Nearshore", "")
+                desc = desc.replace("Offshore", "")
+                #Some description fields have the platform name as well as the geo location. We want
+                #to split it up so we can just pick out the geo location.
+                descParts = desc.split(',')
+                #This should be platform name,city,state
+                if(len(descParts) > 2):
+                  desc = "%s,%s" % (descParts[1],descParts[2])
+                #city,state
+                elif(len(descParts) > 1):
+                  desc = "%s,%s" % (descParts[0],descParts[1])
+                else:
+                  desc = ''
                 tweet = "Buoy Offshore Weather "
                 hasData = True
+
+              if(latestDate == None):
+                latestDate = row['m_date']
+              #We only want the most current data. We need to retrieve the last 6 hours to make sure we catch
+              #data that might occur on an odd interval.
+              else:
+                if(latestDate != row['m_date']):
+                  break
+                latestDate = row['m_date']
               processOb = False
               obsName = row['standard_name']
               if( obsName == 'air_temperature' ):
-                obsName = 'AirTemp'
+                obsName = 'Air Temperature'
                 processOb = True
               elif( obsName == 'water_temperature' ):
-                obsName = 'WaterTemp'
+                obsName = 'Water Temperature'
                 processOb = True
               elif( obsName == 'wind_speed' ):
-                obsName = 'WindSpeed'
+                obsName = 'Wind Speed'
                 processOb = True
               elif( obsName == 'wind_from_direction' ):
-                obsName = 'WindDir' 
+                obsName = 'Wind Direction' 
                 processOb = True
               
               if( processOb ):
                 obsUOM = row['uom']
                 value = row['m_value']
                 uom = uomConverter.getConversionUnits( obsUOM, 'en' )
+                displayUnits = uom 
                 if( len(uom) > 0 ):
-                  value = uomConverter.measurementConvert( value, obsUOM, uom )              
-                tweet += "%s %4.1f %s " % ( obsName, value, uom )
+                  value = uomConverter.measurementConvert( value, obsUOM, uom )
+                  displayUnits = uomConverter.getUnits(obsUOM, uom)
+                  if(displayUnits  != None):
+                    uom = displayUnits
+                tweet += "%s %4.1f%s " % ( obsName, value, uom )
             
             if( len(tweet) ):
+              if(len(desc)):
+                tweet += desc
               try:
+                print("%s attempting to tweet: %s(%d chars)" %( platform,tweet,len(tweet) ) )
                 status = client.PostUpdate( tweet )
-                print( "%s Tweets: %s" %( platform,tweet ) )
               except twitter.TwitterError,e:
                 print("Twitter Error: %s" %(e.message))
                 continue
