@@ -291,6 +291,12 @@ point and glad to hear any feedback in regards to running 'ESXi' instead of
 
 == ESXi links ==
 
+=== Install and configure ===
+
+http://www.virtualizationadmin.com/articles-tutorials/vmware-esx-articles/installation-and-deployment/10-steps-install-use-free-vmware-esxi-4.html
+
+http://www.virtualizationadmin.com/articles-tutorials/vmware-esx-articles/installation-and-deployment/new-vmware-esxi-server-configuration-checklist.html
+
 Install video(15 minutes) http://vmwarevideos.govirtual.tv/vsphere-esxi-40-install-and-configure <br>
 Review http://windowsitpro.com/article/articleid/101039/vmware-esxi.html <br/>
 
