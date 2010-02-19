@@ -1,18 +1,16 @@
 import sys
 import array
 import time
-#from xenia import xeniaDB
-#from xenia import xeniaSQLite
-#from xenia import xeniaPostGres
-#from xenia import qaqcTestFlags
-#rom xenia import uomconversionFunctions
-#from xenia import recursivedefaultdict
+import optparse
 
+from xeniatools.xenia import dbXenia
 from xeniatools.xenia import xeniaSQLite
 from xeniatools.xenia import xeniaPostGres
+from xeniatools.xenia import dbTypes
 from xeniatools.xenia import qaqcTestFlags
 from xeniatools.xenia import uomconversionFunctions
 from xeniatools.xenia import recursivedefaultdict
+from xeniatools.xmlConfigFile import xmlConfigFile
 
 from lxml import etree
 import logging
@@ -39,6 +37,7 @@ class obsInfo:
     self.sensorID       = None              #Correllary to the Xenia sensor ID(not m_type)
     self.uom            = None              #units of measurement for the observation.
     self.updateInterval = None              #The rate at which the sensor updates.
+    self.sOrder         = 1                 #The sensor order.
     self.sensorRangeLimits = rangeLimits()  #The limits for the sensor range.
     self.grossRangeLimits = rangeLimits()   #The limits for the gross range.
     self.climateRangeLimits = {}            #A dictionary keyed from 1-12 representing the climate ranges for the month.
@@ -262,10 +261,19 @@ class loadSettings:
             obsHandle  = obs.xpath('obsHandle' )
             if( len(obsHandle) ):             
               obsHandle = obsHandle[0].text
+                            
               #The handle is in the form of observationname.units of meaure: "wind_speed.m_s-1" for example               
               parts = obsHandle.split('.')
               obsSettings = obsInfo(parts[0])
-              obsSettings.uom = parts[1]            
+              obsSettings.uom = parts[1]
+
+              #DWR v1253
+              #Added sorder since if we do have multiples of the same obs on a platform, we need to distinguish them.
+              sOrder = obs.xpath('sOrder')
+              #Set the sOrder if we have one.
+              if(len(sOrder)):
+                obsSettings.sOrder = int(sOrder[0].text)
+                          
               #Rate at which the sensor updates.              
               interval  = obs.xpath('UpdateInterval' )
               if( len(interval) ):
@@ -321,7 +329,7 @@ class loadSettings:
                 limits = rangeLimits()
                 limits.rangeHi = obsSettings.grossRangeLimits.rangeHi
                 limits.rangeLo = obsSettings.grossRangeLimits.rangeLo
-                for i in range( 1,12 ):
+                for i in range( 1,13 ):
                   obsSettings.climateRangeLimits[i] = limits
                   
               #Now add the observation to our platform info dictionary.
@@ -331,93 +339,379 @@ class loadSettings:
       return( platformInfoDict )
     except Exception, e:
       print( 'ERROR: ' + str(e)  + ' Terminating script')
-    
-class platformResultsTable(object):
-  def __init__(self):
-    self.table = None
-    self.platforms = recursivedefaultdict()
-  
-  def clear(self):
-    self.platforms.clear()
-    
-  def createHTMLTable(self):
-    htmlTable = ''
-    try:
-      platformKeys = self.platforms.keys()
-      platformKeys.sort() 
-      #for platformKey in self.platforms.keys():
-      for platformKey in platformKeys:    
-        if( len(htmlTable) ):
-          htmlTable += "<br>"
-        htmlTable += "<table border=\"1\">\n"
-        #We want to sort the dates
-        dateKeys = self.platforms[platformKey].keys()
-        dateKeys.sort()
-        writeHeader = True
-        tableHeader = '<th>Platform</th><th>Date</th><th>Value Labels</th>'
-        for dateKey in dateKeys: 
-          valuesLabel = "Value</br>QC Flag</br>QC Level"
-          tableRow = "<tr>\n<td>%s</td><td>%s</td><td NOWRAP>%s</td>\n" %( platformKey, dateKey, valuesLabel )
-          obsKeys = self.platforms[platformKey][dateKey].keys()
-          obsKeys.sort()
-          for obsKey in obsKeys:
-          #for obsKey in self.platforms[platformKey][dateKey]:
-            if( writeHeader ):
-              if( 'limits' in self.platforms[platformKey][dateKey][obsKey] != False ):
-                obsNfo = self.platforms[platformKey][dateKey][obsKey]['limits']
-                if( obsNfo != None ):
-                  tableHeader += "<th>%s(%s)</th>" %( obsKey, ( ( obsNfo.uom != None ) and obsNfo.uom or '' ) )
-                else:
-                  tableHeader += "<th>%s()</th>" %( obsKey )
-              else:
-                tableHeader += "<th>%s()</th>" %( obsKey )
-                
-            qcLevel = self.platforms[platformKey][dateKey][obsKey]['qclevel']
-  
-            #The cell background colors are defined in the style sheet(http://carocoops.org/~dramage_prod/secoora/styles/main.css)
-            bgColor = "qcDEFAULT"
-            if( qcLevel == qaqcTestFlags.NO_DATA):
-              bgColor = "qcMISSING"
-            elif( qcLevel == qaqcTestFlags.DATA_QUAL_NO_EVAL):
-              bgColor = "qcNOEVAL"
-            elif( qcLevel == qaqcTestFlags.DATA_QUAL_BAD):
-              bgColor = "qcFAIL"
-            elif( qcLevel == qaqcTestFlags.DATA_QUAL_SUSPECT):
-              bgColor = "qcSUSPECT"
-            elif( qcLevel == qaqcTestFlags.DATA_QUAL_GOOD):
-              bgColor = "qcPASS"
-            if( qcLevel != qaqcTestFlags.NO_DATA ):
-              tableRow += "<td id=\"%s\">%4.2f</br>%d</br>%s</td>\n" \
-              % (bgColor,
-                 ( self.platforms[platformKey][dateKey][obsKey]['value'] != None ) and self.platforms[platformKey][dateKey][obsKey]['value'] or -9999.0,
-                 ( self.platforms[platformKey][dateKey][obsKey]['qclevel'] != None ) and self.platforms[platformKey][dateKey][obsKey]['qclevel'] or -9999.0,
-                 ( self.platforms[platformKey][dateKey][obsKey]['qcflag'] != None ) and self.platforms[platformKey][dateKey][obsKey]['qcflag'] or -9999.0 )
-            else:
-              tableRow += "<td id=\"%s\">Data Missing</br>%d</br>000000</td></td>\n" % (bgColor,qaqcTestFlags.NO_DATA)
-          tableRow += "</tr>\n"
-          if( writeHeader ):
-            htmlTable += tableHeader
-            writeHeader = False          
-          htmlTable += tableRow
-        htmlTable += '</table>'
-    except Exception, e:
-        self.lastErrorMessage = str(e) + ' Terminating script.'
 
-    if( len(htmlTable) == 0 ):
-      htmlTable = None
-    return( htmlTable )
+class rangeTests(object):
+  def __init__(self, xmlConfigFilename):
+    self.cfgFile = xmlConfigFile(xmlConfigFilename)
+    logFile = ''
+    self.logger = None
+    logFile = self.cfgFile.getEntry('//environment/logging/logDir')
+    if(logFile != None):
+      streamHandler = False
+      tag = self.cfgFile.getEntry('//environment/logging/streamhandler')
+      if(tag != None):
+        streamHandler = True
+  
+      tag = self.cfgFile.getEntry('//environment/logging/maxBytes')
+      if(tag != None):
+        maxBytes = int(tag)
+      else:
+        print( 'ERROR: //environment/logging/maxBytes not defined in config file. Using 1000000' )
+        maxBytes = 1000000
+  
+      tag = self.cfgFile.getEntry('//environment/logging/backupCount')
+      if(tag != None):
+        backupCount = int(tag)
+      else:
+        print( 'ERROR: //environment/logging/backupCount not defined in config file. Using 5' )
+        backupCount = 5
         
-  def addObsQC(self, platform, obsName, date, value, qcLevel, qcFlag, qcLimits=None ):
-    self.platforms[platform][date][obsName]['value'] = value
-    self.platforms[platform][date][obsName]['qclevel'] = qcLevel
-    self.platforms[platform][date][obsName]['qcflag'] = qcFlag
-    if( qcLimits != None ):
-      self.platforms[platform][date][obsName]['limits'] = qcLimits
+      self.logger = logging.getLogger("qaqc_logger")
+      self.logger.setLevel(logging.DEBUG)
+      # create formatter and add it to the handlers
+      formatter = logging.Formatter("%(asctime)s,%(levelname)s,%(lineno)d,%(message)s")
+      handler = logging.handlers.RotatingFileHandler( logFile, "a", maxBytes, backupCount )
+      handler.setLevel(logging.DEBUG)
+      handler.setFormatter(formatter)    
+      self.logger.addHandler(handler)
+      
+      #Do we want to create a stream handler to put the message out to stdout?
+      if(streamHandler):
+        logSh = logging.StreamHandler()
+        logSh.setLevel(logging.DEBUG)
+        logSh.setFormatter(formatter)
+        self.logger.addHandler(logSh)
+      self.logger.info('Log file opened.')
+    
+    #Get the settings for how the qc Limits are stored so we know how to process them.
+    settings = loadSettings()
+    type = self.cfgFile.getEntry('//environment/qcLimits/fileType')
+    if(type != None):
+      if( type == 'test_profiles' ):
+        tag = self.cfgFile.getEntry('//environment/qcLimits/file')
+        if(tag != None):
+          self.platformInfoDict = settings.loadFromTestProfilesXML(tag)
+          if(self.logger != None):
+            self.logger.info("Limits type file: %s File: %s" % (type,tag) )
+          else:
+            print("Limits type file: %s File: %s" % (type,tag))
+        else:
+          if(self.logger != None):
+            self.logger.error("No QC Limits provided.")
+          else:
+            print("No QC Limits provided.")
+          sys.exit(-1)
+    else:
+      if(self.logger != None):
+        self.logger.error("No QC Limits type provided.")
+      else:
+        print("No QC Limits type provided.")      
+      sys.exit(-1)
+      
+    self.db = None
+    dbSettings = self.cfgFile.getDatabaseSettings()
+    if(dbSettings['type'] != None):
+      self.db = dbXenia()      
+      #Are we connecting to a SQLite database?
+      if(dbSettings['type'] == 'sqlite'):
+        if(dbSettings['dbName']):
+          if(self.db.connect(dbSettings['dbName']) == False):
+            if(self.logger != None):
+              self.logger.error("Unable to connect to SQLite database.")
+            else:
+              print("Unable to connect to SQLite database.")              
+            sys.exit(-1)
+          if(self.logger != None):           
+            self.logger.info("Database type: %s File: %s" % (dbSettings['type'],dbSettings['dbName']) )
+          else:
+            print("Database type: %s File: %s" % (dbSettings['type'],dbSettings['dbName']) )            
+       #PostGres db?
+      elif(dbSettings['type'] == 'postgres'):
+        if(len(dbSettings['dbName']) and len(dbSettings['dbUser']) and len(dbSettings['dbPwd'])):
+          if(self.db.connect( None, dbSettings['dbUser'], dbSettings['dbPwd'], dbSettings['dbHost'], dbSettings['dbName'] ) == False):
+            if(self.logger != None):
+              self.logger.error( "Unable to connect to PostGres. host: %s UDBName: %s user: %s pwd: %s ErrorMsg: %s" % (host,name,user,pwd,db.lastErrorMsg) )
+            else:
+              print( "Unable to connect to PostGres. host: %s UDBName: %s user: %s pwd: %s ErrorMsg: %s" % (host,name,user,pwd,db.lastErrorMsg) )
+            sys.exit(-1)
+        else:
+          if(self.logger != None):
+            self.logger.error( "Missing configuration info for PostGres setup." )
+          else:
+            print( "Missing configuration info for PostGres setup." )            
+          sys.exit(-1)        
+    else:
+      if(self.logger != None):
+        logger.error( "No database type provided." )
+      else:
+        print( "No database type provided." )
+      sys.exit(-1)
+    
+    self.sqlUpdateFile = self.cfgFile.getEntry( '//environment/database/sqlQCUpdateFile' )
+    if(tag != None):
+      if(self.logger != None):
+        self.logger.info( "SQL QC Update file: %s" % (self.sqlUpdateFile))
+      else: 
+        print( "SQL QC Update file: %s" % (self.sqlUpdateFile))
+    else:
+      if(self.logger != None):
+        self.logger.error("No SQL update filename.")
+      else:
+        print("No SQL update filename.")        
+      
+    #Get conversion xml file
+    self.uomConvertFile = self.cfgFile.getEntry('//environment/unitsCoversion/file')
+    if(self.uomConvertFile != None):
+      if(self.logger != None):
+        self.logger.info("Units conversion file: %s" % (self.uomConvertFile) )
+      else:
+        print("Units conversion file: %s" % (self.uomConvertFile) )
+    else:
+      if(self.logger != None):
+        self.logger.debug("No units conversion file specified in config file." % (self.uomConvertFile) )
+      else:
+        print("No units conversion file specified in config file." % (self.uomConvertFile) )
+  
+    self.lastNHours = None
+    self.startDate  = None
+    self.endDate    = None
+    self.ignoreQAQCFlags = False
+    self.totalRows  = 0
+    self.qcTotalFailCnt = 0
+    self.qcTotalMissingLimitsCnt = 0
+    
+  
+  def setLastNHours(self, lastNHours):
+    self.lastNHours = lastNHours
+    self.queryRecords(lastNHours, None, None, self.ignoreQAQCFlags)
+  
+  def setDateRange(self, startDate, endDate):
+    self.startDate = startDate
+    self.endDate = endDate
+    self.queryRecords(None, self.startDate, self.endDate, self.ignoreQAQCFlags)
+    
+  def setQCSQLFile(self, sqlFileName):
+    self.sqlUpdateFile = sqlFileName
+  
+  def restampQAQCRecords(self, restampQAQC):
+    self.ignoreQAQCFlags = restampQAQC
+    if(self.logger != None and restampQAQC):
+      self.logger.debug("Restamping QAQC Flags.")
+         
+  def performTests(self, platformNfo, dbCursor, sqlUpdateFile):
+    try:
+
+      qcFailCnt = 0
+      qcMissingLimitsCnt = 0   
+      rowCnt = 0
+      row = dbCursor.fetchone()
+      lastDate = None
+      while( row != None ):
+        dataTests = qcTestSuite()
+        rowCnt += 1
+        if( row['standard_name'] != None ):
+          obsName   = row['standard_name']
+          
+          dateVal = None
+          if( row['m_date'] != None ):
+            dateVal = row['m_date']
+            #Determine if we were given a datetime object. The psycopg2 connection returns that type, although
+            #pysqlite returns just the string since it has no datetime concept.
+            if( dateVal.__class__.__name__ == 'datetime' ):
+              dateVal = dateVal.__str__()
+                        
+          uom = None
+          if( row['uom'] != None ):
+            uom = row['uom']
+          
+          m_type_id = -1    
+          if( row['m_type_id'] != None ):
+            m_type_id = int(row['m_type_id'])
+            
+          m_value = None
+          if( row['m_value'] != None ):
+            m_value   = float(row['m_value'])
+  
+          sensor_id = -1
+          if( row['sensor_id'] != None ):
+            sensor_id = int(row['sensor_id'])
+            
+          s_order = -1
+          if( row['s_order'] != None ):
+            s_order   = int(row['s_order'])
+          
+          if( lastDate == None or lastDate != dateVal ):
+            lastDate = dateVal
+            
+          obsNfo = platformNfo.getObsInfo(obsName)
+          #the qc_flag in the database is a string. We've defined a character array to represent each type of test, so
+          #here we fill up the array with 0s to begin with, then per array ndx set the test results.
+          qcFlag = array.array('c')
+          fill = ''       
+          fill = fill.zfill(qaqcTestFlags.TQFLAG_NN+1)   
+          qcFlag.fromstring(fill)
+  
+          qcLevel = qaqcTestFlags.DATA_QUAL_NO_EVAL
+          if( obsNfo != None ):
+            if( obsNfo.sensorID == None ):
+              obsNfo.sensorID = sensor_id            
+            #Check to see if the units of measurement for the limits is the same for the data, if not we'll get our conversion factor.
+            if( uom != obsNfo.uom and m_value != None ):
+              uomConvert = uomconversionFunctions(self.uomConvertFile)
+              convertedVal = uomConvert.measurementConvert( m_value, obsNfo.uom, uom)
+              if(convertedVal != None ):
+                m_value = convertedVal
+          else:
+            qcMissingLimitsCnt += 1
+            if( self.logger != None ):
+              self.logger.error( "%s No limit set for obsName: %s" % (dateVal, obsName) )
+              
+          #Get the numeric representation of the month(1...12)
+          dateformat = "%Y-%m-%dT%H:%M:%S"
+          if( dateVal.find("T") == -1 ):
+            dateformat = "%Y-%m-%d %H:%M:%S"
+            
+          month = int(time.strftime( "%m", time.strptime(dateVal, dateformat) ))
+          dataTests.runRangeTests(obsNfo, m_value, month)
+          
+          #The qcFlag string is interpreted as follows. The leftmost byte is the first test, which is the data available test,
+          #each preceeding byte is another test of lesser importance. We store the values in a string which is to always contain
+          #the same number of bytes for consistency. Some examples:
+          #"000000" would represent no tests were done
+          #"200000" represents the data available test was done and passed(0 = no test, 1 = failed, 2 = passed)
+          #"220000" data available, sensor range tests performed.
+          qcFlag[qaqcTestFlags.TQFLAG_DA] = ( "%d" % dataTests.dataAvailable )
+          qcFlag[qaqcTestFlags.TQFLAG_SR] = ( "%d" % dataTests.sensorRangeCheck )
+          qcFlag[qaqcTestFlags.TQFLAG_GR] = ( "%d" % dataTests.grossRangeCheck )
+          qcFlag[qaqcTestFlags.TQFLAG_CR] = ( "%d" % dataTests.climateRangeCheck )
+          qcLevel = dataTests.calcQCLevel()
+                                        
+          if( qcLevel == qaqcTestFlags.DATA_QUAL_BAD and self.logger != None ):
+            self.logger.debug( "QCTest Failed: Date %s obsName: %s value: %f(%s) qcFlag: %s qcLevel: %d" % (dateVal, obsName, ( m_value != None ) and m_value or -9999.0, ( uom != None ) and uom or '', qcFlag.tostring(), qcLevel) )
+            qcFailCnt += 1
+  
+          sql = "UPDATE multi_obs SET \
+                  qc_flag='%s',qc_level=%d WHERE \
+                  m_date='%s' AND sensor_id=%d" \
+                  %(qcFlag.tostring(), qcLevel, dateVal, sensor_id)
+          sqlUpdateFile.write(sql+"\n")
+          row = dbCursor.fetchone()
+      if(self.logger != None):                
+        self.logger.debug( "End processing rows" )
+        
+      #Keep a running count of the total number of rows processed.    
+      self.totalRows += rowCnt
+      self.qcTotalFailCnt += qcFailCnt
+      self.qcTotalMissingLimitsCnt += qcMissingLimitsCnt
+      if(self.logger != None):
+        self.logger.info( "QAQC suspect or bad count: %d QAQC no limits count: %d" %(qcFailCnt,qcMissingLimitsCnt) )
+      return(rowCnt)
+    
+    except Exception, e:
+      import traceback     
+      errMsg = "ERROR Terminating script." 
+      if( self.logger != None ):
+        self.logger.error(errMsg, exc_info=1)
+      else:
+        print( traceback.print_exc() )
+        
+    return(0)
+
+  def queryRecords(self, lastNHours=None, beginDate=None, endDate=None, ignoreQCedRecords=False):
+    try:
+      sqlUpdateFile = open(self.sqlUpdateFile, "w")
+      totalprocTime = processingEnd = processingStart = 0
+      for platformKey in self.platformInfoDict.keys():
+        
+        if( sys.platform == 'win32'):
+           processingStart = time.clock()
+        else:
+           processingStart = time.time()
+           
+        if(self.logger != None):
+          self.logger.debug( "Start processing platform: %s" % (platformKey) )
+        
+        platformNfo = self.platformInfoDict[platformKey]
+        startTime = 0;
+                                        
+        dbCursor = None
+        if( lastNHours != None ):
+          if(self.db.dbConnection.dbType == dbTypes.SQLite):
+            dateOffset = "m_date > strftime('%%Y-%%m-%%dT%%H:%%M:%%S', 'now','-%d hours') AND" % (lastNHours)
+          else:
+            dateOffset = "m_date >  date_trunc('hour',( SELECT timezone('UTC', now()-interval '%d hours' ) ) ) AND" % (lastNHours)
+          if(self.logger != None):
+            self.logger.debug( "Processing Last: %d hours." % (lastNHours) )
+        elif(beginDate != None and endDate != None):
+          dateOffset = "(m_date >= '%s' AND m_date < '%s') AND" % (beginDate,endDate)
+        else:
+          if(self.logger != None):
+            self.logger.error("No time period specified for database query. Cannot continue.")
+          else:
+            print("No time period specified for database query. Cannot continue.")
+          sys.exit(-1)
+        
+        qcSQL = ''
+        if(ignoreQCedRecords == False):
+           qcSQL = "AND qc_level IS NULL"
+
+        sql= "SELECT m_date \
+              ,multi_obs.platform_handle \
+              ,obs_type.standard_name \
+              ,uom_type.standard_name as uom \
+              ,multi_obs.m_type_id \
+              ,m_value \
+              ,qc_level \
+              ,sensor.row_id as sensor_id\
+              ,sensor.s_order \
+            FROM multi_obs \
+              left join sensor on sensor.row_id=multi_obs.sensor_id \
+              left join m_type on m_type.row_id=multi_obs.m_type_id \
+              left join m_scalar_type on m_scalar_type.row_id=m_type.m_scalar_type_id \
+              left join obs_type on obs_type.row_id=m_scalar_type.obs_type_id \
+              left join uom_type on uom_type.row_id=m_scalar_type.uom_type_id \
+              WHERE %s multi_obs.platform_handle = '%s' %s AND sensor.row_id IS NOT NULL\
+              ORDER BY m_date DESC" \
+              % (dateOffset, platformKey, qcSQL)
+        if(self.logger != None):
+          self.logger.debug(sql)       
+        dbCursor = self.db.dbConnection.executeQuery(sql)       
+        rowCnt = self.performTests(platformNfo, dbCursor, sqlUpdateFile)
+        dbCursor.close()
+        
+        if( sys.platform == 'win32'):
+          processingEnd = time.clock()
+        else:
+          processingEnd = time.time()
+        totalprocTime += (processingEnd-processingStart)
+        
+        if(self.logger != None):
+          self.logger.debug( "%d rows in time: %f(ms)" %(rowCnt, ((processingEnd-processingStart)*1000.0 )) )
+          self.logger.debug( "End processing platform: %s" % (platformKey) )
+          
+      if(self.logger != None):
+        self.logger.debug("QAQC Proc'd: %d rows in time: %f(ms)" %(self.totalRows, totalprocTime * 1000.0 ))
+        self.logger.debug("End QAQC processing")
+    except Exception, e:
+      import traceback     
+      errMsg = "ERROR Terminating script." 
+      if( self.logger != None ):
+        self.logger.error(errMsg, exc_info=1)
+      else:
+        print( traceback.print_exc() )
+    except IOError, e:
+      import traceback      
+      errMsg = "ERROR Terminating script." 
+      if( self.logger != None ):
+        self.logger.error(errMsg, exc_info=1)
+      else:
+        print( traceback.print_exc() )
     
 if __name__ == '__main__':
   if( len(sys.argv) < 2 ):
     print( "Usage: rangeCheck.py xmlconfigfile")
     sys.exit(-1)    
+    
   totalRows = 0
   qcTotalFailCnt = 0
   qcTotalMissingLimitsCnt = 0
@@ -506,7 +800,7 @@ if __name__ == '__main__':
     if( type == 'sqlite' ):
       if(len(xmlTree.xpath( '//environment/database/db/name' ))):
         xmlTag = xmlTree.xpath( '//environment/database/db/name' )[0].text
-        xmlTag = time.strftime(xmlTag, time.gmtime())        
+        #xmlTag = time.strftime(xmlTag, time.gmtime())        
         #db.openXeniaSQLite( xmlTag )
         db = xeniaSQLite()
         if( db.connect( xmlTag ) == False ):
@@ -562,29 +856,23 @@ if __name__ == '__main__':
   else:
     if( logger != None ):
       logger.debug("No units conversion file specified in config file." % (uomConvertFile) )
-  
-  #Are we writing out an HTML file showing the results of the range tests?
-  htmlResultsFile = None
-  xmlTag = xmlTree.xpath( '//environment/outputs/qcResultsTable/file' )
-  if(len(xmlTag) ):    
-    htmlResultsFile = open( xmlTag[0].text, 'w' )
-    if( logger != None ):
-      logger.info( "Opened HTML Results file: %s" % (xmlTag[0].text) )
-    xmlTag = xmlTree.xpath( '//environment/outputs/qcResultsTable/styleSheet' )    
-    if( len(xmlTag) ):  
-      styleSheet = xmlTag[0].text
-    if( styleSheet == None ):
-      styleSheet = 'http://carocoops.org/~dramage_prod/styles/main.css'
 
-    htmlResultsFile.write( "<html>\n" )
-    htmlResultsFile.write( "<BODY id=\"RGB_BODY_BG\" >\n" )    
-    htmlResultsFile.write( "<link href=\"%s\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\" />\n"  % ( styleSheet ) )
+  #DWR 1/29/2010 
+  #Added pastNHours into the config file to allow changes to how far back in the data we query.      
+  lastNHours = xmlTree.xpath('//environment/qcLimits/lastNHours')
+  if(len(lastNHours)):
+    lastNHours = int(lastNHours[0].text)      
+    if( logger != None ):
+      logger.info("Getting data for last: %d hours" % (lastNHours) )
+    #A value of -1 means we want to query all the past data.
+    if(lastNHours == -1):
+      lastNHours = None
   else:
     if( logger != None ):
-      logger.debug( "No HTML results file specified in config file parameter: //environment/outputs/qcResultsTable/file" )
+      logger.debug("lastNHours not specified in config file. Using 168." )
+      lastNHours = 168
   
   #rangeCheck = obsRangeCheck( '' )
-  htmlTable = platformResultsTable()
   try:
     for platformKey in platformInfoDict.keys():
       platformNfo = platformInfoDict[platformKey]
@@ -595,7 +883,8 @@ if __name__ == '__main__':
       else:
         processingStart = time.time()            
       
-      dbCursor = db.getObsDataForPlatform( platformKey, 168 )
+      logger.debug( "Processing platform: %s" % (platformKey) )
+      dbCursor = db.getObsDataForPlatform( platformKey, lastNHours )
       
       if( dbCursor == None ):
         length = len(db.lastErrorMsg) 
@@ -610,29 +899,9 @@ if __name__ == '__main__':
       qcFailCnt = 0
       qcMissingLimitsCnt = 0   
       rowCnt = 0
-      #for row in dbCursor:
-      """
-      if( sys.platform == 'win32'):
-        startFetch = time.clock()
-      else:
-        startFetch = time.time()
-      """
       row = dbCursor.fetchone()
-      """
-      if( sys.platform == 'win32'):
-        endFetch = time.clock()
-      else:
-        endFetch = time.time()
-      logger.debug( "%s row fetch time: %f(ms)" %(platformKey, (endFetch-startFetch)*1000.0 ) )
-      """
       lastDate = None
       while( row != None ):
-        """
-        if( sys.platform == 'win32'):
-          rowStart = time.clock()
-        else:
-          rowStart = time.time()
-        """            
         dataTests = qcTestSuite()
         rowCnt += 1
         if( row['standard_name'] != None ):
@@ -667,13 +936,6 @@ if __name__ == '__main__':
             s_order   = int(row['s_order'])
           
           if( lastDate == None or lastDate != dateVal ):
-            if( htmlResultsFile != None ):
-              #Prime the table with all the obs we should have.
-              for name in platformNfo.obsList.keys():
-                nfo = platformNfo.getObsInfo(name)
-                htmlTable.addObsQC(platformKey, name, dateVal, None, qaqcTestFlags.NO_DATA, None, nfo)            
-                #logger.debug( "platform: %s obsName: %s date: %s %s %s" \
-                #       % (platformKey,name,dateVal,nfo.obsName,nfo.uom ) )          
             lastDate = dateVal
             
           obsNfo = platformNfo.getObsInfo(obsName)
@@ -718,10 +980,7 @@ if __name__ == '__main__':
           qcFlag[qaqcTestFlags.TQFLAG_GR] = ( "%d" % dataTests.grossRangeCheck )
           qcFlag[qaqcTestFlags.TQFLAG_CR] = ( "%d" % dataTests.climateRangeCheck )
           qcLevel = dataTests.calcQCLevel()
-          
-          if( htmlResultsFile != None ):
-            htmlTable.addObsQC(platformKey, obsName, dateVal, m_value, qcLevel, qcFlag.tostring(), obsNfo)
-                              
+                                        
           if( qcLevel != qaqcTestFlags.DATA_QUAL_GOOD and logger != None ):
             logger.debug( "QCTest Failed: Date %s Platform: %s obsName: %s value: %f(%s) qcFlag: %s qcLevel: %d" % (dateVal, platformKey, obsName, ( m_value != None ) and m_value or -9999.0, ( uom != None ) and uom or '', qcFlag.tostring(), qcLevel) )
             qcFailCnt += 1
@@ -732,9 +991,7 @@ if __name__ == '__main__':
                   %(qcFlag.tostring(), qcLevel, dateVal, sensor_id)
           sqlUpdateFile.write(sql+"\n")
           row = dbCursor.fetchone()
-            
-          
-
+                      
       logger.debug( "End processing rows" )
       #Keep a running count of the total number of rows processed.    
       totalRows += rowCnt
@@ -749,18 +1006,7 @@ if __name__ == '__main__':
         logger.info( "Platform stats-----------------------------------------------------------------------------" )
         logger.info( "%s getObsDataForPlatform QAQC Proc'd: %d rows in time: %f(ms)" %(platformKey, rowCnt, ((processingEnd-processingStart)*1000.0 )) )
         logger.info( "%s QAQC suspect or bad count: %d QAQC no limits count: %d" %(platformKey,qcFailCnt,qcMissingLimitsCnt) )
-      
-    if( htmlResultsFile != None ):
-      htmlResults = htmlTable.createHTMLTable()
-      if( htmlResults != None ):
-        htmlResultsFile.writelines( htmlResults )
-        htmlResultsFile.write( '<br>' )
-        htmlResultsFile.flush()
-        htmlTable.clear()
-        logger.info( "Creating HTML Results Table: %s" % ( htmlResultsFile.name ) )
-      else:
-        logger.info( "No results to create HTML Table."  )
-          
+                
     if( sys.platform == 'win32'):
       endProcess = time.clock()
     else:
@@ -773,18 +1019,25 @@ if __name__ == '__main__':
       logger.info( "Closing log file." )
         
     sqlUpdateFile.close()      
-    if( htmlResultsFile != None ):
-      htmlResultsFile.write( "</BODY>\n" )    
-      htmlResultsFile.write( "</html>\n" )    
-      htmlResultsFile.close()  
-      if( logger != None ):
-        logger.info( "Closed HTML Results file: %s" % (htmlResultsFile.name) )
 
       
   except IOError, e:
-   if( logger != None ):
-      logger.error( str(e) + ' Terminating script.' )
+    import traceback
+    
+    errMsg = "ERROR Terminating script." 
+    if( logger != None ):
+      logger.error(errMsg, exc_info=1)
+    else:
+      print( traceback.print_exc() )
+
   except Exception, e:
-   if( logger != None ):
-      logger.error( str(e) + ' Terminating script.' )
+    import traceback
+   
+    errMsg = "ERROR Terminating script." 
+    if( logger != None ):
+      logger.error(errMsg, exc_info=1)
+    else:
+      print( traceback.print_exc() )
+
+
 
