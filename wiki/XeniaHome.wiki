@@ -17,6 +17,8 @@ See also [AmazonWebServices] regarding a Amazon Machine Image(AMI) for test/deve
 
 [http://www.youtube.com/watch?v=_CO9o2DyVV0&fmt=6 YouTube video]
 
+[http://xenia.googlecode.com/files/xenia_geo.doc white paper]
+
 = Projects utilizing Xenia RDB schema = 
 
 CarolinasRCOOS (openlayers *beta/experimental*) http://carolinasrcoos.org
