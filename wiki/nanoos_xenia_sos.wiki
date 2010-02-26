@@ -18,7 +18,7 @@ Our adapted SOS server code will be made available once our SOS service goes ope
 
 == Brief technical specs ==
 
-I've adapted the Xenia data model for PostgreSQL; [http://code.google.com/p/xenia/wiki/NANOOSXenia here's the documentation page for that implementation].
+[http://code.google.com/p/xenia/wiki/NANOOSXenia I've adapted the Xenia data model for PostgreSQL; here's the documentation page for that implementation].
 
 Eric's code can use configurations and pull data from a set of XML and ascii files, or do everything by directly querying the database, or a mix of both. Currently I'm relying exclusively on database queries. I've created a Xenia table (_obs_series_cat_) that holds what I call an "observation series catalog" summarizing available platforms, sensors, measurements, locations and data extent (and automatically kept updated); I'm making use of this catalog table for quick summary data extraction from the SOS server.
 
