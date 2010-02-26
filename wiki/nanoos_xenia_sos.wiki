@@ -1,6 +1,8 @@
-#NANOOS Xenia OOSTethys SOS Perl server
-
 _Implementation of Xenia OOSTethys SOS Perl server on NANOOS Xenia RDB_
+
+Page outline:
+
+<wiki:toc max_depth="6">
 
 = NANOOS Xenia OOSTethys SOS Perl server =
 
