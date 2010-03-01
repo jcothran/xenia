@@ -609,7 +609,7 @@ Currently /usr2 is the database storage partition.  On our host server, I expand
   * in vSphere, edit the image->Edit settings->Hardware->Hard disk->Disk Provisioning to the desired total image size
   * use something like a gparted .iso file to reboot the image from your local desktop CD (in vSphere there is a menu option/icon to connect your local CD/DVD drive for reference by the image)
   * to reboot from CD change the image->Edit settings->Options->Boot Options->Force BIOS Setup to alter the boot-up sequence temporarily to run gparted,etc.
-
+  * use gparted,etc to expand the /usr2 partition to the unallocated portion size
 
 
 == Additional links ==
