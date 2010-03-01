@@ -589,6 +589,29 @@ http://deadprogrammersociety.blogspot.com/2009/08/postgresql-on-ubuntu-on-ec2.ht
 
 http://deadprogrammersociety.blogspot.com/2009/10/postgresql-on-ubuntu-on-ec2-backing-it.html
 
+== P2V with vCenter ==
+
+To allow remote root login from vCenter tool, made the following ssh change
+
+allow remote root login
+{{{
+vi /etc/ssh/sshd_config
+
+#PermitRootLogin no
+PermitRootLogin yes
+
+/etc/init.d/sshd reload
+}}}
+
+== Expanding storage partition ==
+
+Currently /usr2 is the database storage partition.  On our host server, I expanded the /usr2 from 8 GB to 200 GB by the following steps
+  * in vSphere, edit the image->Edit settings->Hardware->Hard disk->Disk Provisioning to the desired total image size
+  * use something like a gparted .iso file to reboot the image from your local desktop CD (in vSphere there is a menu option/icon to connect your local CD/DVD drive for reference by the image)
+  * to reboot from CD change the image->Edit settings->Options->Boot Options->Force BIOS Setup to alter the boot-up sequence temporarily to run gparted,etc.
+
+
+
 == Additional links ==
 
 http://www.slideshare.net/ajturner/scaling-mapufacture-on-amazon-web-services <br/>
