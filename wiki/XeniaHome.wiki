@@ -30,7 +30,7 @@ Intelligent River http://www.intelligentriver.org/data-products (Clemson Univers
 
 Great Lakes Information Network (GLIN) http://gis.glin.net (Xenia RDB)
 
-Northwest Association of Networked Ocean Observing Systems (NANOOS) NANOOSXenia
+Northwest Association of Networked Ocean Observing Systems (NANOOS) [NANOOSXenia]
 
 ----
 
