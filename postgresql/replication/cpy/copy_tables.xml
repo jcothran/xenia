@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- the below tables are listed in their dependency order, so when populating the list should be read in order forward and when deleting the list should be read in order backward -->
+
+<tableList>
+
+	<!-- data dictionary -->
+	<table>
+		<name>obs_type</name>
+		<columns>row_id,row_entry_date,row_update_date,standard_name,definition</columns>
+	</table>
+	<table>
+		<name>uom_type</name>
+		<columns>row_id,row_entry_date,row_update_date,standard_name,definition,display</columns>
+	</table>
+	<table>
+		<name>m_scalar_type</name>
+		<columns>row_id,row_entry_date,row_update_date,obs_type_id,uom_type_id</columns>
+	</table>
+	<table>
+		<name>m_type</name>
+		<columns>row_id,row_entry_date,row_update_date,num_types,m_scalar_type_id,m_scalar_type_id_2,m_scalar_type_id_3,m_scalar_type_id_4,m_scalar_type_id_5,m_scalar_type_id_6,m_scalar_type_id_7,m_scalar_type_id_8</columns>
+	</table>
+
+	<!-- collection -->	
+	<table>
+		<name>collection_type</name>
+		<columns>row_id,row_entry_date,row_update_date,type_name,description</columns>
+	</table>
+	<table>
+		<name>collection</name>
+		<columns>row_id,row_entry_date,row_update_date,type_id,short_name,long_name,description,fixed_date,min_date,max_date,fixed_lon,min_lon,max_lon,fixed_lat,min_lat,max_lat,fixed_z,min_z,max_z</columns>
+	</table>
+
+	<!-- organization -->		
+	<table>
+		<name>app_catalog</name>
+		<columns>row_id,row_entry_date,row_update_date,short_name,long_name,description</columns>
+	</table>
+	<table>
+		<name>project</name>
+		<columns>row_id,row_entry_date,row_update_date,short_name,long_name,description</columns>
+	</table>
+	<table>
+		<name>organization</name>
+		<columns>row_id,row_entry_date,row_update_date,short_name,active,long_name,description,url,opendap_url</columns>
+	</table>
+
+	<!-- platform -->		
+	<table>
+		<name>platform_type</name>
+		<columns>row_id,row_entry_date,row_update_date,type_name,description</columns>
+	</table>
+	<table>
+		<name>platform</name>
+		<columns>row_id,row_entry_date,row_update_date,organization_id,type_id,short_name,platform_handle,fixed_longitude,fixed_latitude,active,begin_date,end_date,project_id,app_catalog_id,long_name,description,url,collection_id,collection_id_2</columns>
+	</table>
+ 
+	<!-- sensor -->		
+	<table>
+		<name>sensor_type</name>
+		<columns>row_id,row_entry_date,row_update_date,type_name,description</columns>
+	</table>
+	<table>
+		<name>sensor</name>
+		<columns>row_id,row_entry_date,row_update_date,platform_id,type_id,short_name,m_type_id,fixed_z,active,begin_date,end_date,s_order,url,collection_id,collection_id_2</columns>
+	</table>
+	<table>
+		<name>sensor_attr</name>
+		<columns>row_id,row_entry_date,row_update_date,sensor_id,attr_name,attr_value</columns>
+	</table>
+
+	<!-- quality control -->		
+	<table>
+		<name>quality_control_type</name>
+		<columns>row_id,row_entry_date,row_update_date,type_name,description</columns>
+	</table>
+	<table>
+		<name>quality_control</name>
+		<columns>row_id,row_entry_date,row_update_date,type_id,short_name,description,url,begin_date,end_date,contact_name,contact_email,contact_phone</columns>
+	</table>
+
+	<!-- multi_obs -->		
+	<table>
+		<name>multi_obs</name>
+		<columns>row_id,row_entry_date,row_update_date,platform_handle,sensor_id,m_type_id,m_date,m_lon,m_lat,m_z,m_value,m_value_2,m_value_3,m_value_4,m_value_5,m_value_6,m_value_7,m_value_8,m_desc,qc_id,qc_level,qc_flag,qc_id_2,qc_level_2,qc_flag_2,collection_id,collection_id_2,d_label_theta,d_top_of_hour,d_report_hour</columns>
+	</table>
+
+	<!-- product support -->		
+	<table>
+		<name>product_type</name>
+		<columns>row_id,row_entry_date,row_update_date,type_name,description</columns>
+	</table>
+	<table>
+		<name>timestamp_lkp</name>
+		<columns>row_id,row_entry_date,row_update_date,product_id,pass_timestamp,filepath</columns>
+	</table>
+	<table>
+		<name>m_type_display_order</name>
+		<columns>row_id,row_entry_date,row_update_date,m_type_id</columns>
+	</table>
+
+	<!-- extra schema for qc testing and notification -->	
+	<table>
+		<name>test_type</name>
+		<columns>row_id,row_entry_date,row_update_date,type_name,description,required_attr</columns>
+	</table>
+	<table>
+		<name>test</name>
+		<columns>row_id,row_entry_date,row_update_date,sensor_id,type_id,active,recurring,eff_begin_date,eff_end_date,done_date,wait_interval,passed,latest_m_value,ignore</columns>
+	</table>
+	
+	<table>
+		<name>test_attr</name>
+		<columns>row_id,row_entry_date,row_update_date,test_id,attr_name,attr_value</columns>
+	</table>
+	
+	<table>
+		<name>app_action_type</name>
+		<columns>row_id,row_entry_date,row_update_date,type_name,description</columns>
+	</table>
+	<table>
+		<name>app_action</name>
+		<columns>row_id,row_entry_date,row_update_date,test_id,type_id,active,done_date,wait_interval,ignore</columns>
+	</table>
+	
+	<table>
+		<name>app_user</name>
+		<columns>row_id,row_entry_date,row_update_date,app_user_name,email</columns>
+	</table>
+	
+	<table>
+		<name>app_group</name>
+		<columns>row_id,row_entry_date,row_update_date,app_group_name</columns>
+	</table>
+	<table>
+		<name>app_user_group</name>
+		<columns>row_id,row_entry_date,row_update_date,app_user_id,app_group_id</columns>
+	</table>	
+	<table>
+		<name>app_message</name>
+		<columns>row_id,row_entry_date,row_update_date,app_message_subject,app_message_content</columns>
+	</table>	
+	<table>
+		<name>email</name>
+		<columns>row_id,row_entry_date,row_update_date,app_action_id,app_message_importance,app_message_id,app_group_id,app_user_id</columns>
+	</table>	
+	
+</tableList>
