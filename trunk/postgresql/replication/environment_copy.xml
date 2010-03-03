@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<environment>
+
+<!-- note that the db password argument is not used in the process_copy.pl psql calls and that code should be changed to incorporate the password argument if needed -->
+
+<db_source>
+		<db_name>db_xenia_v2</db_name>
+		<username>xxx</username>
+		<password>xxx</password>
+		<host>xxx.xxx.xxx.xxx</host>
+</db_source>
+
+<db_target>
+		<db_name>db_xenia_v2_archive</db_name>
+		<username>xxx</username>
+		<password>xxx</password>
+		<host>xxx.xxx.xxx.xxx</host>
+</db_target>
+
+<path>
+<path_psql>/usr/local/pgsql/bin/psql</path_psql>
+<path_tables>/usr2/home/jcothran/cc/cpy/copy_tables.xml</path_tables>
+
+<!-- the following 3 elements (dir_tmp_cpy_local,dir_tmp_cpy_host,dir_cpy) could contain the same directory value where everything is running on the same server.  The below example shows a shared tmp directory between two servers which is used for running a cpy file against a separate server database instance and the final dir_cpy is where the cpy files are archived. Remember that for remote database instances the filepaths are relative to the remote server. -->
+
+<dir_tmp_cpy_local>/usr2/test_cpy/</dir_tmp_cpy_local>
+<dir_tmp_cpy_host>/nemo_usr2/test_cpy/</dir_tmp_cpy_host>
+<dir_cpy>/usr2/home/jcothran/cc/cpy</dir_cpy>
+</path>
+
+</environment>

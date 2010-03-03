@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- this is just an abbreviated(small) version of the table listing for testing purposes -->
+
+<!-- the below tables are listed in their dependency order, so when populating the list should be read in order forward and when deleting the list should be read in order backward -->
+
+<tableList>
+
+        <!-- data dictionary -->
+        <table>
+                <name>obs_type</name>
+                <columns>row_id,row_entry_date,row_update_date,standard_name,definition</columns>
+        </table>
+        <table>
+                <name>uom_type</name>
+                <columns>row_id,row_entry_date,row_update_date,standard_name,definition,display</columns>
+        </table>
+
+</tableList>
+
