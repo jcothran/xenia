@@ -71,7 +71,7 @@ UPDATE: Doing another round of builds, I was getting an error:
 {{{
 "Nonrepresentable section on output"
 }}}
-doing some internet searching turned up [this http://mateusz.loskot.net/2008/07/31/libgeotiff-lesson-for-today/] need for this configure option:
+doing some internet searching turned up [http://mateusz.loskot.net/2008/07/31/libgeotiff-lesson-for-today/ this] need for this configure option:
 {{{
 ./configure --with-ld-shared="gcc -shared"
 or for UBUNTU
