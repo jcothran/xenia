@@ -116,10 +116,13 @@ sudo apt-get postgresql-server-dev-8.3
 }}}
 
 ==MAPSERVER==
-One thing to notice here is I did not use my own Postgres build. The latest source was already on the machine and PostGIS was build as well, so I used that. However I went ahead and listed them above since you do need them.
-Version used: 5.0.2
+Added following packges:
 {{{
-./configure --prefix=$HOME/local --enable-runpath --with-gdal=$HOME/local/bin/gdal-config --with-ogr=$HOME/local/bin/gdal-config --with-proj=$HOME/local --with-php=$HOME/local --with-gd=$HOME/local --with-freetype=$HOME/local --with-png=$HOME/local --with-jpeg=$HOMEe/local --with-libiconv=$HOME/local --with-wmsclient --with-postgis=/usr/local/pgsql/bin/pg_config
+sudo apt-get install libxslt1-dev
+sudo apt-get install libpam0g-dev
+}}}
+{{{
+./configure --enable-runpath --with-gdal --with-ogr --with-proj --with-php --with-gd --with-freetype --with-png --with-jpeg --with-libiconv --with-wmsclient --with-postgis
 make
 }}}
 After making mapserver, you'll need to put the executable in a cgi-bin so apache or whatever webserver you are using will be able to access it.
