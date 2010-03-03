@@ -1,25 +1,5 @@
 #Notes on mapserver setup
 
-After my recent struggle getting mapserver setup to run open layers against, I thought I would document a couple of things I did, mostly the config settings I used for each package.
-I used the notes [http://www.jasonbirch.com/files/install_mapserver_pair_networks_freebsd.txt here] as a starting point.
-
-=Environment Setup=
-
-All these steps were done under an "etch" Debian install.
-I built the code and installed it all under my /home directory so as to not overwrite any existing packages. The directory structure I use is:
-
-/home/dramage/local Which contains the installed packages. 
-/home/dramage/src  Which contains all the source packages.
-
-Ensure that the following environment variables include the local path I am not well versed in good/bad Linux practices concerning setting the environment variables, however I set these in my user .bash_profile. I did see some posts about the use of LD_LIBRARY_PATH as being a no-no, however I wanted to get a working product so I went with it.
-
-{{{
-PATH -> $HOME/local/bin 
-LDFLAGS -> -L$HOME/local/lib
-CPPFLAGS -> -I$HOME/local/include
-LD_LIBRARY_PATH -> $HOME/local/lib
-LD_RUN_PATH -> $HOME/local/lib
-}}}
 
 =Packages=
 I grabbed all the packages from the source, not through the Debian package manager. I ran into problem after problem grabbing source packages through Debian.
@@ -109,8 +89,7 @@ make install
 }}}
 
 ==GDAL==
-
-
+NOTE: Swig must be installed to use the python bindings.
 {{{
 ./configure --prefix=/usr/local --with-static-proj4=/usr/local --with-png=/usr/local --with-jpeg=/usr/local --with-sqlite3=/usr/local --with-geotiff=/usr/local --with-python --with-pymoddir=/usr/local/lib/python2.5/site-packages
 --with-tif=/usr/local --without-odbcmake
