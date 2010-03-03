@@ -1,3 +1,4 @@
+#labels s
 #Notes on mapserver setup
 
 After my recent struggle getting mapserver setup to run open layers against, I thought I would document a couple of things I did, mostly the config settings I used for each package.
@@ -164,6 +165,11 @@ Version used: 1.3.3
 {{{
 ./configure --prefix=/usr/local/pgsql --with-pgsql=/usr/local/pgsql/bin/pg_config
 }}}
+UPDATE: For our VMWARE image, I installed the postgresql-server-dev-8.3 package:
+{{{
+sudo apt-get postgresql-server-dev-8.3
+}}}
+
 ==MAPSERVER==
 One thing to notice here is I did not use my own Postgres build. The latest source was already on the machine and PostGIS was build as well, so I used that. However I went ahead and listed them above since you do need them.
 Version used: 5.0.2
