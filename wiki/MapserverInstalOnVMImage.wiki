@@ -69,7 +69,7 @@ make install
 ==GD 2==
 
 {{{
-./configure --prefix=$HOME/local --disable-shared  --with-libiconv-prefix=/usr/local --with-png=/usr/local --with-freetype=/usr/local --with-jpeg=/usr/local
+./configure --with-libiconv-prefix=/usr/local --with-png=/usr/local --with-freetype=/usr/local --with-jpeg=/usr/local
 make
 make install
 }}}
