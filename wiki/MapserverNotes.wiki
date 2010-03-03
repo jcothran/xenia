@@ -67,6 +67,17 @@ Version used: 1.2.4
 make 
 make install
 }}}
+UPDATE: Doing another round of builds, I was getting an error:
+{{{
+"Nonrepresentable section on output"
+}}}
+doing some internet searching turned up [this http://mateusz.loskot.net/2008/07/31/libgeotiff-lesson-for-today/] need for this configure option:
+{{{
+./configure --with-ld-shared="gcc -shared"
+or for UBUNTU
+export CFLAGS=-fno-stack-protector
+export CPPFLAGS=-fno-stack-protector
+}}}
 
 ==LIBICONV==
 Version used: 1.12
