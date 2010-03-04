@@ -20,7 +20,7 @@ applications: java/tomcat, geoserver
 
 #postgres
 users: postgres, xeniaprod
-files: pg_hba.conf
+files: pg_hba.conf , [http://www.postgresql.org/docs/current/static/libpq-pgpass.html .pgpass]
 
 /home/xeniaprod/config
 
