@@ -96,10 +96,11 @@ NOTE: Swig must be installed to use the python bindings.
 make install
 }}}
 ==GEOS==
+Needed to use sudo to do the make.
 {{{
 ./configure 
-make
-make install
+sudo make
+sudo make install
 }}}
 ==AGG==
 
@@ -110,11 +111,16 @@ make
 {{{
 ./configure 
 }}}
-UPDATE: For our VMWARE image, I installed the postgresql-server-dev-8.3 package:
+Installed the postgresql-server-dev-8.3 package:
 {{{
 sudo apt-get postgresql-server-dev-8.3
 }}}
-
+To run the 'make check', need to be the postgres user: 
+{{{
+sudo su postgres
+make check
+}}}
+If not, you get an error message of: "psql: FATAL:  permission denied to set parameter "lc_messages""
 ==MAPSERVER==
 Added following packges:
 {{{
