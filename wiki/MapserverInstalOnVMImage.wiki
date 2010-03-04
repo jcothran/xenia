@@ -117,6 +117,8 @@ Installed the postgresql-server-dev-8.3 package:
 {{{
 sudo apt-get postgresql-server-dev-8.3
 }}}
+Trying to use the latest release tar, I kept running into an error that postgis_config.h could not be found. After some searching on the net, found someone else had the same issue with a previous version and the solution was to check the source out of SVN and build it, first running 'sh autogen.sh'. Then running configure and finally make. This worked fine.
+I then went back and tried to rebuild the tarred version I had downloaded and that worked. Not sure what had changed other than perhaps a change in the shell/environemnt from running the 'autogen.sh'.
 To run the 'make check', need to be the postgres user: 
 {{{
 sudo su postgres
