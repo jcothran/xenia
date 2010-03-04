@@ -128,7 +128,7 @@ sudo apt-get install libxslt1-dev
 sudo apt-get install libpam0g-dev
 }}}
 {{{
-./configure --enable-runpath --with-gdal --with-ogr --with-proj --with-php --with-gd --with-freetype --with-png --with-jpeg --with-libiconv --with-wmsclient --with-postgis
+./configure --enable-runpath --with-gdal=/usr/local/bin/gdal-config --with-ogr=/usr/local --with-proj=/usr/local --with-php=/usr/include/php5 --with-gd=/usr/local --with-freetype=/usr/local --with-png=/usr/local --with-jpeg=/usr/local --with-libiconv=/usr/local --with-wmsclient --with-postgis=/usr/lib/postgresql/8.3/bin/pg_config
 make
 }}}
 After making mapserver, you'll need to put the executable in a cgi-bin so apache or whatever webserver you are using will be able to access it.
