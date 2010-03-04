@@ -8,6 +8,8 @@ I grabbed all the packages from the source, not through the Debian package manag
 Recently I have been attempting to get [http://tilecache.org/ TileCache] up and running. TileCache relies on the python mapscript from mapserver to work. I have been running into issues of undefined symbols with mapscript ranging from FT_New_Face to libiconv_open not being found. I think I have traced the issue to the fact I build all the mapserver pieces with --disable-shared. I have gone back and made most of them without that switch and seem to be getting closer. Basically this means instead of the libraries being linked into the exectuable, mapserver will now be using the components as *.so or shared objects.
 
 
+*LIBRARY PATHS*
+A recurring problem I seem to have is shared library files not being found, or incorrect ones getting used. On this Ubuntu image, I've installed all the libs and bins in the default location which is /usr/local. For some reason, some of the libs weren't being found. If you have this issue check your ld.so.conf.d directory(if your system uses that, otherwise it you might just need to edit the ld.so.conf file) and make sure you have a .conf file that spells out the /usr/local/lib file for the shared libraries. My ld.so.conf.d directory had a libc.conf file that had /usr/local/lib yet I still had an issue. Once you make a change, you run 'ldconfig' to reload the changes. This seemed to cure my issue.
 
 ==LIBPNG==
 
