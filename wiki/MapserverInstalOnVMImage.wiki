@@ -137,7 +137,8 @@ make
 }}}
 After making mapserver, you'll need to put the executable in a cgi-bin so apache or whatever webserver you are using will be able to access it.
 
-Tilecache uses the mapscript.py script, so you'll need to make sure this is accesible in some manner. I placed a copy in the site-packages directory.
+Tilecache uses the mapscript.py script. To install the scripts go into mapserver/mapscript/python and run 'python setup.py install'
+
 
 =Various Notes=
 One issue I was having was some of the gdal utilities not being able to find a shared object that I had built. A useful tool to track down where/what shared libraries an executable is using is "ldd". If I do "ldd mapserver" my output is:
