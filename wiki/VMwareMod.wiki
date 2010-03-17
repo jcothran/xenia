@@ -48,6 +48,8 @@ sudo cpan -i "Config::IniFiles"
 sudo cpan -i Geo::WeatherNWS    #Package for retrieving NWS data.
 sudo cpan -i SOAP::Lite
 
+sudo aptitude install squid squid-common
+
 ######################################
 #ec2 ami command tools - begin
 #mainly interested in ec2-bundle-image for converting/uploading vmware image
