@@ -71,7 +71,7 @@ http://radar.oreilly.com/2009/06/google-squared-is-an-exponenti.html
 
 Google Forms (choose the 'form' option for an existing spreadsheet)<br/>
 
-<wiki:video width="200" height="100" url="http://www.youtube.com/v/IzgaUOW6GIs&hl=en_US&fs=1" />
+<wiki:video width="640" height="385" url="http://www.youtube.com/v/IzgaUOW6GIs&hl=en_US&fs=1" />
 
 == Troubleshooting ==
 
