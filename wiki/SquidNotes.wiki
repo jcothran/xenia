@@ -37,7 +37,7 @@ iptables nat table list, clear commands - note that you won't see nat table list
 {{{
 #list nat table
 iptables -L -nv -t nat
-#clear nat table
+#clear nat table - you can restore any rules that are in /etc/iptables.rules using #iptables-restore command but any other rules will be cleared/deleted
 iptables -F -t nat 
 }}}
 
