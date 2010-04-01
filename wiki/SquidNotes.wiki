@@ -143,6 +143,8 @@ http://www.deckle.co.za/squid-users-guide/Squid_Configuration_Basics
 
 http://magazine.redhat.com/2007/04/11/squid-in-5-minutes/
 
+Better usage examples with pattern-matching in the following links
+
 http://blog.spench.net/2010/02/24/tips-for-setting-up-squid-in-reverse-proxy-web-accelerator-accel-mode/
 
 http://mark.ossdl.de/2008/12/using-squid-to-replace-apache-mod_proxy-as-proxy-for-exchange-2007/
