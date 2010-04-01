@@ -28,6 +28,7 @@ Start/restart squid - rerun after any changes to squid.conf file
 /etc/init.d/squid restart
 }}}
 
+----
 iptables command to redirect port 80 to squid(at port 3128) - xxx.xxx.xxx.xxx is your IP address
 {{{
 iptables -t nat -A PREROUTING -d xxx.xxx.xxx.xxx -p tcp --dport 80 -j REDIRECT --to-ports 3128
