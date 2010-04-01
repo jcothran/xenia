@@ -2,7 +2,7 @@
 
 Wanted to document the steps I went through to get [http://www.squid-cache.org Squid] up and going on one of our virtual servers.
 
-The problem that we were running into is that to open an IP port like port 80 (http) to the outside world from within our university network, there's a whole network administration process to open that or other ports up, which takes some time and overhead.  In our case, it would be easier to share(or multiplex) a single open port with multiple servers and redirect the incoming requests based on some keyword in the URL address such as the server1,server2 differentiation in the below URL addresses:
+The problem that we were running into is that to open an IP port like port 80 (http) to the outside world from within our university network, there's a whole network administration process to open that or other ports up, which takes some time and overhead.  In our case, it would be easier to share(multiplex) a single open port with multiple servers and redirect the incoming requests based on some keyword in the URL address such as the server1,server2 differentiation in the below URL addresses:
 
 http://mysite.org/server1/...
 
