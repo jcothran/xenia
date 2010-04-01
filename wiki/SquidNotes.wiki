@@ -19,9 +19,78 @@ Install squid
 aptitude install squid squid-common
 }}}
 
+----
 Changes to the squid.conf file
+
 {{{
+http_access allow localhost
+
+#VM_CONFIG begin
+http_access allow all
+miss_access allow all
+#VM_CONFIG end
+
+# And finally deny all other access to this proxy
+http_access deny all
 }}}
+
+{{{
+# Squid normally listens to port 3128
+#VM_CONFIG
+http_port 3128 transparent
+}}}
+
+The below example will use the squid proxy server to remap requests to one of two destination servers depending on the URL arguments used.  URL requests with mapserv or tilecache in the address will be routed to the 'mapServer' IP while requests with the mydomainServer IP or domain name will be routed to a different server IP.
+
+You would configure your URL keyword arguments pattern-matching(url_regex,dstdomain) here
+
+under TAG: cache_peer section
+{{{
+#VM_CONFIG begin
+cache_peer 129.252.111.222 parent 80 0 proxy-only name=mapServer
+cache_peer 129.252.111.333 parent 80 0 proxy-only name=mydomainServer
+
+acl mapserv_url url_regex -i mapserv
+http_access allow mapserv_url
+cache_peer_access mapServer allow mapserv_url
+
+acl tilecache_url url_regex -i tilecache
+http_access allow tilecache_url
+cache_peer_access mapServer allow tilecache_url
+
+acl mydomain_url dstdomain 129.252.111.111
+http_access allow mydomain_url
+cache_peer_access mydomainServer allow mydomain_url
+
+acl mydomain_url dstdomain mydomain.edu
+http_access allow mydomain_url
+cache_peer_access mydomainServer allow mydomain_url
+
+cache_peer_access mydomainServer deny all
+#VM_CONFIG end
+}}}
+
+I commented out the following lines as they were preventing my query parameters from being successfully rerouted.  May be some security follow-up issues to look into here.
+{{{
+#We recommend you to use at least the following line.
+#VM_CONFIG
+#hierarchy_stoplist cgi-bin ?
+}}}
+
+{{{
+#VM_CONFIG begin
+#acl QUERY urlpath_regex cgi-bin \?
+#cache deny QUERY
+#VM_CONFIG end
+}}}
+
+Uncommented the following line
+{{{
+#VM_CONFIG
+cache_dir ufs /var/spool/squid 100 16 256
+}}}
+
+----
 
 Start/restart squid - rerun after any changes to squid.conf file
 {{{
