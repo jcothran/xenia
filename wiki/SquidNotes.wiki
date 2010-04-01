@@ -1,0 +1,22 @@
+#summary notes on using 'squid' for proxy, redirection server
+
+{{{
+aptitude install squid squid-common
+
+
+
+/etc/init.d/squid restart
+
+iptables -t nat -A PREROUTING -d 129.252.37.90 -p tcp --dport 80 -j REDIRECT --to-ports 3128
+
+==
+
+tail -f /var/log/squid/access.log
+
+#list nat table
+iptables -L -nv -t nat
+#clear nat table
+iptables -F -t nat 
+
+/etc/iptables.rules
+}}}
