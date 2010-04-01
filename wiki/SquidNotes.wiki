@@ -12,6 +12,13 @@ http://mysite.org/server2/...
 
 So instead of asking your network services admin for a new static IP and opening various ports and so on, you re-use your existing IP's and open ports across several servers and manage their assignments via server destination keywords in the URL address.
 
+On the target servers, symbolic links could represent the URL keywords to handle the address prefixing
+
+{{{
+cd /var/www
+ln -s /var/www server1
+}}}
+
 Squid allows this kind of URL string pattern-matching redirection via its configuration file 'squid.conf' settings.  Squid also supports web caching of requested server files to speed-up the performance response of server file/content requests, but this example does not concern that or other features of squid.
 
 Squid was installed as root user on a linux ubuntu based server.  There are several links at the page bottom which were used to gain an understanding of iptables, squid and the squid configuration(squid.conf) file changes needed to get the functionality wanted.
