@@ -2,7 +2,7 @@
 
 Wanted to document the steps I went through to get [http://www.squid-cache.org Squid] up and going on one of our virtual servers.
 
-The problem that we were running into is that to open an IP port like port 80 (http) to the outside world from within our university network, there's a whole network administration process to open that or other ports up, which takes some time and overhead.  In our case, it would be easier to share(multiplex) a single open port with multiple servers and redirect the incoming requests based on some keyword in the URL address such as the server1,server2 differentiation in the below URL addresses:
+The problem that we were running into is that to open an IP port like port 80 (http) to the outside world from within our university network, there's a whole network administration process to open that or other ports up, which takes some time and overhead.    With the incorporation of virtual servers which make it very easy to spin up several 'new' server instances for testing or production, it would be easier to share(multiplex) a single existing open port with multiple servers and redirect the incoming requests based on some keyword in the URL address such as the server1,server2 differentiation in the below URL addresses:
 
 http://mysite.org/server1/...
 
@@ -10,23 +10,66 @@ http://mysite.org/server2/...
 
 Squid allows this kind of URL string pattern-matching redirection via its configuration file 'squid.conf' settings.  Squid also supports web caching of requested server files to speed-up the performance response of server file/content requests, but this example does not concern that or other features of squid.
 
+Squid was installed as root user on an linux ubuntu based server.  There are several links at the page bottom which were used to gain an understanding of iptables, squid and the squid configuration(squid.conf) file changes needed to get the functionality wanted.
+
+Install squid
 {{{
 aptitude install squid squid-common
+}}}
 
+Changes to the squid.conf file
+{{{
+}}}
 
-
+Start/restart squid - rerun after any changes to squid.conf file
+{{{
 /etc/init.d/squid restart
+}}}
 
-iptables -t nat -A PREROUTING -d 129.252.37.90 -p tcp --dport 80 -j REDIRECT --to-ports 3128
+iptables command to redirect port 80 to squid(at port 3128) - xxx.xxx.xxx.xxx is your IP address
+{{{
+iptables -t nat -A PREROUTING -d xxx.xxx.xxx.xxx -p tcp --dport 80 -j REDIRECT --to-ports 3128
+}}}
 
-==
-
-tail -f /var/log/squid/access.log
-
+iptables nat table list, clear commands - note that you won't see nat table listings or changes without using the '-t nat' parameters
+{{{
 #list nat table
 iptables -L -nv -t nat
 #clear nat table
 iptables -F -t nat 
-
-/etc/iptables.rules
 }}}
+
+on server reboot, the server uses the file /etc/iptables.rules to initialize the iptables settings
+
+to preserve your iptables changes, backup your existing iptables.rules file and overwrite the existing rules file with the [http://www.faqs.org/docs/iptables/iptables-save.html iptables-save] command
+
+check squid's access log for testing or debug
+{{{
+tail -f /var/log/squid/access.log
+}}}
+
+----
+
+http://www.linuxhomenetworking.com/wiki/index.php/Quick_HOWTO_:_Ch14_:_Linux_Firewalls_Using_iptables
+
+http://www.lesismore.co.za/squid3.html
+
+http://gofedora.com/how-to-configure-squid-proxy-server/
+
+http://www.linuxjournal.com/article/4408?page=0,1
+
+http://www.cyberciti.biz/tips/linux-setup-transparent-proxy-squid-howto.html
+
+http://docs.huihoo.com/gnu_linux/squid/html/x2088.html
+
+http://www.deckle.co.za/squid-users-guide/Transparent_Caching/Proxy
+
+http://www.deckle.co.za/squid-users-guide/Accelerator_Mode
+
+http://www.deckle.co.za/squid-users-guide/Squid_Configuration_Basics
+
+http://magazine.redhat.com/2007/04/11/squid-in-5-minutes/
+
+http://blog.spench.net/2010/02/24/tips-for-setting-up-squid-in-reverse-proxy-web-accelerator-accel-mode/
+
+http://mark.ossdl.de/2008/12/using-squid-to-replace-apache-mod_proxy-as-proxy-for-exchange-2007/
