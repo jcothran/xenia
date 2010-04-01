@@ -49,6 +49,7 @@ tail -f /var/log/squid/access.log
 }}}
 
 ----
+= Links = 
 
 http://www.linuxhomenetworking.com/wiki/index.php/Quick_HOWTO_:_Ch14_:_Linux_Firewalls_Using_iptables
 
