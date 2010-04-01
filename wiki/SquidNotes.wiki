@@ -12,7 +12,7 @@ http://mysite.org/server2/...
 
 Squid allows this kind of URL string pattern-matching redirection via its configuration file 'squid.conf' settings.  Squid also supports web caching of requested server files to speed-up the performance response of server file/content requests, but this example does not concern that or other features of squid.
 
-Squid was installed as root user on an linux ubuntu based server.  There are several links at the page bottom which were used to gain an understanding of iptables, squid and the squid configuration(squid.conf) file changes needed to get the functionality wanted.
+Squid was installed as root user on a linux ubuntu based server.  There are several links at the page bottom which were used to gain an understanding of iptables, squid and the squid configuration(squid.conf) file changes needed to get the functionality wanted.
 
 Install squid
 {{{
