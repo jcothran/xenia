@@ -49,6 +49,7 @@ sudo cpan -i Geo::WeatherNWS    #Package for retrieving NWS data.
 sudo cpan -i SOAP::Lite
 sudo cpan -i Date::Parse  #Is not needed, mistaken install
 sudo cpan -i DateTime
+sudo cpan -i DateTime::Locale #Dependency of the DateTime module.
 sudo cpan -i Test::Exception #Dependency of the DateTime module.
 
 sudo aptitude install squid squid-common
