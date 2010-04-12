@@ -8,6 +8,7 @@ from lxml import etree
 from xeniatools.xenia import xeniaPostGres
 from xeniatools.xenia import uomconversionFunctions
 from xeniatools.xmlConfigFile import xmlConfigFile
+from xeniatools.xenia import qaqcTestFlags
 
 def createFriends( configFile ):
   from xeniatools.xenia import recursivedefaultdict
@@ -101,6 +102,7 @@ if __name__ == '__main__':
           #Connect to the Twitter api.
           try:
             client = twitter.Api(twitterAccount, twitterPwd)
+            user = client.GetUser(twitterAccount)
           except twitter.TwitterError,e:
             print("Twitter Error: %s" %(e.message))
             continue
@@ -127,9 +129,10 @@ if __name__ == '__main__':
                 left join m_scalar_type on m_scalar_type.row_id=m_type.m_scalar_type_id \
                 left join obs_type on obs_type.row_id=m_scalar_type.obs_type_id \
                 left join uom_type on uom_type.row_id=m_scalar_type.uom_type_id \
-                WHERE %s multi_obs.platform_handle = '%s' AND sensor.row_id IS NOT NULL\
+                WHERE %s multi_obs.platform_handle = '%s' AND sensor.row_id IS NOT NULL \
+                AND multi_obs.qc_level = %d \
                 ORDER BY m_date DESC;" \
-                % (dateOffset,platform)
+                % (dateOffset,platform, qaqcTestFlags.DATA_QUAL_GOOD)
           cursor = db.executeQuery(sql)
           if( cursor != None ):
             tweet = ''
