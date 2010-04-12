@@ -67,6 +67,22 @@ class qaqcTestFlags:
       return( 'Data quality suspect' )
     elif( qcLevel == qaqcTestFlags.DATA_QUAL_GOOD ):
       return( 'Data quality good' )
+
+class dbXenia(object):
+  def __init__(self):
+    self.dbConnection = None
+    
+  def connect(self, dbFilePath=None, user=None, passwd=None, host=None, dbName=None ):
+    #Connecting to a SQLite database
+    if(dbFilePath != None):
+      self.dbConnection = xeniaSQLite()
+      return(self.dbConnection.connect(dbFilePath))
+    #Connecting to a PostGres DB
+    else:
+      self.dbConnection = xeniaPostGres()
+      return(self.dbConnection.connect(None, user, passwd, host, dbName))
+    return(False)
+
       
 class xeniaDB:
   """
@@ -367,6 +383,12 @@ class xeniaDB:
     lastErrorMsg can be checked for the error message.
   """
   def addSensor(self, obsName, uom, platformHandle, active=1, fixedZ=0, sOrder=1, mTypeID=None, addObsAndUOM=False):
+    
+    #If the sensor already exists, we're done.
+    id = self.sensorExists(obsName, uom, platformHandle, sOrder) 
+    if(id != -1 and id != None):
+      return(id)
+      
     #If the mTypeID is passed in, we already have a complete set of obs ids, uoms, scalar types.
     if(mTypeID == None):      
       obsTypeID = self.obsTypeExists( obsName )
@@ -600,7 +622,6 @@ class xeniaDB:
       valID += 1
     sql = "INSERT INTO multi_obs (%s) VALUES (%s)" %( columns, values )
     dbCursor = self.executeQuery(sql)
-    #If we successfully added the org, let's get it's row_id.
     if( dbCursor != None ):
       if(autoCommit):
         return(self.commit())
@@ -627,7 +648,7 @@ class xeniaDB:
     if(id != -1 and id != None):
       sql = "SELECT * FROM platform WHERE platform_handle = '%s';" % (platformHandle)
       return(self.executeQuery(sql))
-    return(False)
+    return(None)
         
   def getDataForSensorID(self,sensorID, startDate, endDate, timeZoneShift):
     return(None)     
