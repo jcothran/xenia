@@ -1,4 +1,4 @@
-see also 
+see also OpenLayersAndGoogleMapOverlays
 
 =!TileCache Notes=
 [http://tilecache.org/ TileCache] is a tile serving server that I am using to sit in between  the RCOOS [http://openlayers.org/ OpenLayers] client and [http://mapserver.gis.umn.edu/ Mapserver] server. In short, this software creates a disk cache for maps and layers. Instead of !OpenLayers having to query mapserver each time for certain maps/layers, it queries !TileCache which then returns the tile set for the WMS request. The first time a query is made, if the tiles don't exist, !TileCache will make the appropriate query to retrieve the requested map area. Once the cache is primed, future queries will result in !TileCache sending the previously generated tile(s) to the client, thus reducing the overhead of a mapserver call. This is quite useful in speeding up the initial loads for our base map. 
