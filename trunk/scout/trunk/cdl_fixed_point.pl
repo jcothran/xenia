@@ -267,6 +267,31 @@ sub fixed_point() {
         );
         push @dominant_wave_period, {%this_dominant_wave_period};
       }
+      #DWR 5/25/2010
+      # push all relative_humidity's onto a stack
+      elsif ($this_standard_name =~ /^relative_humidity$/) {
+        %this_relative_humidity = (
+          var_name => $this_var_name,
+          var_id   => $i,
+          dim_id   => $this_var_dimid[0],
+          height   => '',
+          units    => ''       
+        );
+        push @relative_humidity, {%this_relative_humidity};
+      }
+      #DWR 5/25/2010
+      # push all relative_humidity's onto a stack
+      elsif ($this_standard_name =~ /^chl_concentration$/) {
+        %this_chl_concentration = (
+          var_name => $this_var_name,
+          var_id   => $i,
+          dim_id   => $this_var_dimid[0],
+          height   => '',
+          units    => ''       
+        );
+        push @chl_concentration, {%this_chl_concentration};
+      }
+      
     }
   }
   
@@ -1322,6 +1347,120 @@ print STATION_ID_SQLFILE "-- this_air_pressure_data[j]=".$this_air_pressure_data
       }
     }
   }
+  
+  #DWR 5/25/1010
+  # relative_humidity's
+  @this_relative_humidity_data = '';
+  for $i (0..$#relative_humidity) {
+    # this variable's dimension better be time
+    if ($relative_humidity[$i]{'dim_id'} != $time_dim{'dim_id'}) {
+      die "ABORT!  $relative_humidity[$i]{'var_name'} has wrong time dimension.\n";
+    }
+    else {
+      # get all the variable goodies
+      $varget = NetCDF::varget($ncid, $relative_humidity[$i]{'var_id'},
+        (0), $time_dim{'dim_size'}, \@this_relative_humidity_data);
+      if ($varget < 0) {die "ABORT! Cannot get $relative_humidity[$i]{'var_name'} data.\n";}
+      # get all the attributes for this variable
+      my $name    = '';
+      my $nc_type = '';
+      my $ndims   = '';
+      my @dimids  = '';
+      my $natts   = '';
+      
+      #DWR 4/5/2008
+      my $units_value = '';
+      my $attget = NetCDF::attget($ncid, $relative_humidity[$i]{'var_id'}, 'units', \$units_value);
+      if ($attget < 0) 
+      {
+       die "ABORT! $relative_humidity[$i]{'var_name'} has no units.\n";
+      }
+      $relative_humidity[$i]{'units'} = $units_value;
+      
+      # we need to loop through the attributes, so find out how many there are
+      my $varinq = NetCDF::varinq($ncid, $relative_humidity[$i]{'var_id'},
+        \$name, \$nc_type, $ndims, \@dimids, \$natts);
+      if ($varinq < 0) {die "ABORT! Cannot get $relative_humidity[$i]{'var_name'}   attributes.\n";}
+      for my $k (0..$natts-1) {
+        # find out about each attribute
+        my $this_attname = '';
+        my $attname = NetCDF::attname($ncid, $relative_humidity[$i]{'var_id'}, $k,   \$this_attname);
+        if ($attname < 0) {die "ABORT! Cannot get $relative_humidity[$i]{'var_name'} $k   attribute.\n";}
+        # is this a height?
+        if ($this_attname eq $height_dim{'dim_name'}) {
+          my $attval = '';
+          my $attget = NetCDF::attget($ncid, $relative_humidity[$i]{'var_id'}, $this_attname,   \$attval);
+          if ($attget < 0) {die "ABORT!  Cannot get $relative_humidity[$i]{'var_name'} $k   attribute.\n";}
+          if (substr($attval,length($attval)-1) eq chr(0)) {chop($attval);}
+          $relative_humidity[$i]{'height'} = $attval;
+        };
+      }
+      # if we didn't have an height attribute, assign the global one to this var
+      if ($relative_humidity[$i]{'height'} == '') {
+        $relative_humidity[$i]{'height'} = $height_value[0];
+      }
+      for my $j (0..$#this_relative_humidity_data) {
+        push @{$relative_humidity[$i]{'data'}}, $this_relative_humidity_data[$j];
+      }
+    }
+  }
+  #DWR 5/25/1010
+  # chl_concentration's
+  @this_chl_concentration_data = '';
+  for $i (0..$#chl_concentration) {
+    # this variable's dimension better be time
+    if ($chl_concentration[$i]{'dim_id'} != $time_dim{'dim_id'}) {
+      die "ABORT!  $chl_concentration[$i]{'var_name'} has wrong time dimension.\n";
+    }
+    else {
+      # get all the variable goodies
+      $varget = NetCDF::varget($ncid, $chl_concentration[$i]{'var_id'},
+        (0), $time_dim{'dim_size'}, \@this_chl_concentration_data);
+      if ($varget < 0) {die "ABORT! Cannot get $chl_concentration[$i]{'var_name'} data.\n";}
+      # get all the attributes for this variable
+      my $name    = '';
+      my $nc_type = '';
+      my $ndims   = '';
+      my @dimids  = '';
+      my $natts   = '';
+      
+      #DWR 4/5/2008
+      my $units_value = '';
+      my $attget = NetCDF::attget($ncid, $chl_concentration[$i]{'var_id'}, 'units', \$units_value);
+      if ($attget < 0) 
+      {
+       die "ABORT! $chl_concentration[$i]{'var_name'} has no units.\n";
+      }
+      $chl_concentration[$i]{'units'} = $units_value;
+      
+      # we need to loop through the attributes, so find out how many there are
+      my $varinq = NetCDF::varinq($ncid, $chl_concentration[$i]{'var_id'},
+        \$name, \$nc_type, $ndims, \@dimids, \$natts);
+      if ($varinq < 0) {die "ABORT! Cannot get $chl_concentration[$i]{'var_name'}   attributes.\n";}
+      for my $k (0..$natts-1) {
+        # find out about each attribute
+        my $this_attname = '';
+        my $attname = NetCDF::attname($ncid, $chl_concentration[$i]{'var_id'}, $k,   \$this_attname);
+        if ($attname < 0) {die "ABORT! Cannot get $chl_concentration[$i]{'var_name'} $k   attribute.\n";}
+        # is this a height?
+        if ($this_attname eq $height_dim{'dim_name'}) {
+          my $attval = '';
+          my $attget = NetCDF::attget($ncid, $chl_concentration[$i]{'var_id'}, $this_attname,   \$attval);
+          if ($attget < 0) {die "ABORT!  Cannot get $chl_concentration[$i]{'var_name'} $k   attribute.\n";}
+          if (substr($attval,length($attval)-1) eq chr(0)) {chop($attval);}
+          $chl_concentration[$i]{'height'} = $attval;
+        };
+      }
+      # if we didn't have an height attribute, assign the global one to this var
+      if ($chl_concentration[$i]{'height'} == '') {
+        $chl_concentration[$i]{'height'} = $height_value[0];
+      }
+      for my $j (0..$#this_chl_concentration_data) {
+        push @{$chl_concentration[$i]{'data'}}, $this_chl_concentration_data[$j];
+      }
+    }
+  }
+  
   
   #
   # write data to file(s)
@@ -2815,6 +2954,122 @@ print STATION_ID_SQLFILE "-- this_air_pressure_data[j]=".$this_air_pressure_data
       }
     }                    
   }
+  
+  #DWR 5/25/2010
+  # relative_humidity
+  # Going to do this right this time.  Instead of populating each row w/ all
+  # the metadata, use the station_id lookup, instead.
+  if ($#relative_humidity > -1) {
+    #DWR 4/5/2008
+    if( $bWriteobsKMLFile )
+    {
+      my $DataVal = 'NULL';
+      my $Height = '';
+      for my $i (0..$#relative_humidity) 
+      {
+        for my $j ($iStartingNdx..$#this_relative_humidity_data) #DWR v1.1.0.0 Starting index now set to $iStartingNdx
+        #for my $j (0..$#relative_humidity) 
+        {
+          $this_station_id = $institution_code_value.'_'.$platform_code_value.'_'.$package_code_value;
+          $this_time_stamp = $time_formatted_values[$j];
+          $this_time_stamp_sec = timelocal(substr($this_time_stamp,17,2),substr($this_time_stamp,14,2),substr($this_time_stamp,11,2),substr($this_time_stamp,8,2),(substr($this_time_stamp,5,2)-1),substr($this_time_stamp,0,4));
+          if( $this_time_stamp_sec > $oldest_ok_timestamp )
+          {        
+            if ($relative_humidity[$i]{'data'}[$j] != $missing_value_value
+                && $relative_humidity[$i]{'data'}[$j] != $Fill_value_value
+                && $this_station_id_top_ts < $this_time_stamp_sec
+                ) 
+            {
+
+              if ($relative_humidity[$i]{'height'} != $missing_value_value
+                && $relative_humidity[$i]{'height'} != $Fill_value_value) 
+              {
+                $Height = sprintf("%.2f",$relative_humidity[$i]{'height'});
+              }
+              $DataVal = sprintf("%.2f",$relative_humidity[$i]{'data'}[$j]);
+                        
+            }
+            my $strUnits;
+            $strUnits = obsKMLSubRoutines::UnitsStringConversion( $relative_humidity[$i]{'units'}, $XMLControlFile );        
+            if( length( $strUnits ) == 0 )
+            {
+              #DWR v1.1.0.0
+              #Make sure we don't have any unprintable characters.            
+              $strUnits = obsKMLSubRoutines::CleanString( $relative_humidity[$i]{'units'} );  
+             
+            }
+            obsKMLSubRoutines::KMLAddObsToHash( 'relative_humidity', 
+                                              $KMLTimeStamp[$j],
+                                              $DataVal,
+                                              1,
+                                              $strPlatformID,
+                                              $Height,
+                                              $strUnits,
+                                              $rObsHash );
+          }                                                
+        }
+      }                                            
+    }        
+  }
+  #DWR 5/25/2010
+  # relative_humidity
+  # Going to do this right this time.  Instead of populating each row w/ all
+  # the metadata, use the station_id lookup, instead.
+  if ($#chl_concentration > -1) {
+    #DWR 4/5/2008
+    if( $bWriteobsKMLFile )
+    {
+      my $DataVal = 'NULL';
+      my $Height = '';
+      for my $i (0..$#chl_concentration) 
+      {
+        for my $j ($iStartingNdx..$#this_chl_concentration_data) #DWR v1.1.0.0 Starting index now set to $iStartingNdx
+        #for my $j (0..$#chl_concentration) 
+        {
+          $this_station_id = $institution_code_value.'_'.$platform_code_value.'_'.$package_code_value;
+          $this_time_stamp = $time_formatted_values[$j];
+          $this_time_stamp_sec = timelocal(substr($this_time_stamp,17,2),substr($this_time_stamp,14,2),substr($this_time_stamp,11,2),substr($this_time_stamp,8,2),(substr($this_time_stamp,5,2)-1),substr($this_time_stamp,0,4));
+          if( $this_time_stamp_sec > $oldest_ok_timestamp )
+          {        
+            if ($chl_concentration[$i]{'data'}[$j] != $missing_value_value
+                && $chl_concentration[$i]{'data'}[$j] != $Fill_value_value
+                && $this_station_id_top_ts < $this_time_stamp_sec
+                ) 
+            {
+
+              if ($chl_concentration[$i]{'height'} != $missing_value_value
+                && $chl_concentration[$i]{'height'} != $Fill_value_value) 
+              {
+                $Height = sprintf("%.2f",$chl_concentration[$i]{'height'});
+              }
+              $DataVal = sprintf("%.2f",$chl_concentration[$i]{'data'}[$j]);
+                        
+            }
+            my $strUnits;
+            $strUnits = obsKMLSubRoutines::UnitsStringConversion( $chl_concentration[$i]{'units'}, $XMLControlFile );        
+            if( length( $strUnits ) == 0 )
+            {
+              #DWR v1.1.0.0
+              #Make sure we don't have any unprintable characters.            
+              $strUnits = obsKMLSubRoutines::CleanString( $chl_concentration[$i]{'units'} );  
+             
+            }
+            obsKMLSubRoutines::KMLAddObsToHash( 'chlorophyll', 
+                                              $KMLTimeStamp[$j],
+                                              $DataVal,
+                                              1,
+                                              $strPlatformID,
+                                              $Height,
+                                              $strUnits,
+                                              $rObsHash );
+          }                                                
+        }
+      }                                            
+    }        
+  }
+  
+  
+  
   #DWR 4/5/2008
   if( $bWriteobsKMLFile )
   {
