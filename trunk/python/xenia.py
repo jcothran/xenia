@@ -899,11 +899,16 @@ class uomconversionFunctions:
   Parameters: 
     xmlConversionFile is the full path to the XML file to use for the conversions.
   """
-  def __init__(self, xmlConversionFile=None):
+  def __init__(self, xmlConversionFile=None, parseFile=True):
     self.xmlConversionFile = xmlConversionFile
+    self.xmlTree = None
+    if(parseFile):
+      self.xmlTree = etree.parse(self.xmlConversionFile)
+      
     
   def setXMLConversionFile(self, xmlConversionFile):
     self.xmlConversionFile = xmlConversionFile
+    self.xmlTree = etree.parse(self.xmlConversionFile)
     
   """
   Function: measurementConvert
@@ -916,11 +921,12 @@ class uomconversionFunctions:
     If a conversion routine is found, then the converted value is returned, otherwise None is returned.
   """
   def measurementConvert(self, value, fromUOM, toUOM):
-    xmlTree = etree.parse(self.xmlConversionFile)
+    if(self.xmlTree == None):
+      self.xmlTree = etree.parse(self.xmlConversionFile)
     
     convertedVal = ''
     xmlTag = "//unit_conversion_list/unit_conversion[@id=\"%s_to_%s\"]/conversion_formula" % (fromUOM, toUOM)
-    unitConversion = xmlTree.xpath(xmlTag)
+    unitConversion = self.xmlTree.xpath(xmlTag)
     if( len(unitConversion) ):     
       conversionString = unitConversion[0].text
       conversionString = conversionString.replace( "var1", ("%f" % value) )
@@ -939,10 +945,13 @@ class uomconversionFunctions:
   
   """
   def getUnits(self, fromUOM, toUOM):
-    xmlTree = etree.parse(self.xmlConversionFile)
+    if(self.xmlTree == None):
+      self.xmlTree = etree.parse(self.xmlConversionFile)
+    
+    #xmlTree = etree.parse(self.xmlConversionFile)
     
     xmlTag = "//unit_conversion_list/unit_conversion[@id=\"%s_to_%s\"]/units" % (fromUOM, toUOM)
-    units = xmlTree.xpath(xmlTag)
+    units = self.xmlTree.xpath(xmlTag)
     if( len(units) ):     
       units = units[0].text
       return(units)
@@ -986,3 +995,14 @@ class uomconversionFunctions:
         return('mb')
       
     return('')
+
+  def getAbbreviatedObservationName(self, obsName):
+    if(self.xmlTree == None):
+      self.xmlTree = etree.parse(self.xmlConversionFile)
+    xmlTag = "//unit_conversion_list/observation[@id=\"%s\"]/abbreviation" % (obsName)
+    abbreviation = self.xmlTree.xpath(xmlTag)
+    if( len(abbreviation) ):     
+      abbreviation = abbreviation[0].text
+      return(abbreviation)
+    return(None)
+    
