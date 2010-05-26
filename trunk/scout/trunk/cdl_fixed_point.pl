@@ -3054,7 +3054,7 @@ print STATION_ID_SQLFILE "-- this_air_pressure_data[j]=".$this_air_pressure_data
               $strUnits = obsKMLSubRoutines::CleanString( $chl_concentration[$i]{'units'} );  
              
             }
-            obsKMLSubRoutines::KMLAddObsToHash( 'chlorophyll', 
+            obsKMLSubRoutines::KMLAddObsToHash( 'chl_concentration', 
                                               $KMLTimeStamp[$j],
                                               $DataVal,
                                               1,
