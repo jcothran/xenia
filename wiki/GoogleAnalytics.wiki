@@ -25,7 +25,7 @@ http://analytics.blogspot.com/2009/06/back-to-basics-filtering-out-your-own.html
 = Videos = 
 
 == Beginning Analytics: Interpreting and Acting on Your Data ==
-<wiki:video url="http://www.youtube.com/watch?v=Hdsb_uH2yPU" width=200 height=100 />
+<wiki:video url="http://www.youtube.com/watch?v=Hdsb_uH2yPU"/>
 
 == Non-Ecommerce Sites: Beyond Averages ==
 <wiki:video url="http://www.youtube.com/watch?v=LgXDUuAK77M"/>
