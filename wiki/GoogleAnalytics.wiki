@@ -18,6 +18,12 @@ Analytics Intelligence constantly monitors your website's traffic. Anytime somet
 
 http://analytics.blogspot.com/2009/11/new-feature-spotlight-analytics.html?utm_source=news_v4&utm_medium=email&utm_campaign=en_us
 
+== Tracking for Flash Applications ==
+http://analytics.blogspot.com/2009/02/google-analytics-tracking-for-flash.html
+
+== Tracking outbound links ==
+http://www.google.com/support/googleanalytics/bin/answer.py?hl=en&answer=55527
+
 == Filtering out your own IP address ==
 http://analytics.blogspot.com/2009/06/back-to-basics-filtering-out-your-own.html
 
