@@ -1,0 +1,31 @@
+#summary notes on google analytics features
+
+<wiki:toc max_depth="6" />
+
+= Analytics blog = 
+Note the blog topic tags in the right-hand column
+
+http://analytics.blogspot.com
+
+== Comparing date ranges == 
+http://analytics.blogspot.com/2009/07/back-to-basics-comparing-days-of-week.html
+
+== Mobile Apps ==
+http://analytics.blogspot.com/2009/11/new-feature-spotlight-google-analytics.html?utm_source=news_v4&utm_medium=email&utm_campaign=en_us
+
+== Analytics intelligence  ==
+Analytics Intelligence constantly monitors your website's traffic. Anytime something significant happens, it adds an automatic alert in your Intelligence reports.
+
+http://analytics.blogspot.com/2009/11/new-feature-spotlight-analytics.html?utm_source=news_v4&utm_medium=email&utm_campaign=en_us
+
+= Filtering out your own IP address =
+http://analytics.blogspot.com/2009/06/back-to-basics-filtering-out-your-own.html
+
+
+= Videos = 
+
+== Beginning Analytics: Interpreting and Acting on Your Data ==
+<wiki:video url="http://www.youtube.com/watch?v=Hdsb_uH2yPU"/>
+
+== Non-Ecommerce Sites: Beyond Averages ==
+<wiki:video url="http://www.youtube.com/watch?v=LgXDUuAK77M"/>
