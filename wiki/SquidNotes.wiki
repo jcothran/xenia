@@ -56,7 +56,7 @@ You would configure your URL keyword arguments pattern-matching(url_regex,dstdom
 under TAG: cache_peer section
 {{{
 #VM_CONFIG begin
-#apparently there is a dependent order listing in servers considered, so make sure the default server(mydomainServer in the below listing) is listed last
+#apparently there is a dependent order listing in servers considered, so make sure the default server(mydomainServer in the below listing) is listed last in cache_peer listing below
 #also the rerouting will fail without error if the access/error logs on the target are full
 
 cache_peer 129.252.111.222 parent 80 0 proxy-only name=mapServer
