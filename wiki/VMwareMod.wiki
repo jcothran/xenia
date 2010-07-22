@@ -80,6 +80,42 @@ kernel-modules-261633-xenu.tar
 
 }}}
 
+GOMODP Exchange Service
+
+The compiling and installing of these files consumed a large amount of storage that I did not expect - around 1 Gigabyte.
+
+{{{
+3) WSO2-WSF-C Library
+This C library requires zlib and libiconv.  zlib is pretty standard on Linux
+installations.  libiconv was not installed on this Linux.  (not sure why this was not installed)
+
+a) Download tarball libiconv01.13 from GNU Web site at: http://www.gnu.org/software/libiconv/#downloading
+Put in: /home/src/libiconv/
+cd /home/src/libiconv
+as su
+./configure
+make
+make install
+
+b) Download tarball  wso2-wsf-c-src-1.3.0.tar. Put in /home/src/wso2/
+http://dist.wso2.org/products/wsf/c/1.3.0/wso2-wsf-c-src-1.3.0.tar.gz
+gzip -d wso2-wsf-c-src-1.3.0.tar.gz
+tar -xvf wso2-wsf-c-src-1.3.0.tar
+cd /home/src/wso2/wso2-wsf-c-src-1.3.0
+
+WSFC_HOME=/opt/wso2/wsf_c
+export WSFC_HOME  (this is the default so probably not needed)
+./configure
+make
+make install
+make samples
+
+
+perl -MCPAN -e 'install Error'
+apt-get install libperl-dev
+perl -MCPAN -e 'install WSO2::WSF'
+}}}
+
 #NetCDf Perl
 {{{ 
 For NetCDF, download the perl source [http://www.unidata.ucar.edu/downloads/netcdf-perl/index.jsp Here]
