@@ -3,17 +3,20 @@
 use LWP::Simple;
 use POSIX qw(strftime);
 use Time::Local;
+use Cwd;
 
 require "../juliandatefunctions.pl";
 
+my $working_dir = getcwd;
 my $layer_name  = 'modis_sst';
 my $table_name  = 'timestamp_lkp';
 my $scratch_dir = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name;
 my $dest_dir    = '/home/xeniaprod/feeds/remotesensing/'.$layer_name;  
-my $fetch_logs   = '/home/xeniaprod/tmp/remotesensing/usf/oi_sst/fetch_logs';
+my $fetch_logs   = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name.'/fetch_logs';
+my $product_id = 1;
 
 
-my $psql_command = '/usr/bin/psql -U xeniaprod -d xenia -c';
+my $psql_command = '/usr/bin/psql -U xeniaprod -d xenia -h 129.252.37.90 -c';
 
 my $two_weeks_ago = time - 60*60*24*14;
 
@@ -43,15 +46,13 @@ foreach (@dir_urls) {
 
   foreach (@latest) {
     $latest_file = $_;
-    ($content_type, $document_length, $modified_time, $expires, $server) =
-      head("$this_dir_url/$latest_file");
+    ($content_type, $document_length, $modified_time, $expires, $server) = head("$url/$latest_file");
     print "  $latest_file\n     ";
     $latest_file_filter = $_;
     $latest_file_filter =~ s/-/_/g;
     # stuff.yyyyjul.hhmmss.stuff
     $latest_file_filter =~ /.*\.(\d\d\d\d)(\d\d\d)\.(\d\d)(\d\d)(\d\d)\..*/;
     ($yyyy, $jul, $hh, $mi, $ss) = ($1, $2, $3, $4, $5);
-    print( "$yyyy $jul $hh $mi $ss\n");
     #Subtract a day off since the date command on the machine that originally ran the script would accept
     #01/00/yyyy as a valid date.
     $jul = $jul - 1;
@@ -91,10 +92,12 @@ foreach (@dir_urls) {
         downloadFile($url, $latest_file, $destFilename, $this_underline_timestamp);
       }      
       print "\n     ".'file last modified            = '.scalar localtime($modified_time)."\n";
-      $cmd = "touch ./fetch_logs/$latest_file";
+      $cmd = "touch $fetch_logs/$latest_file";
+      print("$cmd\n");
       `$cmd`;
-      $cmd = "echo '$modified_time' > ./fetch_logs/$latest_file";
+      $cmd = "echo '$modified_time' > $fetch_logs/$latest_file";
       `$cmd`;
+      print("$cmd\n");
     }
     else 
     {
@@ -111,7 +114,8 @@ sub downloadFile
   getstore("$url/$latest_file", $destFilename );
 
   # make it properly transparent
-  $cmd = '/usr/bin/gm mogrify -transparent "rgb(0,0,0)" ' . $destFilename;          
+  print("Setting transparency.\n");
+  $cmd = '/usr/bin/gm mogrify -transparent "rgb(1,1,1)" ' . $destFilename;          
   `$cmd`;
   print( "$cmd\n" );
 
@@ -123,7 +127,7 @@ sub downloadFile
   print( "$cmd\n" );
 
   $cmd = 'cp -f '
-    .$dest_dir.'/.'.$layer_name.'.wld'
+    . $working_dir .'/.'.$layer_name.'.wld'
     .' '.$dest_dir.'/'.$layer_name.'_'.$this_underline_timestamp.'.wld';
   `$cmd`;
   print( "$cmd\n" );
@@ -142,5 +146,5 @@ sub downloadFile
          . ');';
 
   print( "$sql\n" );
-  #`$psql_command "$sql"`
+  `$psql_command "$sql"`
 }
