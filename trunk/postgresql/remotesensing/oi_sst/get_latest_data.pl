@@ -9,7 +9,7 @@ my $scratch_dir = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name;
 my $dest_dir    = '/home/xeniaprod/feeds/remotesensing/'.$layer_name;  
 my $fetch_logs   = '/home/xeniaprod/tmp/remotesensing/usf/oi_sst/fetch_logs';
 
-my $psql_command = '/usr/bin/psql -U xeniaprod -d xenia -c';
+my $psql_command = '/usr/bin/psql -U xeniaprod -d xenia -h 129.252.37.90 -c';
 
 `rm -f $scratch_dir/*`;
 
