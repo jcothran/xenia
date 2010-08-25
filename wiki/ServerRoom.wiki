@@ -1,3 +1,12 @@
 #summary internal reference to server setup
 
+Server names,IP's from Door towards back
+
 <img src="http://xenia.googlecode.com/files/Img_2260.jpg" height="400" width="320" />
+
+Rack 1
+<hr />
+<img src="http://xenia.googlecode.com/files/Img_2261.jpg" height="400" width="320" /><br />
+<img src="http://xenia.googlecode.com/files/Img_2262.jpg" height="400" width="320" /><br />
+<hr />
+Rack 2
