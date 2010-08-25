@@ -1,6 +1,6 @@
 #summary internal reference to server setup
 
-Server names,IP's from Door towards back
+Server names,IP's from the door entrance toward the back of the room.
 
 The flat-screen monitor and keyboard by Trident in the picture can be plugged into the various servers for monitoring as needed
 <img src="http://xenia.googlecode.com/files/Img_2260.jpg" height="400" width="320" />
