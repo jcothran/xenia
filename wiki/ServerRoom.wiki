@@ -1,5 +1,3 @@
 #summary internal reference to server setup
 
-http://xenia.googlecode.com/files/Img_2260.jpg
-
-http://xenia.googlecode.com/files/xenia_v2_marked.jpg
+<img http://xenia.googlecode.com/files/Img_2260.jpg height=200 width=400>
