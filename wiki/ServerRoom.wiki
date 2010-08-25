@@ -20,6 +20,8 @@ esxi 37.87
   139.124 - squid, test/development, plone
     squid forward to old trident(139.178)
   139.217 - archivalDB
+
+nautilus
   
 NWS Marine Weather Portal(MWP) project - Charlton Galvarino 
   nwstwo(37.59 = 139.110 nile)
@@ -31,3 +33,5 @@ Rack 2 (top to bottom)<br />
 <img src="http://xenia.googlecode.com/files/Img_2264.JPG" height="400" width="320" />
 <img src="http://xenia.googlecode.com/files/Img_2265.jpg" height="400" width="320" />
 <img src="http://xenia.googlecode.com/files/Img_2266.jpg" height="400" width="320" />
+
+torino(Charlton Galvarino - MWP project), old neptune(offline), nemo(offline)
