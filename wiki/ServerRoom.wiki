@@ -2,15 +2,16 @@
 
 Server names,IP's from Door towards back
 
+The flat-screen monitor and keyboard by Trident in the picture can be plugged into the various servers for monitoring as needed
 <img src="http://xenia.googlecode.com/files/Img_2260.jpg" height="400" width="320" />
 
 <hr />
-Rack 1 <br />
+Rack 1 (top to bottom) <br />
 <img src="http://xenia.googlecode.com/files/Img_2261.jpg" height="400" width="320" />
 <img src="http://xenia.googlecode.com/files/Img_2262.jpg" height="400" width="320" />
 <img src="http://xenia.googlecode.com/files/Img_2263.jpg" height="400" width="320" />
 <hr />
-Rack 2 <br />
+Rack 2 (top to bottom)<br />
 <img src="http://xenia.googlecode.com/files/Img_2264.JPG" height="400" width="320" />
 <img src="http://xenia.googlecode.com/files/Img_2265.jpg" height="400" width="320" />
 <img src="http://xenia.googlecode.com/files/Img_2266.jpg" height="400" width="320" />
