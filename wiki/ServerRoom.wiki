@@ -21,9 +21,9 @@ esxi 37.87
     squid forward to old trident(139.178)
   139.217 - archivalDB
   
- 
-nwstwo(37.59 = 139.110 nile)
-nwsone(37.58 = 139.109 neo)
+NWS Marine Weather Portal(MWP) project - Charlton Galvarino 
+  nwstwo(37.59 = 139.110 nile)
+  nwsone(37.58 = 139.109 neo)
 }}}
 
 <hr />
