@@ -2,7 +2,7 @@
 
 Server names,IP's from the door entrance toward the back of the room.
 
-The flat-screen monitor and keyboard by Trident in the picture can be plugged into the various servers for monitoring as needed
+The flat-screen monitor and keyboard by Trident(139.178) in the picture can be plugged into the various servers for monitoring as needed
 <img src="http://xenia.googlecode.com/files/Img_2260.jpg" height="400" width="320" />
 
 <hr />
@@ -10,6 +10,20 @@ Rack 1 (top to bottom) <br />
 <img src="http://xenia.googlecode.com/files/Img_2261.jpg" height="400" width="320" />
 <img src="http://xenia.googlecode.com/files/Img_2262.jpg" height="400" width="320" />
 <img src="http://xenia.googlecode.com/files/Img_2263.jpg" height="400" width="320" />
+
+esxi 139.198 ,br />
+  139.139 - mapserver,tilecache engine <br />
+  139.144 - cormp1 <br />
+esxi 37.87 
+  neptune 37.90 main production <br />
+  139.124 - squid, test/development, plone <br />
+    squid forward to old trident(139.178) <br />
+  139.217 - archivalDB <br />
+  
+ 
+nwstwo(37.59 = 139.110 nile) <br />
+nwsone(37.58 = 139.109 neo) <br />
+
 <hr />
 Rack 2 (top to bottom)<br />
 <img src="http://xenia.googlecode.com/files/Img_2264.JPG" height="400" width="320" />
