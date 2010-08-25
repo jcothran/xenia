@@ -11,6 +11,6 @@ Rack 1 <br />
 <img src="http://xenia.googlecode.com/files/Img_2263.jpg" height="400" width="320" />
 <hr />
 Rack 2 <br />
-<img src="http://xenia.googlecode.com/files/Img_2264.jpg" height="400" width="320" />
+<img src="http://xenia.googlecode.com/files/Img_2264.JPG" height="400" width="320" />
 <img src="http://xenia.googlecode.com/files/Img_2265.jpg" height="400" width="320" />
 <img src="http://xenia.googlecode.com/files/Img_2266.jpg" height="400" width="320" />
