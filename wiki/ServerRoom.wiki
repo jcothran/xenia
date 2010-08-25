@@ -11,18 +11,20 @@ Rack 1 (top to bottom) <br />
 <img src="http://xenia.googlecode.com/files/Img_2262.jpg" height="400" width="320" />
 <img src="http://xenia.googlecode.com/files/Img_2263.jpg" height="400" width="320" />
 
-esxi 139.198 ,br />
-  139.139 - mapserver,tilecache engine <br />
-  139.144 - cormp1 <br />
+{{{
+esxi 139.198 
+  139.139 - mapserver,tilecache engine
+  139.144 - cormp1 
 esxi 37.87 
-  neptune 37.90 main production <br />
-  139.124 - squid, test/development, plone <br />
-    squid forward to old trident(139.178) <br />
-  139.217 - archivalDB <br />
+  neptune 37.90 main production 
+  139.124 - squid, test/development, plone
+    squid forward to old trident(139.178)
+  139.217 - archivalDB
   
  
-nwstwo(37.59 = 139.110 nile) <br />
-nwsone(37.58 = 139.109 neo) <br />
+nwstwo(37.59 = 139.110 nile)
+nwsone(37.58 = 139.109 neo)
+}}}
 
 <hr />
 Rack 2 (top to bottom)<br />
