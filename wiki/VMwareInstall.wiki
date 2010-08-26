@@ -297,7 +297,6 @@ http://www.virtualizationadmin.com/articles-tutorials/vmware-esx-articles/instal
 
 http://www.virtualizationadmin.com/articles-tutorials/vmware-esx-articles/installation-and-deployment/new-vmware-esxi-server-configuration-checklist.html
 
-Install video(15 minutes) http://vmwarevideos.govirtual.tv/vsphere-esxi-40-install-and-configure <br>
 Review http://windowsitpro.com/article/articleid/101039/vmware-esxi.html <br/>
 
 vmware resource contention(cpu,memory,etc) handling (found under image Edit Settings->Resources tab) http://vmzare.wordpress.com/2007/02/27/sharesreservationlimits-cpumemory-resource-settings
@@ -347,9 +346,7 @@ For some more good reading, take a look at Duncan Epping’s experience with a c
 == Update June 19 2009 ==
 Went through the VMware ESXi install process on one of the new Secoora 
 servers(Dell Poweredge 2950) here this week - it was very easy and 
-straightforward and proceeded the same as documented in the below 15 minute 
-video of the same. 
-http://vmwarevideos.govirtual.tv/vsphere-esxi-40-install-and-configure/
+straightforward.
  
 ESXi is the recommended freeware 'bare metal' server install for the vmware 
 virtualization stuff.  *vSphere* is the related separate remote desktop 
