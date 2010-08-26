@@ -293,6 +293,9 @@ point and glad to hear any feedback in regards to running 'ESXi' instead of
 
 === Install and configure ===
 
+Note that we use Dell Poweredge servers which required us to in the physical server BIOS to enable 'virtualization technology' or VT shown at the following link, we don't have/use the vMotion feature so we don't enable 'execute disable'
+http://www.vmwareinfo.com/2009/02/enable-vt-and-evc-in-dell-bios.html
+
 http://www.virtualizationadmin.com/articles-tutorials/vmware-esx-articles/installation-and-deployment/10-steps-install-use-free-vmware-esxi-4.html
 
 http://www.virtualizationadmin.com/articles-tutorials/vmware-esx-articles/installation-and-deployment/new-vmware-esxi-server-configuration-checklist.html
