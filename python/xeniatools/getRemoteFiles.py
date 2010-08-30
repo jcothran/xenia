@@ -247,7 +247,9 @@ class remoteFileDownload:
           self.writeFetchLogFile(strFetchLogFile, ModDate)
         
       if( downloadFile ):
-        strDestFilePath = self.destDir + remoteFileName          
+        strDestFilePath = self.destDir + remoteFileName
+        if(destFileName):
+          strDestFilePath = self.destDir + destFileName
         self.logMsg( 'getFile::Downloading file: ' +  strDestFilePath )
         DestFile = open(strDestFilePath, "w" + self.fileMode)
         #Write to our local file
