@@ -428,3 +428,31 @@ json_callback({
         }},
 ...
 }}} 
+
+= Simple schema version 5 = 
+
+The below is the most compact form I can currently think of, using a leading 'platform' set of data which does not contain a uom or values but does provide a list of location and time points which are inherited by other sensors in the listing that do not contain a location or time list.  Each sensor could contain an 'elevation' if included that specifies the elevation above(+) or below(-) the platform location in meters.  I'm doubtful that this qualifies as GeoJSON at this point, but it should be very minimal data transfer for cases - the only other additional compression step past this that comes to mind for now would be for cases where large sets of platform data(say greater than 100 platforms requested at once), to provide id lookup tables(organization,platform,sensor types, carocoops = 12, carocoops.cap2.buoy = 12, air_temperature = 23 for example) as json and use integer id lookups within the repeated data listings instead of the full string listing.
+
+{{{
+json_callback({
+"type": "FeatureCollection",
+    "stationId": "urn:x-noaa:def:station:ndbc::41012",
+    "features": [        {"type": "Feature",
+            "geometry": {
+                "type": "MultiPoint",
+                "coordinates": [[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0]] 
+            },
+         "properties": {
+            "obsType": "platform",
+            "time": ["2009-04-28T18:50:00Z","2009-04-28T19:50:00Z","2009-04-28T20:50:00Z","2009-04-28T21:50:00Z","2009-04-28T22:50:00Z","2009-04-28T23:50:00Z","2009-04-29T00:50:00Z","2009-04-29T01:50:00Z","2009-04-29T02:50:00Z","2009-04-29T03:50:00Z","2009-04-29T04:50:00Z","2009-04-29T05:50:00Z","2009-04-29T06:50:00Z","2009-04-29T07:50:00Z","2009-04-29T08:50:00Z","2009-04-29T09:50:00Z","2009-04-29T10:50:00Z","2009-04-29T11:50:00Z","2009-04-29T12:50:00Z","2009-04-29T13:50:00Z","2009-04-29T14:50:00Z","2009-04-29T15:50:00Z","2009-04-29T16:50:00Z"],
+            ]
+        }},
+        {"type": "Feature",
+         "properties": {
+            "obsType": "air_temperature",
+            "uomType": "celsius",
+            "elevation": "4",
+            "value": ["23","23.2","23","23","23","22.9","22.9","22.8","22.8","22.8","22.7","22.7","22.4","22.4","22.2","22.2","22.1","22.2","22.6","22.4","22.7","23","23"]
+        }},
+...
+}}} 
