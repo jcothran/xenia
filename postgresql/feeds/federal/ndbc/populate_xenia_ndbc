@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ ! -f /tmp/lock_populate_xenia_ndbc ]; then
+  touch /tmp/lock_populate_xenia_ndbc
+  /home/xeniaprod/scripts/postgresql/feeds/federal/mk_sql_for_xenia.pl ndbc 24 /home/xeniaprod/tmp/sqlfiles/ndbc.sql debug
+  psql -U xeniaprod -d xenia -f /home/xeniaprod/tmp/sqlfiles/ndbc.sql  
+  rm -f /tmp/lock_populate_xenia_ndbc
+fi
