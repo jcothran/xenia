@@ -168,7 +168,7 @@ class dbDisplayLatestObs(object):
         order by multi_obs_platform_handle,m_type_display_order_row_id,sensor_s_order,m_date desc;"\
         % (boundingBox,boundingBox)
       
-      #print(sql)
+      print(sql)
       latestObs = recursivedefaultdict()
       latestDate = None
       currentPlatform = None
@@ -226,7 +226,8 @@ class dbDisplayLatestObs(object):
           contentHeader = ''
           platformContent = ''
           latestDate = None
-          
+          if(platform == 'ndbc.41004.met'):
+            i = 0
           platformParts = platform.split('.')    
           lcPlatform = platformParts[1].lower()
           operator = platformParts[0]
@@ -321,14 +322,24 @@ class dbDisplayLatestObs(object):
     
           htmlContent = "%s%s</table><div id=\"popupobsgraph\"></div>" %(contentHeader,platformContent)                          
           
+          lat = 0.0
+          if( 'm_lat' in latestObs[operator]['platform_list'][platform] != False):
+            lat = latestObs[operator]['platform_list'][platform]['m_lat']
+          lon = 0.0
+          if('m_lon' in latestObs[operator]['platform_list'][platform] != False):
+            lon = latestObs[operator]['platform_list'][platform]['m_lon']
+          obsDate = ""          
+          if('local_date' in latestObs[operator]['platform_list'][platform]['obs_list'][displayOrder] != False):
+            obsDate = latestObs[operator]['platform_list'][platform]['obs_list'][displayOrder]['local_date']
+            
           dbCur = self.addRowToObsTable(insertDate, 
-                                        latestObs[operator]['platform_list'][platform]['obs_list'][displayOrder]['local_date'],                                        
-                                        latestObs[operator]['platform_list'][platform]['m_lat'], 
-                                        latestObs[operator]['platform_list'][platform]['m_lon'],
+                                        obsDate,                                        
+                                        lat, 
+                                        lon,
                                         operator, 
                                         htmlContent, 
                                         platform)
-          if(dbCur == None):
+          if(dbCur == False):
             print(xeniaDb.dbConnection.getErrorInfo())
           """                  
           sql = "INSERT INTO html_content(wkt_geometry,organization,html,platform_handle)\
@@ -410,7 +421,7 @@ class dbDisplayLatestObs(object):
       
         #Add the datapoints 
         googURL += "&chd=t:%s&%s&%s" %(chd,chds,chxl) 
-        googURL = "onClick=\"javascript:carolinasrcoos.app.googleChart(''%s'',''%s'');\""\
+        googURL = "onClick=\"javascript:rcoosmapping.app.googleChart(''%s'',''%s'');\""\
                   %(shortName, googURL)
         return(googURL)
 
