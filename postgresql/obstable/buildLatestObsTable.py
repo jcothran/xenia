@@ -226,8 +226,6 @@ class dbDisplayLatestObs(object):
           contentHeader = ''
           platformContent = ''
           latestDate = None
-          if(platform == 'ndbc.41004.met'):
-            i = 0
           platformParts = platform.split('.')    
           lcPlatform = platformParts[1].lower()
           operator = platformParts[0]
@@ -243,8 +241,17 @@ class dbDisplayLatestObs(object):
           #No description in the database, so we'll make one based on the operator and platform
           if(len(desc) == 0):
             desc = "%s %s" % (operator, platformParts[1])
+          
+          if( ('url' in latestObs[operator]['platform_list'][platform]) != False):
+            platformUrl = latestObs[operator]['platform_list'][platform]['url']
+          elif(('url' in latestObs[operator]) != False):          
+            platformUrl = latestObs[operator]['url']
+          else:
+            platformUrl = ''
+          
+            
           contentHeader = "<div id=\"popupobscontent\" class=\"popupobscontent\"><hr/><a href=\"%s\" target=new onclick=\"\">%s</a><p id=\"popupobsloc\" class=\"popupobsloc\">Latitude: %4.3f Longitude: %4.3f</p><p id=\"popupobslinks\" class=\"popupobslinks\">%s</p>"\
-                          %(latestObs[operator]['url'], 
+                          %(platformUrl, 
                             desc,
                             latestObs[operator]['platform_list'][platform]['m_lat'],
                             latestObs[operator]['platform_list'][platform]['m_lon'],
@@ -291,7 +298,9 @@ class dbDisplayLatestObs(object):
               if(len(displayUOM) == 0):
                 displayUOM = obsUOM            
               value = uomConverter.measurementConvert( value, obsUOM, displayUOM )
-                
+              if(value == None):
+                value = latestObs[operator]['platform_list'][platform]['obs_list'][displayOrder]['m_value']
+                displayUOM = obsUOM
               googURL = self.buildGoogleChartLink(xeniaDb, 
                                                   platform, 
                                                   obsLabel, 
