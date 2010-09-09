@@ -249,12 +249,22 @@ class dbDisplayLatestObs(object):
           else:
             platformUrl = ''
           
-            
+          lat = 0.0
+          lon = 0.0
+          if(('m_lat' in latestObs[operator]['platform_list'][platform]) != False):
+            lat = latestObs[operator]['platform_list'][platform]['m_lat']
+          else:
+            print("No latitude defined for platform: %s" %(platform))
+          if(('m_lat' in latestObs[operator]['platform_list'][platform]) != False):
+            lon = latestObs[operator]['platform_list'][platform]['m_lon']
+          else:
+            print("No longitude defined for platform: %s" %(platform))
+
           contentHeader = "<div id=\"popupobscontent\" class=\"popupobscontent\"><hr/><a href=\"%s\" target=new onclick=\"\">%s</a><p id=\"popupobsloc\" class=\"popupobsloc\">Latitude: %4.3f Longitude: %4.3f</p><p id=\"popupobslinks\" class=\"popupobslinks\">%s</p>"\
                           %(platformUrl, 
                             desc,
-                            latestObs[operator]['platform_list'][platform]['m_lat'],
-                            latestObs[operator]['platform_list'][platform]['m_lon'],
+                            lat,
+                            lon,
                             links )
           
           displayOrderKeys = latestObs[operator]['platform_list'][platform]['obs_list'].keys()
@@ -331,12 +341,14 @@ class dbDisplayLatestObs(object):
     
           htmlContent = "%s%s</table><div id=\"popupobsgraph\"></div>" %(contentHeader,platformContent)                          
           
+          """
           lat = 0.0
           if( 'm_lat' in latestObs[operator]['platform_list'][platform] != False):
             lat = latestObs[operator]['platform_list'][platform]['m_lat']
           lon = 0.0
           if('m_lon' in latestObs[operator]['platform_list'][platform] != False):
             lon = latestObs[operator]['platform_list'][platform]['m_lon']
+          """
           obsDate = ""          
           if('local_date' in latestObs[operator]['platform_list'][platform]['obs_list'][displayOrder] != False):
             obsDate = latestObs[operator]['platform_list'][platform]['obs_list'][displayOrder]['local_date']
