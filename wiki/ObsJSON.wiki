@@ -2,7 +2,11 @@
 
 developed from discussions with working group http://groups.google.com/group/ioos-kml
 
-see also [http://geojson.org/geojson-spec.html geojson]
+see also [http://geojson.org/geojson-spec.html geojson] <br />
+[http://json-schema.org json schema] <br />
+[http://nico.vahlas.eu/2010/04/23/json-schema-specifying-and-validating-json-data-structures/ json schema discussion] <br />
+[http://sdf.ndbc.noaa.gov/sos/ NDBC implementation(see SOS KML/JSON output)] <br />
+
 
 see also [http://carocoops.org/obsjson/feeds/all/latest_hours_12 latest 12 hours from platforms as ObsJSON], note the function and smooth brackets wrapping the GeoJSON are utilized to support the dynamic Javascript callback functionality for KML in GE version 5.
 
