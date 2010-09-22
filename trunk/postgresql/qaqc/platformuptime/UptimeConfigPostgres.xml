@@ -1,0 +1,13 @@
+<Environment>
+  <Database>
+    <DB>
+      <name></name>
+      <user></user>
+      <pwd></pwd>
+    </DB>
+    <Settings>
+      <tmpdir>/home/xeniaprod/tmp/</tmpdir>
+      <sensorplotphp></sensorplotphp>
+    </Settings>    
+  </Database>
+</Environment>
