@@ -16,6 +16,10 @@
       <handle></handle>
       <twitterAccount></twitterAccount>
       <twitterPwd></twitterPwd>
+      <consumerKey></consumerKey>
+      <consumerSecret></consumerSecret>
+      <accessTokenKey></accessTokenKey>
+      <accessTokenSecret></accessTokenSecret>            
     </platform>
   </twitterList>
 </environment>
