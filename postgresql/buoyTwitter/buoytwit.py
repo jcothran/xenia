@@ -95,13 +95,19 @@ if __name__ == '__main__':
       for child in configFile.getNextInList(twitList):
         platform        = configFile.getEntry( 'handle',child ) 
         twitterAccount  = configFile.getEntry( 'twitterAccount',child )
-        twitterPwd      = configFile.getEntry( 'twitterPwd',child )
-        if( platform != None and 
-            twitterAccount != None and 
-            twitterPwd != None ):
+        #twitterPwd      = configFile.getEntry( 'twitterPwd',child )
+        accessTK        = configFile.getEntry( 'accessTokenKey',child )
+        accessSec      = configFile.getEntry( 'accessTokenSecret',child )
+        consumerKey      = configFile.getEntry( 'consumerKey',child )
+        consumerSecret   = configFile.getEntry( 'consumerSecret',child )
+        if( accessTK != None and accessSec != None and 
+            consumerKey != None and consumerSecret != None):
           #Connect to the Twitter api.
           try:
-            client = twitter.Api(twitterAccount, twitterPwd)
+            client = twitter.Api(consumerKey, 
+                                 consumerSecret, 
+                                 accessTK, 
+                                 accessSec)
             user = client.GetUser(twitterAccount)
           except twitter.TwitterError,e:
             print("Twitter Error: %s" %(e.message))
