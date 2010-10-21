@@ -94,7 +94,7 @@ $latest_obs{platform_list}{$platform_handle}{m_lat} = $m_lat;
 $latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{uom_type} = $uom_type;
 $latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{m_z} = $m_z;
 $latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{m_date}{$m_date}{m_value} = $m_value;
-$latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{m_date}{$m_date}{qc_level} = $m_value;
+$latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{m_date}{$m_date}{qc_level} = $qc_level;
 
 } #process sql to hash 
 
