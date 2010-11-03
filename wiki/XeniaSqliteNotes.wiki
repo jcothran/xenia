@@ -151,6 +151,8 @@ select platform_handle
 group by platform_handle,m_type_id;
 }}}
 
+*note: on postgres, group by requires all select columns except the aggregate column specified in the group by*
+
 = simple row formatting on SELECT result =
 
 {{{
