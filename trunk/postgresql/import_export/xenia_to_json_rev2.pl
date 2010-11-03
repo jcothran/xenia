@@ -149,6 +149,7 @@ foreach my $m_date (sort keys %{$r_latest_obs->{platform_list}{$platform_handle}
 chop($time_list); #drop trailing comma
 chop($value_list); #drop trailing comma
 chop($point_list); #drop trailing comma
+chop($qc_level_list); #drop trailing comma
 
 if(length($obs_list))
 {
