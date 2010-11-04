@@ -106,6 +106,7 @@ class dbDisplayLatestObs(object):
       DATAQUERYPAGEPATH = 'http://carolinasrcoos.org/queryStation.php?station=';
       ADCPGRAPHURL = 'http://carocoops.org/~dramage_prod/cgi-bin/rcoos/ADCPGraph.php?PLATFORMID=<ID>&INTERVAL=<INTERVAL>';
       TWITTERURL = 'http://twitter.com/';
+      EMAILALERTPAGEPATH = "http://www.secoora.org/pages/alertpage.php?platform="
 
       sql = "SELECT to_char(timezone('UTC', m_date), 'YYYY-MM-DD HH24:MI:SS') AS local_date \
       ,m_date as m_date\
@@ -229,14 +230,18 @@ class dbDisplayLatestObs(object):
           platformParts = platform.split('.')    
           lcPlatform = platformParts[1].lower()
           operator = platformParts[0]
-          links ='<a href=%s%s_%s_%s_GeoRSS_latest.xml target=new title="RSS Feed"><img src="images/rss_small.jpg"/></a>'\
+          links ='<a href=%s%s_%s_%s_GeoRSS_latest.xml target=new title="RSS Feed"><img src="resources/images/default/rss_small.jpg"/></a>'\
                   %(GEORSSPATH, platformParts[0], lcPlatform, platformParts[2]);     
           if( lcPlatform == 'cap2' or lcPlatform == 'sun2' or lcPlatform == 'frp2' or
               lcPlatform == 'ocp1' or lcPlatform == 'ilm2' or lcPlatform == 'ilm3' ):
-            links += '<a href=%s%sRCOOS target=new title="Twitter Feed"><img src="images/twitter.png"/></a>'\
+            links += '<a href=%s%sRCOOS target=new title="Twitter Feed"><img src="resources/images/default/twitter.png"/></a>'\
              %(TWITTERURL,lcPlatform)
-          links += '<a href=%s%s target=new title="Data Query"><img src="images/data_query.png"/></a>'\
+          links += '<a href=%s%s target=new title="Data Query"><img src="resources/images/default/data_query.png"/></a>'\
                     %(DATAQUERYPAGEPATH, lcPlatform.upper());
+                    
+          links += '<a href=%s%s target=new title="Email Alerts"><img src="resources/images/default/mail.png"/></a>'\
+                    %(EMAILALERTPAGEPATH, platform);
+                    
           desc = latestObs[operator]['platform_list'][platform]['platform_desc']
           #No description in the database, so we'll make one based on the operator and platform
           if(len(desc) == 0):
@@ -269,12 +274,14 @@ class dbDisplayLatestObs(object):
           
           displayOrderKeys = latestObs[operator]['platform_list'][platform]['obs_list'].keys()
           displayOrderKeys.sort()    
-          
+          obsDate = ""     
+
           for displayOrder in displayOrderKeys:    
             if(latestDate == None):
               if(latestObs[operator]['platform_list'][platform]['obs_list'][displayOrder]['m_date'] != None):
                 #latestDate = latestObs[operator]['platform_list'][platform]['obs_list'][displayOrder]['m_date']                     
                 latestDate = latestObs[operator]['platform_list'][platform]['obs_list'][displayOrder]['local_date']
+                obsDate = latestDate
                 localDatetime = time.strptime(latestDate, '%Y-%m-%d %H:%M:%S')                
                 obsLocalEpochSecs = time.mktime(localDatetime)
                 
@@ -294,8 +301,7 @@ class dbDisplayLatestObs(object):
                   
                 platformContent = "<div id=\"popupobs\" class=\"popupobs\"><table class=\"popupobsdata\"><caption>%s</caption>"\
                                 % (datetimeLabel)
-                               
-            
+                                          
             if(latestObs[operator]['platform_list'][platform]['obs_list'][displayOrder]['m_value'] != None):
               obsUOM = latestObs[operator]['platform_list'][platform]['obs_list'][displayOrder]['uom']
               value = latestObs[operator]['platform_list'][platform]['obs_list'][displayOrder]['m_value']
@@ -348,11 +354,7 @@ class dbDisplayLatestObs(object):
           lon = 0.0
           if('m_lon' in latestObs[operator]['platform_list'][platform] != False):
             lon = latestObs[operator]['platform_list'][platform]['m_lon']
-          """
-          obsDate = ""          
-          if('local_date' in latestObs[operator]['platform_list'][platform]['obs_list'][displayOrder] != False):
-            obsDate = latestObs[operator]['platform_list'][platform]['obs_list'][displayOrder]['local_date']
-            
+          """            
           dbCur = self.addRowToObsTable(insertDate, 
                                         obsDate,                                        
                                         lat, 
