@@ -221,7 +221,9 @@ class remoteFileDownload:
           #Convert the time into a seconds notation to make comparisons easier.
           date = time.strptime( ModDate, '%a, %d %b %Y %H:%M:%S %Z' )
           ModDate = time.mktime(date)
-          
+        else:
+          ModDate = time.time()
+            
         logFileDate = self.checkFetchLogFile(strFetchLogFile)
         
         writeFetchLogFile = 0
