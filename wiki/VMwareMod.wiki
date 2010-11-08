@@ -167,6 +167,10 @@ sudo apt-get install gparted
 sudo apt-get install rdate
 }}}
 
+{{{
+sudo apt-get install php5-cli
+}}}
+
 = Distribution checklist = 
 
 see [VMwareDesign]
