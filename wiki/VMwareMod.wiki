@@ -167,8 +167,10 @@ sudo apt-get install gparted
 sudo apt-get install rdate
 }}}
 
+#support platform query pages
 {{{
 sudo apt-get install php5-cli
+sudo apt-get install php5-pgsql
 }}}
 
 = Distribution checklist = 
