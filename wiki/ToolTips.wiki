@@ -30,6 +30,7 @@ this.hoverControl = new OpenLayers.Control.SelectFeature(layer,
       //This block of code gets the Lat/Lon of the feature, then converts that into viewport coordinates.
       //Finally, the mapBox gives us the offset of our mappanel so we can adjust our tooltip location. If we didn't do this
       //the tooltip would show up at the left hand side of the viewport. 
+      //I used the GeoExt popup.js as a guide to getting the correct screen coordinates.
       var centerLonLat = feature.geometry.getBounds().getCenterLonLat();
       var centerPx = this.mapObj.getViewPortPxFromLonLat(centerLonLat);
       var mapBox = Ext.fly(this.mapObj.div).getBox(); 
