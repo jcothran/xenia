@@ -1,7 +1,7 @@
 #An example of adding tooltips to a vector layer that uses features
 
 
-= ToolTips =
+= !ToolTips =
 
 For my latest work on the interactive map, I decided to use a vector layer which contained features for every platform. I got the idea talking with the guys at [http://www.nanoos.org/nvs/nvs.php?section=NVS-Assets NANOOS] and looking at their excellent map. Although they did not use a !GeoExt/!ExtJs framework, their idea of treating each platform as a separate object gave me some ideas.
 
