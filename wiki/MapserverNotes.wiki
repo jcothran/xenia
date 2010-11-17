@@ -1,5 +1,5 @@
+#summary Notes on mapserver setup
 #labels s
-#Notes on mapserver setup
 
 After my recent struggle getting mapserver setup to run open layers against, I thought I would document a couple of things I did, mostly the config settings I used for each package.
 I used the notes [http://www.jasonbirch.com/files/install_mapserver_pair_networks_freebsd.txt here] as a starting point.
