@@ -1,4 +1,4 @@
-#Some pointers on working with GeoExt/ExtJS/OpenLayers
+#summary Some pointers on working with GeoExt/ExtJS/OpenLayers
 
 = Mapping =
 
