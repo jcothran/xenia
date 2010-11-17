@@ -5,7 +5,7 @@
 
 For my latest work on the interactive map, I decided to use a vector layer which contained features for every platform. I got the idea talking with the guys at [http://www.nanoos.org/nvs/nvs.php?section=NVS-Assets NANOOS] and looking at their excellent map. Although they did not use a !GeoExt/!ExtJs framework, their idea of treating each platform as a separate object gave me some ideas.
 
-The following code block shows my OpenLayers.Control.SelectFeature object and the handlers that implement the popup:
+The following code block shows my !OpenLayers.Control.!SelectFeature object and the handlers that implement the popup:
 {{{
 this.hoverControl = new OpenLayers.Control.SelectFeature(layer,
 {
