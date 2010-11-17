@@ -1,5 +1,4 @@
-#VectorFeatureToolTips
-
+#summary An example of implementing ToolTips with Vector Features.
 
 = !ToolTips =
 
