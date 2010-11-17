@@ -1,0 +1,66 @@
+#An example of adding tooltips to a vector layer that uses features
+
+
+= ToolTips =
+
+For my latest work on the interactive map, I decided to use a vector layer which contained features for every platform. I got the idea talking with the guys at [http://www.nanoos.org/nvs/nvs.php?section=NVS-Assets NANOOS] and looking at their excellent map. Although they did not use a !GeoExt/!ExtJs framework, their idea of treating each platform as a separate object gave me some ideas.
+
+The following code block shows my OpenLayers.Control.SelectFeature object and the handlers that implement the popup:
+{{{
+this.hoverControl = new OpenLayers.Control.SelectFeature(layer,
+{
+  id: 'insituhover',
+  hover: true,
+  highlightOnly: true,
+  renderIntent: "temporary",
+  scope: this,
+  eventListeners: {
+    beforefeaturehighlighted: function(event){ },
+    featurehighlighted: function(event){
+      //Change the cursor to one that points at the feature.
+      var feature = event.feature;
+      feature.style.cursor="pointer";
+      if(this.toolTip != undefined)
+      {
+        this.toolTip.destroy();
+        this.toolTip = null;
+      }
+      //Get the station ID from the feature. We use this as our tooltip text.
+      var staId = feature.attributes.staID;
+      //This block of code gets the Lat/Lon of the feature, then converts that into viewport coordinates.
+      //Finally, the mapBox gives us the offset of our mappanel so we can adjust our tooltip location. If we didn't do this
+      //the tooltip would show up at the left hand side of the viewport. 
+      var centerLonLat = feature.geometry.getBounds().getCenterLonLat();
+      var centerPx = this.mapObj.getViewPortPxFromLonLat(centerLonLat);
+      var mapBox = Ext.fly(this.mapObj.div).getBox(); 
+      
+      this.toolTip = new Ext.ToolTip({
+        id: "ToolTip",
+        html: staId
+      });
+      //Show our tooltip. The + 10 and - 15 on the x and y locations are used to give a slight offset for the tool tip so it is not
+      //directly under the cursor.
+      this.toolTip.showAt([centerPx.x + mapBox.x + 10, centerPx.y + mapBox.y - 15]);
+
+    },
+    featureunhighlighted: function(event){
+      //If there is a tooltip, we destroy it.
+      if(this.toolTip != undefined)
+      {
+        //this.toolTip.close();
+        this.toolTip.destroy();
+        this.toolTip = null;
+      }
+      //Change the cursor back to the normal one.
+      var feature = event.feature;
+      delete feature.style.cursor;
+    },
+    scope : this
+  }        
+});    
+//We set the stopClick and stopDown to false so the hover control doesn't eat the click event. If we didn't do this, we'd lose the ability
+//to click on a feature and have our popup work.
+this.hoverControl.handlers["feature"].stopClick = false;
+this.hoverControl.handlers["feature"].stopDown = false;
+
+}}}
