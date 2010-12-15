@@ -6,11 +6,11 @@ These are the scripts currently running that retrieve the data from various sour
 
 
 
-*Machine*: neptune.baruch.sc.edu<br\>
-*Category*: Data Ingestion Scripts<br\>
-*Process*: NetCDF Scout<br\>
-*Script*: GetLatestData.pl<br\>
-*Command line parameters*:<br\>
+*Machine*: neptune.baruch.sc.edu <br/>
+*Category*: Data Ingestion Scripts <br/>
+*Process*: NetCDF Scout <br/>
+*Script*: GetLatestData.pl <br/>
+*Command line parameters*: <br/>
 {{{
 --URLControlFile is the XML file with the URL list the script will download the files from.
 --FileFilter is the filter to apply to the file listings to allow the script to download the files we really want. Optional.
@@ -20,7 +20,8 @@ These are the scripts currently running that retrieve the data from various sour
 --FetchLogDir is the directory were the file time stamps are stored. The script uses these files to determine which files are really the latest. Optional, default is ./fetch_logs.             
  --UseLastNTimeStamps Integer representing the last N time entries to use when converting the data to obsKML. Optional.
 --UseLastNTimeStampsForOrg Optional. List specifing orginization and the last N time entries to use for them. Whereas the UseLastNTimeStamps is applied to every organization, this can tailor to the specific. If not provided and UseLastNTimeStamps is provided, it is used. 
-}}}<br\>
+}}}
+<br/>
 *Directory*: /home/xeniaprod/scripts/scout/trunk<br\>
 *Description*: Process netCDF files converting them into obsKML which are then processed by obskml_to_xenia_postgresql.pl to store the data into the database. This is scheduled to run in the crontab. NetCDF files for Carolinas RCOOS, NDBC, USF, NWS, NOS, and NCCOOS are processed. The obsKML files are then pulled into the database using the following scripts:<br\>
 
