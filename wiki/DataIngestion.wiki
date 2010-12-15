@@ -11,7 +11,9 @@ These are the scripts currently running that retrieve the data from various sour
 *Category*: Data Ingestion Scripts
 
 *Process*: NetCDF Scout
+
 *Script*: GetLatestData.pl
+
 *Command line parameters*:
 {{{
 --URLControlFile is the XML file with the URL list the script will download the files from.
@@ -23,25 +25,41 @@ These are the scripts currently running that retrieve the data from various sour
  --UseLastNTimeStamps Integer representing the last N time entries to use when converting the data to obsKML. Optional.
 --UseLastNTimeStampsForOrg Optional. List specifing orginization and the last N time entries to use for them. Whereas the UseLastNTimeStamps is applied to every organization, this can tailor to the specific. If not provided and UseLastNTimeStamps is provided, it is used. 
 }}}
+
 *Directory*: /home/xeniaprod/scripts/scout/trunk
+
 *Description*: Process netCDF files converting them into obsKML which are then processed by obskml_to_xenia_postgresql.pl to store the data into the database. This is scheduled to run in the crontab. NetCDF files for Carolinas RCOOS, NDBC, USF, NWS, NOS, and NCCOOS are processed. The obsKML files are then pulled into the database using the following scripts:
 
 
 
 *Process*: populate_xenia_nws
+
 *Script*: populate_xenia_nws
+
 *Command line parameters*:
+
 	Argument 1: Provider name – nos, nws, etc
+
 	Argument 2: Not used
+
 	Argument 3: Fully qualified path to SQL output file	
+
 *Directory*: /home/xeniaprod/scripts/postgresql/feeds/federal/nws
+
 *Description*: Pulls in NWS data directly from the NWS site. This is used in tandem with the NetCDF scout. Currently this is scheduled to run in crontab.
+
 *Shell Script Makeup*
+
 	_Script_: mk_sql_for_xenia.pl
+
 	_Command line parameters_:
+
 		Argument 1: Provider name – nos, nws, etc
+
 		Argument 2: Not used
+
 		Argument 3: Fully qualified path to SQL output file	
+
 	_Description_: Connects to the NWS webservice, pulls the data down into a SQL file for importation into the database. Next psql is executed to import the SQL 	file.
 	
 *Process*: populate_xenia_nos
