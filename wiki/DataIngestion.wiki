@@ -6,13 +6,14 @@ These are the scripts currently running that retrieve the data from various sour
 
 
 
-Machine: neptune.baruch.sc.edu
+*Machine*: neptune.baruch.sc.edu
 
-Category: Data Ingestion Scripts
+*Category*: Data Ingestion Scripts
 
-Process: NetCDF Scout
-Script: GetLatestData.pl
-Command line parameters:
+*Process*: NetCDF Scout
+*Script*: GetLatestData.pl
+*Command line parameters*:
+{{{
 --URLControlFile is the XML file with the URL list the script will download the files from.
 --FileFilter is the filter to apply to the file listings to allow the script to download the files we really want. Optional.
 --DirForObsKml provides the path to the store the ObsKML files created. This is an optional argument, if not provided no ObsKML files are written.             
@@ -21,54 +22,51 @@ Command line parameters:
 --FetchLogDir is the directory were the file time stamps are stored. The script uses these files to determine which files are really the latest. Optional, default is ./fetch_logs.             
  --UseLastNTimeStamps Integer representing the last N time entries to use when converting the data to obsKML. Optional.
 --UseLastNTimeStampsForOrg Optional. List specifing orginization and the last N time entries to use for them. Whereas the UseLastNTimeStamps is applied to every organization, this can tailor to the specific. If not provided and UseLastNTimeStamps is provided, it is used. 
-Directory: /home/xeniaprod/scripts/scout/trunk
-Description: Process netCDF files converting them into obsKML which are then processed by obskml_to_xenia_postgresql.pl to store the data into the database. This is scheduled to run in the crontab.
-NetCDF files for Carolinas RCOOS, NDBC, USF, NWS, NOS, and NCCOOS are
-processed. The obsKML files are then pulled into the database using the following scripts:
+}}}
+*Directory*: /home/xeniaprod/scripts/scout/trunk
+*Description*: Process netCDF files converting them into obsKML which are then processed by obskml_to_xenia_postgresql.pl to store the data into the database. This is scheduled to run in the crontab. NetCDF files for Carolinas RCOOS, NDBC, USF, NWS, NOS, and NCCOOS are processed. The obsKML files are then pulled into the database using the following scripts:
 
 
 
-Process: populate_xenia_nws
-Script: populate_xenia_nws
-Command line parameters:
+*Process*: populate_xenia_nws
+*Script*: populate_xenia_nws
+*Command line parameters*:
 	Argument 1: Provider name – nos, nws, etc
 	Argument 2: Not used
 	Argument 3: Fully qualified path to SQL output file	
-Directory: /home/xeniaprod/scripts/postgresql/feeds/federal/nws
-Description: Pulls in NWS data directly from the NWS site. This is used in tandem with the NetCDF scout. Currently this is scheduled to run in crontab.
-Shell Script Makeup
-	Script: mk_sql_for_xenia.pl
-	Command line parameters:
+*Directory*: /home/xeniaprod/scripts/postgresql/feeds/federal/nws
+*Description*: Pulls in NWS data directly from the NWS site. This is used in tandem with the NetCDF scout. Currently this is scheduled to run in crontab.
+*Shell Script Makeup*
+	_Script_: mk_sql_for_xenia.pl
+	_Command line parameters_:
 		Argument 1: Provider name – nos, nws, etc
 		Argument 2: Not used
 		Argument 3: Fully qualified path to SQL output file	
-	Description: Connects to the NWS webservice, pulls the data down into a SQL file for importation into 
-	the database. Next psql is executed to import the SQL 	file.
+	_Description_: Connects to the NWS webservice, pulls the data down into a SQL file for importation into the database. Next psql is executed to import the SQL 	file.
 	
-Process: populate_xenia_nos
-Script: populate_xenia_nos
-Directory: /home/xeniaprod/scripts/postgresql/feeds/federal/nos
-Description: Pulls in NOS data directly from the NOS site. This is used in tandem with the NetCDF scout.
-Currently this is scheduled to run in crontab.
-Shell Script Makeup
-	Script: mk_sql_for_xenia.pl
-	Command line parameters:
+*Process*: populate_xenia_nos
+*Script*: populate_xenia_nos
+*Directory*: /home/xeniaprod/scripts/postgresql/feeds/federal/nos
+*Description*: Pulls in NOS data directly from the NOS site. This is used in tandem with the NetCDF scout. Currently this is scheduled to run in crontab.
+*Shell Script Makeup*
+	_Script_: mk_sql_for_xenia.pl
+	_Command line parameters_:
 		Argument 1: Provider name – nos, nws, etc
 		Argument 2: Not used
 		Argument 3: Fully qualified path to SQL output file	
-	Description: Connects to the NOS webservice, pulls the data down into a SQL 	file for importation into the database. Next psql is executed to import the SQL 	file.
+	_Description_: Connects to the NOS webservice, pulls the data down into a SQL 	file for importation into the database. Next psql is executed to import the SQL 	file.
 
-Process: feed_fit
-Script: feed_fit.sh
-Directory: /home/xeniaprod/cron
-Description: Shell script that pulls in data from the Sebastion Inlet station in Florida.
-Shell Script Makeup
-	Script: fit_to_obskml.pl
-	Directory: /home/xeniaprod/scripts/postgresql/feeds/fit
-	Description: Process the Fit data.
-	Script: obskml_to_xenia_postgresql.pl
-	Directory: /home/xeniaprod/scripts/postgresql/import_export
-	Description: Takes the obsKML and writes it into the database.
+*Process*: feed_fit
+*Script*: feed_fit.sh
+*Directory*: /home/xeniaprod/cron
+*Description*: Shell script that pulls in data from the Sebastion Inlet station in Florida.
+*Shell Script Makeup*
+	_Script_: fit_to_obskml.pl
+	_Directory_: /home/xeniaprod/scripts/postgresql/feeds/fit
+	_Description_: Process the Fit data.
+	_Script_: obskml_to_xenia_postgresql.pl
+	_Directory_: /home/xeniaprod/scripts/postgresql/import_export
+	_Description_: Takes the obsKML and writes it into the database.
 
 
 Process: getYSIData
@@ -86,4 +84,3 @@ Command line parameters:
 Directory: /home/xeniaprod/ /scripts/postgresql/feeds/ysi
 Description: Pulls in the data for the YSI site which is described in the configuration file
 provided  on the command line. This script pulls in the data for the some NERRS water quality sites.
-
