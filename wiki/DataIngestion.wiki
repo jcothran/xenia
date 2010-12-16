@@ -2,7 +2,7 @@
 
 = Introduction =
 
-These are the scripts currently running that retrieve the data from various sources and import that data into the Xenia database.<br\><br\>
+These are the scripts currently running that retrieve the data from various sources and import that data into the Xenia database.<br/>
 
 ==Machine== 
 neptune.baruch.sc.edu <br/>
