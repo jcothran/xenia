@@ -29,7 +29,69 @@ Data Ingestion Scripts <br/>
 *Directory*: /home/xeniaprod/scripts/scout/trunk<br/>
 *Description*: Process netCDF files converting them into obsKML which are then processed by obskml_to_xenia_postgresql.pl to store the data into the database. This is scheduled to run in the crontab. NetCDF files for Carolinas RCOOS, NDBC, USF, NWS, NOS, and NCCOOS are processed. The obsKML files are then pulled into the database using the following scripts:<br/>
 
+*Process*: Carocoops NetCDF Scout<br\>
+*Script*: populate_xenia_carocoops.sh<br\>
+*Command line parameters*:<br\>
+*Directory*: /home/xeniaprod/cron<br\>
+*Description*: Shell script for processing the Carocoops netcdf files. This script incoporates the NetCDF scout above, but only handles the Carocoops 
+netcdf files. The files are pulled down then processed into the database. Deletes the previous KML, ZIP and KMZ files.<br\>
+*Shell Script Makeup* <br\>
+  _Script_: GetLatestData.pl <br\>
+  _Command Line Parameters_: See NetCDF section above. <br\>
+  _Description_: Processes the netCDF files into obsKML files.<br\>
+  
+  _Script_: obskml_to_xenia_postgresql.pl
+  _Command Line Parameters_: <br\>
+    Argument 1 - The URL to the KMZ file to process.<br\>
+    Argument 2 - Path where the SQL file will be written.<br\>
+    Argument 3 - Filename to use for the SQL file.<br\>
+    Argument 4 - Database name to connect to.<br\>
+    <br\>
+  _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br\>
+  
+  
+*Process*: CORMP NetCDF Scout<br\>
+*Script*: populate_xenia_cormp.sh<br\>
+*Command line parameters*:<br\>
+*Directory*: /home/xeniaprod/cron<br\>
+*Description*: Shell script for processing the CORMP netcdf files. This script incoporates the NetCDF scout above, but only handles the Carocoops 
+netcdf files. The files are pulled down then processed into the database. Deletes the previous KML, ZIP and KMZ files.<br\>
+*Shell Script Makeup* <br\>
+  _Script_: GetLatestData.pl <br\>
+  _Command Line Parameters_: See NetCDF section above. <br\>
+  _Description_: Processes the netCDF files into obsKML files.<br\>
+  
+  _Script_: obskml_to_xenia_postgresql.pl
+  _Command Line Parameters_: <br\>
+    Argument 1 - The URL to the KMZ file to process.<br\>
+    Argument 2 - Path where the SQL file will be written.<br\>
+    Argument 3 - Filename to use for the SQL file.<br\>
+    Argument 4 - Database name to connect to.<br\>
+    <br\>
+  _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br\>
+  
+  
 
+*Process*: USF NetCDF Scout<br\>
+*Script*: populate_xenia_usf.sh<br\>
+*Command line parameters*:<br\>
+*Directory*: /home/xeniaprod/cron<br\>
+*Description*: Shell script for processing the USF and NDBC netcdf files. This script incoporates the NetCDF scout above, but only handles the Carocoops 
+netcdf files. The files are pulled down then processed into the database. Deletes the previous KML, ZIP and KMZ files.<br\>
+*Shell Script Makeup* <br\>
+  _Script_: GetLatestData.pl <br\>
+  _Command Line Parameters_: See NetCDF section above. <br\>
+  _Description_: Processes the netCDF files into obsKML files.<br\>
+  
+  _Script_: obskml_to_xenia_postgresql.pl
+  _Command Line Parameters_: <br\>
+    Argument 1 - The URL to the KMZ file to process.<br\>
+    Argument 2 - Path where the SQL file will be written.<br\>
+    Argument 3 - Filename to use for the SQL file.<br\>
+    Argument 4 - Database name to connect to.<br\>
+    <br\>
+  _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br\>
+     
 
 *Process*: populate_xenia_nws <br/>
 *Script*: populate_xenia_nws <br/>
