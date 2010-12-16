@@ -28,6 +28,7 @@ Data Ingestion Scripts <br/>
 <br/>
 *Directory*: /home/xeniaprod/scripts/scout/trunk<br/>
 *Description*: Process netCDF files converting them into obsKML which are then processed by obskml_to_xenia_postgresql.pl to store the data into the database. This is scheduled to run in the crontab. NetCDF files for Carolinas RCOOS, NDBC, USF, NWS, NOS, and NCCOOS are processed. The obsKML files are then pulled into the database using the following scripts:<br/>
+*Schedule*: Runs twice an hour.
 ----
 
 *Process*: Carocoops NetCDF Scout<br/>
@@ -49,6 +50,8 @@ netcdf files. The files are pulled down then processed into the database. Delete
     Argument 4 - Database name to connect to.<br/>
     <br/>
   _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
+*Schedule*: Runs every quarter hour. We run it this way since the dial up times for the platforms occur throughout the hour, one may be dialed at
+5 past the hour and another at 20 past.
 ----
   
   
@@ -71,6 +74,8 @@ netcdf files. The files are pulled down then processed into the database. Delete
     Argument 4 - Database name to connect to.<br/>
     <br/>
   _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
+*Schedule*: Runs every quarter hour. We run it this way since the dial up times for the platforms occur throughout the hour, one may be dialed at
+5 past the hour and another at 20 past.
 ----
  
 
@@ -93,6 +98,8 @@ netcdf files. The files are pulled down then processed into the database. Delete
     Argument 4 - Database name to connect to.<br/>
     <br/>
   _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
+*Schedule*: Runs every quarter hour. We run it this way since the dial up times for the platforms occur throughout the hour, one may be dialed at
+5 past the hour and another at 20 past.
 ----
          
 
@@ -111,6 +118,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
 		Argument 2: Not used <br/>
 		Argument 3: Fully qualified path to SQL output file <br/>
 	_Description_: Connects to the NWS webservice, pulls the data down into a SQL file for importation into the database. Next psql is executed to import the SQL 	file.<br/>
+*Schedule*: Runs every 10 minutes. NWS stations have a fairly rapid update rate.
 ----
 
 
@@ -125,6 +133,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
 		Argument 2: Not used <br/>
 		Argument 3: Fully qualified path to SQL output file	<br/>
 	_Description_: Connects to the NOS webservice, pulls the data down into a SQL 	file for importation into the database. Next psql is executed to import the SQL 	file. <br/>
+*Schedule*: Runs twice an hour.
 ----
 
 
@@ -139,6 +148,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
 	_Script_: obskml_to_xenia_postgresql.pl <br/>
 	_Directory_: /home/xeniaprod/scripts/postgresql/import_export <br/>
 	_Description_: Takes the obsKML and writes it into the database. <br/>
+*Schedule*: Runs every quarter hour.
 ----
 
 
@@ -149,6 +159,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
 *Directory*: /home/xeniaprod/ /scripts/postgresql/feeds/ysi <br/>
 *Description*: Pulls in the data for the YSI site which is described in the configuration file 
 provided  on the command line. This script pulls in the data for the Apache Pier. <br/>
+*Schedule*: Runs twice an hour.
 ----
 
 *Process*: getYSIData <br/>
@@ -158,4 +169,5 @@ provided  on the command line. This script pulls in the data for the Apache Pier
 *Directory*: /home/xeniaprod/ /scripts/postgresql/feeds/ysi <br/>
 *Description*: Pulls in the data for the YSI site which is described in the configuration file 
 provided  on the command line. This script pulls in the data for the some NERRS water quality sites. <br/>
+*Schedule*: Runs twice an hour.
 ----
