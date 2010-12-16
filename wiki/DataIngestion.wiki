@@ -11,7 +11,7 @@ neptune.baruch.sc.edu <br/>
 Data Ingestion Scripts <br/>
 
 ===Scripts===
-
+----
 *Process*: NetCDF Scout <br/>
 *Script*: GetLatestData.pl <br/>
 *Command line parameters*: <br/>
