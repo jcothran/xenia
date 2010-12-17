@@ -315,6 +315,7 @@ class ysiDataCollection(object):
       (obs,fromUOM,sOrder) = self.convertToXeniaObsAndUOM(param)
       #Didn't have a match, so we'll use the source.
       if(len(obs) == 0):
+        print("ERROR: Unable to find Xenia observation name for YSI param: %s." %(param))
         parts = param.split('[')
         obs = parts[0]
         fromUOM = parts[1]
@@ -549,6 +550,10 @@ class ysiDataCollection(object):
       obs = "salinity"
       uom = "psu"
       sOrder = "1"
+    elif( ysiObsName == 'Surface %DO [%]' ):
+      obs = "oxygen_concentration"
+      uom = "percent"
+      sOrder = "1"
     elif( ysiObsName == 'Surface DO [%]' ):
       obs = "oxygen_concentration"
       uom = "percent"
@@ -578,6 +583,10 @@ class ysiDataCollection(object):
       uom = "percent"
       sOrder = "2"
     elif( ysiObsName == 'Surface DO Conc [mg/L]' ):
+      obs = "oxygen_concentration"
+      uom = "mg_L-1"
+      sOrder = "1"
+    elif( ysiObsName == 'Surface DO [mg/L] [mg/L]' ):
       obs = "oxygen_concentration"
       uom = "mg_L-1"
       sOrder = "1"
@@ -636,6 +645,10 @@ class ysiDataCollection(object):
     elif( ysiObsName == 'Battery [V]' ):
       obs = "battery_voltage"
       uom = "V"
+      sOrder = "1"
+    elif( ysiObsName == 'Surface Depth [m]' ):
+      obs = "depth"
+      uom = "m"
       sOrder = "1"
     return(obs,uom,sOrder)
 
