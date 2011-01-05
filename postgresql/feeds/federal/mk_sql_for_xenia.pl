@@ -1,6 +1,14 @@
+###################################################################################
+#Revisions
+#Date: 2011/1/4
+#Author: DWR
+#Changes: Fixed the SQL station query to search for platform.active>0 to handle 
+# the expanded active flags now in use.
+###################################################################################
 #!/usr/bin/perl
 
 use lib '/home/xeniaprod/scripts/postgresql/feeds/federal';
+#use lib "C:\\Documents and Settings\\dramage\\workspace\\SVNSandbox\\xenia\\postgresql\\feeds\\federal";
 
 use strict;
 use ObsUtils;
@@ -17,6 +25,7 @@ my (@stations);
 my $start_time=time();
 
 my $cfg=Config::IniFiles->new( -file => '/home/xeniaprod/scripts/postgresql/feeds/federal/dbConfig.ini');
+#my $cfg=Config::IniFiles->new( -file => 'C:\\Documents and Settings\\dramage\\workspace\\SVNSandbox\\xenia\\postgresql\\feeds\\federal\\dbConfig.ini');
 my $db_name=$cfg->val('rcoos','database');
 my $db_user=$cfg->val('rcoos','username');
 my $db_passwd=$cfg->val('rcoos','password');
@@ -38,6 +47,7 @@ my $insert_sql = "INSERT INTO multi_obs ("
   .") VALUES";
 
 		
+#my $dbh = DBI->connect ("dbi:PgPP:dbname=$db_name;host=129.252.37.90","$db_user","$db_passwd");
 my $dbh = DBI->connect ("dbi:Pg:dbname=$db_name","$db_user","$db_passwd");
 if (!defined $dbh) {die "Cannot connect to database! Database: $db_name User: $db_user\n";}
 
@@ -58,7 +68,7 @@ FROM
      ON platform.row_id = sensor.platform_id
      left JOIN organization
      on organization.row_id=platform.organization_id  
-where platform.active = 1 and organization.short_name='$target_obs'
+where platform.active > 0 and organization.short_name='$target_obs'
 ORDER BY
    platform.platform_handle
   ,sensor.short_name;";
@@ -80,7 +90,7 @@ while (my @row = $sth->fetchrow()) {
   $local_setup{$platform_platform_handle}{$sensor_short_name}{platform_fixed_longitude} = $platform_fixed_longitude;
   $local_setup{$platform_platform_handle}{$sensor_short_name}{platform_fixed_latitude}  = $platform_fixed_latitude;
     
-  #print( "$platform_platform_handle $sensor_short_name $sensor_row_id $sensor_m_type_id $sensor_fixed_z $platform_fixed_longitude $platform_fixed_latitude\n" );
+  print( "$platform_platform_handle $sensor_short_name $sensor_row_id $sensor_m_type_id $sensor_fixed_z $platform_fixed_longitude $platform_fixed_latitude\n" );
 }
 $sth->finish;
 $dbh->disconnect();
@@ -104,6 +114,7 @@ foreach my $station (keys %obs) {
   my %o = %{$obs{$station}};
   foreach my $date (keys %o) {
     foreach my $c (keys %{$local_setup{$station}}) {
+      print("$c\n");
       if (defined($obs{$station}{$date}{$c}) && $c ne 'time_stamp_utc') {
         my $sql = "$insert_sql ("
           . "now()"
