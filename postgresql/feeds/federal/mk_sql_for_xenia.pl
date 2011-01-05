@@ -1,3 +1,4 @@
+#!/usr/bin/perl
 ###################################################################################
 #Revisions
 #Date: 2011/1/4
@@ -5,7 +6,6 @@
 #Changes: Fixed the SQL station query to search for platform.active>0 to handle 
 # the expanded active flags now in use.
 ###################################################################################
-#!/usr/bin/perl
 
 use lib '/home/xeniaprod/scripts/postgresql/feeds/federal';
 #use lib "C:\\Documents and Settings\\dramage\\workspace\\SVNSandbox\\xenia\\postgresql\\feeds\\federal";
