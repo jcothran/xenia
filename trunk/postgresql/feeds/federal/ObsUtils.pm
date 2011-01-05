@@ -1,4 +1,13 @@
 #!/usr/bin/perl
+###################################################################################
+#Revisions
+#Date: 2011/1/4
+#Author: DWR
+#Subroutine:get_nos_obs 
+#Changes: Log out any fault messages we get for the requests.
+# Moved the $service->getWaterLevelRawSixMin type calls above the individual loops to
+# cut down on overhead.
+###################################################################################
 
 package ObsUtils;
 
@@ -171,7 +180,8 @@ sub get_ndbc_obs {
         ,air_temperature         => $atmp
         ,air_pressure            => $baro
         ,significant_wave_height => $wvht
-        ,sea_surface_temperature => $wtmp
+        ,water_temperature => $wtmp
+        #,sea_surface_temperature => $wtmp
       );
 
  
@@ -380,16 +390,16 @@ sub get_nos_obs {
 
   #my $now_time="20081101 01:00";
   #my $end_time="20081130 23:59";
+  my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/waterlevelrawsixmin/wsdl/WaterLevelRawSixMin.wsdl')->want_som(1);  
   foreach my $s (@stations) {
     my $station_id = substr($s,index($s,'|')+1);
     my $system_station = substr($s,0,index($s,'|'));
-    if ($debug) {print STDERR "NOS $system_station (water level)\n";}
+    if ($debug) {print STDERR "NOS $system_station (water level MLLW)\n";}
                                                                                 
     # Get water level first
     #my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/services/WaterLevelRawSixMin?wsdl')->want_som(1);
-    my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/waterlevelrawsixmin/wsdl/WaterLevelRawSixMin.wsdl')->want_som(1);
+    #my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/waterlevelrawsixmin/wsdl/WaterLevelRawSixMin.wsdl')->want_som(1);
     my $response = $service->getWaterLevelRawSixMin($station_id, $now_time, $end_time, 'MLLW', 0, 0);
-                                                                                
     if(!$response->fault()) {
       # Get all the obs.
       foreach my $v ($response->valueof('//data/item')) {
@@ -406,17 +416,23 @@ sub get_nos_obs {
         );
         # Add it to the hash.
         $latest_obs{$system_station}{$date} = \%d;
+        #print("$v\n");
       }
-    }       
+    }
+    else
+    {
+      my $fault = $response->fault();
+      print("Error in the getWaterLevelRawSixMin response. $fault->{faultstring}\n");
+    }
   }
-
+  my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/waterlevelrawsixmin/wsdl/WaterLevelRawSixMin.wsdl')->want_som(1);
   foreach my $s (@stations) {
     my $station_id = substr($s,index($s,'|')+1);
     my $system_station = substr($s,0,index($s,'|'));
-    if ($debug) {print STDERR "NOS $system_station (water level)\n";}
+    if ($debug) {print STDERR "NOS $system_station (water level MSL)\n";}
 
     # Get water level first
-    my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/waterlevelrawsixmin/wsdl/WaterLevelRawSixMin.wsdl')->want_som(1);
+    #my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/waterlevelrawsixmin/wsdl/WaterLevelRawSixMin.wsdl')->want_som(1);
     my $response = $service->getWaterLevelRawSixMin($station_id, $now_time, $end_time, 'MSL', 0, 0);
 
     if(!$response->fault()) { 
@@ -439,18 +455,24 @@ sub get_nos_obs {
             $latest_obs{$system_station}{$date} = \%d;
           }
         }
-
       }
     }
+    else
+    {
+      my $fault = $response->fault();
+      print("Error in the getWaterLevelRawSixMin response. $fault->{faultstring}\n");
+    }
+    
   }
 
   # Move onto the wind data.
+  my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/wind/wsdl/Wind.wsdl')->want_som(1);  
   foreach my $s (@stations) {
     my $station_id = substr($s,index($s,'|')+1);
     my $system_station = substr($s,0,index($s,'|'));
     if ($debug) {print STDERR "NOS $system_station (wind)\n";}
 
-    my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/wind/wsdl/Wind.wsdl')->want_som(1);
+    #my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/wind/wsdl/Wind.wsdl')->want_som(1);
     my $response = $service->getWind($station_id, $now_time, $end_time, 0);
 
     if(!$response->fault()) {
@@ -479,15 +501,21 @@ sub get_nos_obs {
         }
       }
     }
+    else
+    {
+      my $fault = $response->fault();
+      print("Error in the getWind response. $fault->{faultstring}\n");
+    }    
   } 
   
   # Move onto the air temp data.
+  my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/airtemperature/wsdl/AirTemperature.wsdl')->want_som(1);
   foreach my $s (@stations) {
     my $station_id = substr($s,index($s,'|')+1);
     my $system_station = substr($s,0,index($s,'|'));
     if ($debug) {print STDERR "NOS $system_station (air temp)\n";}
 
-    my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/airtemperature/wsdl/AirTemperature.wsdl')->want_som(1);
+    #my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/airtemperature/wsdl/AirTemperature.wsdl')->want_som(1);
     my $response = $service->getAirTemperature($station_id, $now_time, $end_time, 0);
 
     if(!$response->fault()) {
@@ -512,15 +540,21 @@ sub get_nos_obs {
         }
       }
     }
+    else
+    {
+      my $fault = $response->fault();
+      print("Error in the getAirTemperature response. $fault->{faultstring}\n");
+    }    
   } 
   
   # Move onto the water temp data.
+  my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/watertemperature/wsdl/WaterTemperature.wsdl')->want_som(1);
   foreach my $s (@stations) {
     my $station_id = substr($s,index($s,'|')+1);
     my $system_station = substr($s,0,index($s,'|'));
     if ($debug) {print STDERR "NOS $system_station (water temp)\n";}
 
-    my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/watertemperature/wsdl/WaterTemperature.wsdl')->want_som(1);
+    #my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/watertemperature/wsdl/WaterTemperature.wsdl')->want_som(1);
     my $response = $service->getWaterTemperature($station_id, $now_time, $end_time, 0);
 
     if(!$response->fault()) {
@@ -545,15 +579,22 @@ sub get_nos_obs {
         }
       }
     }
+    else
+    {
+      my $fault = $response->fault();
+      print("Error in the getWaterTemperature response. $fault->{faultstring}\n");
+    }    
+    
   } 
   
   # Move onto the pressure data.
+  my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/barometricpressure/wsdl/BarometricPressure.wsdl')->want_som(1);
   foreach my $s (@stations) {
     my $station_id = substr($s,index($s,'|')+1);
     my $system_station = substr($s,0,index($s,'|'));
     if ($debug) {print STDERR "NOS $system_station (pressure)\n";}
 
-    my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/barometricpressure/wsdl/BarometricPressure.wsdl')->want_som(1);
+    #my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/barometricpressure/wsdl/BarometricPressure.wsdl')->want_som(1);
     my $response = $service->getBarometricPressure($station_id, $now_time, $end_time, 0);
 
     if(!$response->fault()) {
@@ -578,15 +619,21 @@ sub get_nos_obs {
         }
       }
     }
+    else
+    {
+      my $fault = $response->fault();
+      print("Error in the getBarometricPressure response. $fault->{faultstring}\n");
+    }        
   } 
   
   # Move onto the currents data.
+  my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/currents/wsdl/Currents.wsdl')->want_som(1);
   foreach my $s (@stations) {
     my $station_id = substr($s,index($s,'|')+1);
     my $system_station = substr($s,0,index($s,'|'));
     if ($debug) {print STDERR "NOS $system_station (currents)\n";}
 
-    my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/currents/wsdl/Currents.wsdl')->want_som(1);
+    #my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/currents/wsdl/Currents.wsdl')->want_som(1);
     my $response = $service->getCurrents($station_id, $now_time, $end_time);
 
     if(!$response->fault()) {
@@ -613,6 +660,11 @@ sub get_nos_obs {
         }
       }
     }
+    else
+    {
+      my $fault = $response->fault();
+      print("Error in the getCurrents response. $fault->{faultstring}\n");
+    }            
   } 
   return \%latest_obs;
 }
