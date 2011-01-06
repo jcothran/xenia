@@ -102,7 +102,9 @@ http://neptune.baruch.sc.edu/xenia/feeds/obsjson/all/latest_hours_24
 }}}
 <br/>
 *Directory*: /home/xeniaprod/scripts/postgresql/import_export<br/>
-*Description*: Queries the latest 24 hours of data for each observation on each active platform then creates the json file. These are not pure JSON files, they are wrapped with a callback function.<br/>
+*Description*: Queries the latest 24 hours of data for each observation on each <br/>
+active platform then creates the json file. These are not pure JSON files, they <br/>
+are wrapped with a callback function.<br/>
 *Schedule*: 0,10,20,30,40,50 after the hour
 
 ----
