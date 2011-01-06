@@ -67,6 +67,17 @@ http://xenia.googlecode.com/files/georss.jpg
 
 GeoRSS provides a simple geospatially referenced RSS feed for simple harvesting/redisplay of latest observations for each platform as a data feed.  Above feed displays correctly in Firefox browser.
 
+*Script*: ObsKMLToGeoRSS.pl <br/>
+*Command line parameters*: <br/>
+{{{
+--ObsKMLFeed is the full path to the KML file to process to create the RSS files
+--FeedDir the directory to output the RSS files to.
+}}}
+<br/>
+*Directory*: /home/xeniaprod/scripts/obskml/products/georss<br/>
+*Description*: Processes obsKML files to create geoRSS files for each platform in the KML file.<br/>
+*Schedule*: Runs twice an hour.
+
 ----
 = GeoJSON =
 
