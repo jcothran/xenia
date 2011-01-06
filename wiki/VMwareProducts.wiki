@@ -67,6 +67,7 @@ http://xenia.googlecode.com/files/georss.jpg
 
 GeoRSS provides a simple geospatially referenced RSS feed for simple harvesting/redisplay of latest observations for each platform as a data feed.  Above feed displays correctly in Firefox browser.
 
+== Script Details ==
 *Script*: ObsKMLToGeoRSS.pl <br/>
 *Command line parameters*: <br/>
 {{{
