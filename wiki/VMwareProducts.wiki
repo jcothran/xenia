@@ -1,4 +1,5 @@
 #summary various formats/products and services supported by the Xenia vmware instance
+#labels None
 
 [VMwareHome]
 
@@ -92,6 +93,17 @@ method for presenting data to websites similar to traditional AJAX methods.  [ht
 see http://code.google.com/p/xenia/wiki/ObsJSON
 
 http://neptune.baruch.sc.edu/xenia/feeds/obsjson/all/latest_hours_24
+
+== Script Details ==
+*Script*: xenia_to_json.pl <br/>
+*Command line parameters*: <br/>
+{{{
+  There are no command line parameters, however there is a hard coded configuration file that is used for the database connection parameters, dbConfig.ini. The output directory is also hardcoded: my $target_dir = '/home/xeniaprod/feeds/obsjson/all/latest_hours_24/';
+}}}
+<br/>
+*Directory*: /home/xeniaprod/scripts/postgresql/import_export<br/>
+*Description*: Queries the latest 24 hours of data for each observation on each active platform then creates the json file. These are not pure JSON files, they are wrapped with a callback function.<br/>
+*Schedule*: 0,10,20,30,40,50 after the hour
 
 ----
 = html table styling for AJAX,etc = 
