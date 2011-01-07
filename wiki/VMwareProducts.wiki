@@ -16,6 +16,8 @@ for a virtualized server image download that produces the below listed products
 
 [http://code.google.com/p/xenia/wiki/XeniaProducts#Google_Earth_and_Maps original documentation ] 
 
+  * [http://code.google.com/p/xenia/wiki/DataIngestion Data Ingestion Scripts]
+
 A script runs once an hour to take the latest observations and create a
   * Combined
     * ObsKML latest [http://neptune.baruch.sc.edu/xenia/feeds/xenia_obskml_latest.kml KML] and [http://neptune.baruch.sc.edu/xenia/feeds/xenia_obskml_latest.kmz KMZ] files for resharing
