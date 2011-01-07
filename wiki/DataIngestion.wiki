@@ -106,10 +106,6 @@ netcdf files. The files are pulled down then processed into the database. Delete
 
 === NWS Processing ===
 *Script*: populate_xenia_nws <br/>
-*Command line parameters*: <br/>
-	Argument 1: Provider name – nos, nws, etc <br/>
-	Argument 2: Not used <br/>
-	Argument 3: Fully qualified path to SQL output file <br/>
 *Directory*: /home/xeniaprod/scripts/postgresql/feeds/federal/nws <br/>
 *Description*: Pulls in NWS data directly from the NWS site. This is used in tandem with the NetCDF scout. Currently this is scheduled to run in crontab. <br/>
 *Shell Script Makeup* <br/>
