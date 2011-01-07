@@ -171,3 +171,16 @@ provided  on the command line. This script pulls in the data for the Apache Pier
 provided  on the command line. This script pulls in the data for the some NERRS water quality sites. <br/>
 *Schedule*: Runs twice an hour.
 ----
+
+== Machine ==
+nautilus.baruch.sc.edu
+
+=== Scripts ===
+
+----
+*Process*: <br/>
+*Script*: <br/>
+*Command line parameters*: <br/>
+*Directory*:  <br/>
+*Description*:  <br/>
+*Schedule*: 
