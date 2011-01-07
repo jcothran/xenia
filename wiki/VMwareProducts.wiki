@@ -12,11 +12,14 @@ for a virtualized server image download that produces the below listed products
 <wiki:toc max_depth="4" />
 
 ----
+= Data Ingestion Scripts =
+Follow the link to the wiki page detailing the scripts used to process the data into the Xenia database.
+[http://code.google.com/p/xenia/wiki/DataIngestion Documention]
+----
 = Google Earth/Maps, Latest ObsKML, Styled KML =
 
 [http://code.google.com/p/xenia/wiki/XeniaProducts#Google_Earth_and_Maps original documentation ] 
 
-  * [http://code.google.com/p/xenia/wiki/DataIngestion Data Ingestion Scripts]
 
 A script runs once an hour to take the latest observations and create a
   * Combined
