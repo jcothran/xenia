@@ -1,0 +1,634 @@
+<organizationList>
+<organization>
+<short_name>usgs</short_name>
+
+<platformList>
+
+<!-- state: South Carolina -->
+
+<platform id="02110815">
+  <short_name>02110815</short_name>
+  <type_name>wq</type_name>
+  <description>WACCAMAW R @ HAGLEY LAND. NR PAWLEYS ISLAND, SC</description>
+  <fixed_latitude>33.43627906</fixed_latitude>
+  <fixed_longitude>-79.18060120</fixed_longitude>
+</platform>
+
+<platform id="021720698">
+  <short_name>021720698</short_name>
+  <type_name>wq</type_name>
+  <description>WANDO RIVER ABOVE MT PLEASANT, SC</description>
+  <fixed_latitude>32.85906380</fixed_latitude>
+  <fixed_longitude>-79.89619630</fixed_longitude>
+</platform>
+
+<platform id="02176603">
+  <short_name>02176603</short_name>
+  <type_name>wq</type_name>
+  <description>BEAUFORT RIVER AT BEAUFORT, SC</description>
+  <fixed_latitude>32.42741485</fixed_latitude>
+  <fixed_longitude>-80.66927300</fixed_longitude>
+</platform>
+
+<platform id="02176585">
+  <short_name>02176585</short_name>
+  <type_name>wq</type_name>
+  <description>BRICKYARD CREEK NEAR BEAUFORT, SC</description>
+  <fixed_latitude>32.42741485</fixed_latitude>
+  <fixed_longitude>-80.69261</fixed_longitude>
+</platform>
+
+<platform id="321603080432202">
+  <short_name>321603080432202</short_name>
+  <type_name>wq</type_name>
+  <description>BFT-1810 TEST #2 @ DOLPHIN HD, HILTON HEAD, SC</description>
+  <fixed_latitude>32.2677</fixed_latitude>
+  <fixed_longitude>-80.72261</fixed_longitude>
+</platform>
+
+<platform id="02176611">
+  <short_name>02176611</short_name>
+  <type_name>wq</type_name>
+  <description>BEAUFORT RIVER NEAR PORT ROYAL, SC</description>
+  <fixed_latitude>32.39464</fixed_latitude>
+  <fixed_longitude>-80.67538</fixed_longitude>
+</platform>
+
+<platform id="02176635">
+  <short_name>02176635</short_name>
+  <type_name>wq</type_name>
+  <description>BATTERY CREEK AT PORT ROYAL, SC</description>
+  <fixed_latitude>32.37714</fixed_latitude>
+  <fixed_longitude>-80.71455</fixed_longitude>
+</platform>
+
+<platform id="02176589">
+  <short_name>02176589</short_name>
+  <type_name>wq</type_name>
+  <description>BEAUFORT RIVER ABOVE BEAUFORT, SC</description>
+  <fixed_latitude>32.45408</fixed_latitude>
+  <fixed_longitude>-80.68177</fixed_longitude>
+</platform>
+
+<platform id="02176640">
+  <short_name>02176640</short_name>
+  <type_name>wq</type_name>
+  <description>BEAUFORT RIVER AT PARRIS ISLAND, SC</description>
+  <fixed_latitude>32.3502</fixed_latitude>
+  <fixed_longitude>-80.669</fixed_longitude>
+</platform>
+
+<platform id="02172020">
+  <short_name>02172020</short_name>
+  <type_name>wq</type_name>
+  <description>W BRANCH COOPER R @ PIMLICO NR MONCKS CORNER, SC</description>
+  <fixed_latitude>33.0935</fixed_latitude>
+  <fixed_longitude>-79.94897</fixed_longitude>
+</platform>
+
+<platform id="02172050">
+  <short_name>02172050</short_name>
+  <type_name>wq</type_name>
+  <description>COOPER R NR GOOSE CREEK, SC</description>
+  <fixed_latitude>33.05767</fixed_latitude>
+  <fixed_longitude>-79.93619</fixed_longitude>
+</platform>
+
+<platform id="02172080">
+  <short_name>02172080</short_name>
+  <type_name>wq</type_name>
+  <description>ASHLEY R NR SUMMERVILLE, SC</description>
+  <fixed_latitude>32.9685</fixed_latitude>
+  <fixed_longitude>-80.25287</fixed_longitude>
+</platform>
+
+<platform id="02172002">
+  <short_name>02172002</short_name>
+  <type_name>wq</type_name>
+  <description>LAKE MOULTRIE TAILRACE CANAL AT MONCKS CORNER, SC</description>
+  <fixed_latitude>33.21517</fixed_latitude>
+  <fixed_longitude>-79.97452</fixed_longitude>
+</platform>
+
+<platform id="02172040">
+  <short_name>02172040</short_name>
+  <type_name>wq</type_name>
+  <description>BACK RIVER AT DUPONT INTAKE NR KITTREDGE, SC</description>
+  <fixed_latitude>33.06378</fixed_latitude>
+  <fixed_longitude>-79.95703</fixed_longitude>
+</platform>
+
+<platform id="02175000">
+  <short_name>02175000</short_name>
+  <type_name>wq</type_name>
+  <description>EDISTO RIVER NR GIVHANS, SC</description>
+  <fixed_latitude>33.02795</fixed_latitude>
+  <fixed_longitude>-80.39149</fixed_longitude>
+</platform>
+
+<platform id="02172053">
+  <short_name>02172053</short_name>
+  <type_name>wq</type_name>
+  <description>COOPER R AT MOBAY NR N CHARLESTON, SC</description>
+  <fixed_latitude>32.98351</fixed_latitude>
+  <fixed_longitude>-79.92286</fixed_longitude>
+</platform>
+
+<platform id="021720677">
+  <short_name>021720677</short_name>
+  <type_name>wq</type_name>
+  <description>COOPER RIVER @ FILBIN CREEK @ NORTH CHARLESTON, SC</description>
+  <fixed_latitude>32.89045</fixed_latitude>
+  <fixed_longitude>-79.96286</fixed_longitude>
+</platform>
+
+<platform id="021720709">
+  <short_name>021720709</short_name>
+  <type_name>wq</type_name>
+  <description>COOPER RIVER AT U.S. HWY 17 AT CHARLESTON, SC</description>
+  <fixed_latitude>32.80323</fixed_latitude>
+  <fixed_longitude>-79.91509</fixed_longitude>
+</platform>
+
+<platform id="02171639">
+  <short_name>02171639</short_name>
+  <type_name>wq</type_name>
+  <description>REDIVERSION CANAL AT ST. STEPHENS, SC</description>
+  <fixed_latitude>33.42683</fixed_latitude>
+  <fixed_longitude>-79.93035</fixed_longitude>
+</platform>
+
+<platform id="021720710">
+  <short_name>021720710</short_name>
+  <type_name>wq</type_name>
+  <description>COOPER RVR @ CUSTOMS HOUSE (AUX) @ CHARLESTON, SC</description>
+  <fixed_latitude>32.78045</fixed_latitude>
+  <fixed_longitude>-79.9237</fixed_longitude>
+</platform>
+
+<platform id="02172084">
+  <short_name>02172084</short_name>
+  <type_name>wq</type_name>
+  <description>ASHLEY R. AT BAKERS LNDING NR NORTH CHARLESTON, SC</description>
+  <fixed_latitude>32.89351</fixed_latitude>
+  <fixed_longitude>-80.10204</fixed_longitude>
+</platform>
+
+<platform id="02110760">
+  <short_name>02110760</short_name>
+  <type_name>wq</type_name>
+  <description>AIW @ MYRTLEWOOD GOLF COURSE @ MYRTLE BEACH, SC</description>
+  <fixed_latitude>33.74073</fixed_latitude>
+  <fixed_longitude>-78.86669</fixed_longitude>
+</platform>
+
+<platform id="02110805">
+  <short_name>02110805</short_name>
+  <type_name>wq</type_name>
+  <description>BULL CK BELOW LITTLE BULL CK NR BUCKSPORT, SC</description>
+  <fixed_latitude>33.60295</fixed_latitude>
+  <fixed_longitude>-79.1181</fixed_longitude>
+</platform>
+
+<platform id="02110809">
+  <short_name>02110809</short_name>
+  <type_name>wq</type_name>
+  <description>WACCAMAW R @ WACHESAW LAND. NR MURRELLS INLET, SC</description>
+  <fixed_latitude>33.56211</fixed_latitude>
+  <fixed_longitude>-79.08587</fixed_longitude>
+</platform>
+
+<platform id="02135200">
+  <short_name>02135200</short_name>
+  <type_name>wq</type_name>
+  <description>PEE DEE RIVER AT HWY 701 NR BUCKSPORT, SC</description>
+  <fixed_latitude>33.661</fixed_latitude>
+  <fixed_longitude>-79.15449</fixed_longitude>
+</platform>
+
+<platform id="02110777">
+  <short_name>02110777</short_name>
+  <type_name>wq</type_name>
+  <description>AIW AT HIGHWAY 9 AT NIXONS CROSSROADS, SC</description>
+  <fixed_latitude>33.85156</fixed_latitude>
+  <fixed_longitude>-78.65585</fixed_longitude>
+</platform>
+
+<platform id="02110704">
+  <short_name>02110704</short_name>
+  <type_name>wq</type_name>
+  <description>WACCAMAW RIVER AT CONWAY MARINA AT CONWAY, SC</description>
+  <fixed_latitude>33.82989</fixed_latitude>
+  <fixed_longitude>-79.04365</fixed_longitude>
+</platform>
+
+<platform id="02110802">
+  <short_name>02110802</short_name>
+  <type_name>wq</type_name>
+  <description>WACCAMAW RIVER AT BUCKSPORT, SC</description>
+  <fixed_latitude>33.64906</fixed_latitude>
+  <fixed_longitude>-79.09421</fixed_longitude>
+</platform>
+
+<platform id="02110770">
+  <short_name>02110770</short_name>
+  <type_name>wq</type_name>
+  <description>A1W AT GRAND STRAND AIRPORT N. MYRTLE BEACH, SC</description>
+  <fixed_latitude>33.82017</fixed_latitude>
+  <fixed_longitude>-78.71557</fixed_longitude>
+</platform>
+
+<platform id="02110755">
+  <short_name>02110755</short_name>
+  <type_name>wq</type_name>
+  <description>AIW AT BRIARCLIFFE ACRES AT N. MYRTLE BEACH, SC</description>
+  <fixed_latitude>33.79851</fixed_latitude>
+  <fixed_longitude>-78.75307</fixed_longitude>
+</platform>
+
+<platform id="021108125">
+  <short_name>021108125</short_name>
+  <type_name>wq</type_name>
+  <description>WACCAMAW RIVER NEAR PAWLEYS ISLAND, SC</description>
+  <fixed_latitude>33.50656</fixed_latitude>
+  <fixed_longitude>-79.12699</fixed_longitude>
+</platform>
+
+<platform id="02110725">
+  <short_name>02110725</short_name>
+  <type_name>wq</type_name>
+  <description>AIW AT HIGHWAY 544 AT SOCASTEE, SC</description>
+  <fixed_latitude>33.68712</fixed_latitude>
+  <fixed_longitude>-79.00476</fixed_longitude>
+</platform>
+
+<!-- state: North Carolina -->
+
+<platform id="0208455155">
+  <short_name>0208455155</short_name>
+  <type_name>wq</type_name>
+  <description>PAMLICO RIV. AT LT.3, NC</description>
+  <fixed_latitude>35.35683</fixed_latitude>
+  <fixed_longitude>-76.64632</fixed_longitude>
+</platform>
+
+<platform id="0208455560">
+  <short_name>0208455560</short_name>
+  <type_name>wq</type_name>
+  <description>PUNGO RIVER CHANNEL LT 18, NC</description>
+  <fixed_latitude>35.51794</fixed_latitude>
+  <fixed_longitude>-76.49632</fixed_longitude>
+</platform>
+
+<platform id="02092162">
+  <short_name>02092162</short_name>
+  <type_name>wq</type_name>
+  <description>NEUSE RIVER AT NEW BERN, NC</description>
+  <fixed_latitude>35.10933</fixed_latitude>
+  <fixed_longitude>-77.03272</fixed_longitude>
+</platform>
+
+<platform id="0209265810">
+  <short_name>0209265810</short_name>
+  <type_name>wq</type_name>
+  <description>NEUSE RIVER AT CHANNEL LIGHT 9, NC</description>
+  <fixed_latitude>34.94849</fixed_latitude>
+  <fixed_longitude>-76.80966</fixed_longitude>
+</platform>
+
+<platform id="0208453300">
+  <short_name>0208453300</short_name>
+  <type_name>wq</type_name>
+  <description>PAMLICO RIVER AT LT.5, NC</description>
+  <fixed_latitude>35.431</fixed_latitude>
+  <fixed_longitude>-76.84133</fixed_longitude>
+</platform>
+
+<platform id="0208114150">
+  <short_name>0208114150</short_name>
+  <type_name>wq</type_name>
+  <description>ROANOKE RIVER AT NC 45 NR WESTOVER, NC</description>
+  <fixed_latitude>35.91522</fixed_latitude>
+  <fixed_longitude>-76.72305</fixed_longitude>
+</platform>
+
+<!--
+<platform id="0208062765">
+  <short_name>0208062765</short_name>
+  <type_name>wq</type_name>
+  <description>ROANOKE RIVER AT HALIFAX, NC</description>
+  <fixed_latitude>36.33328</fixed_latitude>
+  <fixed_longitude>-77.58278</fixed_longitude>
+</platform>
+-->
+
+<!--
+<platform id="02108566">
+  <short_name>02108566</short_name>
+  <type_name>wq</type_name>
+  <description>NORTHEAST CAPE FEAR R NR BURGAW, NC</description>
+  <fixed_latitude>34.59878</fixed_latitude>
+  <fixed_longitude>-77.8761</fixed_longitude>
+</platform>
+-->
+
+<platform id="0209262905">
+  <short_name>0209262905</short_name>
+  <type_name>wq</type_name>
+  <description>NEUSE RIVER AT CHANNEL LIGHT 11, NC</description>
+  <fixed_latitude>34.99905</fixed_latitude>
+  <fixed_longitude>-76.943</fixed_longitude>
+</platform>
+
+<platform id="02084472">
+  <short_name>02084472</short_name>
+  <type_name>wq</type_name>
+  <description>PAMLICO RIVER AT WASHINGTON, NC</description>
+  <fixed_latitude>35.54266</fixed_latitude>
+  <fixed_longitude>-77.06162</fixed_longitude>
+</platform>
+
+<platform id="02081022">
+  <short_name>02081022</short_name>
+  <type_name>wq</type_name>
+  <description>ROANOKE RIVER NEAR OAK CITY, NC</description>
+  <fixed_latitude>36.01411</fixed_latitude>
+  <fixed_longitude>-77.21528</fixed_longitude>
+</platform>
+
+<platform id="02081094">
+  <short_name>02081094</short_name>
+  <type_name>wq</type_name>
+  <description>ROANOKE R AT JAMESVILLE, NC</description>
+  <fixed_latitude>35.81385</fixed_latitude>
+  <fixed_longitude>-76.89379</fixed_longitude>
+</platform>
+
+<platform id="02108690">
+  <short_name>02108690</short_name>
+  <type_name>wq</type_name>
+  <description>NE CAPE FEAR RIVER NEAR WILMINGTON, NC</description>
+  <fixed_latitude>34.25883</fixed_latitude>
+  <fixed_longitude>-77.94819</fixed_longitude>
+</platform>
+
+<!-- state: Georgia -->
+
+<platform id="022035975">
+  <short_name>022035975</short_name>
+  <type_name>wq</type_name>
+  <description>HUDSON CREEK AT MERIDIAN LANDING, NEAR MERIDIAN, GA</description>
+  <fixed_latitude>31.45333</fixed_latitude>
+  <fixed_longitude>-81.36278</fixed_longitude>
+</platform>
+
+<platform id="02198840">
+  <short_name>02198840</short_name>
+  <type_name>wq</type_name>
+  <description>SAVANNAH RIVER NEAR PORT WENTWORTH, GA</description>
+  <fixed_latitude>32.23575</fixed_latitude>
+  <fixed_longitude>-81.15122</fixed_longitude>
+</platform>
+
+<!-- state: Florida - East -->
+
+<!--
+<platform id="02266300">
+  <short_name>02266300</short_name>
+  <type_name>wq</type_name>
+  <description>REEDY CREEK NR VINELAND, FL</description>
+  <fixed_latitude>28.33279</fixed_latitude>
+  <fixed_longitude>-81.5798</fixed_longitude>
+</platform>
+-->
+
+<!--
+<platform id="02245260">
+  <short_name>02245260</short_name>
+  <type_name>wq</type_name>
+  <description>DEEP CREEK AT SPUDS, FL</description>
+  <fixed_latitude>29.72969</fixed_latitude>
+  <fixed_longitude>-81.48674</fixed_longitude>
+</platform>
+-->
+
+<platform id="294213081345300">
+  <short_name>294213081345300</short_name>
+  <type_name>wq</type_name>
+  <description>ST.JOHNS RIVER AT DANCY POINT NR SPUDS, FL</description>
+  <fixed_latitude>29.70386</fixed_latitude>
+  <fixed_longitude>-81.58119</fixed_longitude>
+</platform>
+
+<platform id="02248380">
+  <short_name>02248380</short_name>
+  <type_name>wq</type_name>
+  <description>HAULOVER CANAL NR MIMS, FL</description>
+  <fixed_latitude>28.73666</fixed_latitude>
+  <fixed_longitude>-80.7545</fixed_longitude>
+</platform>
+
+<!--
+<platform id="02235500">
+  <short_name>02235500</short_name>
+  <type_name>wq</type_name>
+  <description>BLUE SPRINGS NR ORANGE CITY, FL</description>
+  <fixed_latitude>28.94415</fixed_latitude>
+  <fixed_longitude>-81.33979</fixed_longitude>
+</platform>
+-->
+
+<!-- state: Florida - West -->
+
+<platform id="02297100">
+  <short_name>02297100</short_name>
+  <type_name>wq</type_name>
+  <description>JOSHUA CREEK AT NOCATEE, FL</description>
+  <fixed_latitude>27.16672</fixed_latitude>
+  <fixed_longitude>-81.87953</fixed_longitude>
+</platform>
+
+<!--
+<platform id="02298123">
+  <short_name>02298123</short_name>
+  <type_name>wq</type_name>
+  <description>PRAIRIE CREEK NEAR FORT OGDEN, FL</description>
+  <fixed_latitude>27.052</fixed_latitude>
+  <fixed_longitude>-81.78453</fixed_longitude>
+</platform>
+-->
+
+<!--
+<platform id="02303000">
+  <short_name>02303000</short_name>
+  <type_name>wq</type_name>
+  <description>HILLSBOROUGH RIVER NEAR ZEPHYRHILLS, FL</description>
+  <fixed_latitude>28.15001</fixed_latitude>
+  <fixed_longitude>-82.23231</fixed_longitude>
+</platform>
+-->
+
+<platform id="02301721">
+  <short_name>02301721</short_name>
+  <type_name>wq</type_name>
+  <description>ALAFIA RIVER AT GIBSONTON, FL</description>
+  <fixed_latitude>27.85975</fixed_latitude>
+  <fixed_longitude>-82.38426</fixed_longitude>
+</platform>
+
+<platform id="02310678">
+  <short_name>02310678</short_name>
+  <type_name>wq</type_name>
+  <description>HOMOSASSA SPRINGS AT HOMOSASSA SPRINGS, FL</description>
+  <fixed_latitude>28.7997</fixed_latitude>
+  <fixed_longitude>-82.58871</fixed_longitude>
+</platform>
+
+<platform id="02301638">
+  <short_name>02301638</short_name>
+  <type_name>wq</type_name>
+  <description>ALAFIA RIVER AT BELL SHOALS NEAR RIVERVIEW, FL</description>
+  <fixed_latitude>27.85891</fixed_latitude>
+  <fixed_longitude>-82.2737</fixed_longitude>
+</platform>
+
+<platform id="02301988">
+  <short_name>02301988</short_name>
+  <type_name>wq</type_name>
+  <description>HILLSBOROUGH RIVER AT HWY 39 NR CRYSTAL SPRINGS, FL</description>
+  <fixed_latitude>28.19334</fixed_latitude>
+  <fixed_longitude>-82.16508</fixed_longitude>
+</platform>
+
+<platform id="02306774">
+  <short_name>02306774</short_name>
+  <type_name>wq</type_name>
+  <description>ROCKY CREEK AT ST HWY 587 AT CITRUS PARK, FL</description>
+  <fixed_latitude>28.06585</fixed_latitude>
+  <fixed_longitude>-82.56565</fixed_longitude>
+</platform>
+
+<platform id="023000095">
+  <short_name>023000095</short_name>
+  <type_name>wq</type_name>
+  <description>MANATEE RIVER AT RYE, FL</description>
+  <fixed_latitude>27.51365</fixed_latitude>
+  <fixed_longitude>-82.36704</fixed_longitude>
+</platform>
+
+<platform id="02312000">
+  <short_name>02312000</short_name>
+  <type_name>wq</type_name>
+  <description>WITHLACOOCHEE RIVER AT TRILBY, FL</description>
+  <fixed_latitude>28.48</fixed_latitude>
+  <fixed_longitude>-82.17758</fixed_longitude>
+</platform>
+
+<platform id="02300021">
+  <short_name>02300021</short_name>
+  <type_name>wq</type_name>
+  <description>MANATEE RIVER AT FORT HAMER, FL</description>
+  <fixed_latitude>27.51837</fixed_latitude>
+  <fixed_longitude>-82.42815</fixed_longitude>
+</platform>
+
+<platform id="264053081572501">
+  <short_name>264053081572501</short_name>
+  <type_name>wq</type_name>
+  <description>L -4820, FL</description>
+  <fixed_latitude>26.6825</fixed_latitude>
+  <fixed_longitude>-81.95694</fixed_longitude>
+</platform>
+
+<platform id="02310663">
+  <short_name>02310663</short_name>
+  <type_name>wq</type_name>
+  <description>CHASSAHOWITZKA RIVER NEAR CHASSAHOWITZKA, FL</description>
+  <fixed_latitude>28.71526</fixed_latitude>
+  <fixed_longitude>-82.60621</fixed_longitude>
+</platform>
+
+<platform id="023060003">
+  <short_name>023060003</short_name>
+  <type_name>wq</type_name>
+  <description>SULPHUR SPRINGS RUN AT SULPHUR SPRINGS, FL</description>
+  <fixed_latitude>28.02113</fixed_latitude>
+  <fixed_longitude>-82.45232</fixed_longitude>
+</platform>
+
+<platform id="02323592">
+  <short_name>02323592</short_name>
+  <type_name>wq</type_name>
+  <description>SUWANNEE RIVER AB GOPHER RIVER NR SUWANNEE, FL</description>
+  <fixed_latitude>29.33941</fixed_latitude>
+  <fixed_longitude>-83.08652</fixed_longitude>
+</platform>
+
+<platform id="02300009">
+  <short_name>02300009</short_name>
+  <type_name>wq</type_name>
+  <description>MANATEE RIVER AT DEVILS ELBOW NEAR FT HAMER, FL</description>
+  <fixed_latitude>27.52087</fixed_latitude>
+  <fixed_longitude>-82.40176</fixed_longitude>
+</platform>
+
+<platform id="02310650">
+  <short_name>02310650</short_name>
+  <type_name>wq</type_name>
+  <description>CHASSAHOWITZKA RIVER NEAR HOMOSASSA, FL</description>
+  <fixed_latitude>28.71526</fixed_latitude>
+  <fixed_longitude>-82.57704</fixed_longitude>
+</platform>
+
+<platform id="02310545">
+  <short_name>02310545</short_name>
+  <type_name>wq</type_name>
+  <description>WEEKI WACHEE RIVER NR WEEKI WACHEE SPRINGS, FL</description>
+  <fixed_latitude>28.53111</fixed_latitude>
+  <fixed_longitude>-82.62316</fixed_longitude>
+</platform>
+
+<platform id="02306000">
+  <short_name>02306000</short_name>
+  <type_name>wq</type_name>
+  <description>SULPHUR SPRINGS AT SULPHUR SPRINGS, FL</description>
+  <fixed_latitude>28.02113</fixed_latitude>
+  <fixed_longitude>-82.45176</fixed_longitude>
+</platform>
+
+<platform id="02304510">
+  <short_name>02304510</short_name>
+  <type_name>wq</type_name>
+  <description>HILLSBOROUGH RIVER AT ROWLETT PK DR NEAR TAMPA, FL</description>
+  <fixed_latitude>28.02113</fixed_latitude>
+  <fixed_longitude>-82.43454</fixed_longitude>
+</platform>
+
+<platform id="02301718">
+  <short_name>02301718</short_name>
+  <type_name>wq</type_name>
+  <description>ALAFIA RIVER AT RIVERVIEW, FL</description>
+  <fixed_latitude>27.8678</fixed_latitude>
+  <fixed_longitude>-82.31981</fixed_longitude>
+</platform>
+
+<platform id="02313000">
+  <short_name>02313000</short_name>
+  <type_name>wq</type_name>
+  <description>WITHLACOOCHEE RIVER NR HOLDER, FL</description>
+  <fixed_latitude>28.98887</fixed_latitude>
+  <fixed_longitude>-82.34954</fixed_longitude>
+</platform>
+
+<platform id="022908295">
+  <short_name>022908295</short_name>
+  <type_name>wq</type_name>
+  <description>Bottle Creek At Rookery Branch Nr Homestead, FL</description>
+  <fixed_latitude>25.48011</fixed_latitude>
+  <fixed_longitude>-80.85396</fixed_longitude>
+</platform>
+
+</platformList>
+
+</organization>
+</organizationList>
