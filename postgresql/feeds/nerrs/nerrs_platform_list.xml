@@ -1,0 +1,597 @@
+<organizationList>
+<organization>
+<short_name>nerrs</short_name>
+
+<platformList>
+
+<platform id="niwolmet">
+  <short_name>niwolmet</short_name>
+  <type_name>met</type_name>
+  <description>North Inlet Winyah Bay, SC</description>
+  <fixed_latitude>33.3493</fixed_latitude>
+  <fixed_longitude>-79.1888</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="niwolwq">
+  <short_name>niwolwq</short_name>
+  <type_name>wq</type_name>
+  <description>North Inlet Winyah Bay, SC</description>
+  <fixed_latitude>33.3493</fixed_latitude>
+  <fixed_longitude>-79.1888</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="acebpmet">
+  <short_name>acebpmet</short_name>
+  <type_name>met</type_name>
+  <description>ACE Basin, SC</description>
+  <fixed_latitude>32.5587</fixed_latitude>
+  <fixed_longitude>-80.4537</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="acespwq">
+  <short_name>acespwq</short_name>
+  <type_name>wq</type_name>
+  <description>ACE Basin, SC</description>
+  <fixed_latitude>32.5587</fixed_latitude>
+  <fixed_longitude>-80.4537</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="apaebmet">
+  <short_name>apaebmet</short_name>
+  <type_name>met</type_name>
+  <description>Apalachicola, FL</description>
+  <fixed_latitude>29.7909</fixed_latitude>
+  <fixed_longitude>-84.8834</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="apaebwq">
+  <short_name>apaebwq</short_name>
+  <type_name>wq</type_name>
+  <description>Apalachicola, FL</description>
+  <fixed_latitude>29.7858</fixed_latitude>
+  <fixed_longitude>-84.8752</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="gndcrmet">
+  <short_name>gndcrmet</short_name>
+  <type_name>met</type_name>
+  <description>Grand Bay, MS</description>
+  <fixed_latitude>30.3592</fixed_latitude>
+  <fixed_longitude>-88.4200</fixed_longitude>
+  <time_add>6</time_add>
+</platform>
+
+<platform id="gndblwq">
+  <short_name>gndblwq</short_name>
+  <type_name>wq</type_name>
+  <description>Grand Bay, MS</description>
+  <fixed_latitude>30.3571</fixed_latitude>
+  <fixed_longitude>-88.4629</fixed_longitude>
+  <time_add>6</time_add>
+</platform>
+
+<platform id="gtmpcmet">
+  <short_name>gtmpcmet</short_name>
+  <type_name>met</type_name>
+  <description>Guana Tolomato Manatanzas, FL</description>
+  <fixed_latitude>29.6578</fixed_latitude>
+  <fixed_longitude>-81.2203</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="gtmpcwq">
+  <short_name>gtmpcwq</short_name>
+  <type_name>wq</type_name>
+  <description>Guana Tolomato Manatanzas, FL</description>
+  <fixed_latitude>29.6692</fixed_latitude>
+  <fixed_longitude>-81.2562</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="jobjbmet">
+  <short_name>jobjbmet</short_name>
+  <type_name>met</type_name>
+  <description>Jobos Bay, PR</description>
+  <fixed_latitude>17.9565</fixed_latitude>
+  <fixed_longitude>-66.2385</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="job20wq">
+  <short_name>job20wq</short_name>
+  <type_name>wq</type_name>
+  <description>Jobos Bay, PR</description>
+  <fixed_latitude>17.9303</fixed_latitude>
+  <fixed_longitude>-66.2116</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="job09wq">
+  <short_name>job09wq</short_name>
+  <type_name>wq</type_name>
+  <description>Jobos Bay, PR</description>
+  <fixed_latitude>17.9437</fixed_latitude>
+  <fixed_longitude>-66.243717</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="nocrcmet">
+  <short_name>nocrcmet</short_name>
+  <type_name>met</type_name>
+  <description>Research Creek, NC</description>
+  <fixed_latitude>34.1555</fixed_latitude>
+  <fixed_longitude>-77.8509</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="nocrcwq">
+  <short_name>nocrcwq</short_name>
+  <type_name>wq</type_name>
+  <description>Research Creek, NC</description>
+  <fixed_latitude>34.1555</fixed_latitude>
+  <fixed_longitude>-77.8509</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="rkbuhmet">
+  <short_name>rkbuhmet</short_name>
+  <type_name>met</type_name>
+  <description>Rookery Bay, FL</description>
+  <fixed_latitude>26.0500</fixed_latitude>
+  <fixed_longitude>-81.7010</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="rkblhwq">
+  <short_name>rkblhwq</short_name>
+  <type_name>wq</type_name>
+  <description>Rookery Bay, FL</description>
+  <fixed_latitude>26.0257</fixed_latitude>
+  <fixed_longitude>-81.7332</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="sapmlmet">
+  <short_name>sapmlmet</short_name>
+  <type_name>met</type_name>
+  <description>Sapelo Island, GA</description>
+  <fixed_latitude>31.4178</fixed_latitude>
+  <fixed_longitude>-81.2953</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="sapldwq">
+  <short_name>sapldwq</short_name>
+  <type_name>wq</type_name>
+  <description>Sapelo Island, GA</description>
+  <fixed_latitude>31.4177</fixed_latitude>
+  <fixed_longitude>-81.2961</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="cbmjbmet">
+  <short_name>cbmjbmet</short_name>
+  <type_name>met</type_name>
+  <description>Chesapeake Bay, MD</description>
+  <fixed_latitude>38.7807</fixed_latitude>
+  <fixed_longitude>-76.7081</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="cbmocwq">
+  <short_name>cbmocwq</short_name>
+  <type_name>wq</type_name>
+  <description>Chesapeake Bay, MD</description>
+  <fixed_latitude>39.4507</fixed_latitude>
+  <fixed_longitude>-76.2746</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="cbmrrwq">
+  <short_name>cbmrrwq</short_name>
+  <type_name>wq</type_name>
+  <description>Chesapeake Bay, MD</description>
+  <fixed_latitude>38.7813</fixed_latitude>
+  <fixed_longitude>-76.7137</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="cbvgiwq">
+  <short_name>cbvgiwq</short_name>
+  <type_name>wq</type_name>
+  <description>Chesapeake Bay, VA</description>
+  <fixed_latitude>37.2174</fixed_latitude>
+  <fixed_longitude>-76.3954</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="cbvshwq">
+  <short_name>cbvshwq</short_name>
+  <type_name>wq</type_name>
+  <description>Chesapeake Bay, VA</description>
+  <fixed_latitude>37.5714</fixed_latitude>
+  <fixed_longitude>-76.8842</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="cbvtcmet">
+  <short_name>cbvtcmet</short_name>
+  <type_name>met</type_name>
+  <description>Chesapeake Bay, VA</description>
+  <fixed_latitude>37.4141</fixed_latitude>
+  <fixed_longitude>-76.7123</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="delllwq">
+  <short_name>delllwq</short_name>
+  <type_name>wq</type_name>
+  <description>Delaware, DE</description>
+  <fixed_latitude>39.1144</fixed_latitude>
+  <fixed_longitude>-75.4992</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="delsjmet">
+  <short_name>delsjmet</short_name>
+  <type_name>met</type_name>
+  <description>Delaware, DE</description>
+  <fixed_latitude>39.0889</fixed_latitude>
+  <fixed_longitude>-75.4368</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="delslwq">
+  <short_name>delslwq</short_name>
+  <type_name>wq</type_name>
+  <description>Delaware, DE</description>
+  <fixed_latitude>39.0849</fixed_latitude>
+  <fixed_longitude>-75.4606</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="elkcwmet">
+  <short_name>elkcwmet</short_name>
+  <type_name>met</type_name>
+  <description>Elkhorn Slough, CA</description>
+  <fixed_latitude>36.818056</fixed_latitude>
+  <fixed_longitude>-121.739394</fixed_longitude>
+  <time_add>9</time_add>
+</platform>
+
+<platform id="elksmwq">
+  <short_name>elksmwq</short_name>
+  <type_name>wq</type_name>
+  <description>Elkhorn Slough, CA</description>
+  <fixed_latitude>36.8179</fixed_latitude>
+  <fixed_longitude>-121.7394</fixed_longitude>
+  <time_add>9</time_add>
+</platform>
+
+<platform id="grbglmet">
+  <short_name>grbglmet</short_name>
+  <type_name>met</type_name>
+  <description>Great Bay, NH</description>
+  <fixed_latitude>43.065303</fixed_latitude>
+  <fixed_longitude>-70.832867</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="grborwq">
+  <short_name>grborwq</short_name>
+  <type_name>wq</type_name>
+  <description>Great Bay, NH</description>
+  <fixed_latitude>43.134</fixed_latitude>
+  <fixed_longitude>-70.911</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="hudfsmet">
+  <short_name>hudfsmet</short_name>
+  <type_name>met</type_name>
+  <description>Hudson River, NY</description>
+  <fixed_latitude>42.0182</fixed_latitude>
+  <fixed_longitude>-73.917</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="hudtnwq">
+  <short_name>hudtnwq</short_name>
+  <type_name>wq</type_name>
+  <description>Hudson River, NY</description>
+  <fixed_latitude>42.0365</fixed_latitude>
+  <fixed_longitude>-73.9253</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="hudtswq">
+  <short_name>hudtswq</short_name>
+  <type_name>wq</type_name>
+  <description>Hudson River, NY</description>
+  <fixed_latitude>42.027</fixed_latitude>
+  <fixed_longitude>-73.9259</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="jacb6wq">
+  <short_name>jacb6wq</short_name>
+  <type_name>wq</type_name>
+  <description>Jacques Cousteau, NJ</description>
+  <fixed_latitude>39.5079</fixed_latitude>
+  <fixed_longitude>-74.3385</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="jacnewq">
+  <short_name>jacnewq</short_name>
+  <type_name>wq</type_name>
+  <description>Jacques Cousteau, NJ</description>
+  <fixed_latitude>39.5479</fixed_latitude>
+  <fixed_longitude>-74.4613</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="jacncmet">
+  <short_name>jacncmet</short_name>
+  <type_name>metf</type_name>
+  <description>Jacques Cousteau, NJ</description>
+  <fixed_latitude>39.5350</fixed_latitude>
+  <fixed_longitude>-74.4636</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="kachomet">
+  <short_name>kachomet</short_name>
+  <type_name>met</type_name>
+  <description>Kachemak Bay, AK</description>
+  <fixed_latitude>59.6009</fixed_latitude>
+  <fixed_longitude>-151.4096</fixed_longitude>
+  <time_add>9</time_add>
+</platform>
+
+<platform id="kachdwq">
+  <short_name>kachdwq</short_name>
+  <type_name>wq</type_name>
+  <description>Kachemak Bay, AK</description>
+  <fixed_latitude>59.6028</fixed_latitude>
+  <fixed_longitude>-151.4081</fixed_longitude>
+  <time_add>9</time_add>
+</platform>
+
+<platform id="kacsdwq">
+  <short_name>kacsdwq</short_name>
+  <type_name>wq</type_name>
+  <description>Kachemak Bay, AK</description>
+  <fixed_latitude>59.4413</fixed_latitude>
+  <fixed_longitude>-151.7186</fixed_longitude>
+  <time_add>9</time_add>
+</platform>
+
+<platform id="marabwq">
+  <short_name>marabwq</short_name>
+  <type_name>wq</type_name>
+  <description>Mission-Aransas, TX</description>
+  <fixed_latitude>27.9798</fixed_latitude>
+  <fixed_longitude>-97.0287</fixed_longitude>
+  <time_add>6</time_add>
+</platform>
+
+<platform id="marcemet">
+  <short_name>marcemet</short_name>
+  <type_name>metf</type_name>
+  <description>Mission-Aransas, TX</description>
+  <fixed_latitude>28.1323</fixed_latitude>
+  <fixed_longitude>-97.0344</fixed_longitude>
+  <time_add>6</time_add>
+</platform>
+
+<platform id="narpcmet">
+  <short_name>narpcmet</short_name>
+  <type_name>met</type_name>
+  <description>Narragansett Bay, RI</description>
+  <fixed_latitude>41.6389</fixed_latitude>
+  <fixed_longitude>-71.3394</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="nartbwq">
+  <short_name>nartbwq</short_name>
+  <type_name>wq</type_name>
+  <description>Narragansett Bay, RI</description>
+  <fixed_latitude>41.5789</fixed_latitude>
+  <fixed_longitude>-71.3215</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="owcolwq">
+  <short_name>owcolwq</short_name>
+  <type_name>wq</type_name>
+  <description>Old Woman Creek, OH</description>
+  <fixed_latitude>41.3819</fixed_latitude>
+  <fixed_longitude>-82.5142</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="owcowmet">
+  <short_name>owcowmet</short_name>
+  <type_name>met</type_name>
+  <description>Old Woman Creek, OH</description>
+  <fixed_latitude>41.377778</fixed_latitude>
+  <fixed_longitude>-82.508056</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="pdbpfmet">
+  <short_name>pdbpfmet</short_name>
+  <type_name>met</type_name>
+  <description>Padilla Bay, WA</description>
+  <fixed_latitude>48.4641</fixed_latitude>
+  <fixed_longitude>-122.468</fixed_longitude>
+  <time_add>8</time_add>
+</platform>
+
+<!-- offline
+<platform id="pdbbvwq">
+  <short_name>pdbbvwq</short_name>
+  <type_name>wq</type_name>
+  <description>Padilla Bay, WA</description>
+  <fixed_latitude>48.4641</fixed_latitude>
+  <fixed_longitude>-122.468</fixed_longitude>
+  <time_add>8</time_add>
+</platform>
+--> 
+
+<platform id="pdbjlwq">
+  <short_name>pdbjlwq</short_name>
+  <type_name>wq</type_name>
+  <description>Padilla Bay, WA</description>
+  <fixed_latitude>48.5181</fixed_latitude>
+  <fixed_longitude>-122.473</fixed_longitude>
+  <time_add>8</time_add>
+</platform>
+
+<platform id="sfbccwq">
+  <short_name>sfbccwq</short_name>
+  <type_name>wq</type_name>
+  <description>San Francisco Bay, CA</description>
+  <fixed_latitude>38.001247</fixed_latitude>
+  <fixed_longitude>-122.460356</fixed_longitude>
+  <time_add>8</time_add>
+</platform>
+
+<platform id="sfbrrmet">
+  <short_name>sfbrrmet</short_name>
+  <type_name>met</type_name>
+  <description>San Francisco Bay, CA</description>
+  <fixed_latitude>38.2225</fixed_latitude>
+  <fixed_longitude>-122.026</fixed_longitude>
+  <time_add>8</time_add>
+</platform>
+
+<platform id="soschwq">
+  <short_name>soschwq</short_name>
+  <type_name>wq</type_name>
+  <description>South Slough, OR</description>
+  <fixed_latitude>43.337700</fixed_latitude>
+  <fixed_longitude>-124.320533</fixed_longitude>
+  <time_add>8</time_add>
+</platform>
+
+<platform id="soscmmet">
+  <short_name>soscmmet</short_name>
+  <type_name>met</type_name>
+  <description>South Slough, OR</description>
+  <fixed_latitude>43.3451</fixed_latitude>
+  <fixed_longitude>-124.3287</fixed_longitude>
+  <time_add>8</time_add>
+</platform>
+
+<platform id="sosvawq">
+  <short_name>sosvawq</short_name>
+  <type_name>wq</type_name>
+  <description>South Slough, OR</description>
+  <fixed_latitude>43.317217</fixed_latitude>
+  <fixed_longitude>-124.321633</fixed_longitude>
+  <time_add>8</time_add>
+</platform>
+
+<platform id="sossewq">
+  <short_name>sossewq</short_name>
+  <type_name>wq</type_name>
+  <description>South Slough, OR</description>
+  <fixed_latitude>43.289683</fixed_latitude>
+  <fixed_longitude>-124.302617</fixed_longitude>
+  <time_add>8</time_add>
+</platform>
+
+<platform id="soswiwq">
+  <short_name>soswiwq</short_name>
+  <type_name>wq</type_name>
+  <description>South Slough, OR</description>
+  <fixed_latitude>43.282417</fixed_latitude>
+  <fixed_longitude>-124.320317</fixed_longitude>
+  <time_add>8</time_add>
+</platform>
+
+<platform id="tjroswq">
+  <short_name>tjroswq</short_name>
+  <type_name>wq</type_name>
+  <description>Tijuana River, CA</description>
+  <fixed_latitude>32.568</fixed_latitude>
+  <fixed_longitude>-117.1312</fixed_longitude>
+  <time_add>9</time_add>
+</platform>
+
+<platform id="tjrtlmet">
+  <short_name>tjrtlmet</short_name>
+  <type_name>met</type_name>
+  <description>Tijuana River, CA</description>
+  <fixed_latitude>32.5745</fixed_latitude>
+  <fixed_longitude>-117.127</fixed_longitude>
+  <time_add>9</time_add>
+</platform>
+
+<platform id="wqbchmet">
+  <short_name>wqbchmet</short_name>
+  <type_name>met</type_name>
+  <description>Waquoit Bay, MA</description>
+  <fixed_latitude>41.5817</fixed_latitude>
+  <fixed_longitude>-70.5251</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="wqbmhwq">
+  <short_name>wqbmhwq</short_name>
+  <type_name>wq</type_name>
+  <description>Waquoit Bay, MA</description>
+  <fixed_latitude>41.5526</fixed_latitude>
+  <fixed_longitude>-70.5485</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="wkbfrwq">
+  <short_name>wkbfrwq</short_name>
+  <type_name>wq</type_name>
+  <description>Weeks Bay, AL</description>
+  <fixed_latitude>30.4162</fixed_latitude>
+  <fixed_longitude>-87.8228</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="wkbwbmet">
+  <short_name>wkbwbmet</short_name>
+  <type_name>met</type_name>
+  <description>Weeks Bay, AL</description>
+  <fixed_latitude>30.4148</fixed_latitude>
+  <fixed_longitude>-87.826</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="wellfmet">
+  <short_name>wellfmet</short_name>
+  <type_name>met</type_name>
+  <description>Wells, ME</description>
+  <fixed_latitude>43.3374</fixed_latitude>
+  <fixed_longitude>-70.55</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+<platform id="welsmwq">
+  <short_name>welsmwq</short_name>
+  <type_name>wq</type_name>
+  <description>Wells, ME</description>
+  <fixed_latitude>43.3421</fixed_latitude>
+  <fixed_longitude>-70.548164</fixed_longitude>
+  <time_add>5</time_add>
+</platform>
+
+</platformList>
+</organization>
+</organizationList>
+
