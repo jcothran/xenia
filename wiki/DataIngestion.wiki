@@ -7,7 +7,7 @@
 These are the scripts currently running that retrieve the data from various sources and import that data into the Xenia database.<br/>
 
 
-==Machine== 
+= Machine = 
 neptune.baruch.sc.edu <br/>
 
 
@@ -180,7 +180,32 @@ netcdf files. The files are pulled down then processed into the database. Delete
 provided  on the command line. This script pulls in the data for the Apache Pier. <br/>
 *Schedule*: Runs twice an hour.
 ----
+=== NERRS Processing ===
+*Script*: populate_xenia_nerrs<br/>
+*Directory*: /home/xeniaprod/cron <br/>
+*Description*: Pulls in NERRS data directly from the NERRS site. <br/>
+*Shell Script Makeup* <br/>
+	_Script_: filter_CDMO_Soap.pl <br/>
+	_Command line parameters_: <br/>
+		Argument 1: Number of records to request <br/>
+	_Description_: Connects to the NERRS SOAP webservice requesting the observation data as XML. Each station has an xml file created.<br/>
+	_Script_: gen_nerrs_obskml.pl <br/>
+	_Command line parameters_: <br/>
+	  Argument 1: Provider Name, nerrs  <br/>
+	  Argument 2: Output directory. Argument 1 is appended to it to form the complete path.  <br/>
+	  Argument 3: Platform list xml file.  <br/>
+          Argument 4: Input file directory, should point to the location of the XML files created by the filter_CDMO_Soap.pl script above.
+	_Description_: Creates the obsKML files by parsing the XML files created by filter_CDMO_Soap.pl. <br/>
+        _Script_: obskml_to_xenia_postgresql.pl
+        _Command Line Parameters_: <br/>
+          Argument 1 - The URL to the KMZ file to process.<br/>
+          Argument 2 - Path where the SQL file will be written.<br/>
+          Argument 3 - Filename to use for the SQL file.<br/>
+          Argument 4 - Database name to connect to.<br/>
+        _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
 
+*Schedule*: Runs twice an hour.
+----
 === YSI Nerrs Processing ===
 *Script*: getYSIData.py <br/>
 *Command line parameters*: <br/>
@@ -191,7 +216,7 @@ provided  on the command line. This script pulls in the data for the some NERRS 
 *Schedule*: Runs twice an hour.
 ----
 
-== Machine ==
+= Machine =
 http://129.252.139.139/xenia/
 
 == Scripts ==
