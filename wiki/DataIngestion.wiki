@@ -192,14 +192,69 @@ provided  on the command line. This script pulls in the data for the some NERRS 
 ----
 
 == Machine ==
-nautilus.baruch.sc.edu
+http://129.252.139.139/xenia/
 
 == Scripts ==
 
 ----
-*Process*: <br/>
-*Script*: <br/>
-*Command line parameters*: <br/>
-*Directory*:  <br/>
-*Description*:  <br/>
-*Schedule*: 
+=== MODIS Sea Surface Temperature === <br/>
+*Script*: get_usf_modis_sst.sh<br/>
+*Directory*:  /home/xeniaprod/cron<br/>
+*Description*:  Gets the latest interpolated SST file and updates the Xenia database on neptune.<br/>
+*Shell Script Makeup* <br/>
+	_Script_:  get_latest_data.pl<br/>
+	_Command line parameters_: 
+  {{{
+    None. 
+    NOTE: There are a number of hardcoded settings in the script, such as working directorys and the URLs to connect to for the data. 
+      
+  }}}<br/>
+	_Description_: Gets the interpolated SST file and updates the Xenia database on neptune.<br/>
+      The following are the hardcoded working directories: <br/>
+      {{{
+      my $scratch_dir = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name;
+      my $dest_dir    = '/home/xeniaprod/feeds/remotesensing/'.$layer_name;  
+      my $fetch_logs   = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name.'/fetch_logs';    
+      }}}
+      The following are the hardcoded URLS: <br/>
+      {{{
+      @dir_urls = (
+        "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$yesterdayJulian/1km/pass/intermediate/",
+        "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$yesterdayJulian/1km/pass/final/",
+        "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$todayJulian/1km/pass/intermediate/",
+        "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$todayJulian/1km/pass/final/"
+        #'http://modis.marine.usf.edu/products/fullpass/sst/'
+      );    
+      }}}
+      The $psql_command is also hardcoded to connect to the database to import the SQL statement.
+
+*Schedule*: Top of each hour
+----
+=== Interpolated Remote Sea Surface Temperature === <br/>
+*Script*: get_usf_modis_sst.sh<br/>
+*Directory*:  /home/xeniaprod/cron<br/>
+*Description*:  Gets the latest modis overpass file and updates the Xenia database on neptune.<br/>
+*Shell Script Makeup* <br/>
+	_Script_:  get_latest_data.pl<br/>
+	_Command line parameters_: 
+  {{{
+    None. 
+    NOTE: There are a number of hardcoded settings in the script, such as working directorys and the URLs to connect to for the data. 
+      
+  }}}<br/>
+	_Description_: Gets the latest modis overpass file and updates the Xenia database on neptune.<br/>
+      The following are the hardcoded working directories: <br/>
+      {{{
+        my $scratch_dir = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name;
+        my $dest_dir    = '/home/xeniaprod/feeds/remotesensing/'.$layer_name;  
+        my $fetch_logs   = '/home/xeniaprod/tmp/remotesensing/usf/oi_sst/fetch_logs';
+      }}}
+      The following are the hardcoded URLS: <br/>
+      {{{
+      @dir_urls = (
+        'http://ocgweb.marine.usf.edu/Products/OI/oidat/'
+      );    
+      }}}
+      The $psql_command is also hardcoded to connect to the database to import the SQL statement.
+
+*Schedule*: Top of each hour
