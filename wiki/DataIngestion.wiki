@@ -7,11 +7,11 @@
 These are the scripts currently running that retrieve the data from various sources and import that data into the Xenia database.<br/>
 
 
-= Machine = 
+= Machine: Neptune = 
 neptune.baruch.sc.edu <br/>
 
 
-== Scripts ==
+== Scripts Neptune ==
 ----
 === NetCDF Scout ===
 *Script*: GetLatestData.pl <br/>
@@ -218,10 +218,10 @@ provided  on the command line. This script pulls in the data for the some NERRS 
 *Schedule*: Runs twice an hour.
 ----
 
-= Machine =
+= Machine: Mapping =
 http://129.252.139.139/
 
-== Scripts ==
+== Scripts: Mapping ==
 
 ----
 
