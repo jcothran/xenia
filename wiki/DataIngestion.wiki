@@ -106,7 +106,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
 
 === NWS Processing ===
 *Script*: populate_xenia_nws <br/>
-*Directory*: /home/xeniaprod/scripts/postgresql/feeds/federal/nws <br/>
+*Directory*: /home/xeniaprod/cron <br/>
 *Description*: Pulls in NWS data directly from the NWS site. This is used in tandem with the NetCDF scout. Currently this is scheduled to run in crontab. <br/>
 *Shell Script Makeup* <br/>
 	_Script_: mk_sql_for_xenia.pl <br/>
@@ -121,7 +121,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
 
 === NOS Processing ===
 *Script*: populate_xenia_nos <br/>
-*Directory*: /home/xeniaprod/scripts/postgresql/feeds/federal/nos <br/>
+*Directory*: /home/xeniaprod/cron <br/>
 *Description*: Pulls in NOS data directly from the NOS site. This is used in tandem with the NetCDF scout. Currently this is scheduled to run in crontab. <br/>
 *Shell Script Makeup* <br/>
 	_Script_: mk_sql_for_xenia.pl <br/>
@@ -187,22 +187,24 @@ provided  on the command line. This script pulls in the data for the Apache Pier
 *Shell Script Makeup* <br/>
 	_Script_: filter_CDMO_Soap.pl <br/>
 	_Command line parameters_: <br/>
-		Argument 1: Number of records to request <br/>
+	  Argument 1: Number of records to request <br/>
 	_Description_: Connects to the NERRS SOAP webservice requesting the observation data as XML. Each station has an xml file created.<br/>
-	_Script_: gen_nerrs_obskml.pl <br/>
+	
+  _Script_: gen_nerrs_obskml.pl <br/>
 	_Command line parameters_: <br/>
-	  Argument 1: Provider Name, nerrs  <br/>
-	  Argument 2: Output directory. Argument 1 is appended to it to form the complete path.  <br/>
-	  Argument 3: Platform list xml file.  <br/>
-          Argument 4: Input file directory, should point to the location of the XML files created by the filter_CDMO_Soap.pl script above.
+    Argument 1: Provider Name, nerrs  <br/>
+    Argument 2: Output directory. Argument 1 is appended to it to form the complete path.  <br/>
+    Argument 3: Platform list xml file.  <br/>
+    Argument 4: Input file directory, should point to the location of the XML files created by the filter_CDMO_Soap.pl script above. <br/>
 	_Description_: Creates the obsKML files by parsing the XML files created by filter_CDMO_Soap.pl. <br/>
-        _Script_: obskml_to_xenia_postgresql.pl
-        _Command Line Parameters_: <br/>
-          Argument 1 - The URL to the KMZ file to process.<br/>
-          Argument 2 - Path where the SQL file will be written.<br/>
-          Argument 3 - Filename to use for the SQL file.<br/>
-          Argument 4 - Database name to connect to.<br/>
-        _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
+  
+  _Script_: obskml_to_xenia_postgresql.pl
+  _Command Line Parameters_: <br/>
+    Argument 1 - The URL to the KMZ file to process.<br/>
+    Argument 2 - Path where the SQL file will be written.<br/>
+    Argument 3 - Filename to use for the SQL file.<br/>
+    Argument 4 - Database name to connect to.<br/>
+  _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
 
 *Schedule*: Runs twice an hour.
 ----
@@ -217,7 +219,7 @@ provided  on the command line. This script pulls in the data for the some NERRS 
 ----
 
 = Machine =
-http://129.252.139.139/xenia/
+http://129.252.139.139/
 
 == Scripts ==
 
