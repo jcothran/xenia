@@ -240,7 +240,6 @@ http://129.252.139.139/
     NOTE: There are a number of hardcoded settings in the script, such as working directorys and the URLs to connect to for the data. 
       
   }}}
-	_Description_: Gets the modis file and updates the Xenia database on neptune.<br/>
       The following are the hardcoded working directories: <br/>
       {{{
       my $scratch_dir = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name;
@@ -257,7 +256,9 @@ http://129.252.139.139/
         #'http://modis.marine.usf.edu/products/fullpass/sst/'
       );    
       }}}
-      The $psql_command is also hardcoded to connect to the database to import the SQL statement.
+      The $psql_command is also hardcoded to connect to the database to import the SQL statement.<br/>      
+      
+	_Description_: Gets the modis file and updates the Xenia database on neptune. The files are downloaded then the file name modified to the format of modis_sst_year_month_day_hour_minute.png then moved to the $dest_dir described above. This is done to have a consistent file naming scheme across the products. The database table used is "timestamp_lkp" which is a generalized table for the remote sensing products. For a given data layer, a mappping product would query the database for the specific product id's(layer's) most recent time entry. The database would return the timestamp which would then be appended to the layer name to then get access to the most recent file. <br/>
 
 *Schedule*: Top of each hour
 ----
@@ -273,7 +274,6 @@ http://129.252.139.139/
     NOTE: There are a number of hardcoded settings in the script, such as working directorys and the URLs to connect to for the data. 
       
   }}}
-	_Description_: Gets the latest interpolated SST file and updates the Xenia database on neptune.<br/>
       The following are the hardcoded working directories: <br/>
       {{{
         my $scratch_dir = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name;
@@ -287,5 +287,5 @@ http://129.252.139.139/
       );    
       }}}
       The $psql_command is also hardcoded to connect to the database to import the SQL statement.
-
+Description_: Gets the modis file and updates the Xenia database on neptune. The files are downloaded then the file name modified to the format of oi_sst_year_month_day_hour_minute.png then moved to the $dest_dir described above. This is done to have a consistent file naming scheme across the products. The database table used is "timestamp_lkp" which is a generalized table for the remote sensing products. For a given data layer, a mappping product would query the database for the specific product id's(layer's) most recent time entry. The database would return the timestamp which would then be appended to the layer name to then get access to the most recent file.
 *Schedule*: Top of each hour
