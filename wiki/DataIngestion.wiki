@@ -14,7 +14,7 @@ neptune.baruch.sc.edu <br/>
 == Scripts Neptune ==
 ----
 === NetCDF Scout ===
-*Script*: populate_xenia_carocoops.sh<br/>
+*Script*: populate_xenia_netcdfscout.sh<br/>
 *Command line parameters*:<br/>
 *Directory*: /home/xeniaprod/cron<br/>
 *Description*: Shell script for processing netcdf files that aren't handled through the other RA specific processing scripts below. This script incoporates the NetCDF scout above, but only handles the Carocoops 
