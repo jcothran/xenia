@@ -197,7 +197,7 @@ http://129.252.139.139/xenia/
 == Scripts ==
 
 ----
-=== MODIS Sea Surface Temperature === <br/>
+=== MODIS Sea Surface Temperature === 
 *Script*: get_usf_modis_sst.sh<br/>
 *Directory*:  /home/xeniaprod/cron<br/>
 *Description*:  Gets the latest interpolated SST file and updates the Xenia database on neptune.<br/>
@@ -230,7 +230,7 @@ http://129.252.139.139/xenia/
 
 *Schedule*: Top of each hour
 ----
-=== Interpolated Remote Sea Surface Temperature === <br/>
+=== Interpolated Remote Sea Surface Temperature === 
 *Script*: get_usf_modis_sst.sh<br/>
 *Directory*:  /home/xeniaprod/cron<br/>
 *Description*:  Gets the latest modis overpass file and updates the Xenia database on neptune.<br/>
