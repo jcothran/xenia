@@ -197,10 +197,11 @@ http://129.252.139.139/xenia/
 == Scripts ==
 
 ----
+
 === MODIS Sea Surface Temperature === 
 *Script*: get_usf_modis_sst.sh<br/>
 *Directory*:  /home/xeniaprod/cron<br/>
-*Description*:  Gets the latest interpolated SST file and updates the Xenia database on neptune.<br/>
+*Description*:  Gets the latest modis file and updates the Xenia database on neptune.<br/>
 *Shell Script Makeup* <br/>
 	_Script_:  get_latest_data.pl<br/>
 	_Command line parameters_: 
@@ -208,8 +209,8 @@ http://129.252.139.139/xenia/
     None. 
     NOTE: There are a number of hardcoded settings in the script, such as working directorys and the URLs to connect to for the data. 
       
-  }}}<br/>
-	_Description_: Gets the interpolated SST file and updates the Xenia database on neptune.<br/>
+  }}}
+	_Description_: Gets the modis file and updates the Xenia database on neptune.<br/>
       The following are the hardcoded working directories: <br/>
       {{{
       my $scratch_dir = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name;
@@ -233,7 +234,7 @@ http://129.252.139.139/xenia/
 === Interpolated Remote Sea Surface Temperature === 
 *Script*: get_usf_modis_sst.sh<br/>
 *Directory*:  /home/xeniaprod/cron<br/>
-*Description*:  Gets the latest modis overpass file and updates the Xenia database on neptune.<br/>
+*Description*:  Gets the latest interpolated SST file and updates the Xenia database on neptune.<br/>
 *Shell Script Makeup* <br/>
 	_Script_:  get_latest_data.pl<br/>
 	_Command line parameters_: 
@@ -241,8 +242,8 @@ http://129.252.139.139/xenia/
     None. 
     NOTE: There are a number of hardcoded settings in the script, such as working directorys and the URLs to connect to for the data. 
       
-  }}}<br/>
-	_Description_: Gets the latest modis overpass file and updates the Xenia database on neptune.<br/>
+  }}}
+	_Description_: Gets the latest interpolated SST file and updates the Xenia database on neptune.<br/>
       The following are the hardcoded working directories: <br/>
       {{{
         my $scratch_dir = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name;
