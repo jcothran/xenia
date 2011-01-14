@@ -265,18 +265,22 @@ provided  on the command line. This script pulls in the data for the Apache Pier
 *Directory*: /home/xeniaprod/cron <br/>
 *Description*: Pulls in NERRS data directly from the NERRS site. <br/>
 *Shell Script Makeup* <br/>
-	_Script_: filter_CDMO_Soap.pl <br/>
-	_Command line parameters_: <br/>
-	  Argument 1: Number of records to request <br/>
-	_Description_: Connects to the NERRS SOAP webservice requesting the observation data as XML. Each station has an xml file created.<br/>
+  _Script_: filter_CDMO_Soap.pl <br/>
+  _Command line parameters_: <br/>
+  {{{
+  Argument 1: Number of records to request <br/>
+  }}}
+ _Description_: Connects to the NERRS SOAP webservice requesting the observation data as XML. Each station has an xml file created.<br/>
 	
   _Script_: gen_nerrs_obskml.pl <br/>
-	_Command line parameters_: <br/>
-    Argument 1: Provider Name, nerrs  <br/>
-    Argument 2: Output directory. Argument 1 is appended to it to form the complete path.  <br/>
-    Argument 3: Platform list xml file.  <br/>
-    Argument 4: Input file directory, should point to the location of the XML files created by the filter_CDMO_Soap.pl script above. <br/>
-	_Description_: Creates the obsKML files by parsing the XML files created by filter_CDMO_Soap.pl. <br/>
+  _Command line parameters_: <br/>
+  {{{
+  Argument 1: Provider Name, nerrs  <br/>
+  Argument 2: Output directory. Argument 1 is appended to it to form the complete path.  <br/>
+  Argument 3: Platform list xml file.  <br/>
+  Argument 4: Input file directory, should point to the location of the XML files created by the filter_CDMO_Soap.pl script above. <br/>
+  }}}
+  _Description_: Creates the obsKML files by parsing the XML files created by filter_CDMO_Soap.pl. <br/>
   
   _Script_: obskml_to_xenia_postgresql.pl
   _Command Line Parameters_: <br/>
