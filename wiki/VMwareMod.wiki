@@ -175,7 +175,7 @@ sudo apt-get install php5-pgsql
 
 == Squid ==
 
-  *hf radar(/home/xeniaprod/scripts/radar) and email alerts
+  * hf radar(/home/xeniaprod/scripts/radar) and email alerts
     * opendap/netcdf(/home/xeniaprod/scripts/dap)
     * curl
   
