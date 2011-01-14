@@ -20,17 +20,27 @@ neptune.baruch.sc.edu <br/>
 *Description*: Shell script for processing netcdf files that aren't handled through the other RA specific processing scripts below. The files are pulled down then processed into the database. Deletes the previous KML, ZIP and KMZ files.<br/>
 *Shell Script Makeup* <br/>
   _Script_: GetLatestData.pl <br/>
-  _Command Line Parameters_: See NetCDF section above. <br/>
+  _Command Line Parameters_:  <br/>
+  {{{
+  --URLControlFile=./URLList.xml 
+  --DirForObsKml=/home/xeniaprod/feeds/scout/general 
+  --NetCDFDir=/home/xeniaprod/tmp/netcdf/scout 
+  --FetchLogDir=/home/xeniaprod/tmp/netcdf/scout/fetch_logs
+  --UseLastNTimeStamps=10 --UseLastNTimeStampsForOrg="nos;60,nws;20" > /home/xeniaprod/tmp/log/scout_netcdf.log
+
+  --URLControlFile is the XML file with the URL list the script will download the files from.
+  --FileFilter is the filter to apply to the file listings to allow the script to download the files we really want. Optional.
+  --DirForObsKml provides the path to the store the ObsKML files created. This is an optional argument, if not provided no ObsKML files are written.
+  --Delete specifies we delete the netcdf files after we write the ObsKML files. This is an optional argument.
+  --NetCDFDir is the directory to store the downloaded files. Optional, default is ./latest_netcdf_files.
+  --FetchLogDir is the directory were the file time stamps are stored. The script uses these files to determine which files are really the latest. Optional, default is ./fetch_logs
+  --UseLastNTimeStamps Integer representing the last N time entries to use when converting the data to obsKML. Optional.
+  --UseLastNTimeStampsForOrg Optional. List specifing orginization and the last N time entries to use for them. Whereas the UseLastNTimeStamps is applied to every organization, this can tailor to the specific. If not provided and UseLastNTimeStamps is provided, it is used.
+  --SkipZipObsKmlDirs Optional. A value of 1 will skip the zipping of the directories under the DirForObsKml option.
+
+  }}}
   _Description_: Processes the netCDF files into obsKML files.<br/>
   
-  _Script_: obskml_to_xenia_postgresql.pl
-  _Command Line Parameters_: <br/>
-    Argument 1 - The URL to the KMZ file to process.<br/>
-    Argument 2 - Path where the SQL file will be written.<br/>
-    Argument 3 - Filename to use for the SQL file.<br/>
-    Argument 4 - Database name to connect to.<br/>
-    <br/>
-  _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
 *Schedule*: Twice an hour
 ----
 
@@ -43,14 +53,28 @@ netcdf files. The files are pulled down then processed into the database. Delete
 *Shell Script Makeup* <br/>
   _Script_: GetLatestData.pl <br/>
   _Command Line Parameters_: See NetCDF section above. <br/>
+  {{{
+  --URLControlFile=./CarocoopsURLList.xml 
+  --DirForObsKml=/home/xeniaprod/feeds/scout/carocoops 
+  --NetCDFDir=/home/xeniaprod/tmp/netcdf/scout 
+  --FetchLogDir=/home/xeniaprod/tmp/netcdf/scout/fetch_logs
+  --UseLastNTimeStamps=10
+  }}}
   _Description_: Processes the netCDF files into obsKML files.<br/>
   
-  _Script_: obskml_to_xenia_postgresql.pl
+  _Script_: obskml_to_xenia_postgresql.pl <br/>
   _Command Line Parameters_: <br/>
-    Argument 1 - The URL to the KMZ file to process.<br/>
-    Argument 2 - Path where the SQL file will be written.<br/>
-    Argument 3 - Filename to use for the SQL file.<br/>
-    Argument 4 - Database name to connect to.<br/>
+  {{{
+  Argument 1 - The URL to the KMZ file to process.<br/>
+  Argument 2 - Path where the SQL file will be written.<br/>
+  Argument 3 - Filename to use for the SQL file.<br/>
+  Argument 4 - Database name to connect to.<br/>
+
+  http://localhost/xenia/feeds/carocoops/carocoops_metadata_latest.kmz 
+  /home/xeniaprod/tmp/sqlfiles
+  "latest_carocoops"
+  "xenia"
+  }}}
     <br/>
   _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
 *Schedule*: Runs every quarter hour. We run it this way since the dial up times for the platforms occur throughout the hour, one may be dialed at
@@ -67,15 +91,28 @@ netcdf files. The files are pulled down then processed into the database. Delete
 *Shell Script Makeup* <br/>
   _Script_: GetLatestData.pl <br/>
   _Command Line Parameters_: See NetCDF section above. <br/>
+  {{{
+  --URLControlFile=./CormpURLList.xml
+  --DirForObsKml=/home/xeniaprod/feeds/scout/cormp 
+  --NetCDFDir=/home/xeniaprod/tmp/netcdf/scout 
+  --FetchLogDir=/home/xeniaprod/tmp/netcdf/scout/fetch_logs
+  --UseLastNTimeStamps=10
+  }}}
   _Description_: Processes the netCDF files into obsKML files.<br/>
   
   _Script_: obskml_to_xenia_postgresql.pl
   _Command Line Parameters_: <br/>
-    Argument 1 - The URL to the KMZ file to process.<br/>
-    Argument 2 - Path where the SQL file will be written.<br/>
-    Argument 3 - Filename to use for the SQL file.<br/>
-    Argument 4 - Database name to connect to.<br/>
-    <br/>
+  {{{
+  Argument 1 - The URL to the KMZ file to process.<br/>
+  Argument 2 - Path where the SQL file will be written.<br/>
+  Argument 3 - Filename to use for the SQL file.<br/>
+  Argument 4 - Database name to connect to.<br/>
+  
+  http://localhost/xenia/feeds/cormp/cormp_metadata_latest.kmz
+  /home/xeniaprod/tmp/sqlfiles
+  "latest_cormp"
+  "xenia"
+  }}}
   _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
 *Schedule*: Runs every quarter hour. We run it this way since the dial up times for the platforms occur throughout the hour, one may be dialed at
 5 past the hour and another at 20 past.
@@ -91,14 +128,35 @@ netcdf files. The files are pulled down then processed into the database. Delete
 *Shell Script Makeup* <br/>
   _Script_: GetLatestData.pl <br/>
   _Command Line Parameters_: See NetCDF section above. <br/>
+  {{{
+  --URLControlFile=./UsfURLList.xml
+  --DirForObsKml=/home/xeniaprod/feeds/scout/usf 
+  --NetCDFDir=/home/xeniaprod/tmp/netcdf/scout 
+  --FetchLogDir=/home/xeniaprod/tmp/netcdf/scout/fetch_logs 
+  --UseLastNTimeStamps=10
+  }}}
   _Description_: Processes the netCDF files into obsKML files.<br/>
   
   _Script_: obskml_to_xenia_postgresql.pl
   _Command Line Parameters_: <br/>
-    Argument 1 - The URL to the KMZ file to process.<br/>
-    Argument 2 - Path where the SQL file will be written.<br/>
-    Argument 3 - Filename to use for the SQL file.<br/>
-    Argument 4 - Database name to connect to.<br/>
+  {{{
+  Argument 1 - The URL to the KMZ file to process.<br/>
+  Argument 2 - Path where the SQL file will be written.<br/>
+  Argument 3 - Filename to use for the SQL file.<br/>
+  Argument 4 - Database name to connect to.<br/>
+  
+  For USF:
+  http://localhost/xenia/feeds/usf/usf_metadata_latest.kmz
+  /home/xeniaprod/tmp/sqlfiles
+  "latest_usf"
+  "xenia"
+
+  For NDBC:
+  http://localhost/xenia/feeds/ndbc/ndbc_metadata_latest.kmz
+  /home/xeniaprod/tmp/sqlfiles
+  "latest_ndbc"
+  "xenia"
+  }}}
     <br/>
   _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
 *Schedule*: Runs every quarter hour. We run it this way since the dial up times for the platforms occur throughout the hour, one may be dialed at
@@ -113,9 +171,17 @@ netcdf files. The files are pulled down then processed into the database. Delete
 *Shell Script Makeup* <br/>
 	_Script_: mk_sql_for_xenia.pl <br/>
 	_Command line parameters_: <br/>
-		Argument 1: Provider name – nos, nws, etc <br/>
-		Argument 2: Not used <br/>
-		Argument 3: Fully qualified path to SQL output file <br/>
+        {{{
+	Argument 1: Provider name – nos, nws, etc <br/>
+	Argument 2: Not used <br/>
+	Argument 3: Fully qualified path to SQL output file <br/>
+        Argument 4: Value of 'debug' will enable logging of some print statements
+
+        nws 
+        24 
+        /home/xeniaprod/tmp/sqlfiles/nws.sql
+        debug
+        }}}
 	_Description_: Connects to the NWS webservice, pulls the data down into a SQL file for importation into the database. Next psql is executed to import the SQL 	file.<br/>
 *Schedule*: Runs every 10 minutes. NWS stations have a fairly rapid update rate.
 ----
@@ -128,9 +194,18 @@ netcdf files. The files are pulled down then processed into the database. Delete
 *Shell Script Makeup* <br/>
 	_Script_: mk_sql_for_xenia.pl <br/>
 	_Command line parameters_: <br/>
-		Argument 1: Provider name – nos, nws, etc <br/>
-		Argument 2: Not used <br/>
-		Argument 3: Fully qualified path to SQL output file	<br/>
+        {{{
+	Argument 1: Provider name – nos, nws, etc <br/>
+	Argument 2: Not used <br/>
+	Argument 3: Fully qualified path to SQL output file	
+        Argument 4: Value of 'debug' will enable logging of some print statements
+
+        nos 
+        24 
+        /home/xeniaprod/tmp/sqlfiles/nws.sql
+        debug
+
+        }}}
 	_Description_: Connects to the NOS webservice, pulls the data down into a SQL 	file for importation into the database. Next psql is executed to import the SQL 	file. <br/>
 *Schedule*: Runs twice an hour.
 ----
