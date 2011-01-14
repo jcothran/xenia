@@ -173,6 +173,12 @@ sudo apt-get install php5-cli
 sudo apt-get install php5-pgsql
 }}}
 
+== Squid ==
+
+opendap/netcdf(/home/xeniaprod/scripts/dap)
+curl
+imagemagick(mogrify command)
+
 = Distribution checklist = 
 
 see [VMwareDesign]
