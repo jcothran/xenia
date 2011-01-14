@@ -169,44 +169,42 @@ netcdf files. The files are pulled down then processed into the database. Delete
 *Directory*: /home/xeniaprod/cron <br/>
 *Description*: Pulls in NWS data directly from the NWS site. This is used in tandem with the NetCDF scout. Currently this is scheduled to run in crontab. <br/>
 *Shell Script Makeup* <br/>
-	_Script_: mk_sql_for_xenia.pl <br/>
-	_Command line parameters_: <br/>
-        {{{
-	Argument 1: Provider name – nos, nws, etc <br/>
-	Argument 2: Not used <br/>
-	Argument 3: Fully qualified path to SQL output file <br/>
-        Argument 4: Value of 'debug' will enable logging of some print statements
+  _Script_: mk_sql_for_xenia.pl <br/>
+  _Command line parameters_: <br/>
+  {{{
+  Argument 1: Provider name – nos, nws, etc <br/>
+  Argument 2: Not used <br/>
+  Argument 3: Fully qualified path to SQL output file <br/>
+  Argument 4: Value of 'debug' will enable logging of some print   statements
 
-        nws 
-        24 
-        /home/xeniaprod/tmp/sqlfiles/nws.sql
-        debug
-        }}}
-	_Description_: Connects to the NWS webservice, pulls the data down into a SQL file for importation into the database. Next psql is executed to import the SQL 	file.<br/>
+  nws 
+  24 
+  /home/xeniaprod/tmp/sqlfiles/nws.sql
+  debug
+  }}}
+  _Description_: Connects to the NWS webservice, pulls the data down into a SQL file for importation into the database. Next psql is executed to import the SQL 	file.<br/>
 *Schedule*: Runs every 10 minutes. NWS stations have a fairly rapid update rate.
 ----
-
 
 === NOS Processing ===
 *Script*: populate_xenia_nos <br/>
 *Directory*: /home/xeniaprod/cron <br/>
 *Description*: Pulls in NOS data directly from the NOS site. This is used in tandem with the NetCDF scout. Currently this is scheduled to run in crontab. <br/>
 *Shell Script Makeup* <br/>
-	_Script_: mk_sql_for_xenia.pl <br/>
-	_Command line parameters_: <br/>
-        {{{
-	Argument 1: Provider name – nos, nws, etc <br/>
-	Argument 2: Not used <br/>
-	Argument 3: Fully qualified path to SQL output file	
-        Argument 4: Value of 'debug' will enable logging of some print statements
+  _Script_: mk_sql_for_xenia.pl <br/>
+  _Command line parameters_: <br/>
+  {{{
+  Argument 1: Provider name – nos, nws, etc <br/>
+  Argument 2: Not used <br/>
+  Argument 3: Fully qualified path to SQL output file	
+  Argument 4: Value of 'debug' will enable logging of some print statements
 
-        nos 
-        24 
-        /home/xeniaprod/tmp/sqlfiles/nws.sql
-        debug
-
-        }}}
-	_Description_: Connects to the NOS webservice, pulls the data down into a SQL 	file for importation into the database. Next psql is executed to import the SQL 	file. <br/>
+  nos 
+  24 
+  /home/xeniaprod/tmp/sqlfiles/nws.sql
+  debug
+  }}}
+  _Description_: Connects to the NOS webservice, pulls the data down into a SQL file for importation into the database. Next psql is executed to import the SQL 	file. <br/>
 *Schedule*: Runs twice an hour.
 ----
 
@@ -241,12 +239,13 @@ netcdf files. The files are pulled down then processed into the database. Delete
 *Directory*: /home/xeniaprod/cron <br/>
 *Description*: Shell script that pulls in data from the Sebastion Inlet station in Florida. <br/>
 *Shell Script Makeup* <br/>
-	_Script_: fit_to_obskml.pl <br/>
-	_Directory_: /home/xeniaprod/scripts/postgresql/feeds/fit <br/>
-	_Description_: Process the Fit data. <br/>
-	_Script_: obskml_to_xenia_postgresql.pl <br/>
-	_Directory_: /home/xeniaprod/scripts/postgresql/import_export <br/>
-	_Description_: Takes the obsKML and writes it into the database. <br/>
+  _Script_: fit_to_obskml.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/fit <br/>
+  _Description_: Process the Fit data. <br/>
+
+  _Script_: obskml_to_xenia_postgresql.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/import_export <br/>
+  _Description_: Takes the obsKML and writes it into the database. <br/>
 *Schedule*: Runs every quarter hour.
 ----
 
