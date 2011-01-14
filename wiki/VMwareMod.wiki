@@ -175,9 +175,12 @@ sudo apt-get install php5-pgsql
 
 == Squid ==
 
-  * opendap/netcdf(/home/xeniaprod/scripts/dap)
-  * curl
-  * imagemagick(mogrify command)
+  *hf radar(/home/xeniaprod/scripts/radar) and email alerts
+    * opendap/netcdf(/home/xeniaprod/scripts/dap)
+    * curl
+  
+  * remotesensing imagery for Chapel Hill(home/xeniaprod/scripts/scscout)
+    * imagemagick(mogrify command)
 
 = Distribution checklist = 
 
