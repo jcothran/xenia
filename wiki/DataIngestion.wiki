@@ -215,23 +215,23 @@ netcdf files. The files are pulled down then processed into the database. Delete
 *Directory*: /home/xeniaprod/scripts/postgresql/feeds/federal/usgs<br/>
 *Description*: Pulls in USGS data directly from the USGS site.  Currently this is scheduled to run in crontab. Cleans up previous KML, KMZ, and SQL files.<br/>
 *Shell Script Makeup* <br/>
-	_Script_: gen_wq_obskml.pl <br/>
-	_Command line parameters_: <br/>
-        {{{
-	Argument 1: Provider name – usgs 
-	Argument 2: Base output directory. Argument one is appended to complete the directory. 
-	Argument 3: XML platform list that details the platforms to query.
-        }}}
-	_Description_: Connects to the USGS webservice, pulls the data down into a KML 	file for importation into the database.<br/>
-        _Script_: obskml_to_xenia_postgresql.pl
-        _Command Line Parameters_: <br/>
-        {{{
-        Argument 1 - The URL to the KMZ file to process.
-        Argument 2 - Path where the SQL file will be written.
-        Argument 3 - Filename to use for the SQL file.
-        Argument 4 - Database name to connect to.
-        }}}
-  _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
+  _Script_: gen_wq_obskml.pl <br/>
+  _Command line parameters_: <br/>
+  {{{
+  Argument 1: Provider name – usgs 
+  Argument 2: Base output directory. Argument one is appended to complete the directory. 
+  Argument 3: XML platform list that details the platforms to query.
+  }}}
+  _Description_: Connects to the USGS webservice, pulls the data down into a KML file for importation into the database.<br/>
+ _Script_: obskml_to_xenia_postgresql.pl
+ _Command Line Parameters_: <br/>
+ {{{
+ Argument 1 - The URL to the KMZ file to process.
+ Argument 2 - Path where the SQL file will be written.
+ Argument 3 - Filename to use for the SQL file.
+ Argument 4 - Database name to connect to.
+ }}}
+ _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
 
 *Schedule*: 45 minutes after the hour.
 ----
