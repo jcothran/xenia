@@ -268,7 +268,7 @@ row_update_date - Date the row was modified last.
 product_id - Integer that specifies what product the row is for. These are described in the product_type table. Modis is id 1.
 pass_timestamp - the products date, the time the date was taken.
 filepath - the child path to the file. The user would have to know the parent directory, such as /home/xeniaprod/feeds/remotesensing, then the filepath would be appended to that to then get the requested file.
-}}}<br/>
+}}}
 
 *Schedule*: Top of each hour
 ----
@@ -308,5 +308,6 @@ row_update_date - Date the row was modified last.
 product_id - Integer that specifies what product the row is for. These are described in the product_type table. Modis is id 1.
 pass_timestamp - the products date, the time the date was taken.
 filepath - the child path to the file. The user would have to know the parent directory, such as /home/xeniaprod/feeds/remotesensing, then the filepath would be appended to that to then get the requested file.
-}}}<br/>
+}}}
+
 *Schedule*: Top of each hour
