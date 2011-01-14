@@ -351,20 +351,19 @@ http://129.252.139.139/
 *Directory*:  /home/xeniaprod/cron<br/>
 *Description*:  Gets the latest modis file and updates the Xenia database on neptune.<br/>
 *Shell Script Makeup* <br/>
-	_Script_:  get_latest_data.pl<br/>
-	_Command line parameters_: 
+  _Script_:  get_latest_data.pl<br/>
+  _Command line parameters_: 
   {{{
-    None. 
-    NOTE: There are a number of hardcoded settings in the script, such as working directorys and the URLs to connect to for the data. 
-      
+  None. 
+  NOTE: There are a number of hardcoded settings in the script, such as working directorys and the URLs to connect to for the data.       
   }}}
-  The following are the hardcoded working directories: <br/>
+  The following are the hardcoded working directories:
   {{{
   my $scratch_dir = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name;
   my $dest_dir    = '/home/xeniaprod/feeds/remotesensing/'.$layer_name;  
   my $fetch_logs   = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name.'/fetch_logs';    
   }}}
-  The following are the hardcoded URLS: <br/>
+  The following are the hardcoded URLS:
   {{{
   @dir_urls = (
     "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$yesterdayJulian/1km/pass/intermediate/",
@@ -373,7 +372,7 @@ http://129.252.139.139/
     "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$todayJulian/1km/pass/final/"
   );    
   }}}
-  The $product_id variable is hardcoded to the value from the product_type table for the data we want. See the _Description below.
+  The $product_id variable is hardcoded to the value from the product_type table for the data we want. See the _Description_ below.
 
   The $psql_command is also hardcoded to connect to the database to import the SQL statement.<br/>      
       
@@ -394,8 +393,8 @@ http://129.252.139.139/
 *Directory*:  /home/xeniaprod/cron<br/>
 *Description*:  Gets the latest interpolated SST file and updates the Xenia database on neptune.<br/>
 *Shell Script Makeup* <br/>
-	_Script_:  get_latest_data.pl<br/>
-	_Command line parameters_: 
+  _Script_:  get_latest_data.pl<br/>
+  _Command line parameters_: 
   {{{
   None. 
   NOTE: There are a number of hardcoded settings in the script, such as working directorys and the URLs to connect to for the data.       
@@ -412,7 +411,7 @@ http://129.252.139.139/
     'http://ocgweb.marine.usf.edu/Products/OI/oidat/'
   );    
   }}}
-  The $product_id variable is hardcoded to the value from the product_type table for the data we want. See the _Description below.
+  The $product_id variable is hardcoded to the value from the product_type table for the data we want. See the _Description_ below.
 
   The $psql_command is also hardcoded to connect to the database to import the SQL statement.
   _Description_: Gets the modis file and updates the Xenia database on neptune. The files are downloaded then the file name modified to the format of oi_sst_year_month_day_hour_minute.png then moved to the $dest_dir described above. This is done to have a consistent file naming scheme across the products. The database table used is "timestamp_lkp" which is a generalized table for the remote sensing products. For a given data layer, a mappping product would query the database for the specific product id's(layer's) most recent time entry. The database would return the timestamp which would then be appended to the layer name to then get access to the most recent file.
