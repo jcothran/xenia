@@ -4,7 +4,7 @@
 
 = Mod list =
 
-This is a list of the wmware image modifications/installs which I added to the original http://gisvm.com vmware image (geostatistics version, includes 'R') listed in their install order.
+This is a list of the wmware image modifications/installs which I added to the original http://gisvm.com vmware image (geostatistics version, includes 'R') listed in their install order.  The server is the primary production 'neptune' instance unless noted in a subsection(like 'Squid',etc)
 
 ----
 
