@@ -375,6 +375,7 @@ http://129.252.139.139/
 *Description*:  Gets the latest modis file and updates the Xenia database on neptune.<br/>
 *Shell Script Makeup* <br/>
   _Script_:  get_latest_data.pl<br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/remotesensing/modis_sst <br/>
   _Command line parameters_: 
   {{{
   None. 
@@ -417,6 +418,7 @@ http://129.252.139.139/
 *Description*:  Gets the latest interpolated SST file and updates the Xenia database on neptune.<br/>
 *Shell Script Makeup* <br/>
   _Script_:  get_latest_data.pl<br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/remotesensing/modis_sst <br/>
   _Command line parameters_: 
   {{{
   None. 
