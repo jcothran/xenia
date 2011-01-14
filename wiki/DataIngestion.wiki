@@ -20,6 +20,7 @@ neptune.baruch.sc.edu <br/>
 *Description*: Shell script for processing netcdf files that aren't handled through the other RA specific processing scripts below. The files are pulled down then processed into the database. Deletes the previous KML, ZIP and KMZ files.<br/>
 *Shell Script Makeup* <br/>
   _Script_: GetLatestData.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/scout/trunk <br/>
   _Command Line Parameters_:  <br/>
   {{{
   --URLControlFile=./URLList.xml 
@@ -52,6 +53,7 @@ neptune.baruch.sc.edu <br/>
 netcdf files. The files are pulled down then processed into the database. Deletes the previous KML, ZIP and KMZ files.<br/>
 *Shell Script Makeup* <br/>
   _Script_: GetLatestData.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/scout/trunk <br/>
   _Command Line Parameters_: See NetCDF section above. <br/>
   {{{
   --URLControlFile=./CarocoopsURLList.xml 
@@ -63,6 +65,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
   _Description_: Processes the netCDF files into obsKML files.<br/>
   
   _Script_: obskml_to_xenia_postgresql.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/import_export <br/>
   _Command Line Parameters_: <br/>
   {{{
   Argument 1 - The URL to the KMZ file to process.<br/>
@@ -90,6 +93,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
 netcdf files. The files are pulled down then processed into the database. Deletes the previous KML, ZIP and KMZ files.<br/>
 *Shell Script Makeup* <br/>
   _Script_: GetLatestData.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/scout/trunk <br/>
   _Command Line Parameters_: See NetCDF section above. <br/>
   {{{
   --URLControlFile=./CormpURLList.xml
@@ -101,6 +105,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
   _Description_: Processes the netCDF files into obsKML files.<br/>
   
   _Script_: obskml_to_xenia_postgresql.pl
+  _Directory_: /home/xeniaprod/scripts/postgresql/import_export <br/>
   _Command Line Parameters_: <br/>
   {{{
   Argument 1 - The URL to the KMZ file to process.<br/>
@@ -127,6 +132,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
 netcdf files. The files are pulled down then processed into the database. Deletes the previous KML, ZIP and KMZ files.<br/>
 *Shell Script Makeup* <br/>
   _Script_: GetLatestData.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/scout/trunk <br/>
   _Command Line Parameters_: See NetCDF section above. <br/>
   {{{
   --URLControlFile=./UsfURLList.xml
@@ -138,6 +144,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
   _Description_: Processes the netCDF files into obsKML files.<br/>
   
   _Script_: obskml_to_xenia_postgresql.pl
+  _Directory_: /home/xeniaprod/scripts/postgresql/import_export <br/>
   _Command Line Parameters_: <br/>
   {{{
   Argument 1 - The URL to the KMZ file to process.<br/>
@@ -170,6 +177,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
 *Description*: Pulls in NWS data directly from the NWS site. This is used in tandem with the NetCDF scout. Currently this is scheduled to run in crontab. <br/>
 *Shell Script Makeup* <br/>
   _Script_: mk_sql_for_xenia.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/federal <br/>
   _Command line parameters_: <br/>
   {{{
   Argument 1: Provider name – nos, nws, etc <br/>
@@ -192,6 +200,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
 *Description*: Pulls in NOS data directly from the NOS site. This is used in tandem with the NetCDF scout. Currently this is scheduled to run in crontab. <br/>
 *Shell Script Makeup* <br/>
   _Script_: mk_sql_for_xenia.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/federal <br/>
   _Command line parameters_: <br/>
   {{{
   Argument 1: Provider name – nos, nws, etc <br/>
@@ -214,6 +223,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
 *Description*: Pulls in USGS data directly from the USGS site.  Currently this is scheduled to run in crontab. Cleans up previous KML, KMZ, and SQL files.<br/>
 *Shell Script Makeup* <br/>
   _Script_: gen_wq_obskml.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/federal/usgs <br/>
   _Command line parameters_: <br/>
   {{{
   Argument 1: Provider name – usgs 
@@ -222,6 +232,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
   }}}
   _Description_: Connects to the USGS webservice, pulls the data down into a KML file for importation into the database.<br/>
  _Script_: obskml_to_xenia_postgresql.pl
+ _Directory_: /home/xeniaprod/scripts/postgresql/import_export <br/>
  _Command Line Parameters_: <br/>
  {{{
  Argument 1 - The URL to the KMZ file to process.
@@ -273,9 +284,13 @@ netcdf files. The files are pulled down then processed into the database. Delete
 
 === YSI Apache Pier Processing ===
 *Script*: getYSIData.py <br/>
-*Command line parameters*: <br/>
-	Argument 1: /home/xeniaprod/config/ysiParseConfig.xml <br/>
-*Directory*: /home/xeniaprod/ /scripts/postgresql/feeds/ysi <br/>
+*Directory*: /home/xeniaprod/scripts/postgresql/feeds/ysi <br/>
+*Command line parameters*: 
+{{{
+  Argument 1: Fullpath to the XML configuration file.
+
+  /home/xeniaprod/config/ysiParseConfig.xml
+}}}
 *Description*: Pulls in the data for the YSI site which is described in the configuration file 
 provided  on the command line. This script pulls in the data for the Apache Pier. <br/>
 *Schedule*: Runs twice an hour.
@@ -286,6 +301,7 @@ provided  on the command line. This script pulls in the data for the Apache Pier
 *Description*: Pulls in NERRS data directly from the NERRS site. This script has a command line parameter to call out how many records to request. This is needed since once a day a backfill request of 96(15 minute interval between records, so last 24 hours) as there is a downtime each time for the NERRS data telemytry.<br/>
 *Shell Script Makeup* <br/>
   _Script_: filter_CDMO_Soap.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/nerrs<br/>
   _Command line parameters_: <br/>
   {{{
   Argument 1: Number of records to request 
@@ -298,6 +314,7 @@ provided  on the command line. This script pulls in the data for the Apache Pier
  _Description_: Connects to the NERRS SOAP webservice requesting the observation data as XML. Each station has an xml file created.<br/>
 	
   _Script_: gen_nerrs_obskml.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/nerrs<br/>
   _Command line parameters_: <br/>
   {{{
   Argument 1: Provider Name, nerrs  
@@ -312,7 +329,8 @@ provided  on the command line. This script pulls in the data for the Apache Pier
   }}}
   _Description_: Creates the obsKML files by parsing the XML files created by filter_CDMO_Soap.pl. <br/>
   
-  _Script_: obskml_to_xenia_postgresql.pl
+  _Script_: obskml_to_xenia_postgresql.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/import_export <br/>
   _Command Line Parameters_: <br/>
   {{{
   Argument 1 - The URL to the KMZ file to process.
@@ -331,8 +349,13 @@ provided  on the command line. This script pulls in the data for the Apache Pier
 ----
 === YSI Nerrs Processing ===
 *Script*: getYSIData.py <br/>
-*Command line parameters*: <br/>
-	Argument 1: /home/xeniaprod/config/nerrsYSIConfigLinux.xml <br/>
+*Directory*: /home/xeniaprod/scripts/postgresql/feeds/ysi <br/>
+*Command line parameters*: 
+{{{
+  Argument 1: Fullpath to the XML configuration file.
+
+  /home/xeniaprod/config/nerrsYSIConfigLinux.xml
+}}}
 *Directory*: /home/xeniaprod/ /scripts/postgresql/feeds/ysi <br/>
 *Description*: Pulls in the data for the YSI site which is described in the configuration file 
 provided  on the command line. This script pulls in the data for the some NERRS water quality sites. <br/>
