@@ -254,7 +254,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
 
   _Script_: obskml_to_xenia_postgresql.pl <br/>
   _Directory_: /home/xeniaprod/scripts/postgresql/import_export <br/>
-  _Command line parameters: <br/>
+  _Command_ line parameters: <br/>
   {{{
   Argument 1 - The URL to the KMZ file to process.
   Argument 2 - Path where the SQL file will be written.
