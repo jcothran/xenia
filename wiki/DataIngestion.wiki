@@ -241,6 +241,15 @@ netcdf files. The files are pulled down then processed into the database. Delete
 *Shell Script Makeup* <br/>
   _Script_: fit_to_obskml.pl <br/>
   _Directory_: /home/xeniaprod/scripts/postgresql/feeds/fit <br/>
+  _Command line parameters: <br/>
+  {{{
+  None
+  Note: There are hardcoded paths and other settings that control where the data is retrieved and saved.
+  URL: my $url = 'http://my.fit.edu/coastal/DATA.HTM';
+  The text data is stored: "./latest.txt"
+  The obsKml is stored: "./fit.kml"
+  The kml file is then zipped and copied to: "/var/www/xenia/feeds/fit/fit_metadata_latest.kmz"
+  }}}
   _Description_: Process the Fit data. <br/>
 
   _Script_: obskml_to_xenia_postgresql.pl <br/>
