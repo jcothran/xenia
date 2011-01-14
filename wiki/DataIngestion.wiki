@@ -263,31 +263,48 @@ provided  on the command line. This script pulls in the data for the Apache Pier
 === NERRS Processing ===
 *Script*: populate_xenia_nerrs<br/>
 *Directory*: /home/xeniaprod/cron <br/>
-*Description*: Pulls in NERRS data directly from the NERRS site. <br/>
+*Description*: Pulls in NERRS data directly from the NERRS site. This script has a command line parameter to call out how many records to request. This is needed since once a day a backfill request of 96(15 minute interval between records, so last 24 hours) as there is a downtime each time for the NERRS data telemytry.<br/>
 *Shell Script Makeup* <br/>
   _Script_: filter_CDMO_Soap.pl <br/>
   _Command line parameters_: <br/>
   {{{
-  Argument 1: Number of records to request <br/>
+  Argument 1: Number of records to request 
+
+  Hourly data:
+  4
+  Backfill:
+  96
   }}}
  _Description_: Connects to the NERRS SOAP webservice requesting the observation data as XML. Each station has an xml file created.<br/>
 	
   _Script_: gen_nerrs_obskml.pl <br/>
   _Command line parameters_: <br/>
   {{{
-  Argument 1: Provider Name, nerrs  <br/>
-  Argument 2: Output directory. Argument 1 is appended to it to form the complete path.  <br/>
-  Argument 3: Platform list xml file.  <br/>
-  Argument 4: Input file directory, should point to the location of the XML files created by the filter_CDMO_Soap.pl script above. <br/>
+  Argument 1: Provider Name, nerrs  
+  Argument 2: Output directory. Argument 1 is appended to it to form the complete path.  
+  Argument 3: Platform list xml file.  
+  Argument 4: Input file directory, should point to the location of the XML files created by the filter_CDMO_Soap.pl script above. 
+
+  nerrs 
+  /home/xeniaprod/feeds/scout 
+  ./nerrs_platform_list.xml  
+  /home/xeniaprod/feeds/scout/nerrs/soap 
   }}}
   _Description_: Creates the obsKML files by parsing the XML files created by filter_CDMO_Soap.pl. <br/>
   
   _Script_: obskml_to_xenia_postgresql.pl
   _Command Line Parameters_: <br/>
-    Argument 1 - The URL to the KMZ file to process.<br/>
-    Argument 2 - Path where the SQL file will be written.<br/>
-    Argument 3 - Filename to use for the SQL file.<br/>
-    Argument 4 - Database name to connect to.<br/>
+  {{{
+  Argument 1 - The URL to the KMZ file to process.
+  Argument 2 - Path where the SQL file will be written.
+  Argument 3 - Filename to use for the SQL file.
+  Argument 4 - Database name to connect to.
+
+  http://localhost/xenia/feeds/nerrs/nerrs_metadata_latest.kmz 
+  /home/xeniaprod/tmp/sqlfiles 
+  "latest_nerrs" 
+  "xenia"
+  }}}
   _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
 
 *Schedule*: Runs twice an hour.
