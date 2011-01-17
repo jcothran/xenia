@@ -2,9 +2,6 @@
 
 Server names,IP's from the door entrance toward the back of the room.
 
-The flat-screen monitor and keyboard by Trident(139.178) in the picture can be plugged into the various servers for monitoring as needed
-<img src="http://xenia.googlecode.com/files/Img_2260.jpg" height="400" width="320" />
-
 <hr />
 Rack 1 (top to bottom) <br />
 <img src="http://xenia.googlecode.com/files/Img_2261.jpg" height="400" width="320" />
@@ -17,8 +14,7 @@ esxi 139.198
   139.144 - cormp1 
 esxi 37.87 
   neptune 37.90 main production 
-  139.124 - squid, test/development, plone
-    squid forward to old trident(139.178)
+  139.124 - squid forwarding(see /etc/squid/squid.conf), test/development, plone, old trident(formerly 139.178) - hfradar, dap
   139.217 - archivalDB
 
 nautilus
