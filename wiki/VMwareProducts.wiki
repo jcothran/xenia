@@ -203,10 +203,12 @@ Recent observation flow<br/>
 http://neptune.baruch.sc.edu/xenia/feeds/flow_xenia_postgres_archive.png
 
 Low count magnified flow<br/>
-http://carocoops.org/obskml/scripts/flow_low.png
+<wiki:comment>http://carocoops.org/obskml/scripts/flow_low.png</wiki:comment>
+http://neptune.baruch.sc.edu/xenia/feeds/flow_xenia_postgres_low_archive.png
 
 Archival database flow<br/>
-http://carocoops.org/obskml/scripts/flow_archive.png
+<wiki:comment>http://carocoops.org/obskml/scripts/flow_archive.png</wiki:comment>
+http://129.252.139.124/xenia2/xenia/feeds/flow_xenia_postgres_archive.png
 
 ----
 = Quality Control (QC) reports =
