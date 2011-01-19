@@ -199,7 +199,7 @@ A script is run once an hour
     * archival database flow
 
 Recent observation flow<br/>
-<!-- http://carocoops.org/obskml/scripts/flow_microwfs.png -->
+<wiki:comment>http://carocoops.org/obskml/scripts/flow_microwfs.png</wiki:comment>
 http://neptune.baruch.sc.edu/xenia/feeds/flow_xenia_postgres_archive.png
 
 Low count magnified flow<br/>
