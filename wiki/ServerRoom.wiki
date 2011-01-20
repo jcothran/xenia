@@ -10,7 +10,7 @@ Rack 1 (top to bottom) <br />
 
 {{{
 esxi 139.198 
-  139.139 - mapserver,tilecache engine
+  139.139 - mapserver,tilecache engine,remotesensing image copying/db ref
   139.144 - cormp1 
 esxi 37.87 
   neptune 37.90 main production 
