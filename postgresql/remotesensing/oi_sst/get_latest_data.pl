@@ -26,6 +26,15 @@ my $dirSortOptions = "\?C=M;O=D";
 #my $dirSortOptions = "";
 my $product_id = 0;
 
+
+#Get rid of any db entries older than 2 weeks
+print("Delete entries older than 2 weeks.\n");
+my $sql = 'DELETE FROM timestamp_lkp WHERE product_id=' . $product_id . ' AND pass_timestamp < now() - interval \'15 days\';';
+print( "$sql\n" );
+`$psql_command "$sql"`;
+
+
+
 #Get current date, since the remote directory has all files from all years we don't want to run through anything older than the current
 #year/month. We subtract off 30 days worth of seconds to get us a 30 day window.
 my $cutoffTime = time() - ( 30 * 24 * 60 * 60 );
