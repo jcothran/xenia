@@ -32,6 +32,15 @@ my $two_weeks_ago = time - 60*60*24*14;
 
 my $dirSortOptions = "\?C=M;O=D";
 
+
+#Get rid of any db entries older than 2 weeks
+#Get rid of any db entries older than 2 weeks
+print("Delete entries older than 2 weeks.\n");
+my $sql = 'DELETE FROM timestamp_lkp WHERE product_id=' . $product_id . ' AND pass_timestamp < now() - interval \'15 days\';';
+print( "$sql\n" );
+`$psql_command "$sql"`;
+
+
 foreach (@dir_urls) {
   my $url = $_;
   #Add the directory sort options.
