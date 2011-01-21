@@ -16,6 +16,11 @@ for a virtualized server image download that produces the below listed products
 Follow the link to the wiki page detailing the scripts used to process the data into the Xenia database.
 [http://code.google.com/p/xenia/wiki/DataIngestion Documention]
 ----
+= Interactive Map = 
+
+http://secoora.org/maps/interactive_map.html A javascript-driven GIS(openlayers,extjs,geoext,etc) - more documentation links available
+
+----
 = Google Earth/Maps, Latest ObsKML, Styled KML =
 
 [http://code.google.com/p/xenia/wiki/XeniaProducts#Google_Earth_and_Maps original documentation ] 
