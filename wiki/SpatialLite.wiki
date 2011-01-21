@@ -81,3 +81,8 @@ For version2.3, the build is a little easier, however the directories on the ./c
 2) Replace the paths for the libproj libraries
 
 3) Added -liconv onto the libspatialite_la_LIBADD  entry.
+
+For latest version, the configure parameters appear to work. Since I grabbed the proj and geos libraries and put them in my local user directory, my config is:
+{{{
+./configure --prefix=$HOME/local --with-proj-include=$HOME/local/include --with-geos-include=$HOME/local/include  --with-proj-lib=$HOME/local/lib --with-geos-lib=$HOME/local/lib
+}}}
