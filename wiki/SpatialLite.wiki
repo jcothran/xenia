@@ -60,6 +60,7 @@ ORDER BY platform_handle ASC
 The area of interested is the 2nd !GeomFromText, that's where I build the WKT POINT() from the existing longitude and latitude columns. Those columns are in  decimal degrees, but to use !GeomFromText we need to build POINT( longitude, latitude ). So after some searching in teh SQL docs I see I can build the string on the fly using the concatenate "||" and roll my own WKT string.
 
 =Debian Build=
+----
 For version2.2
 To get SpatiaLite working under Debian, I had to make some changes in some of the makefiles. The SpatiaLite developer will be addressing these in a future release, however I am documenting just in case. Two libraries, libgeos and libproj4 had their directories hard coded to a /usr/lib type directory, whereas I had my own working copy in a different location. So I need the compiler to search in my locations.
 
@@ -73,7 +74,7 @@ spatialite_DEPENDENCIES and LDADD
 
 
 3) also in /src/shell/Makefile added -liconv in the LDADD entry.
-
+----
 For version2.3, the build is a little easier, however the directories on the ./configure script are still not used. The changes are as follows:
 
 1) Replace the paths for the libgeos libraries
@@ -81,8 +82,12 @@ For version2.3, the build is a little easier, however the directories on the ./c
 2) Replace the paths for the libproj libraries
 
 3) Added -liconv onto the libspatialite_la_LIBADD  entry.
-
+----
 For latest version, the configure parameters appear to work. Since I grabbed the proj and geos libraries and put them in my local user directory, my config is:
 {{{
 ./configure --prefix=$HOME/local --with-proj-include=$HOME/local/include --with-geos-include=$HOME/local/include  --with-proj-lib=$HOME/local/lib --with-geos-lib=$HOME/local/lib
 }}}
+
+To enable the use of external extensions in Sqlite, you have to make sure it has been configured(./configure) with --enable-dynamic-extensions. Then you have to rebuild and re-install Sqlite.
+One time wasting issue I ran into was the install program putting the libraries into /usr/local/lib, but the executable looking in /usr/lib. 
+My solution was to use the "-R /usr/local/lib" directive on the LINK line.
