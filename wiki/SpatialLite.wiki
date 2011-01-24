@@ -87,7 +87,9 @@ For latest version, the configure parameters appear to work. Since I grabbed the
 {{{
 ./configure --prefix=$HOME/local --with-proj-include=$HOME/local/include --with-geos-include=$HOME/local/include  --with-proj-lib=$HOME/local/lib --with-geos-lib=$HOME/local/lib
 }}}
+Another issue I ran into after compilation, was when loading the extension, the libiconv library could not be found. spatialite.c has an include directive of "#include <iconv.h>." I think the system was not searching the proper include directories. I ended up editing the .c file and putting the path in as "/usr/include/iconv.h."
 
-To enable the use of external extensions in Sqlite, you have to make sure it has been configured(./configure) with --enable-dynamic-extensions. Then you have to rebuild and re-install Sqlite.
+To enable the use of external extensions in Sqlite, you have to make sure it has been configured(./configure) with --enable-dynamic-extensions. 
+Then you have to rebuild and re-install Sqlite.
 One time wasting issue I ran into was the install program putting the libraries into /usr/local/lib, but the executable looking in /usr/lib. 
 My solution was to use the "-R /usr/local/lib" directive on the LINK line.
