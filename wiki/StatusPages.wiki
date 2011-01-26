@@ -6,6 +6,17 @@
 
 An overview of the platform and sensor status pages used for review and update of the real-time in-situ platform and sensor data or system checks collected and monitored by the Xenia database
 
+== Status codes ==
+
+  * inactive
+  * active
+  * technical difficulty
+
+  * offline
+  * archival
+  * delayed, non real-time
+  * planned
+
 ----
 == Update pages ==
 
