@@ -27,7 +27,7 @@ Manually set/update
   * *delayed, non real-time* - platform/sensor does not collect data in real-time
   * *planned* - platform/sensor is planned for a future deployment
 
-Where tables are presented, rows are sortable by clicking on the associated column heading.
+Where tables are presented in the webpages, rows are sortable by clicking on the associated column heading.
 
 ----
 == Update pages ==
