@@ -8,9 +8,9 @@ An overview of the platform and sensor status pages used for review and update o
 
 == Status codes ==
 
-  * inactive
-  * active
-  * technical difficulty
+  * *inactive*
+  * *active*
+  * *technical difficulty*
 
   * offline
   * archival
