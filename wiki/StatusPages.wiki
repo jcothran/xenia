@@ -8,10 +8,12 @@ An overview of the platform and sensor status pages used for review and update o
 
 == Status codes ==
 
+Automatically set, manual update
   * *inactive*
   * *active*
   * *technical difficulty*
 
+Manually set/update
   * offline
   * archival
   * delayed, non real-time
