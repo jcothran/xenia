@@ -4,6 +4,8 @@
 
 = Introduction =
 
+http://neptune.baruch.sc.edu/xenia/status/platformStatus.php
+
 An overview of the platform and sensor status pages used for review and update of the real-time in-situ platform and sensor data or system checks collected and monitored by the Xenia database.
 
 Note that these status pages may fail to represent the *true* availability or status of recent data or other resources for a variety of reasons from problems with servers or software internally to problems with networking between servers or telemetry of data from platforms.  These status pages are intended to help find problems in collection or sharing of data/resources and provide additional automated reporting metrics where helpful.
