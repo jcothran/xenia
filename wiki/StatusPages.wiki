@@ -69,7 +69,7 @@ http://xenia.googlecode.com/files/status_9.jpg
 ----
 === Platform update(no issues) ===
 
-An example platform which is not currently having any reporting issues.  Note there is a select drop-down box in the upper right corner to choose a different data provider/operator and the 'all' status link to see 'all' platform status - active as well as otherwise
+An example platform which is not currently having any reporting issues.  Note there is a select drop-down box in the upper right corner to choose a different data provider/operator and the 'all' status link to see 'all' platform status - active status as well as any other status
 
 http://xenia.googlecode.com/files/status_7.jpg
 
