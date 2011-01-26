@@ -89,9 +89,9 @@ The left-hand side shows the query conditions for the right-hand resultset.  The
 
 The link back to the Platform/Sensor Update pages is at page bottom left(circled)
 
-The link to the platform history(next shot) is circled.
-
 http://xenia.googlecode.com/files/status_1.jpg
+
+The link to the platform history(next shot) is circled.
 
 ----
 === Platform status - history ===
