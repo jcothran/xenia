@@ -1,0 +1,5 @@
+#summary documentation of platform/sensor status pages
+
+= Introduction =
+
+http://xenia.googlecode.com/files/Img_2261.jpg
