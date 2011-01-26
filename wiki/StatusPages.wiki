@@ -14,10 +14,10 @@ Automatically set, manual update
   * *technical difficulty* - recent data unavailable (no data in past 4 hours)
 
 Manually set/update
-  * *offline* - sensor or platform is expected to be offline for an extended period of time(several days or more)
-  * *archival* - sensor or platform has been permanently removed from service
-  * *delayed, non real-time* - sensor or platform does not collect data in real-time
-  * *planned* - sensor or platform is planned for a future deployment
+  * *offline* - platform/sensor is expected to be offline for an extended period of time(several days or more)
+  * *archival* - platform/sensor has been permanently removed from service
+  * *delayed, non real-time* - platform/sensor does not collect data in real-time
+  * *planned* - platform/sensor is planned for a future deployment
 
 ----
 == Update pages ==
