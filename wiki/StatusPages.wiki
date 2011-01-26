@@ -27,6 +27,8 @@ Manually set/update
   * *delayed, non real-time* - platform/sensor does not collect data in real-time
   * *planned* - platform/sensor is planned for a future deployment
 
+Where tables are presented, rows are sortable by clicking on the associated column heading.
+
 ----
 == Update pages ==
 
@@ -40,15 +42,34 @@ http://xenia.googlecode.com/files/status_6.jpg
 
 === Platform update ===
 
+The status of platforms(the circled platform link) or sensors which are not 'active' are shown in this table.  Each platform row can have the following fields manually changed or populated
+  * Status - one of the status codes
+  * Expected Resume Date
+  * Comments - a free-form text field to describe technical issues,etc
+  * Updated By - the author of this update
+
+At the end of each platform row is an 'Update' button - clicking this updates the database only with the changes for that row.  If there are multiple rows which need to be updated, click the update button for each corresponding row.
+
+Clicking on an individual platform name(the circled platform name) will show the associated sensors for that platform(shown in the next shot).
+
 http://xenia.googlecode.com/files/status_8.jpg
 
 ----
 === Sensor update ===
+The status of a chosen platforms sensors(the circled sensor link) or sensors which are not 'active' are shown in this table.  Each platform row can have the following fields manually changed or populated
+  * Status - one of the status codes
+  * Expected Resume Date
+  * Comments - a free-form text field to describe technical issues,etc
+  * Updated By - the author of this update
+
+At the end of each platform row is an 'Update' button - clicking this updates the database only with the changes for that row.  If there are multiple rows which need to be updated, click the update button for each corresponding row.
 
 http://xenia.googlecode.com/files/status_9.jpg
 
 ----
 === Platform update(no issues) ===
+
+An example platform which is not currently having any reporting issues.  Note there is a select drop-down box in the upper right corner to choose a different data provider/operator and the 'all' status link to see 'all' platform status - active as well as otherwise
 
 http://xenia.googlecode.com/files/status_7.jpg
 
