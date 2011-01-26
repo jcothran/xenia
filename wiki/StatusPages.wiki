@@ -14,10 +14,10 @@ Automatically set, manual update
   * *technical difficulty*
 
 Manually set/update
-  * offline
-  * archival
-  * delayed, non real-time
-  * planned
+  * *offline*
+  * *archival*
+  * *delayed, non real-time*
+  * *planned*
 
 ----
 == Update pages ==
