@@ -1,6 +1,10 @@
 #summary documentation of platform/sensor status pages
 
+<wiki:toc max_depth="6" />
+
 = Introduction =
+
+An overview of the platform and sensor status pages used for review and update of the real-time in-situ platform and sensor data or system checks collected and monitored by the Xenia database
 
 http://xenia.googlecode.com/files/status_6.jpg
 
