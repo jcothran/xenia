@@ -6,36 +6,47 @@
 
 An overview of the platform and sensor status pages used for review and update of the real-time in-situ platform and sensor data or system checks collected and monitored by the Xenia database
 
+== Login ==
+
 http://xenia.googlecode.com/files/status_6.jpg
 
 ----
 
+== Platform update ==
+
 http://xenia.googlecode.com/files/status_8.jpg
 
 ----
+== Sensor update ==
 
 http://xenia.googlecode.com/files/status_9.jpg
 
 ----
+== Platform update(no issues) ==
 
 http://xenia.googlecode.com/files/status_7.jpg
 
 ----
+== Platform status ==
 
 http://xenia.googlecode.com/files/status_1.jpg
 
 ----
+== Platform status - history ==
 
 http://xenia.googlecode.com/files/status_2.jpg
 
 ----
+== Platform sensors ==
 
 http://xenia.googlecode.com/files/status_3.jpg
 
 ----
+== Sensor status ==
 
 http://xenia.googlecode.com/files/status_4.jpg
 
 ----
+== Sensor status history ==
 
 http://xenia.googlecode.com/files/status_5.jpg
