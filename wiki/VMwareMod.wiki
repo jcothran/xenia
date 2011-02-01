@@ -188,6 +188,11 @@ ran into issues with mysql dependencies with other packages
 {{{
 dpkg -l | grep mysql
 apt-get --purge remove libdbd-mysql-perl
+
+under /home/user
+rm -rf udig
+rm -rf gvSIG
+rm -rf Kosmo-1.2.1
 }}}
 
 = Distribution checklist = 
