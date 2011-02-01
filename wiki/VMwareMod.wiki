@@ -182,6 +182,14 @@ sudo apt-get install php5-pgsql
   * remotesensing imagery for Chapel Hill(home/xeniaprod/scripts/scscout)
     * imagemagick(mogrify command)
 
+== Mapping ==
+
+ran into issues with mysql dependencies with other packages
+{{{
+dpkg -l | grep mysql
+apt-get --purge remove libdbd-mysql-perl
+}}}
+
 = Distribution checklist = 
 
 see [VMwareDesign]
