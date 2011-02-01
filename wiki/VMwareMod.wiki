@@ -193,6 +193,12 @@ under /home/user
 rm -rf udig
 rm -rf gvSIG
 rm -rf Kosmo-1.2.1
+
+under /home/xeniaprod
+
+clean src expands, leave .tar
+rm -rf scripts/sqlite
+
 }}}
 
 = Distribution checklist = 
