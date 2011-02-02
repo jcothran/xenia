@@ -451,3 +451,101 @@ The database would return the timestamp which would then be appended to the laye
   }}}
 
 *Schedule*: Top of each hour
+
+----
+=== Advanced Very High Resolution Radiometer Sea Surface Temperature === 
+*Script*: get_usf_avhrr_sst.sh.sh<br/>
+*Directory*:  /home/xeniaprod/cron<br/>
+*Description*:  Gets the latest AVHRR SST file and updates the Xenia database on neptune. Also updates the old schema database to feed
+the static maps for SECOORA generated at Chapel Hill.<br/>
+*Shell Script Makeup* <br/>
+  _Script_:  get_latest_data.pl<br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/remotesensing/avhrr_sst <br/>
+  _Command line parameters_: 
+  {{{
+  None. 
+  NOTE: There are a number of hardcoded settings in the script, such as working directorys and the URLs to connect to for the data.       
+  }}}
+  The following are the hardcoded working directories: <br/>
+  {{{
+    my $scratch_dir = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name;
+    my $dest_dir    = '/home/xeniaprod/feeds/remotesensing/'.$layer_name;  
+    my $dest_dir_2    = '/nautilus_usr2/maps/seacoos/data/usf/'.$layer_name;  
+  }}}
+  The following are the hardcoded URLS: <br/>
+  {{{
+    @dir_urls = (
+      'http://www.imars.usf.edu/husf_avhrr/products/images/fullpass/'.$yyyy_dot_mm
+    );
+
+    @final_dods_urls = (
+      'http://www.imars.usf.edu/dods-bin/nph-dods/husf_avhrr/FULL_PASS_HDF_SST/'.$yyyy_dot_mm
+    );
+    $final_suffix = 'usf.sst.hdf.html';
+
+    @auto_dods_urls = (
+      'http://www.imars.usf.edu/dods-bin/nph-dods/husf_avhrr/FULL_PASS_HDF_SST/auto/'.$yyyy_dot_mm
+    );
+  );    
+  }}}
+  The $product_id variable is hardcoded to the value from the product_type table for the data we want. See the _Description_ below.
+
+  The $psql_command is also hardcoded to connect to the database to import the SQL statement.
+  _Description_: Gets the modis file and updates the Xenia database on neptune. The files are downloaded then the file name modified to the format of oi_sst_year_month_day_hour_minute.png then moved to the $dest_dir described above. This is done to have a consistent file naming scheme across the products. The database table used is "timestamp_lkp" which is a generalized table for the remote sensing products. For a given data layer, a mappping product would query the database for the specific product id's(layer's) most recent time entry. The database would return the timestamp which would then be appended to the layer name to then get access to the most recent file.
+The database would return the timestamp which would then be appended to the layer name to then get access to the most recent file. The table column layout is as follows:
+  {{{
+  row_id - Autoincrementing integer as the primary key
+  row_entry_date - Date when the row was added to the table
+  row_update_date - Date the row was modified last.
+  product_id - Integer that specifies what product the row is for. These are described in the product_type table. Modis is id 1.
+  pass_timestamp - the products date, the time the date was taken.
+  filepath - the child path to the file. The user would have to know the parent directory, such as /home/xeniaprod/feeds/remotesensing, then the filepath would be appended to that to then get the requested file.
+  }}}
+  This script also feeds entries to the old schema database. In that database there is a table per remote sensing product.
+*Schedule*: 30 minutes after the hour
+
+----
+=== MODIS RGB True Color === 
+*Script*: get_usf_modis_rgb.sh<br/>
+*Directory*:  /home/xeniaprod/cron<br/>
+*Description*:  Gets the latest MODIS RGB file and updates the Xenia database on neptune. Also updates the old schema database to feed
+the static maps for SECOORA generated at Chapel Hill.<br/>
+*Shell Script Makeup* <br/>
+  _Script_:  get_latest_data.pl<br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/remotesensing/modis_rgb <br/>
+  _Command line parameters_: 
+  {{{
+  None. 
+  NOTE: There are a number of hardcoded settings in the script, such as working directorys and the URLs to connect to for the data.       
+  }}}
+  The following are the hardcoded working directories: <br/>
+  {{{
+    my $scratch_dir = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name;
+    my $dest_dir    = '/home/xeniaprod/feeds/remotesensing/'.$layer_name;  
+    my $dest_dir_2    = '/nautilus_usr2/maps/seacoos/data/usf/'.$layer_name;  
+  }}}
+  The following are the hardcoded URLS: <br/>
+  {{{
+  @dir_urls = (
+    "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$yesterdayJulian/1km/pass/intermediate/",
+    "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$yesterdayJulian/1km/pass/final/",
+    "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$todayJulian/1km/pass/intermediate/",
+    "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$todayJulian/1km/pass/final/"
+    #'http://modis.marine.usf.edu/products/fullpass/rgb/'
+  );
+  }}}
+  The $product_id variable is hardcoded to the value from the product_type table for the data we want. See the _Description_ below.
+
+  The $psql_command is also hardcoded to connect to the database to import the SQL statement.
+  _Description_: Gets the modis file and updates the Xenia database on neptune. The files are downloaded then the file name modified to the format of oi_sst_year_month_day_hour_minute.png then moved to the $dest_dir described above. This is done to have a consistent file naming scheme across the products. The database table used is "timestamp_lkp" which is a generalized table for the remote sensing products. For a given data layer, a mappping product would query the database for the specific product id's(layer's) most recent time entry. The database would return the timestamp which would then be appended to the layer name to then get access to the most recent file.
+The database would return the timestamp which would then be appended to the layer name to then get access to the most recent file. The table column layout is as follows:
+  {{{
+  row_id - Autoincrementing integer as the primary key
+  row_entry_date - Date when the row was added to the table
+  row_update_date - Date the row was modified last.
+  product_id - Integer that specifies what product the row is for. These are described in the product_type table. Modis is id 1.
+  pass_timestamp - the products date, the time the date was taken.
+  filepath - the child path to the file. The user would have to know the parent directory, such as /home/xeniaprod/feeds/remotesensing, then the filepath would be appended to that to then get the requested file.
+  }}}
+  This script also feeds entries to the old schema database. In that database there is a table per remote sensing product.
+*Schedule*: 35 minutes after the hour
