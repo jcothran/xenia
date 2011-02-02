@@ -15,7 +15,7 @@ esxi 139.198
 esxi 37.87 
   neptune 37.90 main production 
   139.124 - squid forwarding(see /etc/squid/squid.conf), test/development, plone, old trident(formerly 139.178) - hfradar, dap
-  139.217 - archivalDB
+  139.156 - archivalDB
 
 nautilus
   
