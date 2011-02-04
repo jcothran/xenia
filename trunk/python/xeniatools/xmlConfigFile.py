@@ -53,8 +53,11 @@ class xmlConfigFile(object):
   Returns:
     If xmlTag found, returns an Element for iteration on, otherwise None.
   '''
-  def getListHead(self, xmlTag):
-    return( self.xmlTree.xpath(xmlTag) )
+  def getListHead(self, xmlTag, xmlElement=None):
+    if(xmlElement == None):
+      return( self.xmlTree.xpath(xmlTag) )
+    else:
+      return(xmlElement.xpath(xmlTag))
   
   def getNextInList(self, elementList ):
     return( elementList[0].getchildren() )
@@ -106,4 +109,39 @@ class xmlConfigFile(object):
        
     return( settings )
   
+  '''
+  Function: getEmailSettings
+  Purpose: Returns various settings from the email section of the config file.
+  The structure for this section is:
+    <environment>
+      <emailSettings>
+        <server></server>
+        <from></from>
+        <pwd></pwd>
+        <emailList>
+          <email>...</<email>
+          <email>...</<email>
+        </emailList>
+      </database> 
+   Parameters: None
+   Return: Returns a keyed dictionary which could have the following keys.
+       ['server'] is smpt server to send the email through.
+       ['from'] is user the email is to be addressed from 
+       ['pwd'] is the user to logon to the smtp server with.
+       ['toList'] comma delimited list of the recipients
+  '''
+  def getEmailSettings(self):
+    settings = {}
+    settings['server'] =  self.getEntry( '//environment/emailSettings/server' )
+    settings['from'] = self.getEntry( '//environment/emailSettings/from' )
+    settings['pwd']  = self.getEntry( '//environment/emailSettings/pwd' )
+    settings['emailList'] = ''
+    emailAddys = ''
+    recptList = self.getListHead("//environment/emailSettings/emailList")
+    for child in self.getNextInList(recptList):
+      if(len(emailAddys)):
+        emailAddys += "," 
+      emailAddys += child.text
+    settings['toList'] = emailAddys
+    return( settings )
 
