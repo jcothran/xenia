@@ -1,4 +1,4 @@
-#import time
+import time
 from pysqlite2 import dbapi2 as sqlite3      
 import psycopg2
 import psycopg2.extras
@@ -68,6 +68,16 @@ class qaqcTestFlags:
     elif( qcLevel == qaqcTestFlags.DATA_QUAL_GOOD ):
       return( 'Data quality good' )
 
+class statusFlags:
+  INACTIVE = 0
+  ACTIVE = 1
+  TECHNICAL_DIFFICULTY = 2
+  OFFLINE = 3
+  ARCHIVAL = 4
+  DELAYED = 5
+  PLANNED = 6
+
+
 class dbXenia(object):
   def __init__(self):
     self.dbConnection = None
@@ -83,6 +93,8 @@ class dbXenia(object):
       return(self.dbConnection.connect(None, user, passwd, host, dbName))
     return(False)
 
+  def executeQuery(self, sql):
+    return(self.dbConnection.executeQuery(sql))
       
 class xeniaDB:
   """
@@ -849,8 +861,87 @@ class xeniaPostGres(xeniaDB):
       self.procTraceback()
     return( None )
   
+  def getCurrentPlatformStatus(self,platformHandle):
+    sql = "SELECT active FROM platform WHERE platform_handle='%s';"\
+          %(platformHandle)
+    dbCursor = self.executeQuery(sql)
+    if(dbCursor != None):
+      row = dbCursor.fetchone()
+      if(row != None):
+        return(row['active'])
+    return(None)
+          
+  def setPlatformStatus(self, platformHandle,status):
+    #Get the platform id and the organization id
+    sql = "SELECT row_id,organization_id FROM platform WHERE platform_handle='%s';" %(platformHandle)
+    dbCursor = self.executeQuery(sql)
+    if(dbCursor != None):
+      row = dbCursor.fetchone()
+      if(row != None):
+        platformId = row['row_id']
+        OrgId = row['organization_id']
+        
+        #Get row entry date, we use local time for it.
+        rowEntryDate = time.strftime('%Y-%m-%dT%H:%M:%S', time.localtime())
+        #Begin date is entered as GMT time.
+        gmtDate = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime())
+        
+        #Platform is not in an active state, so these should be the first entries into the
+        #platform_status and archive table.
+        if(status != statusFlags.ACTIVE):
+          #Update the platform_status table to reflect the new status.
+          sql = "INSERT INTO platform_status "\
+          "(platform_id,organization_id,row_entry_date,begin_date,status,platform_handle) "\
+          "values (%d,%d,'%s','%s',%d,'%s');"\
+          %(platformId,OrgId,rowEntryDate,gmtDate,status,platformHandle)
+          statusCursor = self.executeQuery(sql)
+          if(statusCursor == None):
+            return(False)
+          self.commit()
+          statusCursor.close()
+          #Now add entry into the platform_status_archive table
+          sql="INSERT INTO platform_status_archive "\
+              "(platform_id,organization_id,row_entry_date,begin_date,status) "\
+              "values(%d,%d,'%s','%s',%d);"\
+              %(platformId,OrgId,rowEntryDate,gmtDate,status)
+          statusCursor = self.executeQuery(sql)
+          if(statusCursor == None):
+            return(False)
+          self.commit()
+          statusCursor.close()
+        #Platform is becoming active again. We get rid of the entry in the platform_status
+        #table then add teh end date into the platform_status_field 
+        else:
+          sql = "DELETE FROM platform_status WHERE platform_id=%d;" %(platformId)
+          statusCursor = self.executeQuery(sql)
+          if(statusCursor == None):
+            return(False)
+          self.commit()
+          statusCursor.close()
+          
+          sql="UPDATE platform_status_archive SET end_date='%s', row_update_date='%s'"\
+              "WHERE platform_id=%d AND end_date IS NULL;"\
+              %(gmtDate,rowEntryDate,platformId)
+          statusCursor = self.executeQuery(sql)
+          if(statusCursor == None):
+            return(False)
+          self.commit()
+          statusCursor.close()
+          
+        #Now update the active field in the platform table.
+        sql = "UPDATE platform SET active=%d WHERE platform_handle='%s';"\
+        %(status,platformHandle)
+        statusCursor = self.executeQuery(sql)
+        if(statusCursor == None):
+          return(False)
+        self.commit()
+        statusCursor.close()
+        
+        
+      return(True)
     
-
+    return(False)    
+        
   def getObsDataForPlatform(self, platform, lastNHours = None ):      
     
     #Do we want to query from a datetime of now back lastNHours?
