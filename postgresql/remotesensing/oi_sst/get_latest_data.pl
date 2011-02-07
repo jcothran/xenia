@@ -5,11 +5,14 @@ use POSIX qw(strftime);
 
 my $layer_name  = 'oi_sst';
 my $table_name  = 'timestamp_lkp';
+my $table_name_2  = 'raster_'.$layer_name;
 my $scratch_dir = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name;
 my $dest_dir    = '/home/xeniaprod/feeds/remotesensing/'.$layer_name;  
+my $dest_dir_2  = '/nautilus_usr2/maps/seacoos/data/usf/'.$layer_name;
 my $fetch_logs   = '/home/xeniaprod/tmp/remotesensing/usf/oi_sst/fetch_logs';
 
 my $psql_command = '/usr/bin/psql -U xeniaprod -d xenia -h 129.252.37.90 -c';
+my $psql_command_2 = '/usr/bin/psql -U postgres -d sea_coos_obs -h nautilus.baruch.sc.edu -c';
 
 `rm -f $scratch_dir/*`;
 
@@ -113,6 +116,12 @@ sub downloadFile
   print( "$cmd\n" );
 
   $cmd = 'cp -f '
+    .$destFilename
+    .' '
+    .$dest_dir_2;
+  `$cmd`;
+
+  $cmd = 'cp -f '
     .$dest_dir.'/.'.$layer_name.'.wld'
     .' '.$dest_dir.'/'.$layer_name.'_'.$this_underline_timestamp.'.wld';
   `$cmd`;
@@ -120,12 +129,10 @@ sub downloadFile
 
   $sql = "insert into $table_name "
          ."( row_entry_date, "
-         ."row_update_date, " 
          ."product_id, "
          ."pass_timestamp, "
          ." filepath ) "
-         ."values( timestamp without time zone '$this_date $this_time', "
-         ."timestamp without time zone '$this_date $this_time', "
+         ."values( now(), "
          ."$product_id, "
          ."timestamp without time zone '$this_date $this_time', "
          .'\''.$layer_name.'/'.$layer_name.'_'.$this_underline_timestamp.'.png\''
@@ -133,4 +140,14 @@ sub downloadFile
 
   print( "$sql\n" );
   `$psql_command "$sql"`;
+
+  $sql = "insert into $table_name_2 (pass_timestamp, local_filename)"
+    .' values (timestamp without time zone '
+    ."'$this_date $this_time'"
+    .','
+    .'\''.$layer_name.'/'.$layer_name.'_'.$this_underline_timestamp.'.png\''
+    .');';
+  `$psql_command_2 "$sql"`;
+
+
 }
