@@ -17,6 +17,7 @@ my $dest_dir_2    = '/nautilus_usr2/maps/seacoos/data/usf/'.$layer_name;
 my $psql_command = '/usr/bin/psql -U xeniaprod -d xenia -h 129.252.37.90 -c';
 my $psql_command_2 = '/usr/bin/psql -U postgres -d sea_coos_obs -h nautilus.baruch.sc.edu -c';
 
+my $fetch_logs   = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name.'/fetch_logs';
 my $product_id = 3;
 
 #Get rid of any db entries older than 2 weeks
@@ -79,7 +80,9 @@ foreach (@dir_urls) {
       else {
         $dods_url = 'None';
       }
-      if (open(LAST_FETCH,"./fetch_logs/$latest_file")) {
+      if (open(LAST_FETCH,"$fetch_logs/$latest_file")) { next; }
+=comment
+      if (open(LAST_FETCH,"$fetch_logs/$latest_file")) {
         $last_fetch_time = <LAST_FETCH>;
         print 'file last modified on record  = '.scalar localtime($last_fetch_time)."\n     ";
         chop($last_fetch_time);
@@ -135,6 +138,7 @@ foreach (@dir_urls) {
           print 'not downloaded';
         }
       }
+=cut
       else {
         print 'downloaded';
         getstore("$this_dir_url/$latest_file",
@@ -185,9 +189,9 @@ foreach (@dir_urls) {
 
       }
       print "\n     ".'file last modified            = '.scalar localtime($modified_time)."\n";
-      $cmd = "touch ./fetch_logs/$latest_file";
+      $cmd = "touch $fetch_logs/$latest_file";
       `$cmd`;
-      $cmd = "echo '$modified_time' > ./fetch_logs/$latest_file";
+      $cmd = "echo '$modified_time' > $fetch_logs/$latest_file";
       `$cmd`;
 
       # Run UPDATEs for the metadata.
