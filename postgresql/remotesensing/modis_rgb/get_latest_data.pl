@@ -183,12 +183,10 @@ foreach (@dir_urls) {
 
           $sql = "insert into $table_name "
           ."( row_entry_date, "
-          ."row_update_date, " 
           ."product_id, "
           ."pass_timestamp, "
           ." filepath ) "
-          ."values( timestamp without time zone '$this_date $this_time', "
-          ."timestamp without time zone '$this_date $this_time', "
+          ."values( now(), "
           ."$product_id, "
           ."timestamp without time zone '$this_date $this_time', "
           .'\''.$layer_name.'/'.$layer_name.'_'.$this_underline_timestamp.'.png\''
