@@ -941,7 +941,24 @@ class xeniaPostGres(xeniaDB):
       return(True)
     
     return(False)    
-        
+
+  def getPlatformStatus(self, platformHandle):
+    status = None
+    sql = "SELECT  to_char(begin_date,'YYYY-MM-DD HH24:MM:SS') as begin_date,reason FROM platform_status "\
+      "WHERE platform_handle='%s' AND end_date IS NULL;"\
+      %(platformHandle)
+    dbCursor = self.executeQuery(sql)
+    if(dbCursor != None):
+      row = dbCursor.fetchone()
+      if(row != None):
+        status = {}
+        status['begin_date'] = row['begin_date'] 
+        reason = "No data received from platform."
+        if(row['reason'] != None):
+          reason = row['reason']
+        status['reason'] = reason
+    return(status)
+         
   def getObsDataForPlatform(self, platform, lastNHours = None ):      
     
     #Do we want to query from a datetime of now back lastNHours?
