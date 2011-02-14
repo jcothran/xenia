@@ -232,10 +232,15 @@ uptime http://neptune.baruch.sc.edu/xenia/feeds/qaqc/PlatformUptimePercentages.h
 documentation http://code.google.com/p/xenia/wiki/PlatformUptime
 earlier documentation http://trac.secoora.org/datamgmt/wiki/PercentageUptime
 
-== Platform/Sensor Status/Query ==
+= Platform/Sensor Status/Query =
 
 http://code.google.com/p/xenia/wiki/StatusPages
 
+= Observation range/condition email alerts =
+ 
+http://secoora.org/pages/alertpage.php?platform=nos.8670870.WL
+
+----
 = Support Tables, columns, triggers =
 
 An optional set of support tables to support display products, display listing order(m_type_display_order) or keeping track timestamps(timestamp_lkp) for remote sensing products or other irregularly timed products.
