@@ -37,7 +37,7 @@ interactive_map.html
    |-openlayers
 }}}
 
-== File description ==
+== File descriptions ==
 
   * interactive_map.html 
   This is the html file that kicks off the creation of the map.
@@ -50,10 +50,13 @@ interactive_map.html
   Contains the base class olMap. This class contains basic mapping setup.
 
   * adapter-extjs.js
-  The adapter code needed to get the Highcharts graphing library to work with the ExtJS framework.
-
+  The adapter code needed to get the Highcharts graphing library to work with the ExtJS framework. The adapter is provided [http://www.sencha.com/forum/showthread.php?93669-Highcharts-adapter-and-plugin-for-ExtJS&highlight=highchartpaneljson
+ here].
   * Ext.ux.HighChart.js
-  The Highchart graphing class wrapper.
+  The Highchart graphing class wrapper. The wrapper class is provided [http://www.sencha.com/forum/showthread.php?93669-Highcharts-adapter-and-plugin-for-ExtJS&highlight=highchartpaneljson here]. 
 
   * ComparisonFilterEx.js
   Class ComparisonEx overrides OpenLayers.Filter.Comparison to create the filters used on the map that allow filtering by observations and/or organization. Our platform data comes from a json file, and alot of the attributes are in a hierarchical structure. To filter on some of the properties, such as observation, a function was needed to traverse down to the particular property. The base implementation of Openlayers did not provide this. The function of interest is the recursive function: getAttribute.
+
+  * units_conversion.js
+  Natively the observation data is in metric. The unitConverter class allows the on the fly conversion from metric to Impertial.
