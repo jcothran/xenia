@@ -59,4 +59,4 @@ interactive_map.html
   Class ComparisonEx overrides OpenLayers.Filter.Comparison to create the filters used on the map that allow filtering by observations and/or organization. Our platform data comes from a json file, and alot of the attributes are in a hierarchical structure. To filter on some of the properties, such as observation, a function was needed to traverse down to the particular property. The base implementation of Openlayers did not provide this. The function of interest is the recursive function: getAttribute.
 
   * units_conversion.js
-  Natively the observation data is in metric. The unitConverter class allows the on the fly conversion from metric to Impertial.
+  Natively the observation data is in metric. The unitConverter class allows the on the fly conversion from metric to Impertial. The initial implementation is found on [http://stackoverflow.com/questions/865590/javascript-unit-of-measure-conversion-library Stack Overflow]. Modifications were made to hand Celsius to Fahrenheit conversions.
