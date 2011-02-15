@@ -1,10 +1,13 @@
 #summary Technical Details of the Interactive Map
+
+<wiki:toc max_depth="4" />
+
 = Introduction =
 
 The Secoora Interactive map is a !JavaScript driven mapping engine using [http://www.openlayers.org OpenLayers], [http://www.geoext.org GeoEXT], and [http://www.extjs.com ExtJS] !JavaScript libraries.
 
 
-= Setup =
+== Setup ==
 The files and directory are structured as follows:
 {{{
 interactive_map.html
@@ -33,3 +36,21 @@ interactive_map.html
    |-legend
    |-openlayers
 }}}
+
+== File description ==
+
+  * interactive_map.html 
+  This is the html file that kicks off the creation of the map.
+
+  * secoora_interactive.js
+  This is the JavaScript file that creates and manages the map.
+  It extends the olMap class found in olMap1.0.js.
+
+  * olMap1.0.js
+  Contains the base class olMap. This class contains basic mapping setup.
+
+  * adapter-extjs.js
+  The adapter code needed to get the Highcharts graphing library to work with the ExtJS framework.
+
+  * Ext.ux.HighChart.js
+  The Highchart graphing class wrapper.
