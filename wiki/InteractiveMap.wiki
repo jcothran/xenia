@@ -1,12 +1,17 @@
 #summary Technical Details of the Interactive Map
 = Introduction =
 
-The Secoora Interactive map is a !JavaScript driven mapping engine using [http://www.openlayers.org OpenLayers], [http://www.geoext.org GeoEXT], and [http://www.extjs.com ExtJS] JavaScript libraries.
+The Secoora Interactive map is a !JavaScript driven mapping engine using [http://www.openlayers.org OpenLayers], [http://www.geoext.org GeoEXT], and [http://www.extjs.com ExtJS] !JavaScript libraries.
 
 
-= Details =
+= Setup =
+The files and directory are structured as follows:
+{{{
+interactive_map.html
+-lib
+ |-secoora_interactive.js
+ |-olMap1.0.js
+ 
+}}}
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+
