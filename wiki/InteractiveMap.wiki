@@ -21,5 +21,15 @@ interactive_map.html
  |-units_conversion.js
 -resources
  |-css
+  |-ext-all-3-3-0.css
+  |-popup.css
+  |-mappanel.css
+  |-style.css
+  |-layout_objects.css
  |-images
+   |-data_age
+   |-default
+   |-help
+   |-legend
+   |-openlayers
 }}}
