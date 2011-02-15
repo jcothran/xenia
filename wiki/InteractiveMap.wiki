@@ -9,9 +9,17 @@ The files and directory are structured as follows:
 {{{
 interactive_map.html
 -lib
+ |-ExtJS-3.3.0
+ |-GeoExt-1.0
+ |-OpenLayers-2.10
+ |-Highcharts
  |-secoora_interactive.js
  |-olMap1.0.js
- 
+ |-ComparisonFilterEx.js
+ |-adapter-extjs.js
+ |-Ext.ux.HighChart.js
+ |-units_conversion.js
+-resources
+ |-css
+ |-images
 }}}
-
-
