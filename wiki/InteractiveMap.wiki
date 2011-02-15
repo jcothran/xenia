@@ -54,3 +54,6 @@ interactive_map.html
 
   * Ext.ux.HighChart.js
   The Highchart graphing class wrapper.
+
+  * ComparisonFilterEx.js
+  Class ComparisonEx overrides OpenLayers.Filter.Comparison to create the filters used on the map that allow filtering by observations and/or organization. Our platform data comes from a json file, and alot of the attributes are in a hierarchical structure. To filter on some of the properties, such as observation, a function was needed to traverse down to the particular property. The base implementation of Openlayers did not provide this. The function of interest is the recursive function: getAttribute.
