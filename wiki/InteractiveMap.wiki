@@ -221,3 +221,10 @@ Shell Script Makeup<br/>
 Schedule: Every 2 hours. <br/>
 ==== Observation Data Source ====
 The observation data is available in JSON files, broken down per platform [http://neptune.baruch.sc.edu/xenia/feeds/obsjson/all/latest_hours_24/ here].
+===== File Creation Script =====
+===== File Creation Script =====
+Script: xenia_to_json.pl<br/>
+Server: Neptune<br/>
+Directory: /home/xeniaprod/scripts/postgresql/import_export<br/>
+Description: Script creates the observation JSON files. Each platform has a seperate file. The last 24 hours of observations for the platform are saved.<br/>
+ 
