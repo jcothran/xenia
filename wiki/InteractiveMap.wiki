@@ -185,7 +185,8 @@ The Vector Features are supplied through an JSON [http://neptune.baruch.sc.edu/x
 }
 }}}
   * Lookup Table 
-  The lookup table mimics the xenia database structure in some aspects. For example the observation names:
+  Lookup data that originates from the Xenia DB have entries that mimic the database structure. The database table name is used for a lookup key. Then the row id is used as the identifier in the platform data above. Finally column names are used as a key to point to the data value.
+  For example the observation names:
 {{{
 "obs_type": 
 {
