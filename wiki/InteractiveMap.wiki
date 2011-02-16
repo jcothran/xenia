@@ -1,0 +1,247 @@
+#summary Technical Details of the Interactive Map
+
+<wiki:toc max_depth="6" />
+
+= Introduction =
+
+The Secoora Interactive map is a !JavaScript driven mapping engine using [http://www.openlayers.org OpenLayers], [http://www.geoext.org GeoEXT], and [http://www.extjs.com ExtJS] !JavaScript libraries.
+
+
+== Setup ==
+The files and directory are structured as follows:
+{{{
+interactive_map.html
+-lib
+ |-ExtJS-3.3.0
+ |-GeoExt-1.0
+ |-OpenLayers-2.10
+ |-Highcharts
+ |-secoora_interactive.js
+ |-olMap1.0.js
+ |-ComparisonFilterEx.js
+ |-adapter-extjs.js
+ |-Ext.ux.HighChart.js
+ |-units_conversion.js
+-resources
+ |-css
+  |-ext-all-3-3-0.css
+  |-popup.css
+  |-mappanel.css
+  |-style.css
+  |-layout_objects.css
+ |-images
+   |-data_age
+   |-default
+   |-help
+   |-legend
+   |-openlayers
+}}}
+
+== File descriptions ==
+
+  * interactive_map.html 
+  This is the html file that kicks off the creation of the map.
+
+  * secoora_interactive.js
+  This is the JavaScript file that creates and manages the map.
+  It extends the olMap class found in olMap1.0.js.
+
+  * olMap1.0.js
+  Contains the base class olMap. This class contains basic mapping setup.
+
+  * adapter-extjs.js
+  The adapter code needed to get the Highcharts graphing library to work with the ExtJS framework. The adapter is provided [http://www.sencha.com/forum/showthread.php?93669-Highcharts-adapter-and-plugin-for-ExtJS&highlight=highchartpaneljson
+ here].
+  * Ext.ux.HighChart.js
+  The Highchart graphing class wrapper. The wrapper class is provided [http://www.sencha.com/forum/showthread.php?93669-Highcharts-adapter-and-plugin-for-ExtJS&highlight=highchartpaneljson here]. 
+
+  * ComparisonFilterEx.js
+  Class ComparisonEx overrides OpenLayers.Filter.Comparison to create the filters used on the map that allow filtering by observations and/or organization. Our platform data comes from a json file, and alot of the attributes are in a hierarchical structure. To filter on some of the properties, such as observation, a function was needed to traverse down to the particular property. The base implementation of Openlayers did not provide this. The function of interest is the recursive function: getAttribute.
+
+  * units_conversion.js
+  Natively the observation data is in metric. The unitConverter class allows the on the fly conversion from metric to Impertial. The initial implementation is found on [http://stackoverflow.com/questions/865590/javascript-unit-of-measure-conversion-library Stack Overflow]. Modifications were made to hand Celsius to Fahrenheit conversions.
+
+== Data Sources ==
+The map uses a combination of WMS and [http://dev.openlayers.org/releases/OpenLayers-2.10/doc/apidocs/files/OpenLayers/Feature/Vector-js.html Vector Features] to display data.
+
+=== Observing Platforms ===
+For the platforms, we use a collection of Vector Features to plot on the map. The Vector Features are contained within a [http://dev.openlayers.org/releases/OpenLayers-2.10/doc/apidocs/files/OpenLayers/Layer/Vector-js.html Vector Layer]. 
+==== Platform Vector Data Source ====
+The Vector Features are supplied through an JSON [http://neptune.baruch.sc.edu/xenia/feeds/obsjson/mapmeta/platform_callback.json file]. The file is broken up into two main bodies, a lookup table and the platform data. The lookup table is used to reduce the overall file size by having frequently used strings stored only in one place. They are referenced in the platform data through integer indexes. 
+===== Platform  Sample Entry =====
+  * Platform Entry Sample:
+{{{
+{
+  "type": "Feature",
+  "geometry": {
+      "coordinates": [-79.620000000000005, 32.799999999999997],
+      "type": "Point"
+  },
+  "properties": {
+      "links": {
+          "dataQuery": {
+              "iconId": 9,
+              "id": "carocoops.CAP2.buoy",
+              "urlId": 2
+          },
+          "emailAlert": {
+              "iconId": 8,
+              "id": "carocoops.CAP2.buoy",
+              "urlId": 1
+          },
+          "geoRSS": {
+              "iconId": 10,
+              "id": "carocoops_cap2_buoy_GeoRSS_latest.xml",
+              "urlId": 3
+          },
+          "twitter": {
+              "iconId": 7,
+              "id": "cap2rcoos",
+              "urlId": 0
+          }
+      },
+      "orgName": 39,
+      "staDataFile": "carocoops:cap2:buoy_data.json",
+      "staDataURL": 4,
+      "staDesc": "CAROCOOPS CAP2, Capers Island Nearshore, SC",
+      "staID": "carocoops.CAP2.buoy",
+      "staObs": [{
+          "Properties": {
+              "obsDisOrd": 1,
+              "obsTypeDesc": 5,
+              "sorder": 1,
+              "uomID": 3
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 2,
+              "obsTypeDesc": 3,
+              "sorder": 1,
+              "uomID": 2
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 3,
+              "obsTypeDesc": 1,
+              "sorder": 1,
+              "uomID": 1
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 4,
+              "obsTypeDesc": 2,
+              "sorder": 1,
+              "uomID": 1
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 5,
+              "obsTypeDesc": 4,
+              "sorder": 1,
+              "uomID": 4
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 6,
+              "obsTypeDesc": 22,
+              "sorder": 1,
+              "uomID": 11
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 25,
+              "obsTypeDesc": 6,
+              "sorder": 1,
+              "uomID": 3
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 30,
+              "obsTypeDesc": 28,
+              "sorder": 1,
+              "uomID": 10
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 33,
+              "obsTypeDesc": 10,
+              "sorder": 1,
+              "uomID": 13
+          },
+          "type": "feature"
+      }],
+      "staTypeImage": 0,
+      "staTypeName": "buoy",
+      "staURL": "http://nautilus.baruch.sc.edu/carocoops_website/buoy_detail.php?buoy=buoy4"
+  }
+}
+}}}
+  * Lookup Table 
+  Lookup data that originates from the Xenia DB have entries that mimic the database structure. The database table name is used for a lookup key. Then the row id is used as the identifier in the platform data above. Finally column names are used as a key to point to the data value.
+  For example the observation names:
+{{{
+"obs_type": 
+{
+  "1": {
+    "display": "Wind Speed",
+    "standard_name": "wind_speed"
+  }
+}}}
+===== File Creation Script =====
+Script: buildPlatformMetadata.sh<br/>
+Server: Neptune
+Directory: /home/xeniaprod/cron<br/>
+Description: Shell script that launches the python script that builds the platform metadata JSON file.<br/>
+Shell Script Makeup<br/>
+
+    Script: buildPlatformMetadata.py <br/>
+    Directory: <br/>
+    Command Line Parameters:
+{{{
+--dbName - The name of the xenia database to connect to.
+--dbHost - The xenia database host address to connect to.
+--dbUser - The xenia database user name to connect with.
+--dbPwd - The xenia database password name to connect with.
+--Polygon - The polygon we want to use to select the platforms. Format is: long lat, long lat....
+--JsonPlatformFilepath - The output directory to write the JSON file.
+--ConversionFile - The XML file with the units conversion formulas.
+--PlaformSettingsFile - This is the XML file that has various settings for platforms.
+--UseJSONCallbackFunc - Set this flag to wrap the JSON in a callback function.
+
+}}}
+
+Schedule: Every 2 hours. <br/>
+==== Observation Data Source ====
+The observation data is available in JSON files, broken down per platform [http://neptune.baruch.sc.edu/xenia/feeds/obsjson/all/latest_hours_24/ here].
+
+===== Observation Sample Entry =====
+{{{
+{"type": "Feature",
+            "geometry": {
+                "type": "MultiPoint",
+                "coordinates": [[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3]] 
+            },
+         "properties": {
+            "obsTypeDesc": "air pressure",
+            "obsType": "air_pressure",
+            "uomType": "mb",
+            "sorder": "1",
+            "time": ["2011-02-15 16:00:00Z","2011-02-15 17:00:00Z","2011-02-15 18:00:00Z","2011-02-15 19:00:00Z","2011-02-15 20:00:00Z","2011-02-15 21:00:00Z","2011-02-15 22:00:00Z","2011-02-15 23:00:00Z","2011-02-16 00:00:00Z","2011-02-16 01:00:00Z","2011-02-16 02:00:00Z","2011-02-16 03:00:00Z","2011-02-16 04:00:00Z","2011-02-16 05:00:00Z","2011-02-16 06:00:00Z","2011-02-16 07:00:00Z","2011-02-16 08:00:00Z","2011-02-16 09:00:00Z","2011-02-16 10:00:00Z","2011-02-16 11:00:00Z","2011-02-16 12:00:00Z","2011-02-16 13:00:00Z","2011-02-16 14:00:00Z","2011-02-16 15:00:00Z","2011-02-16 16:00:00Z","2011-02-16 17:00:00Z","2011-02-16 18:00:00Z","2011-02-16 19:00:00Z"],
+            "value": ["1024.1","1024.4","1024.1","1023.7","1023.6","1023.8","1024.2","1024.4","1024.3","1024.5","1024.4","1024.8","1024.9","1024.6","1024.4","1024.4","1024","1023.6","1023.8","1024.1","1024.3","1024.8","1025.2","1025.5","1025.3","1024.8","1024.2","1023.3"]
+        }},
+
+}}}
+===== File Creation Script =====
+Script: xenia_to_json.pl<br/>
+Server: Neptune<br/>
+Directory: /home/xeniaprod/scripts/postgresql/import_export<br/>
+Description: Script creates the observation JSON files. Each platform has a seperate file. The last 24 hours of observations for the platform are saved.<br/>
+ 
