@@ -66,7 +66,7 @@ The map uses a combination of WMS and [http://dev.openlayers.org/releases/OpenLa
 
 === Observing Platforms ===
 For the platforms, we use a collection of Vector Features to plot on the map. The Vector Features are contained within a [http://dev.openlayers.org/releases/OpenLayers-2.10/doc/apidocs/files/OpenLayers/Layer/Vector-js.html Vector Layer]. 
-==== Vector Data Source ====
+==== Platform Vector Data Source ====
 The Vector Features are supplied through an JSON [http://neptune.baruch.sc.edu/xenia/feeds/obsjson/mapmeta/platform_callback.json file]. The file is broken up into two main bodies, a lookup table and the platform data. The lookup table is used to reduce the overall file size by having frequently used strings stored only in one place. They are referenced in the platform data through integer indexes. 
 
   * Platform Entry Sample:
@@ -195,4 +195,6 @@ The Vector Features are supplied through an JSON [http://neptune.baruch.sc.edu/x
     "standard_name": "wind_speed"
   }
 }}}
-   
+
+==== Observation Data Source ====
+The observation data is available in JSON files, broken down per platform [http://neptune.baruch.sc.edu/xenia/feeds/obsjson/all/latest_hours_24/ here].
