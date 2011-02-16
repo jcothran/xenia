@@ -68,3 +68,119 @@ The map uses a combination of WMS and [http://dev.openlayers.org/releases/OpenLa
 For the platforms, we use a collection of Vector Features to plot on the map. The Vector Features are contained within a [http://dev.openlayers.org/releases/OpenLayers-2.10/doc/apidocs/files/OpenLayers/Layer/Vector-js.html Vector Layer]. 
 ==== Vector Data Source ====
 The Vector Features are supplied through an JSON [http://neptune.baruch.sc.edu/xenia/feeds/obsjson/mapmeta/platform_callback.json file]. The file is broken up into two main bodies, a lookup table and the platform data. The lookup table is used to reduce the overall file size by having frequently used strings stored only in one place. They are referenced in the platform data through integer indexes.
+
+The following is an example of a platform entry:
+{{{
+{
+  "type": "Feature",
+  "geometry": {
+      "coordinates": [-79.620000000000005, 32.799999999999997],
+      "type": "Point"
+  },
+  "properties": {
+      "links": {
+          "dataQuery": {
+              "iconId": 9,
+              "id": "carocoops.CAP2.buoy",
+              "urlId": 2
+          },
+          "emailAlert": {
+              "iconId": 8,
+              "id": "carocoops.CAP2.buoy",
+              "urlId": 1
+          },
+          "geoRSS": {
+              "iconId": 10,
+              "id": "carocoops_cap2_buoy_GeoRSS_latest.xml",
+              "urlId": 3
+          },
+          "twitter": {
+              "iconId": 7,
+              "id": "cap2rcoos",
+              "urlId": 0
+          }
+      },
+      "orgName": 39,
+      "staDataFile": "carocoops:cap2:buoy_data.json",
+      "staDataURL": 4,
+      "staDesc": "CAROCOOPS CAP2, Capers Island Nearshore, SC",
+      "staID": "carocoops.CAP2.buoy",
+      "staObs": [{
+          "Properties": {
+              "obsDisOrd": 1,
+              "obsTypeDesc": 5,
+              "sorder": 1,
+              "uomID": 3
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 2,
+              "obsTypeDesc": 3,
+              "sorder": 1,
+              "uomID": 2
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 3,
+              "obsTypeDesc": 1,
+              "sorder": 1,
+              "uomID": 1
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 4,
+              "obsTypeDesc": 2,
+              "sorder": 1,
+              "uomID": 1
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 5,
+              "obsTypeDesc": 4,
+              "sorder": 1,
+              "uomID": 4
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 6,
+              "obsTypeDesc": 22,
+              "sorder": 1,
+              "uomID": 11
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 25,
+              "obsTypeDesc": 6,
+              "sorder": 1,
+              "uomID": 3
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 30,
+              "obsTypeDesc": 28,
+              "sorder": 1,
+              "uomID": 10
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 33,
+              "obsTypeDesc": 10,
+              "sorder": 1,
+              "uomID": 13
+          },
+          "type": "feature"
+      }],
+      "staTypeImage": 0,
+      "staTypeName": "buoy",
+      "staURL": "http://nautilus.baruch.sc.edu/carocoops_website/buoy_detail.php?buoy=buoy4"
+  }
+}
+}}}
