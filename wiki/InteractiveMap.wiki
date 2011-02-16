@@ -68,7 +68,7 @@ The map uses a combination of WMS and [http://dev.openlayers.org/releases/OpenLa
 For the platforms, we use a collection of Vector Features to plot on the map. The Vector Features are contained within a [http://dev.openlayers.org/releases/OpenLayers-2.10/doc/apidocs/files/OpenLayers/Layer/Vector-js.html Vector Layer]. 
 ==== Platform Vector Data Source ====
 The Vector Features are supplied through an JSON [http://neptune.baruch.sc.edu/xenia/feeds/obsjson/mapmeta/platform_callback.json file]. The file is broken up into two main bodies, a lookup table and the platform data. The lookup table is used to reduce the overall file size by having frequently used strings stored only in one place. They are referenced in the platform data through integer indexes. 
-===== Sample Entry =====
+===== Platform  Sample Entry =====
   * Platform Entry Sample:
 {{{
 {
@@ -222,7 +222,7 @@ Schedule: Every 2 hours. <br/>
 ==== Observation Data Source ====
 The observation data is available in JSON files, broken down per platform [http://neptune.baruch.sc.edu/xenia/feeds/obsjson/all/latest_hours_24/ here].
 
-===== Sample Entry =====
+===== Observation Sample Entry =====
 {{{
 {"type": "Feature",
             "geometry": {
