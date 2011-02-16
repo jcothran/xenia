@@ -60,3 +60,9 @@ interactive_map.html
 
   * units_conversion.js
   Natively the observation data is in metric. The unitConverter class allows the on the fly conversion from metric to Impertial. The initial implementation is found on [http://stackoverflow.com/questions/865590/javascript-unit-of-measure-conversion-library Stack Overflow]. Modifications were made to hand Celsius to Fahrenheit conversions.
+
+== Data Sources ==
+The map uses a combination of WMS and [http://dev.openlayers.org/releases/OpenLayers-2.10/doc/apidocs/files/OpenLayers/Feature/Vector-js.html Vector Features] to display data.
+
+=== Vector Features ===
+For the platforms, we use a collection of Vector Features to plot on the map. The Vector Features are contained within a [http://dev.openlayers.org/releases/OpenLayers-2.10/doc/apidocs/files/OpenLayers/Layer/Vector-js.html Vector Layer].
