@@ -31,7 +31,7 @@ MAP
     IMAGEURL  'http://129.252.37.86/mapserv_tmp'
     METADATA   
      "wms_title" "RCOOS Mapping"
-     "wms_onlineresource" "http://129.252.37.86/cgi-bin/mapserv?map=/home/xeniaprod/mapping/common/general.map"
+     "wms_onlineresource" "http://129.252.139.124/cgi-bin/mapserv?map=/home/xeniaprod/mapping/common/general.map"
      "wms_srs" "epsg:4326 EPSG:900913"
      "wms_feature_info_mime_type" "text/html"
      "wms_extent" "-90.5 24.5 -60.5 37.2"     
@@ -130,6 +130,13 @@ LAYER
   CLASS
     OUTLINECOLOR 120 120 120
   END
+  METADATA
+    "wms_srs" "EPSG:4326"
+    "wms_name" "states_outline"
+    "wms_server_version" "1.1.1"
+    "wms_format" "image/png"
+  END
+  
 END
 
 
@@ -379,7 +386,6 @@ LAYER
     "wms_name" "oi_sst"
     "wms_server_version" "1.1.1"
     "wms_format" "image/png"
-    "wms_onlineresource" "http://129.252.139.124/cgi-bin/mapserv?"
     "wms_extent" "-90.5 24.5 -60.5 37.2"
     
   END
@@ -400,7 +406,6 @@ LAYER
     "wms_name" "modis_sst"
     "wms_server_version" "1.1.1"
     "wms_format" "image/png"
-    "wms_onlineresource" "http://129.252.139.124/cgi-bin/mapserv?"
     "wms_extent" "-90.5 24.5 -60.5 37.2"    
   END
 END
@@ -589,7 +594,7 @@ END
     TOLERANCEUNITS pixels
     TYPE POINT
     CONNECTIONTYPE POSTGIS
-    CONNECTION "user=xeniaprod password=xeniaprod!99 dbname=xenia host=neptune.baruch.sc.edu"
+    CONNECTION "user= password= dbname= host="
     METADATA
       "wms_srs" "EPSG:4269 EPSG:4326 EPSG:900913"
       "wms_extent" "-180 -90 180 90"
@@ -1697,7 +1702,7 @@ END
     TOLERANCEUNITS pixels
     TYPE POINT
     CONNECTIONTYPE POSTGIS
-    CONNECTION "user=xeniaprod password=xeniaprod!99 dbname=xenia host=neptune.baruch.sc.edu"
+    CONNECTION "user= password= dbname= host="
     METADATA
       "wms_srs" "EPSG:4269 EPSG:4326"
       "wms_extent" "-180 -90 180 90"
