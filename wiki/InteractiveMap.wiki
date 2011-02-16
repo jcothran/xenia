@@ -206,15 +206,15 @@ Shell Script Makeup<br/>
     Directory: <br/>
     Command Line Parameters:
 {{{
---dbHost 
---dbUser
---dbPwd
---dbName
---Polygon
---JsonPlatformFilepath
---ConversionFile
---PlaformSettingsFile
---UseJSONCallbackFunc
+--dbName - The name of the xenia database to connect to.
+--dbHost - The xenia database host address to connect to.
+--dbUser - The xenia database user name to connect with.
+--dbPwd - The xenia database password name to connect with.
+--Polygon - The polygon we want to use to select the platforms. Format is: long lat, long lat....
+--JsonPlatformFilepath - The output directory to write the JSON file.
+--ConversionFile - The XML file with the units conversion formulas.
+--PlaformSettingsFile - This is the XML file that has various settings for platforms.
+--UseJSONCallbackFunc - Set this flag to wrap the JSON in a callback function.
 
 }}}
 
