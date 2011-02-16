@@ -68,7 +68,7 @@ The map uses a combination of WMS and [http://dev.openlayers.org/releases/OpenLa
 For the platforms, we use a collection of Vector Features to plot on the map. The Vector Features are contained within a [http://dev.openlayers.org/releases/OpenLayers-2.10/doc/apidocs/files/OpenLayers/Layer/Vector-js.html Vector Layer]. 
 ==== Platform Vector Data Source ====
 The Vector Features are supplied through an JSON [http://neptune.baruch.sc.edu/xenia/feeds/obsjson/mapmeta/platform_callback.json file]. The file is broken up into two main bodies, a lookup table and the platform data. The lookup table is used to reduce the overall file size by having frequently used strings stored only in one place. They are referenced in the platform data through integer indexes. 
-===== Sample Entries =====
+===== Sample Entry =====
   * Platform Entry Sample:
 {{{
 {
@@ -222,6 +222,23 @@ Schedule: Every 2 hours. <br/>
 ==== Observation Data Source ====
 The observation data is available in JSON files, broken down per platform [http://neptune.baruch.sc.edu/xenia/feeds/obsjson/all/latest_hours_24/ here].
 
+===== Sample Entry =====
+{{{
+{"type": "Feature",
+            "geometry": {
+                "type": "MultiPoint",
+                "coordinates": [[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3]] 
+            },
+         "properties": {
+            "obsTypeDesc": "air pressure",
+            "obsType": "air_pressure",
+            "uomType": "mb",
+            "sorder": "1",
+            "time": ["2011-02-15 16:00:00Z","2011-02-15 17:00:00Z","2011-02-15 18:00:00Z","2011-02-15 19:00:00Z","2011-02-15 20:00:00Z","2011-02-15 21:00:00Z","2011-02-15 22:00:00Z","2011-02-15 23:00:00Z","2011-02-16 00:00:00Z","2011-02-16 01:00:00Z","2011-02-16 02:00:00Z","2011-02-16 03:00:00Z","2011-02-16 04:00:00Z","2011-02-16 05:00:00Z","2011-02-16 06:00:00Z","2011-02-16 07:00:00Z","2011-02-16 08:00:00Z","2011-02-16 09:00:00Z","2011-02-16 10:00:00Z","2011-02-16 11:00:00Z","2011-02-16 12:00:00Z","2011-02-16 13:00:00Z","2011-02-16 14:00:00Z","2011-02-16 15:00:00Z","2011-02-16 16:00:00Z","2011-02-16 17:00:00Z","2011-02-16 18:00:00Z","2011-02-16 19:00:00Z"],
+            "value": ["1024.1","1024.4","1024.1","1023.7","1023.6","1023.8","1024.2","1024.4","1024.3","1024.5","1024.4","1024.8","1024.9","1024.6","1024.4","1024.4","1024","1023.6","1023.8","1024.1","1024.3","1024.8","1025.2","1025.5","1025.3","1024.8","1024.2","1023.3"]
+        }},
+
+}}}
 ===== File Creation Script =====
 Script: xenia_to_json.pl<br/>
 Server: Neptune<br/>
