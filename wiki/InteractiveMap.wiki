@@ -212,20 +212,19 @@ Shell Script Makeup<br/>
 
     Script: buildPlatformMetadata.py <br/>
     Directory: <br/>
-    Command Line Parameters:
-{{{
---dbName - The name of the xenia database to connect to.
---dbHost - The xenia database host address to connect to.
---dbUser - The xenia database user name to connect with.
---dbPwd - The xenia database password name to connect with.
---Polygon - The polygon we want to use to select the platforms. Format is: long lat, long lat....
---JsonPlatformFilepath - The output directory to write the JSON file.
---ConversionFile - The XML file with the units conversion formulas.
---PlaformSettingsFile - This is the XML file that has various settings for platforms. 
---UseJSONCallbackFunc - Set this flag to wrap the JSON in a callback function.
+    Command Line Parameters:<br/>
+    --dbName - The name of the xenia database to connect to.<br/>
+    --dbHost - The xenia database host address to connect to.<br/>
+    --dbUser - The xenia database user name to connect with.<br/>
+    --dbPwd - The xenia database password name to connect with.<br/>
+    --Polygon - The polygon we want to use to select the platforms.   Format is: long lat, long lat....<br/>
+    --JsonPlatformFilepath - The output directory to write the JSON file.<br/>
+    --ConversionFile - The XML file with the units conversion formulas.<br/>
+    --PlaformSettingsFile - This is the XML file that has various  settings for platforms. A sample of the file can be found Sample can be found [http://code.google.com/p/xenia/source/browse/trunk/postgresql/mapping/platformSettings-template.xml here].<br/>
+    --UseJSONCallbackFunc - Set this flag to wrap the JSON in a callback function.<br/>
 
-}}}
-A sample of the file used in the --PlatformSettingsFile can be found Sample can be found [http://code.google.com/p/xenia/source/browse/trunk/postgresql/mapping/platformSettings-template.xml here].
+
+
 
 Schedule: Every 2 hours. <br/>
 ==== Observation Data Source ====
