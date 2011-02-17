@@ -260,5 +260,8 @@ Command Line Parameters: No command line parameters, however there are hardcoded
 
 === WMS Data Sources ===
 A combination of both local and remote WMS layers are used on the map. Locally, [http://mapserver.org Mapserver] is the mapping engine used to host and serve up the WMS data.
-
+==== Layers ====
+This section will detail any layers that use a wrapper script in between the WMS request and the Mapserver engine. 
+  * HF Radar Currents
+  *currents_rs_wrapper_tst* The HF Radar data is stored in a shapefile. This wrapper is used to created the appropriate file name to pass onto the Mapserver for serving out the tiles. The file naming convention is: year_month_day_hour_00_00.shp. The WMS query provides a layer specific variable, TIME_OFFSET_HOURS which is used in determining the file to use. An offset of 3 hours is used in the map. TIME_OFFSET_HOURS is used to determine the date/time that generates the shapefile name.
  
