@@ -5,12 +5,14 @@
 = Introduction =
 
 The Secoora Interactive map is a !JavaScript driven mapping engine using [http://www.openlayers.org OpenLayers], [http://www.geoext.org GeoEXT], and [http://www.extjs.com ExtJS] !JavaScript libraries. 
+The [http://highcharts.com/ Highcharts] library provides the graphing capability used on the observation popup windows.
 
 
 == Setup ==
 The files and directory are structured as follows:
 {{{
-interactive_map.html
+|
+-interactive_map.html
 -lib
  |-ExtJS-3.3.0
  |-GeoExt-1.0
@@ -38,6 +40,13 @@ interactive_map.html
 }}}
 
 == File descriptions ==
+  * ExtJS-3.3.0 is the directory where the ExtJs files are stored. The files are extracted in the preserving directory hierarchy. 
+
+  * GeoExt-1.0 is the parent directory of the GeoExt library.
+
+  * OpenLayers-2.10 is the parent directory of the Openlayers library.
+
+  * Highcharts is the parent directory of the Highcharts library.
 
   * interactive_map.html 
   This is the html file that kicks off the creation of the map.
