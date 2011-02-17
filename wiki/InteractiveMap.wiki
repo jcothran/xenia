@@ -4,7 +4,7 @@
 
 = Introduction =
 
-The Secoora Interactive map is a !JavaScript driven mapping engine using [http://www.openlayers.org OpenLayers], [http://www.geoext.org GeoEXT], and [http://www.extjs.com ExtJS] !JavaScript libraries.
+The Secoora Interactive map is a !JavaScript driven mapping engine using [http://www.openlayers.org OpenLayers], [http://www.geoext.org GeoEXT], and [http://www.extjs.com ExtJS] !JavaScript libraries. 
 
 
 == Setup ==
@@ -243,5 +243,13 @@ The observation data is available in JSON files, broken down per platform [http:
 Script: xenia_to_json.pl<br/>
 Server: Neptune<br/>
 Directory: /home/xeniaprod/scripts/postgresql/import_export<br/>
-Description: Script creates the observation JSON files. Each platform has a seperate file. The last 24 hours of observations for the platform are saved.<br/>
+Description: Script creates the observation JSON files. Each platform has a seperate file. The last 24 hours of observations for the platform are saved. The file naming convention is: organization:platform short name:platform type_data.json<br/> 
+Command Line Parameters: No command line parameters, however there are hardcoded paths to note.
+  * $target_dir = '/home/xeniaprod/feeds/obsjson/all/latest_hours_24/';
+  This is the output directory where the JSON files will be written.
+  * my $cfg=Config::IniFiles->new( -file => '/home/xeniaprod/config/dbConfig.ini');
+  This is the file containing the connection information for the database.
+
+
+
  
