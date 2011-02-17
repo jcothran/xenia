@@ -59,9 +59,9 @@ The files and directory are structured as follows:
   Contains the base class olMap. This class contains basic mapping setup.
 
   * adapter-extjs.js
-  The adapter code needed to get the Highcharts graphing library to work with the ExtJS framework. The adapter is provided [http://www.sencha.com/forum/showthread.php?93669-Highcharts-adapter-and-plugin-for-ExtJS&highlight=highchartpaneljson here].
+  The adapter code needed to get the Highcharts graphing library to work with the ExtJS framework. The original source for the adapter is provided [http://www.sencha.com/forum/showthread.php?93669-Highcharts-adapter-and-plugin-for-ExtJS&highlight=highchartpaneljson here].
   * Ext.ux.HighChart.js
-  The Highchart graphing class wrapper. The wrapper class is provided [http://www.sencha.com/forum/showthread.php?93669-Highcharts-adapter-and-plugin-for-ExtJS&highlight=highchartpaneljson here]. 
+  The Highchart graphing class wrapper. The original source for the wrapper class is provided [http://www.sencha.com/forum/showthread.php?93669-Highcharts-adapter-and-plugin-for-ExtJS&highlight=highchartpaneljson here]. 
 
   * ComparisonFilterEx.js
   Class ComparisonEx overrides OpenLayers.Filter.Comparison to create the filters used on the map that allow filtering by observations and/or organization. Our platform data comes from a json file, and alot of the attributes are in a hierarchical structure. To filter on some of the properties, such as observation, a function was needed to traverse down to the particular property. The base implementation of Openlayers did not provide this. The function of interest is the recursive function: getAttribute.
@@ -221,7 +221,7 @@ Shell Script Makeup<br/>
 --Polygon - The polygon we want to use to select the platforms. Format is: long lat, long lat....
 --JsonPlatformFilepath - The output directory to write the JSON file.
 --ConversionFile - The XML file with the units conversion formulas.
---PlaformSettingsFile - This is the XML file that has various settings for platforms.
+--PlaformSettingsFile - This is the XML file that has various settings for platforms. Sample can be found [http://code.google.com/p/xenia/source/browse/trunk/postgresql/mapping/platformSettings-template.xml here].
 --UseJSONCallbackFunc - Set this flag to wrap the JSON in a callback function.
 
 }}}
