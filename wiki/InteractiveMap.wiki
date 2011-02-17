@@ -263,5 +263,11 @@ A combination of both local and remote WMS layers are used on the map. Locally, 
 ==== Layers ====
 This section will detail any layers that use a wrapper script in between the WMS request and the Mapserver engine. 
   * HF Radar Currents
-  _currents_rs_wrapper_tst_ The HF Radar data is stored in a shapefile. This wrapper is used to created the appropriate file name to pass onto the Mapserver for serving out the tiles. The file naming convention is: year_month_day_hour_00_00.shp. The WMS query provides a layer specific variable, TIME_OFFSET_HOURS which is used in determining the file to use. An offset of 3 hours is used in the map. 
- 
+  _Script:_ currents_rs_wrapper_tst <br/>
+  _Machine:_ Maury<br/>
+  _Directory_: /usr/local/apache2/cgi-bin<br/>
+  _Description:_ The HF Radar data is stored in a shapefile. This wrapper is used to created the appropriate file name to pass onto the Mapserver for serving out the tiles. The file naming convention is: year_month_day_hour_00_00.shp. The WMS query provides a layer specific variable, TIME_OFFSET_HOURS which is used in determining the file to use. An offset of 3 hours is used in the map. <br/>
+  _Command Line Parameters:_ <br/>
+    Normal WMS parameters, plus the following layer specific params:<br/>
+    TIME_OFFSET_HOURS - Offset in hours. <br/>
+    MAP_SCALEBAR_STATUS - ON or OFF. Used to query scalebar for layer.<br/>
