@@ -218,10 +218,12 @@ uptime http://neptune.baruch.sc.edu/xenia/feeds/qaqc/PlatformUptimePercentages.h
 documentation http://code.google.com/p/xenia/wiki/PlatformUptime
 earlier documentation http://trac.secoora.org/datamgmt/wiki/PercentageUptime
 
+----
 = Platform/Sensor Status/Query =
 
 http://code.google.com/p/xenia/wiki/StatusPages
 
+----
 = Observation range/condition email alerts =
  
 http://secoora.org/pages/alertpage.php?platform=nos.8670870.WL
