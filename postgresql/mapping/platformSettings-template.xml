@@ -1,0 +1,64 @@
+<platformSettings>
+  <externalPages>
+    <page>
+      <name>Twitter</name>
+      <tooltip>Opens platform's Twitter page</tooltip>
+      <url>http://twitter.com/</url>
+    </page>
+  </externalPages>
+  <urls>
+      <!--
+       The base url used when retrieving the observation data JSON file for a platform.
+       -->
+      <jsonDataUrl>http://neptune.baruch.sc.edu/xenia/feeds/obsjson/all/latest_hours_24/</jsonDataUrl>
+  </urls>
+  <!-- 
+  These are the icon look ups used in the platform meta data. In the platform data, each platform can have numerous icons/images, one for how it is 
+  represented, then the icons used to access the external data pages. Instead of storing the full string for the paths in each platform, we use an id
+  instead and then have a json lookup table that we can then get the path from.
+  -->
+  <icons>
+    <icon id="buoy">
+      <!-- 
+      typeList is a list of the platform types that will use this given imageUrl to represent itself. This can be overridden in the <platforms> section
+      below if we wanted to use a different icon.
+      -->
+      <typeList>
+        <type>buoy</type>
+        <type>met</type>
+        <type>adcp</type>
+        <type>weatherpak</type>
+      </typeList>
+      <imageUrl>resources/images/legend/buoy-default.png</imageUrl>
+    </icon>
+    <icon id="default">
+      <typeList>
+        <type>default</type>
+      </typeList>
+      <imageUrl>resources/images/legend/default.png</imageUrl>
+    </icon>
+    <icon id="twitter">
+      <typeList>
+        <type>twitter</type>
+      </typeList>
+      <imageUrl>resources/images/default/twitter.png</imageUrl>
+    </icon>
+  </icons>
+  <!-- 
+  The <platforms> area is where we can detail out any unique properties for individual platforms. For instance only a hand full of the platforms
+  have twitter accounts.
+  -->
+  <platforms>
+    <platform id="carocoops.CAP2.buoy">
+      <handle>carocoops.CAP2.buoy</handle>
+      <!-- 
+      The <links> area is where we define unique data pages for the platform, such as it's twitterId. All platforms are considered to have a dataQuery
+      page, geoRSS page and emailAlert page, however the twitter pages are only on a few.
+      -->
+      <links>
+        <twitterId>cap2rcoos</twitterId>
+      </links>    
+    </platform>
+   
+  </platforms>
+</platformSettings>
