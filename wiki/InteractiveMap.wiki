@@ -262,6 +262,7 @@ Command Line Parameters: No command line parameters, however there are hardcoded
 A combination of both local and remote WMS layers are used on the map. Locally, [http://mapserver.org Mapserver] is the mapping engine used to host and serve up the WMS data. Both USC and Chapel Hill host local layers using Mapserver.
 ==== Layers ====
 This section will detail any layers that use a wrapper script in between the WMS request and the Mapserver engine. 
+===== HF Radar Wrapper Script =====
   * HF Radar Currents
   _Script:_ currents_rs_wrapper_tst <br/>
   _Machine:_ Maury<br/>
@@ -272,6 +273,7 @@ This section will detail any layers that use a wrapper script in between the WMS
     TIME_OFFSET_HOURS - Offset in hours. <br/>
     MAP_SCALEBAR_STATUS - ON or OFF. Used to query scalebar for layer.<br/>
 
+===== Drifters Wrapper Script =====
   * Drifters
   _Script:_ drifter_wrapper<br/>
   _Machine:_ Maury<br/>
