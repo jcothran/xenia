@@ -272,6 +272,9 @@ This section will detail any layers that use a wrapper script in between the WMS
     Normal WMS parameters, plus the following layer specific params:<br/>
     TIME_OFFSET_HOURS - Offset in hours. <br/>
     MAP_SCALEBAR_STATUS - ON or OFF. Used to query scalebar for layer.<br/>
+  
+  _Mapfile:_ currents_rs_tst.map
+  _Directory_: /opt/secoora_ogc/maps/
 
 ===== Drifters Wrapper Script =====
   * Drifters
@@ -283,3 +286,6 @@ This section will detail any layers that use a wrapper script in between the WMS
     Normal WMS parameters, plus the following layer specific params:<br/>
     TIME_OFFSET_HOURS - Offset in hours. Used for time offset in the SQL done in the drifter.map file. This offset is used to query for the latest drifter position(head).<br/>
     TAIL - Specifies the number of days previous to query for to draw the trailing dots on the map behind the head.<br/>
+
+  _Mapfile:_ drifter.map
+  _Directory_: /opt/secoora_ogc/maps/
