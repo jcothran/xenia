@@ -279,5 +279,5 @@ This section will detail any layers that use a wrapper script in between the WMS
   _Description:_ The drifter positions are stored in a database. This wrapper is used to create the current head position of the drifter, then use the TAIL parameter to create the trailing points that show previous drifter positions.<br/>
   _Command Line Parameters:_ <br/>
     Normal WMS parameters, plus the following layer specific params:<br/>
-    TIME_OFFSET_HOURS - Offset in hours. Used for time offset in the SQL done in the drifter.map file.<br/>
+    TIME_OFFSET_HOURS - Offset in hours. Used for time offset in the SQL done in the drifter.map file. This offset is used to query for the latest drifter position(head).<br/>
     TAIL - Specifies the number of days previous to query for to draw the trailing dots on the map behind the head.<br/>
