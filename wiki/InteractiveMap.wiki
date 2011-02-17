@@ -259,7 +259,7 @@ Command Line Parameters: No command line parameters, however there are hardcoded
   This is the file containing the connection information for the database.
 
 === WMS Data Sources ===
-A combination of both local and remote WMS layers are used on the map. Locally, [http://mapserver.org Mapserver] is the mapping engine used to host and serve up the WMS data.
+A combination of both local and remote WMS layers are used on the map. Locally, [http://mapserver.org Mapserver] is the mapping engine used to host and serve up the WMS data. Both USC and Chapel Hill host local layers using Mapserver.
 ==== Layers ====
 This section will detail any layers that use a wrapper script in between the WMS request and the Mapserver engine. 
   * HF Radar Currents
