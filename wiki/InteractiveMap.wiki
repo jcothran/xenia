@@ -8,7 +8,7 @@ The Secoora Interactive map is a !JavaScript driven mapping engine using [http:/
 The [http://highcharts.com/ Highcharts] library provides the graphing capability used on the observation popup windows.
 
 
-== Setup ==
+= Setup =
 The files and directory are structured as follows:
 {{{
 |
