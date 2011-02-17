@@ -59,8 +59,7 @@ The files and directory are structured as follows:
   Contains the base class olMap. This class contains basic mapping setup.
 
   * adapter-extjs.js
-  The adapter code needed to get the Highcharts graphing library to work with the ExtJS framework. The adapter is provided [http://www.sencha.com/forum/showthread.php?93669-Highcharts-adapter-and-plugin-for-ExtJS&highlight=highchartpaneljson
- here].
+  The adapter code needed to get the Highcharts graphing library to work with the ExtJS framework. The adapter is provided [http://www.sencha.com/forum/showthread.php?93669-Highcharts-adapter-and-plugin-for-ExtJS&highlight=highchartpaneljson here].
   * Ext.ux.HighChart.js
   The Highchart graphing class wrapper. The wrapper class is provided [http://www.sencha.com/forum/showthread.php?93669-Highcharts-adapter-and-plugin-for-ExtJS&highlight=highchartpaneljson here]. 
 
