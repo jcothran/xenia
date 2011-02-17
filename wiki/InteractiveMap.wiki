@@ -53,7 +53,7 @@ The files and directory are structured as follows:
 
   * secoora_interactive.js
   This is the JavaScript file that creates and manages the map.
-  It extends the olMap class found in olMap1.0.js.
+  It extends the olMap class found in olMap1.0.js. The addLayers() function is where the WMS layers are added. 
 
   * olMap1.0.js
   Contains the base class olMap. This class contains basic mapping setup.
