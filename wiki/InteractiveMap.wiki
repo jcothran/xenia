@@ -271,3 +271,13 @@ This section will detail any layers that use a wrapper script in between the WMS
     Normal WMS parameters, plus the following layer specific params:<br/>
     TIME_OFFSET_HOURS - Offset in hours. <br/>
     MAP_SCALEBAR_STATUS - ON or OFF. Used to query scalebar for layer.<br/>
+
+  * Drifters
+  _Script:_ drifter_wrapper<br/>
+  _Machine:_ Maury<br/>
+  _Directory_: /usr/local/apache2/cgi-bin<br/>
+  _Description:_ The file naming convention is: year_month_day_hour_00_00.shp. The WMS query provides a layer specific variable, TIME_OFFSET_HOURS which is used in determining the file to use. An offset of 3 hours is used in the map. <br/>
+  _Command Line Parameters:_ <br/>
+    Normal WMS parameters, plus the following layer specific params:<br/>
+    TIME_OFFSET_HOURS - Offset in hours. <br/>
+    TAIL - Specifies the number of days previous to query for to draw the trailing dots on the map behind the head.<br/>
