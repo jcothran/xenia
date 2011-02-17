@@ -65,10 +65,6 @@ http://xenia.googlecode.com/files/time_series.jpg
 Simple time-series graphs of the previous days observations are available as web links embedded within the KML and HTML table stub displays <br/>
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastLite#a_description_of_the_graph_xml_f
 
-== vector graphs (ADCP) ==
-
-see [http://code.google.com/p/xenia/wiki/ADCPProfilerNotes ADCPProfilerNotes]
-
 ----
 = GeoRSS = 
 
@@ -149,16 +145,6 @@ Past 24 hours timestamped CSV, Shapefiles split out 'by observation type' <br/>
 http://neptune.baruch.sc.edu/xenia/feeds/by_obs_recent
 
 see also see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate#Convert_from_ObsKML_to_other_for
-
-----
-= Data source files - zipped ObsKML and SQL =
-
-A [http://neptune.baruch.sc.edu/xenia/feeds/all_metadata_latest.zip zip file] of all the ObsKML imported to the database and a [http://neptune.baruch.sc.edu/xenia/feeds/latest_raw.sql SQL file] of the ObsKML as converted to SQL INSERT statements.  Either source could be used to populate other copy xenia instances.  
-
-----
-= Latest 3 day database and julian weekly archive databases = 
-
-Sqlite file download for priming, analysis, etc of the latest 3 day time window [http://neptune.baruch.sc.edu/xenia/archive_db/latest.db database] and [http://neptune.baruch.sc.edu/xenia/archive_db/weekly/ folder] containing the julian-weekly-split archive of sqlite databases.
 
 ----
 = SOS =
@@ -288,3 +274,21 @@ Triggers:
     mk_the_geom BEFORE INSERT ON multi_obs FOR EACH ROW EXECUTE PROCEDURE mk_the_geom()
     set_top_of_hour AFTER INSERT ON multi_obs FOR EACH ROW EXECUTE PROCEDURE set_top_of_hour()
 }}}
+
+= Earlier products =
+
+The below products were developed earlier and may not be active or maintained
+ 
+== vector graphs (ADCP) ==
+
+see [http://code.google.com/p/xenia/wiki/ADCPProfilerNotes ADCPProfilerNotes]
+
+----
+== Latest 3 day database and julian weekly archive databases == 
+
+Sqlite file download for priming, analysis, etc of the latest 3 day time window [http://neptune.baruch.sc.edu/xenia/archive_db/latest.db database] and [http://neptune.baruch.sc.edu/xenia/archive_db/weekly/ folder] containing the julian-weekly-split archive of sqlite databases.
+
+----
+== Data source files - zipped ObsKML and SQL ==
+
+A [http://neptune.baruch.sc.edu/xenia/feeds/all_metadata_latest.zip zip file] of all the ObsKML imported to the database and a [http://neptune.baruch.sc.edu/xenia/feeds/latest_raw.sql SQL file] of the ObsKML as converted to SQL INSERT statements.  Either source could be used to populate other copy xenia instances.  
