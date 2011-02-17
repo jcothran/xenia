@@ -221,10 +221,11 @@ Shell Script Makeup<br/>
 --Polygon - The polygon we want to use to select the platforms. Format is: long lat, long lat....
 --JsonPlatformFilepath - The output directory to write the JSON file.
 --ConversionFile - The XML file with the units conversion formulas.
---PlaformSettingsFile - This is the XML file that has various settings for platforms. Sample can be found [http://code.google.com/p/xenia/source/browse/trunk/postgresql/mapping/platformSettings-template.xml here].
+--PlaformSettingsFile - This is the XML file that has various settings for platforms. 
 --UseJSONCallbackFunc - Set this flag to wrap the JSON in a callback function.
 
 }}}
+A sample of the file used in the --PlatformSettingsFile can be found Sample can be found [http://code.google.com/p/xenia/source/browse/trunk/postgresql/mapping/platformSettings-template.xml here].
 
 Schedule: Every 2 hours. <br/>
 ==== Observation Data Source ====
