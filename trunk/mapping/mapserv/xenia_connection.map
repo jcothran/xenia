@@ -1,0 +1,2 @@
+CONNECTIONTYPE POSTGIS
+CONNECTION "user=xeniaprod password=xeniaprod!99 dbname=xenia host=neptune.baruch.sc.edu"

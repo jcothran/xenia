@@ -593,8 +593,7 @@ END
     TOLERANCE 5
     TOLERANCEUNITS pixels
     TYPE POINT
-    CONNECTIONTYPE POSTGIS
-    CONNECTION "user= password= dbname= host="
+    INCLUDE 'xenia_connection.map'  #This pulls in the file that has the connection information. This way we can check in the overall map file and hide the sensitive info.
     METADATA
       "wms_srs" "EPSG:4269 EPSG:4326 EPSG:900913"
       "wms_extent" "-180 -90 180 90"
@@ -1701,8 +1700,7 @@ END
     TOLERANCE 5
     TOLERANCEUNITS pixels
     TYPE POINT
-    CONNECTIONTYPE POSTGIS
-    CONNECTION "user= password= dbname= host="
+    INCLUDE 'xenia_connection.map'  #This pulls in the file that has the connection information. This way we can check in the overall map file and hide the sensitive info.
     METADATA
       "wms_srs" "EPSG:4269 EPSG:4326"
       "wms_extent" "-180 -90 180 90"
