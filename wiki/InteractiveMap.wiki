@@ -268,13 +268,13 @@ This section will detail the local mapfiles used, as well as any wrapper scripts
   _Machine:_ Maury<br/>
   _Directory_: /usr/local/apache2/cgi-bin<br/>
   _Description:_ The HF Radar data is stored in a shapefile. This wrapper is used to created the appropriate file name to pass onto the Mapserver for serving out the tiles. The file naming convention is: year_month_day_hour_00_00.shp. The WMS query provides a layer specific variable, TIME_OFFSET_HOURS which is used in determining the file to use. An offset of 3 hours is used in the map. <br/>
-  _Command Line Parameters:_ <br/>
-    Normal WMS parameters, plus the following layer specific params:<br/>
-    TIME_OFFSET_HOURS - Offset in hours. <br/>
-    MAP_SCALEBAR_STATUS - ON or OFF. Used to query scalebar for layer.<br/>
   
   _Mapfile:_ [http://trac.secoora.org/visual/browser/mapping/trunk/mapserver/mapfiles/currents_rs_tst.map currents_rs_tst.map]<br/>
   _Directory_: /opt/secoora_ogc/maps/<br/>
+  _URL Parameters:_ <br/>
+    Normal WMS parameters, plus the following layer specific params:<br/>
+    TIME_OFFSET_HOURS - Offset in hours. <br/>
+    MAP_SCALEBAR_STATUS - ON or OFF. Used to query scalebar for layer.<br/>
 
 ===== Drifters =====
   * Drifters
@@ -282,13 +282,13 @@ This section will detail the local mapfiles used, as well as any wrapper scripts
   _Machine:_ Maury<br/>
   _Directory_: /usr/local/apache2/cgi-bin<br/>
   _Description:_ The drifter positions are stored in a database. This wrapper is used to create the current head position of the drifter, then use the TAIL parameter to create the trailing points that show previous drifter positions.<br/>
-  _Command Line Parameters:_ <br/>
-    Normal WMS parameters, plus the following layer specific params:<br/>
-    TIME_OFFSET_HOURS - Offset in hours. Used for time offset in the SQL done in the drifter.map file. This offset is used to query for the latest drifter position(head).<br/>
-    TAIL - Specifies the number of days previous to query for to draw the trailing dots on the map behind the head.<br/>
 
   _Mapfile:_ [http://trac.secoora.org/visual/browser/mapping/trunk/mapserver/mapfiles/drifter.map drifter.map]<br/>
   _Directory_: /opt/secoora_ogc/maps/<br/>
+  _URL Parameters:_ <br/>
+    Normal WMS parameters, plus the following layer specific params:<br/>
+    TIME_OFFSET_HOURS - Offset in hours. Used for time offset in the SQL done in the drifter.map file. This offset is used to query for the latest drifter position(head).<br/>
+    TAIL - Specifies the number of days previous to query for to draw the trailing dots on the map behind the head.<br/>
 
 ===== Interpolated Sea Surface Temperature =====
   _Mapfile:_ [http://code.google.com/p/xenia/source/browse/trunk/mapping/mapserv/general.map general.map]<br/>
@@ -310,3 +310,6 @@ This section will detail the local mapfiles used, as well as any wrapper scripts
   _Mapfile:_ [http://trac.secoora.org/visual/browser/mapping/trunk/mapserver/mapfiles/secoora_insitu.map secoora_insitu.map]<br/>
   _Directory_: /opt/secoora_ogc/maps<br/>
   _Machine:_ Maury<br/>
+  _URL Parameters_:
+    Normal WMS parameters, in addition:
+    TIME_OFFSET_HOURS - Used to query the winds from now -   TIME_OFFSET_HOURS
