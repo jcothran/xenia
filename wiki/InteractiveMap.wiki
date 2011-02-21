@@ -311,5 +311,5 @@ This section will detail the local mapfiles used, as well as any wrapper scripts
   _Directory_: /opt/secoora_ogc/maps<br/>
   _Machine:_ Maury<br/>
   _URL Parameters_:
-    Normal WMS parameters, in addition:
+    Normal WMS parameters, in addition:<br/>
     TIME_OFFSET_HOURS - Used to query the winds from now -   TIME_OFFSET_HOURS
