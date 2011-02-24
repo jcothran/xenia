@@ -644,4 +644,4 @@ A breakout(circa 2010) of some of our server layout - basically we have
   * an 'archival' instance which is just a larger xenia database instance where records older than 'recent'(past two-weeks) are kept
   * a 'squid' instance which handles internal http request rerouting by a shared IP and port references using a server name/keywords convention in the URL to route the requests - possible caching speedups eventually
 
-<img src="http://xenia.googlecode.com/files/stack.jpg" height="400" width="320" />
+<img src="http://xenia.googlecode.com/files/stack.jpg" />
