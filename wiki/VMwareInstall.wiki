@@ -635,3 +635,13 @@ http://www.dedoimedo.com/computers/amazon-ec2.html
   * security - depends on trust/testing between provider of software/system and consumer/host, and also feedback where security or performance could be improved
   * possibly run appliance outside of consumer firewall(or quarantined) until level of trust/confidence established
   * image/virtualization use in modeling community for distributed/grid computing purposes
+
+== Infrastructure / Stack ==
+
+A breakout(circa 2010) of some of our server layout - basically we have
+  * a main production server instance(Xenia), represented by the shared server instance
+  * working to also share a 'mapping' server instance for our mapping engine,tilecache,etc
+  * an 'archival' instance which is just a larger xenia database instance where records older than 'recent'(past two-weeks) are kept
+  * a 'squid' instance which handles internal http request rerouting by a shared IP and port references using a server name/keywords convention in the URL to route the requests - possible caching speedups eventually
+
+<img src="http://xenia.googlecode.com/files/stack.jpg" height="400" width="320" />
