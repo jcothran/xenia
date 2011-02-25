@@ -2071,7 +2071,526 @@ END
     END
   END
 ######################################################Styled Water Level######################################################
-  
+
+######################################################Wind Barbs######################################################
+  LAYER
+    NAME "wind_obs_hourly_recent"
+    #DEBUG 4
+    STATUS OFF
+    DATA "the_geom from multi_obs USING UNIQUE row_id USING SRID=-1"
+    #DATA "the_geom from (select platform_handle, m_date, z, m_value, d_label_theta) USING UNIQUE seq USING SRID=-1"
+    FILTER "d_report_hour = date_trunc('hour', timestamp with time zone 'now()' AT TIME ZONE 'UTC' - interval '%TIME_OFFSET_HOURS% hours') AND m_type_id = 1 AND d_top_of_hour=1 AND d_label_theta IS NOT NULL AND platform_handle NOT LIKE 'nws.%.%'"
+    #FILTER "report_time_stamp = date_trunc('hour', timestamp with time zone 'now()' AT TIME ZONE 'UTC' - interval '%TIME_OFFSET_HOURS% hours')" 
+    DUMP TRUE
+    #TEMPLATE "WIND.html"
+    TOLERANCE 5
+    TOLERANCEUNITS pixels
+    TYPE POINT
+    INCLUDE 'xenia_connection.map'  #This pulls in the file that has the connection information. This way we can check in the overall map file and hide the sensitive info.
+    METADATA
+      "wms_srs" "EPSG:4269 EPSG:4326 EPSG:900913"
+      "wms_extent" "-180 -90 180 90"
+      "wms_title" "In-situ wind speed and direction (hourly)"
+      "wms_abstract" "TBD"
+      "wfs_srs" "EPSG:4326"
+      "wfs_extent" "-180 -90 180 90"
+      "wfs_title" "In-situ wind speed and direction (hourly)"
+      "wfs_abstract" "TBD"    
+      "gml_include_items" "all"
+    END
+    PROJECTION 
+      "init=epsg:4326"
+      "init=epsg:900913"
+    END
+
+    #LABELITEM "this_label_char"
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 5) AND (([m_value] * 2.2369362921) < 10))
+      TEXT 'ã'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 10) AND (([m_value] * 2.2369362921) < 15))
+      TEXT 'ä'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 15) AND (([m_value] * 2.2369362921) < 20))
+      TEXT 'å'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 20) AND (([m_value] * 2.2369362921) < 25))
+      TEXT 'æ'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 25) AND (([m_value] * 2.2369362921) < 30))
+      TEXT 'ç'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 30) AND (([m_value] * 2.2369362921) < 35))
+      TEXT '&'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 35) AND (([m_value] * 2.2369362921) < 40))
+      TEXT "è"
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 40) AND (([m_value] * 2.2369362921) < 45))
+      TEXT 'é'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 45) AND (([m_value] * 2.2369362921) < 50))
+      TEXT 'ê'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 50) AND (([m_value] * 2.2369362921) < 55))
+      TEXT 'ë'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 55) AND (([m_value] * 2.2369362921) < 60))
+      TEXT 'ì'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 60) AND (([m_value] * 2.2369362921) < 65))
+      TEXT 'í'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 65) AND (([m_value] * 2.2369362921) < 70))
+      TEXT 'î'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 75) AND (([m_value] * 2.2369362921) < 80))
+      TEXT 'ï'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 80) AND (([m_value] * 2.2369362921) < 85))
+      TEXT 'ð'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 85) AND (([m_value] * 2.2369362921) < 90))
+      TEXT 'ñ'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 90) AND (([m_value] * 2.2369362921) < 100))
+      TEXT 'ò'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 100) AND (([m_value] * 2.2369362921) < 110))
+      TEXT 'ó'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 110) AND (([m_value] * 2.2369362921) < 115))
+      TEXT 'ô'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 115) AND (([m_value] * 2.2369362921) < 120))
+      TEXT 'õ'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 120) AND (([m_value] * 2.2369362921) < 125))
+      TEXT 'ö'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 125) AND (([m_value] * 2.2369362921) < 130))
+      TEXT '÷'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 130) AND (([m_value] * 2.2369362921) < 135))
+      TEXT 'ø'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 135) AND (([m_value] * 2.2369362921) < 140))
+      TEXT 'ù'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        COLOR 0 0 0
+        #OUTLINECOLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION ((([m_value] * 2.2369362921) >= 140))
+      TEXT 'ú'
+      LABEL
+        ANGLE [d_label_theta]
+        FORCE TRUE
+        TYPE TRUETYPE
+        FONT 'weather'
+        ANTIALIAS TRUE
+        #OUTLINECOLOR 0 0 0
+        COLOR 0 0 0
+        POSITION CC
+        OFFSET 2 -6
+        BUFFER 0
+        PARTIALS TRUE
+        SIZE 25
+      END
+      STYLE END
+    END
+    CLASS
+      EXPRESSION (5 > ([m_value] * 2.2369362921))
+      #LABEL
+      #  ANGLE [d_label_theta]
+      #END
+      SIZE 5
+      SYMBOL 'circle'
+      OUTLINECOLOR 0 0 0
+      COLOR 255 255 255
+    END
+  END  
+######################################################Wind Barbs######################################################
 ######################################################Legend######################################################
 LEGEND
   STATUS ON
