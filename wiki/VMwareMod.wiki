@@ -173,6 +173,8 @@ sudo apt-get install php5-cli
 sudo apt-get install php5-pgsql
 }}}
 
+gnuplot 4.4
+
 == Squid ==
 
   * hf radar(/home/xeniaprod/scripts/radar) and email alerts
