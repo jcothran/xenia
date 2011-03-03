@@ -209,9 +209,10 @@ see [VMwareDesign]
     * include any image application type installs to mod list
     * include any script/database changes to project svn
   * Storage
-    * remove all large sized testing datasets, files ({{{du -h --max-depth=1}}})
+    * remove all large sized testing datasets, logs, files ({{{du -h --max-depth=1}}})
     * clear any browser, application caches
     * clear user histories (history -c) or profile changes, info
+    * as sudo/root, apt-get clean , to remove packages at /var/cache/apt/archives
   * Security
     * return user/passwords to initial test spec or common suggested/known distribution value
     * remove any personal/institution specific information or addresses which should not be circulated
