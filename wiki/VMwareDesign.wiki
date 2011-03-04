@@ -230,3 +230,32 @@ ytes=2000m xeniavm20090722.vmdk multi
 
 #move large single image to archive desktop folder, upload split image to torino via scp
 }}}
+
+= Config =
+
+Site, database and application-specific configuration information should be stored under config files at /home/xeniaprod/config - specifically simple site.ini file reference as seen in perl and php code samples below.
+
+perl
+{{{
+use Config::IniFiles;
+my $cfg=Config::IniFiles->new( -file => '/home/xeniaprod/config/site.ini');
+my $email_server=$cfg->val('site','email_server');
+my $email_sender=$cfg->val('site','email_sender');
+my $email_to_sys=$cfg->val('site','email_to_sys');
+my @array_email_to_sys = split('\s+',$email_to_sys);
+my $server_name=$cfg->val('site','server_name');
+}}}
+
+php
+{{{
+/*** parse the ini file ***/
+$config = parse_ini_file("/home/xeniaprod/config/site.ini", 1);
+/*** assign variables ***/
+$ip = $config['site']['ip];
+
+$db_ref = 'db_xenia';
+$dbname = $config[$db_ref]['dbname'];
+$user = $config[$db_ref]['user'];
+$pass = $config[$db_ref]['pass'];
+$host = $config[$db_ref]['host'];
+}}}
