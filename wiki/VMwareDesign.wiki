@@ -251,7 +251,7 @@ php
 /*** parse the ini file ***/
 $config = parse_ini_file("/home/xeniaprod/config/site.ini", 1);
 /*** assign variables ***/
-$ip = $config['site']['ip];
+$ip = $config['site']['ip'];
 
 $db_ref = 'db_xenia';
 $dbname = $config[$db_ref]['dbname'];
