@@ -187,10 +187,11 @@ else
     $sql = "SELECT to_char( ( m_date - interval '$time_subtract hours'), 'MM-DD-YYYY HH24:MM'), $column_value 
             FROM $db_table 
             WHERE sensor_id = $sensor_id and 
-              $column_value >= $range_min and 
-              $column_value <= $range_max and 
               m_date >= ( timestamp '$from_date 00:00:00' - interval '$time_subtract hours') and 
-              m_date <= ( timestamp '$to_date 00:00:00' - interval '$time_subtract hours') $qc_clause 
+              m_date <= ( timestamp '$to_date 00:00:00' - interval '$time_subtract hours') and
+              $column_value >= $range_min and 
+              $column_value <= $range_max  
+              $qc_clause 
               order by m_date;" 
   }
 }
