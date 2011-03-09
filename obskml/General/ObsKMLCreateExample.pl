@@ -53,7 +53,7 @@ else
 }
 chomp( $KMLTimeStamp );   
 
-my $DataVal = 28;
+my $DataVal = 0;
 
 my $SensorOrder = 1; #Sensor order is used to seperate multiple same type sensors that are installed on a platform. 
                      #In this example we will have 2 water_temperature sensors on the platform. The one closest to the surface gets a value
@@ -73,7 +73,7 @@ obsKMLSubRoutines::KMLAddObsToHash( 'water_temperature',  #Observation name.
 
 #Now we add the sea bottom water temperature value.
 $SensorOrder = 2; 
-$DataVal = 24;
+$DataVal = 0;
 obsKMLSubRoutines::KMLAddObsToHash( 'water_temperature',  #Observation name. 
                                     $KMLTimeStamp,      
                                     $DataVal,           #Data value
@@ -115,4 +115,3 @@ else
 obsKMLSubRoutines::BuildKMLFile( \%ObsHash, $strXMLFilename );
 
 
-                                    
