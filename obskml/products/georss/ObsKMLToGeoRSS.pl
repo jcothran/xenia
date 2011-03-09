@@ -1,8 +1,5 @@
 ##########################################################################################
 #Revisions
-# Date: 2010-02-11
-# Changes: Changed the GeoRSS type to the "simple" layout in an effort to boost our google
-#  presence. 
 # Rev: 1.1.0.0
 # Changes: Added conversion to imperial for some measurements, such as speeds and temperatures.
 # Fixedup the publication date to put the time in EST instead of UTC(subtract 4 hours)
@@ -16,9 +13,9 @@ use LWP::Simple;
 use obsKMLSubRoutines; 
 
 use constant MICROSOFT_PLATFORM => 0;
-use constant USE_DEBUG_PRINTS => 1;
+use constant USE_DEBUG_PRINTS => 0;
 
-my $strEmail = 'dan@inlet.geol.sc.edu';
+my $strEmail = 'carolinasrcoos@gmail.com';
 #use $strRSSXML = "<?xml version="1.0" encoding="UTF-8"?>\n
 
 my %CommandLineOptions;
@@ -153,6 +150,8 @@ foreach my $File (@Files)
     my $lon_lat_string        = sprintf("%s",$platform->find('Point/coordinates'));
     my ($longitude,$latitude) = split(/,/,$lon_lat_string);
     my $datetime = sprintf("%s",$platform->find('TimeStamp'));
+    #DWR v1.2.0.0
+    my $platformDesc           = sprintf("%s", $platform->find('Metadata/obsList/platformDescription'));
     
     if( USE_DEBUG_PRINTS )
     {
@@ -190,14 +189,7 @@ foreach my $File (@Files)
     my $strRow = '<?xml version="1.0" encoding="UTF-8"?>';
     print( $GeoRSSFile  $strRow."\n" );
     #RSS version next.
-    #DWR 2010-02-11
-    $strRow = "<feed xmlns=\"http://www.w3.org/2005/Atom\"\nxmlns:georss=\"http://www.georss.org/georss\">";
-    #$strRow = '<feed xmlns:georss="http://www.georss.org/georss" xmlns:gml="http://www.opengis.net/gml">';
-    #$strRow = '<rss version="2.0" '.
-    #          'xmlns:dc="http://purl.org/dc/elements/1.1/" '. 
-    #          'xmlns:georss="http://www.georss.org/georss" '. 
-    #          'xmlns="http://www.w3.org/2005/Atom" '.
-    #          'xmlns:gml="http://www.opengis.net/gml">';
+    $strRow = '<rss version="2.0" xmlns:georss="http://www.georss.org/georss" xmlns:gml="http://www.opengis.net/gml">';
     print( $GeoRSSFile  $strRow."\n" );
      
     ################################################################################################
@@ -214,14 +206,15 @@ foreach my $File (@Files)
     { 
       ($organization_name, $platform_name, $package_name) = split(/\./,$platform_id); 
     }
-    
-    #$strRow = '<channel>';
-    #print( $GeoRSSFile  $strRow."\n" );
+    #Now we begin the channel information.
+    $strRow = '<channel>';
+    print( $GeoRSSFile  $strRow."\n" );
     
     my $strChannelDate;
     my $strRFCDate = $datetime;
     $strRFCDate =~ s/Z//;
     $strRFCDate =~ s/T/ /;
+    
     if( !MICROSOFT_PLATFORM )
     {
       #Convert the DB date into RFC822 as per the RSS spec.
@@ -245,58 +238,49 @@ foreach my $File (@Files)
     chomp( $strRFCDate );
     chomp( $strChannelDate );
     
-    #DWR 2010-02-11
-    $strRow = "<title>$platform_id latest observations</title>\n<updated>$strChannelDate</updated>\n<author><email>$strEmail</email></author>\n";
-    #$strRow = "<title>$platform_id latest observations</title>\n<description>Latest observation data</description>\n<pubDate>$strChannelDate</pubDate>\n<webMaster>$strEmail</webMaster>\n";
-    
+    $platform_id =~ s/\./ /g;    
+    $strRow = "<title>$platform_id latest observations</title>\n<description>$platformDesc</description>\n<pubDate>$strChannelDate</pubDate>\n<webMaster>$strEmail</webMaster>\n";
     print( $GeoRSSFile  $strRow );
-    
     #We must have a valid link to add the tag.
     if( length( $platform_url ) > 0 )
     {
-      $strRow = "<link href=\"$platform_url\" />\n";
-      #$strRow = "<link> $platform_url</link>\n";
+      $strRow = "<link>$platform_url</link>\n";
     }
     else
     {
       #We MUST have a link for the georss, so if the obsKML file didn't have one, we dummy something up for now.
-      $strRow = "<link href=\"http://$platform_id\" />\n";
-      #$strRow = "<link>http://$platform_id</link>\n";
+      $strRow = "<link>http://$platform_id</link>\n";
     }
     print( $GeoRSSFile  $strRow );
+    #DWR v1.2.0.0
+    #Add time to live which is how often the cache should be refreshed.
+    print( $GeoRSSFile  '<ttl>30</ttl>');
   
     #######################################################################################################################################
     # The <item> children begin here.
-    #$strRow = '<item>';
-    #DWR 2010-02-11
-    #Following Google's georss example.
-    $strRow = '<entry>';
+    $strRow = '<item>';
     print( $GeoRSSFile  $strRow."\n" );
     
     $strRow = "<title>$platform_id Latest observations</title>";
     print( $GeoRSSFile  $strRow."\n" );
+
+    $strRow = "<pubDate>$strRFCDate</pubDate>";
+    print( $GeoRSSFile  $strRow."\n" );
     
     #We must have a valid link to add the tag.
     if( length( $platform_url ) > 0 )
     {
-      $strRow = "<link href=\"$platform_url\" />\n";      
-      #$strRow = "<link>$platform_url</link>\n";
+      $strRow = "<link>$platform_url</link>\n";
     }
     else
     {
       #We MUST have a link for the georss, so if the obsKML file didn't have one, we dummy something up for now.
-      $strRow = "<link href=\"http://$platform_id\" />\n";      
-      #$strRow = "<link>http://$platform_id</link>\n";
+      $strRow = "<link>http://$platform_id</link>\n";
     }
     print( $GeoRSSFile  $strRow );
-
-    #DWR 2010-02-11
-    $strRow = "<updated>$strRFCDate</updated>";
-    #$strRow = "<pubDate>$strRFCDate</pubDate>";    
-    print( $GeoRSSFile  $strRow."\n" );
     
-    #$strRow = "<author>$strEmail</author>";
-    #print( $GeoRSSFile  $strRow."\n" );
+    $strRow = "<author>$strEmail</author>";
+    print( $GeoRSSFile  $strRow."\n" );
 
     my $measurement = '';
     my $depth = ''; 
@@ -306,7 +290,7 @@ foreach my $File (@Files)
       $depth                = sprintf("%s",$observation->find('elev'));
       $measurement          = sprintf("%s",$observation->find('value'));
       my $parameter         = sprintf("%s",$observation->find('obsType'));
-      $parameter            =~ s/_/ /g;
+      $parameter            =~ s/_/ /g;      
       my $uom               = sprintf("%s",$observation->find('uomType'));
       my $observed_property = $parameter.".".$uom;
       my $data_url          = sprintf("%s",$observation->find('dataURL'));
@@ -335,35 +319,25 @@ foreach my $File (@Files)
     $strDesc .= '</table>';
     #VM_CONFIG $strDesc .= '<table><tr></br></tr><tr>Please fill out our survey and let us know your who/what/wheres and how we can improve the information to better serve you.<tr><a href="http://carolinasrcoos.org/survey.php">Survey</a></tr></table>';
     
-    #We use the ![CDATA]] directive to tell teh parser not to mess with the contents so we can take advantage of the HTML table
+    #We use the ![CDATA]] directive to tell the parser not to mess with the contents so we can take advantage of the HTML table
     #formatting.
-    $strRow = "<summary type=\"html\"><![CDATA[$strDesc]]></summary>\n";
-    #$strRow = "<description><![CDATA[$strDesc]]></description>\n";
+    $strRow = "<description><![CDATA[$strDesc]]></description>\n";
     print( $GeoRSSFile  $strRow );
-    #$strRow = "<georss:where>\n<gml:Point>\n<gml:pos>$latitude $longitude</gml:pos>\n</gml:Point>\n</georss:where>\n";
-    #print( $GeoRSSFile  $strRow );
-    
-    #DWR 2010-02-11
-    #Following Google's georss example.
+    $strRow = "<georss:where>\n<gml:Point>\n<gml:pos>$latitude $longitude</gml:pos>\n</gml:Point>\n</georss:where>\n";
+    print( $GeoRSSFile  $strRow );
+    #DWR v1.2.0.0
     $strRow = "<georss:point>$latitude $longitude</georss:point>\n";
     print( $GeoRSSFile  $strRow );
     
     
     #Close the item tag.
-    #$strRow = '</item>';
-    #DWR 2010-02-11
-    #Following Google's georss example.
-    $strRow = '</entry>';
-    
+    $strRow = '</item>';
     print( $GeoRSSFile  $strRow."\n" );
     #Close the channel tag.
-    #$strRow = '</channel>';
-    #print( $GeoRSSFile  $strRow."\n" );
+    $strRow = '</channel>';
+    print( $GeoRSSFile  $strRow."\n" );
     #close the rss tag.
-    #DWR 2010-02-11
-    #Following Google's georss example.
-    $strRow = '</feed>';
-    #$strRow = '</rss>';
+    $strRow = '</rss>';
     print( $GeoRSSFile  $strRow."\n" );
     
     close( $GeoRSSFile );
