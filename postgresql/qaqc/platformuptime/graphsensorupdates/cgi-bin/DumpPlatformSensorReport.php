@@ -52,7 +52,7 @@ if (empty($strTimeZone))
 }
 
 $strFilename;
-$strCMD = "cd /var/myscheduler/flowmonitor ; perl QueryPlatformSensorReportTimes.pl".
+$strCMD = "cd /home/xeniaprod/scripts/postgresql/qaqc/platformuptime/graphsensorupdates; perl QueryPlatformSensorReportTimes.pl".
               " --Environment=$strEnvironment".
               " --PlatformID=$strPlatformID".
               " --SensorName=$strSensorName".
@@ -64,14 +64,14 @@ $strCMD = "cd /var/myscheduler/flowmonitor ; perl QueryPlatformSensorReportTimes
                 
 #echo $strCMD;
 $strFilename = `$strCMD`;
+#echo( $strFilename );
 if( empty( $strFilename ) )
 {
-  header( "Location: http://carocoops.org/no_data.png" );
+  header( "Location: http://129.252.37.90/xenia/feeds/qaqc/imgs/no_data.png" );
 }
 else
 {
-  #echo "Location: http://carocoops.org/ms_tmp/$strFilename";
-  header( "Location: http://152.20.240.19/tmp/diags/$strFilename" );
+  header( "Location: http://129.252.37.90/xenia/feeds/qaqc/imgs/tmp/$strFilename" );
 }
 
 
