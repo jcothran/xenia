@@ -100,7 +100,7 @@ cd /home/xeniaprod/config #database user/password
 
 =
 
-#remove hidden log, history files
+#remove hidden log, history files as root, xeniaprod
 cd /home/xeniaprod
 ls -la -sort
 
@@ -215,7 +215,7 @@ UptimeConfigPostgres.xml:      <pwd>xeniaprod99</pwd>
 
 5)user passwords default/neutral set
 
-6)clear user home history files, history
+6)clear user home history files, history as root, xeniaprod
 
 7)re-enable sample crontab flow
 
