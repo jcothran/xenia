@@ -1,9 +1,7 @@
 import sys
-if(sys.platform == "win32"):
-  sys.path.insert(0, "C:\Documents and Settings\dramage\workspace\QAQC-ControlChart")
 import optparse
 
-from rangeCheck import rangeTests
+from xeniatools.rangeCheck import rangeTests
 
 if __name__ == '__main__':
   try:
@@ -28,6 +26,8 @@ if __name__ == '__main__':
                     help="Overrides the sql output file provided in the config file. This is the file the QAQC SQL UPDATE statements are saved." )
     parser.add_option("-q", "--IgnoreQAQCFlags", dest="ignoreQAQCFlags", action= 'store_true',
                     help="Flag allows us to restamp records that have already been quality controlled." )
+    parser.add_option("-t", "--TestRun", dest="testRun", action= 'store_true',
+                    help="Flag allows us to run the QAQC with no committing into the database." )
 
     
     (options, args) = parser.parse_args()
@@ -40,6 +40,8 @@ if __name__ == '__main__':
     qaqc = rangeTests(options.xmlConfigFile)
     if(options.ignoreQAQCFlags != None and options.ignoreQAQCFlags == True):
       qaqc.restampQAQCRecords(True)
+    if(options.testRun != None and options.testRun == True):
+      qaqc.testRun(options.testRun)
       
     if(options.lastNHours != None):
       qaqc.setLastNHours(int(options.lastNHours))
