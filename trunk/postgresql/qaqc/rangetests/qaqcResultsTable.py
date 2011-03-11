@@ -377,9 +377,14 @@ class qaqcHTMLResults(object):
       if(lastNHours):
         if(beginDateTime is None):    
           if(self.xeniaDB.dbType == dbTypes.PostGRES):      
-            dateOffset = "(m_date >= date_trunc('hour',timezone('UTC', now()-interval '%d hours' )) AND\
-                   m_date <= date_trunc('hour',timezone('UTC', now()))) AND "\
-                   % (int(lastNHours))
+            #Get calc the dateOffset from current time - lastNHours we want to query for.
+            dateOffset = time.time() - (int(lastNHours) * 3600)
+            dateOffset = "%s" % (time.strftime('%Y-%m-%dT%H:00:00', time.gmtime(dateOffset)))
+            dateOffset = "m_date >= '%s' AND " %(dateOffset) 
+            #dateOffset = "(m_date >= date_trunc('hour',timezone('UTC', now()-interval '%d hours' )) AND\
+            #       m_date <= date_trunc('hour',timezone('UTC', now()))) AND "\
+            #       % (int(lastNHours))
+            
           else:
             dateOffset = "(m_date >= strftime('%%Y-%%m-%%dT%%H:00:00', 'now', '-%d hours') AND\
                    m_date <= strftime('%%Y-%%m-%%dT%%H:00:00', 'now')) AND "\
@@ -421,6 +426,7 @@ class qaqcHTMLResults(object):
             if( dateVal.__class__.__name__ == 'datetime' ):
               dateVal = dateVal.__str__()                        
                       
+            print(row['standard_name'])
             if( lastDate == None or lastDate != dateVal ):
               #Prime the table with all the obs we should have.
               for name in platformNfo.obsList.keys():
@@ -429,7 +435,6 @@ class qaqcHTMLResults(object):
                 #print( "Priming: %s date: %s sOrder: %s" %(name,dateVal,row['s_order']))
               lastDate = dateVal
             obsNfo = platformNfo.getObsInfo(row['standard_name'])
-            print(row['standard_name'])
             #If we don't have a limit for an observation, don't add it to our list.
             if(obsNfo !=None):              
               #print("Adding: %s date: %s sOrder: %s" %(row['standard_name'],dateVal,row['s_order']))
