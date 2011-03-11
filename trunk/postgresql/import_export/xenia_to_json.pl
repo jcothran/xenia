@@ -50,17 +50,20 @@ select
     ,m_lat
     ,m_z
     ,m_value
+    ,sensor.s_order
   from multi_obs
     left join platform on platform.platform_handle=multi_obs.platform_handle
     left join organization on organization.row_id=platform.organization_id
     left join m_type on m_type.row_id=multi_obs.m_type_id
     left join m_scalar_type on m_scalar_type.row_id=m_type.m_scalar_type_id
+    left join sensor on sensor.row_id=multi_obs.sensor_id
     left join obs_type on obs_type.row_id=m_scalar_type.obs_type_id  
     left join uom_type on uom_type.row_id=m_scalar_type.uom_type_id  
-  where m_date > now() - interval '1 day'
+  where m_date > now() - interval '1 day' AND sensor.active=1
 order by multi_obs.platform_handle,obs_type.standard_name,m_date;
 };
-
+#where m_date > now() - interval '1 day' and multi_obs.platform_handle like 'scdnr.%'   #debug
+my $lastPlatform = "";
 my $sth = $dbh->prepare($sql);
 $sth->execute();
 
@@ -74,17 +77,21 @@ while (my (
     $m_lon,
     $m_lat,
     $m_z,
-    $m_value
+    $m_value,
+    $sorder
   ) = $sth->fetchrow_array) {
+
+#print "$platform_handle:$obs_type:$uom_type:$m_date:$m_z:$sorder:$m_value\n"; #debug
+$platform_handle = lc($platform_handle);
 
 $latest_obs{platform_list}{$platform_handle}{org_url} = $org_url;
 $latest_obs{platform_list}{$platform_handle}{platform_url} = $platform_url;
 $latest_obs{platform_list}{$platform_handle}{m_lon} = $m_lon;
 $latest_obs{platform_list}{$platform_handle}{m_lat} = $m_lat;
 
-$latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{uom_type} = $uom_type;
-$latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{m_z} = $m_z;
-$latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{m_date}{$m_date}{m_value} = $m_value;
+$latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{uom_list}{$uom_type}{sorder_list}{$sorder}{uom_type} = $uom_type;
+$latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{uom_list}{$uom_type}{sorder_list}{$sorder}{m_z} = $m_z;
+$latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{uom_list}{$uom_type}{sorder_list}{$sorder}{m_date}{$m_date}{m_value} = $m_value;
 
 } #process sql to hash 
 
@@ -98,7 +105,7 @@ my $kml_content .= <<"END_OF_LIST";
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
   <Document>
    <!-- A simple KML example demonstrating the parsing of an ObsJSON v2 file Google Earth 5,. giencke@[gmail|google].com -->
-    <name>Parsing ObsJSON v2 in KML</name>
+    <name>Parsing ObsJSON v3 in KML</name>
 END_OF_LIST
 
 ######################################################
@@ -113,6 +120,7 @@ my $platform_url = $latest_obs{platform_list}{$platform_handle}{platform_url};
 my $platform_lon = $latest_obs{platform_list}{$platform_handle}{m_lon};
 my $platform_lat = $latest_obs{platform_list}{$platform_handle}{m_lat};
 
+
 my ($time_list,$obs_list,$point_list);
 
 my $data_score = 0;
@@ -120,10 +128,12 @@ my $data_score = 0;
 $obs_list = '';
 #obsList
 foreach my $obs_type (sort keys %{$r_latest_obs->{platform_list}{$platform_handle}{obs_list}}) {
+foreach my $uom_type (sort keys %{$r_latest_obs->{platform_list}{$platform_handle}{obs_list}{$obs_type}{uom_list}}) {
+foreach my $sorder (sort keys %{$r_latest_obs->{platform_list}{$platform_handle}{obs_list}{$obs_type}{uom_list}{$uom_type}{sorder_list}}) {
   $data_score++;
 
-  my $uom_type = $latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{uom_type};
-  my $m_z = ','.$latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{m_z};
+  my $uom_type = $latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{uom_list}{$uom_type}{sorder_list}{$sorder}{uom_type};
+  my $m_z = ','.$latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{uom_list}{$uom_type}{sorder_list}{$sorder}{m_z};
   if ($m_z eq ",$missing_z") { $m_z = ""; } #don't want to confuse others with in-house convention for missing elev
 
 #timeList
@@ -132,11 +142,12 @@ foreach my $obs_type (sort keys %{$r_latest_obs->{platform_list}{$platform_handl
 $time_list = '';
 $point_list = '';
 my $value_list = '';
-foreach my $m_date (sort keys %{$r_latest_obs->{platform_list}{$platform_handle}{obs_list}{$obs_type}{m_date}}) {
+foreach my $m_date (sort keys %{$r_latest_obs->{platform_list}{$platform_handle}{obs_list}{$obs_type}{uom_list}{$uom_type}{sorder_list}{$sorder}{m_date}}) {
   #print "m_date:$m_date\n";
   $time_list .= "\"$m_date\Z\",";
 
-  my $m_value = $latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{m_date}{$m_date}{m_value};
+  my $m_value = $latest_obs{platform_list}{$platform_handle}{obs_list}{$obs_type}{uom_list}{$uom_type}{sorder_list}{$sorder}{m_date}{$m_date}{m_value};
+  #print "$platform_handle:$obs_type:$uom_type:$m_date:$m_z:$sorder:$m_value\n"; #debug
   $value_list .= "\"$m_value\","; 
 
   $point_list .= "[$platform_lon,$platform_lat$m_z],"; 
@@ -145,6 +156,10 @@ chop($time_list); #drop trailing comma
 chop($value_list); #drop trailing comma
 chop($point_list); #drop trailing comma
 
+#substitute spaces for underscore for search engine discovery purposes
+my $obs_type_space = $obs_type;
+$obs_type_space =~ s/_/ /g;
+
 $obs_list .= <<"END_OF_LIST";
         {"type": "Feature",
             "geometry": {
@@ -152,13 +167,17 @@ $obs_list .= <<"END_OF_LIST";
                 "coordinates": [$point_list] 
             },
          "properties": {
+            "obsTypeDesc": "$obs_type_space",
             "obsType": "$obs_type",
             "uomType": "$uom_type",
+            "sorder": "$sorder",
             "time": [$time_list],
             "value": [$value_list]
         }},
 END_OF_LIST
 
+} #foreach $sorder
+} #foreach $uom
 } #foreach $obs
 chop($obs_list); #drop trailing comma
 
@@ -205,11 +224,8 @@ open (JSON_FILE, ">$target_dir/$platform_handle\_data.json");
 my $json_content_data = <<"END_OF_LIST";
 json_callback({
 "type": "FeatureCollection",
-"properties": {
     "stationId": "urn:x-noaa:def:station:$org_name\::$platform_name",
-
     "features": [$obs_list]
-}
 })
 END_OF_LIST
 
@@ -222,10 +238,10 @@ $kml_content .= <<"END_OF_LIST";
       <name>$platform_handle</name>
       <description><![CDATA[]]></description>
       <!--using personal Sites page for hosting, file replicated on ioos-kml Groups page-->
-      <styleUrl>http://sites.google.com/site/giencke/Home/obs_json_style_v2.kml#json_embedded</styleUrl>
+      <styleUrl>http://sites.google.com/site/giencke/Home/obs_json_style_v3.kml#json_embedded</styleUrl>
 
 <ExtendedData>
-<!--From http://code.google.com/p/xenia/wiki/ObsJSON#Simple_schema_version_2 -->
+<!--From http://code.google.com/p/xenia/wiki/ObsJSON#Demo_1 -->
 <Data name="ObsJSON_Example_metadata">
 <value>$json_content_metadata</value>
 </Data>
@@ -265,6 +281,31 @@ $dbh->disconnect();
 print `date`;
 exit 0;
 
+sub getPlatformStatus()
+{
+  my $platform_handle = shift;
+  $sql = "SELECT begin_date,reason FROM platform_status WHERE platform_handle = '$platform_handle' AND end_date IS NULL;";
+
+  my $sth = $dbh->prepare($sql);
+  if(!$sth->execute())
+  {
+    print("Failed to execute query $sth->errstr\n SQLStatement: $sql\n");
+    return(-1);
+  }
+  my @row_ary = $sth->fetchrow_array();
+  if(@row_ary != undef)
+  {
+    my %status = {};
+    $status{begin_date} = $row_ary[0];
+    $status{reason} = 'No data received from platform.';
+    if(length($row_ary[1]))
+    {
+      $status{reason} = $row_ary[1]; 
+    }
+    return(\%status);
+  }
+  return(undef);
+}
 #--------------------------------------------------------------------
 #                   escape_literals
 #--------------------------------------------------------------------
