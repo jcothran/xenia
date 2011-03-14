@@ -155,7 +155,8 @@ class platformResultsTable(object):
                 tableHeader += "<th>%s()</th>" %( obsKey )
                 
             qcLevel = self.platforms[platformKey][dateKey][obsKey]['qclevel']
-  
+            qcFlag = self.platforms[platformKey][dateKey][obsKey]['qcflag']
+            value = self.platforms[platformKey][dateKey][obsKey]['value']
             #The cell background colors are defined in the style sheet(http://carocoops.org/~dramage_prod/secoora/styles/main.css)
             bgColor = "qcDEFAULT"
             if( qcLevel == qaqcTestFlags.NO_DATA):
@@ -171,9 +172,9 @@ class platformResultsTable(object):
             if( qcLevel != qaqcTestFlags.NO_DATA ):
               tableRow += "<td id=\"%s\">%4.2f</br>%d</br>%s</td>\n" \
               % (bgColor,
-                 ( self.platforms[platformKey][dateKey][obsKey]['value'] != None ) and self.platforms[platformKey][dateKey][obsKey]['value'] or -9999.0,
-                 ( self.platforms[platformKey][dateKey][obsKey]['qclevel'] != None ) and self.platforms[platformKey][dateKey][obsKey]['qclevel'] or -9999.0,
-                 ( self.platforms[platformKey][dateKey][obsKey]['qcflag'] != None ) and self.platforms[platformKey][dateKey][obsKey]['qcflag'] or -9999.0 )
+                 ( value != None ) and value or -9999.0,
+                 ( qcLevel != None ) and qcLevel or -9999.0,
+                 ( qcFlag != None ) and qcFlag or -9999.0 )
             else:
               tableRow += "<td id=\"%s\">Data Missing</br>%d</br>000000</td></td>\n" % (bgColor,qaqcTestFlags.NO_DATA)
           tableRow += "</tr>\n"
@@ -263,7 +264,11 @@ class qaqcResultsPage(object):
                   tableHeader += "<th>%s()</th>" %( obsName )
                   
               qcLevel = self.platforms['platform'][platformKey]['date'][dateKey]['sOrder'][sOrderKey]['obsName'][obsKey]['qclevel']
+              if(qcLevel == None):
+                qclevel = -9999
               qcFlag = self.platforms['platform'][platformKey]['date'][dateKey]['sOrder'][sOrderKey]['obsName'][obsKey]['qcflag']
+              if(qcFlag == None):
+                qcFlag == "-9999"
               value = self.platforms['platform'][platformKey]['date'][dateKey]['sOrder'][sOrderKey]['obsName'][obsKey]['value']
               #The cell background colors are defined in the style sheet(http://carocoops.org/~dramage_prod/secoora/styles/main.css)
               bgColor = "qcDEFAULT"
@@ -286,8 +291,8 @@ class qaqcResultsPage(object):
                 tableRow += "<td id=\"%s\">%4.2f</br>%d</br>%s</td>\n" \
                 % (bgColor,
                    value,
-                   (( qcLevel != None ) and qcLevel or -9999.0),
-                   (( qcFlag != None ) and qcFlag or -9999.0 ))
+                   qcLevel,
+                   qcFlag)
               else:
                 tableRow += "<td id=\"%s\">Data Missing</br>%d</br>000000</td></td>\n" % (bgColor,qaqcTestFlags.NO_DATA)
           tableRow += "</tr>\n"
@@ -410,7 +415,7 @@ class qaqcHTMLResults(object):
             left join obs_type on obs_type.row_id=m_scalar_type.obs_type_id \
             left join uom_type on uom_type.row_id=m_scalar_type.uom_type_id \
             WHERE\
-            %s sensor.row_id IS NOT NULL AND multi_obs.platform_handle = '%s'\
+            %s (sensor.active >=0 AND sensor.active < 4) AND multi_obs.platform_handle = '%s'\
             ORDER BY m_date DESC,obs_type.standard_name ASC" \
             % (dateOffset,platformKey)       
       print("Querying platform: %s for date range: %s." %(platformKey,dateOffset))
