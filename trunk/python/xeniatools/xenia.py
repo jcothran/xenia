@@ -912,6 +912,20 @@ class xeniaPostGres(xeniaDB):
         #Platform is becoming active again. We get rid of the entry in the platform_status
         #table then add teh end date into the platform_status_field 
         else:
+          #Get current platform_status info to move over to the archive.
+          sql = "SELECT author,reason FROM platform_status WHERE platform_id=%d;" %(platformId)
+          
+          statusCursor = self.executeQuery(sql)
+          if(statusCursor == None):
+            return(False)
+          row = statusCursor.fetchone()
+          author = ''
+          reason = ''
+          if(row != None):
+            author = row['author']
+            reason = row['reason']
+          statusCursor.close()
+          
           sql = "DELETE FROM platform_status WHERE platform_id=%d;" %(platformId)
           statusCursor = self.executeQuery(sql)
           if(statusCursor == None):
@@ -919,9 +933,9 @@ class xeniaPostGres(xeniaDB):
           self.commit()
           statusCursor.close()
           
-          sql="UPDATE platform_status_archive SET end_date='%s', row_update_date='%s'"\
+          sql="UPDATE platform_status_archive SET end_date='%s',row_update_date='%s',author='%s',reason='%s'"\
               "WHERE platform_id=%d AND end_date IS NULL;"\
-              %(gmtDate,rowEntryDate,platformId)
+              %(gmtDate,rowEntryDate,author,reason,platformId)
           statusCursor = self.executeQuery(sql)
           if(statusCursor == None):
             return(False)
