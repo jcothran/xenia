@@ -71,7 +71,7 @@ After the *xeniaflow.sh* script has executed, most of the products listed at [VM
 ----
 = Adding a new ObsKML feed =
 
-*note - ObsKML is an XML feed oriented way of supplying new data to the Xenia database, but writing SQL INSERT statements to import/populate or ASCII/CSV export data are valid approaches also - in this case the import/export scripts at http://code.google.com/p/xenia/source/browse/#svn/trunk/postgresql/import_export may be helpful in understanding the structure of the data as stored in the relational database*
+*note - ObsKML is an XML feed oriented way of supplying new data to the Xenia database, but writing SQL INSERT statements to import/populate or ASCII/CSV export data are valid approaches also - in this case the import/export scripts at http://code.google.com/p/xenia/source/browse/#svn/trunk/postgresql/import_export (in particular http://code.google.com/p/xenia/source/browse/trunk/postgresql/import_export/obskml_to_xenia_postgresql.pl ) may be helpful in understanding the structure of the data as stored in the relational database*
 
 How to add additional data feeds(obskml formatted) beyond those already included (usgs, nerrs, ndbc, nws).
 
