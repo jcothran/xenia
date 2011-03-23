@@ -6,6 +6,8 @@ see also [VMwareHome],[VMwareInstall]
 
 = Download the vmware player =
 
+*Note* the below image install functions are for a desktop-PC based 'player' version, while the latest Xenia image is ESXi 4.0 server-based.  To convert to a player-based version of the image, see instructions at http://blog.laksha.net/2009/10/how-to-create-virtual-machine-using.html or use the vmware vCenter convertor standalone application(should be available for free from vmware website).
+
 == Windows ==
 
 Goto vmware player download page at http://www.vmware.com/download/player/download.html and download, install windows version(2.5.1 tested)
