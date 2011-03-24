@@ -1,6 +1,8 @@
 #summary This page is for general SQL notes for the Xenia DB.
 
 
+Check [http://code.google.com/p/xenia/wiki/XeniaSqliteNotes here] for more SQL notes with the xenia SQLite database as well.
+
 = SELECT dates from one sensor that are the same dates from another sensor =
 Recently I wanted to do some correlation testing for our platforms against some known good NDBC platforms. Correlation requires the list of values to be the same length, however we might miss an update throughout the day so we'd have a hole in our data. This query is useful to make sure the dates in the outer select match the dates in the sbuquery select, thereby giving us the data points for the same time periods. You have to execute this twice, swapping the sensor ID's.
 
