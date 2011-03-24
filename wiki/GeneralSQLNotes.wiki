@@ -1,5 +1,6 @@
 #summary This page is for general SQL notes for the Xenia DB.
 
+<wiki:toc max_depth="6" />
 
 Check [http://code.google.com/p/xenia/wiki/XeniaSqliteNotes here] for more SQL notes with the xenia SQLite database as well.
 
