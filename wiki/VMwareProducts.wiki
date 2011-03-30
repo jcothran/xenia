@@ -212,6 +212,11 @@ http://code.google.com/p/xenia/wiki/StatusPages
 http://secoora.org/pages/alertpage.php?platform=nos.8670870.WL
 
 ----
+= Mobile/Location based platform reports =
+
+http://www.carolinasrcoos.org/mobileBuoy.html
+
+----
 = Quality Control (QC) reports =
 
 http://neptune.baruch.sc.edu/xenia/feeds/qaqc/
