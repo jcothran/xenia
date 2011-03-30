@@ -94,7 +94,7 @@ Both users *xeniaprod* and *user* are part of the *admin* group ({{{sudo vi /etc
 
 *Required section for configuring image to use local IP,system/database passwords and understanding data flow*
 
-*By default as a test, on initial image startup this image will begin trying to hourly access over the web a few kmz files(ndbc,nos) for aggregation to the xenia database and production of several output formats and services.  Check 'flow_' output graphs(.png) under http://localhost/xenia/feeds or http://xxx.xxx.xxx.xxx/xenia/feeds after a few hours to verify feed processing/population.*
+*By default as a test, on initial image startup this image will begin trying to hourly access over the web a few data feeds(ndbc,nos) for aggregation to the xenia database and production of several output formats and services.  Check 'flow_' output graphs(.png) under http://localhost/xenia/feeds or http://xxx.xxx.xxx.xxx/xenia/feeds after a few hours to verify feed processing/population.*
 
 If you plan to run a production xenia vmware instance accessible by others on the web, search the xeniaprod code from the following directory to see the necessary localhost substitutions(for your production machine http address) or other configuration options.
 
@@ -102,7 +102,7 @@ see also http://code.google.com/p/xenia/wiki/VMwareDesign#Checklist , http://cod
 
 All of the end-specific configuration/security settings should be set in .ini,.xml,... type files under *`/home/xeniaprod/config`*  This is not currently quite the case as some user/passwords are passed into various scripts as cron parameters and so on.
 
-*`/home/xeniaprod/config/site.ini`* is the main .ini file which should be used for tracking the server IP or other server global initialization settings.
+*`/home/xeniaprod/config/site.ini`* is the main .ini file which should be used for tracking the server IP or other server global initialization settings from product scripts.
 
 replace the sample IP of 129.252.139.71 in the below line commands with your IP (xxx.xxx.xxx.xxx)
 {{{
