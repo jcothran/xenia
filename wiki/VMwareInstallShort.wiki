@@ -8,20 +8,6 @@ The below notes assume installation on a server running *VMware ESXi 4.0*, for f
 
 = Setup =
 
-== network bridge ==
-
-*note - network bridge(this section instruction) only utilized for vmware player and server, not vmware ESXi *
-
-[http://code.google.com/p/xenia/wiki/XeniaUpdates#Additional_server_notes_-_static_IP,_network_bridge,_iptables original documentation]
-
-Wanted to bridge the 'virtual' vmware player server across the 'host' server.  Established my static IP on the host using the following steps.
-
-For the 'virtual' server on the vmplayer menu at screen top, changed the 'Devices->Network Adapter' setting to 'Bridged' which establishes network communication between the virtual server and host.
-
-You may also need to set the radio button 'wired network' from the top menu icon(circled in red) in the following image
-
-<img src="http://xenia.googlecode.com/files/screen_1.jpg" height=300 width=600>
-
 == static ip ==
 
 *required section for proper IP address bridging*
@@ -54,22 +40,6 @@ Running 'ifconfig' command from virtual host listed ethernet as 'eth5' which is 
 I did not have to modify the defaulted dns file settings for host or virtual server files under /etc/resolv.conf 
 
 ----
-
-== iptables ==
-
-*optional section - this section on iptables is informational and can be skipped*
-
-With the network 'bridge' setting in the vmware player, any ports on the virtual server are bridged over the host server (use 'nmap' command to see open ports).  So with the gisvm image opened on the vmplayer I was able to see the apache web server sample webpage running on port 80 and J2EE/tomcat server sample webpage running on port 8080 from other machines.
-
-Currently only have port 80 open to machines outside the university network and wanted to show the geoserver demo applications running on port 8080 so used the following iptables commands (on the virtual server) to port forward 80 to 8080.
-
-from http://www.klawitter.de/tomcat80.html
-{{{
-iptables -t nat -A OUTPUT -d localhost -p tcp --dport 80 -j REDIRECT --to-ports 8080
-iptables -t nat -A OUTPUT -d 129.252.37.90 -p tcp --dport 80 -j REDIRECT --to-ports 8080
-iptables -t nat -A PREROUTING -d 129.252.37.90 -p tcp --dport 80 -j REDIRECT --to-ports 8080
-}}}
-
 == openssh ==
 
 *required section if ssh access from other networks/IP's is needed*
