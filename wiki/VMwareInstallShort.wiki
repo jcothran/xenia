@@ -53,6 +53,7 @@ file /etc/hosts.allow
 sshd : ALL : deny
 }}}
 
+----
 == image default users, passwords ==
 
 *required section for security purposes*
@@ -71,6 +72,7 @@ Both users *xeniaprod* and *user* are part of the *admin* group ({{{sudo vi /etc
 
 *optional* see the other gisvm related passwords [http://www.vmware.com/appliances/directory/55606 here] and modify as needed.
 
+----
 == host substitutions, configuration ==
 
 *Required section for configuring image to use local IP,system/database passwords and understanding data flow*
@@ -123,16 +125,7 @@ check output graphs(.png) under http://xxx.xxx.xxx.xxx/xenia/feeds after a few h
 
 }}}
 
-== postgresql or sqlite == 
-
-*optional section - this section can be skipped if default postgresql database is acceptable*
-
-The latest version of the vmware image is configured to utilize a postgresql/postgis relational database while the earlier version utilized a sqlite file-based relational database.
-
-These changes are reflected in the xeniaprod crontab with xeniaflow_postgresql.sh directing the aggregation and product generation towards the /home/xeniaprod/scripts/postgresql branch instead of the /home/xeniaprod/scripts/sqlite one.
-
-Similarly the symbolic links(time_series, sos) under /var/www/xenia are linked to postgresql branch instead of sqlite one.
-
+----
 == miscellaneous ==
 
 *informational section*
