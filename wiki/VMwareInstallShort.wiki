@@ -2,7 +2,7 @@
 
 see also [VMwareHome]
 
-The below notes assume installation on a server running VMware ESXi, for further notes on ESXi, other VMware or virtualization products see earlier notes at [VMwareInstall]
+The below notes assume installation on a server running *VMware ESXi 4.0*, for further notes on ESXi, other VMware or virtualization products see earlier notes at [VMwareInstall]
 
 <wiki:toc max_depth="6" />
 
