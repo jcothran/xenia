@@ -100,7 +100,7 @@ If you plan to run a production xenia vmware instance accessible by others on th
 
 see also http://code.google.com/p/xenia/wiki/VMwareDesign#Checklist , http://code.google.com/p/xenia/wiki/VMwareDesign##VM_CONFIG_notes
 
-All of the end-specific configuration/security settings should be set in .ini,.xml,... type files under `/home/xeniaprod/config`  This is not currently quite the case as some user/passwords are passed into various scripts as cron parameters and so on.
+All of the end-specific configuration/security settings should be set in .ini,.xml,... type files under *`/home/xeniaprod/config`*  This is not currently quite the case as some user/passwords are passed into various scripts as cron parameters and so on.
 
 *`/home/xeniaprod/config/site.ini`* is the main .ini file which should be used for tracking the server IP or other server global initialization settings.
 
