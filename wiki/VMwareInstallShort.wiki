@@ -146,6 +146,9 @@ alter user xeniaprod with password 'xxx';
 #enable #VM_CONFIG ip addresses
 sudo vi /usr2/pg_data/pg_hba.conf
 
+#postgres auto-authentication
+sudo vi /home/xeniaprod/.pgpass
+
 cd /home/xeniaprod/config #database user/password
   dbConfig.ini
   environment_xenia_default.xml
