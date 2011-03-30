@@ -102,7 +102,7 @@ see also http://code.google.com/p/xenia/wiki/VMwareDesign#Checklist , http://cod
 
 All of the end-specific configuration/security settings should be set in .ini,.xml,... type files under `/home/xeniaprod/config`  This is not currently quite the case as some user/passwords are passed into various scripts as cron parameters and so on.
 
-Too help mark/denote where a new server setup should consider changing the scripts or settings depending on their installation, the main search keywork is `*VM_CONFIG*`
+Too help mark/denote where a new server setup should consider changing the scripts or settings depending on their installation, the main search keywork is *`VM_CONFIG`*
 
 
 
