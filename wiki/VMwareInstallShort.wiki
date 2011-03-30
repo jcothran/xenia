@@ -8,13 +8,13 @@ The below notes assume installation on a server running *VMware ESXi 4.0*, for f
 
 = Setup =
 
-== static ip ==
-
-*required section for proper IP address bridging*
+== ip setting ==
 
 The {{{ifconfig}}} command will tell you which ethernet device the server is trying to communicate on({{{ifconfig -a}}} will show all available devices).  For mine the host server was running 'eth0' and the virtual was running 'eth5'
 
 from http://forums.techarena.in/operating-systems/1106661.htm
+
+== static ip ==
 
 for the host the static IP is 129.252.37.90 
 
@@ -38,6 +38,25 @@ sudo /etc/init.d/networking restart
 Running 'ifconfig' command from virtual host listed ethernet as 'eth5' which is substituted for the 'eth0' and run in the same steps listed above for configuring the static IP for the host except now on the virtual server.
 
 I did not have to modify the defaulted dns file settings for host or virtual server files under /etc/resolv.conf 
+
+== dynamic ip (dhcp) ==
+
+Discover the ethernet device that the server is trying to communicate on using the `ifconfig` command as detailed above(device is eth0 in the example below).
+
+In host file /etc/network/interfaces
+{{{
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+}}}
+
+Then restart network with 
+{{{
+sudo /etc/init.d/networking restart
+}}}
+
 
 ----
 == openssh ==
