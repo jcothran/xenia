@@ -158,6 +158,14 @@ search for #VM_CONFIG in effected crons (as user 'xeniaprod', crontab -e)
 check output graphs(.png) under http://xxx.xxx.xxx.xxx/xenia/feeds after a few hours to verify feed processing/population
 
 }}}
+=== crontabs ===
+The two crontabs utilized are for users *root* and *xeniaprod*
+
+*root* crontab is utilized to clear temporary or other system files and may have some lines commented out(#QQ ) initially since they are system checks that provide email notification.  These can be uncommented once the system check settings are reviewed and email server and email send list defined.
+
+*xeniaprod* crontab should cover everything else.  It's main subshell script that it calls half-hourly is xeniaflow_postgresql.sh  Many data feeds and possibly some products are commented out(#QQ ) initially and should be reviewed before uncommenting/enabling.
+
+The shell scripts referenced by cron are all placed at *`/home/xeniaprod/cron`*
 
 ----
 == miscellaneous ==
