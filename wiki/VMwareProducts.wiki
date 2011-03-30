@@ -215,6 +215,12 @@ http://secoora.org/pages/alertpage.php?platform=nos.8670870.WL
 = Mobile/Location based platform reports =
 
 http://www.carolinasrcoos.org/mobileBuoy.html
+----
+= Database Query, Comparison = 
+
+Within application maps, database query links can be referenced and compared by their platform handle
+
+http://secoora.org/pages/queryStation.php?platform=ndbc.41004.met
 
 ----
 = Quality Control (QC) reports =
