@@ -29,7 +29,7 @@ The vmware appliance page reference for this download is http://www.vmware.com/a
 ----
 = Next Steps =
 
-[VMwareInstall] describes image setup and configuration info depending on your vmware version
+[VMwareInstallShort] describes image setup and configuration info depending on your vmware version
 
 [VMwareProducts] describes the output formats and services which should be available from the vmware server image
 
