@@ -14,7 +14,7 @@ The {{{ifconfig}}} command will tell you which ethernet device the server is try
 
 from http://forums.techarena.in/operating-systems/1106661.htm
 
-== static ip ==
+=== static ip ===
 
 for the host the static IP is 129.252.37.90 
 
@@ -39,7 +39,7 @@ Running 'ifconfig' command from virtual host listed ethernet as 'eth5' which is 
 
 I did not have to modify the defaulted dns file settings for host or virtual server files under /etc/resolv.conf 
 
-== dynamic ip (dhcp) ==
+=== dynamic ip (dhcp) ===
 
 Discover the ethernet device that the server is trying to communicate on using the `ifconfig` command as detailed above(device is eth0 in the example below).
 
