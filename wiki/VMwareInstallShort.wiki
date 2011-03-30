@@ -133,9 +133,7 @@ cd /home/xeniaprod/config #database user/password
   dbConfig.ini
   environment_xenia_default.xml
 
-#enable feeds as needed
-/home/xeniaprod/cron/getObskml.sh
-/home/xeniaprod/cron/mk_xenia_all_latest.sh
+#enable feeds as needed(crontab feeds currently commented out with '#QQ ')
 
 search for #VM_CONFIG in effected crons (as user 'xeniaprod', crontab -e)
 #start crons - root, xeniaprod
