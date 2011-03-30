@@ -63,7 +63,7 @@ sudo /etc/init.d/networking restart
 
 *required section if ssh access from other networks/IP's is needed*
 
-The initial image runs an openssh daemon which accepts no outside connects via the /etc/hosts.allow file below.  Modify the hosts.allow,hosts.deny files as necessary for access/security purposes.
+The initial image runs an openssh daemon which accepts no outside connects via the /etc/hosts.allow file below.  Modify the hosts.allow,hosts.deny files as necessary for access/security purposes.  The VMware vSphere desktop application provices a server command-line window(console) for initial login.
 
 file /etc/hosts.allow
 {{{
@@ -79,28 +79,32 @@ sshd : ALL : deny
 
 #reset user passwds to public defaults - user,root,xeniaprod,postgres - as root, passwd <username>
 
-The *root* user has password *root99*.  Modify this password as needed.
+The *root* user has password *root!99*.  Modify this password as needed.
 
-The *postgres* user has password *postgres99*.  Modify this password as needed.
+The *postgres* user has password *postgres!99*.  Modify this password as needed.
 
-The username associated with the xenia development is *xeniaprod* with password *xeniaprod99*  Modify this password as needed.
+The username associated with the xenia development is *xeniaprod* with password *xeniaprod!99*  Modify this password as needed.
 
-The username *user* has password *user99* although this user account is not utilized.  Modify this password as needed.
+The username *user* has password *user!99* although this user account is not utilized.  Modify this password as needed.
 
 Both users *xeniaprod* and *user* are part of the *admin* group ({{{sudo vi /etc/group}}}) which is a 'sudo' ({{{sudo vi /etc/sudoers}}}) enabled group.
-
-*optional* see the other gisvm related passwords [http://www.vmware.com/appliances/directory/55606 here] and modify as needed.
 
 ----
 == host substitutions, configuration ==
 
 *Required section for configuring image to use local IP,system/database passwords and understanding data flow*
 
-*By default as a test, on initial image startup this image will begin trying to hourly access over the web a few kmz files(usgs,nerrs,ndbc) for aggregation to the xenia database and production of several output formats and services.  Check 'flow_' output graphs(.png) under http://localhost/xenia/feeds or http://xxx.xxx.xxx.xxx/xenia/feeds after a few hours to verify feed processing/population.*
+*By default as a test, on initial image startup this image will begin trying to hourly access over the web a few kmz files(ndbc,nos) for aggregation to the xenia database and production of several output formats and services.  Check 'flow_' output graphs(.png) under http://localhost/xenia/feeds or http://xxx.xxx.xxx.xxx/xenia/feeds after a few hours to verify feed processing/population.*
 
 If you plan to run a production xenia vmware instance accessible by others on the web, search the xeniaprod code from the following directory to see the necessary localhost substitutions(for your production machine http address) or other configuration options.
 
 see also http://code.google.com/p/xenia/wiki/VMwareDesign#Checklist , http://code.google.com/p/xenia/wiki/VMwareDesign##VM_CONFIG_notes
+
+All of the end-specific configuration/security settings should be set in .ini,.xml,... type files under `/home/xeniaprod/config`  This is not currently quite the case as some user/passwords are passed into various scripts as cron parameters and so on.
+
+Too help mark/denote where a new server setup should consider changing the scripts or settings depending on their installation, the main search keywork is `*VM_CONFIG*`
+
+
 
 replace *your_ip* in the below line commands with your IP (xxx.xxx.xxx.xxx)
 {{{
