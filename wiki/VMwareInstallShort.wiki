@@ -102,18 +102,29 @@ see also http://code.google.com/p/xenia/wiki/VMwareDesign#Checklist , http://cod
 
 All of the end-specific configuration/security settings should be set in .ini,.xml,... type files under `/home/xeniaprod/config`  This is not currently quite the case as some user/passwords are passed into various scripts as cron parameters and so on.
 
-Too help mark/denote where a new server setup should consider changing the scripts or settings depending on their installation, the main search keywork is *`VM_CONFIG`*
-
-
-
-replace *your_ip* in the below line commands with your IP (xxx.xxx.xxx.xxx)
+replace the sample IP of 129.252.139.71 in the below line commands with your IP (xxx.xxx.xxx.xxx)
 {{{
 cd /home/xeniaprod
 find . -name "*" -exec grep -H "VM_CONFIG" {} \; 
-perl -p -i -e 's/129.252.37.90/your_ip/g' `find ./ -name "*.pl"`
-perl -p -i -e 's/129.252.37.90/your_ip/g' `find ./ -name "*.html"`
-perl -p -i -e 's/129.252.37.90/your_ip/g' `find ./ -name "*.xml"`
+perl -p -i -e 's/129.252.139.71/your_ip/g' `find ./ -name "*.pl"`
+perl -p -i -e 's/129.252.139.71/your_ip/g' `find ./ -name "*.html"`
+perl -p -i -e 's/129.252.139.71/your_ip/g' `find ./ -name "*.xml"`
 }}}
+
+Repeat this search-term/substitute process for the following other two development-specific folders.
+
+Development folders
+{{{
+cd /var/xenia
+cd /usr/lib/cgi-bin
+}}}
+
+`find` usage example
+{{{
+perl -p -i -e 's/xxx.xxx.xxx.xxx/129.252.139.71/g' `find . -type f \( -name "*.pl" -o -name "*.php" -o -name "*.xml" -o -name "*.html" -o -name "*.ini" -o -name "*.txt" -o -name "*.conf"\)`
+}}}
+
+To help mark/denote where a new server setup should consider changing the scripts or settings depending on their installation, the main search keywork is *`VM_CONFIG`*
 
 {{{
 search for #VM_CONFIG in effected files
