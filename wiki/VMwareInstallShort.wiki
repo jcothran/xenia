@@ -161,6 +161,19 @@ search for #VM_CONFIG in effected crons (as user 'xeniaprod', crontab -e)
 check output graphs(.png) under http://xxx.xxx.xxx.xxx/xenia/feeds after a few hours to verify feed processing/population
 
 }}}
+
+== additional search terms ==
+
+The below search terms may be present and need replacement(possible lower/upper/mixed case) - particularly in the configuration files under `home\xeniaprod\config` or cron files under `home\xeniaprod\cron` 
+
+{{{
+gmail - used in the email notification listings
+secoora
+129.252.37.90
+neptune.baruch.sc.edu
+neptune
+}}}
+
 === crontabs ===
 The two crontabs utilized are for users *root* and *xeniaprod*
 
