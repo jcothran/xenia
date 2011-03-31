@@ -265,7 +265,7 @@ class qaqcResultsPage(object):
                   
               qcLevel = self.platforms['platform'][platformKey]['date'][dateKey]['sOrder'][sOrderKey]['obsName'][obsKey]['qclevel']
               if(qcLevel == None):
-                qclevel = -9999
+                qcLevel = -9999
               qcFlag = self.platforms['platform'][platformKey]['date'][dateKey]['sOrder'][sOrderKey]['obsName'][obsKey]['qcflag']
               if(qcFlag == None):
                 qcFlag == "-9999"
