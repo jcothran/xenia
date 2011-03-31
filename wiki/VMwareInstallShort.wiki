@@ -162,7 +162,7 @@ check output graphs(.png) under http://xxx.xxx.xxx.xxx/xenia/feeds after a few h
 
 }}}
 
-== additional search terms ==
+=== additional search terms ===
 
 The below search terms may be present and need replacement(possible lower/upper/mixed case) - particularly in the configuration files under `home\xeniaprod\config` or cron files under `home\xeniaprod\cron` 
 
