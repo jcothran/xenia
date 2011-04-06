@@ -1,5 +1,12 @@
+
 import sys
 import math
+
+class statsException(Exception):
+  def __init__(self,value):
+    self.parameter = value
+  def __str__(self):
+    return(repr(self.parameter))
 
 class stats(object):
   def __init__(self):
@@ -82,3 +89,74 @@ class stats(object):
       self.populationStdDev = math.sqrt(deviationSum / len(self.items))
       return(True)
     return(False)
+  
+  
+class covariance(object):
+  def __init__(self):
+    self.x = stats()
+    self.y = stats()
+  
+  def reset(self):
+    self.x.reset()
+    self.y.reset()
+        
+  def doCalculations(self, x, y):
+    self.x.items = x
+    self.y.items = y
+    #Have to have the same count in each variable set.
+    if(len(self.x.items) == len(self.y.items)):
+      self.x.doCalculations()
+      self.y.doCalculations()
+      
+      cnt = len(self.x.items)
+      i = 0
+      covariance = 0
+      while i < cnt:
+        dx = self.x.items[i] - self.x.average
+        dy = self.y.items[i] - self.y.average
+        covariance += (dx * dy)         
+        i += 1
+      if(cnt > 0):
+        covariance = covariance / cnt
+        
+      return(covariance)
+    else:
+      raise statsException("Arrays must be the same length.")
+
+class correlation(covariance):
+  def __init__(self):
+    covariance.__init__(self)
+    self.coefficient = None
+       
+  def doCalculations(self, x,y, type="pearson"):
+    try:
+      cov = covariance.doCalculations(self, x, y)
+      correlation = -9999
+      if(self.x.populationStdDev != None and self.x.populationStdDev != 0 and 
+         self.y.populationStdDev != None and self.y.populationStdDev != 0):
+        correlation = cov / (self.x.populationStdDev * self.y.populationStdDev)    
+      return(correlation)
+    except Exception, e:
+      print(e)
+        
+class vectorMagDir(object):
+  
+  def calcMagAndDir(self, x, y):
+    magnitude = math.hypot(x,y)   
+    angle = math.atan2(y,x)
+    return(magnitude,angle)
+    #$angle = sprintf("%.1f",180/3.1416*$angle);
+    #$angle = 90 - $angle;
+    #only return positive degrees
+    #if ($angle < 0) 
+    #{ 
+    #  $angle = 360 + $angle; 
+    #}
+   # 
+    #my @result = ($mag, $angle);
+  def calcVector(self, speed, direction):
+    eastComp = speed * math.sin( math.radians(direction) );
+    northComp = speed * math.cos( math.radians(direction) );  
+    
+    return(eastComp,northComp)
+            
