@@ -250,6 +250,8 @@ _more documentation later_
 
 The following support columns have been added to the multi_obs table to support some common display needs. They are prefixed with 'd_' for 'display'.
 
+*Note* These columns are included with the version 2 schema, but if you are upgrading from something earlier and are missing these columns, the following [http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/XeniaPackageV2/alter_multi_obs_display.sql alter sql statements] should create the necessary columns.
+
 === d_label_theta integer ===
 
 For MapServer? directional font libraries, the direction is negative of the true direction(degrees from North), so 90 (degrees) becomes -90 for display purposes.
@@ -257,6 +259,8 @@ For MapServer? directional font libraries, the direction is negative of the true
 === set_top_of_hour trigger ===
 
 fields used: d_top_of_hour integer, d_report_hour timestamp without time zone
+
+*Note* You must apply this database [http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/XeniaPackageV2/top_report_hour.sql insert trigger and index] for these columns to be active.
 
 These two columns work together to label new observations as they are inserted with their d_report_hour and whether the new observation should be used for a top of the hour report(d_top_of_hour). The d_report_hour is associated with all observations a half hour before and after a given hour. So a d_report_hour of 12:00 would apply to all observations between 11:31 and 12:30. The d_top_of_hour indicator of '1' indicates that an observation is closest to the top of the hour among a group of observations for the same d_report_hour. Time comparisons between observations for the top of hour designation are made at the minute level, so 11:01:18 might be ignored for d_top_of_hour against an earlier 11:01:28.
 
@@ -269,6 +273,12 @@ If querying the database for d_report_hour and d_top_of_hour, try to use the sam
 === mk_the_geom trigger ===
 
 mk_the_geom trigger is used to automatically populate PostGIS multi_obs.the_geom column for a given lat/long pair.
+
+If you've PostGIS enabled your multi_obs table with a geometry column(the_geom) similar to the below
+
+{{{select addgeometrycolumn('your_database_name_here,'multi_obs','the_geom',-1,'POINT',2);
+}}}
+Apply the following [http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/XeniaPackageV2/mk_the_geom.sql after insert trigger]
 
 on table multi_obs
 {{{
