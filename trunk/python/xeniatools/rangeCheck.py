@@ -3,19 +3,18 @@ import array
 import time
 import optparse
 import math
+import datetime
 
 from sqlalchemy import exc
 from sqlalchemy.orm.exc import *
+from sqlalchemy import or_
 from xeniatools.xeniaSQLAlchemy import xeniaAlchemy, multi_obs, organization, platform, uom_type, obs_type, m_scalar_type, m_type, sensor 
 
-from xeniatools.xenia import dbXenia
-from xeniatools.xenia import xeniaSQLite
-from xeniatools.xenia import xeniaPostGres
-from xeniatools.xenia import dbTypes
 from xeniatools.xenia import qaqcTestFlags
 from xeniatools.xenia import uomconversionFunctions
 from xeniatools.xenia import recursivedefaultdict
 from xeniatools.xmlConfigFile import xmlConfigFile
+#from xeniatools.stats import vectorMagDir
 from xeniatools.utils import smtpClass 
 
 from lxml import etree
@@ -41,11 +40,12 @@ class obsQAQC:
     self.uom            = uom
     self.sOrder         = sOrder
     self.updateInterval = None              #The rate at which the sensor updates.
-    self.sensorBad      = False             #Flag that specifies the sensor is bad, so no tests to perform, set data flags as bad.
     self.sensorRangeLimits = rangeLimits()  #The limits for the sensor range.
     self.grossRangeLimits = rangeLimits()   #The limits for the gross range.
     self.climateRangeLimits = {}            #A dictionary keyed from 1-12 representing the climate ranges for the month.
     self.stdDeviation   = None              #Standard deviation used for the time continuity check.
+    self.nearestNeighbor= {}                #Settings used for the nearest neighbor check. keyed on the platformHandle since
+                                            #there may be more than one neighbor we want to check against.
         
   def setSensorRangeLimits(self, rangeLo, rangeHi):    
     self.sensorRangeLimits.rangeLo = rangeLo
@@ -60,16 +60,15 @@ class obsQAQC:
     self.climateRangeLimits[month] = limits
   def setStandardDeviation(self, stdDev):
     self.stdDeviation = stdDev  
+  def setNearestNeighbor(self, platformHandle, standardDeviation):
+    self.nearestNeighbor[platformHandle] = standardDeviation
 """
 Class: qcTestSuite
 Purpose: Implements the range tests and qcFlag determination detailed in the Seacoos netCDF documentation.
 """
 class qcTestSuite:
   def __init__(self, logger=None):
-    self.logger = logger
-    
-    
-    
+    self.logger = logger         
   """
   Function: rangeTest
   Purpose: performs the range test. Checks are done to verify limits were provided as well as a valid value. 
@@ -105,6 +104,8 @@ class qcTestSuite:
     qaqcTestFlags.TEST_PASSED is the tests were passed, otherwise qaqcTestFlags.TEST_FAILED.
   """
   def runRangeTests(self, obsNfo, rec, month = 0):
+    if(self.logger != None):
+      self.logger.info("Performing Range Checks.")         
     #Do we have a valid value?
     if(rec.m_value != None):     
       rec.dataAvailable = qaqcTestFlags.TEST_PASSED
@@ -125,7 +126,7 @@ class qcTestSuite:
       else:
         #The sensor is marked as offline, however we are still getting data. We can't
         #trust the data, so we are going to flag it as bad.
-        if(rec.sensor.active == 3):
+        if(rec.sensor.active == 3 or rec.sensor.active >= 7):
           rec.dataAvailable      = qaqcTestFlags.TEST_FAILED                    
     else:
       rec.dataAvailable      = qaqcTestFlags.TEST_FAILED
@@ -136,16 +137,17 @@ class qcTestSuite:
       if(self.logger != None):          
         self.logger.debug( "Range Test Failed: Date %s Platform: %s obsName: %s value: %f(%s) qcFlag: %s qcLevel: %d"\
                      % (rec.m_date.__str__(), rec.platform_handle, obsNfo.obsName, ( rec.m_value != None ) and rec.m_value or -9999.0, ( obsNfo.uom != None ) and obsNfo.uom or '', rec.prelimQCFlag.tostring(), rec.prelimQCLevel) )
-      
+
   """
-  Function: timeContinuityCheck
-  Purpose: Implements the NDBC time continuity(rate of change) test. 
-    The formula is: M = 0.8 * standard deviation of observation * square root(time difference in hours since last good observation)
-    Time is never greater than 3 hours.
-    The standard deviations used come from a table provided by NDBC.
-  Parameters
-    recs is the array of observation records to process.
-    obsNfo is the QAQC information for the observation.
+  Function: getNextTestedRec
+  Purpose: Given the array of observation recs, this will recursively go through the records in the specified direction
+    testing for the next record whose qc_level is qaqcTestFlags.DATA_QUAL_GOOD
+  Parameters:
+    curNdx is the index of the current record we wish to begin searching from
+    recs is the array of observation records
+    reverse if True, will search backwards in the array, by default it searches forward.
+  Return:
+    If found, the observation rec that passed the test condition, otherwise None is returned.
   """
   def getNextTestedRec(self, curNdx, recs, reverse=False):
     if(reverse == False):
@@ -172,15 +174,33 @@ class qcTestSuite:
     self.getNextTestedRec(ndx, recs, reverse)
       
       
-    
-  def timeContinuityCheck(self, recs, obsNfo, ignoreQAQCFlags):    
+  """
+  Function: timeContinuityCheck
+  Purpose: Implements the NDBC time continuity(rate of change) test. 
+    The formula is: M = 0.8 * standard deviation of observation * square root(time difference in hours since last good observation)
+    Time is never greater than 3 hours.
+    The standard deviations used come from a table provided by NDBC.
+  Parameters
+    recs is the array of observation records to process.
+    obsNfo is the QAQC information for the observation.
+    ignoreQAQCFlags flag that is True will cause the processing to ignore previously set flags.
+  """    
+  def timeContinuityCheck(self, recs, obsNfo, ignoreQAQCFlags):   
+    if(self.logger != None):
+      self.logger.info("Performing Time Continuity Check.")     
     rowCnt = len(recs) - 1
     while rowCnt > 0:
       curRec = recs[rowCnt]
       #Has the record already been rate of change tested?
-      if((curRec.qc_level != None and curRec.qc_flag != None and curRec.qc_level == qaqcTestFlags.DATA_QUAL_GOOD and int(curRec.qc_flag[qaqcTestFlags.TQFLAG_RC]) == qaqcTestFlags.NO_TEST)\
-         or (curRec.prelimQCLevel != None and curRec.prelimQCFlag != None and curRec.prelimQCLevel == qaqcTestFlags.DATA_QUAL_GOOD and int(curRec.prelimQCFlag[qaqcTestFlags.TQFLAG_RC]) == qaqcTestFlags.NO_TEST)\
-         or ignoreQAQCFlags):
+      if((curRec.qc_level != None and 
+          curRec.qc_flag != None and 
+          curRec.qc_level == qaqcTestFlags.DATA_QUAL_GOOD and 
+          int(curRec.qc_flag[qaqcTestFlags.TQFLAG_RC]) == qaqcTestFlags.NO_TEST)\
+      or (curRec.prelimQCLevel != None and 
+         curRec.prelimQCFlag != None and 
+         curRec.prelimQCLevel == qaqcTestFlags.DATA_QUAL_GOOD and 
+         int(curRec.prelimQCFlag[qaqcTestFlags.TQFLAG_RC]) == qaqcTestFlags.NO_TEST)\
+      or ignoreQAQCFlags):
         
         #If the record had the range tests performed, let's get those results.
         if(curRec.qc_level != None):
@@ -252,10 +272,140 @@ class qcTestSuite:
         else:
           if(self.logger != None):
             self.logger.info("No rec found with good QAQC. Obs: %s Rec date: %s" %(obsNfo.obsName,curRec.m_date.__str__()))
-      else:
-        if(self.logger != None):
-          self.logger.error("Record has no valid qc_flag/qc_level or prelimQCFlag/prelimQCLevel. Date: %s" %(curRec.m_date))          
+      #else:
+      #  if(self.logger != None):
+      #    self.logger.error("Record has no valid qc_flag/qc_level or prelimQCFlag/prelimQCLevel. Date: %s" %(curRec.m_date))          
       rowCnt -= 1
+      
+
+  """
+  Function: nearestNeighborCheck
+  Purpose: For the platform defined as the nearest neighbor, queries the record closest in time to the record
+    we want to check. If it is within the appropriate standard deviation, it is acceptable.
+  Parameters:
+    db is a xeniaAlchemy database object that we use to query the nearest neighbor records.
+    recs the list of current observation records we are testing.
+    obsNfo is the obsQAQC object that contains the limits we are testing against.
+    ignoreQAQCFlags is a flag that if True specifies we ignore all currently set qaqc flags and re-test.
+  """
+  def nearestNeighborCheck(self, db, recs, obsNfo, ignoreQAQCFlags):
+    #reportHours = []
+    #Build a list of the report hours we want to get from our nearest neighbor.
+    #for curRec in recs:
+    #  if(ignoreQAQCFlags):
+    #      reportHours.append(("multi_obs.d_report_hour='%s'" %(curRec.d_report_hour)))
+    #  else:
+    #    if(curRec.prelimQCLevel != None):
+    #      reportHours.append(("multi_obs.d_report_hour='%s'" %(curRec.d_report_hour)))
+    if(self.logger != None):
+      self.logger.info("Performing Nearest Neighbor Check.")
+    windDir = False
+    if(obsNfo.obsName == "wind_from_direction"):
+      windDir = True
+    rowCnt = len(recs)
+    #if(rowCnt > 12):
+    #  rowCnt = 12
+    i = 0
+    while i < rowCnt:
+      curRec = recs[i]
+      #HAve we already checked this record or are we reprocessing?
+      if((curRec.qc_level != None and 
+          curRec.qc_flag != None and 
+          curRec.qc_level == qaqcTestFlags.DATA_QUAL_GOOD and 
+          int(curRec.qc_flag[qaqcTestFlags.TQFLAG_NN]) == qaqcTestFlags.NO_TEST)\
+        or (curRec.prelimQCLevel != None and 
+         curRec.prelimQCFlag != None and 
+         curRec.prelimQCLevel == qaqcTestFlags.DATA_QUAL_GOOD and 
+         int(curRec.prelimQCFlag[qaqcTestFlags.TQFLAG_NN]) == qaqcTestFlags.NO_TEST)\
+        or ignoreQAQCFlags):
+
+        #If the record had the range tests performed, let's get those results.
+        if(curRec.qc_level != None):
+          self.decodeQCFlags(curRec, curRec.qc_flag) 
+          curRec.prelimQCLevel= curRec.qc_level
+        
+        for nnKey in obsNfo.nearestNeighbor:
+          nnSensorId = db.sensorExists(obsNfo.obsName, obsNfo.uom, nnKey, obsNfo.sOrder)
+          if(nnSensorId != None):
+            nnRec = None
+            #If we are reprocessing the records, we do not test to see if the qc_level is None.
+            try:
+              #Since the date our platform collects the information might not align with the nearest neighbor, we
+              #filter on the m_date of the curRec.m_date - 30 minutes.
+              
+              dateOffset = curRec.m_date - datetime.timedelta(minutes=30)
+             
+              recQuery = db.session.query(multi_obs).\
+                  filter(multi_obs.m_date >= dateOffset).\
+                  filter(multi_obs.sensor_id == nnSensorId).\
+                  filter(multi_obs.d_report_hour == curRec.d_report_hour).\
+                  filter(multi_obs.d_top_of_hour == 1)
+              nnRec = recQuery.one()   
+            #When using the one() function in the query, if no result is found, it throws the NoResultFound exception.                            
+            except NoResultFound, e:
+              if(self.logger != None):
+                msg = "Platform: %s Sensor: %d Report Hour: %s\n%s" %(nnKey,nnSensorId,curRec.d_report_hour,e)              
+                self.logger.debug(msg)
+            except exc.InvalidRequestError, e:
+              msg = "Platform: %s Sensor: %d Report Hour: %s\n%s" %(nnKey,nnSensorId,curRec.d_report_hour,e)              
+              if(self.logger != None):
+                self.logger.exception(msg)
+            if(nnRec != None):
+              #If the observation is not wind direction, just use values normally.
+              if(windDir == False):
+                delta = math.fabs(curRec.m_value - nnRec.m_value)
+              #If the observation is wind direction, let's try and compensate for the 360/0 rollover since
+              #a value of 350 is close to a value of 2, however the delta will be large.
+              else:
+                #We want to work with magnitude and direction, so let's get the wind speed sensor id so we
+                #can get the corresponding record from the database.
+                """
+                windSpdId = db.sensorExists('wind_speed', 'm_s-1', curRec.platform_handle, obsNfo.sOrder)
+                nnwindSpdId = db.sensorExists('wind_speed', 'm_s-1', nnKey, obsNfo.sOrder)
+                windSpdRec = db.session.query(multi_obs).\
+                              filter(multi_obs.sensor_id == windSpdId).\
+                              filter(multi_obs.d_report_hour == curRec.d_report_hour).one()
+                nnwindSpdRec = db.session.query(multi_obs).\
+                              filter(multi_obs.sensor_id == nnwindSpdId).\
+                              filter(multi_obs.d_report_hour == curRec.d_report_hour).one()
+                vmd = vectorMagDir()
+                e,n = vmd.calcVector(windSpdRec.m_value, curRec.m_value)
+                delta = math.fabs(curRec.m_value - nnRec.m_value)
+                nnVal = nnRec.m_value 
+                if(nnVal > curRec.m_value + 180):
+                  nnVal = nnVal - 360
+                if(nnVal < curRec.m_value - 180):
+                  nnVal = nnVal + 360
+                """
+                delta = math.fabs(curRec.m_value - nnRec.m_value)
+                  
+              if(delta > obsNfo.nearestNeighbor[nnKey]):
+                curRec.nearneighborCheck = qaqcTestFlags.TEST_FAILED
+                curRec.nnRec = nnRec
+              else:
+                curRec.nearneighborCheck = qaqcTestFlags.TEST_PASSED
+    
+              curRec.prelimQCFlag = self.calcQCFlags(curRec)
+              curRec.prelimQCLevel = self.calcQCLevel(curRec)
+              #If we failed the test, we don't need to compare against any other nearest neighbors.
+              if(curRec.nearneighborCheck == qaqcTestFlags.TEST_FAILED):
+                if(self.logger != None):          
+                  self.logger.debug( "Nearest Neighbor Test Failed: Date %s Platform: %s obsName: %s value: %4.2f(%s) NNPlatform: %s value: %4.2f StdDev: %4.2f"\
+                               % (curRec.m_date.__str__(), curRec.platform_handle, obsNfo.obsName,\
+                                  ( curRec.m_value != None ) and curRec.m_value or -9999.0,\
+                                  ( obsNfo.uom != None ) and obsNfo.uom or '', \
+                                   nnKey, curRec.nnRec.m_value, obsNfo.nearestNeighbor[nnKey]))
+                break                        
+      i += 1
+  """
+  Function: dataCorrelation
+  Purpose: Performs a Pearson(for the time being) correlation test on the data. This will
+  give us an indication on how closely the observation we are testing falls in line with the
+  nearest neighbor.
+   
+  """
+  def dataCorrelation(self, recs, obsNfo, ignoreQAQCFlags):
+    return
   """
   Function: calcQCLevel
   Purpose: Calculates the aggregate data quality flag. This determination depends on the value of each of the limit test flags.
@@ -350,15 +500,16 @@ Purpose: Container for the various limits(sensor,gross,climate) for the given ob
 Represents a single point observation from the xenia DB.
 """    
 class observation(multi_obs):
-  dataAvailable      = qaqcTestFlags.NO_TEST   #Flag specifing the validity of whether data is available. 1st test performed
-  sensorRangeCheck   = qaqcTestFlags.NO_TEST   #Flag specifing the validity of the sensor range check. 2nd test performed
-  grossRangeCheck    = qaqcTestFlags.NO_TEST   #Flag specifing the validity of the gross range check. 3rd test performed
-  climateRangeCheck  = qaqcTestFlags.NO_TEST   #Flag specifing the validity of the climate range check. 4th test performed
-  rateofchangeCheck  = qaqcTestFlags.NO_TEST   #Flag specifing the validity of the rate of change check.
-  nearneighborCheck  = qaqcTestFlags.NO_TEST   #Flag specifing the validity of the nearest neighbor check.
-  prelimQCFlag       = None
-  prelimQCLevel      = None
-
+  dataAvailable       = qaqcTestFlags.NO_TEST   #Flag specifing the validity of whether data is available. 1st test performed
+  sensorRangeCheck    = qaqcTestFlags.NO_TEST   #Flag specifing the validity of the sensor range check. 2nd test performed
+  grossRangeCheck     = qaqcTestFlags.NO_TEST   #Flag specifing the validity of the gross range check. 3rd test performed
+  climateRangeCheck   = qaqcTestFlags.NO_TEST   #Flag specifing the validity of the climate range check. 4th test performed
+  rateofchangeCheck   = qaqcTestFlags.NO_TEST   #Flag specifing the validity of the rate of change check.
+  nearneighborCheck   = qaqcTestFlags.NO_TEST   #Flag specifing the validity of the nearest neighbor check.
+  prelimQCFlag        = None  #For records that are currently getting QAQC'd, this is the preliminary qc_flag. Each test updates it along the way.
+  prelimQCLevel       = None  #For records that are currently getting QAQC'd, this is the preliminary qc_level. Each test updates it along the way.
+  nnRec               = None  #If the record fails the nearest neighbor test, this is the record that it was compared against. Used when sending
+                              #out the email.
 
 
 """
@@ -493,13 +644,17 @@ class platformInfo(qcTestSuite):
       #points are good before we can test.
       if(obsNfo.stdDeviation):
         self.timeContinuityCheck(recs, obsNfo, self.ignoreQAQCFlags)
+      if(len(obsNfo.nearestNeighbor)):
+        self.nearestNeighborCheck(db, recs, obsNfo, self.ignoreQAQCFlags)
+      
       
       #Loops through making the changes in the records we want to then update back to the database.     
       for rec in recs:
         if(rec.prelimQCLevel != None and rec.prelimQCFlag != None):        
           rec.qc_level = rec.prelimQCLevel
           rec.qc_flag = rec.prelimQCFlag.tostring()
-          if(rec.qc_level != qaqcTestFlags.DATA_QUAL_GOOD):
+          if(rec.qc_level != qaqcTestFlags.DATA_QUAL_GOOD or 
+             rec.nearneighborCheck == qaqcTestFlags.TEST_FAILED):
             qcFailCount += 1
             #IF the sensor is not in one of the automatically set states, let's not save the record to send in an email.
             #The reason for this is we may have a known bad sensor that will continue to fail QAQC, so we want
@@ -523,6 +678,137 @@ class platformInfo(qcTestSuite):
         self.logger.warning("No records available for testing.")
   
  
+class rangeLimitsConfig(object):
+  def __init__(self, logger):
+    self.logger = logger
+  """
+  Function: loadFromTestProfilesXML
+  Purpose: Loads the limits from the test_profiles.xml file passed in with xmlConfigFile
+  Parameters: 
+    xmlConfigFile is the full path to the test_profiles file to use.
+  """  
+  def loadFromTestProfilesXML(self, xmlConfigFilename):  
+    platformInfoDict = {}
+    try:
+      monthList = {'Jan': 1, 'Feb': 2, 'Mar': 3, "Apr": 4, "May": 5, "Jun": 6, "Jul": 7, "Aug": 8, "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12 }
+      #Get the default standard deviations for the observations.
+      cfgFile = xmlConfigFile(xmlConfigFilename)
+      stdDevList = cfgFile.getListHead( '//standardDeviations' )
+      stdDeviations = recursivedefaultdict()
+      for child in cfgFile.getNextInList(stdDevList):      
+        val = cfgFile.getEntry( 'stdDev',child )               
+        if(val != None):
+          val = float(val)
+          stdDeviations[child.tag]['stdDev'] = val
+          units = cfgFile.getEntry( 'units',child )
+          stdDeviations[child.tag]['units'] = units
+      
+      testProfileList = cfgFile.getListHead( '//testProfileList' )
+      for testProfile in cfgFile.getNextInList(testProfileList):            
+        #See if the test profile has an ID.
+        id = cfgFile.getEntry( 'id', testProfile )   
+        #Determine which platforms are in this testProfile
+        platformList = cfgFile.getListHead( 'platformList', testProfile )
+        for platform in cfgFile.getNextInList(platformList):
+          platformHandle = platform.text
+          platformInfoDict[platformHandle] = platformInfo(platformHandle, self.logger)
+          
+          #Now loop through and get all the observations.
+          obsList =  cfgFile.getListHead('obsList', testProfile)
+          for obs in cfgFile.getNextInList(obsList):
+            obsHandle = cfgFile.getEntry('obsHandle', obs)          
+            if(obsHandle != None):                
+              #The handle is in the form of observationname.units of measure: "wind_speed.m_s-1" for example               
+              parts = obsHandle.split('.')
+              #Added sorder since if we do have multiples of the same obs on a platform, we need to distinguish them.
+              sOrder = cfgFile.getEntry('sOrder', obs)          
+              #Set the sOrder if we have one.
+              if(sOrder != None):
+                sOrder = int(sOrder)
+              else:
+                sOrder = 1
+              obsSettings = obsQAQC(parts[0], parts[1], sOrder)
+              
+              #DWR 02/28/2011
+              #Get the standard dev value for the obs.
+              if(obsSettings.obsName in stdDeviations):
+                obsSettings.stdDeviation = stdDeviations[obsSettings.obsName]['stdDev']
+
+                          
+              #Rate at which the sensor updates.              
+              interval = cfgFile.getEntry('UpdateInterval', obs)          
+              if(interval != None):
+                obsSettings.updateInterval = int(interval)            
+              #Ranges
+              hi = cfgFile.getEntry('rangeHigh', obs)
+              lo = cfgFile.getEntry('rangeLow', obs)
+              if(hi != None and lo != None):
+                obsSettings.setSensorRangeLimits(float(lo), float(hi))
+                        
+              hi = cfgFile.getEntry('grossRangeHigh', obs)
+              lo = cfgFile.getEntry('grossRangeLow', obs)
+              if(hi != None and lo != None):
+                obsSettings.setGrossRangeLimits(float(lo), float(hi))
+             
+              
+              #Check to see if we have a climate range, if not, we just use the grossRange.
+              #climateList = obs.xpath('climatologicalRangeList')
+              climateList =  cfgFile.getListHead('climatologicalRangeList', obs)              
+              if(climateList != None and len(climateList)):
+                #for climateRange in climateList[0].getchildren():
+                for climateRange in cfgFile.getNextInList(climateList):
+                  startMonth = cfgFile.getEntry('startMonth', climateRange)
+                  rangeHi = cfgFile.getEntry('rangeHigh', climateRange)
+                  rangeLo = cfgFile.getEntry('rangeLow', climateRange)
+                  endMonth = cfgFile.getEntry('endMonth', climateRange)                  
+                  if(rangeHi != None):
+                    rangeHi = float(rangeHi)
+                  if(rangeLo != None):
+                    rangeLo = float(rangeLo)                 
+                  #Since the climate range entries can span multiple months, for ease of use we want to have a 
+                  #bucket per month so we need to check the start and end dates to see if we need to break them up.
+                  #Also to take note, the limits are stored in a dictionary keyed by the month number, so we normally 
+                  #start at 1 and not 0. 
+                  strtNum = monthList[startMonth]
+                  endNum = monthList[endMonth]
+                  #If we have an interval between the start and end greater than one, we've got a range of months covered.
+                  if( (endNum - strtNum) > 1 ):
+                    i = strtNum
+                    #Loop adding limits for each month in the range.
+                    while( i < endNum ):
+                      obsSettings.setClimateRangeLimits(rangeLo, rangeHi, i)
+                      #obsSettings.climateRangeLimits[i] = limits
+                      i += 1
+                  else:
+                    obsSettings.setClimateRangeLimits(rangeLo, rangeHi, strtNum)
+                    #obsSettings.climateRangeLimits[strtNum] = limits
+              #No climate range given, so we default to the grossRange.
+              else:
+                #limits = rangeLimits()
+                rangeHi = obsSettings.grossRangeLimits.rangeHi
+                rangeLo = obsSettings.grossRangeLimits.rangeLo
+                for i in range( 1,13 ):
+                  obsSettings.setClimateRangeLimits(rangeLo, rangeHi, i)                  
+                  #obsSettings.climateRangeLimits[i] = limits
+              #Get the nearest neighbor info if there is any.
+              nnList = cfgFile.getListHead('nearestNeighborList', obs)
+              if(nnList != None and len(nnList)):
+                for nn in cfgFile.getNextInList(nnList):            
+                  nnPlatform = cfgFile.getEntry('platformHandle', nn)
+                  nnStdDev = cfgFile.getEntry('standardDeviation', nn)                  
+                  if(nnPlatform != None and nnStdDev != None):              
+                    obsSettings.setNearestNeighbor(nnPlatform, float(nnStdDev))
+              #Now add the observation to our platform info dictionary.
+              platformNfo = platformInfoDict[platformHandle]
+              
+              platformNfo.addObsQAQCInfo(obsSettings)
+                      
+      return( platformInfoDict )
+    except Exception, e:
+      if(self.logger != None):
+        self.logger.exception(e)
+        sys.exit(-1)
+  
   
 class rangeTests(object):
   def __init__(self, xmlConfigFilename):
@@ -539,7 +825,8 @@ class rangeTests(object):
       if( type == 'test_profiles' ):
         tag = self.cfgFile.getEntry('//environment/qcLimits/file')
         if(tag != None):
-          self.platformInfoDict = self.loadFromTestProfilesXML(tag)
+          settings = rangeLimitsConfig(self.logger)
+          self.platformInfoDict = settings.loadFromTestProfilesXML(tag)
           if(self.logger != None):
             self.logger.info("Limits type file: %s File: %s" % (type,tag) )
           else:
@@ -561,8 +848,10 @@ class rangeTests(object):
     sqlAlchemyLog = self.cfgFile.getEntry("//environment/database/sqlAlchemyLog")
     if(sqlAlchemyLog != None):
       sqlAlchemyLog = int(sqlAlchemyLog)
+      if(sqlAlchemyLog):
+        sqlAlchemyLog = True        
     else:
-      sqlAlchemyLog = 0
+      sqlAlchemyLog = False
     dbSettings = self.cfgFile.getDatabaseSettings()
     if(dbSettings['type'] != None):
       self.db = xeniaAlchemy(self.logger)      
@@ -624,139 +913,6 @@ class rangeTests(object):
     
   def testRun(self, testRunFlag):
     self.testRunFlag = testRunFlag
-  """
-  Function: loadFromTestProfilesXML
-  Purpose: Loads the limits from the test_profiles.xml file passed in with xmlConfigFile
-  Parameters: 
-    xmlConfigFile is the full path to the test_profiles file to use.
-  """  
-  def loadFromTestProfilesXML(self, xmlConfigFile):  
-    platformInfoDict = {}
-    try:
-      monthList = {'Jan': 1, 'Feb': 2, 'Mar': 3, "Apr": 4, "May": 5, "Jun": 6, "Jul": 7, "Aug": 8, "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12 }
-      xmlTree = etree.parse(xmlConfigFile)
-      #Get the default standard deviations for the observations.
-      stdDevList = xmlTree.xpath('//standardDeviations')
-      stdDeviations = recursivedefaultdict()
-      for stdDev in stdDevList[0].getchildren():
-        
-        val = stdDev.xpath("stdDev")
-        if(val != None):
-          val = float(val[0].text)
-          stdDeviations[stdDev.tag]['stdDev'] = val
-        units = stdDev.xpath("units")
-        if(units != None):
-          units = units[0].text
-          stdDeviations[stdDev.tag]['units'] = units
-      
-      testProfileList = xmlTree.xpath( '//testProfileList')
-      for testProfile in testProfileList[0].getchildren():
-        #See if the test profile has an ID.
-        id = testProfile.xpath( 'id' )
-        if( len(id) ):
-          id = id[0].text
-        #Determine which platforms are in this testProfile
-        platformList = testProfile.xpath('platformList')
-        for platform in platformList[0].getchildren():          
-          platformHandle = platform.text
-          platformInfoDict[platformHandle] = platformInfo(platformHandle, self.logger)
-          
-          #Now loop through and get all the observations.
-          obsList = testProfile.xpath('obsList')
-          for obs in obsList[0].getchildren():             
-            obsHandle  = obs.xpath('obsHandle' )
-            if( len(obsHandle) ):             
-              obsHandle = obsHandle[0].text
-                            
-              #The handle is in the form of observationname.units of measure: "wind_speed.m_s-1" for example               
-              parts = obsHandle.split('.')
-              #Added sorder since if we do have multiples of the same obs on a platform, we need to distinguish them.
-              sOrder = obs.xpath('sOrder')
-              #Set the sOrder if we have one.
-              if(len(sOrder)):
-                sOrder = int(sOrder[0].text)
-              else:
-                sOrder = 1
-              obsSettings = obsQAQC(parts[0], parts[1], sOrder)
-              
-              #DWR 02/28/2011
-              #Get the standard dev value for the obs.
-              if(obsSettings.obsName in stdDeviations):
-                obsSettings.stdDeviation = stdDeviations[obsSettings.obsName]['stdDev']
-
-                          
-              #Rate at which the sensor updates.              
-              interval  = obs.xpath('UpdateInterval' )
-              if( len(interval) ):
-                obsSettings.updateInterval = int(interval[0].text)            
-              #Ranges
-              hi  = obs.xpath('rangeHigh' )
-              lo  = obs.xpath('rangeLow' )
-              if(len(hi) and len(lo)):
-                obsSettings.setSensorRangeLimits(float(lo[0].text), float(hi[0].text))
-                        
-              hi  = obs.xpath('grossRangeHigh' )
-              lo  = obs.xpath('grossRangeLow' )
-              if(len(hi) and len(lo)):
-                obsSettings.setGrossRangeLimits(float(lo[0].text), float(hi[0].text))
-             
-              
-              #Check to see if we have a climate range, if not, we just use the grossRange.
-              climateList = obs.xpath('climatologicalRangeList')
-              if( len(climateList ) ):
-                for climateRange in climateList[0].getchildren():             
-                  #limits = rangeLimits()
-                  startMonth  = climateRange.xpath('startMonth' )
-                  rangeHi  = climateRange.xpath('rangeHigh' )
-                  rangeLo  = climateRange.xpath('rangeLow' )
-                  if( len(startMonth) ):
-                    startMonth = startMonth[0].text
-                  endMonth  = climateRange.xpath('endMonth' )
-                  if( len(endMonth) ):
-                    endMonth = endMonth[0].text
-                  rangeHi  = climateRange.xpath('rangeHigh' )
-                  if( len(rangeHi) ):
-                    rangeHi = float(rangeHi[0].text)
-                  rangeLo  = climateRange.xpath('rangeLow' )
-                  if( len(rangeLo) ):
-                    rangeLo = float(rangeLo[0].text)
-                  #Since the climate range entries can span multiple months, for ease of use we want to have a 
-                  #bucket per month so we need to check the start and end dates to see if we need to break them up.
-                  #Also to take note, the limits are stored in a dictionary keyed by the month number, so we normally 
-                  #start at 1 and not 0. 
-                  strtNum = monthList[startMonth]
-                  endNum = monthList[endMonth]
-                  #If we have an interval between the start and end greater than one, we've got a range of months covered.
-                  if( (endNum - strtNum) > 1 ):
-                    i = strtNum
-                    #Loop adding limits for each month in the range.
-                    while( i < endNum ):
-                      obsSettings.setClimateRangeLimits(rangeLo, rangeHi, i)
-                      #obsSettings.climateRangeLimits[i] = limits
-                      i += 1
-                  else:
-                    obsSettings.setClimateRangeLimits(rangeLo, rangeHi, strtNum)
-                    #obsSettings.climateRangeLimits[strtNum] = limits
-              #No climate range given, so we default to the grossRange.
-              else:
-                #limits = rangeLimits()
-                rangeHi = obsSettings.grossRangeLimits.rangeHi
-                rangeLo = obsSettings.grossRangeLimits.rangeLo
-                for i in range( 1,13 ):
-                  obsSettings.setClimateRangeLimits(rangeLo, rangeHi, i)                  
-                  #obsSettings.climateRangeLimits[i] = limits
-                  
-              #Now add the observation to our platform info dictionary.
-              platformNfo = platformInfoDict[platformHandle]
-              
-              platformNfo.addObsQAQCInfo(obsSettings)
-              
-        
-      return( platformInfoDict )
-    except Exception, e:
-      if(self.logger != None):
-        self.logger.exception(e)
-        sys.exit(-1)
   
   def setLastNHours(self, lastNHours):
     self.lastNHours = lastNHours
@@ -781,7 +937,7 @@ class rangeTests(object):
 
   def queryRecords(self, lastNHours=None, beginDate=None, endDate=None, ignoreQCedRecords=False):
     try:
-      sqlUpdateFile = open(self.sqlUpdateFile, "w")
+      #sqlUpdateFile = open(self.sqlUpdateFile, "w")
       totalprocTime = processingEnd = processingStart = 0
       if( lastNHours != None ):
         #Get calc the dateOffset from current time - lastNHours we want to query for.
@@ -859,12 +1015,29 @@ class rangeTests(object):
       #Do we have any failed records?
       msg = ''
       if(len(platformObj.failList)):
-        if(len(msg)):
-          msg += "\n"
-        msg = "Platform: %s\n" %(platformKey)
+        msg = "\nPlatform: %s\n" %(platformKey)
         for rec in platformObj.failList:
-          msg += "Observation: %s Date: %s Value: %4.2f qc_flag: %s qc_level: %d\n"\
+          msg += "\tObservation: %s Date: %s Value: %4.2f qc_flag: %s qc_level: %d\n"\
             %(rec.sensor.m_type.scalar_type.obs_type.standard_name, rec.m_date, rec.m_value, rec.qc_flag, rec.qc_level)
+          obsNfo = platformObj.obsQAQCList[rec.sensor.m_type.scalar_type.obs_type.standard_name]
+          if(rec.dataAvailable == qaqcTestFlags.TEST_FAILED):
+            msg += "\t\tData available test failed.\n"    
+          if(rec.sensorRangeCheck  == qaqcTestFlags.TEST_FAILED):
+            msg += "\t\tSensor Range Check test failed. Limit Hi: %4.2f Limit Lo: %4.2f\n" %(obsNfo.sensorRangeLimits.rangeHi,obsNfo.sensorRangeLimits.rangeLo)   
+          if(rec.grossRangeCheck   == qaqcTestFlags.TEST_FAILED):
+            msg += "\t\tGross Range Check test failed. Limit Hi: %4.2f Limit Lo: %4.2f\n" %(obsNfo.grossRangeLimits.rangeHi,obsNfo.grossRangeLimits.rangeLo)       
+          if(rec.climateRangeCheck == qaqcTestFlags.TEST_FAILED):
+            dateformat = "%Y-%m-%dT%H:%M:%S"
+            if( rec.m_date.__str__().find("T") == -1 ):
+              dateformat = "%Y-%m-%d %H:%M:%S"          
+            month = int(time.strftime( "%m", time.strptime(rec.m_date.__str__(), dateformat) ))
+            limits = obsNfo.climateRangeLimits[month]                        
+            msg += "\t\tClimate Range Check test failed. Limit Hi: %4.2f Limit Lo: %4.2f\n" %(limits.rangeHi,limits.rangeLo)
+          if(rec.rateofchangeCheck == qaqcTestFlags.TEST_FAILED):
+            msg += "\t\tRate of Change test failed.\n"     
+          if(rec.nearneighborCheck == qaqcTestFlags.TEST_FAILED):
+            if(rec.nnRec != None):
+              msg += "\t\tNearest Neighbor test failed. NN: %s value: %4.2f StdDev: %4.2f\n"%(rec.nnRec.platform_handle, rec.nnRec.m_value, obsNfo.nearestNeighbor[rec.nnRec.platform_handle])     
             
         if(len(msg)):
           emailMsg += msg

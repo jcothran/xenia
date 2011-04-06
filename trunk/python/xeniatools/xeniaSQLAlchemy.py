@@ -10,6 +10,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import exc
 from sqlalchemy.orm.exc import *
+from geoalchemy import *
 
 Base = declarative_base()
 
@@ -46,10 +47,10 @@ class platform(Base):
   description      = Column(String(1000))    
   url              = Column(String(200))      
   metadata_id      = Column(Integer)                     
-  #the_geom         geometry                 
+  the_geom         = GeometryColumn(Point(2))                 
   
   organization    = relationship(organization)   
-  
+  sensors         = relationship("sensor", order_by="sensor.row_id", backref="platform")
    
 class uom_type(Base):
   __tablename__ = 'uom_type'  
@@ -109,7 +110,7 @@ class sensor(Base):
   metadata_id      = Column(Integer)                     
   report_interval  = Column(Integer)                     
   
-  platform = relationship(platform)
+  #platform = relationship(platform, backref=backref("sensors"))
   m_type = relationship(m_type)
   
 class multi_obs(Base):
@@ -142,7 +143,7 @@ class multi_obs(Base):
   d_label_theta    = Column(Integer)                     
   d_top_of_hour    = Column(Integer)                     
   d_report_hour    = Column(DateTime(timezone=False)) 
-  #the_geom         = geometry                    
+  the_geom         = GeometryColumn(Point(2))                 
   
   m_type          = relationship(m_type)
   sensor          = relationship(sensor)
@@ -253,7 +254,11 @@ class xeniaAlchemy(object):
     
     try:
       #Connect to the database
-      connectionString = "%s://%s:%s@%s/%s" %(databaseType, dbUser, dbPwd, dbHost, dbName) 
+      if(dbHost != None and len(dbHost)):
+        connectionString = "%s://%s:%s@%s/%s" %(databaseType, dbUser, dbPwd, dbHost, dbName)
+      else:
+        connectionString = "%s://%s:%s@/%s" %(databaseType, dbUser, dbPwd, dbName)
+         
       self.dbEngine = create_engine(connectionString, echo=printSQL)
       
       #metadata object is used to keep information such as datatypes for our table's columns.
@@ -292,6 +297,33 @@ class xeniaAlchemy(object):
         .join((uom_type, uom_type.row_id == m_scalar_type.uom_type_id))\
         .filter(sensor.s_order == sOrder)\
         .filter(platform.platform_handle == platformHandle)\
+        .filter(obs_type.standard_name == obsName)\
+        .filter(uom_type.standard_name == uom).one()
+      return(rec.row_id)
+    except NoResultFound, e:
+      if(self.logger != None):
+        self.logger.debug(e)
+    except exc.InvalidRequestError, e:
+      if(self.logger != None):
+        self.logger.exception(e)
+    
+    return(None)
+  """
+  Function: mTypeExists
+  Purpose: Checks to see if the passed in obsName with the given units of measurement exists in the m_type table.
+  Parameters: 
+    obsName is the sensor(observation) we are testing for.
+  Returns:
+    The m_type id(row_id) if it exists, -1 if it does not exists, or None if an error occured. If there was an error
+    lastErrorMsg can be checked for the error message.
+  """
+  def mTypeExists(self, obsName, uom):
+    
+    try:  
+      rec = self.session.query(m_type.row_id)\
+        .join((m_scalar_type, m_scalar_type.row_id == m_type.m_scalar_type_id))\
+        .join((obs_type, obs_type.row_id == m_scalar_type.obs_type_id))\
+        .join((uom_type, uom_type.row_id == m_scalar_type.uom_type_id))\
         .filter(obs_type.standard_name == obsName)\
         .filter(uom_type.standard_name == uom).one()
       return(rec.row_id)
