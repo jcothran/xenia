@@ -276,7 +276,8 @@ mk_the_geom trigger is used to automatically populate PostGIS multi_obs.the_geom
 
 If you've PostGIS enabled your multi_obs table with a geometry column(the_geom) similar to the below
 
-{{{select addgeometrycolumn('your_database_name_here,'multi_obs','the_geom',-1,'POINT',2);
+{{{
+select addgeometrycolumn('your_database_name_here,'multi_obs','the_geom',-1,'POINT',2);
 }}}
 
 Apply the following [http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/XeniaPackageV2/mk_the_geom.sql after insert trigger]
