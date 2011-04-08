@@ -173,6 +173,9 @@ secoora
 129.252.37.90
 neptune.baruch.sc.edu
 neptune
+
+google analytics code - like UA-xxxxxx-x
+google maps key
 }}}
 
 === crontabs ===
