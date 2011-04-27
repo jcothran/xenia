@@ -10,4 +10,22 @@ This page will contain some notes to various gotchas and setup parameters I've r
 == Database configuration ==
 [http://drupal.org/documentation/install/create-database Here] is the page on the Drupal site on the steps needed to get the database configured.
 After doing this, I took a copy of the working SECOORA database and imported it using the following mysql command:
+{{{
 mysql -u <username> -p <databasename> < <sqlfilename>
+
+<username> is the username created for Drupal to access the database.
+<databasename> is the name of the database for Drupal
+<sqlfilename> is the exported SQL file of the production SECOORA website that gets backed up every night.
+}}}
+
+== File paths ==
+
+=== settings.php ===
+In the /sites/default/settings.php file, we need to configure a couple of items for our test system.
+  * $db_url = 'mysql://username:password@localhost/databasename';
+  This is the connection string drupal uses to connect to the mysql database.
+  * $base_url = 'http://129.252.139.80/drupal/htdocs'; 
+  Since I use a subdirectory in my /var/www directory to house the test system, I need to tell drupal what the base URL to use.
+
+=== .htaccess ===
+Have to configure a RewriteBase to tell Drupal where the base directory is going to be. If I don't do this, the relative paths to images will not work.
