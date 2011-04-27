@@ -20,4 +20,43 @@ I've implemented the algorithms in a set of python scripts.
   -q, --IgnoreQAQCFlags Flag allows us to restamp records that have already been quality controlled.
   -t, --TestRun   Flag allows us to run the QAQC with no committing into the database.
   }}}
+  === Config Files ===
+  ==== XMLConfigFile ====
+  This is the configuration file used for the --XMLConfigFile parameter in the qaqcChecks.py script.
+ {{{
+<environment>
+  <database>
+    <db>
+      <type></type>
+      <name></name>
+      <user></user>
+      <pwd></pwd>
+      <host></host>
+    </db>
+    <sqlAlchemyLog>0</sqlAlchemyLog>
+  </database>
+  <emailSettings>
+    <server></server>
+    <from></from>
+    <pwd></pwd>
+    <emailList>
+      <email></email>
+      <email></email>
+      <email></email>
+    </emailList>
+  </emailSettings>
+  
+  <qcLimits>
+    <fileType>test_profiles</fileType>
+    <file>test_profiles.xml</file>
+  </qcLimits>
+  <unitsCoversion>
+    <file>UnitsConversionPython.xml</file>
+  </unitsCoversion>
+  <logging>    
+    <configFile>qaqcLog.conf</configFile>  
+  </logging> 
+ 
+</environment>
+ }}}
   
