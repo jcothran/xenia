@@ -11,12 +11,13 @@ I've implemented the algorithms in a set of python scripts.
   === qaqcChecks.py ===
   This file is a wrapper script that has various command line parameters that control how/what QAQC is processed.
   ==== Command Line Parameters ====
-  * -c, --XMLConfigFile The xml file containing the configuration information.
-  * -n, --LastNHours The Last N Hours to query data for.
-  * -b, --BeginDateTime The date to begin the data query for.
-  * -e, --EndDateTime The date to end the data query for.
-  * -s, --SQLOutputFileName Overrides the sql output file provided in the config file. This is the file the QAQC SQL UPDATE statements are saved.
-  * -q, --IgnoreQAQCFlags Flag allows us to restamp records that have already been quality controlled.
-  * -t, --TestRun   Flag allows us to run the QAQC with no committing into the database.
-
+  {{{
+  -c, --XMLConfigFile The xml file containing the configuration information.
+  -n, --LastNHours The Last N Hours to query data for.
+  -b, --BeginDateTime The date to begin the data query for.
+  -e, --EndDateTime The date to end the data query for.
+  -s, --SQLOutputFileName Overrides the sql output file provided in the config file. This is the file the QAQC SQL UPDATE statements are saved.
+  -q, --IgnoreQAQCFlags Flag allows us to restamp records that have already been quality controlled.
+  -t, --TestRun   Flag allows us to run the QAQC with no committing into the database.
+  }}}
   
