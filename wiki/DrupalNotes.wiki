@@ -29,3 +29,14 @@ In the /sites/default/settings.php file, we need to configure a couple of items 
 
 === .htaccess ===
 Have to configure a RewriteBase to tell Drupal where the base directory is going to be. If I don't do this, the relative paths to images will not work.
+
+
+== Module configurations ==
+
+=== Zend Framework ===
+*Requirements*
+  * Drupal [http://drupal.org/project/zend module] from the bottom of the page. 
+  * Zend [http://framework.zend.com/download framework]
+
+The key to getting Drupal to recognize the Zend module after you enable it in the admin/modules area is to make sure the path to the framework is known. I added it on my php.ini file. Make sure when you put the path in it goes up to the library directory, not library/Zend. 
+My ini entry looks like: /var/www/drupal/htdocs/sites/all/modules/zend/library
