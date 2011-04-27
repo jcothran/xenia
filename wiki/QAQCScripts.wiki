@@ -25,22 +25,21 @@ I've implemented the algorithms in a set of python scripts.
   This is the configuration file used for the --XMLConfigFile parameter in the qaqcChecks.py script.
  {{{
 <environment>
-  <database>
+  <database> 
     <db>
-      <type></type>
-      <name></name>
-      <user></user>
-      <pwd></pwd>
-      <host></host>
+      <type></type> 
+      <name></name> 
+      <user></user> 
+      <pwd></pwd> 
+      <host></host> 
     </db>
     <sqlAlchemyLog>0</sqlAlchemyLog>
   </database>
-  <emailSettings>
+  <emailSettings> 
     <server></server>
     <from></from>
     <pwd></pwd>
     <emailList>
-      <email></email>
       <email></email>
       <email></email>
     </emailList>
@@ -55,8 +54,13 @@ I've implemented the algorithms in a set of python scripts.
   </unitsCoversion>
   <logging>    
     <configFile>qaqcLog.conf</configFile>  
-  </logging> 
- 
+  </logging>  
 </environment>
  }}}
-  
+  # <database>
+    * <type> - Type of the database: postgres is the default and currently only one supported.
+    * <name> - The name of the database to connect to.
+    * <user> - The user name to connect to the database with.
+    * <pwd> - Password for the database connection.
+    * <host> - IP address of the database host.
+  # <emailSettings>
