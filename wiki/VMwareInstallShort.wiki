@@ -1,6 +1,6 @@
 #summary install short notes for running a server production instance
 
-see also [VMwareHome]
+see also [VMwareHome] [VMwareDownload]
 
 The below notes assume installation on a server running *VMware ESXi 4.0*, for further notes on ESXi, other VMware or virtualization products see earlier notes at [VMwareInstall]
 
