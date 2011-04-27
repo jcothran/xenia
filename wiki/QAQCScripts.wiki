@@ -1,5 +1,7 @@
 #summary Details on the QAQC processing scripts.
 
+<wiki:toc max_depth="6" />
+
 = Introduction =
 
 The QAQC processing is based around the QAQC documentation that came out of QARTOD meetings and distilled into a [http://trac.secoora.org/datamgmt/browser/docs/whitepapers/trunk/SEACOOS%20QA-QC%20Standards%20and%20Procedures%20Whitepaper.doc paper] by Sara Haines.
