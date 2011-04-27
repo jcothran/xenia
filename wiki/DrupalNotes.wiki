@@ -1,0 +1,13 @@
+#summary Some notes on Drupal configuration.
+
+= Introduction =
+
+This page will contain some notes to various gotchas and setup parameters I've run across with my limited Drupal experience.
+
+
+= Details =
+
+== Database configuration ==
+[http://drupal.org/documentation/install/create-database Here] is the page on the Drupal site on the steps needed to get the database configured.
+After doing this, I took a copy of the working SECOORA database and imported it using the following mysql command:
+mysql -u <username> -p <databasename> < <sqlfilename>
