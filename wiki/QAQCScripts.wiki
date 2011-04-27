@@ -41,7 +41,6 @@ I've implemented the algorithms in a set of python scripts.
     <pwd></pwd>
     <emailList>
       <email></email>
-      <email></email>
     </emailList>
   </emailSettings>
   
@@ -57,10 +56,16 @@ I've implemented the algorithms in a set of python scripts.
   </logging>  
 </environment>
  }}}
-  # <database>
-    * <type> - Type of the database: postgres is the default and currently only one supported.
-    * <name> - The name of the database to connect to.
-    * <user> - The user name to connect to the database with.
-    * <pwd> - Password for the database connection.
-    * <host> - IP address of the database host.
-  # <emailSettings>
+  # database
+  Details the xml tags dealing with the database connection.
+    * type - Type of the database: postgres is the default and currently only one supported.
+    * name - The name of the database to connect to.
+    * user - The user name to connect to the database with.
+    * pwd - Password for the database connection.
+    * host - IP address of the database host.
+  # emailSettings
+  Details the xml tags dealing with the email settings. Emails are sent out whenever we have a QAQC failure.
+    * server - The SMTP server that is to be used to send the emails.
+    * from - The user on the SMTP server that the email is from.
+    * pwd - The user password to connect to the SMTP server.
+    * emailList - A list of <email> entries that contain the email addresses of who we want to send the email to.
