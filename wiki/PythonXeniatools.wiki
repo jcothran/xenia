@@ -30,4 +30,8 @@ Basic Xenia database interface. This was the first Xenia database object I devel
   * [http://lxml.de/ lxml]
 
 
-=== [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/xeniaSQLAlchemy.py xeniaSQLAlchemy.py ]
+=== [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/xeniaSQLAlchemy.py xeniaSQLAlchemy.py] xeniaSQLAlchemy.py ===
+SQLAlchemy interface for the Xenia database. The main tables are all defined here. 
+==== External Dependencies ====
+  * [http://www.sqlalchemy.org/ SQLAlchemy]
+  * [http://www.geoalchemy.org/ GeoAlchemy]
