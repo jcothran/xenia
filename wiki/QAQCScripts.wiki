@@ -78,6 +78,13 @@ I've implemented the algorithms in a set of python scripts.
    The following is an example of a simple test_profiles.xml file which contains only one platform with one sensor for QC validation:
   {{{
  <xml>
+  <standardDeviations>
+    <air_pressure>
+      <stdDev>21.0</stdDev>
+      <units>mb</units>
+    </air_pressure>
+  </standardDeviations>
+
   <testProfileList>
    <testProfile>
     <id>CaroCoopsBuoys</id>
@@ -114,6 +121,15 @@ I've implemented the algorithms in a set of python scripts.
   }}}
   A file may contain multiple test profiles, each of which can be used to group like platforms together. Like platforms would be platforms that have
   the same sensor array on board. 
+  * `<standardDeviations>`
+  This tag denotes the start of one or more entries for standard deviation information. These are used in the rate of change/time continuity test from NDBC. Each standard deviation section uses the observation name as the tag.
+    * `<air_pressure>`
+    Start of the std dev information for the air pressure observation. The tags must use the observation name defined in the Xenia database's obs_type table.
+      * `<stdDev>`
+      The standard deviation value to be used in the rate of change/time continuity test.
+      * `<units>`
+      The units of measurement the stdDev value is in. 
+
   * `<testProfileList>`
   This tag denotes the start of a list of one or more `<testProfile>` entries.
   * `<testProfile>`
