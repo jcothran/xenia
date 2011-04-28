@@ -1,5 +1,7 @@
 #summary The Python scripts that makeup xeniatools.
 
+<wiki:toc max_depth="6" />
+
 = Introduction =
 
 To make sure various Python scripts I create can re-use common code, I needed a place to store the scripts that the Python environment could find. Python has a site-packages directory that is a common location, so I created a xeniatools directory to house my various utilities. Xeniatools is a bit of a misnomer as I have scripts that do alot more than just interact with the Xenia database.
@@ -20,3 +22,12 @@ This is the brains of our QAQC processing. It doesn't have a '__main__' function
   * recursivedefaultdict from [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/xenia.py#9 xeniatools.xenia]
   * xmlConfigFile from [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/xmlConfigFile.py#10 xeniatools.xmlConfigFile]
   * smtpClass from [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/utils.py#17 xeniatools.utils]
+=== [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/xenia.py xenia.py] ===
+Basic Xenia database interface. This was the first Xenia database object I developed in Python before starting to use SQLAlchemy. This file houses some objects that are database specific, but not database connection specific. For instance the QAQC flags and units conversion functions.
+==== External Dependencies ====
+  * [http://trac.edgewall.org/wiki/PySqlite pysqlite2]
+  * [http://initd.org/psycopg/ psycopg2]
+  * [http://lxml.de/ lxml]
+
+
+=== [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/xeniaSQLAlchemy.py xeniaSQLAlchemy.py ]
