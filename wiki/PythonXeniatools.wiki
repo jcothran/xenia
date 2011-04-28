@@ -10,6 +10,7 @@ For brevity's sake "External Dependencies" are other Python packages I had to in
 == Files ==
 === [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/rangeCheck.py rangeCheck.py] ===
 This is the brains of our QAQC processing. It doesn't have a '__main__' function, it is just a container for the various classes used for doing the QAQC.
+[http://code.google.com/p/xenia/wiki/QAQCScripts#qaqcChecks.py qaqcChecks.py] is the wrapper script that kicks off testing.
 ==== External Dependencies ====
   * [http://www.sqlalchemy.org/ SQLAlchemy]
   * [http://lxml.de/ lxml] using the  object etree
