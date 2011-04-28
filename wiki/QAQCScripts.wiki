@@ -123,6 +123,12 @@ being sampled with the sensor. For example, we are measuring Air Temperature and
         </climateRange>  
       </climatologicalRangeList>
      </obs>
+      <nearestNeighborList>
+        <neighbor>
+          <platformHandle>ndbc.41004.met</platformHandle>
+          <standardDeviation>6</standardDeviation>          
+        </neighbor>
+      </nearestNeighborList>
     </obsList>
     <notify>
      <timeLagLimit>14400</timeLagLimit>
@@ -169,5 +175,12 @@ being sampled with the sensor. For example, we are measuring Air Temperature and
             * `<endMonth>` the month, abbreviate unix style, the range ends on.
             * `<rangeLow>` the low climatological test range.
             * `<rangeHigh>` the high climatological test range.
-
-        * `<notify>` Currently this section is not used.
+        * `<nearestNeighborList>`
+        Begins the one or more entries for nearest neighbor platforms to use for the nearest neighbor check.
+          * `<neighbor>`
+          Entry for a nearest neighbor.
+            * `<platformHandle>`
+            The platform handle, from the Xenia platform table, to use as the nearest neighbor. We query the platform for the observation we are interested in.
+            * `<standardDeviation>`
+            Standard deviation value to use for the test.
+      * `<notify>` Currently this section is not used.
