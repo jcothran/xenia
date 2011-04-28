@@ -24,8 +24,7 @@ This is the brains of our QAQC processing. It doesn't have a '__main__' function
   * smtpClass from [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/utils.py#17 xeniatools.utils]
 ----
 
-=== [http://code.google.com/p/xenia/source/browse/trunk/python
-/xeniatools/xenia.py xenia.py] xenia.py ===
+=== [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/xenia.py xenia.py] xenia.py ===
 
 Basic Xenia database interface. This was the first Xenia database object I developed in Python before starting to use SQLAlchemy. This file houses some objects that are database specific, but not database connection specific. For instance the QAQC flags and units conversion functions.
 ==== External Dependencies ====
