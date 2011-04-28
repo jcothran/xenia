@@ -1,0 +1,21 @@
+#summary The Python scripts that makeup xeniatools.
+
+= Introduction =
+
+To make sure various Python scripts I create can re-use common code, I needed a place to store the scripts that the Python environment could find. Python has a site-packages directory that is a common location, so I created a xeniatools directory to house my various utilities. Xeniatools is a bit of a misnomer as I have scripts that do alot more than just interact with the Xenia database.
+
+For brevity's sake "External Dependencies" are other Python packages I had to install. "Internal Dependencies" are Python objects developed in house, and most likely living in the xeniatools directory.
+
+
+== Files ==
+=== rangeCheck.py ===
+This is the brains of our QAQC processing. It doesn't have a '__main__' function, it is just a container for the various classes used for doing the QAQC.
+==== External Dependencies ====
+  * [http://www.sqlalchemy.org/ SQLAlchemy]
+  * [http://lxml.de/ lxml] using the  object etree
+==== Internal Dependencies ====
+  * qaqcTestFlags from xeniatools.xenia
+  * uomconversionFunctions from xeniatools.xenia
+  * recursivedefaultdict from xeniatools.xenia
+  * xmlConfigFile from xeniatools.xmlConfigFile
+  * smtpClass from xeniatools.utils
