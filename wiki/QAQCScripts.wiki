@@ -8,13 +8,20 @@ The QAQC processing is based around the QAQC documentation that came out of QART
 I've implemented the algorithms in a set of python scripts.
 
 For data stored in a [http://code.google.com/p/xenia/wiki/XeniaPackageV2 Xenia] schema database, the  script will test observations to determine if they fall within defined limits. The script will then populate the qc_level and qc_flag columns in the multi_obs table.  Currently there are four tests run on an observation. The tests are listed in execution order, if one of them fails, the testing does not continue.
-  # Data Available Test checks to see if a data point is available for testing. 
-  # Sensor Range Test determines if the output of the sensor corresponds with its dynamic range. For example, if a sensor ouputs a "short int" the range would be 32765 to -32765. 
-  # Gross Range Test determines if the measured value is valid for the type of measurement being sampled with the sensor. For example, we are measuring Air Temperature and given the geographic location we expect the range to be from 0 to 100 Fahrenheit.
-  # Climatological Range Test is similar to the Gross Range Test, however it allows a finer granularity of the test ranges based on the start and end month. For example, even thought the Gross Range for our Air Temperature sensor is 0-100, we know that Jun-Aug the range is going to be 90-100. With this finer range control, we would be able to catch an errant reading that fell within the Gross Range and would normally be flagged as good data.
-  # Rate of Change/Time Continuity Test flags an observation if it deviates over a certain amount from the previous measurement. The algorithm was taken from the NDBC QAQC manual [http://www.ndbc.noaa.gov/realtime.pdf "Improved Real-Time Quality Control of NDBC
+  # *Data Available Test*
+  Checks to see if a data point is available for testing. 
+  # *Sensor Range Test*
+  Check if the output of the sensor corresponds with its dynamic range. For example, if a sensor ouputs a "short int" the range would be 32765 to -32765. 
+  # *Gross Range Test*
+  Check if the measured value is valid for the type of measurement being sampled with the sensor. For example, we are measuring Air Temperature and given the geographic location we expect the range to be from 0 to 100 Fahrenheit.
+  # *Climatological Range Test*
+  Similar to the Gross Range Test, however it allows a finer granularity of the test ranges based on the start and end month. For example, even thought the Gross Range for our Air Temperature sensor is 0-100, we know that Jun-Aug the range is going to be 90-100. With this finer range control, we would be able to catch an errant reading that fell within the Gross Range and would normally be flagged as good data.
+  # *Rate of Change/Time Continuity Test*
+  Flags an observation if it deviates over a certain amount from the previous measurement. The algorithm was taken from the NDBC QAQC manual [http://www.ndbc.noaa.gov/realtime.pdf "Improved Real-Time Quality Control of NDBC
 Measurements"].
-  # Nearest Neighbor check 
+  # *Nearest Neighbor Test*
+  This is currently under review and currently a failure of the test does not result in the data point being flagged as questionable. Each observation can be assigned a neighbor platform that has the same observation. The test retrieves the neighbor observation closest to the sample time of the observation we are testing. If the delta between the observation exceeds the standard deviation value, the test fails. 
+*NOTE* The wind direction test needs refinement since we can experience compass rollover. In other words a value of 350 is very close to 10 direction wise, however the delta is quite large and will fail the test.
 == Files ==
   === qaqcChecks.py ===
   This file is a wrapper script that has various command line parameters that control how/what QAQC is processed.
