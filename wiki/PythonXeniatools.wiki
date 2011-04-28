@@ -10,7 +10,7 @@ For brevity's sake "External Dependencies" are other Python packages I had to in
 
 
 == Files ==
-=== [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/rangeCheck.py rangeCheck.py] ===
+=== [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/rangeCheck.py rangeCheck.py] rangeCheck.py===
 This is the brains of our QAQC processing. It doesn't have a '__main__' function, it is just a container for the various classes used for doing the QAQC.
 [http://code.google.com/p/xenia/wiki/QAQCScripts#qaqcChecks.py qaqcChecks.py] is the wrapper script that kicks off testing.
 ==== External Dependencies ====
@@ -22,7 +22,7 @@ This is the brains of our QAQC processing. It doesn't have a '__main__' function
   * recursivedefaultdict from [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/xenia.py#9 xeniatools.xenia]
   * xmlConfigFile from [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/xmlConfigFile.py#10 xeniatools.xmlConfigFile]
   * smtpClass from [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/utils.py#17 xeniatools.utils]
-=== [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/xenia.py xenia.py] ===
+=== [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/xenia.py xenia.py] xenia.py===
 Basic Xenia database interface. This was the first Xenia database object I developed in Python before starting to use SQLAlchemy. This file houses some objects that are database specific, but not database connection specific. For instance the QAQC flags and units conversion functions.
 ==== External Dependencies ====
   * [http://trac.edgewall.org/wiki/PySqlite pysqlite2]
