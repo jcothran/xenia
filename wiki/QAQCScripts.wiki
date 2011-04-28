@@ -139,4 +139,4 @@ I've implemented the algorithms in a set of python scripts.
             * `<rangeLow>` the low climatological test range.
             * `<rangeHigh>` the high climatological test range.
 
-        * `<timeLagLimit>` tag sets the number of seconds deviation allowed from the current time of the system compared to the measurement time in the database before the data is flagged as lagging.
+        * `<notify>` Currently this section is not used.
