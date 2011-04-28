@@ -8,14 +8,14 @@ For brevity's sake "External Dependencies" are other Python packages I had to in
 
 
 == Files ==
-=== rangeCheck.py ===
+=== [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/rangeCheck.py rangeCheck.py] ===
 This is the brains of our QAQC processing. It doesn't have a '__main__' function, it is just a container for the various classes used for doing the QAQC.
 ==== External Dependencies ====
   * [http://www.sqlalchemy.org/ SQLAlchemy]
   * [http://lxml.de/ lxml] using the  object etree
 ==== Internal Dependencies ====
-  * qaqcTestFlags from xeniatools.xenia
-  * uomconversionFunctions from xeniatools.xenia
-  * recursivedefaultdict from xeniatools.xenia
-  * xmlConfigFile from xeniatools.xmlConfigFile
-  * smtpClass from xeniatools.utils
+  * qaqcTestFlags from [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/xenia.py xeniatools.xenia]
+  * uomconversionFunctions from [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/xenia.py xeniatools.xenia]
+  * recursivedefaultdict from [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/xenia.py xeniatools.xenia]
+  * xmlConfigFile from [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/xmlConfigFile.py xeniatools.xmlConfigFile]
+  * smtpClass from [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/utils.py xeniatools.utils]
