@@ -1,5 +1,9 @@
 #summary internal reference to server setup
 
+<wiki:toc max_depth="6" />
+
+= Server room = 
+
 Server names,IP's from the door entrance toward the back of the room.
 
 <hr />
@@ -33,6 +37,7 @@ Rack 2 (top to bottom)<br />
 torino(Charlton Galvarino - MWP project), old neptune(offline), nemo(offline)
 
 ----
+= Squid re-routing, server keywords = 
 
 squid mapping (on 129.252.139.124, /etc/squid/squid.conf)
 
