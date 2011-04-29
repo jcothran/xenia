@@ -91,6 +91,14 @@ being sampled with the sensor. For example, we are measuring Air Temperature and
   qcLimits defines the section where the information about where/how the qc limits are stored. Currently we only use a test_profiles xml file.
     * `<fileType>` - Specifies the type of file the limits are stored in. Currently only test_profiles is used.
     * `<file>` The fully qualified path to the xml file to use. 
+  * `<unitsCoversion>`
+  Start of the section dealing with units conversion.
+    * `<file>`
+    The fully qualified filepath to the XML file to use for the units conversion. 
+  * `<logging>`
+  Start of the section dealing with the logging system
+    * `<configFile>`
+    This is the fully qualified filepath to the configuration file for the Python logging.
 
   ==== test_profiles.xml ====
    The following is an example of a simple test_profiles.xml file which contains only one platform with one sensor for QC validation:
