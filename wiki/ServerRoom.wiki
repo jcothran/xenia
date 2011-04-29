@@ -31,3 +31,67 @@ Rack 2 (top to bottom)<br />
 <img src="http://xenia.googlecode.com/files/Img_2266.jpg" height="400" width="320" />
 
 torino(Charlton Galvarino - MWP project), old neptune(offline), nemo(offline)
+
+----
+
+squid mapping (on 129.252.139.124, /etc/squid/squid.conf)
+
+any changes run /etc/init.d/squid restart
+
+{{{
+
+cache_peer 129.252.139.139 parent 80 0 proxy-only name=mapServer
+cache_peer 129.252.139.144 parent 80 0 proxy-only name=cormp1Server
+cache_peer 129.252.139.71 parent 80 0 proxy-only name=xenia2vmServer
+cache_peer 129.252.139.124 parent 80 0 proxy-only name=squidServer
+cache_peer 129.252.37.88 parent 80 0 proxy-only name=nautilusServer
+cache_peer 129.252.139.80 parent 80 0 proxy-only name=drupalServer
+cache_peer 129.252.139.124 parent 80 0 proxy-only name=tridentServer
+
+
+##
+acl mapserv_url url_regex -i mapserv
+#acl arch_url url_regex -i http://129.252.139.178/xenia
+http_access allow mapserv_url
+cache_peer_access mapServer allow mapserv_url
+
+acl tilecache_url url_regex -i tilecache
+http_access allow tilecache_url
+cache_peer_access mapServer allow tilecache_url
+
+acl mapping_url url_regex -i mapping
+http_access allow mapping_url
+cache_peer_access mapServer allow mapping_url
+
+acl cormp1_url url_regex -i cormp1
+http_access allow cormp1_url
+cache_peer_access cormp1Server allow cormp1_url
+
+acl xenia2vm_url url_regex -i xenia2vm
+http_access allow xenia2vm_url
+cache_peer_access xenia2vmServer allow xenia2vm_url
+
+acl squid_url url_regex -i squid
+http_access allow squid_url
+cache_peer_access squidServer allow squid_url
+
+acl nautilus_url url_regex -i storm_surge_data/latest
+http_access allow nautilus_url
+cache_peer_access nautilusServer allow nautilus_url
+
+acl drupal_url url_regex -i drupal
+http_access allow drupal_url
+cache_peer_access drupalServer allow drupal_url
+
+##
+acl trident_url dstdomain 129.252.139.124
+http_access allow trident_url
+cache_peer_access tridentServer allow trident_url
+
+acl trident_url dstdomain trident.baruch.sc.edu
+http_access allow trident_url
+cache_peer_access tridentServer allow trident_url
+
+cache_peer_access tridentServer deny all
+
+}}}
