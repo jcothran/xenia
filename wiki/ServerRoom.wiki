@@ -39,6 +39,8 @@ torino(Charlton Galvarino - MWP project), old neptune(offline), nemo(offline)
 ----
 = Squid re-routing, server keywords = 
 
+requests routed through 129.252.139.124 use squid to subroute based on server keyword like http://129.252.139.124/mapping/...
+
 squid mapping (on 129.252.139.124, /etc/squid/squid.conf)
 
 any changes run /etc/init.d/squid restart
