@@ -38,3 +38,7 @@ SQLAlchemy interface for the Xenia database. The main tables are all defined her
 ==== External Dependencies ====
   * [http://www.sqlalchemy.org/ SQLAlchemy]
   * [http://www.geoalchemy.org/ GeoAlchemy]
+
+----
+=== [http://code.google.com/p/xenia/source/browse/trunk/python/xeniatools/utils.py utils.py] utils.py ===
+This file is meant to house utility classes. Currently the only object available is the smtpClass which enables us to send emails.
