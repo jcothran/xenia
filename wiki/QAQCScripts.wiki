@@ -28,7 +28,6 @@ being sampled with the sensor. For example, we are measuring Air Temperature and
   This file is a wrapper script that has various command line parameters that control how/what QAQC is processed.
   ==== Dependencies ====
   * [http://code.google.com/p/xenia/wiki/PythonXeniatools#rangeCheck.py rangeCheck.py]
-  This is the QAQC brains. File is in site-packages/xeniatools directory.
   ==== Command Line Parameters ====
   {{{
   -c, --XMLConfigFile The xml file containing the configuration information.
