@@ -1,3 +1,9 @@
+########################################################################
+#Revisions
+#Date: 5/2/2011
+#Function: createCSV
+#Changes: Added date test to ignore any observations whose date is older than 2 days.
+########################################################################
 import os
 import sys
 import time
@@ -11,12 +17,13 @@ class nerrsYSIData(ysiDataCollection):
   def formDBDate(self, date):
     try:      
       datetime = time.strptime(date, "%m/%d/%Y %I:%M %p")
+      #PUt back in GMT conversion as per Jay.
       #As per Jay's instruction, we leave the date/time in local time zone.
-      #datetime = time.mktime(datetime)
+      datetime = time.mktime(datetime)
       #Time is in CST since station is in MS, so we add an hour to make it EST.
-      #datetime += (60*60)
+      datetime += (60*60)
       #We are assuming the date is not in UTC, so we convert it.
-      #datetime = time.gmtime(datetime)
+      datetime = time.gmtime(datetime)
       dbDateTime = time.strftime("%Y-%m-%dT%H:%M", datetime)
       return(dbDateTime)
     
@@ -55,9 +62,14 @@ class nerrsYSIData(ysiDataCollection):
       for platform in platformKeys:       
         dateKeys = obsHash['platform'][platform]['date'].keys()
         #We want to sort the dates
-        dateKeys.sort(reverse=True)
+        #dateKeys.sort(reverse=True)
+        dateKeys.sort()
         for dateKey in dateKeys:      
           #Make nerrs specific date/time
+          dateTime = datetime.datetime.strptime(dateKey,"%Y-%m-%dT%H:%M")
+          dateDiff = datetime.datetime.now() - dateTime 
+          if(dateDiff.days > 2):
+            continue         
           dateTime = time.strptime(dateKey,"%Y-%m-%dT%H:%M")
           date = time.strftime("%m/%d/%Y", dateTime)
           timeVal = time.strftime("%H:%M:00", dateTime)
