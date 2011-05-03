@@ -7,7 +7,8 @@
 import os
 import sys
 import time
-sys.path.append("C:\\Documents and Settings\\dramage\\workspace\\PythonTest")
+import datetime
+#sys.path.append("C:\\Documents and Settings\\dramage\\workspace\\PythonTest")
 from getYSIData import ysiDataCollection
 
 class nerrsYSIData(ysiDataCollection):
@@ -69,6 +70,7 @@ class nerrsYSIData(ysiDataCollection):
           dateTime = datetime.datetime.strptime(dateKey,"%Y-%m-%dT%H:%M")
           dateDiff = datetime.datetime.now() - dateTime 
           if(dateDiff.days > 2):
+            print("Date: %s is older than 2 days, skipping." %(dateKey))
             continue         
           dateTime = time.strptime(dateKey,"%Y-%m-%dT%H:%M")
           date = time.strftime("%m/%d/%Y", dateTime)
