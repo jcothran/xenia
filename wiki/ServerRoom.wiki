@@ -49,7 +49,8 @@ any changes run /etc/init.d/squid restart
 
 cache_peer 129.252.139.139 parent 80 0 proxy-only name=mapServer
 cache_peer 129.252.139.144 parent 80 0 proxy-only name=cormp1Server
-cache_peer 129.252.139.71 parent 80 0 proxy-only name=xenia2vmServer
+#cache_peer 129.252.139.71 parent 80 0 proxy-only name=xenia2vmServer
+cache_peer 129.252.139.156 parent 80 0 proxy-only name=xenia2Server
 cache_peer 129.252.139.124 parent 80 0 proxy-only name=squidServer
 cache_peer 129.252.37.88 parent 80 0 proxy-only name=nautilusServer
 cache_peer 129.252.139.80 parent 80 0 proxy-only name=drupalServer
@@ -74,9 +75,9 @@ acl cormp1_url url_regex -i cormp1
 http_access allow cormp1_url
 cache_peer_access cormp1Server allow cormp1_url
 
-acl xenia2vm_url url_regex -i xenia2vm
-http_access allow xenia2vm_url
-cache_peer_access xenia2vmServer allow xenia2vm_url
+acl xenia2_url url_regex -i xenia2
+http_access allow xenia2_url
+cache_peer_access xenia2Server allow xenia2_url
 
 acl squid_url url_regex -i squid
 http_access allow squid_url
