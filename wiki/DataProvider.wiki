@@ -3,7 +3,7 @@
 
 = Model data = 
 
-The recommended method for sharing gridded model data is via a netCDF format, catalog enabled via [http://www.unidata.ucar.edu/projects/THREDDS/ THREDDS] and map visualization enabled vi ncWMS
+The recommended method for sharing gridded model data is via a netCDF format, catalog enabled via [http://www.unidata.ucar.edu/projects/THREDDS/ THREDDS] and map visualization enabled via [http://www.resc.rdg.ac.uk/trac/ncWMS/ ncWMS]
 
 Sample associated organization and model metadata and links, thumbnails are listed below(maximum number of characters in parenthesis) - one row for each data variable/layer
 
