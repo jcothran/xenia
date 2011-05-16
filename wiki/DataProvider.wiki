@@ -23,6 +23,7 @@ Similarly for data archives, we recommend archive agreements with [http://www.no
   * location id/name(s - short format(50 char)) - e.g. cap2,sebastian,niwolmet
     * location(s) longitude/latitude
     * preferred format for sending this link mapping data is as a CSV or shapefile
+  * notice as to observation types - water temperature,wind,etc
 
 = Simple In-situ data = 
 
@@ -37,6 +38,7 @@ Similarly for data archives, we recommend archive agreements with [http://www.no
   * Size and format of files to be shared and frequency of update
     * timestamp information should be included with each observation or set of observations
   * HTTP folder location from which to get the most recent files - this folder should only hold the past few days worth of files to prevent a large number of files being scanned - older files can be moved to an older or julian day/week or month/year dated sub-folders 
+  * notice as to observation types - water temperature,wind,etc
 
 = Imagery data = 
 
