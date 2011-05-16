@@ -7,9 +7,9 @@ We recommend coastal/ocean in-situ data providers that will have near real-time 
 
 Similarly for data archives, we recommend archive agreements with [http://www.nodc.noaa.gov/ NODC] for long-term data storage and sharing.
 
-= Placemark links =
+= Placemark links(URL'S) =
 
-  * notice as to nature of links are to
+  * notice as to nature of links(URL's) are to
     * near real-time(past 24 hours)
     * delayed-mode
     * archival data
@@ -22,6 +22,7 @@ Similarly for data archives, we recommend archive agreements with [http://www.no
     * (optional) - data disclaimer description(1000 char)
   * location id/name(s - short format(50 char)) - e.g. cap2,sebastian,niwolmet
     * location(s) longitude/latitude
+    * preferred format for sending this link mapping data is as a CSV or shapefile
 
 = Simple In-situ data = 
 
