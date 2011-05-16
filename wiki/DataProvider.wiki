@@ -1,7 +1,7 @@
 #summary notes for providing data to our systems
 <wiki:toc max_depth="6" />
 
-We can attempt to cross-display others links to data or data maps or observations within our system catalogs or displays as our personnel time, and server/storage capacity allow.  Internally we have focused mostly on near real-time observation data feeds, but can cross-reference other map points and displays as able.
+We can attempt to cross-display others links to data or data maps or observations within our system catalogs or displays as our personnel time, and server/storage capacity allow.  Internally in the past we have focused mostly on near real-time observation data feeds, but can cross-reference other map points and displays as able.
 
 We recommend coastal/ocean in-situ data providers that will have near real-time observations registering their wind and water ongoing to register their platforms with [http://www.ndbc.noaa.gov/ NDBC] - or let us know if they want us to proxy their data feed to NDBC for them.
 
