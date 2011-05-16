@@ -18,7 +18,7 @@ Similarly for data archives, we recommend archive agreements with [http://www.no
     * long name and short name - e.g. Florida Institute of Technology (long name) or FIT(short name)
     * URL link
     * (optional) - description(1000 char max)
-    * (optional) - data dessimination description(1000 char)
+    * (optional) - data dessimination/credit description(1000 char)
     * (optional) - data disclaimer description(1000 char)
   * location id/name(s - short format(50 char)) - e.g. cap2,sebastian,niwolmet
     * location(s) longitude/latitude
@@ -31,7 +31,7 @@ Similarly for data archives, we recommend archive agreements with [http://www.no
     * long name and short name - e.g. Florida Institute of Technology (long name) or FIT(short name)
     * URL link
     * (optional) - description(1000 char max)
-    * (optional) - data dessimination description(1000 char)
+    * (optional) - data dessimination/credit description(1000 char)
     * (optional) - data disclaimer description(1000 char)
   * platform id/name(s - short format(50 char)) - e.g. cap2,sebastian,niwolmet
     * platform(s) longitude/latitude
@@ -48,7 +48,7 @@ We do not permanently archive imagery data, but we can cross-display map imagery
     * long name and short name - e.g. Florida Institute of Technology (long name) or FIT(short name)
     * URL link
     * (optional) - description(1000 char max)
-    * (optional) - data dessimination description(1000 char)
+    * (optional) - data dessimination/credit description(1000 char)
     * (optional) - data disclaimer description(1000 char)
   * data/layer long name and short name - e.g. sea_surface_temperature (long name) or sst(short name)
   * data/layer description(1000 char)
