@@ -42,7 +42,7 @@ Similarly for data archives, we recommend archive agreements with [http://www.no
 
 = Imagery data = 
 
-We do not permanently archive imagery data, but we can cross-display map imagery for a limited time window and associated data/bandwidth size  
+We do not permanently archive imagery data, but we can cross-display map imagery for a limited time window and associated data/bandwidth size.  Imagery data is assumed to cover a simple longitude/latitude bounding box area with default projection of EPSG:4326
 
   * organization
     * long name and short name - e.g. Florida Institute of Technology (long name) or FIT(short name)
