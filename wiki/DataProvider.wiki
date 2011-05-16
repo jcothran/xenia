@@ -1,6 +1,60 @@
 #summary notes for providing data to our systems
 <wiki:toc max_depth="6" />
 
+We can attempt to cross-display others links to data or data maps or observations within our systems as our server and storage capacity allow.  Internally we have focused mostly on near real-time observation data feeds, but can cross-reference other map points and displays as able.
+
+We recommend coastal/ocean in-situ data providers that will have near real-time observations registering their wind and water ongoing to register their platforms with [http://www.ndbc.noaa.gov/ NDBC] - or let us know if they want us to proxy their data feed to NDBC for them.
+
+Similarly for data archives, we recommend archive agreements with [http://www.nodc.noaa.gov/ NODC] for long-term data storage and sharing.
+
+= Placemark links =
+
+  * notice as to nature of links are to
+    * near real-time(past 24 hours)
+    * delayed-mode
+    * archival data
+    * model data 
+  * organization
+    * long name and short name - e.g. Florida Institute of Technology (long name) or FIT(short name)
+    * URL link
+    * (optional) - description(1000 char max)
+    * (optional) - data dessimination description(1000 char)
+    * (optional) - data disclaimer description(1000 char)
+  * location id/name(s - short format(50 char)) - e.g. cap2,sebastian,niwolmet
+    * location(s) longitude/latitude
+
+= Simple In-situ data = 
+
+  * organization
+    * long name and short name - e.g. Florida Institute of Technology (long name) or FIT(short name)
+    * URL link
+    * (optional) - description(1000 char max)
+    * (optional) - data dessimination description(1000 char)
+    * (optional) - data disclaimer description(1000 char)
+  * platform id/name(s - short format(50 char)) - e.g. cap2,sebastian,niwolmet
+    * platform(s) longitude/latitude
+  * Size and format of files to be shared and frequency of update
+    * timestamp information should be included with each observation or set of observations
+  * HTTP folder location from which to get the most recent files - this folder should only hold the past few days worth of files to prevent a large number of files being scanned - older files can be moved to an older or julian day/week or month/year dated sub-folders 
+
+= Imagery data = 
+
+We do not permanently archive imagery data, but we can cross-display map imagery for a limited time window and associated data/bandwidth size  
+
+  * organization
+    * long name and short name - e.g. Florida Institute of Technology (long name) or FIT(short name)
+    * URL link
+    * (optional) - description(1000 char max)
+    * (optional) - data dessimination description(1000 char)
+    * (optional) - data disclaimer description(1000 char)
+  * data/layer long name and short name - e.g. sea_surface_temperature (long name) or sst(short name)
+  * data/layer description(1000 char)
+  * Size of files to be shared and frequency of update
+  * HTTP folder location from which to get the most recent files - this folder should only hold the past few days worth of files to prevent a large number of files being scanned - older files can be moved to an older or julian day/week or month/year dated sub-folders 
+  * image timestamp information(variablename_YYYY_MM_DD_HH_MM_SS.png) should be suffixed in the filename, suchas sst_2011_05_14_13_00_00.png
+  * metadata associated with the image should be available in a projection.txt file or sent via email - such as the lat/long bounding box for the image and associated projection if not default EPSG:4326
+  * legend information for the image should be provided in a separate legend.png file
+
 = Model data = 
 
 The recommended method for sharing gridded model data is via a netCDF format, catalog enabled via [http://www.unidata.ucar.edu/projects/THREDDS/ THREDDS] and map visualization enabled via [http://www.resc.rdg.ac.uk/trac/ncWMS/ ncWMS]
