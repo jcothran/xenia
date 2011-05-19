@@ -554,8 +554,10 @@ The database would return the timestamp which would then be appended to the laye
 === Remote Sensing Cache Reseed === 
 *Script*: rs_clean_reseed.sh<br/>
 *Directory*:  /home/xeniaprod/cron<br/>
-*Description*: Uses the tilecache scripts tilecache_clean.py and tilecache_seed.py to flush the tile cache then reseed the primary zoom level(the view a user first sees on the map). Tilecaching the remote sensing layers allows us to serve up the layers quicker than constantly hitting mapserver. 
+*Description*: Uses the tilecache scripts tilecache_clean.py and tilecache_seed.py to flush the tile cache then reseed the primary zoom level(the view a user first sees on the map). Tilecaching the remote sensing layers allows us to serve up the layers quicker than constantly hitting mapserver. <br/>
 NOTE: This jobs runs under the www-data cron tab since the incoming layer requests are handled by this users. Otherwise we'd run into file/directory permission issues. <br/>
+If the tilecache root directory is changed in the tilecache.cfg file, the directory for the clean and seed scripts would need to be changed in the shell script as well. Currently the root directory is: /usr2/data/xeniaprod/tmp/mapserver_tmp/tilecache/<br/>
+
 *Command line parameters*: None <br/>
 *Schedule*: 30 minutes after the hour. We could refine this by having the recaching done whenever we actually get new remote sensing layers.
 
@@ -565,5 +567,7 @@ NOTE: This jobs runs under the www-data cron tab since the incoming layer reques
 *Directory*:  /home/xeniaprod/cron<br/>
 *Description*: Uses the tilecache scripts tilecache_clean.py and tilecache_seed.py to flush the tile cache then reseed the primary zoom level(the view a user first sees on the map). Tilecaching the hourly observation visualization layers allows us to serve up the layers quicker than constantly hitting mapserver. 
 NOTE: This jobs runs under the www-data cron tab since the incoming layer requests are handled by this users. Otherwise we'd run into file/directory permission issues. <br/>
+If the tilecache root directory is changed in the tilecache.cfg file, the directory for the clean and seed scripts would need to be changed in the shell script as well. Currently the root directory is: /usr2/data/xeniaprod/tmp/mapserver_tmp/tilecache/<br/>
+
 *Command line parameters*: None <br/>
 *Schedule*: 10&50 minutes after the hour. 
