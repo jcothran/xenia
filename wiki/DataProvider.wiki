@@ -80,7 +80,7 @@ Sample associated organization and model metadata and links, thumbnails are list
 || url_details(1024) ||  ||
 || url_legend(1024) || http://omglnx1.meas.ncsu.edu/thredds/wms/fmrc/sabgom/SABGOM_Forecast_Model_Run_Collection_best.ncd?EXCEPTIONS=application/vnd.ogc.se_xml&FORMAT=image/gif&TRANSPARENT=true&VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&CRS=EPSG:4326&LAYER=temp ||
 || url_getdata(1024) || http://omglnx1.meas.ncsu.edu/thredds/catalog/fmrc/sabgom/catalog.html?dataset=fmrc/sabgom/SABGOM_Forecast_Model_Run_Collection_best.ncd ||
-|| wms_base(1024) || http://omglnx1.meas.ncsu.edu/thredds/catalog/fmrc/sabgom/catalog.html?dataset=fmrc/sabgom/SABGOM_Forecast_Model_Run_Collection_best.ncd || http://omglnx1.meas.ncsu.edu/thredds/wms/fmrc/sabgom/SABGOM_Forecast_Model_Run_Collection_best.ncd ||
+|| wms_base(1024) || http://omglnx1.meas.ncsu.edu/thredds/catalog/fmrc/sabgom/catalog.html?dataset=fmrc/sabgom/SABGOM_Forecast_Model_Run_Collection_best.ncd ||
 || wms_layers(1024) || temp ||
 
  
