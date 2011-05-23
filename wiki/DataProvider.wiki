@@ -7,6 +7,7 @@ We recommend coastal/ocean in-situ data providers that will have near real-time 
 
 Similarly for data archives, we recommend archive agreements with [http://www.nodc.noaa.gov/ NODC] for long-term data storage and sharing - or let us know if we should act as a proxy/forward for their data to NODC.
 
+----
 = Placemark links(URL'S) =
 
   * notice as to nature of links(URL's) are to
@@ -25,6 +26,7 @@ Similarly for data archives, we recommend archive agreements with [http://www.no
   * preferred format for sending this link mapping data is as a CSV or shapefile
   * notice as to observation types - water temperature,wind,etc
 
+----
 = Simple In-situ data = 
 
   * organization
@@ -40,6 +42,7 @@ Similarly for data archives, we recommend archive agreements with [http://www.no
   * HTTP folder location from which to get the most recent files - this folder should only hold the past few days worth of files to prevent a large number of files being scanned - older files can be moved to an older or julian day/week or month/year dated sub-folders 
   * notice as to observation types - water temperature,wind,etc
 
+----
 = Imagery data = 
 
 We do not permanently archive imagery data, but we can cross-display map imagery for a limited time window and associated data/bandwidth size.  Imagery data is assumed to cover a simple longitude/latitude bounding box area with default projection of EPSG:4326
@@ -58,6 +61,7 @@ We do not permanently archive imagery data, but we can cross-display map imagery
   * metadata associated with the image should be available in a projection.txt file or sent via email - such as the lat/long bounding box for the image and associated projection if not default EPSG:4326
   * legend information for the image should be provided in a separate legend.png file
 
+----
 = Model data = 
 
 The recommended method for sharing gridded model data is via a netCDF format, catalog enabled via [http://www.unidata.ucar.edu/projects/THREDDS/ THREDDS] and map visualization enabled via [http://www.resc.rdg.ac.uk/trac/ncWMS/ ncWMS]
