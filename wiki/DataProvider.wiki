@@ -68,11 +68,11 @@ The recommended method for sharing gridded model data is via a netCDF format, ca
 
 Sample associated organization and model metadata and links, thumbnails are listed below(maximum number of characters in parenthesis) - one row for each data variable/layer and can be seen in the model inventory webpage at http://secoora.org/models/
 
-|| field(max length) || example value ||
+|| *field(max length)* || *example value* ||
 || title(200) || SABGOM ||
 || institute(200) || North Carolina State University (NCSU) ||
-|| variable(200) || sea surface temperature ||
-|| variable_aliases(200) || water temperature temp ||
+|| variable(200) || sea_surface_temperature ||
+|| variable_aliases(200) || water_temperature temp ||
 || abstract(1000) || This quasi-operational model was implemented based on the Regional Ocean Modeling System (ROMS), a new community ocean circulation model that is in widespread use for estuarine, shelf, and coastal applications. ||
 || extent_geographic(200) || South Atlantic Bight, Gulf of Mexico ||
 || extent_temporal(200) || ||
