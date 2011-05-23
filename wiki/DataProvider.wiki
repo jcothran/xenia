@@ -64,5 +64,22 @@ The recommended method for sharing gridded model data is via a netCDF format, ca
 
 Sample associated organization and model metadata and links, thumbnails are listed below(maximum number of characters in parenthesis) - one row for each data variable/layer and can be seen in the model inventory webpage at http://secoora.org/models/
 
+|| field(max length) || example value ||
+|| title(200) || SABGOM ||
+|| institute(200) || North Carolina State University (NCSU) ||
+|| variable(200) || sea surface temperature ||
+|| variable_aliases(200) || water temperature temp ||
+|| abstract(1000) || This quasi-operational model was implemented based on the Regional Ocean Modeling System (ROMS), a new community ocean circulation model that is in widespread use for estuarine, shelf, and coastal applications. ||
+|| extent_geographic(200) || South Atlantic Bight, Gulf of Mexico ||
+|| extent_temporal(200) || NULL ||
+|| url_thumbnail(1024) || thumb/ncsu_sabgom/sea_surface_temperature.jpg ||
+|| url_details(1024) ||  ||
+|| url_legend(1024) || http://omglnx1.meas.ncsu.edu/thredds/wms/fmrc/sabgom/SABGOM_Forecast_Model_Run_Collection_best.ncd?EXCEPTIONS=application/vnd.ogc.se_xml&FORMAT=image/gif&TRANSPARENT=true&VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&CRS=EPSG:4326&LAYER=temp ||
+|| url_getdata(1024) || http://omglnx1.meas.ncsu.edu/thredds/catalog/fmrc/sabgom/catalog.html?dataset=fmrc/sabgom/SABGOM_Forecast_Model_Run_Collection_best.ncd ||
+|| wms_base(1024) || http://omglnx1.meas.ncsu.edu/thredds/catalog/fmrc/sabgom/catalog.html?dataset=fmrc/sabgom/SABGOM_Forecast_Model_Run_Collection_best.ncd || http://omglnx1.meas.ncsu.edu/thredds/wms/fmrc/sabgom/SABGOM_Forecast_Model_Run_Collection_best.ncd ||
+|| wms_layers(1024) || temp ||
+
+  
+
 || title(200) || institute(200) || variable(200) ||  variable_aliases(45) || abstract(1000) || extent_geographic(200) || extent_temporal(200) || url_thumbnail(1024) || url_details(1024) || url_legend(1024) || url_getdata(1024) || wms_base(1024) || wms_layers(1024) ||
 || SABGOM || North Carolina State University (NCSU) || sea surface temperature || water temperature temp || This quasi-operational model was implemented based on the Regional Ocean Modeling System (ROMS), a new community ocean circulation model that is in widespread use for estuarine, shelf, and coastal applications. || South Atlantic Bight, Gulf of Mexico || NULL || thumb/ncsu_sabgom/sea_surface_temperature.jpg || http://omglnx6.meas.ncsu.edu/sabgom_nfcast/ || http://omglnx1.meas.ncsu.edu/thredds/wms/fmrc/sabgom/SABGOM_Forecast_Model_Run_Collection_best.ncd?EXCEPTIONS=application/vnd.ogc.se_xml&FORMAT=image/gif&TRANSPARENT=true&VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&CRS=EPSG:4326&LAYER=temp || http://omglnx1.meas.ncsu.edu/thredds/catalog/fmrc/sabgom/catalog.html?dataset=fmrc/sabgom/SABGOM_Forecast_Model_Run_Collection_best.ncd || http://omglnx1.meas.ncsu.edu/thredds/wms/fmrc/sabgom/SABGOM_Forecast_Model_Run_Collection_best.ncd || temp ||      
