@@ -3,7 +3,7 @@
 
 We can attempt to cross-display others links to data or data maps or observations within our system catalogs or displays as our personnel time, and server/storage capacity allow.  Internally in the past we have focused mostly on near real-time observation data feeds, but can cross-reference other map points and displays as able.
 
-We recommend coastal/ocean in-situ data providers that will have near real-time observations registering their wind and water ongoing to register their platforms with [http://www.ndbc.noaa.gov/ NDBC] - or let us know if they want us to proxy/forward their data feed to NDBC for them.
+We recommend coastal/ocean in-situ data providers that will have near real-time observations registering their wind and water ongoing for a year or more to register their platforms with [http://www.ndbc.noaa.gov/ NDBC] - or let us know if they want us to proxy/forward their data feed to NDBC for them.
 
 Similarly for data archives, we recommend archive agreements with [http://www.nodc.noaa.gov/ NODC] for long-term data storage and sharing - or let us know if we should act as a proxy/forward for their data to NODC.
 
