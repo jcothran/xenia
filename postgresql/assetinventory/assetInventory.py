@@ -16,19 +16,22 @@ from xeniatools.xenia import uomconversionFunctions
 class assetInventory(object):
   def __init__(self, baseUrl=None):
     self.baseUrl = baseUrl
-    self.directoryObj = None
     return 
 
   def doRequest(self, query):
     data = None
     try:       
+      #The requests to the inventory are structure as follows:
+      #url/title/request type
+      #The title is defined in the inventory directory as the "title" field.
+      #The request type are the same(hopefully stay that way) as the "get" functions defined below.
       url = "%s/%s" % (self.baseUrl,query)
       request = urllib2.Request(url)
       response = urllib2.urlopen(request)
       data = response.read()
     
     except URLError, e:
-      #If there is a code member and it is 204, that means the page is blank.
+      #If there is a code member and it is 204, that means there was nothing for the server to return.
       if(hasattr(e, 'code') and e.code == 204):
         data = ""
       else:
@@ -38,14 +41,15 @@ class assetInventory(object):
     return(data)
     
   def getDirectory(self, url=None):
+    directory = None
     if(url != None):
       directoryUrl = url
     
     data = self.doRequest("directory")
     if(data != None):
-      self.directoryObj = eval(data)  
-      return(True)    
-    return(False)
+      directory = eval(data)  
+
+    return(directory)    
   
   def getLocationDescription(self, urlId):
     query = "%s/%s" %(urlId,self.getLocationDescription.__name__)
@@ -208,8 +212,11 @@ if __name__ == '__main__':
     outFile = open(options.resultsFile, "w")
     
     inventory = assetInventory(baseUrl=options.baseUrl)
-    inventory.getDirectory()
-    
+    directoryObjs = inventory.getDirectory()
+    if(directoryObs == None):
+      print("Did not receive a valid directory object, cannot continue.")
+      sys.exit(-1)
+      
     db = xeniaAlchemy()
     if(db.connectDB("postgresql+psycopg2", options.dbUser, options.dbPwd, options.dbHost, options.dbName, False) != True):
       print("Unable to connect to database. Host: %s DBName: %s" %(options.dbHost, options.dbName))
@@ -227,11 +234,20 @@ if __name__ == '__main__':
           status = ""
         responsible = inventory.getResponsibleMember(mooring['urlId'])
         if(responsible == None):
-          responsible = ""
-        outFile.write("%s|%s|%s|%s\n" %(mooring['title'],
+          responsible = ""          
+        lon = inventory.getLongitude(mooring['urlId'])
+        if(lon == None):
+          lon = ""
+        lat = inventory.getLatitude(mooring['urlId'])
+        if(lat == None):
+          lat = ""
+        
+        outFile.write("%s|%s|%s|%s|%s|%s\n" %(mooring['title'],
                                   type,
                                   status,
-                                  responsible))
+                                  responsible,
+                                  lon,
+                                  lat))
 
     outFile.write("\nPlatform Descriptions\n\n")
     for mooring in inventory.directoryObj:
