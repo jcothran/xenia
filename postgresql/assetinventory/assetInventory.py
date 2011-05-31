@@ -7,6 +7,8 @@ import urllib2
 from urllib2 import Request, urlopen, URLError, HTTPError
 import pickle
 import traceback
+from sqlalchemy import exc
+from sqlalchemy.orm.exc import *
 
 from xeniatools.xeniaSQLAlchemy import xeniaAlchemy, multi_obs, organization, platform, uom_type, obs_type, m_scalar_type, m_type, sensor 
 from xeniatools.xenia import uomconversionFunctions
@@ -25,6 +27,7 @@ class assetInventory(object):
       #url/title/request type
       #The title is defined in the inventory directory as the "title" field.
       #The request type are the same(hopefully stay that way) as the "get" functions defined below.
+      #An example is: http://inventory.secoora.org/platforms/capers-island-buoy-2/getLocationDescription
       url = "%s/%s" % (self.baseUrl,query)
       request = urllib2.Request(url)
       response = urllib2.urlopen(request)
@@ -213,7 +216,7 @@ if __name__ == '__main__':
     
     inventory = assetInventory(baseUrl=options.baseUrl)
     directoryObjs = inventory.getDirectory()
-    if(directoryObs == None):
+    if(directoryObjs == None):
       print("Did not receive a valid directory object, cannot continue.")
       sys.exit(-1)
       
@@ -224,7 +227,7 @@ if __name__ == '__main__':
     
     #First pass to log out platforms that aren't in our database.
     outFile.write("Platforms not in database.\n\n")
-    for mooring in inventory.directoryObj:
+    for mooring in directoryObjs:
       if(len(mooring['regionalId']) == 0):
         type = inventory.getPlatformType(mooring['urlId'])
         if(type == None):
@@ -241,16 +244,26 @@ if __name__ == '__main__':
         lat = inventory.getLatitude(mooring['urlId'])
         if(lat == None):
           lat = ""
-        
-        outFile.write("%s|%s|%s|%s|%s|%s\n" %(mooring['title'],
+        #Check to see if the agencyId is something we match on.
+        potentialPlatform = ""
+        if(len(mooring['agencyId'])):
+          try:
+            rec = db.session.query(platform).filter(platform.short_name == mooring['agencyId']).one()
+            potentialPlatform = rec.platform_handle
+          #Didn't find anything that matchched, so this most likely is not in the database
+          except NoResultFound, e:
+            potentialPlatform = ""
+        outFile.write("%s|%s|%s|%s|%s|%s|%s|%s\n" %(mooring['title'],
+                                  mooring['agencyId'],
                                   type,
                                   status,
                                   responsible,
                                   lon,
-                                  lat))
+                                  lat,
+                                  potentialPlatform))
 
     outFile.write("\nPlatform Descriptions\n\n")
-    for mooring in inventory.directoryObj:
+    for mooring in directoryObjs:
       if(len(mooring['regionalId']) != 0):
         inventory.getDeploymentEnd(mooring['urlId'])
         desc = inventory.getLocationDescription(mooring['urlId'])
