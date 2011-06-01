@@ -23,3 +23,15 @@ sensor_id=4644 and
 mo.d_report_hour=d_report_hour) 
 ORDER BY sensor_id ASC, d_report_hour ASC;
 }}}
+----
+= Auto Increment Field =
+If you need to set a field to be an autoincrement field after the table has been created, here are the steps:
+
+  # Create sequence table
+  CREATE SEQUENCE tablename_id_seq;
+  
+  #If a field does not already exist in the table we want to use the autoincrement field in, create it.
+  ALTER TABLE tablename_products ADD id INT UNIQUE;
+
+  # Now modify existing table we want to use the sequence table.
+  ALTER TABLE tablename ALTER COLUMN id SET DEFAULT NEXTVAL(‘tablename_id_seq’);
