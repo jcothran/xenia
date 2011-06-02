@@ -157,12 +157,14 @@ class platformMetaData(object):
           platform.short_name,platform.platform_handle,platform.fixed_longitude,platform.fixed_latitude,platform.active,platform.url,\
           platform.description as platform_desc,\
           platform.organization_id AS organization_id,\
+          platform_type.type_name AS platform_type,\
           organization.short_name as organization_short_name,\
           organization.url as organization_url\
           FROM platform\
           LEFT JOIN organization ON platform.organization_id = organization.row_id\
+          LEFT JOIN platform_type ON platform.type_id = platform_type.row_id\
           WHERE\
-            (platform.active>=1 AND platform.active <=3) AND\
+            platform.active <3 AND\
             Contains( GeomFromText( \'POLYGON((%s))\'), GeomFromText( 'POINT(' || fixed_longitude || ' ' || fixed_latitude ||')' ) )\
           ORDER BY platform_handle ASC;"\
           %(polygon)
@@ -185,11 +187,9 @@ class platformMetaData(object):
         property['orgName']     = row['organization_id']
         property['staURL']      = row['url']
         property['staTypeName'] = platformHandle[2]
-        icon = ''
-        if(platformHandle[2].lower() in self.iconMap != False):
-          icon = self.iconMap[platformHandle[2].lower()]
-        else:
-          icon = self.iconMap['default']
+        
+        icon = self.getPlatformIcon(row['platform_handle'], row['platform_type'])
+
         property['staTypeImage']= icon
         obsList = self.getObservationForPlatform(row['platform_handle'], obsLookup, uomLookup)
         property['staObs']=obsList
@@ -238,6 +238,38 @@ class platformMetaData(object):
     #platformMetadata['platforms'] = platformTypes
     #platformMetadata['platforms'] = featureCollection
     return(platformTypes, obsLookup, uomLookup, orgLookup)
+  
+  def getPlatformIcon(self, platformHandle, platformType):
+    iconId = None
+    platformHandle = platformHandle.split('.')
+    #Check to see if we have an override for the specific platform.
+    tag = "//platformSettings/platforms/platform[@id=\"%s.%s.%s\"]/icon" %(platformHandle[0],platformHandle[1],platformHandle[2])
+    icon = self.settingsFile.getEntry(tag)    
+    if(icon != None):
+      #Got an icon, now we need to find the integer ID for it.
+      for id in self.iconList:
+        if(self.iconList[id] == icon):
+          iconId = id
+          break
+    else:
+      #Check to see if we have wildcarded a group of platforms.
+      tag = "//platformSettings/platforms/platform[@id=\"%s.*.%s\"]/icon" %(platformHandle[0], platformHandle[2])
+      icon = self.settingsFile.getEntry(tag)    
+      if(icon != None):
+        #Got an icon, now we need to find the integer ID for it.
+        for id in self.iconList:
+          if(self.iconList[id] == icon):
+            iconId = id
+            break
+    #Don't have a platform specific icon, so we use the platformType to determine which one to use.      
+    if(iconId == None):
+      iconId = self.iconMap['default']
+      if(platformType != None):
+        platformType = platformType.lower()
+        if(platformType in self.iconMap != False):
+          iconId = self.iconMap[platformType]
+          
+    return(iconId)
   
   def getPlatformLinks(self, platformHandle, property):
     links = {}
