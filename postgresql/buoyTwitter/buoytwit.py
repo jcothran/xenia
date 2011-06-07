@@ -117,7 +117,9 @@ if __name__ == '__main__':
             continue
       
           dateOffset = "m_date >= date_trunc('hour',( SELECT timezone('UTC', now() - interval '6 hour') ) ) AND d_top_of_hour = 1 AND"
-                  
+          qcWhere =  "AND multi_obs.qc_level = %d"  % (qaqcTestFlags.DATA_QUAL_GOOD)
+          if(platform.find('ndbc') != -1):
+            qcWhere = ""
           sql= "SELECT m_date \
                 ,multi_obs.platform_handle \
                 ,obs_type.standard_name \
@@ -136,10 +138,11 @@ if __name__ == '__main__':
                 left join obs_type on obs_type.row_id=m_scalar_type.obs_type_id \
                 left join uom_type on uom_type.row_id=m_scalar_type.uom_type_id \
                 WHERE %s multi_obs.platform_handle = '%s' AND sensor.row_id IS NOT NULL \
-                AND multi_obs.qc_level = %d \
+                %s \
                 ORDER BY m_date DESC;" \
-                % (dateOffset,platform, qaqcTestFlags.DATA_QUAL_GOOD)
+                % (dateOffset,platform, qcWhere)
           cursor = db.executeQuery(sql)
+          print(sql)
           if( cursor != None ):
             tweet = ''
             desc = ''
