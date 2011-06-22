@@ -1,6 +1,12 @@
 #!/usr/bin/perl
 ###################################################################################
 #Revisions
+#Date: 2011/06/21
+#Author: DWR
+#Subroutine:get_nos_obs 
+#Changes: Changed sea_surface_temperature hash name to water_temperature to match what 
+# we have in the database.
+
 #Date: 2011/1/4
 #Author: DWR
 #Subroutine:get_nos_obs 
