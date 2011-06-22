@@ -575,7 +575,8 @@ sub get_nos_obs {
 
         # It's likely that a record already exists in the system hash.  So simply append to it . . .
         if (exists $latest_obs{$system_station}{$date}) {
-          $latest_obs{$system_station}{$date}{sea_surface_temperature} = $d{sea_surface_temperature};
+          #$latest_obs{$system_station}{$date}{sea_surface_temperature} = $d{sea_surface_temperature};
+          $latest_obs{$system_station}{$date}{water_temperature} = $d{sea_surface_temperature};
         }
         # . . . otherwise, add it to the hash.
         else {
