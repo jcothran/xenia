@@ -157,3 +157,6 @@ libc.so.6 => /lib/libc.so.6 (0x40662000)
 libcrypt.so.1 => /lib/libcrypt.so.1 (0x40796000)
 }}}
 This is where the LD_LIBRARY_FLAGS really comes into play. If there is an existing build of any of the needed shared libraries and I did not have your environment setup to point to the builds I made, the executable would search the default path and use what it found, if it found anything. This could be problematic if the library was not built with whatever features I needed.
+----
+==PostGis==
+To get our postgis data brought over onto the VMWare machine, I exported the data via pg_dump. After running into errors while importing, I noticed that the postgis functions it was trying to create was referencing a local directory, or trying to with a path like '$libdir/liblwgeom'. I did a global search in replace in the sql file to point to our target machine's fullpath to liblwgeom.
