@@ -1,5 +1,9 @@
 ########################################################################
 #Revisions
+#Date: 7/13/2011
+#Function: __init__
+#Changes: Added ini parameter //environment/debug/writeCSVDebugDataFile to allow a debug csv 
+# to be appended to for tracking down a data gap issue.
 #Date: 5/2/2011
 #Function: createCSV
 #Changes: Added date test to ignore any observations whose date is older than 2 days.
@@ -10,11 +14,20 @@ import time
 import datetime
 #sys.path.append("C:\\Documents and Settings\\dramage\\workspace\\PythonTest")
 from getYSIData import ysiDataCollection
+from xeniatools.xmlConfigFile import xmlConfigFile
 
 class nerrsYSIData(ysiDataCollection):
-  def __init__(self, xmlConfiFile):
-    ysiDataCollection.__init__(self,xmlConfiFile)
-
+  def __init__(self, xmlConfigFilename):
+    ysiDataCollection.__init__(self,xmlConfigFilename)
+    configSettings = xmlConfigFile(xmlConfigFilename)
+    #DWR 7/13/2011
+    #Added flag to write an appending data file per station to keep track of all the data we pull down.
+    self.writeCSVDebugDataFile = configSettings.getEntry("//environment/debug/writeCSVDebugDataFile")
+    if(self.writeCSVDebugDataFile != None):
+      self.writeCSVDebugDataFile = float(self.writeCSVDebugDataFile)
+    else:
+      self.writeCSVDebugDataFile = 0
+      
   def formDBDate(self, date):
     try:      
       datetime = time.strptime(date, "%m/%d/%Y %I:%M %p")
@@ -55,8 +68,15 @@ class nerrsYSIData(ysiDataCollection):
         swmpStation = "gndblwq"
         
       csvFile = open(csvFilename, "w")
+      debugCSVFile = None
+      if(self.writeCSVDebugDataFile):
+        debugCSVFile = open(csvFilename + ".debug", "a")
+        
       #Write the header line
       csvFile.write("Date,Time,Temp,SpCond,Sal,DO_pct,DO_mgl,Depth,pH,Turb,BVolt,SWMPStation\n")
+      
+      if(debugCSVFile != None):
+        debugCSVFile.write("Date,Time,Temp,SpCond,Sal,DO_pct,DO_mgl,Depth,pH,Turb,BVolt,SWMPStation\n")
       
       #Now let's run through the hash to build the CSV file.    
       platformKeys = obsHash['platform'].keys()
@@ -134,8 +154,24 @@ class nerrsYSIData(ysiDataCollection):
                          "%.2f," #turbidity
                          "%.2f," #battery_voltage
                          "%s\n"#swmpStation
+                        %(date,timeVal,waterTemp,water_conductivity,salinity,oxygen_concentration_percent,oxygen_concentration_mgL,depth,ph,turbidity,battery_voltage,swmpStation))
+          if(debugCSVFile != None):
+            debugCSVFile.write("%s,"  #date
+                         "%s," #timeVal
+                         "%.2f," #waterTemp
+                         "%.2f," #water_conductivity
+                         "%.2f," #salinity
+                         "%.2f," #oxygen_concentration_percent
+                         "%.2f," #oxygen_concentration_mgL
+                         "%.2f," #depth
+                         "%.2f," #ph
+                         "%.2f," #turbidity
+                         "%.2f," #battery_voltage
+                         "%s\n"#swmpStation
                         %(date,timeVal,waterTemp,water_conductivity,salinity,oxygen_concentration_percent,oxygen_concentration_mgL,depth,ph,turbidity,battery_voltage,swmpStation))    
       csvFile.close()
+      if(debugCSVFile != None):
+        debugCSVFile.close()
     except Exception, e:
       import sys
       import traceback
@@ -156,12 +192,5 @@ if __name__ == '__main__':
   except Exception, e:
     import sys
     import traceback
-    
-    info = sys.exc_info()        
-    excNfo = traceback.extract_tb(info[2], 1)
-    items = excNfo[0]
-    lastErrorFile = items[0]    
-    lastErrorLineNo = items[1]    
-    lastErrorFunc = items[2]        
-    print("%s Function: %s Line: %s File: %s" % (str(e), lastErrorFunc, lastErrorLineNo, lastErrorFile)) 
+    traceback.print_exc()
     sys.exit(- 1)
