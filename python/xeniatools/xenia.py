@@ -1,3 +1,11 @@
+"""
+Revisions
+Author: DWR
+Date: 2011-07-25
+Function: addMeasurement, addMeasurementWithMType
+Changes: Added the use of teh row_entry_date column. For code already using this function, if the rowEntryDate 
+parameter is not provided, one is created using the current localtime.
+"""
 import time
 from pysqlite2 import dbapi2 as sqlite3      
 import psycopg2
@@ -619,9 +627,13 @@ class xeniaDB:
   Function: addMeasurement
   Purpose: Adds a new entry into the multi_obs table.
   """
-  def addMeasurementWithMType(self, mTypeID, sensorID, platformHandle, date, lat, lon, z, mValues, sOrder=1, autoCommit=True ):
-    columns = "platform_handle,sensor_id,m_type_id,m_date,m_lat,m_lon,m_z"
-    values = "'%s',%d,%d,'%s',%f,%f,%f" % (platformHandle,sensorID,mTypeID,date,lat,lon,z)
+  def addMeasurementWithMType(self, mTypeID, sensorID, platformHandle, date, lat, lon, z, mValues, sOrder=1, autoCommit=True, rowEntryDate=None):
+    #DWR 2011-07-25
+    #Added the row_entry_date column. If no date was passed, we create it below to use a localtime.
+    columns = "platform_handle,sensor_id,m_type_id,m_date,m_lat,m_lon,m_z,row_entry_date"
+    if(rowEntryDate == None):
+      rowEntryDate = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+    values = "'%s',%d,%d,'%s',%f,%f,%f,'%s'" % (platformHandle,sensorID,mTypeID,date,lat,lon,z,rowEntryDate)
     #There are multiple m_value columns in multi_obs. The values parameter is a list whose index
     #represents the m_value column to be populated.
     valID = 1
@@ -640,7 +652,7 @@ class xeniaDB:
       return(True)
     return(False)
 
-  def addMeasurement(self, obsName, uom, platformHandle, date, lat, lon, z, mValues, sOrder=1, autoCommit=True ):
+  def addMeasurement(self, obsName, uom, platformHandle, date, lat, lon, z, mValues, sOrder=1, autoCommit=True, rowEntryDate=None ):
     sensorID = self.sensorExists(obsName, uom, platformHandle, sOrder)
     if(sensorID == -1 ):
       self.lastErrorMsg = "Unable to add measurement. Sensor: %s(%s) does not exist on platform: %s. No entry in sensor table." %(obsName,uom,platformHandle)
@@ -653,7 +665,7 @@ class xeniaDB:
       return(None) 
     elif(mTypeID == None):
       return(None)
-    return( self.addMeasurementWithMType( mTypeID, sensorID, platformHandle, date, lat, lon, z, mValues, sOrder, autoCommit ) )
+    return( self.addMeasurementWithMType( mTypeID, sensorID, platformHandle, date, lat, lon, z, mValues, sOrder, autoCommit,rowEntryDate) )
   
   def getPlatformInfo(self,platformHandle):
     id = self.platformExists(platformHandle)
@@ -672,6 +684,24 @@ class xeniaDB:
     return(None)
   def getObsDataForPlatform(self, platform, lastNHours = None ):                 
     return(None)
+
+  """
+  Function: compassDirToCardinalPt
+  Purpose: Given a 0-360 compass direction, this function will return the cardinal point for it.
+    Compass is broken into 8 points: N, NE, E, SE, S, SW, W, NW
+  Parameters:
+    compassDir is the compass direction to compute the cardinal point for.
+  """
+  def compassDirToCardinalPt(self, compassDir):
+    if(compassDir >= 0 and compassDir <= 360):
+      #Get the cardinal point. We use an 8 point system, N, NE, E, SE, S, SW, W, NW
+      #We have to "wrap" N since out valid compassDir values are 0-360. 
+      cardinalPts = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"]
+      degreeOffset = 360 / 8
+      cardPt = int(round(compassDir / degreeOffset, 0))
+      if(cardPt < 9):
+        return(cardinalPts[cardPt])
+    return(None)              
 
 class xeniaSQLite(xeniaDB):
   """
