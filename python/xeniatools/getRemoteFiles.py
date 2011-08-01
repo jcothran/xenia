@@ -1,3 +1,10 @@
+"""
+Revision: 
+Date: 2011-07-26
+Function: remoteFileDownload.__init__
+Changes: Added logger object reference. Throughout the code, whereever a print was used, a test is now used to see
+  if we have a valid logger object, if so that is used.
+"""
 #import sys
 from urllib2 import Request, urlopen, URLError, HTTPError
 import time
@@ -11,7 +18,7 @@ import optparse
 # can be further refined to see if the modification date has changed.
 ####################################################################################################################
 class remoteFileDownload:
-  def __init__ ( self, baseURL, destDir, fileMode='b', useFetchLog=False, fetchLogDir=None, log=False ):
+  def __init__ ( self, baseURL, destDir, fileMode='b', useFetchLog=False, fetchLogDir=None, log=False, logger=None ):
     self.baseURL = baseURL      #The base url we will be pulling the file(s) from.
     #Is the URL an HTTP or FTP? The "screen scraping" is different for each.
     self.httpAddy = True
@@ -24,6 +31,9 @@ class remoteFileDownload:
     self.strLastError = ''            #If an error occured, this string will contain it.
     self.useFetchLog = useFetchLog #1 to create a log file to keep track of what file(s) we have downloaded.
     self.fetchLogDir = fetchLogDir #Directory to store the fetch log files
+    
+    #DWR 2011-07-26
+    self.logger = logger
     
   def SetBaseURL(self, baseURL ):
     self.baseURL = baseURL      #The base url we will be pulling the file(s) from.
@@ -68,16 +78,25 @@ class remoteFileDownload:
         fileList.append(parts[-1])
     #handle errors
     except HTTPError, e:
-      self.strLastError = "ERROR::ftpCheckForNewFiles: %s %s" %(e.code, strUrl)
+      if(self.logger != None):
+        self.logger.exception(e)
+      else:
+        self.strLastError = "ERROR::ftpCheckForNewFiles: %s %s" %(e.code, strUrl)
       #print "HTTP Error:",e.code , strUrl
     except URLError, e:
-      self.strLastError = "ERROR::ftpCheckForNewFiles: %s %s" %(e.reason, strUrl)
+      if(self.logger != None):
+        self.logger.exception(e)
+      else:
+        self.strLastError = "ERROR::ftpCheckForNewFiles: %s %s" %(e.reason, strUrl)
       #print "URL Error:",e.reason , strUrl
     except Exception, e:  
-      self.strLastError = "ERROR::ftpCheckForNewFiles: %s" % (str(e))
+      if(self.logger != None):
+        self.logger.exception(e)
+      else:
+        self.strLastError = "ERROR::ftpCheckForNewFiles: %s" % (str(e))
       #print "Error:",e.reason
     
-    if( len(self.strLastError ) ):
+    if(len(self.strLastError ) and self.logger == None):
       self.logMsg( self.strLastError )
         
     return( fileList )
@@ -107,16 +126,25 @@ class remoteFileDownload:
      
     #handle errors
     except HTTPError, e:
-      self.strLastError = "ERROR::httpCheckForNewFiles: %s %s" %(e.code, strUrl)
+      if(self.logger != None):
+        self.logger.exception(e)
+      else:
+        self.strLastError = "ERROR::httpCheckForNewFiles: %s %s" %(e.code, strUrl)
       #print "HTTP Error:",e.code , strUrl
     except URLError, e:
-      self.strLastError = "ERROR::httpCheckForNewFiles: %s %s" %(e.reason, strUrl)
+      if(self.logger != None):
+        self.logger.exception(e)
+      else:
+        self.strLastError = "ERROR::httpCheckForNewFiles: %s %s" %(e.reason, strUrl)
       #print "URL Error:",e.reason , strUrl
     except Exception, e:  
-      self.strLastError = "ERROR::httpCheckForNewFiles: : %s" % (str(e))
+      if(self.logger != None):
+        self.logger.exception(e)
+      else:
+        self.strLastError = "ERROR::httpCheckForNewFiles: : %s" % (str(e))
       #print "Error:",e.reason
     
-    if( len(self.strLastError ) ):
+    if( len(self.strLastError ) and self.logger == None):
       self.logMsg( self.strLastError )
         
     return( fileList )
@@ -138,7 +166,10 @@ class remoteFileDownload:
       strFilePath = self.fetchLogDir + fileName
       fetchLog = open( strFilePath, 'w' )      
       fetchLog.write( ( "%d\n" % dateTime ) )
-      self.logMsg( "writeFetchLogFile::Creating fetchlog: %s Modtime: %d" % (strFilePath,dateTime) )
+      if(self.logger != None):
+        self.logger.debug("Creating fetchlog: %s Modtime: %d" %(strFilePath,dateTime))
+      else:
+        self.logMsg( "writeFetchLogFile::Creating fetchlog: %s Modtime: %d" % (strFilePath,dateTime) )
       return(1)
     except IOError, e:
       self.strLastError = str(e)
@@ -163,15 +194,20 @@ class remoteFileDownload:
       ModDate = LogFile.readline()     
       if( len(ModDate) ):
         ModDate = float( ModDate )
-
-      self.logMsg( "checkFetchLogFile::Fetchlog %s exists. Modtime: %d" % (strFilePath,ModDate) )
+      if(self.logger != None):
+        self.logger.debug("Fetchlog %s exists. Modtime: %d" % (strFilePath,ModDate))
+      else:
+        self.logMsg( "checkFetchLogFile::Fetchlog %s exists. Modtime: %d" % (strFilePath,ModDate) )
 
     except IOError, e:
       self.strLastError = str(e)
-      if( e.errno != 2 ):
-        self.logMsg( self.strLastError )
-      else:
-        self.logMsg( "checkFetchLogFile::Fetchlog: %s does not exist" % (strFilePath) )
+      if(self.logger != None):
+        self.logger.exception(e)
+      else:  
+        if( e.errno != 2 ):
+          self.logMsg( self.strLastError )
+        else:
+          self.logMsg( "checkFetchLogFile::Fetchlog: %s does not exist" % (strFilePath) )
 
     return(ModDate)
 
@@ -195,8 +231,11 @@ class remoteFileDownload:
   def getFile( self, remoteFileName, destFileName, compareModDate ):
     retVal = None
     try:    
-      self.logMsg( '-----------------------------------------------------------------' )
-      self.logMsg( 'getFile::Processing file: ' + remoteFileName + ' from URL: ' + self.baseURL )
+      if(self.logger != None):
+        self.logger.info("Processing file: %s from URL : %s" % (remoteFileName,self.baseURL))
+      else:
+        self.logMsg( '-----------------------------------------------------------------' )
+        self.logMsg( 'getFile::Processing file: ' + remoteFileName + ' from URL: ' + self.baseURL )
       
       url = self.baseURL + remoteFileName
       req = Request(url)   
@@ -235,7 +274,10 @@ class remoteFileDownload:
           if( ModDate <= logFileDate ):
             downloadFile = 0
           else:            
-            self.logMsg( ("getFile::File modification date is now: %.1f, previous mod date: %.1f" % (ModDate, logFileDate)) )
+            if(self.logger != None):
+              self.debug("File modification date is now: %.1f, previous mod date: %.1f" % (ModDate, logFileDate))
+            else:
+              self.logMsg( ("getFile::File modification date is now: %.1f, previous mod date: %.1f" % (ModDate, logFileDate)) )
             writeFetchLogFile = 1
             
         #Not comparing file mod dates, but need to see if we had grabbed that file already. 
@@ -252,7 +294,11 @@ class remoteFileDownload:
         strDestFilePath = self.destDir + remoteFileName
         if(destFileName):
           strDestFilePath = self.destDir + destFileName
-        self.logMsg( 'getFile::Downloading file: ' +  strDestFilePath )
+          
+        if(self.logger != None):
+          self.logger.debug("Downloading file: %s" %(strDestFilePath))
+        else:
+          self.logMsg( 'getFile::Downloading file: ' +  strDestFilePath )
         DestFile = open(strDestFilePath, "w" + self.fileMode)
         #Write to our local file
         DestFile.write(htmlFile.read())
@@ -261,20 +307,27 @@ class remoteFileDownload:
         
     #handle errors
     except HTTPError, e:
-      self.strLastError = "ERROR::getFile: %s %s" %(e.code, url)
-      #print "HTTP Error:",e.code , url
+      if(self.logger != None):
+        self.logger.exception(e)
+      else:
+        self.strLastError = "ERROR::getFile: %s %s" %(e.code, url)
     except URLError, e:
-      self.strLastError = "ERROR::getFile: %s %s" %(e.reason, url)
-      #print "URL Error:",e.reason , url
-    except Exception, E:  
-      self.strLastError = "ERROR::getFile::Error:",str(E)
-      #print "Error:",str(E)
+      if(self.logger != None):
+        self.logger.exception(e)
+      else:
+        self.strLastError = "ERROR::getFile: %s %s" %(e.reason, url)
+    except Exception, e:  
+      if(self.logger != None):
+        self.logger.exception(e)
+      else:
+        self.strLastError = "ERROR::getFile::Error: %s" %(str(e))
 
-    if( len(self.strLastError ) ):
+    if( len(self.strLastError ) and self.logger == None):
       self.logMsg( self.strLastError )
       self.strLastError = ""
-
-    self.logMsg( '-----------------------------------------------------------------' )
+    
+    if(self.logger == None):  
+      self.logMsg( '-----------------------------------------------------------------' )
     
     return(retVal)
     
@@ -298,20 +351,27 @@ class remoteFileDownload:
           DestFile.close()
           
       return( 1 )
+
     #handle errors
     except HTTPError, e:
-      print "HTTP Error:",e.code , url
-      return( -1 )
-    except URLError, e:
-      print "URL Error:",e.reason , url
-      return( -1 )
-    except Exception, E:  
-      print "Error:",str(E)
+      if(self.logger != None):
+        self.logger.exception(e)
+      else:
+        self.logMsg("ERROR::getFile: %s %s" %(e.code, url))
       return(-1)
-    
-    if( len( self.strLastError ) ):
-      self.logMsg( self.strLastError )
-    
+    except URLError, e:
+      if(self.logger != None):
+        self.logger.exception(e)
+      else:
+        self.logMsg("ERROR::getFile: %s %s" %(e.reason, url))
+      return(-1)
+    except Exception, e:  
+      if(self.logger != None):
+        self.logger.exception(e)
+      else:
+        self.logMsg("ERROR::getFile::Error: %s" % (str(e)))
+      return(-1)
+        
     return(0)
   ####################################################################################################################
   #Function: logMsg
@@ -319,7 +379,10 @@ class remoteFileDownload:
   ####################################################################################################################
   def logMsg(self, msg ):
     if( self.log ):
-      print( msg )
+      if(self.logger != None):
+        self.logger.debug(msg)
+      else:
+        print( msg )
       
       
 
