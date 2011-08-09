@@ -8,7 +8,7 @@ This page will contain some notes to various gotchas and setup parameters I've r
 = Details =
 
 == Database configuration ==
-[http://drupal.org/documentation/install/create-database Here] is the page on the Drupal site on the steps needed to get the database configured.
+[http://drupal.org/documentation/install/create-database Here] and [http://drupal.org/node/22675 here] are pages on the Drupal site on the steps needed to get the database configured.
 After doing this, I took a copy of the working SECOORA database and imported it using the following mysql command:
 {{{
 mysql -u <username> -p <databasename> < <sqlfilename>
