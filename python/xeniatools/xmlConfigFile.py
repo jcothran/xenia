@@ -1,3 +1,16 @@
+"""
+Revisions
+Date: 9/22/2011
+Author: DWR
+Function: xmlConfigFile.getEmailSettings
+Changes: Calls xmlConfigFile.getEmailSettingsEx
+
+Function: xmlConfigFile.getEmailSettingsEx
+Changes: toList is now an array instead of a comma string.
+
+Function: xmlConfigFile.getDatabaseSettings
+Changes: Calls getDatabaseSettingsEx now
+"""
 from lxml import etree
 
 
@@ -88,6 +101,7 @@ class xmlConfigFile(object):
        ['dbHost'] is the IP address of the host machine running the postgres instance.
   '''
   def getDatabaseSettings(self):
+    """
     settings = None    
     type = self.getEntry( '//environment/database/db/type' )
     if( type != None ):
@@ -106,6 +120,28 @@ class xmlConfigFile(object):
         settings['dbUser'] = self.getEntry( '//environment/database/db/user' )
         settings['dbPwd']  = self.getEntry( '//environment/database/db/pwd' )
         settings['dbHost'] = self.getEntry( '//environment/database/db/host' )
+    """   
+    return(self.getDatabaseSettingsEx())
+
+  def getDatabaseSettingsEx(self, tagPrefix='//environment/database/db/' ):
+    settings = None    
+    type = self.getEntry( tagPrefix + 'type' )
+    if( type != None ):
+      if( type == 'sqlite' ):
+        xmlVal = self.getEntry( tagPrefix + 'name' )
+        if( xmlVal != None ):
+          settings = {}
+          settings['type']  = 'sqlite'
+          settings['dbName'] = xmlVal
+        else:
+          return(None)
+      elif( type == 'postgres' ):
+        settings = {}
+        settings['type']   = 'postgres'
+        settings['dbName'] = self.getEntry( tagPrefix + 'name' )
+        settings['dbUser'] = self.getEntry( tagPrefix + 'user' )
+        settings['dbPwd']  = self.getEntry( tagPrefix + 'pwd' )
+        settings['dbHost'] = self.getEntry( tagPrefix + 'host' )
        
     return( settings )
   
@@ -131,17 +167,27 @@ class xmlConfigFile(object):
        ['toList'] comma delimited list of the recipients
   '''
   def getEmailSettings(self):
+    """
     settings = {}
     settings['server'] =  self.getEntry( '//environment/emailSettings/server' )
     settings['from'] = self.getEntry( '//environment/emailSettings/from' )
     settings['pwd']  = self.getEntry( '//environment/emailSettings/pwd' )
-    settings['emailList'] = ''
+    settings['toList'] = []
     emailAddys = ''
     recptList = self.getListHead("//environment/emailSettings/emailList")
     for child in self.getNextInList(recptList):
-      if(len(emailAddys)):
-        emailAddys += "," 
-      emailAddys += child.text
-    settings['toList'] = emailAddys
-    return( settings )
+      settings['toList'].append(child.text)
+    """
+    return(self.getEmailSettingsEx())
 
+  def getEmailSettingsEx(self, tagPrefix='//environment/emailSettings/'):
+    settings = {}
+    settings['server'] =  self.getEntry(tagPrefix + "/server")
+    settings['from'] = self.getEntry(tagPrefix + "/from")
+    settings['pwd']  = self.getEntry(tagPrefix + "/pwd")
+    settings['toList'] = []
+    emailAddys = ''
+    recptList = self.getListHead(tagPrefix + "/emailList")
+    for child in self.getNextInList(recptList):
+      settings['toList'].append(child.text)
+    return( settings )
