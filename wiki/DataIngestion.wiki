@@ -245,23 +245,23 @@ netcdf files. The files are pulled down then processed into the database. Delete
 *Schedule*: 45 minutes after the hour.
 ----
 
-=== FIT Processing ===
-*Script*: feed_fit.sh <br/>
+=== SCCF Processing ===
+*Script*: feed_sccf.sh <br/>
 *Directory*: /home/xeniaprod/cron <br/>
-*Description*: Shell script that pulls in data from the Sebastion Inlet station in Florida. <br/>
+*Description*: Shell script that pulls in data from  Sanibel-Captiva Conservation Foundation River,Estuary and Coastal Observing Network in Florida. <br/>
 *Shell Script Makeup* <br/>
-  _Script_: fit_to_obskml.pl <br/>
-  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/fit <br/>
+  _Script_: sccf_to_obskml.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/sccf <br/>
   _Command line parameters: <br/>
   {{{
   None
   Note: There are hardcoded paths and other settings that control where the data is retrieved and saved.
-  URL: my $url = 'http://my.fit.edu/coastal/DATA.HTM';
+  URL: my $url = 'http://recon.sccf.org/latest.kml';
   The text data is stored: "./latest.txt"
-  The obsKml is stored: "./fit.kml"
-  The kml file is then zipped and copied to: "/var/www/xenia/feeds/fit/fit_metadata_latest.kmz"
+  The obsKml is stored: "./sccf.kml"
+  The kml file is then zipped and copied to: "/var/www/xenia/feeds/sccf/sccf_metadata_latest.kmz"
   }}}
-  _Description_: Process the Fit data. <br/>
+  _Description_: Process the SCCF data. <br/>
 
   _Script_: obskml_to_xenia_postgresql.pl <br/>
   _Directory_: /home/xeniaprod/scripts/postgresql/import_export <br/>
@@ -279,6 +279,42 @@ netcdf files. The files are pulled down then processed into the database. Delete
   }}}
   _Description_: Takes the obsKML and writes it into the database. <br/>
 *Schedule*: Runs every quarter hour.
+----
+
+=== FLDEP Processing ===
+*Script*: feed_fldep.sh <br/>
+*Directory*: /home/xeniaprod/cron <br/>
+*Description*: Shell script that pulls in data from the Florida Department of Environmental Protection <br/>
+*Shell Script Makeup* <br/>
+  _Script_: fldep_to_obskml.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/fldep <br/>
+  _Command line parameters: <br/>
+  {{{
+  None
+  Note: There are hardcoded paths and other settings that control where the data is retrieved and saved.
+  URL: my $url = 'http://www.fldep-stevens.com/...';
+  The text data is stored: "./latest.txt"
+  The obsKml is stored: "./fldep.kml"
+  The kml file is then zipped and copied to: "/var/www/xenia/feeds/fldep/fldep_metadata_latest.kmz"
+  }}}
+  _Description_: Process the FLDEP data. <br/>
+
+  _Script_: obskml_to_xenia_postgresql.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/import_export <br/>
+  _Command_ line parameters: <br/>
+  {{{
+  Argument 1 - The URL to the KMZ file to process.
+  Argument 2 - Path where the SQL file will be written.
+  Argument 3 - Filename to use for the SQL file.
+  Argument 4 - Database name to connect to.
+
+  http://localhost/xenia/feeds/fldep/fldep_metadata_latest.kmz 
+  ""
+  "latest_in_situ" 
+  "xenia"
+  }}}
+  _Description_: Takes the obsKML and writes it into the database. <br/>
+*Schedule*: Runs every 20 minutes.
 ----
 
 
