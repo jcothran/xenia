@@ -57,6 +57,7 @@ sudo cpan -i "Date::Manip"
 sudo cpan -i "Date::Pcalc"
 }}}
 
+= crosstab query =
 {{{
 #postgresql crosstab function
 #as root
