@@ -183,6 +183,10 @@ ORDER BY sensor_id ASC, d_report_hour ASC;
 
 = crosstab query = 
 
+see also 
+http://www.postgresql.org/docs/9.1/static/tablefunc.html <br/>
+http://code.google.com/p/xenia/wiki/VMwareMod#crosstab_query
+
 Not sure how well this query performs or utilizes indexes, but need something like this for 'pivot' table type transforms of row values to column values.
 
 Can dynamically do a pre-query to lookup and substitute readable column header names like wind_speed,air_pressure,etc in the below final results query.
