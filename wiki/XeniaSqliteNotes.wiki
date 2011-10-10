@@ -193,7 +193,8 @@ Can dynamically do a pre-query to lookup and substitute readable column header n
 
 Can also dynamically substitute in the where clauses additional platform_handle,sensor_id,m_date or other key search parameters.
 
-sample query
+sample query for platform = carocoops.CAP2.buoy,wind_speed(1) and air_pressure(4) m_type_id's - note the select and as parameters should be equal in number of expected columns.
+
 {{{
 SELECT * FROM crosstab
 (
