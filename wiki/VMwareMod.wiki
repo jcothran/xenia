@@ -49,7 +49,23 @@ sudo cpan -i Geo::WeatherNWS    #Package for retrieving NWS data.
 sudo cpan -i SOAP::Lite
 
 sudo aptitude install squid squid-common
+}}}
 
+{{{
+#Vembu additional perl packages
+sudo cpan -i "Date::Manip"
+sudo cpan -i "Date::Pcalc"
+}}}
+
+{{{
+#postgresql crosstab function
+#as root
+apt-get install postgresql-contrib-8.3
+#as superuser postgres
+postgres@neptune:/var/www/xenia/pages/test$ psql -U postgres -d xenia -f /usr/share/postgresql/8.3/contrib/tablefunc.sql
+}}}
+
+{{{
 ######################################
 #ec2 ami command tools - begin
 #mainly interested in ec2-bundle-image for converting/uploading vmware image
