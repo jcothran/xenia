@@ -200,8 +200,8 @@ sample query for platform = carocoops.CAP2.buoy - wind_speed(4644) and air_press
 {{{
 SELECT * FROM crosstab
 (
-  'SELECT m_date,m_type_id,m_value from multi_obs where m_date >= ''2011-10-10'' and sensor_id in (4644,4648) ORDER BY 1',
-  'SELECT DISTINCT m_type_id FROM multi_obs where m_date >= ''2011-10-10'' and sensor_id in (4644,4648) ORDER BY 1'
+  'SELECT m_date,sensor_id,m_value from multi_obs where m_date >= ''2011-10-10'' and sensor_id in (4644,4648) ORDER BY 1',
+  'SELECT DISTINCT sensor_id FROM multi_obs where m_date >= ''2011-10-10'' and sensor_id in (4644,4648) ORDER BY 1'
 )
 AS
 (
