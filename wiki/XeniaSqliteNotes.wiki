@@ -191,7 +191,7 @@ Not sure how well this query performs or utilizes indexes, but need something li
 
 Can dynamically do a pre-query to lookup and substitute readable column header names like wind_speed,air_pressure,etc in the below final results query.
 
-Can also dynamically substitute in the where clauses additional platform_handle,sensor_id,m_date or other key search parameters.
+Can also dynamically substitute in the where clauses additional m_date,sensor_id or other key search parameters.
 
 sample query for platform = carocoops.CAP2.buoy,wind_speed(4644) and air_pressure(4648) m_type_id's
   * note the 'SELECT' and 'AS' parameters should be equal in number of expected columns.
