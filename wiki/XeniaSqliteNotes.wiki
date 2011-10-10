@@ -193,7 +193,7 @@ Can dynamically do a pre-query to lookup and substitute readable column header n
 
 Can also dynamically substitute in the where clauses additional m_date,sensor_id or other key search parameters.
 
-sample query for platform = carocoops.CAP2.buoy,wind_speed(4644) and air_pressure(4648) m_type_id's
+sample query for platform = carocoops.CAP2.buoy - wind_speed(4644) and air_pressure(4648) sensor_id's
   * note the 'SELECT' and 'AS' parameters should be equal in number of expected columns.
   * note the SELECT statements have been optimized to trigger the multi_obs index usage with m_date,sensor_id order and specifics - below query returned in < 100 ms.  Can run 'EXPLAIN ANALYZE' on overall and subqueries to gauge performance.
 
