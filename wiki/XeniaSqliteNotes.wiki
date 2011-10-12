@@ -228,7 +228,7 @@ sample output
  2011-10-09 11:00:00 |      11.6 |    1022.1
 }}}
 
-== segmenation fault: work-around ==
+== segmentation fault: work-around ==
 
 I ended up getting intermittent(hard to troubleshoot) segmentation faults in postgresql using the crosstab functionality and just ended up using the below perl transformation of the resultset to get the same type of crosstab output format.
 
