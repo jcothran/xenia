@@ -28,5 +28,3 @@ Here are some sample requests and responses. Note that all these examples are cu
 Our intent is to release the code, eventually, when we've cleaned it up and documented it just enough.
 
 I also intend to document conventions used (IOOS conventions), with links to where they're specified; when something seemed ambiguous, I'll try to describe the rationale behind decisions made.
-
--Emilio Mayorga
