@@ -11,7 +11,7 @@ Limitations of this SOS code are mainly related to GetObservation: only one proc
 
 Another current limitation has nothing to do with the code itself, but with the data store behind it: only the previous 30 days of data are available. 
 
-Here are some sample requests and responses. Explanations will be added later.
+Here are some sample requests and responses. Note that all these examples are currently based on multi-depth (profiling) platforms. Explanations will be added later.
 
   # *GetCapabilities*
     * Fully explicit request:  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&version=1.0.0&request=GetCapabilities]
