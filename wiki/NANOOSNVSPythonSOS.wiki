@@ -7,6 +7,10 @@ This is a temporary scratch pad for documenting the IOOS Python SOS server devel
 
 *_The new server is not official yet, but will be soon (by early Nov 2011). So, the information and data from these responses are intended for testing only!_*
 
+Limitations of this SOS code are mainly related to GetObservation: only one procedure (station) and one observationOffering (measured parameter) can be requested at a time; BBOX parameter is not implemented; the only "standard" data encoding response available is the IOOS CSV specification; vector observationOffering requests (eg, Winds) are not implemented.
+
+Another current limitation has nothing to do with the code itself, but with the data store behind it: only the previous 30 days of data are available. 
+
 Here are some sample requests and responses. Explanations will be added later.
 
   # *GetCapabilities*
