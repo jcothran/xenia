@@ -3,22 +3,22 @@
 
 = Python SOS for NANOOS NVS NRT in-situ Assets =
 
-This is a temporary scratch pad for documenting the IOOS Python SOS server developed recently by [http://nanoos.org NANOOS] (first by CMOP, then enhanced by APL-UW). Note that this code has no relationship at all to the [http://www.oostethys.org/downloads/sos-cookbook-python/pysos-version-0.1 older Python SOS server that was also developed by CMOP / NANOOS, around 2007/2008]. That code is basically orphaned, as far as we know.
+This is a temporary scratch pad for documenting the IOOS Python SOS server developed recently by [http://nanoos.org NANOOS] (first by CMOP, then enhanced by APL-UW). Note that this code has *no relationship at all* to the [http://www.oostethys.org/downloads/sos-cookbook-python/pysos-version-0.1 older Python SOS server that was also developed by CMOP / NANOOS, around 2007/2008]; That code is basically orphaned, as far as we know.
 
 The new server is not official yet, but will be soon (by early Nov 2011). 
 
 Here are some sample requests and responses. Explanations will be added later.
 
-  # GetCapabilities
+  # *GetCapabilities*
     * Fully explicit request:  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&version=1.0.0&request=GetCapabilities]
     * Minimalist version, with defaults:  [http://habu.apl.washington.edu/pyws/sos.py]
-  # DescribeSensor
-  * Fully explicit request:  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&version=1.0.0&request=DescribeSensor&procedure=urn:ioos:station:nanoos:ORCA_Hoodsport&outputFormat=text/xml;subtype="sensorML/1.0.1"]
-  * Minimalist version, with defaults and short names (not full urn's):  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&request=DescribeSensor&procedure=ORCA_Hoodsport]
-  # GetObservation
-  * Fully explicit request, for latest data:  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&version=1.0.0&request=GetObservation&offering=urn:ioos:station:nanoos:ORCA_Hoodsport&observedProperty=http://mmisw.org/ont/cf/parameter/sea_water_temperature&responseFormat=text/plain]
-  * Minimalist version, with defaults and short names (not full urn's):  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&request=GetObservation&offering=ORCA_Hoodsport&observedProperty=sea_water_temperature&responseFormat=text/plain]
-  * Another Minimalist request, but specifying a time interval:  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&request=GetObservation&offering=ORCA_Twanoh&observedProperty=mass_concentration_of_oxygen_in_sea_water&eventTime=2011-10-18T00:00Z/2011-10-20T23:00Z&responseFormat=text/plain]
+  # *DescribeSensor*
+    * Fully explicit request:  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&version=1.0.0&request=DescribeSensor&procedure=urn:ioos:station:nanoos:ORCA_Hoodsport&outputFormat=text/xml;subtype="sensorML/1.0.1"]
+    * Minimalist version, with defaults and short names (not full urn's):  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&request=DescribeSensor&procedure=ORCA_Hoodsport]
+  # *GetObservation*
+    * Fully explicit request, for latest data:  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&version=1.0.0&request=GetObservation&offering=urn:ioos:station:nanoos:ORCA_Hoodsport&observedProperty=http://mmisw.org/ont/cf/parameter/sea_water_temperature&responseFormat=text/plain]
+    * Minimalist version, with defaults and short names (not full urn's):  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&request=GetObservation&offering=ORCA_Hoodsport&observedProperty=sea_water_temperature&responseFormat=text/plain]
+    * Another Minimalist request, but specifying a time interval:  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&request=GetObservation&offering=ORCA_Twanoh&observedProperty=mass_concentration_of_oxygen_in_sea_water&eventTime=2011-10-18T00:00Z/2011-10-20T23:00Z&responseFormat=text/plain]
 
 Our intent is to release the code, eventually, when we've cleaned it up and documented it just enough.
 
