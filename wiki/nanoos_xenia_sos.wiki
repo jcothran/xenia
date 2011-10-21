@@ -1,4 +1,5 @@
 #summary NANOOS Xenia OOSTethys SOS Perl server
+#labels NANOOS,SOS,Xenia
 
 Page outline:
 
