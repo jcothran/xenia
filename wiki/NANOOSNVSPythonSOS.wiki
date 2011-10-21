@@ -12,10 +12,10 @@ Here are some sample requests and responses. Explanations will be added later.
   # *GetCapabilities*
     * Fully explicit request:  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&version=1.0.0&request=GetCapabilities]
     * Minimalist version, with defaults:  [http://habu.apl.washington.edu/pyws/sos.py]
+    * Request just the OperationsMetadata section of the GetCapabilities response:  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&request=GetCapabilities&sections=OperationsMetadata]
   # *DescribeSensor*
     * Fully explicit request:  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&version=1.0.0&request=DescribeSensor&procedure=urn:ioos:station:nanoos:ORCA_Hoodsport&outputFormat=text/xml;subtype="sensorML/1.0.1"]
     * Minimalist version, with defaults and short names (not full urn's):  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&request=DescribeSensor&procedure=ORCA_Hoodsport]
-    * Request just the OperationsMetadata section of the GetCapabilities response:  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&request=GetCapabilities&sections=OperationsMetadata]
   # *GetObservation*
     * Fully explicit request, for latest data:  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&version=1.0.0&request=GetObservation&offering=urn:ioos:station:nanoos:ORCA_Hoodsport&observedProperty=http://mmisw.org/ont/cf/parameter/sea_water_temperature&responseFormat=text/plain]
     * Minimalist version, with defaults and short names (not full urn's):  [http://habu.apl.washington.edu/pyws/sos.py?service=SOS&request=GetObservation&offering=ORCA_Hoodsport&observedProperty=sea_water_temperature&responseFormat=text/plain]
