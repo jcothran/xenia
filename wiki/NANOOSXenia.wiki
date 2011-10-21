@@ -1,4 +1,5 @@
 #summary NANOOS Xenia Implementation at APL-UW ("XAN")
+#labels NANOOS
 
 = NANOOS Xenia Implementation at APL-UW ("XAN") =
 
