@@ -5,7 +5,7 @@
 
 This is a temporary scratch pad for documenting the IOOS Python SOS server developed recently by [http://nanoos.org NANOOS] (first by CMOP, then enhanced by APL-UW). Note that this code has *no relationship at all* to the [http://www.oostethys.org/downloads/sos-cookbook-python/pysos-version-0.1 older Python SOS server that was also developed by CMOP / NANOOS, around 2007/2008]; That code is basically orphaned, as far as we know.
 
-The new server is not official yet, but will be soon (by early Nov 2011). 
+*_The new server is not official yet, but will be soon (by early Nov 2011). So, the information and data from these responses are intended for testing only!_*
 
 Here are some sample requests and responses. Explanations will be added later.
 
