@@ -465,6 +465,11 @@ json_callback({
 ----
 = instrumentation case examples =
 
+  * Geometry z coordinate is relative to mean sea level(MSL) with height(+) or depth(-) in meters.
+  * The ordering of effected list arguments is in time increasing order(oldest first, latest last) allowing picking off the latest value be grabbing the last associated set of time/values off the list.
+  * ? Stationary platforms would use GeoJSON 'Point' type and mobile platforms would use 'MultiPoint' type. MultiPoint coordinates are paired with listed time values.
+  * ? sensorId(or just id) is optional but would provide a means of association for related time-series or sensor metadata.
+
 == stationary platform ==
 
 {{{
@@ -498,4 +503,38 @@ json_callback({
 
 == stationary profiler ==
 
+e.g. a temperature,current,etec profiler looking up or down a water column
+
+{{{
+json_callback({
+"type": "FeatureCollection",
+    "stationId": "urn:x-noaa:def:station:ndbc::41012",
+    "features": [        {"type": "Feature",
+            "geometry": {
+                "type": "MultiPoint",
+                "coordinates": [[-80.5,30,-1],[-80.5,30,-1],[-80.5,30,-1],[-80.5,30,-1],[-80.5,30,-1],[-80.5,30,-1]] 
+            },
+         "properties": {
+            "obsType": "water_temperature",
+            "uomType": "celsius",
+            "time": ["2009-04-28T18:50:00Z","2009-04-28T19:50:00Z","2009-04-28T20:50:00Z","2009-04-28T21:50:00Z","2009-04-28T22:50:00Z","2009-04-28T23:50:00Z"],
+            "value": ["23","23.2","23","23","23","22.9"]
+        }},
+        {"type": "Feature",
+            "geometry": {
+                "type": "MultiPoint",
+                "coordinates": [[-80.5,30,-2],[-80.5,30,-2],[-80.5,30,-2],[-80.5,30,-2],[-80.5,30,-2],[-80.5,30,-2]] 
+            },
+         "properties": {
+            "obsType": "water_temperature",
+            "uomType": "celsius",
+            "time": ["2009-04-28T18:50:00Z","2009-04-28T19:50:00Z","2009-04-28T20:50:00Z","2009-04-28T21:50:00Z","2009-04-28T22:50:00Z","2009-04-28T23:50:00Z"],
+            "value": ["23","23.2","23","23","23","22.9"]
+        }},
+...
+}}} 
+
+
 == glider ==
+
+e.g. measuring different obs on a freely moving platform
