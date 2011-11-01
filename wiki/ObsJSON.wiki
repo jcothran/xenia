@@ -468,53 +468,70 @@ json_callback({
   * Geometry z coordinate is relative to mean sea level(MSL) with height(+) or depth(-) in meters.
   * The ordering of effected list arguments is in time increasing order(oldest first, latest last) allowing picking off the latest value be grabbing the last associated set of time/values off the list.
   * ? Stationary platforms would use GeoJSON 'Point' type and mobile platforms would use 'MultiPoint' type. MultiPoint coordinates are paired with listed time values.
-  * ? sensorId(or just id) is optional but would provide a means of association for related time-series or sensor metadata.
+  * ? sOrder(sensor order) is optional but would provide a means of distinguishing between redundant sensors with primary, secondary, etc level of importance. sOrder integer increases with direction away from MSL.
 
 == stationary platform ==
+
+The below example shows an air_pressure and two air_temperature readings(a primary sensor and redundant secondary sensor - differing by z-coordinate and sOrder)
 
 {{{
 json_callback({
 "type": "FeatureCollection",
-    "stationId": "urn:x-noaa:def:station:ndbc::41012",
+    "id": "urn:x-noaa:def:station:ndbc::41012",
     "features": [        {"type": "Feature",
             "geometry": {
-                "type": "MultiPoint",
-                "coordinates": [[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0],[-80.5,30,0]] 
+                "type": "Point",
+                "coordinates": [-80.5,30,0] 
             },
          "properties": {
+            "sOrder": "1",
             "obsType": "air_pressure",
             "uomType": "mb",
-            "time": ["2009-04-28T18:50:00Z","2009-04-28T19:50:00Z","2009-04-28T20:50:00Z","2009-04-28T21:50:00Z","2009-04-28T22:50:00Z","2009-04-28T23:50:00Z","2009-04-29T00:50:00Z","2009-04-29T01:50:00Z","2009-04-29T02:50:00Z","2009-04-29T03:50:00Z","2009-04-29T04:50:00Z","2009-04-29T05:50:00Z","2009-04-29T06:50:00Z","2009-04-29T07:50:00Z","2009-04-29T08:50:00Z","2009-04-29T09:50:00Z","2009-04-29T10:50:00Z","2009-04-29T11:50:00Z","2009-04-29T12:50:00Z","2009-04-29T13:50:00Z","2009-04-29T14:50:00Z","2009-04-29T15:50:00Z","2009-04-29T16:50:00Z"],
-            "value": ["1027.3","1026.5","1026","1025.9","1025.5","1025.3","1025.7","1025.6","1025.9","1026","1025.8","1025.7","1025","1024.6","1024.5","1024.9","1025.4","1025.9","1026.3","1026.3","1026.6","1026.2","1025.7"]
+            "time": ["2009-04-28T18:50:00Z","2009-04-28T19:50:00Z","2009-04-28T20:50:00Z","2009-04-28T21:50:00Z","2009-04-28T22:50:00Z","2009-04-28T23:50:00Z"],
+            "value": ["1027.3","1026.5","1026","1025.9","1025.5","1025.3"]
         }},
         {"type": "Feature",
             "geometry": {
-                "type": "MultiPoint",
-                "coordinates": [[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4],[-80.5,30,4]] 
+                "type": "Point",
+                "coordinates": [-80.5,30,4] 
             },
          "properties": {
+            "sOrder": "1",
             "obsType": "air_temperature",
             "uomType": "celsius",
-            "time": ["2009-04-28T18:50:00Z","2009-04-28T19:50:00Z","2009-04-28T20:50:00Z","2009-04-28T21:50:00Z","2009-04-28T22:50:00Z","2009-04-28T23:50:00Z","2009-04-29T00:50:00Z","2009-04-29T01:50:00Z","2009-04-29T02:50:00Z","2009-04-29T03:50:00Z","2009-04-29T04:50:00Z","2009-04-29T05:50:00Z","2009-04-29T06:50:00Z","2009-04-29T07:50:00Z","2009-04-29T08:50:00Z","2009-04-29T09:50:00Z","2009-04-29T10:50:00Z","2009-04-29T11:50:00Z","2009-04-29T12:50:00Z","2009-04-29T13:50:00Z","2009-04-29T14:50:00Z","2009-04-29T15:50:00Z","2009-04-29T16:50:00Z"],
-            "value": ["23","23.2","23","23","23","22.9","22.9","22.8","22.8","22.8","22.7","22.7","22.4","22.4","22.2","22.2","22.1","22.2","22.6","22.4","22.7","23","23"]
+            "time": ["2009-04-28T18:50:00Z","2009-04-28T19:50:00Z","2009-04-28T20:50:00Z","2009-04-28T21:50:00Z","2009-04-28T22:50:00Z","2009-04-28T23:50:00Z"],
+            "value": ["23","23.2","23","23","23","22.9"]
+        }},
+        {"type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [-80.5,30,6] 
+            },
+         "properties": {
+            "sOrder": "2",
+            "obsType": "air_temperature",
+            "uomType": "celsius",
+            "time": ["2009-04-28T18:50:00Z","2009-04-28T19:50:00Z","2009-04-28T20:50:00Z","2009-04-28T21:50:00Z","2009-04-28T22:50:00Z","2009-04-28T23:50:00Z"],
+            "value": ["23","23.2","23","23","23","22.9"]
         }},
 ...
 }}} 
 
 == stationary profiler ==
 
-e.g. a temperature,current,etec profiler looking up or down a water column
+e.g. a temperature,current,etec profiler looking up or down a water column - this is basically the same format as a stationary platform, just the same observation type listed and distinguished by z-coordinate elevation and sOrder.
 
 {{{
 json_callback({
 "type": "FeatureCollection",
-    "stationId": "urn:x-noaa:def:station:ndbc::41012",
+    "id": "urn:x-noaa:def:station:ndbc::41012",
     "features": [        {"type": "Feature",
             "geometry": {
-                "type": "MultiPoint",
-                "coordinates": [[-80.5,30,-1],[-80.5,30,-1],[-80.5,30,-1],[-80.5,30,-1],[-80.5,30,-1],[-80.5,30,-1]] 
+                "type": "Point",
+                "coordinates": [-80.5,30,-1] 
             },
          "properties": {
+            "sOrder": "1",
             "obsType": "water_temperature",
             "uomType": "celsius",
             "time": ["2009-04-28T18:50:00Z","2009-04-28T19:50:00Z","2009-04-28T20:50:00Z","2009-04-28T21:50:00Z","2009-04-28T22:50:00Z","2009-04-28T23:50:00Z"],
@@ -522,10 +539,11 @@ json_callback({
         }},
         {"type": "Feature",
             "geometry": {
-                "type": "MultiPoint",
-                "coordinates": [[-80.5,30,-2],[-80.5,30,-2],[-80.5,30,-2],[-80.5,30,-2],[-80.5,30,-2],[-80.5,30,-2]] 
+                "type": "Point",
+                "coordinates": [-80.5,30,-2] 
             },
          "properties": {
+            "sOrder": "2",
             "obsType": "water_temperature",
             "uomType": "celsius",
             "time": ["2009-04-28T18:50:00Z","2009-04-28T19:50:00Z","2009-04-28T20:50:00Z","2009-04-28T21:50:00Z","2009-04-28T22:50:00Z","2009-04-28T23:50:00Z"],
