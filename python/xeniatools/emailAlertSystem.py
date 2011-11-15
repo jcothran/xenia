@@ -1,3 +1,11 @@
+"""
+Revisions
+Author: DWR
+Date: 2011-11-15
+Functions: emailAlerts.createEmailMsg and emailAlerts.createEmailMsg
+Changes: Replaced the database observation and units of measure names with more display friendly version from
+the units conversion file.
+"""
 import sys
 import os
 import stat
@@ -228,7 +236,7 @@ class emailAlerts:
     
     alertsDBFile = configSettings.getEntry("//environment/database/alertsDB/name")   
     xeniaDBSettings = configSettings.getDatabaseSettings()
-    conversionXMLFile = configSettings.getEntry("//environment/unitsCoversion/file")
+    conversionXMLFile = configSettings.getEntry("//environment/unitsConversion/file")
     
     self.unsubURL = configSettings.getEntry("//environment/unsubscribeURL")
     self.georssURL = configSettings.getEntry("//environment/geoRSSURL")
@@ -358,7 +366,7 @@ class emailAlerts:
     except Exception, E:
       self.logger.error( str(E) )
       #print( str(E) )
-      return(False)
+    return(False)
     
   def checkForAlerts(self):
     emailAlertGroups = recursivedefaultdict()
@@ -475,8 +483,23 @@ class emailAlerts:
                     #sendAlert = False
                     break
                   else:
-                    obsAlertMsg += "<li><b>Observation:</b> %s: %4.1f %s(Limit(%s): %4.1f %s)</li>" % ( row['standard_name'],val,uom,emailAlert.operator, emailAlert.limit,uom)
-                    self.logger.debug( "Alert: <li><b>Observation:</b> %s: %4.1f %s(Limit: %4.1f %s)</li>" % ( row['standard_name'],val,uom,emailAlert.limit,uom) ) 
+                    #DWR 2011-11-15
+                    #Use the display names to clean up the email.
+                    displayLabel = self.uomConverter.getDisplayObservationName(row['standard_name'])
+                    if(displayLabel == None):
+                      displayLabel = row['standard_name']
+                    #DWR 2011-11-15
+                    #Use the display unit of measurement to clean up the email.
+                    imperialUOM = self.uomConverter.getConversionUnits( row['uom'], 'en' )
+                    if(imperialUOM == None or len(imperialUOM) == 0):
+                      displayUOM = row['uom']
+                    else:
+                      displayUOM = self.uomConverter.getUnits( row['uom'], imperialUOM )          
+                      if(displayUOM == None):
+                        displayUOM = imperialUOM              
+                    
+                    obsAlertMsg += "<li><b>Observation:</b> %s: %4.1f %s(Limit(%s): %4.1f %s)</li>" % ( displayLabel,val,displayUOM,emailAlert.operator, emailAlert.limit,uom)
+                    self.logger.debug( "Alert: <li><b>Observation:</b> %s: %4.1f %s(Limit: %4.1f %s)</li>" % ( displayLabel,val,displayUOM,emailAlert.limit,uom) ) 
                     #If the group is marked as single, this means it is a standalone alert.                   
                     if( group == 'single' ):
                       sendAlert = False
@@ -518,8 +541,10 @@ class emailAlerts:
     msg.alertObsList = obsAlertMsg;
     #Build the unsubscribe link.
     msg.unsubscribe = self.unsubURL
+    #Add the operation type
+    msg.unsubscribe += 'operation=unsubscribe'
     #Replace the email tag placeholder with the email addy.
-    msg.unsubscribe += "EMAIL=%s" % (emailAddy)
+    msg.unsubscribe += "&EMAIL=%s" % (emailAddy)
     #Now figure out if the email alert was for a group of conditions, or a single.
     if( emailAlert.grpID != None ):
       msg.unsubscribe += '&GRPID=%d' % (emailAlert.grpID)
@@ -574,9 +599,24 @@ class emailAlerts:
         val = self.uomConverter.measurementConvert( float(row['m_value']), row['uom'], uom )              
         if( val == None ):
           val = float(row['m_value'])
-        
-        msg.obsList += "<li>%s: %4.1f %s</li>" % ( row['standard_name'],val,uom )
-        self.logger.debug( "<li>%s: %4.1f %s</li>" % ( row['standard_name'],val,uom ) )
+
+        #DWR 2011-11-15
+        #Use the display names to clean up the email.
+        displayLabel = self.uomConverter.getDisplayObservationName(row['standard_name'])
+        if(displayLabel == None):
+          displayLabel = row['standard_name']
+        #DWR 2011-11-15
+        #Use the display unit of measurement to clean up the email.
+        imperialUOM = self.uomConverter.getConversionUnits( row['uom'], 'en' )
+        if(imperialUOM == None or len(imperialUOM) == 0):
+          displayUOM = row['uom']
+        else:
+          displayUOM = self.uomConverter.getUnits( row['uom'], imperialUOM )          
+          if(displayUOM == None):
+            displayUOM = imperialUOM              
+                  
+        msg.obsList += "<li>%s: %4.1f %s</li>" % ( displayLabel, val, displayUOM )
+        self.logger.debug( "<li>%s: %4.1f %s</li>" % ( displayLabel, val, displayUOM ) )
                           
     #Get platform URL
     sql = "SELECT url\
@@ -667,12 +707,12 @@ class emailAlerts:
       except Exception, E:
         self.logger.error( str(E) )
         sys.exit(-1)
-  def unsubscribeAlert(self, unsubscribeParams):
-    paramList = unsubscribeParams.split(',')
-    paramDict = {}
-    for param in paramList:
-      params = param.split("=")
-      paramDict[params[0]]=params[1]
+  def unsubscribeAlert(self, paramDict):
+    #paramList = unsubscribeParams.split(',')
+    #paramDict = {}
+    #for param in unsubscribeParams:
+    #  params = param.split("=")
+    #  paramDict[params[0]]=params[1]
     
     email = None
     if( ( 'EMAIL' in paramDict ) == True ):
@@ -695,6 +735,7 @@ class emailAlerts:
     return( self.alertsDB.unsubscribe(email, platform, obsID, grpID) )
         
 if __name__ == '__main__':
+  logger = None
   try:
     parser = optparse.OptionParser()
     parser.add_option("-c", "--XMLConfigFile", dest="xmlConfigFile",
