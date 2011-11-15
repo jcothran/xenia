@@ -5,6 +5,9 @@ Date: 2011-11-15
 Functions: emailAlerts.createEmailMsg and emailAlerts.createEmailMsg
 Changes: Replaced the database observation and units of measure names with more display friendly version from
 the units conversion file.
+
+Function: __main__
+Changes: Added use of logging config file.
 """
 import sys
 import os
@@ -22,6 +25,7 @@ from xeniatools.xenia import dbTypes
 from xeniatools.xmlConfigFile import xmlConfigFile
 
 import logging
+import logging.config
 import logging.handlers
 
 class GroupWriteRotatingFileHandler(logging.handlers.RotatingFileHandler):
@@ -758,16 +762,20 @@ if __name__ == '__main__':
   
     configSettings = xmlConfigFile( options.xmlConfigFile )
     
-  
-    logFile = configSettings.getEntry("//environment/logging/logFilename")
-    
+    #2011-11-15 DWR
+    #Use python logging config file.
+    #logFile = configSettings.getEntry("//environment/logging/logFilename")
+    logFile = configSettings.getEntry("//environment/logging/configFile")        
+    logging.config.fileConfig(logFile)
+    logger = logging.getLogger("emailalert_logger")
+
+    """
     backupCount = configSettings.getEntry("//environment/logging/backupCount")
     maxBytes = configSettings.getEntry("//environment/logging/maxBytes")
     logFileExists = True
     #If the log file does not exist, we want to make sure when we create it to give everyone write access to it.
     if(os.path.isfile(logFile) != True):
       logFileExists = False
-
     logger = logging.getLogger("emailalert_logger")
     logger.setLevel(logging.DEBUG)
     # create formatter and add it to the handlers
@@ -787,6 +795,7 @@ if __name__ == '__main__':
       os.chmod(logFile, currMode | (stat.S_IXUSR|stat.S_IWGRP|stat.S_IXGRP|stat.S_IROTH|stat.S_IWOTH|stat.S_IXOTH))
       
     # add the handlers to the logger
+    """
     logger.info('Log file opened')
     
     procAlerts = emailAlerts( configSettings )
@@ -806,7 +815,7 @@ if __name__ == '__main__':
         retVal = 0
      
     logger.info('Closing log file.')
-    handler.close()
+    #handler.close()
     
     sys.exit(retVal)
 
