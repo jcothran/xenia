@@ -648,7 +648,7 @@ If the tilecache root directory is changed in the tilecache.cfg file, the direct
 ----
 === HF Radar === 
 
-These scripts run once an hour to help aggregate and check uptime for the Secoora HF Radar stations
+These scripts run once an hour to help aggregate and check uptime for the Secoora HF Radar stations.  The final rendering of these hf radar netcdf files is currently handled by servers at NC-Chapel Hill.
 
 *directory* /home/xeniaprod/scripts/radar
 
@@ -660,6 +660,4 @@ For Tampa/West Florida Shelf(WFS), a similar set of scripts is under the 'tampa'
 
 For Miami, a similar set of scripts is under 'miami'.
 
-For NC Outer banks, a similar set of scripts is under 'banks'
-
-
+For NC Outer banks, a similar set of scripts is under 'banks' - for 'banks' no data is collected or converted, just uptime/notification checks.
