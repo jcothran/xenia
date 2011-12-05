@@ -1,0 +1,9 @@
+#summary Javascript Webpage speed improvements.
+
+= Introduction =
+
+The following are some tools I've recently used to help improve the load times of our mapping pages. These are based mainly on a soup of Openlayers, GeoExt/ExtJS. 
+
+= Javascript Minimizer =
+One enhancement I'd read about was that it is better to ask the server for one larger file, than multiple smaller files. 
+I used the [http://developer.yahoo.com/yui/compressor/ yuicompressor] from Yahoo to concatenate and compress multiple javascript and css files.
