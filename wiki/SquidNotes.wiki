@@ -102,7 +102,7 @@ Uncommented the following line
 cache_dir ufs /var/spool/squid 100 16 256
 }}}
 
-Ran into issues with using mod_python where had to add alias line to apache httpd.conf routing server keyword path to local path without server keyword.  Also for POST and OPTIONS methods, had to add POST and never_direct lines to squid.conf in below section
+Ran into issues with using mod_python where had to add alias line to apache httpd.conf routing server keyword path to local path without server keyword(like {{{alias projects/pesticide to pesticide}}}).  Also for POST and OPTIONS methods, had to add POST and never_direct lines to squid.conf in below section
 
 {{{
 acl CONNECT method CONNECT
