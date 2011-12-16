@@ -102,6 +102,16 @@ Uncommented the following line
 cache_dir ufs /var/spool/squid 100 16 256
 }}}
 
+Ran into issues with using mod_python where had to add alias line to apache httpd.conf routing server keyword path to local path without server keyword.  Also for POST and OPTIONS methods, had to add POST and never_direct lines to squid.conf in below section
+
+{{{
+acl CONNECT method CONNECT
+
+acl POST method POST
+#have to use never_direct on POST or all, otherwise assumes DIRECT access to local squid server
+never_direct allow all
+}}}
+
 ----
 
 Start/restart squid - rerun after any changes to squid.conf file
