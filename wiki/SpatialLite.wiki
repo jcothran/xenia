@@ -96,4 +96,4 @@ My solution was to use the "-R /usr/local/lib" directive on the LINK line.
 
 ----
 For version 3.0.1 yet again there are issues.
-The library seems to look in /usr/lib for the needed .so files(libgeos, ect). Again I've run into an issue with iconv not being found.
+The library seems to look in /usr/lib for the needed .so files(libgeos, ect). I just copied the libgeos-3.3.2 file into /usr/lib and I'll see if anyone posts a response on the libspatialite google group.
