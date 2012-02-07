@@ -93,3 +93,7 @@ To enable the use of external extensions in Sqlite, you have to make sure it has
 Then you have to rebuild and re-install Sqlite.
 One time wasting issue I ran into was the install program putting the libraries into /usr/local/lib, but the executable looking in /usr/lib. 
 My solution was to use the "-R /usr/local/lib" directive on the LINK line.
+
+----
+For version 3.0.1 yet again there are issues.
+The library seems to look in /usr/lib for the needed .so files(libgeos, ect). Again I've run into an issue with iconv not being found.
