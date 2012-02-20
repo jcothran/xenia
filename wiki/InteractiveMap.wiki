@@ -166,8 +166,7 @@ googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
  * _name_  - Name given to the tab.
  * _layerTreeName_ - Name given to the layer tree panel.
  * _toolbarGroupName_ - Unique identifier for the tool bar at the top of the map window.
- * * mapConfig *
- Configuration parameters specific to the map layout.
+ * * mapConfig * -  Configuration parameters specific to the map layout.
  * _mapExtents_ - Defines the bounding box used for the map.
    * _lowerLeft_ - Lower left latitude and longitude point for the bounding box. Consists of a "lon" and "lat" entry.
    * _upperRight_ - Upper right latitude and longitude point for the bounding box. Consists of a "lon" and "lat" entry.
@@ -184,7 +183,7 @@ googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
      * _children_ - The layers the folder group contains.
        * "Google Terrain" - Define the name of the layer.
          * _type_ - The OpenLayers layer object to create.
-         * _options_ - The attribute mimics the OpenLayers options field for the layer. Each setting, unless otherwise noted, 
+         * _options_ - The attribute mimics the OpenLayers options ield for the layer. Each setting, unless otherwise noted, 
          is defined in the appropriate OpenLayers class.
            * _sphericalMercator_ - OpenLayers option.
            * _type_  - This represents the type of Google Map data to query: 'G_PHYSICAL_MAP', 'G_HYBRID_MAP'. 
