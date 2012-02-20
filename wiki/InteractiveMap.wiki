@@ -77,7 +77,7 @@ The configuration file is a JSON file containing general data in the header sect
 
   * Header Config
 {{{
-map_config_callback({ 
+map_config_callback({      -Javascript callback function
   "serverSettings" : 
   {
     "mapserverIP" : "",    - Currently not used.
@@ -91,10 +91,7 @@ destination url.
   },
   "googleAnalyticsKey" : "UA-xxxxxx",  -If provided, will use Google 
 Analytics to track page hits.
-}}}
 
-  * Map Tab Configuration
-{{{
   "tabs" :
   [
     {
@@ -137,10 +134,32 @@ point for the bounding box.
 
         "units": "degrees", -Default display units. Option used in OpenLayers Map object.
 
-        "layers" : -Section defines the layers the map will contain. see below for layout.
+        "layers" : -Section defines the layers this map tab will contain. 
         [
-        {
-        }
+          {
+            "folder" : "BaseLayers" , -For future use. Defines the name of the group the layers under the "children" attribute will fall under.
+
+            "children" : -For future use. The layers the folder group contains.
+            {
+              "Google Terrain" : -Define the name of the layer.
+              {
+                "type" : "OpenLayers.Layer.Google", -The OpenLayers 
+layer object to create.
+                "options": -The attribute mimics the OpenLayers options field for the layer. Each setting, unless otherwise noted, is defined in the appropriate OpenLayers class.
+                {
+                  "sphericalMercator": true,
+                  "type": "G_PHYSICAL_MAP", - This represents the type of Google Map data to query: 'G_PHYSICAL_MAP', 'G_HYBRID_MAP'. 
+                  "MIN_ZOOM_LEVEL": 6, 
+                  "MAX_ZOOM_LEVEL": 15,
+                  "displayInLayerSwitcher": true, - A bool to indicate 
+whether a layer is to be shown in the layer tree.
+
+                  "GROUP" : "BaseMap" -String for the layer tree folder
+to place this layer. In the future, the "folder" option above will supersede this. 
+                }
+              }              
+            }
+          }
         ]
       }
     }
