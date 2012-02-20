@@ -228,7 +228,7 @@ googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
      * _folder_ - For future use which will defines the name of the group the layers under the "children" attribute will fall under.
      * _children_ - The layers the folder group contains.
        * "Google Terrain" - Define the name of the layer.
-         * _type_ - The !OpenLayers layer object to create. In addition to the standard !OpenLayers objects, there are a few custom ones as well listed in the Custom Layers entry below.
+         * _type_ - The !OpenLayers layer object to create. In addition to the standard !OpenLayers objects, there are a few custom ones as well listed in the [#Custom_Layers] entry below.
          * _params_ - Attribute is for !OpenLayers layer objects that have a "params" configuration.   
          * _options_ - The attribute mimics the !OpenLayers options field for the layer. Each setting, unless otherwise noted, is defined in the appropriate !OpenLayers class.
 
@@ -239,7 +239,31 @@ These are "options" that are not standard to !OpenLayers objects but used but ou
   * _GROUP_ -String for the layer tree folder to place this layer. In the future, the "folder" option above will supersede this. 
   * _QUERYABLE_ - Bool, set to true if user can click on layer data to get information, like GetFeatureInfo request for WMS layers.
 
-  * "rcoosmapping.platformVectorLayer" - The stationary observing platforms are encapsulated here. Each platform is an OpenLayers Vector feature.
+  * "rcoosmapping.platformVectorLayer" - The stationary observing platforms are encapsulated here. Each platform is an OpenLayers Vector feature. Example:
+{{{
+{
+  "type" : "rcoosmapping.platformVectorLayer",
+  "url" : "http://129.252.139.124/cgi-bin/mapserv?",
+  "options":
+  {
+    "displayInLayerSwitcher": true,
+    "visibility": false,
+    "GROUP" : "InSitu",
+    "QUERYABLE": true,
+    "visibility": true,
+    "multiple" : true,
+    "rendererOptions": 
+    {
+      "zIndexing": true
+    } 
+  },
+  "featuresUrl": "http://neptune.baruch.sc.edu/xenia/feeds/obsjson/mapmeta/platform_callback.json",
+  "EnableGetFeatureInfo": true,
+  "active" : true
+}
+}}}
+    * featuresUrl - URL to the JSON file containing the platform data. File described below in [InteractiveMap#Observing_Platforms] 
+
   * "rcoosmapping.kmlLayer" - Wrapper for KML layers. Defines a click handle to query data points in the layer.
   * "OpenLayers.Layer.WMSEx" - Re-queries the server each time a scroll action or enable/disable layer is performed. This is useful for layers whose underlying data can change periodically.
   * "rcoosmapping.earthNCCharts" - Wrapper for the Earth NC NOAA navigation maps. Needed since the layer is a XYZ type layer and needs a specific function to determine the tiles to query.
