@@ -78,22 +78,19 @@ The configuration file is a JSON file containing general data in the header sect
   * Header Config
 {{{
 map_config_callback({ 
-  "serverSettings" :
+  "serverSettings" : 
   {
-    "mapserverIP" : "",
-    - Currently not used.
-    "tilecacheIP" : "",    
-    - Currently not used.
-    "proxyHost" : "AjaxProxy.php?url=" 
-    -Many data sources are retrieved using Ajax queries, however the 
-data sources do not reside on the server hosting the map. Ajax imposes 
-a security restriction that no 3rd party servers can be accessed via an 
-Ajax call. We use a proxy server to get retrieve the data from the data 
-servers. The format is: path to proxy?url=. OpenLayers populates the 
-url portion with the destination url.
+    "mapserverIP" : "",    - Currently not used.
+    "tilecacheIP" : "",    - Currently not used.
+    "proxyHost" : "AjaxProxy.php?url="     -Many data sources are
+ retrieved using Ajax queries, however the data sources do not reside on the server hosting the map. Ajax imposes a security restriction that 
+no 3rd party servers can be accessed via an Ajax call. We use a proxy 
+server to get retrieve the data from the data servers. The format is: 
+path to proxy?url=. OpenLayers populates the url portion with the 
+destination url.
   },
-  "googleAnalyticsKey" : "UA-xxxxxx",
-  -If provided, will use Google Analytics to track page hits.
+  "googleAnalyticsKey" : "UA-xxxxxx",  -If provided, will use Google 
+Analytics to track page hits.
 }}}
 
   * Map Tab Configuration
@@ -101,36 +98,46 @@ url portion with the destination url.
   "tabs" :
   [
     {
-      "name" : "Realtime Observations",
-      "layerTreeName" : "Real Time Layers",
-      "toolbarGroupName" : "rtmap",
-      "mapConfig" :
+      "name" : "Realtime Observations",    -Name given to the tab.
+      "layerTreeName" : "Real Time Layers",-Name given to the layer
+tree panel.
+      "toolbarGroupName" : "rtmap", -Unique identifier for the tool bar at the top of the map window.
+      "mapConfig" : -Configuration parameters specific to the map layout.
       {
-        "mapExtents" : 
+        "mapExtents" : -Defines the bounding box used for the map.
         {
-          "lowerLeft" : 
+          "lowerLeft" : -Lower left latitude and longitude
+point for the bounding box.
           {
             "lon" : -90.5,
             "lat" : 24.5
           },
-          "upperRight" : 
+          "upperRight" : -Upper right latitude and longitude
+point for the bounding box.
           {
             "lon" : -60.5,
             "lat" : 37.2
           },
-          "centerMapOn" :
+          "centerMapOn" : -The point which the map will attempt to center the map on.
           {
             "lon" : -82.376,
             "lat" : 30.50
           }
         },
-        "numZoomLevels": 9,
-        "maxResolution": 2445.984904688,
-        "resolutions": [2445.984904688,1222.992452344,611.496226172,305.748113086,152.874056543,76.437028271,38.218514136,19.109257068,9.554628534,4.777314267,2.388657133,1.194328567,0.59716428337097171575,0.298582142],
-        "projection": "EPSG:900913",
-        "displayProjection": "EPSG:4326",
-        "units": "degrees",               
-        "layers" :
+        "numZoomLevels": 9, -Number of zoom levels the map will use. Option used in OpenLayers Map object.
+
+        "maxResolution": 2445.984904688, -The maximum resolution of the map. Option used in OpenLayers Map object.
+
+        "resolutions": -The list of resolutions the map will use. Option used in OpenLayers Map object.
+[2445.984904688,1222.992452344,611.496226172,305.748113086,152.874056543,76.437028271,38.218514136,19.109257068,9.554628534,4.777314267,2.388657133,1.194328567,0.59716428337097171575,0.298582142],
+
+        "projection": "EPSG:900913", -The internal projection the base map uses. Option used in OpenLayers Map object.
+
+        "displayProjection": "EPSG:4326", -The projection used for displaying information. Option used in OpenLayers Map object.
+
+        "units": "degrees", -Default display units. Option used in OpenLayers Map object.
+
+        "layers" : -Section defines the layers the map will contain. see below for layout.
         [
         {
         }
