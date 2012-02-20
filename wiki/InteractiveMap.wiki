@@ -152,10 +152,7 @@ Javascript callback function. Must be defined as "map_config_callback".
 ===== serverSettings =====
   * mapserverIP - Currently not used.
   * tilecacheIP - Currently not used.
-  * proxyHost   - Many data sources are retrieved using Ajax queries, however the data sources do not reside 
-  on the server hosting the map. Ajax imposes a security restriction that no 3rd party servers can be accessed 
-  via an Ajax call. We use a proxy to get retrieve the data from the data servers. 
-  The format is: path to proxy?url=. OpenLayers populates the url portion with the destination url.
+  * proxyHost   - Many data sources are retrieved using Ajax queries, however the data sources do not reside on the server hosting the map. Ajax imposes a security restriction that no 3rd party servers can be accessed via an Ajax call. We use a proxy to get retrieve the data from the data servers. The format is: path to proxy?url=. OpenLayers populates the url portion with the destination url.
 
 googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
 
@@ -182,8 +179,7 @@ googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
      * _children_ - The layers the folder group contains.
        * "Google Terrain" - Define the name of the layer.
          * _type_ - The OpenLayers layer object to create.
-         * _options_ - The attribute mimics the OpenLayers options ield for the layer. Each setting, unless otherwise noted, 
-         is defined in the appropriate OpenLayers class.
+         * _options_ - The attribute mimics the OpenLayers options ield for the layer. Each setting, unless otherwise noted, is defined in the appropriate OpenLayers class.
            * _sphericalMercator_ - OpenLayers option.
            * _type_  - This represents the type of Google Map data to query: 'G_PHYSICAL_MAP', 'G_HYBRID_MAP'. 
            * _MIN_ZOOM_LEVEL_ - OpenLayers option.
