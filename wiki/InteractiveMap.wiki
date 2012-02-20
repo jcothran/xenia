@@ -87,6 +87,7 @@ map_config_callback({
   "googleAnalyticsKey" : "UA-xxxxxx",
 }}}
   * Map Tab Configuration
+{{{
   "tabs" :
   [
     {
