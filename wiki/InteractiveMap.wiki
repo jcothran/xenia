@@ -73,7 +73,7 @@ The files and directory are structured as follows:
 The map uses a combination of WMS and [http://dev.openlayers.org/releases/OpenLayers-2.10/doc/apidocs/files/OpenLayers/Feature/Vector-js.html Vector Features] to display data.
 
 === Layer Configuration File ===
-The following are sample entries of the layer configuration file.
+The configuration file is a JSON file containing general data in the header section, then a "tabs" section that defines individual maps on separate tabs.
 
   * Header Config
 {{{
