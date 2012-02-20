@@ -77,85 +77,68 @@ The configuration file is a JSON file containing general data in the header sect
 
   * Header Config
 {{{
-map_config_callback({      -Javascript callback function
+map_config_callback({      
   "serverSettings" : 
   {
-    "mapserverIP" : "",    - Currently not used.
-    "tilecacheIP" : "",    - Currently not used.
-    "proxyHost" : "AjaxProxy.php?url="     -Many data sources are
- retrieved using Ajax queries, however the data sources do not reside on the server hosting the map. Ajax imposes a security restriction that 
-no 3rd party servers can be accessed via an Ajax call. We use a proxy 
-server to get retrieve the data from the data servers. The format is: 
-path to proxy?url=. OpenLayers populates the url portion with the 
-destination url.
+    "mapserverIP" : "",    
+    "tilecacheIP" : "",    
+    "proxyHost" : "AjaxProxy.php?url="
   },
-  "googleAnalyticsKey" : "UA-xxxxxx",  -If provided, will use Google 
-Analytics to track page hits.
+  "googleAnalyticsKey" : "UA-xxxxxx", 
 
   "tabs" :
   [
     {
-      "name" : "Realtime Observations",    -Name given to the tab.
-      "layerTreeName" : "Real Time Layers",-Name given to the layer
+      "name" : "Realtime Observations",
+      "layerTreeName" : "Real Time Layers",
 tree panel.
-      "toolbarGroupName" : "rtmap", -Unique identifier for the tool bar at the top of the map window.
-      "mapConfig" : -Configuration parameters specific to the map layout.
+      "toolbarGroupName" : "rtmap",
+      "mapConfig" : 
       {
-        "mapExtents" : -Defines the bounding box used for the map.
+        "mapExtents" : 
         {
-          "lowerLeft" : -Lower left latitude and longitude
-point for the bounding box.
+          "lowerLeft" :
           {
             "lon" : -90.5,
             "lat" : 24.5
           },
-          "upperRight" : -Upper right latitude and longitude
-point for the bounding box.
+          "upperRight" :
           {
             "lon" : -60.5,
             "lat" : 37.2
           },
-          "centerMapOn" : -The point which the map will attempt to center the map on.
+          "centerMapOn" :
           {
             "lon" : -82.376,
             "lat" : 30.50
           }
         },
-        "numZoomLevels": 9, -Number of zoom levels the map will use. Option used in OpenLayers Map object.
+        "numZoomLevels": 9,
+        "maxResolution": 2445.984904688, 
 
-        "maxResolution": 2445.984904688, -The maximum resolution of the map. Option used in OpenLayers Map object.
-
-        "resolutions": -The list of resolutions the map will use. Option used in OpenLayers Map object.
+        "resolutions": 
 [2445.984904688,1222.992452344,611.496226172,305.748113086,152.874056543,76.437028271,38.218514136,19.109257068,9.554628534,4.777314267,2.388657133,1.194328567,0.59716428337097171575,0.298582142],
 
-        "projection": "EPSG:900913", -The internal projection the base map uses. Option used in OpenLayers Map object.
-
-        "displayProjection": "EPSG:4326", -The projection used for displaying information. Option used in OpenLayers Map object.
-
-        "units": "degrees", -Default display units. Option used in OpenLayers Map object.
-
-        "layers" : -Section defines the layers this map tab will contain. 
+        "projection": "EPSG:900913",
+        "displayProjection": "EPSG:4326",
+        "units": "degrees",
+        "layers" : 
         [
           {
-            "folder" : "BaseLayers" , -For future use. Defines the name of the group the layers under the "children" attribute will fall under.
-
-            "children" : -For future use. The layers the folder group contains.
+            "folder" : "BaseLayers" ,
+            "children" :
             {
-              "Google Terrain" : -Define the name of the layer.
+              "Google Terrain" :
               {
-                "type" : "OpenLayers.Layer.Google", -The OpenLayers 
-layer object to create.
-                "options": -The attribute mimics the OpenLayers options field for the layer. Each setting, unless otherwise noted, is defined in the appropriate OpenLayers class.
+                "type" : "OpenLayers.Layer.Google",
+                "options": 
                 {
                   "sphericalMercator": true,
-                  "type": "G_PHYSICAL_MAP", - This represents the type of Google Map data to query: 'G_PHYSICAL_MAP', 'G_HYBRID_MAP'. 
+                  "type": "G_PHYSICAL_MAP",
                   "MIN_ZOOM_LEVEL": 6, 
                   "MAX_ZOOM_LEVEL": 15,
-                  "displayInLayerSwitcher": true, - A bool to indicate 
-whether a layer is to be shown in the layer tree.
-
-                  "GROUP" : "BaseMap" -String for the layer tree folder
-to place this layer. In the future, the "folder" option above will supersede this. 
+                  "displayInLayerSwitcher":
+                  "GROUP" : "BaseMap"
                 }
               }              
             }
@@ -165,6 +148,51 @@ to place this layer. In the future, the "folder" option above will supersede thi
     }
   ]
 }}}
+==== map_config_callback ====
+Javascript callback function. Must be defined as "map_config_callback".
+===== serverSettings =====
+  * mapserverIP - Currently not used.
+  * tilecacheIP - Currently not used.
+  * proxyHost   - Many data sources are retrieved using Ajax queries, however the data sources do not reside 
+  on the server hosting the map. Ajax imposes a security restriction that no 3rd party servers can be accessed 
+  via an Ajax call. We use a proxy to get retrieve the data from the data servers. 
+  The format is: path to proxy?url=. OpenLayers populates the url portion with the destination url.
+
+googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
+
+===== tabs =====
+ An array of tab objects, each containing a map.
+ * * Tab Configuration *
+ * _name_  - Name given to the tab.
+ * _layerTreeName_ - Name given to the layer tree panel.
+ * _toolbarGroupName_ - Unique identifier for the tool bar at the top of the map window.
+ * mapConfig *
+ Configuration parameters specific to the map layout.
+ * _mapExtents_ - Defines the bounding box used for the map.
+   * _lowerLeft_ - Lower left latitude and longitude point for the bounding box. Consists of a "lon" and "lat" entry.
+   * _upperRight_ - Upper right latitude and longitude point for the bounding box. Consists of a "lon" and "lat" entry.
+   * _centerMapOn_ - The point which the map will attempt to center the map on. Consists of a "lon" and "lat" entry.
+   * _numZoomLevels_  - Number of zoom levels the map will use. Option used in OpenLayers Map object.
+   * _maxResolution_  - The maximum resolution of the map. Option used in OpenLayers Map object.
+   * _resolutions_  - The list of resolutions the map will use. Option used in OpenLayers Map object. For a base layer like Google Maps, 
+   those resolutions are fixed and defined by google.
+   * _projection_  - The internal projection the base map uses. Option used in OpenLayers Map object.
+   * _displayProjection_ - The projection used for displaying information. Option used in OpenLayers Map object.
+   * _units_ - Default display units. Option used in OpenLayers Map object.
+   * _layers_ - Section defines the layers this map tab will contain. 
+     * _folder_ - For future use which will defines the name of the group the layers under the "children" attribute will fall under.
+     * _children_ - The layers the folder group contains.
+       * "Google Terrain" - Define the name of the layer.
+         * _type_ - The OpenLayers layer object to create.
+         * _options_ - The attribute mimics the OpenLayers options field for the layer. Each setting, unless otherwise noted, 
+         is defined in the appropriate OpenLayers class.
+           * _sphericalMercator_ - OpenLayers option.
+           * _type_  - This represents the type of Google Map data to query: 'G_PHYSICAL_MAP', 'G_HYBRID_MAP'. 
+           * _MIN_ZOOM_LEVEL_ - OpenLayers option.
+           * _MAX_ZOOM_LEVEL_ - OpenLayers option.
+           * _displayInLayerSwitcher_ - A bool to indicate whether a layer is to be shown in the layer tree.
+           * _GROUP_ -String for the layer tree folder to place this layer. In the future, the "folder" option 
+           above will supersede this. 
 
 === Observing Platforms ===
 For the platforms, we use a collection of Vector Features to plot on the map. The Vector Features are contained within a [http://dev.openlayers.org/releases/OpenLayers-2.10/doc/apidocs/files/OpenLayers/Layer/Vector-js.html Vector Layer]. 
