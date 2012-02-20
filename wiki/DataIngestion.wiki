@@ -209,36 +209,35 @@ netcdf files. The files are pulled down then processed into the database. Delete
 
 ==== INI File ====
 {{{
-[Database]
-user = 
-password = 
-host = 
-name = 
-connectionstring = 
+[Database] - Section for the database parameters
+user =     - User name used to log onto the database
+password = - Password used
+host =     - Host address where the database server runs.
+name =     - Database name
+connectionstring = - SQLAlchemey database driver connection string.
 
-[settings]
-uomconversionfile=
+[settings] - Section for general settings
+uomconversionfile= - Path to the XML units conversion file.
+ 
+[logging] - Section for log file
+configfile = The fully qualified path to the logging config file.
 
-[logging]
-configfile = 
+[area] - Section for the area of interest when checking for platforms in the bounding box given below.
+bbox= - Polygon defining our area of interest.
 
-[area]
-bbox=
+[processing] 
+organizationlist = - Comma seperataed list of Organization IDs to process. For each entry here, there should be a corresponding section below. 
 
-[processing]
-organizationlist =
-
-[ndbc]
-difurl=
-checkfornewplatforms=
-lastnhours=
-processingobject=
-checkfornewplatforms=
-addnewplatformstodb=
-jsonconfig=
-stationoffering=
-newplatformkml=
-whitelist=
+[ndbc] - Organization from the organization list above.
+difurl= - Base URL for the dif service
+checkfornewplatforms= - Either 0 or 1. 1 will do a getCapabilities query to determine if there are any new platforms in the bbox defined above. Also checks the available observations against the observation defined on the platform in our database.
+lastnhours= - The last N hours of data to request in a getObservation query.
+processingobject= - Name of the object used to do the processing.
+addnewplatformstodb= Either 0 or 1. 1 will create new platforms/sensors according to what is discovered in the getCapabilities query.
+jsonconfig= - JSON config file that defines the mapping of observations available from the Dif service to the Xenia names of those observations.
+stationoffering= -  The provider specific URN portion needed in the getObservation query.
+newplatformkml= - If checkfornewplatforms is 1, the is the fully qualified path to write a kml file out containing new platforms found and observations found that do not exist on the database platforms.
+whitelist= If defined, this is a comma delimeted list of stations to pull data via getObservations. If not defined, the organization name in this section is used to pull all stations.
 
 }}}
 ----
