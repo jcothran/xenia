@@ -240,6 +240,109 @@ newplatformkml= - If checkfornewplatforms is 1, the is the fully qualified path 
 whitelist= If defined, this is a comma delimeted list of stations to pull data via getObservations. If not defined, the organization name in this section is used to pull all stations.
 
 }}}
+
+==== Xenia Mapping File ====
+For NDBC, we ask for the getObservation data to be returned in a CSV format. This file defines a mapping for those columns. At the head of the file are columns common across all the CSV data returns, then under the "observation_columns" area we define the Dif providers observation name which defines columns specific to that datum. The mapping from the CSV column to the Xenia observation are defined under "m_value_columns".
+Some observations(Winds, Waves, Currents) contain multiple datums, each having a mapping in the m_value_column. For multiple datums, the column order must be preserved in the "m_value_columns".
+{{{
+{
+  "platform_identifier" : "station_id",
+  "sensor_identifier" : "sensor_id",
+  "fixed_location" : 
+  {
+    "lat" : "latitude (degree)",
+    "lon" : "longitude (degree)"
+  },
+  "datetime" : "date_time",
+  "observation_columns" :
+  {
+    "air_pressure_at_sea_level": 
+    {
+      "depth" : "depth (m)",
+      "m_value_columns":
+      [
+        {"air_pressure_at_sea_level (hPa)": "air_pressure"}
+      ]
+    },
+    
+    "air_temperature": 
+    {
+      "depth" : "depth (m)",
+      "m_value_columns":
+      [
+        {"air_temperature (C)": "air_temperature"}
+      ]
+    }, 
+    "currents": 
+    {
+      "depth" : "depth (m)",
+      "bin (count)" : "s_order",
+      "m_value_columns":
+      [
+        {"direction_of_sea_water_velocity (degree)": "current_to_direction"}, 
+        {"sea_water_speed (cm/s)": "current_speed"}
+      ]
+    }, 
+    "sea_floor_depth_below_sea_surface": 
+    {
+      "m_value_columns":
+      [
+        {"sea_floor_depth_below_sea_surface (m)": "depth"}
+      ]
+    }, 
+    "sea_water_electrical_conductivity": 
+    {
+      "depth" : "depth (m)",
+      "m_value_columns":
+      [
+        {"sea_water_electrical_conductivity (mS/cm)": "water_conductivity"}
+      ]
+    }, 
+    "sea_water_salinity": 
+    {
+      "depth" : "depth (m)",    
+      "m_value_columns":
+      [
+        {"sea_water_salinity (psu)": "salinity"}
+      ]
+    }, 
+    "sea_water_temperature": 
+    {
+      "depth" : "depth (m)",    
+      "m_value_columns":
+      [
+        {"sea_water_temperature (C)": "water_temperature"}
+      ]
+    }, 
+    "waves": 
+    {
+      "m_value_columns":
+      [
+        {"mean_wave_direction (degree)": "mean_wave_direction_peak_period"}, 
+        {"principal_wave_direction (degree)": "principal_wave_direction"}, 
+        {"sea_surface_swell_wave_period (s)": "dominant_wave_period"}, 
+        {"sea_surface_swell_wave_significant_height (m)": "swell_height"}, 
+        {"sea_surface_swell_wave_to_direction (degree)": "swell_wave_direction"}, 
+        {"sea_surface_wave_mean_period (s)": "average_wave_period"}, 
+        {"sea_surface_wave_significant_height (m)": "significant_wave_height"}, 
+        {"sea_surface_wave_to_direction (degree)": "significant_wave_to_direction"}, 
+        {"sea_surface_wind_wave_period (s)": "wind_wave_period"}, 
+        {"sea_surface_wind_wave_significant_height (m)": "wind_wave_height"}, 
+        {"sea_surface_wind_wave_to_direction (degree)": "wind_wave_direction"}
+      ]
+    }, 
+    "winds": 
+    {
+      "depth" : "depth (m)",    
+      "m_value_columns":
+      [
+        {"wind_from_direction (degree)": "wind_from_direction"}, 
+        {"wind_speed (m/s)": "wind_speed"}, 
+        {"wind_speed_of_gust (m/s)": "wind_gust"}
+      ]
+    }
+  }
+}}}}
 ----
 
 
