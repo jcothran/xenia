@@ -228,7 +228,7 @@ googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
      * _folder_ - For future use which will defines the name of the group the layers under the "children" attribute will fall under.
      * _children_ - The layers the folder group contains.
        * "Google Terrain" - Define the name of the layer.
-         * _type_ - The !OpenLayers layer object to create. In addition to the standard !OpenLayers objects, there are a few custom ones as well listed in the [#Custom_Layers] entry below.
+         * _type_ - The !OpenLayers layer object to create. In addition to the standard !OpenLayers objects, there are a few custom ones as well listed in the [Custom_Layers] entry below.
          * _params_ - Attribute is for !OpenLayers layer objects that have a "params" configuration.   
          * _options_ - The attribute mimics the !OpenLayers options field for the layer. Each setting, unless otherwise noted, is defined in the appropriate !OpenLayers class.
 
@@ -262,7 +262,7 @@ These are "options" that are not standard to !OpenLayers objects but used but ou
   "active" : true
 }
 }}}
-    * featuresUrl - URL to the JSON file containing the platform data. File described below in [InteractiveMap#Observing_Platforms] 
+    * featuresUrl - URL to the JSON file containing the platform data. File described below in [Observing_Platforms] 
 
   * "rcoosmapping.kmlLayer" - Wrapper for KML layers. Defines a click handle to query data points in the layer.
   * "OpenLayers.Layer.WMSEx" - Re-queries the server each time a scroll action or enable/disable layer is performed. This is useful for layers whose underlying data can change periodically.
