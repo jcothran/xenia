@@ -182,11 +182,11 @@ googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
            * "rcoosmapping.kmlLayer" - Wrapper for KML layers. Defines a click handle to query data points in the layer.
            * "OpenLayers.Layer.WMSEx" - Re-queries the server each time a scroll action or enable/disable layer is performed. This is useful for layers whose underlying data can change periodically.
            * "rcoosmapping.earthNCCharts" - Wrapper for the Earth NC NOAA navigation maps. Needed since the layer is a XYZ type layer and needs a specific function to determine the tiles to query.
-           
+         * _params_ - Attribute is for OpenLayers layer objects that have a "params" configuration.   
          * _options_ - The attribute mimics the OpenLayers options field for the layer. Each setting, unless otherwise noted, is defined in the appropriate OpenLayers class.
            * * Non-OpenLayers Options *
-           * _displayInLayerSwitcher_ - A bool to indicate whether a layer is to be shown in the layer tree.
-           * _GROUP_ -String for the layer tree folder to place this layer. In the future, the "folder" option above will supersede this. 
+             * _displayInLayerSwitcher_ - A bool to indicate whether a layer is to be shown in the layer tree.
+             * _GROUP_ -String for the layer tree folder to place this layer. In the future, the "folder" option above will supersede this. 
 
 === Observing Platforms ===
 For the platforms, we use a collection of Vector Features to plot on the map. The Vector Features are contained within a [http://dev.openlayers.org/releases/OpenLayers-2.10/doc/apidocs/files/OpenLayers/Layer/Vector-js.html Vector Layer]. 
