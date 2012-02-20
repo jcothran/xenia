@@ -194,6 +194,22 @@ netcdf files. The files are pulled down then processed into the database. Delete
 *Schedule*: Runs every 10 minutes. NWS stations have a fairly rapid update rate.
 ----
 
+=== NDBC Processing ===
+*Script*: populate_xenia_ndbc <br/>
+*Directory*: /home/xeniaprod/cron <br/>
+*Description*: Now using the IOOS Dif web service, pulls in NOS data directly from the NDBC site. Only pulling a limited number of stations to test out the Dif service. Remaining NDBC stations are processed through the USF netcdf processing.<br/>
+*Shell Script Makeup* <br/>
+  _Script_:DataIngestion.py <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/ioosdif <br/>
+  _Command line parameters_: <br/>
+  {{{
+  --ConfigFile=/home/xeniaprod/config/ndbcDataIngest.ini  
+  }}}
+*Schedule*: Runs twice an hour.
+
+----
+
+
 === NOS Processing ===
 *Script*: populate_xenia_nos <br/>
 *Directory*: /home/xeniaprod/cron <br/>
