@@ -207,6 +207,40 @@ netcdf files. The files are pulled down then processed into the database. Delete
   }}}
 *Schedule*: Runs twice an hour.
 
+==== INI File ====
+{{{
+[Database]
+user = 
+password = 
+host = 
+name = 
+connectionstring = 
+
+[settings]
+uomconversionfile=
+
+[logging]
+configfile = 
+
+[area]
+bbox=
+
+[processing]
+organizationlist =
+
+[ndbc]
+difurl=
+checkfornewplatforms=
+lastnhours=
+processingobject=
+checkfornewplatforms=
+addnewplatformstodb=
+jsonconfig=
+stationoffering=
+newplatformkml=
+whitelist=
+
+}}}
 ----
 
 
