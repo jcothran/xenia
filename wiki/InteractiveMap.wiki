@@ -166,7 +166,7 @@ googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
  * _name_  - Name given to the tab.
  * _layerTreeName_ - Name given to the layer tree panel.
  * _toolbarGroupName_ - Unique identifier for the tool bar at the top of the map window.
- * mapConfig *
+ * * mapConfig *
  Configuration parameters specific to the map layout.
  * _mapExtents_ - Defines the bounding box used for the map.
    * _lowerLeft_ - Lower left latitude and longitude point for the bounding box. Consists of a "lon" and "lat" entry.
