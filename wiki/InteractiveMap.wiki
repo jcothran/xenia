@@ -246,6 +246,7 @@ These are "options" that are not standard to !OpenLayers objects but used but ou
 
   * "rcoosmapping.platformVectorLayer" - The stationary observing platforms are encapsulated here. Each platform is an OpenLayers Vector feature. Example:
 {{{
+"Real Time Platforms" :
 {
   "type" : "rcoosmapping.platformVectorLayer",
   "url" : "http://129.252.139.124/cgi-bin/mapserv?",
