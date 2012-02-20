@@ -228,7 +228,7 @@ googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
      * _folder_ - For future use which will defines the name of the group the layers under the "children" attribute will fall under.
      * _children_ - The layers the folder group contains.
        * "Google Terrain" - Define the name of the layer.
-         * _type_ - The !OpenLayers layer object to create. In addition to the standard !OpenLayers objects, there are a few custom ones as well listed in the [Custom_Layers] entry below.
+         * _type_ - The !OpenLayers layer object to create. In addition to the standard !OpenLayers objects, there are a few custom ones as well listed in the [#Custom_Layers Custom Layers] entry below.
          * _params_ - Attribute is for !OpenLayers layer objects that have a "params" configuration.   
          * _options_ - The attribute mimics the !OpenLayers options field for the layer. Each setting, unless otherwise noted, is defined in the appropriate !OpenLayers class.
 
