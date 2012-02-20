@@ -72,6 +72,63 @@ The files and directory are structured as follows:
 == Data Sources ==
 The map uses a combination of WMS and [http://dev.openlayers.org/releases/OpenLayers-2.10/doc/apidocs/files/OpenLayers/Feature/Vector-js.html Vector Features] to display data.
 
+=== Layer Configuration File ===
+The following are sample entries of the layer configuration file.
+
+  * Header Config
+{{{
+map_config_callback({ 
+  "serverSettings" :
+  {
+    "mapserverIP" : "",
+    "tilecacheIP" : "",
+    "proxyHost" : "http://secoora.org/AjaxProxy.php?url="
+  },
+  "googleAnalyticsKey" : "UA-xxxxxx",
+}}}
+  * Map Tab Configuration
+  "tabs" :
+  [
+    {
+      "name" : "Realtime Observations",
+      "layerTreeName" : "Real Time Layers",
+      "toolbarGroupName" : "rtmap",
+      "mapConfig" :
+      {
+        "mapExtents" : 
+        {
+          "lowerLeft" : 
+          {
+            "lon" : -90.5,
+            "lat" : 24.5
+          },
+          "upperRight" : 
+          {
+            "lon" : -60.5,
+            "lat" : 37.2
+          },
+          "centerMapOn" :
+          {
+            "lon" : -82.376,
+            "lat" : 30.50
+          }
+        },
+        "numZoomLevels": 9,
+        "maxResolution": 2445.984904688,
+        "resolutions": [2445.984904688,1222.992452344,611.496226172,305.748113086,152.874056543,76.437028271,38.218514136,19.109257068,9.554628534,4.777314267,2.388657133,1.194328567,0.59716428337097171575,0.298582142],
+        "projection": "EPSG:900913",
+        "displayProjection": "EPSG:4326",
+        "units": "degrees",               
+        "layers" :
+        [
+        {
+        }
+        ]
+      }
+    }
+  ]
+}}}
+
 === Observing Platforms ===
 For the platforms, we use a collection of Vector Features to plot on the map. The Vector Features are contained within a [http://dev.openlayers.org/releases/OpenLayers-2.10/doc/apidocs/files/OpenLayers/Layer/Vector-js.html Vector Layer]. 
 ==== Platform Vector Data Source ====
