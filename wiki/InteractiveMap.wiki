@@ -80,19 +80,22 @@ The configuration file is a JSON file containing general data in the header sect
 map_config_callback({ 
   "serverSettings" :
   {
-    "mapserverIP" : "",    
-    "tilecacheIP" : "",
-    "proxyHost" : "AjaxProxy.php?url="
+    "mapserverIP" : "",
+    - Currently not used.
+    "tilecacheIP" : "",    
+    - Currently not used.
+    "proxyHost" : "AjaxProxy.php?url=" 
+    -Many data sources are retrieved using Ajax queries, however the 
+data sources do not reside on the server hosting the map. Ajax imposes 
+a security restriction that no 3rd party servers can be accessed via an 
+Ajax call. We use a proxy server to get retrieve the data from the data 
+servers. The format is: path to proxy?url=. OpenLayers populates the 
+url portion with the destination url.
   },
   "googleAnalyticsKey" : "UA-xxxxxx",
+  -If provided, will use Google Analytics to track page hits.
 }}}
-  * mapserverIP 
-    Currently not used.
-  * tilecacheIP
-    Currently not used.
-  * proxyHost
-    Many data sources are retrieved using Ajax queries, however the data
-    sources do not reside on the server hosting the map. Ajax imposes a security restriction that no 3rd party servers can be accessed via an Ajax call. We use a proxy server to get retrieve the data from the data servers. The format is: path to proxy?url=. OpenLayers populates the url portion with the destination url.
+
   * Map Tab Configuration
 {{{
   "tabs" :
