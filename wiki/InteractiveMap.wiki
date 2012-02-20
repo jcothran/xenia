@@ -169,8 +169,7 @@ googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
      * _centerMapOn_ - The point which the map will attempt to center the map on. Consists of a "lon" and "lat" entry.
    * _numZoomLevels_  - Number of zoom levels the map will use. Option used in OpenLayers Map object.
    * _maxResolution_  - The maximum resolution of the map. Option used in OpenLayers Map object.
-   * _resolutions_  - The list of resolutions the map will use. Option used in OpenLayers Map object. For a base layer like Google Maps, 
-   those resolutions are fixed and defined by google.
+   * _resolutions_  - The list of resolutions the map will use. Option used in OpenLayers Map object. For a base layer like Google Maps, those resolutions are fixed and defined by google.
    * _projection_  - The internal projection the base map uses. Option used in OpenLayers Map object.
    * _displayProjection_ - The projection used for displaying information. Option used in OpenLayers Map object.
    * _units_ - Default display units. Option used in OpenLayers Map object.
@@ -178,7 +177,12 @@ googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
      * _folder_ - For future use which will defines the name of the group the layers under the "children" attribute will fall under.
      * _children_ - The layers the folder group contains.
        * "Google Terrain" - Define the name of the layer.
-         * _type_ - The OpenLayers layer object to create.
+         * _type_ - The OpenLayers layer object to create. In addition to the standard OpenLayers objects, there are a few custom ones as well listed here: 
+           * "rcoosmapping.platformVectorLayer" - The stationary observing platforms are encapsulated here. Each platform is an OpenLayers Vector feature.
+           * "rcoosmapping.kmlLayer" - Wrapper for KML layers. Defines a click handle to query data points in the layer.
+           * "OpenLayers.Layer.WMSEx" - Re-queries the server each time a scroll action or enable/disable layer is performed. This is useful for layers whose underlying data can change periodically.
+           * "rcoosmapping.earthNCCharts" - Wrapper for the Earth NC NOAA navigation maps. Needed since the layer is a XYZ type layer and needs a specific function to determine the tiles to query.
+           
          * _options_ - The attribute mimics the OpenLayers options ield for the layer. Each setting, unless otherwise noted, is defined in the appropriate OpenLayers class.
            * _sphericalMercator_ - OpenLayers option.
            * _type_  - This represents the type of Google Map data to query: 'G_PHYSICAL_MAP', 'G_HYBRID_MAP'. 
