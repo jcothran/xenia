@@ -141,6 +141,57 @@ map_config_callback({
                 }
               }              
             }
+          },
+          {
+            "folder": "InSitu",
+            "children":
+            {
+              "Sea Surface Temperature":
+              {
+                "type" : "OpenLayers.Layer.WMSEx",
+                "url" : "http://129.252.139.124/tilecache/tilecache.py?",
+                "params":
+                {
+                  "LAYERS": "sst_obs_hourly_recent",
+                  "SRS": "epsg:4326",
+                  "FORMAT": "image/png",
+                  "TRANSPARENT": true,
+                  "TIME_OFFSET_HOURS": 2          
+                },
+                "options":
+                {
+                  "displayInLayerSwitcher": true,
+                  "visibility": false,
+                  "GROUP" : "InSitu",
+                  "QUERYABLE": false,
+                  "visibility": false,
+                  "alwaysRefresh": true                  
+                },
+                "EnableGetFeatureInfo": false,
+                "zIndexDelta" : 2                
+              },
+              "Real Time Observations":
+              {
+                "type" : "rcoosmapping.platformVectorLayer",
+                "url" : "http://129.252.139.124/cgi-bin/mapserv?",
+                "options":
+                {
+                  "displayInLayerSwitcher": true,
+                  "visibility": false,
+                  "GROUP" : "InSitu",
+                  "QUERYABLE": true,
+                  "visibility": true,
+                  "multiple" : true,
+                  "rendererOptions": 
+                  {
+                    "zIndexing": true
+                  } 
+                },
+                "featuresUrl": "http://neptune.baruch.sc.edu/xenia/feeds/obsjson/mapmeta/platform_callback.json",
+                "EnableGetFeatureInfo": true,
+                "active" : true
+              }
+            }
           }
         ]
       }
