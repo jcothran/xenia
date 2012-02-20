@@ -167,10 +167,10 @@ googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
  * _layerTreeName_ - Name given to the layer tree panel.
  * _toolbarGroupName_ - Unique identifier for the tool bar at the top of the map window.
  * * mapConfig * -  Configuration parameters specific to the map layout.
- * _mapExtents_ - Defines the bounding box used for the map.
-   * _lowerLeft_ - Lower left latitude and longitude point for the bounding box. Consists of a "lon" and "lat" entry.
-   * _upperRight_ - Upper right latitude and longitude point for the bounding box. Consists of a "lon" and "lat" entry.
-   * _centerMapOn_ - The point which the map will attempt to center the map on. Consists of a "lon" and "lat" entry.
+   * _mapExtents_ - Defines the bounding box used for the map.
+     * _lowerLeft_ - Lower left latitude and longitude point for the bounding box. Consists of a "lon" and "lat" entry.
+     * _upperRight_ - Upper right latitude and longitude point for the bounding box. Consists of a "lon" and "lat" entry.
+     * _centerMapOn_ - The point which the map will attempt to center the map on. Consists of a "lon" and "lat" entry.
    * _numZoomLevels_  - Number of zoom levels the map will use. Option used in OpenLayers Map object.
    * _maxResolution_  - The maximum resolution of the map. Option used in OpenLayers Map object.
    * _resolutions_  - The list of resolutions the map will use. Option used in OpenLayers Map object. For a base layer like Google Maps, 
