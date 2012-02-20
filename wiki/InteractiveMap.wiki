@@ -192,6 +192,8 @@ map_config_callback({
                 "active" : true
               }
             }
+          },
+          { - Next tab starts here.
           }
         ]
       }
@@ -208,7 +210,7 @@ Javascript callback function. Must be defined as "map_config_callback".
 googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
 
 ===== tabs =====
- An array of tab objects, each containing a map.
+ An array of tab objects, each containing a map. 
  * * Tab Configuration *
  * _name_  - Name given to the tab.
  * _layerTreeName_ - Name given to the layer tree panel.
