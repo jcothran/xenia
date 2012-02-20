@@ -91,7 +91,6 @@ map_config_callback({
     {
       "name" : "Realtime Observations",
       "layerTreeName" : "Real Time Layers",
-tree panel.
       "toolbarGroupName" : "rtmap",
       "mapConfig" : 
       {
