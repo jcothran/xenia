@@ -1,0 +1,26 @@
+#Information about the Pesticide Project setup.
+
+
+
+== Blue Host Configurations ==
+
+  * Python
+
+    From source, built and installed Python v 2.7.2
+
+    * Libs
+
+      * SQLAlachemy
+        easy_install worked for this one.
+
+      * psycopg2-2.4.4
+        Installed from source, easy_install resulted in various errors.
+
+      * pytz-2011n
+        Installed from source, easy_install resulted in various errors.
+
+      * simplejson-2.3.2
+        Installed from source, easy_install resulted in various errors.
+
+
+         
