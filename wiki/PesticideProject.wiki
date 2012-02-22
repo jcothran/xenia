@@ -6,10 +6,11 @@
   * File layout
     Home directory is: /home2/sccoasta
     Added directories:
-     config
-     cron
-     scripts
-
+    {{{
+    $HOME/config
+    $HOME/cron
+    $HOME/scripts
+    }}}
   * Python
     From source, built and installed Python v 2.7.2
     Modified .bashrc to use the local Python installation by adding:
