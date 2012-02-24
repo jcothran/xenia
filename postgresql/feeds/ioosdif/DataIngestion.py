@@ -4,7 +4,8 @@ import logging
 import logging.config
 import ConfigParser
 import urllib
-import urllib2 
+import urllib2
+import socket 
 import datetime
 import re
 import csv
@@ -38,6 +39,8 @@ class ioosDif(object):
     if(logger):
       self.logger = logging.getLogger(type(self).__name__)
     self.sosUrl = sosUrl
+    
+    
   
   def doRequest(self, parameters):
     difRequest = None
@@ -48,6 +51,8 @@ class ioosDif(object):
       req = urllib2.Request(self.sosUrl + '?' + params)
       #req = urllib2.Request(self.sosUrl,params)
       # Open the url
+      #Set the timeout so we don't hang on the urlopen calls.
+      socket.setdefaulttimeout(30)
       connection = urllib2.urlopen(req)
       difRequest = connection.read()
       
@@ -229,21 +234,26 @@ class difObservationCSV(difObservation, ioosDif):
                                    eventtime, 
                                    featureofinterest, 
                                    version)
-    #Check to see if we got a valid response or an exception.
-    if(data.find("ExceptionReport") == -1):      
-      self.depthCol = self.xeniaToDifMapping.getDepthColumnName(observedproperty)
-      self.difObsMap = self.xeniaToDifMapping.getDifColumnsFromObs(observedproperty)
-      self.lineNum = 0
-      columnDefs = self.xeniaToDifMapping.getHeaderColumnNames(observedproperty)      
-      splitData = data.split("\n")
-      #We use the column header list from above to map the rows into key/value pairs.
-      self.getObsData = csv.DictReader(splitData, columnDefs)
-      self.header = self.getObsData.next()
-      self.lineNum += 1
-      return(True)
-    else:
-      raise(difError(data))
-
+    if(self.logger):
+      self.logger.debug("getObservation completed.")
+    if(data != None):
+      #Check to see if we got a valid response or an exception.
+      if(data.find("ExceptionReport") == -1):      
+        self.depthCol = self.xeniaToDifMapping.getDepthColumnName(observedproperty)
+        self.difObsMap = self.xeniaToDifMapping.getDifColumnsFromObs(observedproperty)
+        self.lineNum = 0
+        columnDefs = self.xeniaToDifMapping.getHeaderColumnNames(observedproperty)      
+        splitData = data.split("\n")
+        #We use the column header list from above to map the rows into key/value pairs.
+        self.getObsData = csv.DictReader(splitData, columnDefs)
+        self.header = self.getObsData.next()
+        self.lineNum += 1
+        return(True)
+      else:
+        if(self.logger):
+          self.logger.error(data)
+        #raise(difError(data))
+    return(False)
   def getFixedLonLatValue(self, dataRow):
     lon = None
     lat = None
@@ -277,9 +287,10 @@ class difObservationCSV(difObservation, ioosDif):
         self.logger.debug("m_value: %s is not a valid number." % (dataRow[dataColumn]))
     return(value)    
   
-  def getTimeSeriesRow(self, xeniaDB, platformHandle, rowEntryDate):
+  def getTimeSeriesRow(self, xeniaDB, platformRec, rowEntryDate):
     recList = []
-    try:
+    #try:
+    if(self.getObsData):
       dataRow = self.getObsData.next()
       if(self.lineNum > 0):        
         for xeniaKey in self.difObsMap:
@@ -293,13 +304,18 @@ class difObservationCSV(difObservation, ioosDif):
             #Get the xenia units. If we get None back, then we'll assume we're in the correct units.
             uom = self.uomConverter.getXeniaUOMName(obsParts[0][1].lower())
             if(uom == None):
-              uom = obsParts[0][1].lower()           
-            dataRec.m_type_id = xeniaDB.mTypeExists(xeniaOb, uom)
-            dataRec.sensor_id = xeniaDB.sensorExists(xeniaOb, uom, platformHandle, sOrder)
+              uom = obsParts[0][1].lower()
+            
+            mTypeId = self.xeniaToDifMapping.getMtypeFromXenia(xeniaOb) 
+            for rec in platformRec.sensors:
+              if(mTypeId == rec.m_type_id):
+                dataRec.m_type_id = rec.m_type_id
+                dataRec.sensor_id = rec.row_id
+                break
             if(dataRec.m_type_id and dataRec.sensor_id):
               dataRec.m_date = self.getDateTime(dataRow)
               dataRec.row_entry_date = rowEntryDate
-              dataRec.platform_handle = platformHandle            
+              dataRec.platform_handle = platformRec.platform_handle            
               dataRec.m_lon,dataRec.m_lat = self.getFixedLonLatValue(dataRow)    
               dataRec.m_value = self.getDataValue(xeniaKey, dataRow)
               dataRec.m_z = self.getDepth(dataRow)
@@ -307,10 +323,10 @@ class difObservationCSV(difObservation, ioosDif):
             else:
               if(self.logger):
                 self.logger.error("No m_type_id or sensor_id found for observation: %s" %(xeniaOb))
-      self.lineNum += 1
-    #No more rows to pull, so we return the empty list.
-    except StopIteration:
-      return(recList)      
+        self.lineNum += 1
+      #No more rows to pull, so we return the empty list.
+      #except StopIteration:
+      #  return(recList)      
     return(recList)
 
 
@@ -324,6 +340,27 @@ class xeniaMappings(object):
               
   def configMapping(self, mappingData):
     return(None)
+  
+  def buildMTypeMapping(self, db, uomConverter):
+    mTypeMap = {}
+    if 'observation_columns' in self.mappings:
+      for difOb in self.mappings['observation_columns']:
+        for difCol in self.mappings['observation_columns'][difOb]['m_value_columns']:
+          xeniaKey = difCol.keys()[0]
+          xeniaOb = difCol[xeniaKey] 
+          if(len(xeniaOb)):
+            obsParts = re.findall("^(\w*)\s\((.{1,})\)", xeniaKey)
+            #Get the xenia units. If we get None back, then we'll assume we're in the correct units.
+            uom = uomConverter.getXeniaUOMName(obsParts[0][1].lower())
+            if(uom == None):
+              uom = obsParts[0][1].lower()           
+            mTypeMap[xeniaOb] = db.mTypeExists(xeniaOb, uom)
+      self.mappings['mTypes'] = mTypeMap
+    return
+  
+  def getMtypeFromXenia(self, xeniaObs):
+    mTypeId = self.mappings['mTypes'][xeniaObs]
+    return(mTypeId)
   
   def getLonLatColumnNames(self):
     latCol = None
@@ -412,14 +449,15 @@ class dataSaveWorker(threading.Thread):
     self.__dataQueue = dataQueue
     self.configFilename = configFile
     self.loggerFlag = logger 
-    threading.Thread.__init__(self)
+    threading.Thread.__init__(self, name="data_saver")
 
   #This is the worker thread that handles saving the records to the database.
   def run(self):
     if(self.loggerFlag):
       logger = logging.getLogger(type(self).__name__)
-      logger.info("Starting saver thread.")
+      logger.info("Starting %s thread." % (self.getName()))
     try:
+      processData = True
       config = ConfigParser.RawConfigParser()
       configFile = open(self.configFilename, 'r')
       config.readfp(configFile)
@@ -437,12 +475,13 @@ class dataSaveWorker(threading.Thread):
           logger.info("Succesfully connect to DB: %s at %s" %(dbName,dbHost))
       else:
         logger.error("Unable to connect to DB: %s at %s. Terminating script." %(dbName,dbHost))
+        processData = False
+
         #sys.exit(-1)            
     except ConfigParser.Error, e:  
       if(logger):
         logger.exception(e)
     
-    processData = True
     #This is the data processing part of the thread. We'll loop here until a None record is posted then exit. 
     while processData:
       dataRec = self.__dataQueue.get()
@@ -452,7 +491,7 @@ class dataSaveWorker(threading.Thread):
           db.session.commit()
           if(logger):
             val = ""
-	    if(dataRec.m_value != None):
+            if(dataRec.m_value != None):
               val = "%f" % (dataRec.m_value)
             logger.debug("Committing record Sensor: %d Datetime: %s Value: %s" %(dataRec.sensor_id, dataRec.m_date, val))
 
@@ -468,7 +507,7 @@ class dataSaveWorker(threading.Thread):
           #sys.exit(-1)
       else:
         if(logger):
-          logger.info("Database saver thread exiting")
+          logger.info("%s thread exiting." % (self.getName()))
         processData = False
       self.__dataQueue.task_done()
 
@@ -476,33 +515,37 @@ class dataSaveWorker(threading.Thread):
               
 class platformInventory:
   def __init__(self, organizationID, configurationFile, logger=True):
-    self.organizationID = organizationID    
+    self.organizationID = organizationID
+    self.configurationFile = configurationFile    
     self.logger = None
     if(logger):
       self.logger = logging.getLogger(type(self).__name__)
+    
+  def connectDB(self):
     try:
-      self.config = ConfigParser.RawConfigParser()
-      self.config.read(configurationFile)
-  
-      dbUser = self.config.get('Database', 'user')
-      dbPwd = self.config.get('Database', 'password')
-      dbHost = self.config.get('Database', 'host')
-      dbName = self.config.get('Database', 'name')
-      dbConnType = self.config.get('Database', 'connectionstring')
-  
+      config = ConfigParser.RawConfigParser()
+      config.read(self.configurationFile)  
+      dbUser = config.get('Database', 'user')
+      dbPwd = config.get('Database', 'password')
+      dbHost = config.get('Database', 'host')
+      dbName = config.get('Database', 'name')
+      dbConnType = config.get('Database', 'connectionstring')
+    except ConfigParser.Error, e:  
+      if(self.logger):
+        self.logger.exception(e)
+      return(False)
+    try:
       self.db = xeniaAlchemy(self.logger)      
       if(self.db.connectDB(dbConnType, dbUser, dbPwd, dbHost, dbName, False) == True):
         if(self.logger):
           self.logger.info("Succesfully connect to DB: %s at %s" %(dbName,dbHost))
+          return(True)
       else:
-        self.logger.error("Unable to connect to DB: %s at %s. Terminating script." %(dbName,dbHost))
-        sys.exit(-1)            
-    except ConfigParser.Error, e:  
-      if(self.logger):
-        self.logger.exception(e)
-        sys.exit(-1)
-    
-
+        self.logger.error("Unable to connect to DB: %s at %s." %(dbName,dbHost))
+    except Exception,e:
+      self.logger.exception(e)
+    return(False)
+  
   def getKnownPlatforms(self):
     return(None)
 
@@ -567,6 +610,9 @@ class xeniaFedsInventory(platformInventory):
   def __init__(self, organizationID, configurationFile, logger=True):    
     platformInventory.__init__(self, organizationID, configurationFile, logger)    
     try:
+      self.config = ConfigParser.RawConfigParser()
+      self.config.read(self.configurationFile)  
+      
       url = self.config.get(self.organizationID, 'difurl')
       self.difObj = ioosDif(url, logger)
       self.difCap = None
@@ -838,7 +884,7 @@ class fedsDataIngestion(dataIngestion):
         self.logger.exception(e)
         sys.exit(-1)   
   
-  def getData(self):
+  def getData(self):      
     #Date/time to use for the row_entry_date in the database. We use local time.
     rowEntryDate = datetime.datetime.today().strftime("%Y-%m-%dT%H:%M:%S")
 
@@ -869,6 +915,8 @@ class fedsDataIngestion(dataIngestion):
       endTime = endTime.strftime("%Y-%m-%dT%H:%M:00Z")
       startTime = startTime.strftime("%Y-%m-%dT%H:%M:00Z")
       
+      #Build the mtype mapping
+      self.inventory.xeniaDataMappings.buildMTypeMapping(self.inventory.db, self.uomConverter)
       #This is the queue used to send database records for processing.
       self.dataQueue = Queue.Queue(0)
       dataSaver = dataSaveWorker(self.configFilename, self.dataQueue)
@@ -887,60 +935,65 @@ class fedsDataIngestion(dataIngestion):
             obsCategory.append(difObs)
         if(self.logger):
            self.logger.info("Processing platform: %s" % (platRec.short_name))
-        for ndbcObsCat in obsCategory:
+        for obsCat in obsCategory:
           offeringString = "urn:ioos:station:%s:%s" % (self.stationoffering,platRec.short_name )
-          """
-          data = self.difObj.getObservation(
-                     offering=offeringString, 
-                     observedproperty=ndbcObsCat,
-                     responseformat='text/csv',
-                     eventtime=('%s/%s' % (startTime,endTime))
-                    )
-          """
-          try:
-            if(self.logger):
-              self.logger.info("getObservation for: %s" %(ndbcObsCat))
-            self.difGetObs.getObservation( offering=offeringString, 
-                                           observedproperty=ndbcObsCat,
-                                           eventtime=('%s/%s' % (startTime,endTime)))
-            #Keep looping until no more rows are available.
-            while True:
-              recList = self.difGetObs.getTimeSeriesRow(self.inventory.db, platRec.platform_handle, rowEntryDate)          
-              if(len(recList)):
+          if(self.logger):
+            self.logger.info("getObservation for: %s" %(obsCat))
+          if(self.difGetObs.getObservation( offering=offeringString, 
+                                         observedproperty=obsCat,
+                                         eventtime=('%s/%s' % (startTime,endTime)))):
+            try:
+              #Keep looping until no more rows are available.
+              getTimeSeriesRow = True
+              if(self.logger):
+                self.logger.debug("Processing time series data")                
+              while getTimeSeriesRow:
+                recList = self.difGetObs.getTimeSeriesRow(self.inventory.db, platRec, rowEntryDate)
+                #self.saveData(recList)          
                 for dataRec in recList:
                   self.dataQueue.put(dataRec)
-                #recList = self.parseReturnData(platRec, ndbcObsCat, data, rowEntryDate)
-              else:
-                break
-          except difError,e:
+            #StopIteration thrown whenever there are no more rows to process.
+            except StopIteration:
+              getTimeSeriesRow = False
+              if(self.logger):
+                self.logger.debug("Finished time series for %s" %(obsCat))
+          else:
             if(self.logger):
-              self.logger.error(e)
-      
-        if(self.logger):
-	  self.logger.debug("Approximate record count in DB queue: %d" % (self.dataQueue.qsize()))
+              self.logger.error("No data or error returned in getObservation query.")
 
-      if(self.logger):
-        self.logger.info("Signalling worker queue to shut down.")
-      #Wait until all the records are processed.
-      self.dataQueue.put(None)
-      self.dataQueue.join()
-      if(self.logger):
-        self.logger.info("Worker queue shut down.")
-      
+        if(self.logger):
+	        self.logger.debug("Approximate record count in DB queue: %d" % (self.dataQueue.qsize()))      
+    
     except Exception, e:  
       if(self.logger):
         self.logger.exception(e)
-        sys.exit(-1)
+
+    if(self.logger):
+      self.logger.info("Signalling worker queue to shut down.")
+    #Adding the none record tells the worker thread to stop processing whenever it hits it.
+    self.dataQueue.put(None)
+    #join blocks until the queue is emptied.
+    self.dataQueue.join()
+    if(self.logger):
+      self.logger.info("Worker queue shut down.")
+
        
   def saveData(self, recordList):    
     try:
-      self.inventory.db.session.add(dataRec)              
-      self.inventory.db.session.commit()
+      for dataRec in recordList:
+        self.inventory.db.session.add(dataRec)              
+        self.inventory.db.session.commit()
+        if(self.logger):
+          val = ""
+          if(dataRec.m_value != None):
+            val = "%f" % (dataRec.m_value)
+          logger.debug("Committing record Sensor: %d Datetime: %s Value: %s" %(dataRec.sensor_id, dataRec.m_date, val))
+        
     #Trying to add record that already exists.
     except exc.IntegrityError, e:
       self.inventory.db.session.rollback()        
-      if(self.logger):
-        self.logger.debug(e.message)                          
+      #if(self.logger):
+      #  self.logger.debug(e.message)                          
     except Exception, e:
       self.inventory.db.session.rollback()        
       if(self.logger):
@@ -949,10 +1002,11 @@ class fedsDataIngestion(dataIngestion):
     return
   
   def processData(self):
-    if(self.checkForNewPlatforms):
-      newRecs, platsMissingObs = self.inventory.findNew()
-      self.inventory.outputRecords(newRecs, platsMissingObs)      
-    self.getData()
+    if(self.inventory.connectDB()):        
+      if(self.checkForNewPlatforms):
+        newRecs, platsMissingObs = self.inventory.findNew()
+        self.inventory.outputRecords(newRecs, platsMissingObs)      
+      self.getData()
     
   """
   def parseReturnData(self, platformRec, difObs, data, rowEntryDate):
