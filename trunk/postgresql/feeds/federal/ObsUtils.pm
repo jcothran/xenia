@@ -392,8 +392,8 @@ sub get_nos_obs {
 
   # COOPS time format: 'YYYYMMDD HH:MM' 
   my $end_time = sprintf "%4d%02d%02d %02d:00",$year+1900,$mon+1,$mday,$hour;
-  my $now_time = sprintf "%4d%02d%02d %02d:00",$year_p+1900,$mon_p+1,$mday_p,$hour_p;
-
+  my $now_time = sprintf "%4d%02d%02d %02d:00",$year_p+1900,$mon_p+1,$mday_p,$hour_p-1;
+  print("Start Time: $now_time End Time: $end_time\n");
   #my $now_time="20081101 01:00";
   #my $end_time="20081130 23:59";
   my $service = SOAP::Lite->service('http://opendap.co-ops.nos.noaa.gov/axis/webservices/waterlevelrawsixmin/wsdl/WaterLevelRawSixMin.wsdl')->want_som(1);  
