@@ -1,11 +1,4 @@
 #!/usr/bin/perl
-###################################################################################
-#Revisions
-#Date: 2011/1/4
-#Author: DWR
-#Changes: Fixed the SQL station query to search for platform.active>0 to handle 
-# the expanded active flags now in use.
-###################################################################################
 
 use lib '/home/xeniaprod/scripts/postgresql/feeds/federal';
 #use lib "C:\\Documents and Settings\\dramage\\workspace\\SVNSandbox\\xenia\\postgresql\\feeds\\federal";
@@ -68,7 +61,7 @@ FROM
      ON platform.row_id = sensor.platform_id
      left JOIN organization
      on organization.row_id=platform.organization_id  
-where platform.active > 0 and organization.short_name='$target_obs'
+where organization.short_name='$target_obs'
 ORDER BY
    platform.platform_handle
   ,sensor.short_name;";
