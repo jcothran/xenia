@@ -16,6 +16,27 @@ Run the following sql in the following order against your database
 Note in the above sql file there is the below commented SELECT statement which will give a more human readable listing of the observation data dictionary
 
 [http://code.google.com/p/xenia/source/browse/trunk/sqlite/sql/display_order.sql Display order lookups]
+
+== PostGIS Enabling ==
+As taken from [http://postgis.refractions.net/docs/ch02.html here]
+
+Many of the PostGIS functions are written in the PL/pgSQL procedural language. As such, the next step to create a PostGIS database is to enable the PL/pgSQL language in your new database. This is accomplish by the command
+
+createlang plpgsql xenia
+
+Now load the PostGIS object and function definitions into your database by loading the postgis.sql definitions file (located in [prefix]/share/contrib as specified during the configuration step).
+
+Some systems have postgis.sql others have lwpostgis.sql.
+
+psql -d xenia -f postgis.sql
+
+For a complete set of EPSG coordinate system definition identifiers, you can also load the spatial_ref_sys.sql definitions file and populate the spatial_ref_sys table. This will permit you to perform ST_Transform() operations on geometries.
+
+psql -d xenia -f spatial_ref_sys.sql
+
+If you wish to add comments to the PostGIS functions, the final step is to load the postgis_comments.sql into your spatial database. The comments can be viewed by simply typing \dd [function_name] from a psql terminal window.
+
+psql -d xenia -f postgis_comments.sql 
 ----
 = Source Code = 
 
