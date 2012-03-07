@@ -1,23 +1,10 @@
-import sys
-import optparse
 import logging
 import logging.config
-import ConfigParser
-import urllib
-import urllib2
-import socket 
-import datetime
-import re
+
+import optparse
 import csv
-from lxml import etree    
-from lxml import objectify
-from pykml import kml
-
-import threading
-import Queue
-
-import shapely
-from shapely.geometry import Polygon, Point
+import re
+import datetime
 
 from sqlalchemy import exc
 from sqlalchemy.orm.exc import *
@@ -25,187 +12,10 @@ from sqlalchemy import or_
 from sqlalchemy.sql import column
 from xeniatools.xeniaSQLAlchemy import xeniaAlchemy, multi_obs, organization, platform, uom_type, obs_type, m_scalar_type, m_type, sensor 
 from xeniatools.xenia import uomconversionFunctions
+from xeniatools.ioosDif import * 
+from xeniatools.DataIngestion import * 
 
-#from geoalchemy import *
-class difError(Exception):
-  def __init__(self, value):
-      self.value = value
-  def __str__(self):
-      return repr(self.value)
 
-class ioosDif(object):
-  def __init__(self, sosUrl, logger=True):
-    self.logger = None
-    if(logger):
-      self.logger = logging.getLogger(type(self).__name__)
-    self.sosUrl = sosUrl
-    
-    
-  
-  def doRequest(self, parameters):
-    difRequest = None
-    parameters['service'] = 'SOS'
-    try:      
-      params = urllib.urlencode(parameters)
-      #create the url and the request
-      req = urllib2.Request(self.sosUrl + '?' + params)
-      #req = urllib2.Request(self.sosUrl,params)
-      # Open the url
-      #Set the timeout so we don't hang on the urlopen calls.
-      socket.setdefaulttimeout(30)
-      connection = urllib2.urlopen(req)
-      difRequest = connection.read()
-      
-    except urllib2.HTTPError, e:
-      if(self.logger):
-        self.logger.exception(e)
-    except urllib2.URLError, e:
-      if(self.logger):
-        self.logger.exception(e)
-    except Exception, e:  
-      if(self.logger):
-        self.logger.exception(e)
-
-    return(difRequest)
-  
-  def getCapabilities(self):
-    parameters = {}  
-    parameters['request'] = 'GetCapabilities'
-    capabilities = difCapabilities(self.doRequest(parameters))      
-    return(capabilities)
-  
-  def describeSensor(self,  
-                    procedure, 
-                    version='1.0.0'):
-    parameters = {}  
-    parameters['request'] = 'DescribeSensor'
-    parameters['outputformat']='text/xml;subtype="sensorML/1.0.0"'
-    parameters['procedure'] = procedure
-    parameters['version'] = version
-    results = objectify.fromstring(self.doRequest(parameters))      
-    return(results)
-  
-  def getObservation(self, 
-                     offering, 
-                     observedproperty,
-                     responseformat,
-                     eventtime=None,
-                     featureofinterest=None,
-                     version='1.0.0'):
-    parameters = {}  
-    parameters['request'] = 'GetObservation'
-    parameters['offering'] = offering
-    parameters['observedproperty'] = observedproperty
-    parameters['responseformat'] = responseformat
-    parameters['version'] = version
-    if(eventtime):
-      parameters['eventtime'] = eventtime
-    if(featureofinterest):
-      parameters['featureofinterest'] = featureofinterest
-    return(self.doRequest(parameters))  
-
-class difCapabilities():
-  def __init__(self, xmlData, logger=True):
-    self.logger = None
-    if(logger):
-      self.logger = logging.getLogger(type(self).__name__)
-    self.getCapRoot = objectify.fromstring(xmlData)
-    
-  def getStationId(self, stationProperty):
-    id = None
-    entryType = None
-    if '{http://www.opengis.net/gml}id' in stationProperty.attrib:    
-      id = stationProperty.attrib['{http://www.opengis.net/gml}id']
-      #The station id is stored as 'station-xxxxx', we want to split it up and just get the station id(xxxxxx)
-      #We want to ignore any tags that aren't station-xxxxx.      
-      stationParts = re.findall("^(network|station)-(.{1,})", id)
-      entryType = stationParts[0][0] 
-      id = stationParts[0][1]                   
-    return(id,entryType)
-  
-  def getFixedLonLat(self, stationProperty):
-    lat = None
-    lon = None
-    lowerCorner = stationProperty['{http://www.opengis.net/gml}boundedBy'].Envelope.lowerCorner
-    lowerCorner = lowerCorner.text.split(' ')
-    try:        
-      lat = float(lowerCorner[0])          
-      lon = float(lowerCorner[1])
-    except ValueError,e:
-      lat = lon = None            
-    return(lon,lat)
-  
-  def getStationDescription(self, stationProperty):
-    desc = None
-    desc = stationProperty['{http://www.opengis.net/gml}description'].text
-    return(desc)      
-  
-  def getStationTimePeriod(self, stationProperty):
-    timePeriod = None
-    timePeriod = stationProperty.time['{http://www.opengis.net/gml}TimePeriod']
-    return(timePeriod)
-  
-  def getStationObservations(self, stationProperty, dbObj, active, sourceToXeniaMap, uomConverter, rowEntryDate):
-    sensorRecs = []
-    sensors = ""
-    for obsProperty in stationProperty.observedProperty:
-      #The attribute is a url to the observation. We're not going to follow the url, we just want the
-      #observation name so split the url up and get the last piece.
-      obsType = obsProperty.attrib['{http://www.w3.org/1999/xlink}href'].split('/')[-1]
-      #Use the obsType to get the xenia observation.
-      xeniaObs = sourceToXeniaMap.getXeniaFromDifObs(obsType)
-      if(xeniaObs != None and len(xeniaObs)):
-        for xeniaOb in xeniaObs:
-          sensors += "obsName: %s\n" % (xeniaOb)
-          #Get the dif column name from the xenia observation name.
-          difObs = sourceToXeniaMap.getDifColNameFromXenia(xeniaOb)
-          if(difObs):
-            obsParts = re.findall("^(\w*)\s\((.{1,})\)", difObs)
-            #Get the xenia units. If we get None back, then we'll assume we're in the correct units.
-            uom = uomConverter.getXeniaUOMName(obsParts[0][1].lower())
-            if(uom == None):
-              uom = obsParts[0][1].lower()
-            #Get the m_type_id for the sensor rec.
-            mType = dbObj.mTypeExists(xeniaOb, uom)
-            if(mType):
-              newSensor = sensor()
-              newSensor.row_entry_date = rowEntryDate
-              newSensor.active = active
-              newSensor.m_type_id = mType
-              newSensor.s_order = 1
-              newSensor.short_name = xeniaOb
-              sensorRecs.append(newSensor)
-              if(self.logger):
-                self.logger.info("Found sensor: %s MType: %d SOrder: %d" % (newSensor.short_name,newSensor.m_type_id,newSensor.s_order))                          
-            else:
-              if(self.logger):
-                self.logger.error("Unable to find the m_type for Obs: %s(%s)" % (xeniaOb, uom))
-                sys.exit(-1)
-          else:
-            if(self.logger):
-              self.logger.error("Could not find dif Observation for xenia: %s" %(xeniaOb))
-      else: 
-        if(self.logger):
-          self.logger.error("GetCapabilities observedProperty: %s not found in xenia obs mapping." %(obsType))                      
-    return(sensorRecs)
-
-class difObservation(object):
-  def __init__(self, logger=True):
-    self.logger = None
-    if(logger):
-      self.logger = logging.getLogger(type(self).__name__)
-     
-  def getFixedLonLatValue(self, data):
-    return(None,None)
-  def getDateTime(self, data):
-    return(None)
-  def getDepth(self, data):
-    return(None)
-  def getDataValue(self, data):
-    return(None)    
-  def getTimeSeriesRow(self):
-    return(None)
-     
 class difObservationCSV(difObservation, ioosDif):
   def __init__(self, sosUrl, xeniaMapping, uomConverter, logger=True):
     difObservation.__init__(self, logger)
@@ -242,9 +52,12 @@ class difObservationCSV(difObservation, ioosDif):
         self.depthCol = self.xeniaToDifMapping.getDepthColumnName(observedproperty)
         self.difObsMap = self.xeniaToDifMapping.getDifColumnsFromObs(observedproperty)
         self.lineNum = 0
-        columnDefs = self.xeniaToDifMapping.getHeaderColumnNames(observedproperty)      
+        #colDefs = self.xeniaToDifMapping.getHeaderColumnNames(observedproperty)      
         splitData = data.split("\n")
-        #We use the column header list from above to map the rows into key/value pairs.
+        #The first line contains the column headers. We use this to map them
+        #into a dictionary as we read each row,
+        self.csvHeader = splitData[0].replace('"', '')
+        columnDefs = self.csvHeader.split(',')
         self.getObsData = csv.DictReader(splitData, columnDefs)
         self.header = self.getObsData.next()
         self.lineNum += 1
@@ -330,282 +143,7 @@ class difObservationCSV(difObservation, ioosDif):
     return(recList)
 
 
-class xeniaMappings(object):
-  def __init__(self, jsonFilepath=None):
-    self.mappings = None
-    if(jsonFilepath):
-      import simplejson as json
-      jsonFile = open(jsonFilepath, 'r')
-      self.mappings = json.load(jsonFile)
-              
-  def configMapping(self, mappingData):
-    return(None)
-  
-  def buildMTypeMapping(self, db, uomConverter):
-    mTypeMap = {}
-    if 'observation_columns' in self.mappings:
-      for difOb in self.mappings['observation_columns']:
-        for difCol in self.mappings['observation_columns'][difOb]['m_value_columns']:
-          xeniaKey = difCol.keys()[0]
-          xeniaOb = difCol[xeniaKey] 
-          if(len(xeniaOb)):
-            obsParts = re.findall("^(\w*)\s\((.{1,})\)", xeniaKey)
-            #Get the xenia units. If we get None back, then we'll assume we're in the correct units.
-            uom = uomConverter.getXeniaUOMName(obsParts[0][1].lower())
-            if(uom == None):
-              uom = obsParts[0][1].lower()           
-            mTypeMap[xeniaOb] = db.mTypeExists(xeniaOb, uom)
-      self.mappings['mTypes'] = mTypeMap
-    return
-  
-  def getMtypeFromXenia(self, xeniaObs):
-    mTypeId = self.mappings['mTypes'][xeniaObs]
-    return(mTypeId)
-  
-  def getLonLatColumnNames(self):
-    latCol = None
-    lonCol = None
-    if "fixed_location" in self.mappings:
-      latCol = self.mappings['fixed_location']['lat']
-      lonCol = self.mappings['fixed_location']['lon']                
-    return(lonCol,latCol)
-  
-  def getDatetimeColumnName(self):
-    dateTimeCol = None
-    if "datetime" in self.mappings:
-      dateTimeCol = self.mappings['datetime']
-    return(dateTimeCol)
-  
-  def getDepthColumnName(self, difObsName):
-    depthCol = None
-    if "depth" in self.mappings['observation_columns'][difObsName]:
-      depthCol = self.mappings['observation_columns'][difObsName]['depth']
-    return(depthCol)
-  
-  def getDifColumnsFromObs(self, difObsName):
-    mapping = None
-    if 'observation_columns' in self.mappings:
-      if difObsName in self.mappings['observation_columns']:
-        #The m_value_columns is a list of dictionaries structured: key = Column Name of the Dif observation, data = xenia obs name
-        #We use a list to gaurantee the the order of the columns since the key also represents the column the data is stored in.
-        mapping = {}
-        for difCol in self.mappings['observation_columns'][difObsName]['m_value_columns']:
-          key = difCol.keys()
-          mapping[key[0]] = difCol[key[0]]
-    return(mapping)
-  
-  def getXeniaFromDifObs(self, difObsName):
-    xeniaObs = None
-    if 'observation_columns' in self.mappings and difObsName in self.mappings['observation_columns']:
-      xeniaObs = []
-      for difCol in self.mappings['observation_columns'][difObsName]['m_value_columns']:
-        keys = difCol.keys()
-        xeniaOb = difCol[keys[0]] 
-        if(len(xeniaOb)):
-          xeniaObs.append(xeniaOb)
-    return(xeniaObs)
-  
-  def getDifObsNameFromXenia(self, xeniaObs):
-    if 'observation_columns' in self.mappings:
-      for difObsMap in self.mappings['observation_columns']:
-        #The m_value_columns is a list of dictionaries structured: key = Column Name of the Dif observation, data = xenia obs name
-        #We use a list to gaurantee the the order of the columns since the key also represents the column the data is stored in.
-        mapping = self.mappings['observation_columns'][difObsMap]['m_value_columns']
-        for difObsRow in mapping:
-          difColName = difObsRow.keys()
-          if(xeniaObs == difObsRow[difColName[0]]):
-            return(difObsMap)
-    return(None)
 
-  def getDifColNameFromXenia(self, xeniaObs):
-    for difObsMap in self.mappings['observation_columns']:
-      #The m_value_columns is a list of dictionaries structured: key = Column Name of the Dif observation, data = xenia obs name
-      #We use a list to gaurantee the the order of the columns since the key also represents the column the data is stored in.
-      mapping = self.mappings['observation_columns'][difObsMap]['m_value_columns']
-      for difObsRow in mapping:
-        key = difObsRow.keys()
-        if(xeniaObs == difObsRow[key[0]]):
-          return(key[0])
-    return(None)
-    
-  def getHeaderColumnNames(self, difObsName):
-    colNames = []
-    colNames.append(self.mappings['platform_identifier'])
-    colNames.append(self.mappings['sensor_identifier'])
-    lon,lat = self.getLonLatColumnNames()
-    colNames.append(lat)
-    colNames.append(lon)
-    colNames.append(self.getDatetimeColumnName())
-    if 'depth' in self.mappings['observation_columns'][difObsName]: 
-      colNames.append(self.mappings['observation_columns'][difObsName]['depth'])
-    for difObsRow in self.mappings['observation_columns'][difObsName]['m_value_columns']:
-      key = difObsRow.keys()
-      colNames.append(key[0])
-    
-    return(colNames)
-
-class dataSaveWorker(threading.Thread):
-  def __init__(self, configFile, dataQueue, logger=True):
-    self.__dataQueue = dataQueue
-    self.configFilename = configFile
-    self.loggerFlag = logger 
-    threading.Thread.__init__(self, name="data_saver")
-
-  #This is the worker thread that handles saving the records to the database.
-  def run(self):
-    if(self.loggerFlag):
-      logger = logging.getLogger(type(self).__name__)
-      logger.info("Starting %s thread." % (self.getName()))
-    try:
-      processData = True
-      config = ConfigParser.RawConfigParser()
-      configFile = open(self.configFilename, 'r')
-      config.readfp(configFile)
-  
-      dbUser = config.get('Database', 'user')
-      dbPwd = config.get('Database', 'password')
-      dbHost = config.get('Database', 'host')
-      dbName = config.get('Database', 'name')
-      dbConnType = config.get('Database', 'connectionstring')
-      
-      configFile.close()
-      db = xeniaAlchemy()      
-      if(db.connectDB(dbConnType, dbUser, dbPwd, dbHost, dbName, False) == True):
-        if(logger):
-          logger.info("Succesfully connect to DB: %s at %s" %(dbName,dbHost))
-      else:
-        logger.error("Unable to connect to DB: %s at %s. Terminating script." %(dbName,dbHost))
-        processData = False
-
-        #sys.exit(-1)            
-    except ConfigParser.Error, e:  
-      if(logger):
-        logger.exception(e)
-    
-    #This is the data processing part of the thread. We'll loop here until a None record is posted then exit. 
-    while processData:
-      dataRec = self.__dataQueue.get()
-      if(dataRec != None):
-        try:
-          db.session.add(dataRec)              
-          db.session.commit()
-          if(logger):
-            val = ""
-            if(dataRec.m_value != None):
-              val = "%f" % (dataRec.m_value)
-            logger.debug("Committing record Sensor: %d Datetime: %s Value: %s" %(dataRec.sensor_id, dataRec.m_date, val))
-
-        #Trying to add record that already exists.
-        except exc.IntegrityError, e:
-          db.session.rollback()        
-          #if(logger):
-          #  logger.debug(e.message)                          
-        except Exception, e:
-          db.session.rollback()        
-          if(logger):
-            logger.exception(e)
-          #sys.exit(-1)
-      else:
-        if(logger):
-          logger.info("%s thread exiting." % (self.getName()))
-        processData = False
-      self.__dataQueue.task_done()
-
-              
-              
-class platformInventory:
-  def __init__(self, organizationID, configurationFile, logger=True):
-    self.organizationID = organizationID
-    self.configurationFile = configurationFile    
-    self.logger = None
-    if(logger):
-      self.logger = logging.getLogger(type(self).__name__)
-    
-  def connectDB(self):
-    try:
-      config = ConfigParser.RawConfigParser()
-      config.read(self.configurationFile)  
-      dbUser = config.get('Database', 'user')
-      dbPwd = config.get('Database', 'password')
-      dbHost = config.get('Database', 'host')
-      dbName = config.get('Database', 'name')
-      dbConnType = config.get('Database', 'connectionstring')
-    except ConfigParser.Error, e:  
-      if(self.logger):
-        self.logger.exception(e)
-      return(False)
-    try:
-      self.db = xeniaAlchemy(self.logger)      
-      if(self.db.connectDB(dbConnType, dbUser, dbPwd, dbHost, dbName, False) == True):
-        if(self.logger):
-          self.logger.info("Succesfully connect to DB: %s at %s" %(dbName,dbHost))
-          return(True)
-      else:
-        self.logger.error("Unable to connect to DB: %s at %s." %(dbName,dbHost))
-    except Exception,e:
-      self.logger.exception(e)
-    return(False)
-  
-  def getKnownPlatforms(self):
-    return(None)
-
-  def findNew(self):      
-    return(None)
-  
-  def outputRecords(self, recs):
-    return(None)
-  
-  def checkAvailableObs(self):
-    return(None)
-  
-  def platformInInventory(self, inventoryRecs, bbox, testPlatformId, testPlatformLat, testPlatformLon, testPlatformMetadata=""):
-    platformFound = False
-    stationPt = shapely.wkt.loads('POINT(%s %s)' %(testPlatformLon,testPlatformLat))    
-    for platRec in inventoryRecs:     
-      lcShortName = platRec.short_name.lower()
-      lcplatformId = testPlatformId.lower()
-      if(lcShortName == lcplatformId):
-        if(self.logger):
-          self.logger.info("Platform: %s exists in the current xenia database." % (testPlatformId))
-        platformFound = True  
-    #The platform wasn't found based on its name, however it may exist and we've called it something else since 
-    #the owner of the platform may be another entity. Let's do a secondary search to see if we find a platform at the same location.        
-    if(platformFound != True):
-      #ST_Dwithin params Geom 1, Geom 2, Distance in meters
-      withinClause = "ST_DWithin(platform.the_geom, '%s', %4.2f)" % (stationPt.wkt, 0.03)
-      distColResult = "'%s'" % (stationPt.wkt)
-      
-      distRecs = self.db.session.query(platform).\
-        filter(withinClause).\
-        all()
-      if(len(distRecs)):
-        platformFound = True  
-        for nearRec in distRecs:
-          if(self.logger):
-            self.logger.info("Test station: %s(%s) is with 0.5 miles of %s, could be same platform" % (testPlatformId,testPlatformMetadata,nearRec.platform_handle))
-    return(platformFound)
-    
-class dataIngestion(object):
-  def __init__(self, configFile, logger=True):
-    
-    self.logger = None
-    if(logger):
-      self.logger = logging.getLogger(type(self).__name__)
-    self.config = ConfigParser.RawConfigParser()
-    self.config.read(configFile)
-  
-  def processData(self):    
-    recList = self.getData()
-    self.saveData(recList)
-    return(None)
-    
-  def getData(self):
-    return([])
-  
-  def saveData(self, recordList):
-    return
-
-    
 class xeniaFedsInventory(platformInventory):
   def __init__(self, organizationID, configurationFile, logger=True):    
     platformInventory.__init__(self, organizationID, configurationFile, logger)    
@@ -962,7 +500,7 @@ class fedsDataIngestion(dataIngestion):
               self.logger.error("No data or error returned in getObservation query.")
 
         if(self.logger):
-	        self.logger.debug("Approximate record count in DB queue: %d" % (self.dataQueue.qsize()))      
+          self.logger.debug("Approximate record count in DB queue: %d" % (self.dataQueue.qsize()))      
     
     except Exception, e:  
       if(self.logger):
@@ -976,7 +514,8 @@ class fedsDataIngestion(dataIngestion):
     self.dataQueue.join()
     if(self.logger):
       self.logger.info("Worker queue shut down.")
-
+    
+    self.inventory.db.disconnect()
        
   def saveData(self, recordList):    
     try:
@@ -1131,5 +670,3 @@ if __name__ == '__main__':
     else:
       import traceback
       traceback.print_exc()
-
-    
