@@ -1,5 +1,6 @@
 #Information about the Pesticide Project setup.
 
+<wiki:toc max_depth="4" />
 
 == Blue Host Configurations ==
 === Programming Environment Requirements ===
@@ -32,7 +33,7 @@
       * simplejson-2.3.2
         Installed from source, easy_install resulted in various errors.
 
-=== PostGres Details ===
+=== !PostGres Details ===
   * Database Name: pesticides
   
          
