@@ -53,20 +53,23 @@ if __name__ == '__main__':
         %(int(options.previousHours), obsWindDir)
   windDir = xeniaDb.executeQuery(sql)
   if(windDir != None):
-    for windDirRow in windDir:     
+    for windDirRow in windDir:   
       val = windDirRow['m_value']
-      print("Platform: %s" %(windDirRow['platform_handle']))
-      #For MapServer?? directional font libraries, the direction is negative of the 
-      #true direction(degrees from North), so 90 (degrees) becomes -90 for display purposes.
-      val = val * -1
-      sql = "UPDATE multi_obs SET d_label_theta=%d WHERE m_date='%s' AND m_type_id=%d AND platform_handle='%s';"\
-            %(val,windDirRow['m_date'],obsWindSpeed,windDirRow['platform_handle'])
-      windSpdCursor = xeniaDb.executeQuery(sql)
-      if(windSpdCursor == None):
-        print("Error updating Wind Speed. Error: %s SQL: %s" %(xeniaDb.dbConnection.getErrorInfo(), sql))
+      if(val != None):      
+        print("Platform: %s" %(windDirRow['platform_handle']))
+        #For MapServer?? directional font libraries, the direction is negative of the 
+        #true direction(degrees from North), so 90 (degrees) becomes -90 for display purposes.
+        val = val * -1
+        sql = "UPDATE multi_obs SET d_label_theta=%d WHERE m_date='%s' AND m_type_id=%d AND platform_handle='%s';"\
+              %(val,windDirRow['m_date'],obsWindSpeed,windDirRow['platform_handle'])
+        windSpdCursor = xeniaDb.executeQuery(sql)
+        if(windSpdCursor == None):
+          print("Error updating Wind Speed. Error: %s SQL: %s" %(xeniaDb.dbConnection.getErrorInfo(), sql))
+        else:
+          rowsUpdated += 1
+          windSpdCursor.close()
       else:
-        rowsUpdated += 1
-        windSpdCursor.close()
+        print("None type for wind value.");
     if(xeniaDb.dbConnection.commit() == False):
       print("Commit Error. Error: %s" %(xeniaDb.dbConnection.getErrorInfo()))
     
