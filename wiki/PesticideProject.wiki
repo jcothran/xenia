@@ -1,8 +1,8 @@
 #Information about the Pesticide Project setup.
 
 
-
 == Blue Host Configurations ==
+=== Programming Environment Requirements ===
   * File layout
     Home directory is: /home2/sccoasta
     Added directories:
@@ -32,5 +32,7 @@
       * simplejson-2.3.2
         Installed from source, easy_install resulted in various errors.
 
-
+=== PostGres Details ===
+  * Database Name: pesticides
+  
          
