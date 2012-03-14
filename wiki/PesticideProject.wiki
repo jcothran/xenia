@@ -4,7 +4,7 @@
 
 == Blue Host Configurations ==
 === Programming Environment Requirements ===
-  * File layout
+  ==== File layout ====
     Home directory is: /home2/sccoasta
     Added directories:
     {{{
@@ -12,7 +12,7 @@
     $HOME/cron
     $HOME/scripts
     }}}
-  * Python
+  ==== Python ====
     From source, built and installed Python v 2.7.2
     Modified .bashrc to use the local Python installation by adding:
     {{{
