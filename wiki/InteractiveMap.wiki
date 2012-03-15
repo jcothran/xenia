@@ -566,7 +566,7 @@ This section will detail the local mapfiles used, as well as any wrapper scripts
     Normal WMS parameters, in addition:<br/>
     TIME_OFFSET_HOURS - Sets the hour to look up in the database.<br/>
 ===== In-Situ Winds =====
-  _Mapfile:_ [http://trac.secoora.org/visual/browser/mapping/trunk/mapserver/mapfiles/secoora_insitu.map secoora_insitu.map]<br/>
+  _Mapfile:_ [http://code.google.com/p/xenia/source/browse/trunk/mapping/mapserv/general.map general.map]<br/>
   _Directory_: /home/xeniaprod/mapping/common<br/>
   _Machine:_ Neptune<br/>
   _URL Parameters_:
