@@ -821,7 +821,7 @@ There is a cron job which checks this folder every minute and processes these fi
 
 so if looking for files on a certain date, supply the wildcard(like `/usr2/prod/buoys/processed/*20120319*` ) for that date to see those records(there are many files in that directory so don't try to list all of them)
 
-The two primary scripts which process those files are similar, the first processes the data to the old carocoops database on nautilus, the second changes the website pages for the old carocoops website at http://carocoops.org
+The two primary scripts which process those files are similar, the first processes the data to the old carocoops database on nautilus, the second changes the website pages for the old carocoops website at http://carocoops.org  If there is a change in the telemetry feed in regards to the number or ordering of parameters, then these two scripts need to change accordingly.  The telemetry feed lines are split into sections(like FCAT,WXPAK,etc) and the indexes from these inline headers should be adjusted as needed.
 
 {{{
 #add to database
