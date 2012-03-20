@@ -819,7 +819,7 @@ There is a cron job which checks this folder every minute and processes these fi
 
 /usr2/prod/buoys/processed
 
-so if looking for files on a certain date, supply the wildcard(like /usr2/prod/buoys/processed/*20120319* ) for that date to see those records(there are many files in that directory so don't try to list all of them)
+so if looking for files on a certain date, supply the wildcard(like `/usr2/prod/buoys/processed/*20120319*` ) for that date to see those records(there are many files in that directory so don't try to list all of them)
 
 The two primary scripts which process those files are similar, the first processes the data to the old carocoops database on nautilus, the second changes the website pages for the old carocoops website at http://carocoops.org
 
