@@ -804,3 +804,30 @@ For Tampa/West Florida Shelf(WFS), a similar set of scripts is under the 'tampa'
 For Miami, a similar set of scripts is under 'miami'.
 
 For NC Outer banks, a similar set of scripts is under 'banks' - for 'banks' no data is collected or converted, just uptime/notification checks.
+
+= Machine: Nautilus = 
+nautilus.baruch.sc.edu <br/>
+
+
+== Scripts Nautilus ==
+----
+=== CarolinasRCOOS(South Carolina - SUN2,CAP2,FRP2) Data feed ===
+
+Jeff Jefferson's telemetry and server pushes the most recent files to /usr2/carocoops_data
+
+There is a cron job which checks this folder every minute and processes these files to the following directory unchanged
+
+/usr2/prod/buoys/processed
+
+so if looking for files on a certain date, supply the wildcard(like /usr2/prod/buoys/processed/*20120319* ) for that date to see those records(there are many files in that directory so don't try to list all of them)
+
+The two primary scripts which process those files are similar, the first processes the data to the old carocoops database on nautilus, the second changes the website pages for the old carocoops website at http://carocoops.org
+
+{{{
+#add to database
+/usr2/prod/buoys/processed/processBuoysDB.pl
+#change webpage
+/usr2/prod/buoys/processed/processBuoys.pl
+#process netcdf
+/usr2/prod/buoys/processed/process_netcdf.pl
+}}}
