@@ -54,6 +54,7 @@ class dataSaveWorker(threading.Thread):
       if(logger):
         logger.exception(e)
     
+    recCount = 0
     #This is the data processing part of the thread. We'll loop here until a None record is posted then exit. 
     while processData:
       dataRec = self.__dataQueue.get()
@@ -66,7 +67,9 @@ class dataSaveWorker(threading.Thread):
             if(dataRec.m_value != None):
               val = "%f" % (dataRec.m_value)
             logger.debug("Committing record Sensor: %d Datetime: %s Value: %s" %(dataRec.sensor_id, dataRec.m_date, val))
-
+            if((recCount % 10) == 0):
+              logger.debug("Approximate record count in DB queue: %d" % (self.__dataQueue.qsize()))
+          recCount += 1        
         #Trying to add record that already exists.
         except exc.IntegrityError, e:
           db.session.rollback()        
@@ -158,7 +161,12 @@ class platformInventory:
             self.logger.info("Test station: %s(%s) is with 0.5 miles of %s, could be same platform" % (testPlatformId,testPlatformMetadata,nearRec.platform_handle))
     return(platformFound)
     
-    
+"""
+Class: dataIngestion
+Purpose: THis is the base class to use to connect to a data source and bring it into the the xenia database.
+This is strictly a class to override, there is no database connection here. The idea is to have a standard interface 
+and simply create an object instance, then call processData.
+"""  
 class dataIngestion(object):
   def __init__(self, configFile, logger=True):
     
@@ -179,6 +187,68 @@ class dataIngestion(object):
   def saveData(self, recordList):
     return
 
+"""
+Class: xeniaDataIngestion
+Purpose: Extends dataIngestion and adds connect/disconnect calls to the xenia database. Could probably just have this
+in the dataIngestion base class.
+"""
+class xeniaDataIngestion(dataIngestion):
+  def __init__(self, organizationId, configFile, logger=True):
+    dataIngestion.__init__(self, configFile, logger)
+    self.xeniaDb = None
+    self.organizationId = organizationId
     
+  def connect(self):
+    try:      
+      #Xenia database
+      dbUser = self.config.get('Database', 'user')
+      dbPwd = self.config.get('Database', 'password')
+      dbHost = self.config.get('Database', 'host')
+      dbName = self.config.get('Database', 'name')
+      dbConnType = self.config.get('Database', 'connectionstring')
+                 
+    except ConfigParser.Error, e:  
+      if(self.logger):
+        self.logger.exception(e)
+    except Exception,e:
+      if(self.logger):
+        self.logger.exception(e)
+    else:                              
+      try:
+        #Attempt to connect to the xenia database
+        self.xeniaDb = xeniaAlchemy()      
+        if(self.xeniaDb.connectDB(dbConnType, dbUser, dbPwd, dbHost, dbName, False) == True):
+          if(self.logger):
+            self.logger.info("Succesfully connect to DB: %s at %s" %(dbName,dbHost))
+          return(True)
+        else:
+          if(self.logger):
+            self.logger.info("Unable to connect to DB: %s at %s" %(dbName,dbHost)) 
+          return(False)          
+      except Exception,e:
+        if(self.logger):
+          self.logger.exception(e)                              
+    return(False)
+
+  def disconnect(self):
+    try:
+      if(self.xeniaDb):
+        self.xeniaDb.disconnect()
+        if(self.logger):
+          self.logger.info("Disconnected from xenia database.")
+        return(True)
+    except Exception,e:
+      if(self.logger):
+        self.logger.exception(e)
+        
+    return(False)                              
+"""
+Class: dataIngestion
+Purpose: THis is the base class to use to connect to a data source and bring it into the the xenia database.
+This is strictly a class to override, there is no database connection here.
+"""  
+class dataProduct(xeniaDataIngestion):
+  def __init__(self, organizationId, configFile, logger=True):
+    xeniaDataIngestion.__init__(self, organizationId, configFile, logger)
 
     
