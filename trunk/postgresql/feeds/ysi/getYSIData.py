@@ -1,3 +1,9 @@
+"""
+Revisions:
+Author: DWR
+Date: 2012-03-23
+Changes: Added a socket timeout to prevent us from hanging on the urlopen calls.
+"""
 import sys
 import StringIO
 import re
@@ -5,6 +11,8 @@ import time
 import urllib
 import urllib2
 from urllib2 import Request, urlopen, URLError, HTTPError
+import socket
+import traceback
 from lxml import etree
 from xeniatools.xmlConfigFile import xmlConfigFile
 from xeniatools.xenia import uomconversionFunctions
@@ -114,45 +122,56 @@ class ysiObsSettings(object):
       customerID = customerID.replace("hidCustomerID=", "")
       customerID = int(customerID)
     else:
-      return(False) 
-    request = urllib2.Request(url)
-    response = urllib2.urlopen(request)
-    data = response.read()
-    #At the top of the HTML file, there is a text field that tells us what site we are looking at:
-    #"You are here: NERRS / Grand Bay NERRS / S.W.A.M.P. / Crooked Bayou Uplink" This regexp
-    #parses the page looking for it.
-    loc = re.findall("<b>(You are here<\/b>.*)(<\/span>)", data)
-    location = None
-    if(len(loc)):
-      location = loc[0][0].split("/")
-      location = location[-1]
-    #We are looking for the javascript calls that match this:
-    #ViewParameterHistory(551,2210,6,'SpCond [mS/cm]',0)
-    list = re.findall('ViewParameterHistory\(.*?\)', data)    
-    #Now let's loop through, pull apart the function parameters and build out settings list.
-    for func in list:
-      #Check to see if we have the function declaration, if so we skip that one.
-      if( func.find('intNodeID') == -1 ):
-        #let's get rid of everything but the bits we are interested in.
-        params = func.replace("ViewParameterHistory", "")
-        params = params.replace("(", "")
-        params = params.replace(")", "")
-        parmList = params.split(",")
-        #Now let's build the settings list.
-        #ViewParameterHistory( intNodeID, intAVIID, intParameterID, sAlternateName, intChanIdx )
-        param = ysiParameters()
-        param.siteName  = location
-        param.customerID= customerID 
-        param.nodeID    = int(parmList[0])
-        param.aviID     = int(parmList[1])
-        param.paramID   = int(parmList[2])
-        param.altName   = parmList[3]
-        param.altName   = param.altName.replace("'", "")
-        param.chanNDX   = int(parmList[4])
-        print( "altName: %s customerID: %d nodeID: %d aviID; %d paramID: %d chanNDX: %d"\
-                %(param.altName,param.customerID,param.nodeID,param.aviID,param.paramID,param.chanNDX) )
-        self.paramList.append(param)              
-    return(True)
+      return(False)
+    try:
+      #Set the timeout so we don't hang on the urlopen calls.    
+      socket.setdefaulttimeout(30)     
+      request = urllib2.Request(url)
+      response = urllib2.urlopen(request)
+    except urllib2.HTTPError, e:
+      traceback.print_exc()
+    except urllib2.URLError, e:
+      traceback.print_exc()
+    except Exception, e:  
+      traceback.print_exc()        
+    else:
+      data = response.read()    
+      #At the top of the HTML file, there is a text field that tells us what site we are looking at:
+      #"You are here: NERRS / Grand Bay NERRS / S.W.A.M.P. / Crooked Bayou Uplink" This regexp
+      #parses the page looking for it.
+      loc = re.findall("<b>(You are here<\/b>.*)(<\/span>)", data)
+      location = None
+      if(len(loc)):
+        location = loc[0][0].split("/")
+        location = location[-1]
+      #We are looking for the javascript calls that match this:
+      #ViewParameterHistory(551,2210,6,'SpCond [mS/cm]',0)
+      list = re.findall('ViewParameterHistory\(.*?\)', data)    
+      #Now let's loop through, pull apart the function parameters and build out settings list.
+      for func in list:
+        #Check to see if we have the function declaration, if so we skip that one.
+        if( func.find('intNodeID') == -1 ):
+          #let's get rid of everything but the bits we are interested in.
+          params = func.replace("ViewParameterHistory", "")
+          params = params.replace("(", "")
+          params = params.replace(")", "")
+          parmList = params.split(",")
+          #Now let's build the settings list.
+          #ViewParameterHistory( intNodeID, intAVIID, intParameterID, sAlternateName, intChanIdx )
+          param = ysiParameters()
+          param.siteName  = location
+          param.customerID= customerID 
+          param.nodeID    = int(parmList[0])
+          param.aviID     = int(parmList[1])
+          param.paramID   = int(parmList[2])
+          param.altName   = parmList[3]
+          param.altName   = param.altName.replace("'", "")
+          param.chanNDX   = int(parmList[4])
+          print( "altName: %s customerID: %d nodeID: %d aviID; %d paramID: %d chanNDX: %d"\
+                  %(param.altName,param.customerID,param.nodeID,param.aviID,param.paramID,param.chanNDX) )
+          self.paramList.append(param)              
+      return(True)
+    return(False)
   """
   Function: getObservationsForParameter
   Purpose: For the given ysiParameters object, this function uses the self.dataQueryURL url to scrape the
@@ -167,36 +186,46 @@ class ysiObsSettings(object):
     obsList = []
     #hidCustomerID=%d&hidParameterID=%d&hidNodeID=%d&hidAVIID=%d&hidChanID=%d"
     url = ( self.dataQueryURL % (ysiParam.customerID,ysiParam.paramID,ysiParam.nodeID,ysiParam.aviID,ysiParam.chanNDX))
-    request = urllib2.Request(url)
-    response = urllib2.urlopen(request)
-    data = response.read()
-    #Break the HTML page apart using the 'table' string as the matching word. We
-    #end up with a list of table entries.
-    splitData=data.split('table')
-    #Now we search for the string"dgParamHistory" since that seems to be in the table
-    #that contains the parameter data we are interested in.
-    for row in splitData:
-      if( row.find('dgParamHistory') > 0 ):
-        splitData = "<table%stable>" %(row)
-        splitData = splitData.replace("&nbsp;", "")
-        break
-    html = StringIO.StringIO(splitData)
-    tableHead = xmlConfigFile(html)
-    rowList = tableHead.getListHead("//table")
-    #We want to clean up the date/time text so we use regexp to retrieve just that.
-    date = re.compile('(\d\d\/\d\d\/\d\d\d\d\s\d\d\:\d\d\s(AM|PM))')
-    val = re.compile('\s')
-    row = 0
-    for child in tableHead.getNextInList(rowList):
-      tag = child.xpath( 'td' )
-      #First row is the header, so skip it.
-      if(row > 0):
-        if(len(tag) >=2):
-          col1 = date.findall(tag[0].text)
-          col2 = val.sub('', tag[1].text)
-          #Create date/time, value tuple.
-          obsList.append([col1[0][0],col2])
-      row += 1
+    try:
+      #Set the timeout so we don't hang on the urlopen calls.
+      socket.setdefaulttimeout(30)         
+      request = urllib2.Request(url)
+      response = urllib2.urlopen(request)
+    except urllib2.HTTPError, e:
+      traceback.print_exc()
+    except urllib2.URLError, e:
+      traceback.print_exc()
+    except Exception, e:  
+      traceback.print_exc()        
+    else:    
+      data = response.read()
+      #Break the HTML page apart using the 'table' string as the matching word. We
+      #end up with a list of table entries.
+      splitData=data.split('table')
+      #Now we search for the string"dgParamHistory" since that seems to be in the table
+      #that contains the parameter data we are interested in.
+      for row in splitData:
+        if( row.find('dgParamHistory') > 0 ):
+          splitData = "<table%stable>" %(row)
+          splitData = splitData.replace("&nbsp;", "")
+          break
+      html = StringIO.StringIO(splitData)
+      tableHead = xmlConfigFile(html)
+      rowList = tableHead.getListHead("//table")
+      #We want to clean up the date/time text so we use regexp to retrieve just that.
+      date = re.compile('(\d\d\/\d\d\/\d\d\d\d\s\d\d\:\d\d\s(AM|PM))')
+      val = re.compile('\s')
+      row = 0
+      for child in tableHead.getNextInList(rowList):
+        tag = child.xpath( 'td' )
+        #First row is the header, so skip it.
+        if(row > 0):
+          if(len(tag) >=2):
+            col1 = date.findall(tag[0].text)
+            col2 = val.sub('', tag[1].text)
+            #Create date/time, value tuple.
+            obsList.append([col1[0][0],col2])
+        row += 1
     return(obsList)
   """
   Function: getAllObservations
@@ -211,7 +240,10 @@ class ysiObsSettings(object):
     obsDict = {}
     for param in self.paramList:
       obsList = self.getObservationsForParameter(param)
-      obsDict[param.altName] = obsList
+      if(len(obsList)):
+        obsDict[param.altName] = obsList
+      else:
+        print("No observations for %s." % (param.altName))
     return(obsDict)
   
 class ysiDataCollection(object):
@@ -582,6 +614,10 @@ class ysiDataCollection(object):
       obs = "oxygen_concentration"
       uom = "percent"
       sOrder = "2"
+    elif( ysiObsName == 'Bottom %DO [%]' ):
+      obs = "oxygen_concentration"
+      uom = "percent"
+      sOrder = "2"
     elif( ysiObsName == 'Surface DO Conc [mg/L]' ):
       obs = "oxygen_concentration"
       uom = "mg_L-1"
@@ -590,11 +626,19 @@ class ysiDataCollection(object):
       obs = "oxygen_concentration"
       uom = "mg_L-1"
       sOrder = "1"
+    elif( ysiObsName == 'Surface DO [mg/L]' ):
+      obs = "oxygen_concentration"
+      uom = "mg_L-1"
+      sOrder = "1"
     elif( ysiObsName == 'DO Conc [mg/L]' ):
       obs = "oxygen_concentration"
       uom = "mg_L-1"
       sOrder = "1"
     elif( ysiObsName == 'Bottom DO Conc [mg/L]' ):
+      obs = "oxygen_concentration"
+      uom = "mg_L-1"
+      sOrder = "2"
+    elif( ysiObsName == 'Bottom DO [mg/L]' ):
       obs = "oxygen_concentration"
       uom = "mg_L-1"
       sOrder = "2"
@@ -647,6 +691,10 @@ class ysiDataCollection(object):
       uom = "V"
       sOrder = "1"
     elif( ysiObsName == 'Surface Depth [m]' ):
+      obs = "depth"
+      uom = "m"
+      sOrder = "1"
+    elif( ysiObsName == 'Bottom Depth [m]' ):
       obs = "depth"
       uom = "m"
       sOrder = "1"
