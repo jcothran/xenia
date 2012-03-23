@@ -141,6 +141,9 @@ class gliderDataSaveWorker(threading.Thread):
     except ConfigParser.Error, e:  
       if(logger):
         logger.exception(e)
+    except Exception,e:
+      if(logger):
+        logger.exception(e)                
     else:
       recCount = 0
       #This is the data processing part of the thread. We'll loop here until a None record is posted then exit. 
@@ -257,14 +260,19 @@ class webbGliders(xeniaDataIngestion):
    
   def disconnect(self):
     xeniaDataIngestion.disconnect(self)
-    if(self.logger):
-      self.logger.info("Signalling worker queue to shut down.")
-    #Adding the none record tells the worker thread to stop processing whenever it hits it.
-    self.dataQueue.put(None)
-    #join blocks until the queue is emptied.
-    self.dataQueue.join()
-    if(self.logger):
-      self.logger.info("Worker queue shut down.")
+    if(self.dbSaver.isAlive()):
+      if(self.logger):
+        self.logger.info("Signalling worker queue to shut down.")
+      #Adding the none record tells the worker thread to stop processing whenever it hits it.
+      self.dataQueue.put(None)
+      #join blocks until the queue is emptied.    
+      self.dataQueue.join()
+      if(self.logger):
+        self.logger.info("Worker queue shut down.")
+    else:
+      if(self.logger):
+        self.logger.debug("Worker thread is already dead.")
+      
     try:
       if(self.dbWebbConn):
         self.dbWebbConn.close()
