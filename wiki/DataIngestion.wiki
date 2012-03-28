@@ -826,11 +826,17 @@ The directory itself contains scripts for getting Savannah HF radar(get_latest_l
 
 The Savannah script checks a remote http folder for the latest (downloaded as latest.txt) data file which gets converted into a seacoos/secoora netcdf grid file using a netcdf template/substitution file.
 
+For Long Bay, SC, a similar set of scripts is under the 'seacoos2' folder.
+
 For Tampa/West Florida Shelf(WFS), a similar set of scripts is under the 'tampa' folder.
 
 For Miami, a similar set of scripts is under 'miami'.
 
 For NC Outer banks, a similar set of scripts is under 'banks' - for 'banks' no data is collected or converted, just uptime/notification checks.
+
+*related mapfiles/wrappers*
+
+
 
 = Machine: Nautilus = 
 nautilus.baruch.sc.edu <br/>
