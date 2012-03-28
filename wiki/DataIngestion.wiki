@@ -123,7 +123,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
 5 past the hour and another at 20 past.
 ----
  
-=== CORMP2 NetCDF Scout ===
+=== CORMP2 ObsKML Scout ===
 *Script*: populate_xenia_cormp2.sh<br/>
 *Command line parameters*:<br/>
 *Directory*: /home/xeniaprod/cron<br/>
