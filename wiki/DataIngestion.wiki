@@ -123,7 +123,35 @@ netcdf files. The files are pulled down then processed into the database. Delete
 5 past the hour and another at 20 past.
 ----
  
+=== CORMP2 NetCDF Scout ===
+*Script*: populate_xenia_cormp2.sh<br/>
+*Command line parameters*:<br/>
+*Directory*: /home/xeniaprod/cron<br/>
+*Description*: Shell script for processing the CORMP obskml files(currently just SUN2WAVE for some wave and current observation types).<br/>
 
+*Shell Script Makeup* <br/>
+  _Script_: get_latest_data.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/cormp2 <br/>
+  _Command Line Parameters_:  <br/>
+
+  _Script_: obskml_to_xenia_postgresql.pl
+  _Directory_: /home/xeniaprod/scripts/postgresql/import_export <br/>
+  _Command Line Parameters_: <br/>
+  {{{
+  Argument 1 - The URL to the KMZ file to process.<br/>
+  Argument 2 - Path where the SQL file will be written.<br/>
+  Argument 3 - Filename to use for the SQL file.<br/>
+  Argument 4 - Database name to connect to.<br/>
+  
+  http://localhost/xenia/feeds/cormp/cormp2_metadata_latest.kmz
+  /home/xeniaprod/tmp/sqlfiles
+  "latest_cormp2"
+  "xenia"
+  }}}
+  _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
+*Schedule*: 15,45 minute marks every hour.
+----
+ 
 === USF NetCDF Scout ===
 *Script*: populate_xenia_usf.sh<br/>
 *Command line parameters*:<br/>
