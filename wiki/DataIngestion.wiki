@@ -818,6 +818,19 @@ If the tilecache root directory is changed in the tilecache.cfg file, the direct
 ----
 === HF Radar === 
 
+
+*mapfiles/wrappers*
+
+
+
+----
+= Machine: Squid =
+http://129.252.139.124/
+
+== Scripts: Squid ==
+----
+=== HF Radar === 
+
 These scripts run once an hour to help aggregate and check uptime for the Secoora HF Radar stations.  The final rendering of these hf radar netcdf files is currently handled by servers at NC-Chapel Hill.
 
 *directory* /home/xeniaprod/scripts/radar
@@ -834,9 +847,8 @@ For Miami, a similar set of scripts is under 'miami'.
 
 For NC Outer banks, a similar set of scripts is under 'banks' - for 'banks' no data is collected or converted, just uptime/notification checks.
 
-*related mapfiles/wrappers*
 
-
+----
 
 = Machine: Nautilus = 
 nautilus.baruch.sc.edu <br/>
