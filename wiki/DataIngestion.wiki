@@ -132,7 +132,6 @@ netcdf files. The files are pulled down then processed into the database. Delete
 *Shell Script Makeup* <br/>
   _Script_: get_latest_data.pl <br/>
   _Directory_: /home/xeniaprod/scripts/postgresql/feeds/cormp2 <br/>
-  _Command Line Parameters_:  <br/>
 
   _Script_: obskml_to_xenia_postgresql.pl
   _Directory_: /home/xeniaprod/scripts/postgresql/import_export <br/>
