@@ -618,7 +618,7 @@ provided  on the command line. This script pulls in the data for the some NERRS 
 ----
 === NCSU ===
 ==== Gliders ====
-*Script*: populate_gliders_usf.sh<br/>
+*Script*: populate_gliders_ncsu.sh<br/>
 *Command line parameters*:<br/>
 *Directory*: /home/xeniaprod/cron<br/>
 *Description*: Shell script for processing the NCSU Webb gliders data.<br/>
