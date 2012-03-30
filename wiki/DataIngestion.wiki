@@ -191,6 +191,22 @@ netcdf files. The files are pulled down then processed into the database. Delete
   _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
 *Schedule*: Runs every quarter hour. We run it this way since the dial up times for the platforms occur throughout the hour, one may be dialed at
 5 past the hour and another at 20 past.
+
+==== Gliders ====
+*Script*: populate_gliders_usf.sh<br/>
+*Command line parameters*:<br/>
+*Directory*: /home/xeniaprod/cron<br/>
+*Description*: Shell script for processing the USF Webb gliders data.<br/>
+
+*Shell Script Makeup* <br/>
+  _Script_: WebbGlider.py <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/gliders/webb <br/>
+  _Command Line Parameters_:  <br/>
+  {{{
+  --ConfigFile=/home/xeniaprod/config/usfWebbGliderDataIngest.ini
+  }}}
+  _Description_: Connects to the glider database at USF to process currentmissions. Since these are not constantly on going, we schedule the cron job manually when one is occurring.<br/>
+
 ----
          
 
