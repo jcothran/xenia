@@ -1,4 +1,5 @@
 import sys
+from math import fabs 
 import optparse
 import logging
 import logging.config
@@ -7,10 +8,14 @@ import datetime
 from pytz import timezone
 import string
 import pymysql
+import poplib 
+import email
+from email import parser as emailParser
+import decimal
 
 from xeniatools.DataIngestion import *
 from xeniatools.ioosDif import xeniaMappings
-from xeniatools.xenia import uomconversionFunctions
+from xeniatools.xenia import uomconversionFunctions,statusFlags
 
 from xeniatools.xeniaSQLAlchemy import xeniaAlchemy, multi_obs, organization, platform, uom_type, obs_type, m_scalar_type, m_type, sensor, collection_run, collection_type 
 
@@ -19,6 +24,7 @@ from sqlalchemy import Column, Integer
 from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey
 from sqlalchemy import func 
+from sqlalchemy.sql.expression import or_, and_
 
 #from pykml_factory.factory import nsmap
 from pykml_factory.factory import KML_ElementMaker as KML
@@ -419,7 +425,11 @@ class webbGliders(xeniaDataIngestion):
             self.maxLon = None
             self.minDepth = None
             self.maxDepth = None
-            collectionRun = self.addCollectionEntry(glider, mission)
+            collectionRun = self.addCollectionEntry(glider, 
+                                                    datetime.datetime.strptime(str(mission['start_date']), '%Y-%m-%d'), 
+                                                    datetime.datetime.strptime(str(mission['end_date']), '%Y-%m-%d'), 
+                                                    int(mission['id']), 
+                                                    None)
             for obs in obsList:
               if(self.logger):
                 self.logger.info("Processing obs: %s" %(obs['webb_name']))
@@ -431,7 +441,7 @@ class webbGliders(xeniaDataIngestion):
             collectionRun.max_lat  = self.maxLat
             collectionRun.min_z    = self.minDepth
             collectionRun.max_z    = self.maxDepth
-            self.addCollectionEntry(glider, mission, collectionRun)
+            self.addCollectionEntry(glider, None, None, None, collectionRun)
     except Exception, e:
       if(self.logger):
         self.logger.exception(e)
@@ -439,30 +449,52 @@ class webbGliders(xeniaDataIngestion):
     self.disconnect()              
     return
   
-  def addCollectionEntry(self, glider, missionNfo, collectionRunRec=None):
+  def getCollectionEntry(self, glider, startDate, endDate):
+    collectionRun = None
+    try:       
+      if(startDate and endDate):
+        collectionRun = self.xeniaDb.session.query(collection_run).\
+          filter(collection_run.short_name == glider).\
+          filter(collection_run.min_date == startDate).\
+          filter(collection_run.max_date == endDate).one()
+      else:
+        collectionRun = self.xeniaDb.session.query(collection_run).\
+          filter(collection_run.short_name == glider).\
+          filter(collection_run.min_date <= startDate).\
+          filter(collection_run.max_date == None).\
+          one()
+        
+      return(collectionRun)
+    except NoResultFound:
+      pass                              
+    return(None)
+      
+  #def addCollectionEntry(self, glider, missionNfo, collectionRunRec=None):
+  def addCollectionEntry(self, glider, startDate=None, endDate=None, missionId=None, collectionRunRec=None):
     #after we process the first observation to get the starting and ending lat/lons. 
     collectionId = None 
     #Add collection_run entry
-    startRun = datetime.datetime.strptime(str(missionNfo['start_date']), '%Y-%m-%d')
-    endRun = datetime.datetime.strptime(str(missionNfo['end_date']), '%Y-%m-%d')  
+    #startRun = datetime.datetime.strptime(str(missionNfo['start_date']), '%Y-%m-%d')
+    #endRun = datetime.datetime.strptime(str(missionNfo['end_date']), '%Y-%m-%d')  
     if(collectionRunRec == None):
-      try:
-        collectionRun = self.xeniaDb.session.query(collection_run).\
-          filter(collection_run.short_name == glider).\
-          filter(collection_run.min_date == startRun).\
-          filter(collection_run.max_date == endRun).one()
-        return(collectionRun)
+      collectionRun = self.getCollectionEntry(glider, startDate, endDate)
       #No Record found, so we'll add it.
-      except NoResultFound, e:                              
+      if(collectionRun == None):         
         collectionRun = collection_run()
         #Use the mission id from the database for our unique id.
-        collectionRun.row_id = int(missionNfo['id'])
+        #collectionRun.row_id = int(missionNfo['id'])
+        if(missionId != None):
+          collectionRun.row_id = missionId
         collectionRun.row_entry_date = self.rowEntryDate
         collectionRun.row_update_date = self.rowEntryDate
         collectionRun.type_id = 0
-        collectionRun.fixed_date = startRun.strftime("%Y-%m-%dT%H:%M:%S")
-        collectionRun.min_date = startRun.strftime("%Y-%m-%dT%H:%M:%S")
-        collectionRun.max_date = endRun.strftime("%Y-%m-%dT%H:%M:%S")
+        collectionRun.fixed_date = startDate
+        collectionRun.min_date = startDate
+        if(endDate != None):
+          collectionRun.max_date = endDate
+        #collectionRun.fixed_date = startRun.strftime("%Y-%m-%dT%H:%M:%S")
+        #collectionRun.min_date = startRun.strftime("%Y-%m-%dT%H:%M:%S")
+        #collectionRun.max_date = endRun.strftime("%Y-%m-%dT%H:%M:%S")
         collectionRun.short_name = "%s" % (glider)
     else:
       collectionRun = collectionRunRec
@@ -572,24 +604,31 @@ class webbGliders(xeniaDataIngestion):
       mTypeId = self.xeniaDb.mTypeExists(xeniaObs[0], uom)
       
     if(sensorId and mTypeId):
-      try:
-        #If we are collecting current mission data. Let's look up what our last entry date was and ask for data
-        #newer than that.
-        lastDate = None
-        if(self.processNewMissions):
+      #If we are collecting current mission data. Let's look up what our last entry date was and ask for data
+      #newer than that.
+      lastDate = None
+      if(self.processNewMissions):
+        useCollectionDate = True
+        try:        
           lastDate = self.xeniaDb.session.query(func.max(glider_multi_obs.m_date)).\
-            filter(multi_obs.platform_handle == platformHandle).\
+            filter(glider_multi_obs.collection_id == collectionRun.row_id).\
+            filter(glider_multi_obs.platform_handle == platformHandle).\
             one()
+          if(lastDate[0] != None):
+            useCollectionDate = False 
+        except NoResultFound, e:
+          pass
+      if(useCollectionDate == False):
+        startEpoch = time.mktime(lastDate[0].timetuple())
+        where = 'time > %f' % (startEpoch)
+      else:
+        #Query the glider database for the observation bounded by the mission start and end dates.
+        #Glider database has a separate table for each observation.
+        startEpoch = time.mktime(datetime.datetime.strptime(str(missionNfo['start_date']), '%Y-%m-%d').timetuple())
+        endEpoch = time.mktime(datetime.datetime.strptime(str(missionNfo['end_date']), '%Y-%m-%d').timetuple())        
+        where = 'time >= %f AND time < %f' % (startEpoch, endEpoch)
+      try:
         cur = self.dbWebbConn.cursor(pymysql.cursors.DictCursor)
-        if(lastDate):
-          startEpoch = time.mktime(lastDate[0].timetuple())
-          where = 'time > %f' % (startEpoch)
-        else:
-          #Query the glider database for the observation bounded by the mission start and end dates.
-          #Glider database has a separate table for each observation.
-          startEpoch = time.mktime(datetime.datetime.strptime(str(missionNfo['start_date']), '%Y-%m-%d').timetuple())
-          endEpoch = time.mktime(datetime.datetime.strptime(str(missionNfo['end_date']), '%Y-%m-%d').timetuple())        
-          where = 'time >= %f AND time < %f' % (startEpoch, endEpoch)
         sql = "SELECT * FROM %s WHERE %s ORDER BY time ASC;"\
          % (obsNfo['table_name'], where)
         cur.execute(sql)
@@ -708,17 +747,257 @@ class webbGliders(xeniaDataIngestion):
         
     if(self.logger):
       self.logger.debug("%s observations added: %d" % (obsNfo['webb_name'], obsCount))      
-    
+
   def convertToDecimalDegrees(self, val):
     dd = None  
-    dms = float(val)
+    dms = fabs(float(val))
     mins = dms % 100
     deg = int((dms - mins) / 100.0)
+    #mins = round((mins / 60.0), 4)
     mins = mins / 60.0
     dd = deg + mins
+    if(float(val) < 0):
+      dd *= -1
     return(dd)
   
+class webbGliderEmail(webbGliders):
+  def __init__(self, organizationId, configFile, logger=False):
+    webbGliders.__init__(self, organizationId, configFile, logger)
+    
+    self.pop3Obj = None
+
+  def connect(self):
+    if(xeniaDataIngestion.connect(self)):
+      try:
+        self.checkfornewplatforms = self.config.get(self.organizationId, 'checkfornewplatforms')
+        emailUser = self.config.get(self.organizationId, 'emailUser')
+        emailPwd = self.config.get(self.organizationId, 'emailPwd')
+      except ConfigParser,e:
+        if(self.logger):
+          self.logger.exception(e)
+      else:
+        try:
+          self.pop3Obj = poplib.POP3('inlet.geol.sc.edu')
+          self.pop3Obj.user('glideremail')
+          self.pop3Obj.pass_('dramage239')
+          if(self.logger):
+            self.logger.info("Successfully connected to email server.")
+          
+          self.rowEntryDate = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+              
+          return(True)  
+    
+        except Exception,e:
+          if(self.logger):
+            self.logger.excetion(e)
+          
+    return(False)
   
+  def disconnect(self):
+    self.pop3Obj.quit()
+  
+  def processData(self):
+    if(self.connect()): 
+      msgList = self.getData()
+      self.saveData(msgList)
+      self.disconnect()
+      
+  def saveData(self, msgList):
+    #The keys are the message Ids from the email server.
+    msgIds = msgList.keys()
+    msgIds.sort()
+    #for msgKey in msgList:
+    for msgKey in msgIds:
+      msg = msgList[msgKey]
+      if 'From' in msg:
+        rcvdFrom = msg['From']
+        if(rcvdFrom == 'root@expose.webbresearch.com' or rcvdFrom == 'root@neptune.meas.ncsu.edu'):
+          if 'Subject' in msg:
+            subject = msg['Subject']
+            if(subject.find('Glider:') != -1):        
+              body = msg.get_payload()
+              #Parse the body of the email to get the latest glider track info. If we
+              #successfully parse it, let's delete the email record from the server.
+              if(self.parseBody(body)):
+                #self.pop3Obj.dele(msgKey)
+                i = 0
+                
+    return
+  
+  def parseBody(self, body):
+    import re
+    if(len(body)):
+      #Example entry: Vehicle Name: salacia
+      gliderName = re.findall('Vehicle Name:\s(.*)', body)
+      if(len(gliderName)):
+        if(self.logger):
+          self.logger.info("Processing glider: %s" % (gliderName[0]))
+        
+        if(self.checkfornewplatforms):
+          self.addPlatform(gliderName[0])
+        #Example: Curr Time: Tue Mar 27 05:44:33 2012 MT:   58163
+        #We trim it to be: Tue Mar 27 05:44:33 2012
+        curTime = re.findall('Curr Time:\s(\w{3}\s\w{3}\s\d{1,2}\s\d{2}:\d{2}:\d{2}\s\d{4})\sMT:*', body)
+        #Example: GPS Location:  3251.608 N -7829.149 E measured
+        #We break it up into (latitude)(compass point) (longitude)(compass point)
+        #Compass point seems redundant since the values appear signed.
+        curLoc = re.findall('GPS Location:\s+([-+]?[0-9]*\.?[0-9]*)\s(\w{1})\s([-+]?[0-9]*\.?[0-9]*)\s(\w{1})', body)
+        recCount = len(curLoc)
+        
+        platformHandle = "%s.%s.glider" % (self.organizationId, gliderName[0])        
+        locMTypeId = self.xeniaDb.mTypeExists('location_epsg_4326', 'undefined')
+        locSensorId = self.xeniaDb.sensorExists('location_epsg_4326', 'undefined', platformHandle, 1)
+        
+        i = 0
+        while(i < recCount):
+          if(len(curLoc[0]) == 4):            
+            lat = self.convertToDecimalDegrees(curLoc[i][0])
+            lon = self.convertToDecimalDegrees(curLoc[i][2])
+            dataTime = datetime.datetime.strptime(curTime[i], '%a %b %d %H:%M:%S %Y')
+            #Check to see if we have a collection entry. If not, we'll add one.
+            collectionRun = self.getCollectionEntry(gliderName[0], dataTime, None)
+            if(collectionRun == None):
+              collectionRun = self.addCollectionEntry(gliderName[0], dataTime, None, None, None)
+            
+            obsRec = glider_multi_obs()
+            obsRec.collection_id = collectionRun.row_id
+            obsRec.row_entry_date = self.rowEntryDate
+            obsRec.m_date = dataTime
+            obsRec.m_type_id = locMTypeId
+            obsRec.sensor_id = locSensorId
+            obsRec.platform_handle = platformHandle
+            obsRec.m_lat = lat
+            obsRec.m_lon = lon
+            obsRec.m_value = lon
+            obsRec.m_value_2 = lat
+            
+            try:              
+              self.xeniaDb.session.add(obsRec)
+              self.xeniaDb.session.commit()
+            #Trying to add record that already exists.
+            except exc.IntegrityError, e:
+              self.xeniaDb.session.rollback()
+              if(self.logger != None):
+                self.logger.exception(e)              
+            except Exception,e:
+              self.xeniaDb.session.rollback()
+              if(self.logger):
+                self.logger.exception(e)
+            else:
+              if(self.logger):
+                self.logger.debug("Platform: %s Datetime: %s Lon: %f Lat: %f adding location record."\
+                                   % (obsRec.platform_handle, obsRec.m_date, obsRec.m_lon, obsRec.m_lat))
+              #Check to see if the location is a min or max
+              updatedExtents = False
+              if(lat < collectionRun.min_lat or collectionRun.min_lat == None):
+                collectionRun.min_lat = lat
+                updatedExtents = True
+              if(lat > collectionRun.max_lat or collectionRun.max_lat == None):
+                collectionRun.max_lat = lat
+                updatedExtents = True
+              if(lon < collectionRun.min_lon or collectionRun.min_lon == None):
+                collectionRun.min_lon = lon
+                updatedExtents = True
+              if(lon > collectionRun.max_lon or collectionRun.max_lon == None):
+                collectionRun.max_lon = lon
+                updatedExtents = True               
+              if(updatedExtents):
+                self.addCollectionEntry(gliderName[0], None, None, None, collectionRun)
+                                                           
+          else:
+            if(self.logger):
+              self.logger.error("Current location: %s does not contain enough data for the latitude and longitude" % (curLoc[0]))
+              return(False)
+          i += 1
+      else:
+        if(self.logger):
+          self.logger.error("Could not find the Vehicle Name identifier in the email address.")  
+          return(False)
+    return(True)
+  
+  def getData(self):
+    emailList = [] 
+    if(self.pop3Obj):
+      #messages = [self.pop3Obj.retr(i) for i in range(1, len(self.pop3Obj.list()[1]) + 1)]
+      #Make a dictionary of the messages, the key is the message number. We'll use this later when we want
+      #to delete the message out of the queue.
+      messages = {}
+      for i in range(1, len(self.pop3Obj.list()[1]) + 1):
+        resp, message, byteCnt = self.pop3Obj.retr(i) 
+        messages[i] = message
+      
+      # Concat message pieces:
+      #messages = ["\n".join(mssg[1]) for mssg in messages]
+      for msgId in messages:
+        messages[msgId] = "\n".join(messages[msgId])
+        msg = messages[msgId]
+        #Log out the message just in case.
+        if(self.logger):
+          self.logger.debug(msg)
+        #Now build the Message object.
+        messages[msgId] = emailParser.Parser().parsestr(msg)
+      #Parse message intom an email object:
+      #emailList = [emailParser.Parser().parsestr(mssg) for mssg in messages]      
+            
+    return(messages)
+  
+  
+  def addPlatform(self, platformName):
+    #Check to see if the platform exists.
+    addPlatform = False
+    try:
+      platRec = self.xeniaDb.session.query(platform).\
+        filter(platform.short_name == platformName).\
+        one()
+        
+    #We didn't find the entry, so we add it along with a location_epsg_4326 sensor.       
+    except NoResultFound, e:
+      addPlatform = True
+      if(self.logger != None):
+        self.logger.debug("Platform: %s not found in database, adding" % (platformName))
+        
+    except Exception,e:
+      if(self.logger):
+        self.logger.exception(e)
+        
+    if(addPlatform):
+      #Get the organization Id. Need it to add a platform.
+      try:
+        orgRec = self.xeniaDb.session.query(organization).\
+          filter(organization.short_name == self.organizationId).\
+          one()
+          
+      #We didn't find the entry, so we add it along with a location_epsg_4326 sensor.       
+      except NoResultFound, e:
+        addPlatform = True
+        if(self.logger != None):
+          self.logger.debug("Organization: %s not found in database, cannot add platform" % (self.organizationId))
+      
+      else:
+        platformRec = platform()
+        platformRec.row_entry_date = self.rowEntryDate
+        platformRec.organization_id = orgRec.row_id
+        platformRec.short_name = platformName
+        platformRec.platform_handle = '%s.%s.glider' % (self.organizationId, platformName)
+        platformRec.active = statusFlags.DELAYED
+        
+        sensorRec = sensor()
+        sensorRec.row_entry_date = self.rowEntryDate
+        sensorRec.platform_id = platformRec.row_id
+        sensorRec.m_type_id = self.xeniaDb.mTypeExists('location_epsg_4326', 'undefined')
+        sensorRec.short_name = 'location_epsg_4326'
+        sensorRec.active = statusFlags.DELAYED
+        sensorRec.s_order = 1
+        
+        platformRec.sensors =[sensorRec]        
+        try:
+          self.xeniaDb.addRec(platformRec, True)
+          #self.xeniaDb.addRec(sensorRec, True)
+        except Exception,e:
+          self.xeniaDb.session.rollback()
+          if(self.logger):
+            self.logger.exception(e)
+      
 class gliderOutput(dataProduct):
 
   def processData(self):
@@ -730,29 +1009,45 @@ class gliderOutput(dataProduct):
 
   def getData(self):
     try:
-      runId = 55
-      gliderName = self.xeniaDb.session.query(platform,collection_run).\
-        join((collection_run, collection_run.short_name == platform.short_name)).\
-        filter(collection_run.row_id == runId).one()
-
-      sensorId = self.xeniaDb.sensorExists('location_epsg_4326', 'undefined', gliderName[0].platform_handle)
-        
-      locRecs = self.xeniaDb.session.query(glider_multi_obs).\
-        filter(glider_multi_obs.collection_id == runId).\
-        filter(glider_multi_obs.sensor_id == sensorId).\
-        order_by(glider_multi_obs.m_date).all()
-
-
+      self.exportCurrentMissions = bool(int(self.config.get(self.organizationId + '_kml', 'outputcurrentmissionsonly')))
+      gliders = self.config.get(self.organizationId, 'whitelist').split(',')
     except ConfigParser.Error, e:  
       if(self.logger):
         self.logger.exception(e)
-        
-    except Exception,e:
-      if(self.logger):
-        self.logger.exception(e)
-    
     else:
-      self.createGliderTrackKML(gliderName[0], gliderName[1], locRecs)
+      try:
+        if(self.exportCurrentMissions):
+          #We're checking only current missions. The collection table may have the min_date filled out
+          #but no max date, such as the NCSU processing where we get only the emails, or
+          #the collection table could have the max_date filled out as well, like the usf where
+          #they have a home brewed mission table we use that has start/end dates for the current mission.
+          nowTime = datetime.datetime.now()
+          collectionRuns = self.xeniaDb.session.query(platform,collection_run).\
+            join((collection_run, collection_run.short_name == platform.short_name)).\
+            filter(platform.short_name.in_(gliders)).\
+            filter(or_(and_(collection_run.min_date <= nowTime,collection_run.max_date == None),and_(collection_run.min_date <= nowTime,collection_run.max_date > nowTime))).all()
+        else:  
+          runId = 55
+          gliderName = self.xeniaDb.session.query(platform,collection_run).\
+            join((collection_run, collection_run.short_name == platform.short_name)).\
+            filter(collection_run.row_id == runId).one()
+
+      except Exception,e:
+        if(self.logger):
+          self.logger.exception(e)
+          
+      else:  
+        for collectionRun in collectionRuns:
+          sensorId = self.xeniaDb.sensorExists('location_epsg_4326', 'undefined', collectionRun[0].platform_handle)
+          runId = collectionRun[1].row_id
+          locRecs = self.xeniaDb.session.query(glider_multi_obs).\
+            filter(glider_multi_obs.collection_id == runId).\
+            filter(glider_multi_obs.sensor_id == sensorId).\
+            order_by(glider_multi_obs.m_date).all()
+  
+          self.createGliderTrackKML(collectionRun[0], collectionRun[1], locRecs)
+        
+    
     """  
     for point in trackPts:
       altitude = locRec.m_z * -1
@@ -788,136 +1083,170 @@ class gliderOutput(dataProduct):
     #gliderTourDoc.Document.Folder.append(trackPlaceMark)
 
   def createGliderTrackKML(self, platformRec, collectionRun, dataRecs):\
-    
-    homeUrl = 'http://ooma.marine.usf.edu/CROW/'
-    dataAttributionPage = 'http://secoora.org/maps/datalinks#usfgliders'
-    kmlFilepath = self.config.get(self.organizationId, 'kmlfilepath')
-    
-    #Check the collectionRun dates to see if the max_date is ahead of the current date. If it is, that means
-    #the glider is currently underway.
-    underway = False
-    today = datetime.datetime.now()
-    if(collectionRun.max_date > today):
-      underway = True
-       
-    tourName = "Glider %s Track" % (platformRec.short_name)
-    gliderTourDoc = KML.kml(
-        KML.Document(
-          KML.Folder(
-            KML.name('Features'),
-            id='features',
-          ),
-        )
-      )
-    gliderTourDoc.Document.Folder.append( KML.Style(
-          KML.IconStyle(
-            KML.scale(1.0),
-            KML.Icon(
-              KML.href('http://ooma.marine.usf.edu/USFGliderIcon.png'),
-            )            
-          ),
-          id='gliderIcon'                                                           
-        )
-    )
-    gliderTourDoc.Document.append( KML.Style(
-          KML.LineStyle(
-                        KML.color('7f00ffff'), 
-                        KML.width(4)
-                       ),
-          id='yellowLineGreenPoly'                                                           
-        )
-    )
-    
-    gliderPathPm = KML.Placemark( 
-                                 KML.name('%s Track' %(platformRec.short_name)),
-                                 KML.styleUrl('#yellowLineGreenPoly')
-                                )
-    #First run through, build our LineString, then we'll simplyfy it.
-    linestringCoords = []      
-    for locRec in dataRecs:
-      lon = locRec.m_value
-      lat = locRec.m_value_2
-      if(lon != None and lat != None):
-        linestringCoords.append((lon,lat))
-      
-    trackPts = LineString(linestringCoords)
-    if(self.logger):
-      self.logger.debug("Point count: %d" % (len(trackPts.coords)))
-    trackPts = trackPts.simplify(0.01, False)
-    if(self.logger):
-      self.logger.debug("After simplify point count: %d" % (len(trackPts.coords)))
-    
-    linestring = ""
-    recCnt = 0
-    descTmplt = "<h1>Glider Track %(type)s</h1>\
-    </br>\
-    <ul>\
-    <li><h2>Begin Date:</h2> %(start_date)s</li>\
-    <li><h2>%(end_date_text)s Date:</h2> %(end_date)s</li>\
-    <li><h2>Information:</h2> <a href='%(attribution)s' target='_blank'>Link</a></li>\
-    <li><h2>Website:</h2> <a href='%(url)s' target='_blank'>Link</a></li>\
-    </ul>"
-    templateData = {}
-    templateData['url'] = homeUrl
-    templateData['attribution'] = dataAttributionPage
-    templateData['start_date'] = collectionRun.min_date.strftime('%Y-%m-%d')
-
-    #If we're underway, let's use a different label and the date/time from the last data record.
-    if(underway):
-      templateData['end_date_text'] = 'Last Update Date/Time'
-      templateData['end_date'] = dataRecs[-1].m_date.strftime('%Y-%m-%dT%H:%M:%S')      
-    else:
-      templateData['end_date_text'] = 'End Date'
-      templateData['end_date'] = collectionRun.max_date.strftime('%Y-%m-%d')
-    
-    
-    for point in trackPts.coords:
-      lon = point[0]
-      lat = point[1]
-      #Add a placemark to show a glider icon to denote start.
-      if(recCnt == 0 or recCnt == (len(trackPts.coords)-1)):
-        templateData['type'] = 'Start'
-        if(recCnt != 0):
-          if(underway):            
-            templateData['type'] = 'Last Report Location'
-          else:
-            templateData['type'] = 'End'
-        desc = descTmplt % (templateData)
-        gliderTourDoc.Document.Folder.append(
-          KML.Placemark(
-            KML.description(desc),
-            KML.Point(
-              KML.coordinates("%f,%f,0" % (
-                      lon,lat
-                  )
-              )
-            ),
-            KML.styleUrl("#gliderIcon")            
-          )
-        )          
-      if(len(linestring)):
-        linestring += '\n'
-      linestring += '%f,%f,0' % (lon,lat)
-      recCnt += 1
-    try:
-      gliderPathPm.append(KML.LineString(
-                                         KML.extrude(1),
-                                         KML.tessellate(1),                                         
-                                         KML.coordinates(linestring)
-                                        )
-                        )
-      gliderTourDoc.Document.append(gliderPathPm)
-      if(underway):
-        kmlFileName = "%s/%s_gliderTrackCurrent.kml" % (kmlFilepath,platformRec.short_name)
-      else:
-        kmlFileName = "%s/gliderTrack_%s.kml" % (kmlFilepath,templateData['start_date'])
-      kmlFile = open(kmlFileName, 'w')      
-      kmlFile.writelines(etree.tostring(gliderTourDoc, pretty_print=True))
-      kmlFile.close()
-    except Exception,e:
+  
+    try:  
+      #homeUrl = 'http://ooma.marine.usf.edu/CROW/'
+      #dataAttributionPage = 'http://secoora.org/maps/datalinks#usfgliders'
+      kmlSection = self.organizationId + '_kml'
+      homeUrl = self.config.get(kmlSection, 'projecturl')
+      dataAttributionPage = self.config.get(kmlSection, 'attributeurl')
+      kmlFilepath = self.config.get(kmlSection, 'kmlfilepath')
+      gliderIconUrl = self.config.get(kmlSection, 'gliderIconUrl')
+    except ConfigParser,e:
       if(self.logger):
         self.logger.exception(e)
-    return
+    else:
+      #Check the collectionRun is None or see if the max_date is ahead of the current date. If it is, that means
+      #the glider is currently underway.
+      underway = False
+      today = datetime.datetime.now()
+      if(collectionRun.max_date == None or collectionRun.max_date > today):
+        underway = True
+         
+      gliderTourDoc = KML.kml(
+          KML.Document(
+            KML.Folder(
+              KML.name('Features'),
+              id='features',
+            ),
+          )
+        )
+      gliderTourDoc.Document.Folder.append( KML.Style(
+            KML.IconStyle(
+              KML.scale(0.75),
+              KML.Icon(
+                #KML.href('http://ooma.marine.usf.edu/USFGliderIcon.png'),
+                KML.href(gliderIconUrl),
+              )            
+            ),
+            id='gliderIconStart'                                                           
+          )
+      )
+      gliderTourDoc.Document.Folder.append( KML.Style(
+            KML.IconStyle(
+              KML.scale(1.0),
+              KML.Icon(
+                #KML.href('http://ooma.marine.usf.edu/USFGliderIcon.png'),
+                KML.href(gliderIconUrl),
+              )            
+            ),
+            id='gliderIcon'                                                           
+          )
+      )
+      gliderTourDoc.Document.append( KML.Style(
+            KML.LineStyle(
+                          KML.color('7f00ffff'), 
+                          KML.width(4)
+                         ),
+            id='yellowLineGreenPoly'                                                           
+          )
+      )
+      
+      gliderPathPm = KML.Placemark( 
+                                   KML.name('%s Track' %(string.capwords(platformRec.short_name))),
+                                   KML.styleUrl('#yellowLineGreenPoly')
+                                  )
+      #First run through, build our LineString, then we'll simplyfy it.
+      linestringCoords = []      
+      for locRec in dataRecs:
+        lon = locRec.m_value
+        lat = locRec.m_value_2
+        if(lon != None and lat != None):
+          linestringCoords.append((lon,lat))
+        
+      trackPts = LineString(linestringCoords)
+      if(self.logger):
+        self.logger.debug("Point count: %d" % (len(trackPts.coords)))
+      if(self.exportCurrentMissions == False):
+        trackPts = trackPts.simplify(0.01, False)
+        if(self.logger):
+          self.logger.debug("After simplify point count: %d" % (len(trackPts.coords)))
+      
+      linestring = ""
+      recCnt = 0
+      descTmplt = "<h1>%(glider_name)s Glider Track %(type)s</h1>\
+      </br>\
+      <ul>\
+      <li><h2>Begin Date:</h2> %(start_date)s</li>\
+      <li><h2>%(end_date_text)s Date:</h2> %(end_date)s</li>\
+      <li><h2>Information:</h2> <a href='%(attribution)s' target='_blank'>Link</a></li>\
+      <li><h2>Website:</h2> <a href='%(url)s' target='_blank'>Link</a></li>\
+      </ul>"
+      templateData = {}
+      templateData['glider_name'] = string.capwords(platformRec.short_name)
+      templateData['url'] = homeUrl
+      templateData['attribution'] = dataAttributionPage
+      templateData['start_date'] = collectionRun.min_date.strftime('%Y-%m-%d')
+  
+      #If we're underway, let's use a different label and the date/time from the last data record.
+      if(underway):
+        templateData['end_date_text'] = 'Last Update Date/Time'
+        templateData['end_date'] = dataRecs[-1].m_date.strftime('%Y-%m-%dT%H:%M:%S')      
+      else:
+        templateData['end_date_text'] = 'End Date'
+        templateData['end_date'] = collectionRun.max_date.strftime('%Y-%m-%d')
+      
+      
+      for point in trackPts.coords:
+        lon = point[0]
+        lat = point[1]
+        #Add a placemark to show a glider icon to denote start.
+        if(recCnt == 0 or recCnt == (len(trackPts.coords)-1)):
+          templateData['type'] = 'Start'
+          gliderIcon = KML.styleUrl("#gliderIcon") 
+          if(recCnt != 0):
+            if(underway):            
+              templateData['type'] = 'Last Report Location'            
+            else:
+              templateData['type'] = 'End'
+          else:
+            gliderIcon = KML.styleUrl("#gliderIconStart")             
+            linestringDesc = descTmplt % (templateData)   
+                    
+          desc = descTmplt % (templateData)
+          gliderTourDoc.Document.Folder.append(
+            KML.Placemark(
+              KML.description(desc),
+              KML.Point(
+                KML.coordinates("%f,%f,0" % (
+                        lon,lat
+                    )
+                )
+              ),
+              gliderIcon           
+            )
+          )          
+        if(len(linestring)):
+          linestring += '\n'
+        linestring += '%f,%f,0' % (lon,lat)
+        recCnt += 1
+      try:
+        gliderPathPm.append(KML.description(linestringDesc))                                                    
+        gliderPathPm.append(KML.LineString(
+                                           KML.extrude(1),
+                                           KML.tessellate(1),                                         
+                                           KML.coordinates(linestring),
+                                          )
+                          )
+        gliderTourDoc.Document.append(gliderPathPm)
+        if(underway):
+          kmlFileName = "%s/%s_gliderTrackCurrent.kml" % (kmlFilepath,platformRec.short_name)
+        else:
+          kmlFileName = "%s/gliderTrack_%s.kml" % (kmlFilepath,templateData['start_date'])
+        kmlFile = open(kmlFileName, 'w')      
+        kmlFile.writelines(etree.tostring(gliderTourDoc, pretty_print=True))
+        if(self.logger):
+          self.logger.info("Writing KML file: %s" % (kmlFileName))
+        kmlFile.close()
+      except Exception,e:
+        if(self.logger):
+          self.logger.exception(e)
+      return
+    
+  def buildKMLDesc(self):
+    kmlDesc = None
+    return(kmlDesc)
+  
 if __name__ == '__main__':
   
   logger = None
