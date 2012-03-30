@@ -157,7 +157,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
 *Directory*: /home/xeniaprod/cron<br/>
 *Description*: Shell script for processing the USF. This script incoporates the NetCDF scout above, but only handles the USF
 netcdf files. The files are pulled down then processed into the database. Deletes the previous KML, ZIP and KMZ files.<br/>
-*NOTE* NDBC netcdf processing stopped. See [#NDBC_Processing here] for new NDBC ingestion.
+*NOTE* NDBC netcdf processing stopped. See [#NDBC_Processing here] for new NDBC ingestion.<br/>
 *Shell Script Makeup* <br/>
   _Script_: GetLatestData.pl <br/>
   _Directory_: /home/xeniaprod/scripts/scout/trunk <br/>
@@ -186,11 +186,6 @@ netcdf files. The files are pulled down then processed into the database. Delete
   "latest_usf"
   "xenia"
 
-  For NDBC:
-  http://localhost/xenia/feeds/ndbc/ndbc_metadata_latest.kmz
-  /home/xeniaprod/tmp/sqlfiles
-  "latest_ndbc"
-  "xenia"
   }}}
     <br/>
   _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
