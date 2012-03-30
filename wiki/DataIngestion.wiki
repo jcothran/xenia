@@ -616,6 +616,22 @@ provided  on the command line. This script pulls in the data for the Apache Pier
 provided  on the command line. This script pulls in the data for the some NERRS water quality sites. <br/>
 *Schedule*: Runs twice an hour.
 ----
+=== NCSU ===
+==== Gliders ====
+*Script*: populate_gliders_usf.sh<br/>
+*Command line parameters*:<br/>
+*Directory*: /home/xeniaprod/cron<br/>
+*Description*: Shell script for processing the NCSU Webb gliders data.<br/>
+
+*Shell Script Makeup* <br/>
+  _Script_: WebbGlider.py <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/gliders/webb <br/>
+  _Command Line Parameters_:  <br/>
+  {{{
+  --ConfigFile=/home/xeniaprod/config/ncsuWebbEmailDataIngest.ini
+  }}}
+  _Description_: This setup processes emails that the Webb glider service sends. We have an email account setup to receive the emails.<br/>
+----
 
 = Machine: Mapping =
 http://129.252.139.139/
@@ -623,6 +639,7 @@ http://129.252.139.139/
 == Scripts: Mapping ==
 
 ----
+
 
 === MODIS Sea Surface Temperature === 
 *Script*: get_usf_modis_sst.sh<br/>
