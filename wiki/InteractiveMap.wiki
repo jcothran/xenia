@@ -572,3 +572,24 @@ This section will detail the local mapfiles used, as well as any wrapper scripts
   _URL Parameters_:
     Normal WMS parameters, in addition:<br/>
     TIME_OFFSET_HOURS - Used to query the winds from now -   TIME_OFFSET_HOURS
+
+=== Tilecached Layers ===
+Layers that use tilecache have some special considerations if you make changes to the bounding box for the map. In the tilecache.cfg, you'll need to change the BBOX paramter for all the tilecache layers used to match the new extent.
+Sample tilecache entry:
+{{{
+[Bathy]
+type=WMSLayer
+url=http://129.252.139.139/cgi-bin/mapserv?MAP=/home/xeniaprod/mapping/common/general.map&transparent=true
+layers=Bathymetry
+levels=20
+maxResolution=156543.0339
+size=256,256
+bbox=-10074413.915389,2814454.731918,-6734829.1920556,4467020.9930062
+srs=EPSG:900913
+extension=png
+extent_type=loose
+}}}
+Tilecache.cfg lives on the Mapping instance under /var/www/tilecache.
+
+Once this change is made, you'll also need to clean the tilecache image directories so the tiles with the new extents can be generated.
+Those directories are here: base=/usr2/data/xeniaprod/tmp/mapserver_tmp/tilecache
