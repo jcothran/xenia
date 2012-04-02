@@ -592,4 +592,4 @@ extent_type=loose
 Tilecache.cfg lives on the Mapping instance under /var/www/tilecache.
 
 Once this change is made, you'll also need to clean the tilecache image directories so the tiles with the new extents can be generated.
-Those directories are here: base=/usr2/data/xeniaprod/tmp/mapserver_tmp/tilecache
+Those directories are here: base=/usr2/data/xeniaprod/tmp/mapserver_tmp/tilecache. The directories can be deleted. They will be regenerated once a new tilecache request comes in for the given layer.
