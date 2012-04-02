@@ -573,7 +573,7 @@ This section will detail the local mapfiles used, as well as any wrapper scripts
     Normal WMS parameters, in addition:<br/>
     TIME_OFFSET_HOURS - Used to query the winds from now -   TIME_OFFSET_HOURS
 
-=== Tilecached Layers ===
+==== Tilecached Layers ====
 Layers that use tilecache have some special considerations if you make changes to the bounding box for the map. In the tilecache.cfg, you'll need to change the BBOX paramter for all the tilecache layers used to match the new extent.
 Sample tilecache entry:
 {{{
