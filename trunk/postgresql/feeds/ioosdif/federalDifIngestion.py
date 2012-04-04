@@ -1,3 +1,9 @@
+"""
+Revisions
+Date: 2012-04-04
+Function: difObservationCSV.getDataValue
+Changes: Added general exception handler.
+"""
 import logging
 import logging.config
 
@@ -98,6 +104,11 @@ class difObservationCSV(difObservation, ioosDif):
     except ValueError,e:
       if(self.logger):
         self.logger.debug("m_value: %s is not a valid number." % (dataRow[dataColumn]))
+    #DWR 2012-04-04
+    #Add general exception handler. Could be a KeyError if dataColumn doesn't exist in the dataRow.
+    except Exception,e:
+      if(self.logger):
+        self.logger.exception(e)
     return(value)    
   
   def getTimeSeriesRow(self, xeniaDB, platformRec, rowEntryDate):
@@ -131,6 +142,8 @@ class difObservationCSV(difObservation, ioosDif):
               dataRec.platform_handle = platformRec.platform_handle            
               dataRec.m_lon,dataRec.m_lat = self.getFixedLonLatValue(dataRow)    
               dataRec.m_value = self.getDataValue(xeniaKey, dataRow)
+              if(dataRec.m_value == None and self.logger):
+                self.logger.error("None data value returned.")                
               dataRec.m_z = self.getDepth(dataRow)
               recList.append(dataRec)
             else:
@@ -441,6 +454,8 @@ class fedsDataIngestion(dataIngestion):
                     join((organization,organization.row_id == platform.organization_id)).\
                     filter(organization.short_name == self.inventory.organizationID).\
                     all()
+        if(self.logger):
+          self.logger.debug("Org Id: %s returning: %d platforms." % (self.inventory.organizationID,len(platformRecs)))
       else:
         platformRecs = self.inventory.db.session.query(platform).\
                     join((organization,organization.row_id == platform.organization_id)).\
@@ -461,18 +476,18 @@ class fedsDataIngestion(dataIngestion):
       dataSaver.start()
       
       for platRec in platformRecs:
-        #First pass make a list of the NDBC observations the platform has. NDBC
+        #First pass make a list of the federal observations the platform has. NDBC/NOS
         #has comprehensive observations of Winds, Waves, and Currents. We don't want to run
         #multiple web queries for the individual platform observations such as wind_speed and direction
         #since they are contained in the single NDBC query.   
+        if(self.logger):
+           self.logger.info("Processing platform: %s" % (platRec.short_name))
         obsCategory = []
         for sensor in platRec.sensors:
           obsName = sensor.m_type.scalar_type.obs_type.standard_name
           difObs = self.inventory.xeniaDataMappings.getDifObsNameFromXenia(obsName)
           if(difObs in obsCategory) == False:
             obsCategory.append(difObs)
-        if(self.logger):
-           self.logger.info("Processing platform: %s" % (platRec.short_name))
         for obsCat in obsCategory:
           offeringString = "urn:ioos:station:%s:%s" % (self.stationoffering,platRec.short_name )
           if(self.logger):
