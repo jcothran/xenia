@@ -15,8 +15,10 @@ Rack 1 (top to bottom) <br />
 {{{
 esxi 139.198 
   139.139 - mapserver,tilecache engine,remotesensing image copying/db ref
-  139.144 - cormp1 
+  139.186 - cormp1 
   139.134 - projects
+  139.144 - thredds
+  139.169 - erddap
 esxi 37.87 
   neptune 37.90 main production, gomodp exchange software 
   139.124 - squid forwarding(see /etc/squid/squid.conf), test/development, plone, old trident(formerly 139.178) - hfradar, dap
