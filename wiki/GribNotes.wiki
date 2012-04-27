@@ -15,7 +15,7 @@ wgrib2.exe -grid test.grb
 
 ----
 
-The grib stuff so far seems to have about a 100 to 1 compression ratio for binary to text, so be careful converting a 8 MB grib file to 800 MB text/csv file.  wgrib2(on linux/ubuntu - 300-400 MB install) is the command line tool I'm using to go from grib to text/csv
+The grib stuff so far seems to have about a 100 to 1 compression ratio for binary to text, so be careful converting a 8 MB grib file to 800 MB text/csv file.  wgrib2(on linux/ubuntu - 300-400 MB install, had problems with windows version) is the command line tool I'm using to go from grib to text/csv
 
 http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/
 
