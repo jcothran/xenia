@@ -1,5 +1,7 @@
 #summary description of hfradar scout and product generation
 
+<wiki:toc max_depth="6" />
+
 = ascii totals to netcdf =
 
 The perl scripts to convert from wera ascii total files(the final total current speed/direction of the combined radial data) to seacoos grid netcdf are at the following link
