@@ -298,6 +298,7 @@ googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
          * "params" - Attribute is for !OpenLayers layer objects that have a "params" configuration.   
          * "options" - The attribute mimics the !OpenLayers options field for the layer. Each setting, unless otherwise noted, is defined in the appropriate !OpenLayers class.
          * "extended_options" - This are is completely unique to our map configuration file. Although the do affect the layer, they are not !OpenLayers parameters. This section will be in a state of flux as we refine various parameters.
+{{{
                   "attribution" - This section is where we give credit to the data provider.                  
                     "infoUrl" - URL with anchor tag to the Secoora page that has a short blurb about the data provider.
                   
@@ -326,7 +327,7 @@ googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
                     "forecastHoursCount" - Some model layers have a forecast ability, this details the number of hours ahead we can request.
                     "hindcastHoursCount"  - Some model layers have a hindcast ability, this details the number of hours behind we can request.
                     "hourlyUpdateInterval" - How often the model generates data.
-                                    
+}}}                                    
            
 
 ==== Custom Layers ====
