@@ -193,7 +193,71 @@ map_config_callback({
               }
             }
           },
-          { - Next tab starts here.
+          {
+            "folder": "Model(NCSU)",
+            "expanded" : false,
+            "children":
+            {
+
+              "Wind(NCEP)":
+              {
+                "type" : "OpenLayers.Layer.WMS",
+                "url": "http://129.252.139.124/cgi-bin/mapserv_model_wrapper?",
+                "params":
+                {
+                  "map" : "/home/xeniaprod/mapping/common/general.map",
+                  "LAYERS": "ncep_global/wind",
+                  "NCWMS_STYLES": "vector/rainbow",
+                  "COLORSCALERANGE": "0,30",
+                  "NUMCOLORBANDS": "20",
+                  "SRS": "epsg:4326",
+                  "FORMAT": "image/png",
+                  "TRANSPARENT": true,
+                },
+                "options":
+                {
+                  "singleTile": true,
+                  "ratio": 1,
+                  "GROUP" : "Model(NCEP)",
+                  "visibility": false,
+                  "QUERYABLE": true,
+                  "opacitySlider": true
+                },
+                "extendedOptions": 
+                {
+                  "attribution" :
+                  {
+                    "infoUrl" : "http://secoora.org/maps/datalinks#"
+                  },
+                  "legend" :
+                  {
+                    "imageUrl" : "http://129.252.139.124/ncWMS/wms?LAYER=ncep_global%2Fwind&COLORSCALERANGE=-1.6532156%2C34.71753&NUMCOLORBANDS=254&LOGSCALE=false&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_inimage&FORMAT=image%2Fpng&WIDTH=20&HEIGHT=100"
+                  },
+                  "opacity" :
+                  {
+                    "slider" : true,
+                    "initOpacity" : 50
+                  },
+                  "getfeatureinfo" :
+                  {
+                    "type" : "rcoosmapping.WMSThreddsXMLGetFeatureInfo",
+                    "vendorParams" :
+                    {
+                      "gfiUrl" : "http://omglnx1.meas.ncsu.edu/thredds/wms/fmrc/sabgom/SABGOM_Forecast_Model_Run_Collection_best.ncd",
+                      "obsType" : "Winds",
+                      "uomType" : "M/S",
+                      "srs" : "EPSG:4326",
+                      "query_layers": "ncep_global/tmp2m"
+                    }
+                  },
+                  "timeParams" :
+                  {
+                    "forecastHoursCount" : 48,
+                    "hindcastHoursCount" : 48,
+                    "hourlyUpdateInterval" : 3 
+                  }                  
+                }
+              }
           }
         ]
       }
