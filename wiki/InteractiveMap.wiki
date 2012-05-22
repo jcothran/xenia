@@ -293,11 +293,41 @@ googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
    * _layers_ - Section defines the layers this map tab will contain. 
      * _folder_ - For future use which will defines the name of the group the layers under the "children" attribute will fall under.
      * _children_ - The layers the folder group contains.
-       * "Google Terrain" - Define the name of the layer.
-         * _type_ - The !OpenLayers layer object to create. In addition to the standard !OpenLayers objects, there are a few custom ones as well listed in the [#Custom_Layers Custom Layers] entry below.
-         * _params_ - Attribute is for !OpenLayers layer objects that have a "params" configuration.   
-         * _options_ - The attribute mimics the !OpenLayers options field for the layer. Each setting, unless otherwise noted, is defined in the appropriate !OpenLayers class.
-         * _extended_options_ - This are is completely unique to our map configuration file. Although the do affect the layer, they are not !OpenLayers parameters. This section will be in a state of flux as we refine various parameters.
+       * "Layer Name" - Define the name of the layer.
+         * "type" - The !OpenLayers layer object to create. In addition to the standard !OpenLayers objects, there are a few custom ones as well listed in the [#Custom_Layers Custom Layers] entry below.
+         * "params" - Attribute is for !OpenLayers layer objects that have a "params" configuration.   
+         * "options" - The attribute mimics the !OpenLayers options field for the layer. Each setting, unless otherwise noted, is defined in the appropriate !OpenLayers class.
+         * "extended_options" - This are is completely unique to our map configuration file. Although the do affect the layer, they are not !OpenLayers parameters. This section will be in a state of flux as we refine various parameters.
+                  "attribution" - This section is where we give credit to the data provider.                  
+                    "infoUrl" - URL with anchor tag to the Secoora page that has a short blurb about the data provider.
+                  
+                  "legend" - Section where legend parameters are set.
+                  
+                    "imageUrl" - Url of the image to use in the Legend Panel.
+
+                  "opacity" - Layer Opacity section.
+                  
+                    "slider" - True flag will add a opacity slider to the layer info popup box for the layer.
+                    "initOpacity" - Initial opacity of the layer. PLaceholder, need to implement.
+                  
+                  "getfeatureinfo" - WMS layer GetFeatureInfo setup area.
+                  
+                    "type" : GetFeatureInfo object type. Can be rcoosmapping.WMSThreddsXMLGetFeatureInfo
+                    "vendorParams" - Options appended to the POST url. These are specific to the type above. The ones listed below are unique to our wrapper which interfaces with a Thredds WMS server.
+                    
+                      "gfiUrl" : "http://omglnx1.meas.ncsu.edu/thredds/wms/fmrc/sabgom/SABGOM_Forecast_Model_Run_Collection_best.ncd",
+                      "obsType" : "Winds",
+                      "uomType" : "M/S",
+                      "srs" : "EPSG:4326",
+                      "query_layers": "ncep_global/tmp2m"
+                    
+                  "timeParams" - Section dealing with the time ranges a layer may have.
+                  
+                    "forecastHoursCount" - Some model layers have a forecast ability, this details the number of hours ahead we can request.
+                    "hindcastHoursCount"  - Some model layers have a hindcast ability, this details the number of hours behind we can request.
+                    "hourlyUpdateInterval" - How often the model generates data.
+                                    
+           
 
 ==== Custom Layers ====
 * * Custom Options *
