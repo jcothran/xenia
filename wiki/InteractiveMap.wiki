@@ -297,6 +297,7 @@ googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
          * _type_ - The !OpenLayers layer object to create. In addition to the standard !OpenLayers objects, there are a few custom ones as well listed in the [#Custom_Layers Custom Layers] entry below.
          * _params_ - Attribute is for !OpenLayers layer objects that have a "params" configuration.   
          * _options_ - The attribute mimics the !OpenLayers options field for the layer. Each setting, unless otherwise noted, is defined in the appropriate !OpenLayers class.
+         * _extended_options_ - This are is completely unique to our map configuration file. Although the do affect the layer, they are not !OpenLayers parameters. This section will be in a state of flux as we refine various parameters.
 
 ==== Custom Layers ====
 * * Custom Options *
