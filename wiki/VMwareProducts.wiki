@@ -149,9 +149,17 @@ see also see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenera
 ----
 = SOS =
 
+==ongoing SOS/SWE community discusssion and work==
+
+http://groups.google.com/group/ioostech_dev
+
+NDBC http://code.google.com/p/ioostech/wiki/NDBC_SWE_Implementation
+
+==Xenia implementations==
+
 note also earlier development with WFS at http://code.google.com/p/xenia/wiki/XeniaPackageSqlite#MicroWFS
 
-== DIF ==
+=== DIF ===
 
 documentation http://code.google.com/p/xenia/wiki/XeniaSOS
 
@@ -164,7 +172,7 @@ XML responses should display correctly within Firefox, IE browsers
 An OGC SOS(OpenGeospatial Consortium [http://www.opengeospatial.org/standards/sos Sensor Observation Service]) web service method supports queries on the database 
 
 
-== Oostethys ==
+=== Oostethys ===
 
 documentation http://code.google.com/p/xenia/wiki/XeniaSOS#Oostethys_SOS
 
