@@ -155,6 +155,8 @@ http://groups.google.com/group/ioostech_dev
 
 NDBC http://code.google.com/p/ioostech/wiki/NDBC_SWE_Implementation
 
+CO-OPS/NOS http://opendap.co-ops.nos.noaa.gov/ioos-dif-sos-test/
+
 ==Xenia implementations==
 
 note also earlier development with WFS at http://code.google.com/p/xenia/wiki/XeniaPackageSqlite#MicroWFS
