@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Notes on SOS/SWE web service development
 
 = 52 North =
 ESRI SOS API
