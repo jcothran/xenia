@@ -1,0 +1,588 @@
+.obs-panel-body{
+  background-color: #FFFFFF;
+}
+/* LAYOUT ASSISTANT TABLE */
+table.layoutAssistant {
+	border-collapse: collapse;
+	border: none;
+	padding: 0px;
+	background: none;
+}
+
+table.layoutAssistant td.default {
+	padding: 0px;
+	border: none;
+	background: none;
+	vertical-align: top;
+}
+
+table.layoutAssistant td.center {
+	text-align: center;
+}
+
+table.layoutAssistant td.vtop {
+	vertical-align: top;
+}
+
+table.layoutAssistant td.bottom {
+	vertical-align: bottom;
+}
+
+table.layoutAssistant td.vcenter {
+	vertical-align: middle;
+}
+
+table.layoutAssistant td.aright {
+	text-align: right;
+}
+
+table.layoutAssistant td.aleft {
+	text-align: left;
+}
+
+table.layoutAssistant td.sp {
+	padding: 2px;
+}
+
+table.layoutAssistant td.nowrap {
+	white-space: nowrap;
+}
+
+table.layoutAssistant td.smallSpacer {
+	padding: 0px 2px;
+	border: none;
+	background: none;
+}
+
+table.layoutAssistant td.vertSpacer {
+	padding: 0px 0px;
+	border: none;
+	background: none;
+}
+
+table.layoutAssistant td.mediumSpacer {
+	padding: 0px 4px;
+	border: none;
+	background: none;
+}
+
+table.layoutAssistant td.largeSpacer {
+	padding: 0px 8px;
+	border: none;
+	background: none;
+}
+
+table.layoutAssistant td.smallSpacerV {
+	padding: 2px 0px;
+	border: none;
+	background: none;
+}
+
+table.layoutAssistant td.mediumSpacerV {
+	padding: 4px 0px;
+	border: none;
+	background: none;
+}
+
+table.layoutAssistant td.largeSpacerV {
+	padding: 8px 0px;
+	border: none;
+	background: none;
+}
+
+table.layoutAssistant td.vspace {
+	padding: 8px 0px 0px 0px;
+	border: none;
+	background: none;
+}
+
+table.layoutAssistant td.vspaceS {
+	padding: 4px 0px 0px 0px;
+	border: none;
+	background: none;
+}
+
+table.layoutAssistant td.vspaceSmall {
+	padding: 4px 0px 0px 0px;
+	border: none;
+	background: none;
+}
+
+table.layoutAssistant tr.xpad td {
+	padding-bottom: 3px;
+}
+
+table.layoutAssistant td.imgWrapper {
+	padding: 0px;
+	border: none;
+	background-color: #8EA399;
+	color: #000000;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+table.chart {
+	border-collapse: collapse;
+}
+
+table.chart td.default {
+	padding: 0px;
+	border: none;
+	border-top: solid 1px #cfd4d9;
+}
+
+
+table.chart td.noBorder {
+	padding: none;
+	border: none;
+}
+
+table.chart td.subVar {
+	border: solid 1px #858b91;
+	background-color: #eff2f4;
+	padding: 0px;
+	white-space: nowrap;
+}
+
+table.chart td.noWrap {
+	white-space: nowrap;
+}
+
+table.chart td.subVar p.default {
+	font-family: "Arial, Helvetica", sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	font-weight: normal;
+	color: #000000;
+	padding: 3px 3px 2px 3px;
+}
+
+table.chart td.default p.default {
+	font-family: "Arial, Helvetica", sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	font-weight: normal;
+	color: #454a4d;
+	padding: 3px 3px 2px 3px;
+}
+
+table.chart td.default p.aRight, table.chart td.subVar p.aRight {
+	text-align: right;
+}
+
+table.chart td.aCenter {
+	text-align: center;
+}
+
+table.chart td.chartButtonHead {
+	color: #000000;
+	background-color: #ebeef0;
+	border: solid 1px #858b91;
+	border-bottom: none;
+	padding: 1px 3px 1px 3px;
+}
+
+table.chart td.chartButtonLabel {
+	color: #000000;
+	font-size: 11px;
+	font-weight: normal;
+	background: none;
+	padding: 1px 3px 1px 3px;
+}
+
+table.chart td.chartButton, table.chart td.chartButtonL, table.chart td.chartButtonM, table.chart td.chartButtonR {
+	border: solid 1px #858b91;
+	padding: 0px;
+	white-space: nowrap;
+	/*ckground-image: url('/images/platinum_button_bg.gif');
+	background-repeat: repeat-x;
+	background-color: #f2f5f7;*/
+}
+
+table.chart tr.chartButton {
+	background-color: #f2f5f7;
+}
+
+table.chart td.chartButton a {
+	text-align: center;
+}
+
+table.chart td.chartButtonL {
+	border-right: none;
+	width: 1%;
+}
+
+table.chart td.chartButtonM {
+	border-left: none;
+	border-right: none;
+}
+
+table.chart td.chartButtonR {
+	border-left: none;
+}
+
+table.chart td.chartButton a.button, table.chart td.chartButtonL a.button, table.chart td.chartButtonR a.button, table.chart td.chartButtonM a.button {
+	display: block;
+	font-family: "Arial, Helvetica", sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	font-weight: normal;
+	color: #000000;
+	padding: 3px 3px 2px 3px;
+}
+
+/*
+table.chart td.chartButton a.button:hover, table.chart td.chartButtonL a.button:hover, table.chart td.chartButtonR a.button:hover, table.chart td.chartButtonM a.button:hover {
+	text-decoration: none;
+}
+
+table.chart td.selected {
+	background: none;
+	background-color: #fff04d;
+	cursor: default;
+}
+
+table.chart td.selected a.button {
+	cursor: default;
+}
+
+table.chart td.selected a.button:hover {
+	text-decoration: none;
+	cursor: default;
+}
+*/
+
+table.chart td a.aLeft {
+	text-align: left;
+}
+
+table.chart td a.aCenter {
+	text-align: center;
+}
+
+table.chart td a.aRight {
+	text-align: right;
+}
+
+table.chart td.chartButtonInvis {
+	border: none;
+	white-space: nowrap;
+	font-family: "Arial, Helvetica", sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	font-weight: normal;
+	color: #000000;
+	padding: 4px 4px 3px 4px;
+	text-align: center;
+}
+
+/*Classes for getting the mouseovers working on the observations panel*/
+table.chart tr.thumb{
+	background: #dddddd;
+	padding: 3px;
+}
+table.chart tr.thumb img{
+	height: 60px;
+	width: 80px;
+}
+table.chart tr.thumb-wrap {
+	margin: 4px;
+	margin-right: 0;
+	padding: 5px;
+}
+table.chart tr.thumb-wrap span{
+	display: block;
+	overflow: hidden;
+	text-align: center;
+}  
+table.chart tr.x-view-over{
+  border:1px solid #dddddd;
+  /*background: #efefef url(../images/default/grid/row-over.gif) repeat-x left top;*/
+	background: none;
+	/*background-color: #fff04d;*/
+  background-color: #C6CCD1;
+	cursor: default;
+	padding: 4px;
+}
+
+table.chart tr.x-view-selected{
+	/*background: #eff5fb url(../images/default/grid/row-sel.gif) no-repeat right bottom;*/
+  background-color: #C6CCD1;
+  /*background: #fff04d;*/
+	border:1px solid #99bbe8;
+	padding: 4px;
+}
+table.chart tr.x-view-selected .thumb{
+	background:transparent;
+}
+
+table.chart tr.loading-indicator {
+	font-size:11px;
+	background-image:url(../images/default/grid/loading.gif);
+	background-repeat: no-repeat;
+	background-position: left;
+	padding-left:20px;
+	margin:10px;
+}
+
+div.area {
+	border: solid 1px #c6ccd1;
+	background-color: #e8ecef;
+	padding: 3px;
+}
+/* MARKER CONTENT */
+div.markerContent {
+	/*width: 250px;*/
+	padding: 0px;
+	/*overflow: hidden;*/
+}
+div.markerContent div.area {
+	border: solid 1px #c6ccd1;
+	background-color: #e8ecef;
+	padding: 3px;
+}
+
+div.markerContent a, div.markerContent a.default {
+	color: #0061a6;
+	text-decoration: none;
+}
+
+div.markerContent a:hover, div.markerContent a.default:hover {
+	text-decoration: underline;
+}
+
+div.markerContent p.markerHead a.emphasis {
+	font-weight: normal;
+	font-style: italic;
+}
+
+div.markerContent p.markerHead {
+	color: #0061a6;
+	font-weight: bold;
+	padding-right: 12px;
+	white-space: nowrap;
+}
+
+div.markerContent p.markerHead a {
+	color: #0061a6;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+div.markerContent p.markerHead a:hover {
+	text-decoration: underline;
+}
+
+div.markerContent div.area {
+	border: solid 1px #c6ccd1;
+	background-color: #e8ecef;
+	padding: 3px;
+}
+
+div.markerContent p.default {
+	font-family: "Arial, Helvetica", sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	color: #000000;
+}
+
+div.markerContent p.vSpace {
+	padding-top: 3px;
+}
+
+div.markerContent p.aRight {
+	text-align: right;
+}
+
+div.markerContent p.latLon, div.markerContent p.provider, div.markerContent p.dataSource, div.markerContent p.state, div.markerContent p.region, div.markerContent p.updateInfo {
+	font-family: "Arial, Helvetica", sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	color: #000000;
+	padding: 1px;
+}
+
+div.markerContent p.updateInfo, div.markerContent div.updateInfo {
+	text-align: center;
+	background-color: #c6ccd1;
+	padding: 4px 4px 3px 4px;
+	/*padding-bottom: 4px;*/
+}
+
+div.markerContent span.updateInfo {
+	/*padding: 2px 4px 1px 4px;*/
+}
+
+div.markerContent div.left {
+	text-align: left;
+}
+
+div.markerContent div.center {
+	text-align: center;
+}
+
+div.markerContent div.right {
+	text-align: right;
+}
+
+div.markerVSpace, p.markerVSpace {
+	margin-top: 6px;
+}
+
+div.markerContent div.markerMeasurements {
+	padding: 1px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+div.markerMeasurements {
+  background-color: #000000
+}
+
+div.markerContent div.markerMeasNormal, div.markerContent div.markerMiscNormal, div.markerContent div.markerMiscSubNormal {
+	padding: 1px;
+}
+
+div.markerContent div.markerMeasLarge {
+	height: 340px;
+	padding: 1px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+div.markerContent div.markerMiscLarge {
+	max-height: 418px;
+	max-width: 608px;
+	padding: 1px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+div.markerContent div.markerMiscSubLarge {
+	max-height: 300px;
+	max-width: 608px;
+	padding: 1px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+div.markerContent div.markerMeasSmall {
+	height: 220px;
+	padding: 1px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+div.markerContent div.markerMiscSmall {
+	max-height: 298px;
+	max-width: 480px;
+	padding: 1px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+div.markerContent div.markerMiscSubSmall {
+	max-height: 220px;
+	max-width: 480px;
+	padding: 1px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+div.markerContent input.linkTextBox {
+	color: #000000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	border: solid 1px #c6ccd1;
+	padding: 1px;
+	margin: 0px;
+}
+
+div.markerContent ul.default, div.markerContent li.default {
+	color: #000000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+div.markerContent a.iwa {
+	color: #0061a6;
+	text-decoration: none;
+}
+
+div.markerContent table.griddedList {
+	border-collapse: collapse:
+	margin: 0px;
+}
+
+div.markerContent table.griddedList td {
+	color: #000000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	margin: 0px;
+	padding: 0px;
+}
+
+div.markerContent table.griddedList td.label {
+	padding-right: 3px;
+}
+
+div.markerContent table.griddedList td.image {
+	padding-right: 3px;
+}
+
+div.markerContent table.griddedList td.image a.gl {
+	margin: 0px;
+	padding: 0px;
+}
+
+div.markerContent a.aux {
+	color: #000000;
+	text-decoration: none;
+}
+
+div.markerContent p.latLon, div.markerContent p.provider, div.markerContent p.dataSource, div.markerContent p.state, div.markerContent p.region, div.markerContent p.updateInfo {
+	font-family: "Arial, Helvetica", sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	color: #000000;
+	padding: 1px;
+}
+div.markerContent table.linedRows {
+	border-collapse: collapse;
+}
+
+div.markerContent table.linedRows td.default, div.markerContent table.linedRows td.hSpacer {
+	vertical-align: top;
+	padding: 4px;
+	color: #000000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	border-top: solid 1px #c6ccd1; 
+}
+
+div.markerContent table.linedRows td.top {
+	border-top: none;
+}
+
+div.markerContent table.linedRows td.bottom {
+	padding-bottom: 0px;
+}
+
+div.markerContent table.linedRows td.hSpacer {
+	padding-left: 8px;
+}
+
+div.markerContent table.linedRows td.aRight {
+	text-align: right;
+}
+
+div.markerContent table.linedRows td.nowrap {
+	white-space: nowrap;
+}
+
+p.platformIssue {
+  color: #FF0000;
+}

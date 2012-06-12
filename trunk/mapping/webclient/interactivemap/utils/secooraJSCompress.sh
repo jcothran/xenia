@@ -1,0 +1,5 @@
+#Compress the javascript files
+./yuicompressor.sh -o ../resources/lib/secoora-min.js ../resources/lib/ExtJS-3.3.0/adapter/ext/ext-base.js ../resources/lib/ExtJS-3.3.0/ext-all.js ../resources/lib/OpenLayers-2.10/OpenLayers.js ../resources/lib/GeoExt-1.0/script/GeoExt.js ../resources/lib/ComparisonFilterEx.js ../resources/lib/GeoExt-1.0/lib/GeoExt/widgets/tree/TreeNodeUIEventMixinExtended.js ../resources/lib/GeoExt-1.0/lib/GeoExt/widgets/tree/LayerOpacitySliderPlugin.js ../resources/lib/GeoExt-1.0/lib/GeoExt/widgets/tree/RadioButtonPlugin.js ../resources/lib/GeoExt-1.0/lib/GeoExt/widgets/tree/LayerInfoPlugin.js ../resources/lib/adapter-extjs.js ../resources/lib/Highcharts/js/highcharts.src.js ../resources/lib/Ext.ux.HighChart.js ../resources/lib/units_conversion.js ../resources/lib/jsUtils.js ../resources/lib/olMap1.1.js ../resources/lib/secoora_interactive.js
+
+#Compress the CSS files
+./yuicompressor.sh -o ../resources/css/secoora-min.css ../resources/css/popup.css ../resources/css/mappanel.css ../resources/css/style.css ../resources/css/layout_objects.css

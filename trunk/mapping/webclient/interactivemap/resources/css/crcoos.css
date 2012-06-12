@@ -1,0 +1,12 @@
+.loading-indicator {
+	background-image:url(../images/default/grid/loading.gif);
+	background-repeat: no-repeat;
+}
+
+/* layout */
+#header {
+	background: url(../images/legend/crcoos_header_bkg.jpg) right no-repeat;
+	border-bottom: 1px solid #006;
+	padding: 0;
+	height: 94px;
+}
