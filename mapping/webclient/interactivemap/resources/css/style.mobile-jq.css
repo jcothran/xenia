@@ -1,0 +1,68 @@
+/*html ,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}*/
+#mapPage .ui-content, #popup .ui-content {
+    padding: 0;
+}
+#popup .ui-content {
+  margin-top: 0px;
+  width: auto;
+}
+#popup .ui-header {
+  width: auto;
+  padding: 0 0;
+}
+
+#mapPage .ui-footer, #popup .ui-footer {
+    text-align: center;
+    padding: 5px 0;
+}
+.portrait, .portrait .ui-page{
+    min-height: 0;
+}
+#mapPage .ui-content, #map {
+    width: 100%;
+    height: 100%;
+}
+.olControlAttribution {
+    font-size: 10px;
+    bottom: 5px;
+    right: 5px;
+}
+#navigation {
+    position: absolute;
+    bottom: 280px;
+    left: 10px;
+    z-index: 1000;
+}
+#navigation .ui-btn-icon-notext {
+    display: block;
+    padding: 7px 6px 7px 8px;
+}
+#title, #tags, #shortdesc {
+    display: none;
+}
+#mapPage .ui-icon-check {
+    opacity: 0.3;
+}
+#mapPage .checked .ui-icon-check {
+    opacity: 1;
+}
+#mapPage .ui-icon-locate {
+    background-image: url(../../resources/lib/OpenLayers-2.11/img/locate.png);
+}
+#mapPage .ui-icon-layers {
+    background-image: url(../../resources/lib/OpenLayers-2.11/img/openlayers.png);
+}
+#mapPage .ui-content .ui-listview-inset, #popup .ui-content .ui-listview-inset, #search_results {
+    margin: 1em;
+}
+#mapPage .ui-content .ui-listview, #popup .ui-content .ui-listview {
+    margin: 0px;
+}
+#details-list li{
+	padding:15px 10px;
+}

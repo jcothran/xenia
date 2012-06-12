@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <?php
+    /*
+    This section is for our pseudo failover handling. There is a cron job that runs on the server that
+    attempts to connect to the main machines handling mapping and data at USC. If it doesn't see a test file,
+    it switches out the site1.ini file to the other servers.
+    */
+    /*** parse the ini file ***/
+    $config = parse_ini_file("/home2/ratingsb/public_html/carolinasrcoos/site1.ini", 1);
+    /*** assign variables ***/
+    $server_ip = $config['site']['ip'];
+    $tilecache_ip = $config['uscmapping']['tilecacheip'];
+    $mapserver_ip = $config['uscmapping']['mapserverip'];
+    $jsonConfigFileURL = $config['uscmapping']['jsonCfgFile'];
+  ?>
+
+
+<head>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+    <title>Carolinas RCOOS Interactive Regional Map</title>
+
+    <script type="text/javascript" src="lib/jsUtils.js"></script>
+   
+    <script type="text/javascript" src="lib/ExtJS-3.3.0/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="lib/ExtJS-3.3.0/ext-all.js"></script>
+    <script type="text/javascript" src="lib/OpenLayers-2.10/OpenLayers.js"></script>
+
+    <script type="text/javascript" src="lib/ComparisonFilterEx.js"></script>
+        
+    <script type="text/javascript" src="lib/GeoExt-1.0/script/GeoExt.js"></script>
+    <script type="text/javascript" src="lib/GeoExt-1.0/lib/GeoExt/widgets/tree/TreeNodeUIEventMixinExtended.js"></script>
+    <script type="text/javascript" src="lib/GeoExt-1.0/lib/GeoExt/widgets/tree/LayerOpacitySliderPlugin.js"></script>
+    <script type="text/javascript" src="lib/GeoExt-1.0/lib/GeoExt/widgets/tree/RadioButtonPlugin.js"></script>
+    <script type="text/javascript" src="lib/GeoExt-1.0/lib/GeoExt/widgets/tree/LayerInfoPlugin.js"></script>
+    <script type="text/javascript" src="lib/adapter-extjs.js"></script>
+    <script type="text/javascript" src="lib/Highcharts/js/highcharts.src.js"></script>
+    
+    
+    <script type="text/javascript" src="lib/Ext.ux.HighChart.js"></script>
+    <script type="text/javascript" src="lib/units_conversion.js"></script>
+    <script type="text/javascript" src="lib/olMap1.1.js"></script>
+    <script type="text/javascript" src="lib/crcoos_interactive.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="resources/css/ext-all-3-3-0.css" />
+    <link rel="stylesheet" type="text/css" href="resources/css/popup.css" />
+    <link rel="stylesheet" type="text/css" href="resources/css/mappanel.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="resources/css/layout_objects.css" />
+    <link rel="stylesheet" type="text/css" href="resources/css/crcoos.css" />
+    
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp
+      &amp;key=ABQIAAAAL73Z-9MqNqy4W5Qwupis9hTlDABIG_v0FOhtEQF52_GvIuKiJBQt2MvAaJ42EeEsm1M_Q1MfWkJorg"
+      type="text/javascript">
+    </script>
+    <!--
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp
+      &amp;key=ABQIAAAAL73Z-9MqNqy4W5Qwupis9hSDKyUcdwS0YBYIkK_TR-VmiATP5BSmwgJsMFzVtYFtDBIDcf0SfM1r-Q"
+      type="text/javascript">
+    </script>
+    -->
+    
+
+  
+    <style type="text/css">
+    html, body {
+        font: normal 12px verdana;
+        margin: 0;
+        padding: 0;
+        border: 0 none;
+        overflow: hidden;
+        height: 100%;
+    }
+    </style>
+  <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+  </script>
+  <script type="text/javascript">    
+    function init()
+    {
+      var server_ip = "<?php echo $server_ip; ?>";
+      var tilecache_ip = "<?php echo $tilecache_ip; ?>";
+      var mapserver_ip = "<?php echo $mapserver_ip; ?>";
+      var jsonConfigFileURL = "<?php echo $jsonConfigFileURL; ?>";
+      
+      rcoosmapping.app.init(server_ip,mapserver_ip,tilecache_ip,jsonConfigFileURL);
+    }
+  </script>
+</head>
+
+
+<body onload="init()">
+  <div class="logo" id="header"><a href="http://carolinasrcoos.org"><img src="resources/images/legend/rcoos_hdr.gif"></img></a></div>
+  <div id="center"></div>
+</body>
+
+</html>

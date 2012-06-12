@@ -1,0 +1,138 @@
+/*.map-panel
+{
+  background-color:#318A9E;
+}*/
+.x-panel-body .west-panel-body
+{
+  background-color:#FFFFFF;
+}
+/*
+.x-panel-header
+{
+  background: url("http://rcoos.org/carolinasrcoosrev2/extjs/resources/images/default/panel/secoora-white-top-bottom.gif") repeat-x scroll 0 -1px transparent
+}
+ul.x-tab-strip-top
+{
+  background: url("http://rcoos.org/carolinasrcoosrev2/extjs/resources/images/default/tabs/secoora-tab-strip-bg.gif") repeat-x scroll center bottom #CEDFF5
+}
+.x-tab-strip-top .x-tab-right
+{
+  background: url("http://rcoos.org/carolinasrcoosrev2/extjs/resources/images/default/tabs/secoora-tabs-sprite.gif") no-repeat scroll 0 -51px transparent
+}
+
+.x-tab-strip-top .x-tab-left
+{
+  background: url("../images/default/tabs/tabs-sprite.gif") no-repeat scroll right -351px transparent
+}
+*/
+.layer-tree-node a span
+{
+  color: #314F9E;
+}
+
+.legend table
+{
+  color: #314F9E;
+}
+
+.legend td.head
+{
+  /*#background-color:#22616F;*/
+  border-bottom:medium none;
+  /*color:#C6CED3;*/
+  font-weight:bold;
+  padding:3px;
+  text-align:center;
+} 
+.legend td.units
+{
+  border-bottom:medium none;
+  padding:3px;
+  text-align:center;
+  color: #000000;
+} 
+
+
+/* Map toolbar items*/
+.zoomin {
+  background-image:url(../images/default/toolbar/icon_zoomin.png) !important;
+  height:20px !important;
+  width:20px !important;
+}
+.zoomout {
+  background-image:url(../images/default/toolbar/icon_zoomout.png) !important;
+  height:20px !important;
+  width:20px !important;
+}
+.zoomfull {
+  background-image:url(../images/default/toolbar/icon_zoomfull.png) !important;
+  height:20px !important;
+  width:20px !important;
+}
+.pan {
+  background-image:url(../images/default/toolbar/icon_pan.png) !important;
+  height:20px !important;
+  width:20px !important;
+}
+
+.info {
+  background-image:url(../images/default/toolbar/info.png) !important;
+  height:20px !important;
+  width:20px !important;
+}
+
+.help {
+  background-image:url(../images/default/toolbar/help.png) !important;
+  height:20px !important;
+  width:20px !important;
+}
+
+
+/*For the popup window that has the obs data*/
+.popupobsdata table {
+  border-collapse: collapse;
+  padding-left:6px;
+}
+.popupobsdata th{
+    color:#000;                     
+}
+.popupobsdata caption{
+  color:#c00;                  
+}
+.popupobsstatusstale{
+  color:#fffc11;
+}
+
+.popupobsdata tr{
+  color:#333;
+}
+.popupobsdata tr:hover {
+  background:#99b3cc none repeat scroll 0 0;
+}
+.popupobsdata tr:click {
+  background:#99b3cc none repeat scroll 0 0;
+}
+
+.popupobsdata td{
+    color:#333;
+}
+
+/*Layer switcher node customizations.*/
+.gx-layer-info {
+  background-image:url(../images/default/toolbar/info.png);
+  background-repeat:no-repeat;
+  background-position:center;   
+  height:16px !important;
+  width:16px !important;
+  border-style:none;
+}
+
+/*Layer switcher node customizations.*/
+.gx-time-adjust {
+  background-image:url(../images/default/shared/calendar.gif);
+  background-repeat:no-repeat;
+  background-position:center;   
+  height:16px !important;
+  width:16px !important;
+  border-style:none;
+} 

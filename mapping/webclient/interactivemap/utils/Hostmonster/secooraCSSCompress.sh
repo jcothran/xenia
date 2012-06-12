@@ -1,0 +1,1 @@
+/home2/ratingsb/public_html/rcoos/utils/yuicompressor-2.4.7/yuicompressor.sh -o resources/css/secoora-min.css resources/css/popup.css resources/css/mappanel.css resources/css/style.css resources/css/layout_objects.css
