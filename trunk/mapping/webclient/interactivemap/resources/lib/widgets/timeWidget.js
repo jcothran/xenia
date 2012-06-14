@@ -13,7 +13,7 @@ rcoosmapping.timeWidget = Ext.extend(Ext.Window, {
     Ext.apply(this, config);
     if(config.layout === undefined)
     {
-      this.layout = 'anchor';
+      this.layout = 'border';
     }
     var tabItems = [];
     if(this.layerInfo)
@@ -21,11 +21,11 @@ rcoosmapping.timeWidget = Ext.extend(Ext.Window, {
       tabItems.push(this.addLayerInfo(this.layerInfo));
     }
 /*
-		var secRow = this.buildSecondRow();
-		if(secRow)
-		{
-			tabItems.push(secRow);
-		}
+    var secRow = this.buildSecondRow();
+    if(secRow)
+    {
+      tabItems.push(secRow);
+    }
 */
     if(this.opacityParams)
     {
@@ -35,64 +35,20 @@ rcoosmapping.timeWidget = Ext.extend(Ext.Window, {
     {
       tabItems.push(this.addDateTimePicker(this.timeParams));
     }
-		
-		var tabPanel = new Ext.TabPanel({
-			id : 'timewidgettab-' + this.title,
-			items : tabItems,
-			activeTab : 0
-			
-		});
-		this.items = [];
-		this.items.push(tabPanel); 
-		
-	/*
-    if(this.opacityParams)
-    {
-      this.items.push(this.addOpacitySlider(this.opacityParams));
-    }
-    if(this.timeParams)
-    {
-      this.items.push(this.addDateTimePicker(this.timeParams));
-    }
-    */
-    rcoosmapping.timeWidget.superclass.constructor.call(this, config);
     
-    /*if(config.timeParams)
-    {
-      this.addDateTimePicker(config.timeParams);
-    }*/
+    var tabPanel = new Ext.TabPanel({
+      id : 'timewidgettab-' + this.title,
+      items : tabItems,
+      activeTab : 0,
+			region : 'center'
+    });
+    this.items = [];
+    this.items.push(tabPanel); 
+    
+   rcoosmapping.timeWidget.superclass.constructor.call(this, config);
+    
   },
-  buildSecondRow : function()
-  {
-		var vPanel;
-		if(this.opacityParams || this.timeParams)
-		{
-			var opacityBox;
-			var timeBox; 
-			var items = [];
-			if(this.opacityParams)
-			{
-				opacityBox = this.addOpacitySlider(this.opacityParams);	
-				items.push(opacityBox);			
-			}
-			if(this.timeParams)
-			{
-				timeBox = this.addDateTimePicker(this.timeParams);	
-				items.push(timeBox);										
-			}
-			vPanel = new Ext.Container({
-				title : 'Layer Adjustments',
-				id : 'dateopacitycontainer-' + this.title,
-				pack : 'start',
-				align : 'stretch',
-				anchor : "100% 50%",
-				layout : 'hbox',
-				items : items
-			});
-		}
-		return(vPanel);
-	},
-	
+  
   addDateTimePicker : function(timeParams)
   {
     //This is the container object that will house the date selector and spinner control.
@@ -129,13 +85,10 @@ rcoosmapping.timeWidget = Ext.extend(Ext.Window, {
     }
 
     var dateTimeSet = new Ext.form.FieldSet({
-			title : 'Time',
+      title : 'Time',
       id : 'datetimefields-' + this.title,
-      //anchor : "100% 100%",
-			//flex : 1,
-			height : 75,
-			//width : 175,
-			style : 'padding: 5px 2px 2px 2px',			
+      height : 75,
+      style : 'padding: 5px 2px 2px 2px',     
       layout : 'vbox',
       tabTip : "Allows the user to visualize different dates and times for the layer data.",
       collapsed: false,   // initially collapse the group
@@ -240,17 +193,64 @@ rcoosmapping.timeWidget = Ext.extend(Ext.Window, {
           var v = this.maxValue - this.minValue;
           return v == 0 ? w : (w/v);
       }
-    });                            
-
-    var sliderSet = new Ext.form.FieldSet({
+    });    
+		var opacitySlider = new Ext.slider.SingleSlider({
 			title : 'Opacity',
+			id : 'opacitysliderCtrl-' + this.title,
+			align : 'center',
+		  width: 150,
+		  height : 20,
+		  minValue: 0,
+		  maxValue: 100,
+		  value: opacityParams.initOpacity ? opacityParams.initOpacity : 100,
+		  aggressive: true,
+		  plugins: new GeoExt.LayerOpacitySliderTip(),
+		  listeners : {
+		    scope : this,
+		    "change" : function(slider, newValue) {
+		      if(this.layer)
+		      { 
+		        this.layer.setOpacity(newValue/100.0);
+		      }
+		    }
+		  }
+		});  
+		/*
+    var opacitySlider = new Ext.Container({
+			title : 'Opacity',
+			id : 'opacitysliders-' + this.title,      
+			items : [{
+				xtype : 'slider',
+	      id : 'opacitysliderCtrl-' + this.title,
+	      width: 150,
+	      height : 20,
+	      minValue: 0,
+	      maxValue: 100,
+	      value: opacityParams.initOpacity ? opacityParams.initOpacity : 100,
+	      aggressive: true,
+	      plugins: new GeoExt.LayerOpacitySliderTip(),
+	      listeners : {
+	        scope : this,
+	        "change" : function(slider, newValue) {
+	          if(this.layer)
+	          { 
+	            this.layer.setOpacity(newValue/100.0);
+	          }
+	        }
+	      }
+			}]
+		});
+		*/
+/*
+    var sliderSet = new Ext.form.FieldSet({
+      title : 'Opacity',
       id : 'opacitysliders-' + this.title,
       //anchor : "50% 100%",
-			//flex : 1,
-			height : 75,
-			//width : 175,
+      //flex : 1,
+      height : 75,
+      //width : 175,
       //layout : 'vbox',      
-			style : 'padding: 5px 2px 2px 2px',
+      style : 'padding: 5px 2px 2px 2px',
       collapsed: false,   // initially collapse the group
       collapsible: false,
       tabTip : "Allows the user to adjust the opacity of the layer.",
@@ -278,35 +278,46 @@ rcoosmapping.timeWidget = Ext.extend(Ext.Window, {
         }      
       ]
     });
-    
+*/    
     //this.add(sliderSet);
-    return(sliderSet);
+    return(opacitySlider);
   },
   addLayerInfo : function(layerInfo)
   {
+    var nfoTmplt = new Ext.XTemplate(
+      '<div class="layerinfo"><p>{text}</p></div>',
+      '<div class="layerinfolink"><p>More information <a href="{infoUrl}" target="_blank"> here</a></p></div>'
+    );
+		var layerInfo = new Ext.Container({
+			title : "Information",
+      id : 'textCtrl-' + this.title,
+      tpl : nfoTmplt,
+      data : this.layerInfo,
+			layout : 'fit'      
+			
+		})
+/*
     var sliderSet = new Ext.form.FieldSet({
       title : "Information",
       id : 'layerinfo-' + this.title,
       //anchor : "100% 50%",
-			style : 'padding: 2px 2px 2px 2px',
+      style : 'padding: 2px 2px 2px 2px',
       layout : 'anchor',
       align : 'center',
       collapsed: false,   // initially collapse the group
       collapsible: false,
       items : [
         {
-          xtype : 'textarea',
+          xtype : 'container',
           id : 'textCtrl-' + this.title,
           anchor : "100% 100%",
-          //height : 'auto',
-          //width : 100,
-          readOnly : true,
-          value : layerInfo.text
+          tpl : nfoTmplt,
+          data : this.layerInfo
         }
       ]
     });
-    //this.add(sliderSet);
-    return(sliderSet);
+*/
+    return(layerInfo);
   }
   /*  
   afterrender : function()
