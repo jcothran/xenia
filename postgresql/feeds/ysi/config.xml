@@ -11,10 +11,42 @@
       <outputs>
         <output>
           <type>kml</type>
-          <filename>C:\Documents and Settings\dramage\workspace\SVNSandbox\xenia\postgresql\import_export\ysi\apachepier.kml</filename>
+          <filename>C:\Documents and Settings\dramage\workspace\SVNSandbox\xenia\postgresql\feeds\ysi\apachepier.kml</filename>
         </output>
       </outputs>
-    </ysiSetting>     
+    </ysiSetting>
+
+    <ysiSetting>
+      <name>lbhmc_2ndave_pier</name>
+      <geoLoc>33.682675,-78.884143</geoLoc>
+      <platformURL>http://www.ysieconet.com/public/WebUI/Default.aspx?hidCustomerID=131</platformURL>
+      <paramScrapeURL>http://www.ysieconet.com/public/WebUI/DashboardDetails.aspx?hidCustomerID=131&amp;hidElementID=305&amp;hidElementType=S&amp;hidNodeID=1265</paramScrapeURL>
+
+      <dataQueryURL>http://www.ysieconet.com/public/WebUI/ParameterHistory.aspx?hidCustomerID=%d&amp;hidParameterID=%d&amp;hidNodeID=%d&amp;hidAVIID=%d&amp;hidChanID=%d</dataQueryURL>
+      
+      <outputs>
+        <output>
+          <type>kml</type>
+          <filename>/Users/danramage/tmp/ysi/2ndavenorthpier.kml</filename>
+        </output>
+      </outputs>
+    </ysiSetting>    
+    <ysiSetting>
+      <name>lbhmc_cherrygrove_pier</name>
+      <geoLoc>33.827491,-78.632003</geoLoc>
+      <platformURL>http://www.ysieconet.com/public/WebUI/Default.aspx?hidCustomerID=131</platformURL>
+      		<paramScrapeURL>http://www.ysieconet.com/public/WebUI/DashboardDetails.aspx?hidCustomerID=131&amp;hidElementID=307&amp;hidElementType=S&amp;hidNodeID=1273</paramScrapeURL>
+
+      <dataQueryURL>http://www.ysieconet.com/public/WebUI/ParameterHistory.aspx?hidCustomerID=%d&amp;hidParameterID=%d&amp;hidNodeID=%d&amp;hidAVIID=%d&amp;hidChanID=%d</dataQueryURL>
+      
+      <outputs>
+        <output>
+          <type>kml</type>
+          <filename>/Users/danramage/tmp/ysi/cherrygrovepier.kml</filename>
+        </output>
+      </outputs>
+    </ysiSetting>    
+     
   </ysiSettingsList>
   <unitsConversion>
     <file>C:\Documents and Settings\dramage\workspace\QAQC-ControlChart\UnitsConversionPython.xml</file>
