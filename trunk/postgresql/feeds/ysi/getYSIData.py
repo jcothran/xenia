@@ -1,6 +1,13 @@
 """
 Revisions:
 Author: DWR
+Date: 2012/06/20
+Function: ysiDataCollection.__init__, ysiDataCollection.convertToXeniaObsAndUOM
+CHanges: Added a ysi observation to xenia mapping file to use.  Previously had hard coded if/elif statements
+to match YSI observation to xenia. Problem is the YSI observations are inconsistent so I moved the mappings to 
+a json file to allow the use of a dictionary to easily add the latest variant of the observation.
+
+Author: DWR
 Date: 2012-03-23
 Changes: Added a socket timeout to prevent us from hanging on the urlopen calls.
 """
@@ -18,6 +25,7 @@ from xeniatools.xmlConfigFile import xmlConfigFile
 from xeniatools.xenia import uomconversionFunctions
 from xeniatools.xenia import recursivedefaultdict
 from pykml import kml
+import simplejson as json
 
 """
 Class: ysiParameters
@@ -290,6 +298,7 @@ class ysiDataCollection(object):
       self.siteSettings[siteName]['paramScrapeURL']= configSettings.getEntry("paramScrapeURL",child)
       self.siteSettings[siteName]['dataQueryURL']  = configSettings.getEntry("dataQueryURL",child)
     self.unitsConversionFile = configSettings.getEntry("//environment/unitsConversion/file")
+    self.ysiMapToXeniaFile = configSettings.getEntry("//environment/ysiObservationMappingFile/file")
   
   """
   Function: processSites
@@ -300,19 +309,34 @@ class ysiDataCollection(object):
     None 
   """
   def processSites(self):
-    for siteName in self.siteSettings:
-      print("Processing site: %s" %(siteName))
-      obsHash = self.getRemoteData(siteName, self.siteSettings[siteName])
-      if(self.siteSettings[siteName]['outputtype'] == 'kml'):
-        self.createKML( siteName, 
-                        self.siteSettings[siteName]['outputfilename'],
-                        obsHash
-                      )
-      elif(self.siteSettings[siteName]['outputtype'] == 'csv'):
-        self.createCSV(siteName, 
-                        self.siteSettings[siteName]['outputfilename'],
-                        obsHash
-                      )        
+    #DWR 2012/06/20
+    #Build the map from the ysi to xenia mapping file.
+    self.ysiMapping = None
+    try:
+      jsonFile = open(self.ysiMapToXeniaFile, "r")
+      jsonData = jsonFile.read()
+    except IOError,e:
+      print(traceback.print_exc())
+    else:
+      try:
+        decoder = json.JSONDecoder()
+        self.ysiMapping = decoder.decode(jsonData)
+      except json.JSONDecodeError:
+        print(traceback.print_exc())
+      else: 
+        for siteName in self.siteSettings:
+          print("Processing site: %s" %(siteName))
+          obsHash = self.getRemoteData(siteName, self.siteSettings[siteName])
+          if(self.siteSettings[siteName]['outputtype'] == 'kml'):
+            self.createKML( siteName, 
+                            self.siteSettings[siteName]['outputfilename'],
+                            obsHash
+                          )
+          elif(self.siteSettings[siteName]['outputtype'] == 'csv'):
+            self.createCSV(siteName, 
+                            self.siteSettings[siteName]['outputfilename'],
+                            obsHash
+                          )        
   
   """
   Function: getRemoteData
@@ -570,6 +594,13 @@ class ysiDataCollection(object):
     obs = ''
     uom = ''
     sOrder = ''
+    
+    
+    if ysiObsName in self.ysiMapping['ysiObservations']:
+      obs = self.ysiMapping['ysiObservations'][ysiObsName]['obs']
+      uom = self.ysiMapping['ysiObservations'][ysiObsName]['uom']
+      sOrder = self.ysiMapping['ysiObservations'][ysiObsName]['sOrder']
+    """
     if( ysiObsName == 'Surface Temp. [F]' ):     
       obs = "water_temperature"
       uom = "fahrenheit"
@@ -698,6 +729,7 @@ class ysiDataCollection(object):
       obs = "depth"
       uom = "m"
       sOrder = "1"
+    """
     return(obs,uom,sOrder)
 
 
@@ -706,14 +738,5 @@ if __name__ == '__main__':
     ysiConvert = ysiDataCollection(sys.argv[1])
     ysiConvert.processSites()
   except Exception, e:
-    import sys
-    import traceback
-    
-    info = sys.exc_info()        
-    excNfo = traceback.extract_tb(info[2], 1)
-    items = excNfo[0]
-    lastErrorFile = items[0]    
-    lastErrorLineNo = items[1]    
-    lastErrorFunc = items[2]        
-    print("%s Function: %s Line: %s File: %s" % (str(e), lastErrorFunc, lastErrorLineNo, lastErrorFile)) 
+    print(traceback.print_exc())
     sys.exit(- 1)
