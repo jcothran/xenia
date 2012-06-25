@@ -116,7 +116,7 @@ getstore("$kml_zip_feed", $path_zipfile_archive);
 `cd $target_dir; unzip obskml.xml.zip`;
 
 my $filelist = `ls $target_dir/*.kml`;
-#print $filelist;
+print $filelist;
 my @files = split(/\n/,$filelist);
 #print @files;
 
@@ -151,7 +151,9 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 
         #get org/platform related info - only processing obskml with Placemark id attribute utilized (like 'Placemark id=carocoops.CAP1.wls')
         my $platform_id = sprintf("%s",$platform->getAttribute('id'));
-        #print "$platform_id\n";
+        #if platform_id not in id attribute, look in name field
+        if (!($platform_id)) { $platform_id = sprintf("%s",$platform->find('name')); }
+        print "$platform_id\n";
 
         #could develop a generic 'none.none.none' placeholder, but problems with maintenance and clean-up with temporary platform,sensor ids
         if (!($platform_id)) { next; }
@@ -203,8 +205,10 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
 
         if ($m_date < $date_cutoff) { print "rejecting date: $m_date \n"; next; }
 
-        ##organization####################
         my ($organization_name,$platform_name,$platform_type) = split(/[\._]/,$platform_id);
+        $platform_id = "$organization_name\.$platform_name\.$platform_type";
+
+        ##organization####################
 
         $sql = qq{ SELECT row_id,short_name from organization where short_name like '$organization_name' };
         #print $sql."\n";
@@ -241,7 +245,7 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
         else {
                 print "platform $platform_name not found - inserting\n";
 
-                $sql = qq{ INSERT into platform(organization_id,short_name,platform_handle,fixed_longitude,fixed_latitude,long_name,description,url) values ($organization_row_id,'$platform_name','$platform_id',$longitude,$latitude,'$platform_desc','$platform_desc','$platform_url'); };
+                $sql = qq{ INSERT into platform(active,organization_id,short_name,platform_handle,fixed_longitude,fixed_latitude,long_name,description,url) values (1,$organization_row_id,'$platform_name','$platform_id',$longitude,$latitude,'$platform_desc','$platform_desc','$platform_url'); };
                 #print $sql."\n";
                 $sth = $dbh->prepare( $sql );
                 $sth->execute();
@@ -265,6 +269,8 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
                 my $m_type_id = get_m_type_id($obs_type,$uom_type);
                 if ($m_type_id eq '') { print "$obs_type.$uom_type undefined \n"; next; }
 
+		#print "$obs_type:$uom_type:$measurement\n"; #debug
+
         ##sensor####################
 
         if ($sorder eq '') { $sorder = 1; }
@@ -279,7 +285,7 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
         else {
                 print "sensor $obs_type.$uom_type not found - inserting\n";
 
-                $sql = qq{ INSERT into sensor(platform_id,m_type_id,s_order) values ($platform_row_id,$m_type_id,$sorder); };
+                $sql = qq{ INSERT into sensor(active,platform_id,m_type_id,s_order) values (1,$platform_row_id,$m_type_id,$sorder); };
                 #print $sql."\n";
                 $sth = $dbh->prepare( $sql );
                 $sth->execute();
@@ -300,10 +306,11 @@ foreach my $platform ($xp->findnodes('//Placemark')) {
         $measurement_count++;
         if ($qclevel ne '' && $qclevel ne '0' && $qclevel ne '3') { print "qclevel suspect/bad/missing($qclevel) measurement: $platform_id:$obs_type.$uom_type $m_date\n"; next; }
         if ($measurement eq '') { print "missing measurement: $platform_id:$obs_type.$uom_type $m_date\n"; $missing_count++; next; }
+        $measurement =~ s/,//g; #strip commas out if needed
 	if (!(isnumeric($measurement))) { print "nonnumeric measurement: $platform_id:$obs_type.$uom_type $m_date\n"; $missing_count++; next; }
 
         $sql = qq{ INSERT into multi_obs(platform_handle,sensor_id,m_type_id,m_date,m_lon,m_lat,m_z,m_value) values ('$platform_id',$sensor_row_id,$m_type_id,'$m_date',$longitude,$latitude,$elev,$measurement); };
-        #print $sql."\n";
+        #print $sql."\n"; #debug
         $sth = $dbh->prepare( $sql );
         $sth->execute();
 
