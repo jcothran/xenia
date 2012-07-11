@@ -1,0 +1,7 @@
+        <obs>
+                <obsType>OBS_TYPE</obsType>
+                <uomType>OBS_UOM</uomType>
+                <value>OBS_VALUE</value>
+                <dataURL>OBS_URL</dataURL>
+                <sorder>OBS_SORDER</sorder>
+        </obs>

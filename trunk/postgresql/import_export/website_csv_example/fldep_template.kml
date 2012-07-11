@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns:kml="http://earth.google.com/kml/2.1" xmlns:obsList="http://carocoops.org/obskml/1.0.0/obskml_simple.xsd">
+<!-- JTC - please forgive any unorthodoxy in the namespace declaration above, there's a bug with the perl XML::XPath package I'm using where all xmlns must be declared in the root element using prefix notation -->
+<Document>
+<name>Near Real-Time Data published by FLDEP(Florida Department of Environmental Protection)</name>
+<open>1</open>
+
+<Placemark id="fldep.bingslanding">
+<Metadata>
+<obsList>
+        <operatorURL>http://www.fldep-stevens.com</operatorURL>
+        <platformURL>http://www.fldep-stevens.com/readings-8720757.php</platformURL>
+        <platformDescription>Bing's Landing station</platformDescription>
+        <obs>
+                <obsType>water_temperature</obsType>
+                <uomType>celsius</uomType>
+                <value>WATER_TEMP_BINGS_LANDING</value>
+                <dataURL>http://www.fldep-stevens.com/data-8720757.php</dataURL>
+        </obs>
+        <obs>
+                <obsType>water_conductivity</obsType>
+                <uomType>mS_cm-1</uomType>
+                <value>CONDUCTIVITY_BINGS_LANDING</value>
+                <dataURL>http://www.fldep-stevens.com/data-8720757.php</dataURL>
+        </obs>
+        <obs>
+                <obsType>water_level</obsType>
+                <uomType>m</uomType>
+                <value>WATER_LEVEL_BINGS_LANDING</value>
+                <dataURL>http://www.fldep-stevens.com/data-8720757.php</dataURL>
+        </obs>
+        <obs>
+                <obsType>salinity</obsType>
+                <uomType>psu</uomType>
+                <value>SALINITY_BINGS_LANDING</value>
+                <dataURL>http://www.fldep-stevens.com/data-8720757.php</dataURL>
+        </obs>
+</obsList>
+</Metadata>
+                <name>fldep.bingslanding(872-0757)</name>
+                <description>Bing's Landing station</description>
+                <Point>
+                <coordinates>-81.204917,29.615417,0</coordinates>
+                </Point>
+                <TimeStamp><when>WHEN_BINGS_LANDING</when></TimeStamp>
+</Placemark>
+
+
+</Document>
+</kml>
+                <coordinates>-80.30085,27.467547,0</coordinates>
