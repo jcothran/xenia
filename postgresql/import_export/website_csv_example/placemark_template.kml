@@ -1,0 +1,16 @@
+<Placemark id="PLACEMARK_ID">
+<Metadata>
+<obsList>
+        <operatorURL>OPERATOR_URL</operatorURL>
+        <platformURL>PLACEMARK_URL</platformURL>
+        <platformDescription>PLACEMARK_DESC</platformDescription>
+        OBS_LIST
+</obsList>
+</Metadata>
+                <name>PLACEMARK_NAME</name>
+                <description>PLACEMARK_DESC</description>
+                <Point>
+                <coordinates>PLACEMARK_COORDS</coordinates>
+                </Point>
+                <TimeStamp><when>PLACEMARK_WHEN</when></TimeStamp>
+</Placemark>
