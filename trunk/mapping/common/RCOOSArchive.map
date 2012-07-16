@@ -1,0 +1,588 @@
+#
+# MapServer map file uses the pound sign (#) to denote the start of a line
+# comment--each line that needs to be commented has to be prepended with a "#".
+#
+# Map files begin with MAP keyword to signify the start of the map object.
+# Well, the entire map file is THE map object.  Enclosed between MAP and END
+# at the very bottom of this map file, are keyword/value pairs and other
+# objects.
+MAP
+  NAME          "Carolinas RCOOS"
+  IMAGETYPE      PNG24
+  EXTENT         -91.5 22 -71.5 36.5
+  #EXTENT        -82 31 -74 37
+  SIZE           500 500
+  SHAPEPATH      "/home/xeniaprod/rcoos/mapserver/data/shapefiles"
+  IMAGECOLOR      204 255 255
+  SYMBOLSET      "./images/symbols.sym"
+  FONTSET        "./fonts/fonts.list"  
+
+  CONFIG "MS_ERRORFILE" "/tmp/RCOOSArchiveMapMapservError.log"
+
+  PROJECTION
+    "init=epsg:4326"
+    "init=epsg:900913"    
+  END
+  
+  WEB
+    IMAGEPATH '/tmp/ms_tmp/'
+    IMAGEURL  '/tmp/ms_tmp/'
+    METADATA   
+     "wms_title" "Carolinas RCOOS"
+     "wms_onlineresource" "http://129.252.139.124/cgi-bin/mapserv?map=/home/xeniaprod/rcoos/mapserver/RCOOSArchive.map"
+     "wms_srs" "epsg:4326 epsg:900913"
+     "wms_feature_info_mime_type" "text/html"
+
+    END
+    
+  END
+  OUTPUTFORMAT
+    NAME PNG
+    DRIVER "GD/PNG"
+    MIMETYPE "image/png"
+    IMAGEMODE RGB
+    EXTENSION "png"
+  END
+  
+  OUTPUTFORMAT
+    NAME PNG
+    DRIVER "GD/PNG"
+    MIMETYPE "image/png1"
+    IMAGEMODE PC256
+    EXTENSION "png"
+  END
+  
+  OUTPUTFORMAT
+    NAME gif
+    DRIVER "GD/GIF"
+    MIMETYPE "image/gif"
+    IMAGEMODE RGB
+    EXTENSION "gif"
+  END
+  OUTPUTFORMAT
+    NAME GTiff
+    DRIVER "GDAL/GTiff"
+    MIMETYPE "image/tiff"
+    IMAGEMODE RGBA
+    EXTENSION "tif"
+  END
+  OUTPUTFORMAT
+    NAME jpeg
+    DRIVER "GD/JPEG"
+    MIMETYPE "image/jpeg"
+    IMAGEMODE RGB
+    EXTENSION "jpg"
+  END
+  # Layer objects are defined beneath the map object.  You need at least one
+  # layer defined in your map file before you can display a map...  You can
+  # define as many layers as you'd like although a limit is typically hard-coded
+  # in map.h in the MapServer source.  The default limit is set at 100.  You'd
+  # have to have a very specialized application to need more than 100 layers in
+  # your application.
+
+  # Start of LAYER DEFINITIONS ---------------------------------------------
+
+######################################################Base Map Layers######################################################
+
+LAYER
+  NAME us_filled
+  GROUP political_bounds_filled
+  STATUS OFF
+  DATA "the_geom from us_states_no_lakes"
+  TYPE POLYGON
+  CONNECTIONTYPE POSTGIS
+  CONNECTION "user=postgres dbname=db_geo host=db_server"
+  CLASS
+    COLOR 250 249 227
+    OUTLINECOLOR 140 140 140
+  END
+END
+
+LAYER
+  NAME counties
+  MAXSCALE 14000000
+  STATUS OFF
+  DATA "the_geom from (select * from us_counties where state_fips in ('01','12','13','37','45')) as foo USING UNIQUE gid USING SRID=-1"
+  #DATA "the_geom from (select * from us_counties ) as foo USING UNIQUE gid USING SRID=-1"
+  TYPE POLYGON
+  CONNECTIONTYPE POSTGIS
+  CONNECTION "user=postgres dbname=db_geo host=db_server"
+  CLASS
+    COLOR 250 249 227
+    OUTLINECOLOR 204 204 204
+  END
+END
+
+LAYER
+  NAME states_outline
+  STATUS OFF
+  DATA "the_geom from us_states"
+  TYPE POLYGON
+  CONNECTIONTYPE POSTGIS
+  CONNECTION "user=postgres dbname=db_geo host=db_server"
+  CLASS
+    OUTLINECOLOR 120 120 120
+  END
+END
+
+LAYER
+  NAME latlonggrid
+  TYPE LINE
+  STATUS OFF
+  CLASS
+    SYMBOL 'dashed1'
+    COLOR 200 200 200
+    LABEL
+      COLOR  0 0 128
+      FONT arial
+      TYPE truetype
+      SIZE 8
+      POSITION CC
+      PARTIALS FALSE
+      BUFFER 5
+      OUTLINECOLOR 255 255 255
+    END
+  END
+  GRID
+    MAXARCS 4
+    LABELFORMAT DDMM
+  END
+END
+
+LAYER
+  NAME us_coastal_cities_major
+  GROUP us_coastal_cities
+  MINSCALE 14000000
+  STATUS OFF
+  TYPE POINT
+  CONNECTIONTYPE OGR
+  CONNECTION "<OGRVRTDataSource>
+      <OGRVRTLayer name=cities>
+        <SrcDataSource>%ETC_DIR%/cities.csv</SrcDataSource>
+          <GeometryType>wkbPoint</GeometryType>
+          <GeometryField encoding='WKT' field='g'/>
+        </OGRVRTLayer>
+    </OGRVRTDataSource>"
+  LABELITEM 'city'
+  CLASSITEM 'city'
+  POSTLABELCACHE TRUE
+  CLASS
+    LABEL
+      TYPE TRUETYPE
+      FONT "arial"
+      PARTIALS TRUE
+      OUTLINECOLOR 255 255 255
+      POSITION CL
+      ANTIALIAS TRUE
+      COLOR 0 0 0
+      SIZE 7
+    END
+    SYMBOL 'circle'
+    COLOR 0 0 0
+    SIZE 4
+    EXPRESSION ("[scale]" eq "major" && ("[city]" eq "Myrtle Beach"))
+  END
+  CLASS
+    LABEL
+      TYPE TRUETYPE
+      FONT "arial"
+      PARTIALS TRUE
+      OUTLINECOLOR 255 255 255
+      POSITION LL
+      ANTIALIAS TRUE
+      COLOR 0 0 0
+      SIZE 7
+    END
+    SYMBOL 'circle'
+    COLOR 0 0 0
+    SIZE 4
+    EXPRESSION ("[scale]" eq "major" && ("[city]" eq "Tallahassee" || "[city]" eq "Tampa Bay" || "[city]" eq "Key West"))
+  END
+  CLASS
+    LABEL
+      TYPE TRUETYPE
+      FONT "arial"
+      PARTIALS TRUE
+      OUTLINECOLOR 255 255 255
+      POSITION UR
+      ANTIALIAS TRUE
+      COLOR 0 0 0
+      SIZE 7
+      OFFSET 3 -1 
+    END
+    SYMBOL 'circle'
+    COLOR 0 0 0
+    SIZE 4
+    EXPRESSION ("[scale]" eq "major")
+  END
+END
+######################################################Base Map Layers######################################################
+
+
+######################################################Archive Data######################################################
+#-----------COORMP Archival data-----------------------------
+  LAYER # CORMPArchives
+    NAME         "CORMPArchives"
+    CONNECTIONTYPE OGR
+    #CONNECTION    "/home/xeniaprod/rcoos/mapserver/data/sqlitedbs/CORMPArchives.db"
+    CONNECTION     "/home/xeniaprod/mapping/common/data/sqlitedbs/CORMPArchives.db"
+    DATA          "html_content"
+    STATUS       OFF
+    TYPE         POINT
+    METADATA
+      "wms_title" "CORMPArchives"      
+      "wms_srs" "epsg:4326 epsg:900913"
+      "wms_include_items" "all"
+      "wms_feature_info_mime_type" "text/html"
+    END
+
+    DEBUG 4
+
+    
+    TEMPLATE './templates/archives_query.html'
+    DUMP TRUE
+    TOLERANCE 10
+
+    CLASSITEM    "owner"
+
+    CLASS
+      NAME 'CORMPArchives'
+      TEMPLATE './templates/archives_query.html'
+      STYLE
+        COLOR      255 255 0
+        OUTLINECOLOR 0 0 0
+        SYMBOL    'circle'
+        SIZE       7
+      END
+    END 
+
+    #CLASS
+    #  NAME 'CORMPArchives'
+    #  TEMPLATE './templates/archives_query.html'
+    #  STYLE
+    #    COLOR      255 0 0
+    #    OUTLINECOLOR 0 0 0
+    #    SYMBOL    'circle'
+    #    SIZE       7
+    #  END
+    #END
+    
+    
+    
+    
+  END # CORMPArchives layer ends here
+#-----------COORMP Archival data-----------------------------
+
+#-----------------CTD data-----------------------------------------
+  LAYER #
+    NAME         "ctd_q1"
+    DATA         "ctd/collection_ids_quarter1"
+    STATUS       OFF
+    TYPE         POINT
+    METADATA
+      "wms_title" "ctd_q1"      
+      "wms_srs" "epsg:4326 epsg:900913"
+      "wms_include_items" "all"
+      "wms_feature_info_mime_type" "text/html"
+    END
+    
+    GROUP        ctd_q1
+    TOLERANCE 10
+    
+    CLASSITEM   'WEBURL'
+    CLASS
+      TEMPLATE './templates/ctd_query.html'
+      STYLE
+        OUTLINECOLOR 0 0 0
+        COLOR 0 0 200
+        SYMBOL  'square'
+        SIZE 5
+      END
+    END
+  END
+  
+  LAYER #
+    NAME         "ctd_q2"
+    DATA         "ctd/collection_ids_quarter2"
+    STATUS       OFF
+    TYPE         POINT
+    METADATA
+      "wms_title" "ctd_q2"      
+      "wms_srs" "epsg:4326 epsg:900913"
+      "wms_include_items" "all"
+      "wms_feature_info_mime_type" "text/html"
+    END
+    GROUP        ctd_q2
+    TOLERANCE 10
+    
+    CLASSITEM   'WEBURL'
+    CLASS
+      TEMPLATE './templates/ctd_query.html'
+      STYLE
+        OUTLINECOLOR 0 0 0
+        COLOR 0 200 200
+        SYMBOL  'square'
+        SIZE 5
+      END
+    END
+  END
+  
+  LAYER #
+    NAME         "ctd_q3"
+    DATA         "ctd/collection_ids_quarter3"
+    STATUS       OFF
+    TYPE         POINT
+    METADATA
+      "wms_title" "ctd_q3"      
+      "wms_srs" "epsg:4326 epsg:900913"
+      "wms_include_items" "all"
+      "wms_feature_info_mime_type" "text/html"
+    END
+    GROUP        ctd_q3
+    TOLERANCE 10
+    
+    CLASSITEM   'WEBURL'
+    CLASS
+      TEMPLATE './templates/ctd_query.html'
+      STYLE
+        OUTLINECOLOR 0 0 0
+        COLOR 200 0 200
+        SYMBOL  'square'
+        SIZE 5
+      END
+    END
+  END
+  
+  LAYER #
+    NAME         "ctd_q4"
+    DATA         "ctd/collection_ids_quarter4"
+    STATUS       OFF
+    TYPE         POINT
+    METADATA
+      "wms_title" "ctd_q4"      
+      "wms_srs" "epsg:4326 epsg:900913"
+      "wms_include_items" "all"
+      "wms_feature_info_mime_type" "text/html"
+    END
+    GROUP        ctd_q4
+    TOLERANCE 10
+    
+    CLASSITEM   'WEBURL'
+    CLASS
+      TEMPLATE './templates/ctd_query.html'
+      STYLE
+        OUTLINECOLOR 0 0 0
+        COLOR 200 200 200
+        SYMBOL  'square'
+        SIZE 5
+      END
+    END
+  END
+#-----------------CTD data-----------------------------------------
+#-----Water Quality------
+  LAYER # WaterQuality
+    NAME         "WaterQuality"
+    CONNECTIONTYPE OGR
+    CONNECTION    "/home/xeniaprod/mapping/common/data/sqlitedbs/html_content.db"
+    DATA          "ferry_content"
+    STATUS       OFF
+    TYPE         POINT
+    METADATA
+      "wms_title" "WaterQuality"      
+      "wms_srs" "epsg:4326 epsg:900913"
+      "wms_include_items" "all"
+      "wms_feature_info_mime_type" "text/html"
+    END
+    CLASSITEM    "html"
+    
+    TEMPLATE './templates/wrecks_query.html'
+    DUMP TRUE
+    TOLERANCE 10
+
+    CLASS
+      NAME 'Water Quality'
+      TEMPLATE './templates/wrecks_query.html'
+      STYLE
+        COLOR      255 0 0
+        OUTLINECOLOR 0 0 0
+        SYMBOL    'circle'
+        SIZE       5
+      END
+    END
+  END
+
+LAYER # FIU
+  DEBUG 5
+  NAME         "FIU"
+  CONNECTIONTYPE OGR
+  CONNECTION    "/home/xeniaprod/mapping/common/data/sqlitedbs/html_content.db"
+  DATA          "fiu_content"
+  STATUS       OFF
+  TYPE         POINT
+  METADATA
+    "wms_title" "FIU"      
+    "wms_srs" "epsg:4326 epsg:900913"
+    "wms_include_items" "all"
+    "wms_feature_info_mime_type" "text/html"
+  END
+  CLASSITEM    "organization"
+  
+  TEMPLATE './templates/wrecks_query.html'
+  DUMP TRUE
+  TOLERANCE 10
+
+  CLASS
+    NAME 'FIU'
+    TEMPLATE './templates/wrecks_query.html'
+    STYLE
+      COLOR      255 0 0
+      OUTLINECOLOR 0 0 0
+      SYMBOL    'circle'
+      SIZE       5
+    END
+  END
+END
+
+######################################################Archive Data######################################################
+#-----Bathymetry-----
+  LAYER #Bathymetry
+    NAME         "Bathymetry"
+    DATA         "bathy"
+    STATUS       OFF
+    TYPE         LINE
+    GROUP        bathy
+    MAXSCALE     14000000
+    
+    CLASSITEM 'elev_feet'
+    CLASS
+      TEXT ([elev_feet] ft)
+      COLOR 236 231 242
+      LABEL
+        PARTIALS FALSE
+        FORCE FALSE
+        TYPE TRUETYPE
+        FONT "arial"
+        SIZE 6
+        COLOR 4 90 141
+        OUTLINECOLOR 255 255 254
+        MINDISTANCE 150
+      END
+      EXPRESSION /^10$/
+    END
+    CLASS
+      TEXT ([elev_feet] ft)
+      COLOR 208 209 230
+      LABEL
+        PARTIALS FALSE
+        FORCE FALSE
+        TYPE TRUETYPE
+        FONT "arial"
+        SIZE 6
+        COLOR 4 90 141
+        OUTLINECOLOR 255 255 254
+        MINDISTANCE 150
+      END
+      EXPRESSION /^20$/
+    END
+    CLASS
+      TEXT ([elev_feet] ft)
+      COLOR 166 189 219
+      LABEL
+        PARTIALS FALSE
+        FORCE FALSE
+        TYPE TRUETYPE
+        FONT "arial"
+        SIZE 6
+        COLOR 4 90 141
+        OUTLINECOLOR 255 255 254
+        MINDISTANCE 150
+      END
+      EXPRESSION /^40$/
+    END
+    CLASS
+      TEXT ([elev_feet] ft)
+      COLOR 166 189 207
+      LABEL
+        PARTIALS FALSE
+        FORCE FALSE
+        TYPE TRUETYPE
+        FONT "arial"
+        SIZE 6
+        COLOR 4 90 141
+        OUTLINECOLOR 255 255 254
+        MINDISTANCE 150
+      END
+      EXPRESSION /^100$/
+    END
+    CLASS
+      TEXT ([elev_feet] ft)
+      COLOR 54 144 192
+      LABEL
+        PARTIALS FALSE
+        FORCE FALSE
+        TYPE TRUETYPE
+        FONT "arial"
+        SIZE 6
+        COLOR 4 90 141
+        OUTLINECOLOR 255 255 254
+        MINDISTANCE 150
+      END
+      EXPRESSION /^200$/
+    END
+    CLASS
+      TEXT ([elev_feet] ft)
+      COLOR 5 112 176
+      LABEL
+        PARTIALS FALSE
+        FORCE FALSE
+        TYPE TRUETYPE
+        FONT "arial"
+        SIZE 6
+        COLOR 4 90 141
+        OUTLINECOLOR 255 255 254
+        MINDISTANCE 150
+      END
+      EXPRESSION /^300$/
+    END
+    CLASS
+      TEXT ([elev_feet] ft)
+      COLOR 4 909 141
+      LABEL
+        PARTIALS FALSE
+        FORCE FALSE
+        TYPE TRUETYPE
+        FONT "arial"
+        SIZE 6
+        COLOR 4 90 141
+        OUTLINECOLOR 255 255 254
+        MINDISTANCE 150
+      END
+      EXPRESSION /^500$/
+    END
+    CLASS
+      TEXT ([elev_feet] ft)
+      COLOR 2 6 88
+      LABEL
+        PARTIALS FALSE
+        FORCE FALSE
+        TYPE TRUETYPE
+        FONT "arial"
+        SIZE 6
+        COLOR 4 90 141
+        OUTLINECOLOR 255 255 254
+        MINDISTANCE 150
+      END
+    END
+
+    METADATA
+      "wms_title" "Bathymetry"      
+      "wms_srs" "epsg:4326 epsg:900913"
+      "wms_include_items" "all"
+      "wms_feature_info_mime_type" "text/html"
+    END   
+    DUMP TRUE   
+    TOLERANCE 10
+  END
+#-----Bathymetry-----
+
+END # All map files must come to an end just as all other things must come to...
