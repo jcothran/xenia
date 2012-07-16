@@ -92,13 +92,16 @@ MAP
   
 ######################################################Base Maps######################################################
 LAYER
+  DEBUG 5
   NAME us_filled
   GROUP political_bounds_filled
   STATUS OFF
   DATA "the_geom from us_states_no_lakes"
   TYPE POLYGON
+  #INCLUDE 'dbgeo_connection.map'  #This pulls in the file that has the connection information. This way we can check in the overall map file and hide the sensitive info.
   CONNECTIONTYPE POSTGIS
-  CONNECTION "user=postgres dbname=db_geo host=db_server"
+  CONNECTION "user=xeniaprod password=xeniaprod!99 dbname=db_geo -p 5432"
+  
   CLASS
     COLOR 250 249 227
     OUTLINECOLOR 140 140 140
@@ -112,8 +115,7 @@ LAYER
   DATA "the_geom from (select * from us_counties where state_fips in ('01','12','13','37','45')) as foo USING UNIQUE gid USING SRID=-1"
   #DATA "the_geom from (select * from us_counties ) as foo USING UNIQUE gid USING SRID=-1"
   TYPE POLYGON
-  CONNECTIONTYPE POSTGIS
-  CONNECTION "user=postgres dbname=db_geo host=db_server"
+  INCLUDE 'dbgeo_connection.map'  #This pulls in the file that has the connection information. This way we can check in the overall map file and hide the sensitive info.
   CLASS
     COLOR 250 249 227
     OUTLINECOLOR 204 204 204
@@ -125,8 +127,7 @@ LAYER
   STATUS OFF
   DATA "the_geom from us_states"
   TYPE POLYGON
-  CONNECTIONTYPE POSTGIS
-  CONNECTION "user=postgres dbname=db_geo host=db_server"
+  INCLUDE 'dbgeo_connection.map'  #This pulls in the file that has the connection information. This way we can check in the overall map file and hide the sensitive info.
   CLASS
     OUTLINECOLOR 120 120 120
   END
@@ -410,6 +411,24 @@ LAYER
   END
 END
 
+LAYER
+  NAME "modis_rgb"
+  STATUS OFF
+  TYPE RASTER
+  UNITS METERS
+  CONNECTION "http://127.0.0.1/cgi-bin/wms/rs/seacoos_rs?&time_offset_hours=%TIME_OFFSET_HOURS%"
+  CONNECTIONTYPE WMS
+  PROJECTION
+  "init=epsg:4269"
+  END
+  METADATA
+    "wms_srs" "EPSG:4269 epsg:4326 EPSG:900913"
+    "wms_name" "modis_rgb"
+    "wms_server_version" "1.1.1"
+    "wms_format" "image/png"
+    "wms_extent" "-90.5 24.5 -60.5 37.2"    
+  END
+END
 
 ######################################################Radar######################################################
 
