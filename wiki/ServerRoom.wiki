@@ -19,6 +19,9 @@ esxi 139.198
   139.134 - projects
   139.144 - thredds
   139.169 - erddap
+  139.199 - 52North
+  139.78  - madrona
+
 esxi 37.87 
   neptune 37.90 main production, gomodp exchange software 
   139.124 - squid forwarding(see /etc/squid/squid.conf), test/development, plone, old trident(formerly 139.178) - hfradar, dap
