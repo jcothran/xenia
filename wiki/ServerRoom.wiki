@@ -19,6 +19,7 @@ esxi 139.198
   139.134 - projects
   139.144 - thredds
   139.169 - erddap
+  139.88  - geoportal
   139.199 - 52North
   139.78  - madrona
 
