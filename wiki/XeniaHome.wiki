@@ -59,6 +59,8 @@ version 2
 
 XeniaPackageV2
 
+Table Diagram http://code.google.com/p/xenia/wiki/XeniaPackageV2#Xenia_Table_Schema_Diagram
+
 version 2 - sqlite
 
 XeniaPackageSqlite
