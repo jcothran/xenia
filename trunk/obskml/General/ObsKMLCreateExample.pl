@@ -68,7 +68,7 @@ obsKMLSubRoutines::KMLAddObsToHash( 'water_temperature',  #Observation name.
                                     $SensorOrder,       #Sensor Order
                                     $strPlatformID,     #Platform ID
                                     $Height,            #Relative height of sensor
-                                    'Celcius',          #Units of measurement
+                                    'celsius',          #Units of measurement
                                     $rObsHash );        #Observation hash
 
 #Now we add the sea bottom water temperature value.
@@ -80,7 +80,7 @@ obsKMLSubRoutines::KMLAddObsToHash( 'water_temperature',  #Observation name.
                                     $SensorOrder,       #Sensor Order
                                     $strPlatformID,     #Platform ID
                                     $Height,            #Relative height of sensor
-                                    'Celcius',          #Units of measurement
+                                    'celsius',          #Units of measurement
                                     $rObsHash );        #Observation hash
 
 #Finally we add an air temperature observation.
@@ -92,7 +92,7 @@ obsKMLSubRoutines::KMLAddObsToHash( 'air_temperature',  #Observation name.
                                     $SensorOrder,       #Sensor Order
                                     $strPlatformID,     #Platform ID
                                     $Height,            #Relative height of sensor
-                                    'Celcius',          #Units of measurement
+                                    'celsius',          #Units of measurement
                                     $rObsHash );        #Observation hash
                                     
 
