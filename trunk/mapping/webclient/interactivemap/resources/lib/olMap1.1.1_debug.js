@@ -2243,27 +2243,7 @@ rcoosmapping.platformVectorLayer  = Ext.extend(OpenLayers.Layer.Vector,
       {
         this.redraw();
       }
-    },
-    
-    getLayerDate : function()
-    {
-      return(this.currentDate);
-    },
-
-    getLayerTime : function()
-    {
-      return(this.getLayerTime);
-    },
-    
-    clearPopup : function()
-    {
-      if(this.layerInfoPopup)
-      {
-        this.layerInfoPopup.close();
-        this.layerInfoPopup = undefined;
-      }    
-    },
-    
+    },            
     getCurrentDateTime : function()
     {
       return(currentDateTime);
@@ -2278,8 +2258,18 @@ rcoosmapping.platformVectorLayer  = Ext.extend(OpenLayers.Layer.Vector,
       {
         this.redraw();
       }
-    },
+    }
     
+    /*
+    clearPopup : function()
+    {
+      if(this.layerInfoPopup)
+      {
+        this.layerInfoPopup.close();
+        this.layerInfoPopup = undefined;
+      }    
+    },
+     
     launchTimeWidget : function(config)
     {
       if(this.layerInfoPopup)
@@ -2300,6 +2290,7 @@ rcoosmapping.platformVectorLayer  = Ext.extend(OpenLayers.Layer.Vector,
       //this.layerInfoPopup.syncSize();
     
     }
+    */
   });
   /**
   Class: OpenLayers.Layer.WMSThredds
@@ -2340,7 +2331,33 @@ rcoosmapping.platformVectorLayer  = Ext.extend(OpenLayers.Layer.Vector,
       if(this.currentDateTime === undefined)
       {
         this.currentDateTime = new Date();
-        this.currentDateTime = getClosestDateToHourInterval(this.currentDateTime, this.extendedOptions.timeParams.hourlyUpdateInterval);
+        var updateInterval;
+        //WE can either have a calculated update interval where the user provides how many times an hour the data updates, or the
+        //specific update times for the hour are provided.
+        if(this.extendedOptions.timeParams.hourlyUpdateInterval)
+        {
+          if(this.extendedOptions.timeParams.currentTimeOffset)
+          {
+            //Adjust time by currentTimeOffset.
+            var utcTime = this.currentDateTime.getTime();          
+            this.currentDate.UTC(utcTime + (currentTimeOffset * 60 * 60 * 1000))
+          }
+          
+          this.currentDateTime = getClosestDateToHourInterval(this.currentDateTime, this.extendedOptions.timeParams.hourlyUpdateInterval);
+        }
+        else if(this.extendedOptions.timeParams.updateTimes)
+        {
+          if(this.extendedOptions.timeParams.currentTimeOffset)
+          {
+            //Adjust time by currentTimeOffset.
+            var utcTime = this.currentDateTime.getTime();          
+            this.currentDate.UTC(utcTime + (currentTimeOffset * 60 * 60 * 1000))
+          }
+          this.currentDateTime = getClosestDateToUpdateTimes(this.currentDateTime, this.extendedOptions.timeParams.updateTimes);  
+        }
+        //this.currentDateTime = getClosestDateToHourInterval(this.currentDateTime, updateInterval, this.extendedOptions.timeParams.updateTimes);
+        //this.currentDateTime = getClosestTimeToInterval(this.currentDateTime, updateInterval, this.extendedOptions.timeParams.updateTimes);
+        
       }
       return(this.currentDateTime);
     },
@@ -2350,11 +2367,10 @@ rcoosmapping.platformVectorLayer  = Ext.extend(OpenLayers.Layer.Vector,
       // Do we have a current layer time? If not let's get one based on the current time.
       if(this.curLayerDateTime === undefined)
       {
-        this.setTimeOffset();
+        this.setTimeOffset(undefined, false);
       }
       newParams['TIME'] = this.curLayerDateTime;
-      return OpenLayers.Layer.WMSTimeOffset.prototype.getFullRequestString.apply(
-                                                  this, arguments);
+      return OpenLayers.Layer.WMSTimeOffset.prototype.getFullRequestString.apply(this, arguments);
       
      },
          
@@ -2370,30 +2386,48 @@ rcoosmapping.platformVectorLayer  = Ext.extend(OpenLayers.Layer.Vector,
     {
       var layerTimeReq;
       
-      if(!dateObj)
+      if(dateObj === undefined)
       {
         dateObj = new Date();
-        dateObj = dateObj.format("Y-m-d H:00:00");
-        dateObj = Date.parseDate(dateObj, "Y-m-d H:00:00");
-        dateObj = getClosestDateToHourInterval(dateObj, this.extendedOptions.timeParams.hourlyUpdateInterval);   
+        //If we need to use a time offset for the initial time, we make the adjustment.
+        if(this.extendedOptions.timeParams.currentTimeOffset)
+        {
+          //Adjust time by currentTimeOffset.
+          var utcTime = dateObj.getTime();          
+          dateObj.setTime(utcTime - (this.extendedOptions.timeParams.currentTimeOffset * 60 * 60 * 1000))
+        }
+        
+        //dateObj = dateObj.format("Y-m-d H:i:00");
+        dateObj = convertToGMT(dateObj)
+        //dateObj = Date.parseDate(dateObj, "Y-m-d H:i:00");
+        
+        if(this.extendedOptions.timeParams.hourlyUpdateInterval)
+        {
+          dateObj = getClosestDateToHourInterval(dateObj, this.extendedOptions.timeParams.hourlyUpdateInterval);
+        }
+        else if(this.extendedOptions.timeParams.updateTimes)
+        {
+          dateObj = getClosestDateToUpdateTimes(dateObj, this.extendedOptions.timeParams.updateTimes);        
+        }        
       } 
       this.currentDateTime = dateObj;
       //WMS TIME is in GMT, so convert from local time to GMT.
-      var gmtDate = convertToGMT(dateObj);
-      gmtDate = getClosestDateToHourInterval(gmtDate, this.extendedOptions.timeParams.hourlyUpdateInterval);
-      layerTimeReq = gmtDate.format("Y-m-d\\TH:00:00.000\\Z");
-      
-      /*if(!timeObj)
+      /*var gmtDate = convertToGMT(dateObj);
+      if(this.extendedOptions.timeParams.hourlyUpdateInterval)
       {
-        timeObj = getClosestDateToHourInterval(dateObj, this.extendedOptions.timeParams.hourlyUpdateInterval);
-      }  
-      layerTimeReq += timeObj.format("\\TH:00:00.000\\Z");
+        gmtDate = getClosestDateToHourInterval(gmtDate, this.extendedOptions.timeParams.hourlyUpdateInterval);
+      }
+      else if(this.extendedOptions.timeParams.updateTimes)
+      {
+        gmtDate = getClosestDateToUpdateTimes(gmtDate, this.extendedOptions.timeParams.updateTimes);        
+      }
+      layerTimeReq = gmtDate.format("Y-m-d\\TH:i:00.000\\Z");
       */
+      layerTimeReq = dateObj.format("Y-m-d\\TH:i:00.000\\Z");
       this.curLayerDateTime = layerTimeReq;
       if(updateLayer)
       {
         this.redraw();
-        //this.mergeNewParams({TIME : layerTimeReq});
       }
     }
   });
@@ -3500,17 +3534,62 @@ rcoosmapping.earthNCCharts =  OpenLayers.Class(OpenLayers.Layer.XYZ, {
             }),
             new GeoExt.tree.LayerInfoPlugin({
                 listeners: { 
-                    scope: this,
-                    "layerinfoclick": function(node, value) 
+                  scope: this,
+                  "layerinfoclick": function(node, event) 
+                  {
+                    if(this.layerInfoPopup)
                     {
-                      if(node.layer.launchTimeWidget)
+                      this.layerInfoPopup.close();
+                      this.layerInfoPopup = undefined;
+                    }
+                    if(node.layer)
+                    {
+                      var layer = node.layer;
+                      var config = {};
+                      config['height'] = 200;
+                      config['width'] = 350;                      
+                      config['x'] = event.xy[0];
+                      config['y'] = event.xy[1];
+                      //We want to make sure the window doesn't popup and have most of it's body cut off because it falls through the bottom
+                      //of the browser window. This bit checks the y position and if where the user clicked plus the height of the popup window
+                      //is greater than the height of the main window, we put the bottom corner of the popup on click point.
+                      var innerHt = this.getInnerHeight();
+                      if(config['height'] + config['y'] >= innerHt)
                       {
-                        node.layer.launchTimeWidget({
-                          width : 300,
-                          height : 150
-                          })
-                      }                      
-                    }                
+                        config['y'] = event.xy[1] - config['height'];
+                      }
+                      config['stateful'] = false;
+                      var titleString = layer.name + ' Adjustments';                      
+                      config['title'] = titleString;
+                      config['id'] = 'layerInfo-' + titleString;
+                      config['layer'] = layer;
+                      if(layer.getCurrentDateTime)
+                      {
+                        //config['initDateTime'] = convertToLocalTZ(layer.getCurrentDateTime());
+                        config['initDateTime'] = layer.getCurrentDateTime();
+                      }
+                      config['layerInfo']  = layer.extendedOptions ? layer.extendedOptions.attribution : undefined;
+                      config['timeParams'] = layer.extendedOptions ? layer.extendedOptions.timeParams : undefined;
+                      config['opacityParams'] = layer.extendedOptions ? layer.extendedOptions.opacity : undefined;
+                
+                      this.layerInfoPopup =  new rcoosmapping.layerInfoWidget(config);
+                      this.layerInfoPopup.show();                      
+                    }
+                    /*if(node.layer.launchTimeWidget)
+                    {
+                      node.layer.launchTimeWidget({
+                        width : 300,
+                        height : 150
+                        })
+                    } */                     
+                  }/*,
+                  "layerTimeAdjust" : function(layer, dateTimeNfo)
+                  {
+                    if(layer.setTimeOffset)
+                    {
+                      layer.setTimeOffset(dateTimeNfo, true);
+                    }
+                  }*/
                 }
             })/*,
             new GeoExt.tree.TimeAdjustPlugin({
@@ -3560,17 +3639,18 @@ rcoosmapping.earthNCCharts =  OpenLayers.Class(OpenLayers.Layer.XYZ, {
             }*/
             if(layer.extendedOptions)
             {
-              if(layer.extendedOptions.attribution != undefined && layer.extendedOptions.attribution.infoUrl)
+              if(layer.extendedOptions.layerInfoPopup != undefined && layer.extendedOptions.layerInfoPopup)
               {
                 this.baseAttrs.layerinfo = "layerinfoclick";
                 this.baseAttrs.uiProvider = "layernodeui";
               }
+              /*
               if(layer.extendedOptions.getfeatureinfo && layer.extendedOptions.getfeatureinfo.timeParams)
               {
                 this.baseAttrs.timeadjust = "timeadjustclick";
                 this.baseAttrs.uiProvider = "layernodeui";
                 this.baseAttrs.iconCls = 'gx-time-adjust';
-              }
+              }*/
             }
             return(true);
           }
