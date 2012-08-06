@@ -1,5 +1,11 @@
 """
 Revisions
+Authod: DWR
+Date: 2012-08-06
+Function emailAlerts.processAlerts
+Changes: Get the qc_level flag in the SQL query. When we have a qc_level, check it to make sure the data
+is valid, then process the alert. If the qc_level is None, we proceed as well.
+
 Author: DWR
 Date: 2011-11-15
 Functions: emailAlerts.createEmailMsg and emailAlerts.createEmailMsg
@@ -22,6 +28,8 @@ from xeniatools.xenia import xeniaSQLite
 from xeniatools.xenia import xeniaPostGres
 from xeniatools.xenia import uomconversionFunctions
 from xeniatools.xenia import dbTypes
+from xeniatools.xenia import qaqcTestFlags #DWR 2012-08-06 Added for QAQC flags
+
 from xeniatools.xmlConfigFile import xmlConfigFile
 
 import logging
@@ -451,6 +459,18 @@ class emailAlerts:
                                     % (emailAlert.alertInterval,platform)
                 whereConditions = "%s AND multi_obs.m_type_id = %d AND platform_handle = '%s'" \
                                   %( innerMaxDateSelect, emailAlert.id, platform )
+                #DWR 2012-08-06
+                #Add the qc_level to our selection request. For observations we have qc'd, we want to check the flag.
+                sql = "SELECT obs_type.standard_name, multi_obs.m_date,uom_type.standard_name AS uom, multi_obs.m_value, multi_obs.m_type_id, multi_obs.qc_level FROM multi_obs \
+                       LEFT JOIN  m_type on multi_obs.m_type_id = m_type.row_id \
+                       LEFT JOIN m_scalar_type on m_scalar_type.row_id = m_type.m_scalar_type_id \
+                       LEFT JOIN obs_type on  obs_type.row_id = m_scalar_type.obs_type_id \
+                       LEFT JOIN  uom_type on uom_type.row_id = m_scalar_type.uom_type_id \
+                       WHERE %s \
+                      ORDER BY obs_type.standard_name ASC;" \
+                      %( whereConditions )
+
+                """
                 sql = "SELECT obs_type.standard_name, multi_obs.m_date,uom_type.standard_name AS uom, multi_obs.m_value, multi_obs.m_type_id FROM multi_obs \
                        LEFT JOIN  m_type on multi_obs.m_type_id = m_type.row_id \
                        LEFT JOIN m_scalar_type on m_scalar_type.row_id = m_type.m_scalar_type_id \
@@ -459,59 +479,70 @@ class emailAlerts:
                        WHERE %s \
                       ORDER BY obs_type.standard_name ASC;" \
                       %( whereConditions )
-                
+                """
 
               dbCursor = self.obsDB.executeQuery( sql )
               self.logger.debug( "SQL: %s" %(sql) )
               if( dbCursor != None ):
                 row = dbCursor.fetchone()
                 if( row != None ):
-                  #Convert the native uom into imperial.      
-                  uom = self.uomConverter.getConversionUnits( row['uom'], 'en' )
-                  if( len( uom ) == 0 ):
-                    uom = row['uom']
-                    self.logger.debug( "uom: %s" %(uom) )
-                  val = float(row['m_value'])
-                  if( len(uom) > 0 ):
-                    val = self.uomConverter.measurementConvert( val, row['uom'], uom )              
-                  if( val == None ):
+                  #DWR 2012-08-06
+                  #If we have a qc_level, let's check it to verify the observation is valid, otherwise if no qc_level, proceed as well.
+                  qcLevel = row['qc_level']
+                  if((qcLevel != None and qcLevel == qaqcTestFlags.DATA_QUAL_GOOD) or (qcLevel is None)):
+                    #Convert the native uom into imperial.      
+                    uom = self.uomConverter.getConversionUnits( row['uom'], 'en' )
+                    if( len( uom ) == 0 ):
+                      uom = row['uom']
+                      self.logger.debug( "uom: %s" %(uom) )
                     val = float(row['m_value'])
-                  #self.logger.debug( "val: %s Limits: %f" %(val,emailAlert.limit) )
-                  #If the value does not exceed the limit, break out of the loop since we have failed one part of the
-                  #combo and need not continue.
-                  testCase = "%4.1f %s %4.1f" %(val, emailAlert.operator, emailAlert.limit)
-                  sendAlert = eval(testCase, {}, {})
-                  self.logger.debug("Testing function: %s" %(testCase))
-                  #if( val <= emailAlert.limit ):
-                  if(sendAlert == False):
-                    #sendAlert = False
-                    break
-                  else:
-                    #DWR 2011-11-15
-                    #Use the display names to clean up the email.
-                    displayLabel = self.uomConverter.getDisplayObservationName(row['standard_name'])
-                    if(displayLabel == None):
-                      displayLabel = row['standard_name']
-                    #DWR 2011-11-15
-                    #Use the display unit of measurement to clean up the email.
-                    imperialUOM = self.uomConverter.getConversionUnits( row['uom'], 'en' )
-                    if(imperialUOM == None or len(imperialUOM) == 0):
-                      displayUOM = row['uom']
+                    if( len(uom) > 0 ):
+                      val = self.uomConverter.measurementConvert(val, row['uom'], uom)              
+                    if( val == None ):
+                      val = float(row['m_value'])
+                    #self.logger.debug( "val: %s Limits: %f" %(val,emailAlert.limit) )
+                    #If the value does not exceed the limit, break out of the loop since we have failed one part of the
+                    #combo and need not continue.
+                    testCase = "%4.1f %s %4.1f" %(val, emailAlert.operator, emailAlert.limit)
+                    sendAlert = eval(testCase, {}, {})
+                    self.logger.debug("Testing function: %s" %(testCase))
+                    #if( val <= emailAlert.limit ):
+                    if(sendAlert == False):
+                      #sendAlert = False
+                      break
                     else:
-                      displayUOM = self.uomConverter.getUnits( row['uom'], imperialUOM )          
-                      if(displayUOM == None):
-                        displayUOM = imperialUOM              
-                    
-                    obsAlertMsg += "<li><b>Observation:</b> %s: %4.1f %s(Limit(%s): %4.1f %s)</li>" % ( displayLabel,val,displayUOM,emailAlert.operator, emailAlert.limit,uom)
-                    self.logger.debug( "Alert: <li><b>Observation:</b> %s: %4.1f %s(Limit: %4.1f %s)</li>" % ( displayLabel,val,displayUOM,emailAlert.limit,uom) ) 
-                    #If the group is marked as single, this means it is a standalone alert.                   
-                    if( group == 'single' ):
-                      sendAlert = False
-                      self.createEmailMsg(email, emailAlert, platform, obsAlertMsg)                      
+                      #DWR 2011-11-15
+                      #Use the display names to clean up the email.
+                      displayLabel = self.uomConverter.getDisplayObservationName(row['standard_name'])
+                      if(displayLabel == None):
+                        displayLabel = row['standard_name']
+                      #DWR 2011-11-15
+                      #Use the display unit of measurement to clean up the email.
+                      imperialUOM = self.uomConverter.getConversionUnits( row['uom'], 'en' )
+                      if(imperialUOM == None or len(imperialUOM) == 0):
+                        displayUOM = row['uom']
+                      else:
+                        displayUOM = self.uomConverter.getUnits( row['uom'], imperialUOM )          
+                        if(displayUOM == None):
+                          displayUOM = imperialUOM              
+                      
+                      obsAlertMsg += "<li><b>Observation:</b> %s: %4.1f %s(Limit(%s): %4.1f %s)</li>" % ( displayLabel,val,displayUOM,emailAlert.operator, emailAlert.limit,uom)
+                      self.logger.debug( "Alert: <li><b>Observation:</b> %s: %4.1f %s(Limit: %4.1f %s)</li>" % ( displayLabel,val,displayUOM,emailAlert.limit,uom) ) 
+                      #If the group is marked as single, this means it is a standalone alert.                   
+                      if( group == 'single' ):
+                        sendAlert = False
+                        self.createEmailMsg(email, emailAlert, platform, obsAlertMsg)
+                  #DWR 2012-08-06
+                  #Set the sendAlert flag to False since the QC Flag is showing invalid data.
+                  else:                      
+                    sendAlert = False
+                    if(self.logger):
+                      self.logger.debug("QC Level: %d, out of range for valid data." % (qcLevel))
                 else:
                   #if( group != 'single' ):
                   sendAlert = False                  
-                  self.logger.debug( "No row returned from last query." ) 
+                  if(self.logger):
+                    self.logger.debug( "No row returned from last query." ) 
               else:
                 if( len( self.obsDB.lastErrorMsg ) ):
                   self.logger.error( self.obsDB.lastErrorMsg )
@@ -820,15 +851,8 @@ if __name__ == '__main__':
     sys.exit(retVal)
 
   except Exception, E:
-    import sys
-    import traceback
-
-    info = sys.exc_info()        
-    excNfo = traceback.extract_tb(info[2],1)
-    items = excNfo[0]
-    errMsg = 'ERROR: %s File: %s Line: %s Function: %s' % (str(E),items[0],items[1],items[2]) 
     if( logger != None ):
-      logger.error( errMsg )
-    print( errMsg )
+      logger.exception(E)
+    print(E)
     sys.exit(-1)
   
