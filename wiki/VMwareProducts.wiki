@@ -14,7 +14,7 @@ for a virtualized server image download that produces the below listed products
 ----
 = Data Ingestion Scripts =
 Follow the link to the wiki page detailing the scripts used to process the data into the Xenia database.
-[http://code.google.com/p/xenia/wiki/DataIngestion Documention]
+[http://code.google.com/p/xenia/wiki/DataIngestion Documentation]
 ----
 = Interactive Map = 
 
