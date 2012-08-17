@@ -632,6 +632,29 @@ provided  on the command line. This script pulls in the data for the some NERRS 
   }}}
   _Description_: This setup processes emails that the Webb glider service sends. We have an email account setup to receive the emails.<br/>
 ----
+=== FWRI Processing ===
+*Script*:  <br/>
+*Directory*: /home/xeniaprod/cron <br/>
+*Description*: Downloads the latest file(s) from the web accessible FTP directory, then processes the observations. Currently only Port Manatee station is available.<br/>
+*Shell Script Makeup* <br/>
+  _Script_: fwriHabmonIngestion.py <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/fwri <br/>
+  _Command line parameters_: <br/>
+  {{{
+  --ConfigFile=/home/xeniaprod/config/fwriDataIngest.ini  
+  }}}
+*Schedule*: Will run once an hour.
+
+==== INI File ====
+{{{
+
+}}}
+
+==== Xenia Mapping File ====
+{{{
+}}}
+----
+
 
 = Machine: Mapping =
 http://129.252.139.139/
