@@ -1,5 +1,6 @@
-import logging
+import logging.config
 import ConfigParser
+import optparse
 
 import threading
 import Queue
@@ -173,9 +174,11 @@ class dataIngestion(object):
     self.logger = None
     if(logger):
       self.logger = logging.getLogger(type(self).__name__)
-    self.config = ConfigParser.RawConfigParser()
-    self.config.read(configFile)
-  
+
+    if(configFile):
+      self.config = ConfigParser.RawConfigParser()
+      self.config.read(configFile)
+      
   def processData(self):    
     recList = self.getData()
     self.saveData(recList)
@@ -197,7 +200,10 @@ class xeniaDataIngestion(dataIngestion):
     dataIngestion.__init__(self, configFile, logger)
     self.xeniaDb = None
     self.organizationId = organizationId
-    
+
+  def initialize(self):
+    return(self.connect())
+      
   def connect(self):
     try:      
       #Xenia database
@@ -216,7 +222,7 @@ class xeniaDataIngestion(dataIngestion):
     else:                              
       try:
         #Attempt to connect to the xenia database
-        self.xeniaDb = xeniaAlchemy()      
+        self.xeniaDb = xeniaAlchemy(self.logger)      
         if(self.xeniaDb.connectDB(dbConnType, dbUser, dbPwd, dbHost, dbName, False) == True):
           if(self.logger):
             self.logger.info("Succesfully connect to DB: %s at %s" %(dbName,dbHost))
@@ -241,7 +247,10 @@ class xeniaDataIngestion(dataIngestion):
       if(self.logger):
         self.logger.exception(e)
         
-    return(False)                              
+    return(False)    
+  
+  def cleanUp(self):
+    return                          
 """
 Class: dataIngestion
 Purpose: THis is the base class to use to connect to a data source and bring it into the the xenia database.
@@ -251,4 +260,6 @@ class dataProduct(xeniaDataIngestion):
   def __init__(self, organizationId, configFile, logger=True):
     xeniaDataIngestion.__init__(self, organizationId, configFile, logger)
 
+
     
+
