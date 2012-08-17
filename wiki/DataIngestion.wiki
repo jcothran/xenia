@@ -647,11 +647,140 @@ provided  on the command line. This script pulls in the data for the some NERRS 
 
 ==== INI File ====
 {{{
+[Database]
+user = 
+password = 
+host = 
+name = 
+connectionstring =
+
+[settings]
+uomconversionfile=UnitsConversionPython.xml
+
+[logging]
+configfile = fwriDataIngestion.conf
+
+
+[processing]
+organizationlist = fwri
+
+
+[fwri]
+processingobject=fwriCSVDataIngestion
+jsonconfig=fwriMapping.json
+csvURL=
+csvFilepath=PortManateeLatest.csv
 
 }}}
 
 ==== Xenia Mapping File ====
 {{{
+{
+  "defaults" :
+  {
+    "platform" :
+    {
+      "default_value" : "fwri.MTBF1.wq",
+      "organization" : "fwri",
+      "organization_url" : "",
+      "type_name" : "Fixed Coastal Station",
+      "plaform_url" : "",
+      "description" : "Middle Tampa Bay"
+    },
+    "fixed_latitude" :
+    {
+      "default_value" : "27.661"
+    },
+    "fixed_longitude":
+    {
+      "default_value" : "-82.594"
+    }
+  },
+  "Time (GMT)" :
+  { 
+    "timezone" : "GMT",
+    "format" : "%m/%d/%y %H:%M",
+    "standard_name" : "m_date",
+    "default_value" : ""
+  },
+  "Temp":
+  {
+    "column_uom"  : "celsius",
+    "standard_name" : "water_temperature",
+    "uom"   : "celsius",
+    "s_order" : 1
+  },
+  "Sp Cond" :
+  {
+    "column_uom"  : "mS_cm-1",
+    "standard_name" : "water_conductivity",
+    "uom"   : "mS_cm-1",
+    "s_order" : 1
+  },
+  "Sal" :
+  {
+    "column_uom"  : "psu",
+    "standard_name" : "salinity",
+    "uom"   : "psu",
+    "s_order" : 1
+  },
+  "Depth" :
+  {
+    "column_uom"  : "m",
+    "standard_name" : "depth",
+    "uom"   : "m",
+    "s_order" : 1
+  },
+  "Ph" :
+  {
+    "column_uom"  : "units",
+    "standard_name" : "ph",
+    "uom"   : "units",
+    "s_order" : 1
+  },
+  "Turb" :
+  {
+    "column_uom"  : "ntu",
+    "standard_name" : "turbidity",
+    "uom"   : "ntu",
+    "s_order" : 1
+  },
+  "Chl" :
+  {
+    "column_uom"  : "ug_L-1",
+    "standard_name" : "chl_concentration",
+    "uom"   : "ug_L-1",
+    "s_order" : 1
+  },
+  "DO %" :
+  {
+    "column_uom"  : "percent",
+    "standard_name" : "oxygen_concentration",
+    "uom"   : "percent",
+    "s_order" : 1
+  },
+  "DO mg" :
+  {
+    "column_uom"  : "mg_L-1",
+    "standard_name" : "oxygen_concentration",
+    "uom"   : "mg_L-1",
+    "s_order" : 1
+  },
+  "BGA cells" :
+  {
+    "column_uom"  : "cells_L-1",
+    "standard_name" : "blue_green_algae",
+    "uom"   : "cells_L-1",
+    "s_order" : 1
+  },
+  "Nitrate" :
+  {
+    "column_uom"  : "uM_L-1",
+    "standard_name" : "nitrate",
+    "uom"   : "uM_L-1",
+    "s_order" : 1
+  }
+}
 }}}
 ----
 
