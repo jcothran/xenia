@@ -537,7 +537,7 @@ Some observations(Winds, Waves, Currents) contain multiple datums, each having a
 ----
 
 
-=== YSI Apache Pier Processing ===
+=== YSI LBHMC Pier Processing ===
 *Script*: getYSIData.py <br/>
 *Directory*: /home/xeniaprod/scripts/postgresql/feeds/ysi <br/>
 *Command line parameters*: 
@@ -547,7 +547,8 @@ Some observations(Winds, Waves, Currents) contain multiple datums, each having a
   /home/xeniaprod/config/ysiParseConfig.xml
 }}}
 *Description*: Pulls in the data for the YSI site which is described in the configuration file 
-provided  on the command line. This script pulls in the data for the Apache Pier. <br/>
+provided  on the command line. This script pulls in the data for the Apache Pier, 2nd Ave North Pier and Cherry Grove Pier. <br/>
+These piers are part of the Long Bay Hypoxia Monitoring Consortium.<br/>
 *Schedule*: Runs twice an hour.
 ----
 === NERRS Processing ===
