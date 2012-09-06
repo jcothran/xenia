@@ -17,7 +17,6 @@ esxi 139.198
   139.139 - mapserver,tilecache engine,remotesensing image copying/db ref
   139.186 - cormp1 
   139.134 - projects
-  139.144 - thredds
   139.169 - erddap
   139.88  - geoportal
   139.199 - 52North
@@ -33,6 +32,16 @@ nautilus
 NWS Marine Weather Portal(MWP) project - Charlton Galvarino 
   nwstwo(37.59 = 139.110 nile)
   nwsone(37.58 = 139.109 neo)
+
+#GSAA server - installed August 2012
+esxi 139.238
+
+#Secoora servers - installed August 2012
+esxi 139.228
+  139.144 - thredds
+
+esxi 139.184
+
 }}}
 
 <hr />
