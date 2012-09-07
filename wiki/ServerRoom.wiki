@@ -26,6 +26,7 @@ esxi 37.87
   neptune 37.90 main production, gomodp exchange software 
   139.124 - squid forwarding(see /etc/squid/squid.conf), test/development, plone, old trident(formerly 139.178) - hfradar, dap
   139.156 - archivalDB
+  139.229 - test server - drupal, wordpress-gsaa
 
 nautilus
   
