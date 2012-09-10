@@ -32,6 +32,7 @@ http://linuxpoison.blogspot.com/2012/01/how-to-install-configure-postgresql.html
 
 #vi 52n-sos-service/src/main/webapp/WEB-INF/conf/dssos.config
 
+{{{
 #tablenames
 TNFOI=feature_of_interest
 TNOBS=observation
@@ -108,5 +109,6 @@ ENDLEASE=end_lease
 #column names of observation_template
 OBSTEMPID=obs_template_id
 OBSTEMP=observation_template
+}}}
 
 ==
