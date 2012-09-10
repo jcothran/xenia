@@ -1,7 +1,6 @@
 #summary notes about mapping to 52North Data Model Schema
 
 ==52North
-apt-get update; apt-get upgrade
 
 apt-get install maven2
 
@@ -13,7 +12,6 @@ wget https://svn.52north.org/svn/swe/main/SOS/Service/trunk/SOS/52n-sos/build.pr
 [INFO] [install:install {execution: default-install}]
 [INFO] Installing /home/bitnami/52n-sensorweb-sos-3.2.1/52n-sos-service/target/52nSOSv3.2.1.war to /root/.m2/repository/org/n52/sensorweb/sos/52n-sos-service/3.2.1/52n-sos-service-3.2.1.war
 
-http://129.252.139.199/52nSOSv3.2.1/
 
 http://52north.org/downloads/sensor-web/sos
 http://blog.52north.org/2012/06/04/sensor-observation-service-installer-and-back-end/
