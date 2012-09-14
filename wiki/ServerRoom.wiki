@@ -34,14 +34,14 @@ NWS Marine Weather Portal(MWP) project - Charlton Galvarino
   nwstwo(37.59 = 139.110 nile)
   nwsone(37.58 = 139.109 neo)
 
-#GSAA server - installed August 2012
-esxi 139.238
-
 #Secoora servers - installed August 2012
 esxi 139.228
-  139.144 - thredds
+  139.174 - thredds
 
 esxi 139.184
+
+#GSAA server - installed August 2012
+esxi 139.238
 
 }}}
 
@@ -120,6 +120,23 @@ cache_peer_access tridentServer allow trident_url
 cache_peer_access tridentServer deny all
 
 }}}
+
+= Remounting changed IP's = 
+
+for NFS remotely mounted folders, use the following commands sudo as root
+
+on target machine edit file
+
+{{{/etc/exports}}}
+
+and run 
+
+{{{exportfs -ra}}}
+
+on source machine edit and re-run mount commands in file
+
+{{{/etc/rc.local}}}
+
 
 = Earlier links = 
 
