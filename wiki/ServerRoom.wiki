@@ -36,7 +36,7 @@ NWS Marine Weather Portal(MWP) project - Charlton Galvarino
 
 #Secoora servers - installed August 2012
 esxi 139.228
-  139.174 - thredds
+  139.70 - thredds
 
 esxi 139.184
 
