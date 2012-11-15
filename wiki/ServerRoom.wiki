@@ -31,7 +31,7 @@ esxi 37.87
 nautilus
   
 NWS Marine Weather Portal(MWP) project - Charlton Galvarino 
-  nwstwo(37.58 = 139.110 nile)
+  nwstwo(37.58 = 139.54 (routed via squid at 139.124), earlier 139.110 nile?)
   nwsone(37.59 = 139.109 neo)
 
 #Secoora servers - installed August 2012
