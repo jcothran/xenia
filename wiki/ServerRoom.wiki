@@ -40,7 +40,7 @@ esxi 139.228
 
 esxi 139.184
   139.70 - thredds
-  139.236  - madrona_dan(marco site new instance)
+  139.236 - madrona_dan(marco site new instance)
   37.88 - nautilus
 
 #GSAA server - installed August 2012
