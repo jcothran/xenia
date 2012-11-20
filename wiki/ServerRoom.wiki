@@ -15,12 +15,13 @@ Rack 1 (top to bottom) <br />
 {{{
 esxi 139.198 
   139.139 - mapserver,tilecache engine,remotesensing image copying/db ref
-  139.186 - cormp1 
   139.134 - projects
   139.169 - erddap
   139.88  - geoportal
+
+  139.186 - cormp1
   139.199 - 52North
-  139.78  - madrona
+  139.78  - madrona(old instance)
 
 esxi 37.87 
   neptune 37.90 main production, gomodp exchange software 
@@ -36,9 +37,11 @@ NWS Marine Weather Portal(MWP) project - Charlton Galvarino
 
 #Secoora servers - installed August 2012
 esxi 139.228
-  139.70 - thredds
 
 esxi 139.184
+  139.70 - thredds
+  139.236  - madrona_dan(marco site new instance)
+  37.88 - nautilus
 
 #GSAA server - installed August 2012
 esxi 139.238
