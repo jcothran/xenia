@@ -45,6 +45,7 @@ esxi 139.184
 
 #GSAA server - installed August 2012
 esxi 139.238
+  139.110 gsaa arcgis server
 
 }}}
 
