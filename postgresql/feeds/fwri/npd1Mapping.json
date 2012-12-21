@@ -1,0 +1,178 @@
+{
+  "header" :
+  [
+    "Date/Time",
+    "UpSondeTemp",
+    "UpSondeSal",
+    "UpSondepH",
+    "UpSondeTurb",
+    "UpSondeCHL",
+    "UpSondeBGAPC",
+    "UpSondeODOpct",
+    "UpSondeODO",
+    "LowSondeTemp",
+    "LowSondeSal",
+    "LowSondepH",
+    "LowSondeTurb",
+    "LowSondeCHL",
+    "LowSondeBGAPC",
+    "LowSondeODOpct",
+    "LowSondeODO"
+  ],
+  "defaults" :
+  {
+    "platform" :
+    {
+      "default_value" : "fwri.npd.wq",
+      "organization" : "fwri",
+      "organization_url" : "http://comps.marine.usf.edu",
+      "type_name" : "Fixed Coastal Station",
+      "platform_url" : "http://comps.marine.usf.edu/index",
+      "description" : "New Pass Dock"
+    },
+    "fixed_latitude" :
+    {
+      "default_value" : "27.33375"
+    },
+    "fixed_longitude":
+    {
+      "default_value" : "-82.57938"
+    }
+  },
+  "Date/Time" :
+  { 
+    "timezone" : "GMT",
+    "format" : "%m/%d/%Y %I:%M:%S %p",
+    "standard_name" : "m_date",
+    "default_value" : ""
+  },
+  "UpSondeTemp" :
+  {
+    "column_uom"  : "celsius",
+    "standard_name" : "water_temperature",
+    "uom"   : "celsius",
+    "s_order" : 1,
+    "m_z" : 0.5
+  },
+  "UpSondeSal" :
+  {
+    "column_uom"  : "psu",
+    "standard_name" : "salinity",
+    "uom"   : "psu",
+    "s_order" : 1,
+    "m_z" : 0.5
+  },
+  "UpSondepH" :
+  {
+    "column_uom"  : "units",
+    "standard_name" : "ph",
+    "uom"   : "units",
+    "s_order" : 1,
+    "m_z" : 0.5
+  },
+  "UpSondeTurb" :
+  {
+    "column_uom"  : "ntu",
+    "standard_name" : "turbidity",
+    "uom"   : "ntu",
+    "s_order" : 1,
+    "m_z" : 0.5
+  },
+  "UpSondeCHL" :
+  {
+    "column_uom"  : "ug_L-1",
+    "standard_name" : "chl_concentration",
+    "uom"   : "ug_L-1",
+    "s_order" : 1,
+    "m_z" : 0.5
+  },
+  "UpSondeBGAPC" :
+  {
+    "column_uom"  : "cells_L-1",
+    "standard_name" : "blue_green_algae",
+    "uom"   : "cells_L-1",
+    "s_order" : 1,
+    "m_z" : 0.5
+  },
+  "UpSondeODOpct" :
+  {
+    "column_uom"  : "percent",
+    "standard_name" : "oxygen_concentration",
+    "uom"   : "percent",
+    "s_order" : 1,
+    "m_z" : 0.5
+  },
+  "UpSondeODO" :
+  {
+    "column_uom"  : "mg_L-1",
+    "standard_name" : "oxygen_concentration",
+    "uom"   : "mg_L-1",
+    "s_order" : 1,
+    "m_z" : 0.5
+  },
+  
+  "LowSondeTemp" :
+  {
+    "column_uom"  : "celsius",
+    "standard_name" : "water_temperature",
+    "uom"   : "celsius",
+    "s_order" : 2,
+    "m_z" : 0.5
+  },
+  "LowSondeSal" :
+  {
+    "column_uom"  : "psu",
+    "standard_name" : "salinity",
+    "uom"   : "psu",
+    "s_order" : 2,
+    "m_z" : 0.5
+  },
+  "LowSondepH" :
+  {
+    "column_uom"  : "units",
+    "standard_name" : "ph",
+    "uom"   : "units",
+    "s_order" : 2,
+    "m_z" : 0.5
+  },
+  "LowSondeTurb" :
+  {
+    "column_uom"  : "ntu",
+    "standard_name" : "turbidity",
+    "uom"   : "ntu",
+    "s_order" : 2,
+    "m_z" : 0.5
+  },
+  "LowSondeCHL" :
+  {
+    "column_uom"  : "ug_L-1",
+    "standard_name" : "chl_concentration",
+    "uom"   : "ug_L-1",
+    "s_order" : 2,
+    "m_z" : 0.5
+  },
+  "LowSondeBGAPC" :
+  {
+    "column_uom"  : "cells_L-1",
+    "standard_name" : "blue_green_algae",
+    "uom"   : "cells_L-1",
+    "s_order" : 2,
+    "m_z" : 0.5
+  },
+  "LowSondeODOpct" :
+  {
+    "column_uom"  : "percent",
+    "standard_name" : "oxygen_concentration",
+    "uom"   : "percent",
+    "s_order" : 2,
+    "m_z" : 0.5
+  },
+  "LowSondeODO" :
+  {
+    "column_uom"  : "mg_L-1",
+    "standard_name" : "oxygen_concentration",
+    "uom"   : "mg_L-1",
+    "s_order" : 2,
+    "m_z" : 0.5
+  }    
+}
