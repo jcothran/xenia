@@ -1,0 +1,129 @@
+{
+  "header" :
+  [
+    "Date/Time",
+    "SixAvgFlux",
+    "SixTBACtTTL",
+    "SatAvgNitCon",
+    "MvdYSIWTemp",
+    "MvdYSISalppt",
+    "MvdYSIDepthM",
+    "MvdYSIpH",
+    "MvdYSITur",
+    "MvdYSICHLugperL",
+    "MvdYSIOD0perSat",
+    "MvdYSIODOmgPerL",
+    "MvdYSBGACellsPerL"
+  ],
+  "defaults" :
+  {
+    "platform" :
+    {
+      "default_value" : "fwri.mtb.wq",
+      "organization" : "fwri",
+      "organization_url" : "http://comps.marine.usf.edu",
+      "type_name" : "Fixed Coastal Station",
+      "platform_url" : "http://comps.marine.usf.edu/index?view=station&id=MTB",
+      "description" : "Middle Tampa Bay"
+    },
+    "fixed_latitude" :
+    {
+      "default_value" : "27.661"
+    },
+    "fixed_longitude":
+    {
+      "default_value" : "-82.594"
+    }
+  },
+  "Date/Time" :
+  {
+    "timezone" : "GMT",
+    "format" : "%m/%d/%Y %I:%M:%S %p",
+    "standard_name" : "m_date",
+    "default_value" : ""
+  },
+  "SixAvgFlux":
+  {
+    "column_uom"  : "w/m^2",
+    "standard_name" : "photosynthetic_active_radiation",
+    "uom"   : "w_m^2",
+    "s_order" : 1
+  },
+  "SixTBACtTTL" :
+  {
+    "column_uom"  : "mm",
+    "standard_name" : "precipitation",
+    "uom"   : "mm",
+    "s_order" : 1
+  },
+  "SatAvgNitCon" :
+  {
+    "column_uom"  : "uM_L-1",
+    "standard_name" : "nitrate",
+    "uom"   : "uM_L-1",
+    "s_order" : 1
+  },
+  "MvdYSIWTemp" :
+  {
+    "column_uom"  : "celsius",
+    "standard_name" : "water_temperature",
+    "uom"   : "celsius",
+    "s_order" : 1
+  },
+  "MvdYSISalppt" :
+  {
+    "column_uom"  : "psu",
+    "standard_name" : "salinity",
+    "uom"   : "psu",
+    "s_order" : 1
+  },
+  "MvdYSIDepthM" :
+  {
+    "column_uom"  : "m",
+    "standard_name" : "depth",
+    "uom"   : "m",
+    "s_order" : 1
+  },
+  "MvdYSIpH" :
+  {
+    "column_uom"  : "units",
+    "standard_name" : "ph",
+    "uom"   : "units",
+    "s_order" : 1
+  },
+  "MvdYSITur" :
+  {
+    "column_uom"  : "ntu",
+    "standard_name" : "turbidity",
+    "uom"   : "ntu",
+    "s_order" : 1
+  },
+  "MvdYSICHLugperL" :
+  {
+    "column_uom"  : "ug_L-1",
+    "standard_name" : "chl_concentration",
+    "uom"   : "ug_L-1",
+    "s_order" : 1
+  },
+  "MvdYSIOD0perSat" :
+  {
+    "column_uom"  : "percent",
+    "standard_name" : "oxygen_concentration",
+    "uom"   : "percent",
+    "s_order" : 1
+  },
+  "MvdYSIODOmgPerL" :
+  {
+    "column_uom"  : "mg_L-1",
+    "standard_name" : "oxygen_concentration",
+    "uom"   : "mg_L-1",
+    "s_order" : 1
+  },
+  "MvdYSBGACellsPerL" :
+  {
+    "column_uom"  : "cells_L-1",
+    "standard_name" : "blue_green_algae",
+    "uom"   : "cells_L-1",
+    "s_order" : 1
+  }
+}
