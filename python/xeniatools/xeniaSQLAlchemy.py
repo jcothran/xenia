@@ -1,3 +1,9 @@
+"""
+Revisions
+Date: 2013-01-02
+Function: xeniaAlchemy::obsTypeExists
+Changes: Fixed up variable name in except handler
+"""
 import time
 
 
@@ -609,7 +615,7 @@ class xeniaAlchemy(object):
       rowId = rec.row_id
     except NoResultFound, e:
       if(self.logger != None):
-        self.logger.debug("Observation: %s does not exist in obs_type table." % (obsname))
+        self.logger.debug("Observation: %s does not exist in obs_type table." % (obsName))
       rowId = -1
     except exc.InvalidRequestError, e:
       if(self.logger != None):
