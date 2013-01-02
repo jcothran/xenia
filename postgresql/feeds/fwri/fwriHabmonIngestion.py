@@ -33,6 +33,8 @@ class fwriCSVDataIngestion(xeniaDataIngestion):
   def processData(self):
     #Get the platforms to process for the organization.
     for platformName in self.platformList:
+      if(self.logger):
+        self.logger.info("Processing platform: %s" % (platformName))
       #Attempt to download the latest file.
       useLogger = False
       if(self.logger):
