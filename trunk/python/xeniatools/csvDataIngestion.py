@@ -1,3 +1,9 @@
+"""
+Revisions:
+Date: 2013-01-02
+FUnction: xeniaCSVReader::next
+Changes:  MAke sure we have a real float value before passing it to the converter.
+"""
 import datetime
 import logging
 import simplejson as json
@@ -23,6 +29,7 @@ class csvSrcToXeniaDataMapping(object):
       #We may have a header array for a csv file that has no header. If we do, let's save that for use in the reader. 
       if 'header' in self.mappings:
         self.rowFieldNames = self.mappings['header']
+        del(self.mappings['header'])
         
       #If we have a defaults section, let's put it in it's on member.
       if 'defaults' in self.mappings:
@@ -175,11 +182,19 @@ class xeniaCSVReader(csv.DictReader):
           obsRec['s_order'] = mapping['s_order']
           #If the units of the source data are not what we want, convert the value.
           if(mapping['uom'] != mapping['column_uom']):
-            val = self.uomConverter.measurementConvert(row[col], mapping['column_uom'], mapping['uom'])
-            if(val == None):
+            #DWR 2013-01-02
+            #MAke sure we have a real float value before passing it to the converter.
+            try:
+              dataVal = float(row[col])
+            except ValueError,e:
               if(self.logger):
-                self.logger.error("Unable to convert value. Obs: %s FromUOM: %s ToUOM: %s" % (mapping['standard_name'], mapping['column_uom'], mapping['uom']))
-              continue
+                self.logger.exception(e)
+            else:
+              val = self.uomConverter.measurementConvert(dataVal, mapping['column_uom'], mapping['uom'])
+              if(val == None):
+                if(self.logger):
+                  self.logger.error("Unable to convert value. Obs: %s FromUOM: %s ToUOM: %s" % (mapping['standard_name'], mapping['column_uom'], mapping['uom']))
+                continue
           else:
             val = row[col]
           obsRec['m_value'] = val
@@ -239,7 +254,7 @@ class csvDataIngestion(xeniaDataIngestion):
     self.rowDate = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
     #We want to start ingesting the data from the last date/time we have in the database.
     startDate = None
-    startDate = datetime.datetime.strptime('2012-12-20T00:00:00', "%Y-%m-%dT%H:%M:%S")
+    #startDate = datetime.datetime.strptime('2012-12-01T00:00:00', "%Y-%m-%dT%H:%M:%S")
     if(self.startFromLastDBEntry):
       platformHandle = self.csvDataFile.xeniaMapping.getPlatformDefaultHandle()
       try:
@@ -251,6 +266,8 @@ class csvDataIngestion(xeniaDataIngestion):
           .all()
         if(len(obsRecs)):
           startDate = obsRecs[0][0]
+          if(self.logger):
+            self.logger.debug("Starting from date/time: %s" % (startDate.strftime("%Y-%m-%dT%H:%M:%S")))
       except Exception,e:
         if(logger):
           logger.exception(e)
