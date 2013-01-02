@@ -1,6 +1,10 @@
 """
 Revisions
 Author: DWR
+Date: 2013-01-02
+Function: uomconversionFunctions::measurementConvert
+Changes: Removed the xmlTag variable from the except handler.
+
 Date: 2011-07-25
 Function: addMeasurement, addMeasurementWithMType
 Changes: Added the use of teh row_entry_date column. For code already using this function, if the rowEntryDate 
@@ -1089,7 +1093,9 @@ class uomconversionFunctions:
       
     except Exception, E:
       import traceback
-      msg = "Value: %f fromUOM: %s toUOM: %s xmlTag: %s Conversion string: %s\n%s" %(value, fromUOM, toUOM, xmlTag, conversionString, traceback.format_exc())
+      #DWR 2013-01-02
+      #Removed the xmlTag variable since it is not needed and might not exist here.
+      msg = "Value: %f fromUOM: %s toUOM: %s xmlTag: %s \n%s" %(value, fromUOM, toUOM, conversionString, traceback.format_exc())
       print(msg)
       
     return(None)
@@ -1174,5 +1180,15 @@ class uomconversionFunctions:
     if( len(display) ):     
       display = display[0].text
       return(display)
+    return(None)
+
+  def getXeniaUOMName(self, uomName):
+    if(self.xmlTree == None):
+      self.xmlTree = etree.parse(self.xmlConversionFile)
+    xmlTag = "//unit_conversion_list/unit[@id=\"%s\"]/xenia_unit" % (uomName)
+    xeniaUOM = self.xmlTree.xpath(xmlTag)
+    if(len(xeniaUOM)):     
+      xeniaUOM = xeniaUOM[0].text
+      return(xeniaUOM)
     return(None)
     
