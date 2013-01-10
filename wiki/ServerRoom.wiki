@@ -13,6 +13,28 @@ Rack 1 (top to bottom) <br />
 <img src="http://xenia.googlecode.com/files/Img_2263.jpg" height="400" width="320" />
 
 {{{
+#dns baruch.sc.edu
+
+37.58 neo 
+37.59 nile
+
+37.86 torino
+37.87 nemo
+37.88 nautilus
+37.90 neptune
+
+139.124 trident
+
+#port 80(http)
+37.86
+37.88
+139.124 (squid/trident)
+
+139.109 (port 873/rsync also)
+139.110 (port 873/rsync also)
+}}}
+
+{{{
 esxi 139.198 
   139.139 - mapserver,tilecache engine,remotesensing image copying/db ref
   139.134 - projects
