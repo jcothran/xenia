@@ -25,6 +25,9 @@ Rack 1 (top to bottom) <br />
 
 139.124 trident
 
+139.113 newt
+139.114 nickel
+
 #port 80(http)
 37.86
 37.88
