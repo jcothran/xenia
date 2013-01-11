@@ -45,6 +45,8 @@ esxi 139.198
   139.199 - 52North
   139.78  - madrona(old instance)
 
+torino 37.86 crcoos mapserver
+
 esxi 37.87 
   neptune 37.90 main production, gomodp exchange software 
   139.124 - squid forwarding(see /etc/squid/squid.conf), test/development, plone, old trident(formerly 139.178) - hfradar, dap
