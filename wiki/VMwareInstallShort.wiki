@@ -27,7 +27,7 @@ auto eth0
 iface eth0 inet static
 address 129.252.37.90
 netmask 255.255.255.0
-gateway 192.252.37.1
+gateway 129.252.37.1
 }}}
 
 Then restart network with 
