@@ -181,6 +181,10 @@ documentation http://code.google.com/p/xenia/wiki/XeniaSOS#Oostethys_SOS
 #GetCapabilities
 http://neptune.baruch.sc.edu/cgi-bin/oostethys_sos.cgi?request=GetCapabilities&service=SOS&version=1.0
 
+http://neptune.baruch.sc.edu/cgi-bin/ioos_sos.cgi?request=GetCapabilities&service=SOS&version=1.0
+
+http://neptune.baruch.sc.edu/cgi-bin/nerrs_sos.cgi?request=GetCapabilities&service=SOS&version=1.0
+
 #DescribeSensor
 http://neptune.baruch.sc.edu/cgi-bin/oostethys_sos.cgi?REQUEST=DescribeSensor&procedure=carocoops.FRP2.buoy
 
