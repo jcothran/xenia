@@ -2,8 +2,28 @@
 
 <wiki:toc max_depth="4" />
 
+----
 = Homepage =
 
+----
 = Learn =
 
   * need content verbiage for 'Habitat Conservation'
+
+= Visualize =
+
+There are the legends that don't support the REST legend request:
+  * All Restrictions 
+  * Black Sea Bass Pots Restrictions 
+  * Bottom Longlines Restrictions 
+  * Commercial Fishing Seasons and Closures 
+  * Federal OCS Administrative Boundaries 
+  * Fish Traps Restrictions 
+  * Limit of OCSLA \u20188(g)\u2019 zone 
+  * OCS Lease Blocks 
+  * OCS Protraction Diagrams 
+  * Octocoral Gear Restrictions 
+  * Recreational Fishing Seasons and Closures 
+  * Roller Rig Trawls Restrictions 
+  * Sargassum Restrictions 
+  * Submerged Land Acts Boundary 
