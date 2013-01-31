@@ -3,7 +3,17 @@
 <wiki:toc max_depth="4" />
 
 ----
-= Homepage =
+= Header/Footer =
+
+  * News items?
+  * Email/phone contact info?
+  * changes? - about page
+  * changes? - partnership page
+
+= Homepage
+
+  * possible upcoming logo, color styling changes
+  * search bar not currently functional
 
 ----
 = Learn =
