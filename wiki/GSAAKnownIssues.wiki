@@ -10,6 +10,12 @@
 
   * need content verbiage for 'Habitat Conservation'
 
+----
+= Catalog =
+
+
+
+----
 = Visualize =
 
 There are the legends that don't support the REST legend request:
