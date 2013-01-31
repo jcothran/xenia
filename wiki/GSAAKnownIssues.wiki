@@ -10,7 +10,7 @@
   * changes? - about page
   * changes? - partnership page
 
-= Homepage
+= Homepage =
 
   * possible upcoming logo, color styling changes
   * search bar not currently functional
