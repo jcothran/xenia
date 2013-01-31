@@ -28,7 +28,9 @@
 ----
 = Visualize =
 
-There are the legends that don't support the REST legend request:
+Still working to display up the *raw* bathmetry data and CVI (Coastal Vulnerability Index) layers.
+
+Missing legends - these are the legends that don't support the REST legend request:
   * All Restrictions 
   * Black Sea Bass Pots Restrictions 
   * Bottom Longlines Restrictions 
