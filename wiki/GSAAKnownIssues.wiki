@@ -29,6 +29,8 @@
 
 Still working to display up the *raw* bathmetry data and CVI (Coastal Vulnerability Index) layers.
 
+Some layers are acronyms and need to be renamed to something better understood and less cryptic.
+
 Missing legends - these are the legends that don't support the REST legend request:
   * All Restrictions 
   * Black Sea Bass Pots Restrictions 
