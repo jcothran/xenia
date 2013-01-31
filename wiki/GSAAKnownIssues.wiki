@@ -1,5 +1,7 @@
 #summary a listing of known issues for the developing GSAA website
 
+<wiki:toc max_depth="4" />
+
 = Homepage =
 
 = Learn =
