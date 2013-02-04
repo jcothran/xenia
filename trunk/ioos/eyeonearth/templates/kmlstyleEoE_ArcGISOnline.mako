@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
 <Document>
-<!-- kmlstyleEoE_ArcGISOnline.mako. 10/24/2012. Emilio. Based on Dan's version from 10/19 -->
+<!-- kmlstyleEoE_ArcGISOnline.mako. 
+11/20/2012. Emilio. Updates, polish. Tweaked and centered update_time_latest table row class.
+10/25/2012. Emilio. Reworked the IOOS and RA logo images section.
+10/24/2012. Emilio. Based on Dan's version from 10/19 -->
   % if kmlData['iconStyles']:
     % for iconStyle in kmlData['iconStyles']:
       <Style id="${iconStyle['id']}">
@@ -84,10 +87,11 @@
               background-color: #E8E6E7;
               padding-bottom: 10px;
             }
-            th.update_time_latest
+            td.update_time_latest
             {
-              font-size: 0.9em;
               font-weight: bold;
+              font-size: 0.9em;
+              text-align: center;
             }
             td.update_time_gmt
             {
@@ -169,7 +173,7 @@
           <div class="observations">
             <table class="observations_table">
               <tr>
-                <th colspan="4" class="update_time_latest">Updated: ${platform['latestTimeUTCstr']}</th>
+                <td colspan="4" class="update_time_latest">Updated: ${platform['latestTimeUTCstr']}</th>
               </tr>
               <tr>
                 <td colspan="4" class="update_time_gmt">Times are in UTC/GMT</td>
@@ -200,11 +204,11 @@
               <tr>
                 <td width="50%" align="middle">
                   <a href="${kmlData['IOOSRA']['URL']}">
-                  <img height="50%" width="50%" src="${kmlData['IOOSRA']['imgLogo']}" title="${kmlData['IOOSRA']['shortName']}"></a>
+                  <img src="${kmlData['IOOSRA']['imgLogo']}" title="${kmlData['IOOSRA']['shortName']}"></a>
                 </td>
                 <td align="middle">
                   <a href="http://ioos.gov">
-                  <img height="50%" width="50%" src="http://www.ioos.gov/images/ioos_blue2.png" title="US IOOS"></a>
+                  <img src="${kmlData['IOOSRA']['ioosLogo']}" title="US IOOS"></a>
                 </td>
               </tr>
               <tr>
