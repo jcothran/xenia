@@ -27,22 +27,25 @@
 ----
 = Visualize =
 
-Still working to display up the *raw* bathmetry data and CVI (Coastal Vulnerability Index) layers.
+  * still working to display up the *raw* bathmetry data and CVI (Coastal Vulnerability Index) layers.
+  * some layer names are acronyms and need to be renamed to something better understood and less cryptic.
+  * Missing legends - these are the legends that don't support the REST legend request:
+    * All Restrictions 
+    * Black Sea Bass Pots Restrictions 
+    * Bottom Longlines Restrictions 
+    * Commercial Fishing Seasons and Closures 
+    * Federal OCS Administrative Boundaries 
+    * Fish Traps Restrictions 
+    * Limit of OCSLA \u20188(g)\u2019 zone 
+    * OCS Lease Blocks 
+    * OCS Protraction Diagrams 
+    * Octocoral Gear Restrictions 
+    * Recreational Fishing Seasons and Closures 
+    * Roller Rig Trawls Restrictions 
+    * Sargassum Restrictions 
+    * Submerged Land Acts Boundary 
 
-Some layer names are acronyms and need to be renamed to something better understood and less cryptic.
+  * map extents
+    * initial map extent shifted southward, focus on 4 state region
+    * query extents limited to GSAA 4-state region
 
-Missing legends - these are the legends that don't support the REST legend request:
-  * All Restrictions 
-  * Black Sea Bass Pots Restrictions 
-  * Bottom Longlines Restrictions 
-  * Commercial Fishing Seasons and Closures 
-  * Federal OCS Administrative Boundaries 
-  * Fish Traps Restrictions 
-  * Limit of OCSLA \u20188(g)\u2019 zone 
-  * OCS Lease Blocks 
-  * OCS Protraction Diagrams 
-  * Octocoral Gear Restrictions 
-  * Recreational Fishing Seasons and Closures 
-  * Roller Rig Trawls Restrictions 
-  * Sargassum Restrictions 
-  * Submerged Land Acts Boundary 
