@@ -24,6 +24,10 @@
 ----
 = Catalog =
 
+  * Jesse
+    * 'view' opens to layer zoom/extent(include layer extent info in config?)
+    * 'view' opens in active tab
+
 ----
 = Visualize =
 
@@ -49,3 +53,8 @@
     * initial map extent shifted southward, focus on 4 state region
     * query extents limited to GSAA 4-state region
 
+  * query/identify tool - when user clicks on the map, info is displayed about that point on the map
+    * for Marco this is done using UTFGrid which is a pre-processing step on the data layers to grid-subset and provide a client-cached summary file(JSON) that is downloaded alongside the map image.  This functionality also supports mouse 'hover' since the summary grid data is resident on the client.
+    * for our initial approach, we would be using ESRI's Query and Geoprocessing API's to make a dynamic web services request(on mouse click) against the remote server associated with the data layer
+    * we could assume all 'active' layers should be queried or allow a layer selection method(checkbox?) for layers that should be queried
+    * query info displayed as a pop-up? 
