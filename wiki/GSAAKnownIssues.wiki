@@ -25,8 +25,10 @@
 = Catalog =
 
   * Jesse
-    * 'view' opens to layer zoom/extent(include layer extent info in config?)
-    * 'view' opens in active tab
+    * 'view' opens to layer zoom/extent(fix should be including layer extent info in config file - bookmark field)
+    * (marco also) 'view' opens in active tab
+
+  * (marco also) - catalog hierarchical listing - the default catalog listing is 'flat' alphabetical layer name ordering within each theme. User requested the default listing to be similar to 'visualize' layer listing with collapsible sections and preservation of layer sub-groupings. My suggestion if this were the case would be to also add a 'flat' listing option as well to allow toggling between a hierarchical and flat listing of layers and associated links.
 
 ----
 = Visualize =
@@ -48,6 +50,11 @@
     * Roller Rig Trawls Restrictions 
     * Sargassum Restrictions 
     * Submerged Land Acts Boundary 
+
+  * layer units?
+    * ports
+
+  * (marco also) - description text overlays basemap text - difficult to read - maybe upwards styling/spacing fix on description overlay
 
   * map extents
     * initial map extent shifted southward, focus on 4 state region
