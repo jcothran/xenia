@@ -10,3 +10,12 @@
       * Arg 1 <output JSON file>: This is the full filename to create the initial_data.json file
       * Arg 2 <Legend File Directory>: This is the directory to store the legend files. Needs to be web accessible.
       * Arg 3 <Legend Base URL>: The URL to the web directory the legend files will be accessed. 
+
+  # buildMetadataHTML
+    This script reads the CSV control file looking at the "source metadata url" column to pull the XML metadata file then convert it to an FGDC HTML version of the metadata. 
+    * Command Line Parameters
+     * Arg 0 <input CSV File>: This is the full path to the CSV file that drives the initial_data.json creation.
+      * Arg 1 <xsl file>: This is the file used to convert the XML to HTML in our case.
+      * Arg 2 <Source Metadata>: The directory to store the XML metadata records. Even if there is no entry in the CSV column "source metadata url", the script will process and convert any XML files in this directory.
+      * Arg 3 <Destination HTML>: This is the file path to store the converted file. Needs to be web accessible.
+      * Arg 4 <URL To Metadata>: The URL to use to create the link to get to the metadata files.
