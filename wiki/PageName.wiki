@@ -6,7 +6,7 @@
   # CSVToInitialJson
     This script reads a CSV and generates the initial_data.json file to prime the system. It will also create the legend files as well.
     * Command Line Parameters
-      *Arg 0 <input CSV File>:* This is the full path to the CSV file that drives the initial_data.json creation.
-      *Arg 1 <output JSON file>:* This is the full filename to create the initial_data.json file
-      *Arg 2 <Legend File Directory>:* This is the directory to store the legend files. Needs to be web accessible.
-      *Arg 3 <Legend Base URL>:* The URL to the web directory the legend files will be accessed. 
+      * Arg 0 <input CSV File>: This is the full path to the CSV file that drives the initial_data.json creation.
+      * Arg 1 <output JSON file>: This is the full filename to create the initial_data.json file
+      * Arg 2 <Legend File Directory>: This is the directory to store the legend files. Needs to be web accessible.
+      * Arg 3 <Legend Base URL>: The URL to the web directory the legend files will be accessed. 
