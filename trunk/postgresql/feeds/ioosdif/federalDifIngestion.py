@@ -1,5 +1,16 @@
 """
 Revisions
+Date: 2013-02-20 DWR
+Function: xeniaFedsInventory::findnew
+Changes: Added check for configuration parameter 'newstationstoadd': THis allows a comma delimeted
+list of stations to be added when 'addnewplatformstodb' and 'addnewplatformstodb' are set to 1
+in the config file. The stations must be in the GetCapabilities query. 
+
+Date: 2012-10-03 DWR
+Function: fedsDataIngestion::getData
+Changes: Added organizationWhitelist to allow organizations that are processed by the ndbc to also be queried. ALlows us to
+use a handle that reflects the originating entity, not just NDBC.
+
 Date: 2012-04-04
 Function: difObservationCSV.getDataValue
 Changes: Added general exception handler.
@@ -20,7 +31,7 @@ from xeniatools.xeniaSQLAlchemy import xeniaAlchemy, multi_obs, organization, pl
 from xeniatools.xenia import uomconversionFunctions
 from xeniatools.ioosDif import * 
 from xeniatools.DataIngestion import * 
-
+from pykml import kml
 
 class difObservationCSV(difObservation, ioosDif):
   def __init__(self, sosUrl, xeniaMapping, uomConverter, logger=True):
@@ -189,6 +200,15 @@ class xeniaFedsInventory(platformInventory):
   def findNew(self):    
     newPlatforms = []
     platformsMissingObs = []
+    #2013-02-20 DWR
+    #Check to see if we have a list of stations we want to add. 
+    stationAddList = None
+    try:
+      stationAddList = self.config.get(self.organizationID, 'newstationstoadd').split(',')          
+    except ConfigParser.Error, e:  
+      if(self.logger):
+        self.logger.debug("Config parameter: newstationstoadd not set, no specific stations will be added.")
+    
     """
     Create our geomtry Polygon object. This is the bounding box of the area we are interested in.
     We use this to test if the stations from the providers station list are within the area,
@@ -219,12 +239,14 @@ class xeniaFedsInventory(platformInventory):
           try:
             lon,lat = self.difCap.getFixedLonLat(station)
             stationPt = shapely.wkt.loads('POINT(%s %s)' %(lon,lat))
+            desc = self.difCap.getStationDescription(station)          
+            if(self.logger):
+              self.logger.debug("Checking station is in region: %s(%s)" % (id,desc))
             if(stationPt.within(bboxPoly)):
               if(self.logger):
                 self.logger.debug("Station: %s Lon: %s Lat: %s in region" % (id,lat,lon))
-              desc = self.difCap.getStationDescription(station)          
               foundPlatform = self.platformInInventory(platformRecs, bboxPoly, id, lat, lon, desc)
-              if(foundPlatform == False):
+              if(foundPlatform == False or (stationAddList and (id in stationAddList))):
                 newRec = self.processNewPlatform(station, rowEntryDate, platformRecs)
                 if(newRec):
                   newPlatforms.append(newRec)
@@ -336,8 +358,6 @@ class xeniaFedsInventory(platformInventory):
           lcShortName = platRec.short_name.lower()
           lcplatformId = id.lower()          
           if(lcShortName == lcplatformId):
-            if(lcShortName == '8651370'):
-              i = 0
             stationObs = self.difCap.getStationObservations(stationProperty, self.db, platRec.active, sourceToXeniaMap, uomConverter, "")
             for obs in stationObs:              
               sOrder = 1
@@ -440,16 +460,31 @@ class fedsDataIngestion(dataIngestion):
     rowEntryDate = datetime.datetime.today().strftime("%Y-%m-%dT%H:%M:%S")
 
     platformWhitelist = None    
-    try:
+    #2012-10-03 DWR
+    #Removed the try/except and explicitly check to see if the parameters exist.
+    #Added the organization whitelist.
+    #If provided, this will only query the platforms in the whitelist.
+    if(self.config.has_option(self.organizationID, 'whitelist')):
       platformWhitelist = self.config.get(self.organizationID, 'whitelist')
-      platformWhitelist = platformWhitelist.split(',')
-    except ConfigParser.Error, e:  
       if(self.logger):
-        self.logger.info("whitelist option does not exist, using the organization name to get platform list.")
+        self.logger.info("Platform Whitelist: %s" % (platformWhitelist))
+      platformWhitelist = platformWhitelist.split(',')
+      
+    #Some organizations use the federal backbone to aggregate their data. We want to 
+    #make sure we keep their attribution.
+    if(self.config.has_option(self.organizationID, 'organizationwhitelist')):
+      organizationWhitelist = self.config.get(self.organizationID, 'organizationwhitelist')
+      if(self.logger):
+        self.logger.info("Organization Whitelist: %s" % (organizationWhitelist))
+      
+      #Add the organization this object is based on to the whitelist. This is just an easy
+      #way to build the SQL in() list.
+      organizationWhitelist = self.organizationID + ',' + organizationWhitelist
+      organizationWhitelist = organizationWhitelist.split(',')
     
     #Build the list of platforms we're going to pull data for via the IOOS Dif.
     try:           
-      if(platformWhitelist == None):
+      if(platformWhitelist == None and organizationWhitelist == None):
         platformRecs = self.inventory.db.session.query(platform).\
                     join((organization,organization.row_id == platform.organization_id)).\
                     filter(organization.short_name == self.inventory.organizationID).\
@@ -457,11 +492,26 @@ class fedsDataIngestion(dataIngestion):
         if(self.logger):
           self.logger.debug("Org Id: %s returning: %d platforms." % (self.inventory.organizationID,len(platformRecs)))
       else:
+        #2012-10-03 DWR
+        #Broke up the query, to accomodate the platform and organization whitelist.
+        platformRecs = self.inventory.db.session.query(platform).\
+                    join((organization,organization.row_id == platform.organization_id))
+        #Check for our whitelists, if they exists, add those filters to the query.
+        if(platformWhitelist):
+          platformRecs = platformRecs.filter(platform.short_name.in_(platformWhitelist))
+        if(organizationWhitelist):
+          platformRecs = platformRecs.filter(organization.short_name.in_(organizationWhitelist))
+        else:
+          platformRecs = platformRecs.filter(organization.short_name == self.inventory.organizationID)
+
+        platformRecs.order_by(platform.row_id).all()
+        """
         platformRecs = self.inventory.db.session.query(platform).\
                     join((organization,organization.row_id == platform.organization_id)).\
                     filter(organization.short_name == self.inventory.organizationID).\
                     filter(platform.short_name.in_(platformWhitelist)).\
                     all()
+        """
       endTime = datetime.datetime.utcnow()
       startTime = endTime - datetime.timedelta(hours=self.lastNHours)
       
@@ -556,8 +606,10 @@ class fedsDataIngestion(dataIngestion):
     return
   
   def processData(self):
-    if(self.inventory.connectDB()):        
-      if(self.checkForNewPlatforms):
+    #2012-10-03 DWR
+    #Adding the logsql parameter.
+    if(self.inventory.connectDB(logsql=False)):        
+      if(self.checkForNewPlatforms):                
         newRecs, platsMissingObs = self.inventory.findNew()
         self.inventory.outputRecords(newRecs, platsMissingObs)      
       self.getData()
