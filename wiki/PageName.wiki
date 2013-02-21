@@ -36,8 +36,9 @@ If dropping database, then below also
 INSERT INTO spatial_ref_sys (srid) VALUES(99996);
 }}}
 
+{{{
 python manage.py loaddata fixtures/flatblocks.json
 
 python manage.py createsuperuser - to add back superusers
-
+}}}
 ----
