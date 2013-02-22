@@ -12,13 +12,18 @@
       * Arg 3 <Legend Base URL>: The URL to the web directory the legend files will be accessed. 
 
   # buildMetadataHTML
-    This script reads the CSV control file looking at the "source metadata url" column to pull the XML metadata file then convert it to an FGDC HTML version of the metadata. 
+    This script reads the CSV control file looking at the "source metadata url" column to pull the XML metadata file then convert it to an FGDC HTML version of the metadata. Outputs a file in the same directory as the input CSV file named controlFile.csv. This file will have the 'local metadata url' column populated.
     * Command Line Parameters
      * Arg 0 <input CSV File>: This is the full path to the CSV file that drives the initial_data.json creation.
      * Arg 1 <xsl file>: This is the file used to convert the XML to HTML in our case.
      * Arg 2 <Source Metadata>: The directory to store the XML metadata records. Even if there is no entry in the CSV column "source metadata url", the script will process and convert any XML files in this directory.
      * Arg 3 <Destination HTML>: This is the file path to store the converted file. Needs to be web accessible.
      * Arg 4 <URL To Metadata>: The URL to use to create the link to get to the metadata files.
+
+  # buildRestLegends
+    This script connects to the Django application database and queries the data_manager_layer table for all the REST layers. It will then attempt to query the REST endpoint for the legend. Depending on the server version either a REST Legend request(v 10.0 and higher) or a SOAP request.
+    * Command Line Parameters
+      * Arg 0: <legenddirectory>: Local directory to save the legend files.
 
 ----
 
