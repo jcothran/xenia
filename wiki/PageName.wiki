@@ -23,7 +23,7 @@
   # buildRestLegends
     This script connects to the Django application database and queries the data_manager_layer table for all the REST layers. It will then attempt to query the REST endpoint for the legend. Depending on the server version either a REST Legend request(v 10.0 and higher) or a SOAP request.
     * Command Line Parameters
-      * Arg 0: <legenddirectory>: Local directory to save the legend files.
+      * Arg 0 <legenddirectory>: Local directory to save the legend files.
 
 ----
 
