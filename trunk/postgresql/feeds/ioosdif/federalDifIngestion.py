@@ -1,5 +1,9 @@
 """
 Revisions
+Date: 2013-02-28 DWR
+Function: fedsDataIngestion::getData
+Changes: Set default value to fix error of accessing unassigned variable.
+
 Date: 2013-02-20 DWR
 Function: xeniaFedsInventory::findnew
 Changes: Added check for configuration parameter 'newstationstoadd': THis allows a comma delimeted
@@ -459,7 +463,10 @@ class fedsDataIngestion(dataIngestion):
     #Date/time to use for the row_entry_date in the database. We use local time.
     rowEntryDate = datetime.datetime.today().strftime("%Y-%m-%dT%H:%M:%S")
 
-    platformWhitelist = None    
+    platformWhitelist = None   
+    #2013-02-28 DWR
+    #Set default value to fix error of accessing unassigned variable.
+    organizationWhitelist = None 
     #2012-10-03 DWR
     #Removed the try/except and explicitly check to see if the parameters exist.
     #Added the organization whitelist.
