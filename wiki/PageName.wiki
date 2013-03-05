@@ -1,9 +1,8 @@
 #summary GSAA Notes
 
-<wiki:toc max_depth="4" />
-
 = Page for various Notes on the GSAA Project =
 
+<wiki:toc max_depth="4" />
 
 == Manage.py Utilities ==
   # CSVToInitialJson
@@ -29,12 +28,14 @@
      * Arg 0 <legend directory>: Local directory to save the legend files.
 
 ----
+= Delete, refresh data layers = 
 
 If need to delete just layers, without dropping database
 {{{
 delete from data_manager_layer_themes;
 delete from data_manager_layer_topics;
 delete from data_manager_layer_sublayers;
+delete from data_manager_layer_attribute_fields;
 delete from data_manager_layer;
 }}}
 
