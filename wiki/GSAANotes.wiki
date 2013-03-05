@@ -1,0 +1,64 @@
+#summary GSAA Notes
+
+<wiki:toc max_depth="4" />
+
+= Manage.py Utilities =
+  # CSVToInitialJson
+    This script reads a CSV and generates the initial_data.json file to prime the system. It will also create the legend files as well.
+    * Command Line Parameters
+      * Arg 0 <input CSV File>: This is the full path to the CSV file that drives the initial_data.json creation.
+      * Arg 1 <output JSON file>: This is the full filename to create the initial_data.json file
+      * Arg 2 <Legend File Directory>: This is the directory to store the legend files. Needs to be web accessible.
+      * Arg 3 <Legend Base URL>: The URL to the web directory the legend files will be accessed. 
+
+  # buildMetadataHTML
+    This script reads the CSV control file looking at the "source metadata url" column to pull the XML metadata file then convert it to an FGDC HTML version of the metadata. Outputs a file in the same directory as the input CSV file named controlFile.csv. This file will have the 'local metadata url' column populated.
+    * Command Line Parameters
+     * Arg 0 <input CSV File>: This is the full path to the CSV file that drives the initial_data.json creation.
+     * Arg 1 <xsl file>: This is the file used to convert the XML to HTML in our case.
+     * Arg 2 <Source Metadata>: The directory to store the XML metadata records. Even if there is no entry in the CSV column "source metadata url", the script will process and convert any XML files in this directory.
+     * Arg 3 <Destination HTML>: This is the file path to store the converted file. Needs to be web accessible.
+     * Arg 4 <URL To Metadata>: The URL to use to create the link to get to the metadata files.
+
+  # buildRestLegends
+    This script connects to the Django application database and queries the data_manager_layer table for all the REST layers. It will then attempt to query the REST endpoint for the legend. Depending on the server version either a REST Legend request(v 10.0 and higher) or a SOAP request.
+    * Command Line Parameters
+     * Arg 0 <legend directory>: Local directory to save the legend files.
+
+----
+= Delete, refresh data layers = 
+
+If need to delete just layers, without dropping database
+{{{
+delete from data_manager_layer_themes;
+delete from data_manager_layer_topics;
+delete from data_manager_layer_sublayers;
+delete from data_manager_layer_attribute_fields;
+delete from data_manager_layer;
+}}}
+
+
+If dropping database, then below also
+{{{
+INSERT INTO spatial_ref_sys (srid) VALUES(99996);
+}}}
+
+{{{
+python manage.py loaddata fixtures/flatblocks.json
+
+python manage.py createsuperuser - to add back superusers
+}}}
+----
+
+= Data Provider notes = 
+
+  * Link to the Rest endpoint.
+  * Metadata file that is fully populated and the URL to it.
+  * A URL to the raw datafile for users to download.
+  * URL for a data source attribution.
+  * Hover description. This is a short 2-3 line description of the data layer that is used on the catalog page when you hover over the layer name.
+  * In-depth description. This is the description we use on the Visualize page when you click the "I" button on the layer and it brings up the info window at the bottom of the map. Also used on the Learn page when you click on the "description" link on the catalog page.  If the metadata description would fit, that one is normally what we'd use.
+  * Query Fields with aliases for human readable terms.  When the user wants to identify a feature by clicking on it, wequery the ESRI endpoint and display the query fields returned. In ArcMap you can assign aliases to the field names to make the field more understandable.
+  * A list of the Query Fields to be returned in a query.  Without a list, we query for all the fields, so there may be returned fields that aren't necessarily of interest to the user, such as the ESRI geometry fields(Shape_Length).
+  * For layer files, the first legend line should have the units at the end of it in parenthesis. Here is an example of what we did with the DNR data: http://129.252.139.110/gsaa/rest/services/SCDNR/MapServer/legend
+  * Topic assignment of the layers. Sediment or Habitat or both.
