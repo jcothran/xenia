@@ -1,10 +1,8 @@
 #summary GSAA Notes
 
-= Page for various Notes on the GSAA Project =
-
 <wiki:toc max_depth="4" />
 
-== Manage.py Utilities ==
+= Manage.py Utilities =
   # CSVToInitialJson
     This script reads a CSV and generates the initial_data.json file to prime the system. It will also create the legend files as well.
     * Command Line Parameters
