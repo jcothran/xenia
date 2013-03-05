@@ -33,6 +33,7 @@ If need to delete just layers, without dropping database
 delete from data_manager_layer_themes;
 delete from data_manager_layer_topics;
 delete from data_manager_layer_sublayers;
+delete from data_manager_attributeinfo;
 delete from data_manager_layer_attribute_fields;
 delete from data_manager_layer;
 }}}
