@@ -47,3 +47,16 @@ python manage.py loaddata fixtures/flatblocks.json
 python manage.py createsuperuser - to add back superusers
 }}}
 ----
+
+= Data Provider notes = 
+
+  * Link to the Rest endpoint.
+  * Metadata file that is fully populated and the URL to it.
+  * A URL to the raw datafile for users to download.
+  * URL for a data source attribution.
+  * Hover description. This is a short 2-3 line description of the data layer that is used on the catalog page when you hover over the layer name.
+  * In-depth description. This is the description we use on the Visualize page when you click the "I" button on the layer and it brings up the info window at the bottom of the map. Also used on the Learn page when you click on the "description" link on the catalog page.  If the metadata description would fit, that one is normally what we'd use.
+  * Query Fields with aliases for human readable terms.  When the user wants to identify a feature by clicking on it, wequery the ESRI endpoint and display the query fields returned. In ArcMap you can assign aliases to the field names to make the field more understandable.
+  * A list of the Query Fields to be returned in a query.  Without a list, we query for all the fields, so there may be returned fields that aren't necessarily of interest to the user, such as the ESRI geometry fields(Shape_Length).
+  * For layer files, the first legend line should have the units at the end of it in parenthesis. Here is an example of what we did with the DNR data: http://129.252.139.110/gsaa/rest/services/SCDNR/MapServer/legend
+  * Topic assignment of the layers. Sediment or Habitat or both.
