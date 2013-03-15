@@ -143,6 +143,11 @@ For UDUNITS, to instead of having to install yacc, you can move the UDUNITS.pm a
 Then move the contents of the auto/UDUNITS directory into /usr/local/lib/perl/5.8.8/auto/UDUNITS. The contents of the directory should be: UDUNITS.so, UDUNITS.bs, and autosplit.ix.
 }}}
 
+ncgen/ncdump
+{{{
+apt-get install netcdf-bin
+}}}
+
 #Python packages
 {{{
 sudo apt-get install python-setuptools #Used to install the easy_install package manager
