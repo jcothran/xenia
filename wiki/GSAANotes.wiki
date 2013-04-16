@@ -67,6 +67,8 @@ cd ..
 python manage.py migrate
 }}}
 
+May need to restart apache to flush cache in some cases(such as theme layer changes)
+
 ----
 
 = Data Provider notes = 
