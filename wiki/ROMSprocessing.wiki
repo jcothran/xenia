@@ -20,11 +20,11 @@ http://docs.scipy.org/doc/scipy/reference/tutorial/io.html
 CSV to shapefile with shapely and fiona - fiona uses gdal
 http://macwright.org/2012/10/31/gis-with-python-shapely-fiona.html
 
-= Model matlab scripts =
+= modify model matlab scripts to load variables from .mat file instead of nc_varget =
 
 Here's my link to the modified initial matlab script [https://code.google.com/p/xenia/source/browse/trunk/model/roms/roms_zslice.m roms_zslice.m] which is called to get an isometric depth in meters slice/layer from the model which has varying layer depths according to the variable s_rho
 
-% is the line comment symbol in the examples below
+'%' is the line comment symbol in the examples below
 
 The main lines to follow here are the call to 
 
@@ -61,4 +61,3 @@ varlist = ...
       grd.(vname) = grd.(vname).(vname);
       grd.(vname) = squeeze(grd.(vname));
 }}}
-
