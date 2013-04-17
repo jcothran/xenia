@@ -73,8 +73,8 @@ This [https://code.google.com/p/xenia/source/browse/trunk/model/roms/mk_sabgom_g
 This [https://code.google.com/p/xenia/source/browse/trunk/model/roms/mk_sabgom.py script] performs the below several steps to create a shapefile output from a given forecast hour and depth request.
 
   * pydap for various vars -> .mat file
-  * matlab/octave scripts -> csv
-  * merge lon/lat csv with var csv
-  * convert csv to shapefile via shapely/fiona
+  * matlab/octave scripts -> var.csv
+  * merge lon/lat matrix with var.csv
+  * convert combined csv to shapefile via shapely/fiona
 
 This request [https://code.google.com/p/xenia/source/browse/trunk/model/roms/mk_all.py script] is the script kicked off daily which supplies the forecast time and depth parameters to be daily created.
