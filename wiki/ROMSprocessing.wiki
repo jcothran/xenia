@@ -20,6 +20,7 @@ http://docs.scipy.org/doc/scipy/reference/tutorial/io.html
 CSV to shapefile with shapely and fiona - fiona uses gdal
 http://macwright.org/2012/10/31/gis-with-python-shapely-fiona.html
 
+----
 = modify model matlab scripts to load variables from .mat file instead of nc_varget =
 
 Here's my link to the modified initial matlab script [https://code.google.com/p/xenia/source/browse/trunk/model/roms/roms_zslice.m roms_zslice.m] which is called to get an isometric depth in meters slice/layer from the model which has varying layer depths according to the variable s_rho
@@ -61,3 +62,19 @@ varlist = ...
       grd.(vname) = grd.(vname).(vname);
       grd.(vname) = squeeze(grd.(vname));
 }}}
+
+----
+= convert local netcdf grid(grd) file to .mat file =
+
+This [https://code.google.com/p/xenia/source/browse/trunk/model/roms/mk_sabgom_grd.py script] does a one-time conversion of some static grid lookup values from netcdf to .mat  There is a probably a way to refactor this code better to apply the same code against an var/object list.
+
+= daily process =
+
+This [https://code.google.com/p/xenia/source/browse/trunk/model/roms/mk_sabgom.py script] performs the below several steps to create a shapefile output from a given forecast hour and depth request.
+
+  * pydap for various vars -> .mat file
+  * matlab/octave scripts -> csv
+  * merge lon/lat csv with var csv
+  * convert csv to shapefile via shapely/fiona
+
+This request [https://code.google.com/p/xenia/source/browse/trunk/model/roms/mk_all.py script] is the script kicked off daily which supplies the forecast time and depth parameters to be daily created.
