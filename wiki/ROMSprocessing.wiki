@@ -20,7 +20,45 @@ http://docs.scipy.org/doc/scipy/reference/tutorial/io.html
 CSV to shapefile with shapely and fiona - fiona uses gdal
 http://macwright.org/2012/10/31/gis-with-python-shapely-fiona.html
 
-= X =
+= Model matlab scripts =
 
+Here's my link to the modified initial matlab script [https://code.google.com/p/xenia/source/browse/trunk/model/roms/roms_zslice.m roms_zslice.m] which is called to get an isometric depth in meters slice/layer from the model which has varying layer depths according to the variable s_rho
 
-https://code.google.com/p/xenia/source/browse/trunk/model/roms/roms_zslice.m
+% is the line comment symbol in the examples below
+
+The main lines to follow here are the call to 
+
+{{{
+grd = roms_get_grid(grd,file);
+}}}
+
+the .mat load and squeeze of the data to get rid of the singleton wrapper
+{{{
+% get the data to be zsliced
+% data = nc_varget(file,var,[time-1 0 0 0],[1 -1 -1 -1]);
+
+data = load('sabgom.mat', var);
+data = data.(var);
+data = squeeze(data);
+}}}
+
+and the conversion of the file to csv at the end
+{{{
+csvwrite(strcat(var, ".csv"),data)
+}}}
+
+In [https://code.google.com/p/xenia/source/browse/trunk/model/roms/roms_get_grid.m roms_get_grid.m] the line changes of interest are the substitution of the .mat variable 'load' for the earlier nc_varget
+
+{{{
+varlist = ...
+    { 'mask_rho','mask_psi','mask_u','mask_v','h','pm','pn','f','angle'};
+  for v = varlist
+    vname = char(v);
+    try
+      % tmp = nc_varget(grd_file,vname);
+
+      grd.(vname) = load('sabgom_grd.mat',vname);
+      grd.(vname) = grd.(vname).(vname);
+      grd.(vname) = squeeze(grd.(vname));
+}}}
+
