@@ -4,9 +4,9 @@
 
 = Introduction =
 
-A follow-on to this initial [https://groups.google.com/group/ioos_tech/browse_thread/thread/5ed3ac7665346455 discussion thread], our task was to run some matlab scripts against model forecast output to provide shapefiles.  I don't have matlab on hand for our servers so wanted to see if I could run octave (an open-source matlab substitute) instead.
+A follow-on to this initial [https://groups.google.com/group/ioos_tech/browse_thread/thread/5ed3ac7665346455 discussion thread], our task was to run some matlab scripts against model forecast output to provide shapefiles.  I don't have matlab on hand for our servers so wanted to see if I could run [http://www.gnu.org/software/octave/ octave] (an open-source matlab substitute, [http://www.ece.ucdavis.edu/~bbaas/6/notes/notes.diffs.octave.matlab.html matlab differences]) instead.
 
-The main issue I ran into was that there isn't an open source equivalent to the mexcdf(nc_*) function calls for interacting with netcdf files via octave.  I tried looking into 'octcdf' but it had its own unique netcdf functions and dependencies that didn't seem a workable substitute for mexcdf calls.  The solution I ended up using was pre-processing the netcdf to matlab data files(.mat files) and replacing the matlab netcdf references with references to the same .mat file data.
+The main issue I ran into was that there isn't an open source equivalent to the mexcdf(nc_`*`) function calls for interacting with netcdf files via octave.  I tried looking into 'octcdf' but it had its own unique netcdf functions and dependencies that didn't seem a workable substitute for mexcdf calls.  The solution I ended up using was pre-processing the netcdf to matlab data files(.mat files) and replacing the matlab netcdf references with references to the same .mat file data.
 
 This worked fine for the most part.  The only problem I ran into that I had to work around(which could be something fixable in my code) was that the scipy.savemat function seemed to trash my matrix values unless I 'wrapped' them in a 'singleton' matrix (like matrix shape 320x440 to 1x320x440) and then 'unwrapped' them in matlab or numpy via the 'squeeze' function.
 
