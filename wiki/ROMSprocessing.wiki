@@ -12,6 +12,14 @@ This worked fine for the most part.  The only problem I ran into that I had to w
 
 Wanted to share my below python scripts with others as helpful in taking a similar matlab/netcdf substitution approach or other workflow tools or bits as interested.
 
+Links
+
+scipy savemat, loadmat examples
+http://docs.scipy.org/doc/scipy/reference/tutorial/io.html
+
+CSV to shapefile with shapely and fiona - fiona uses gdal
+http://macwright.org/2012/10/31/gis-with-python-shapely-fiona.html
+
 = X =
 
 
