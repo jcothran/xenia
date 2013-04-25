@@ -70,6 +70,41 @@ python manage.py migrate
 May need to restart apache to flush cache in some cases(such as theme layer changes)
 
 ----
+= initial install from git over madrona notes =
+
+{{{
+git clone https://github.com/gsaaportal/marco-portal.git
+
+git checkout --track origin/topic-maps-and-catalog
+
+dan - settings_local.py
+  settings.py add 
+  UNDER_MAINTENANCE_TEMPLATE=False
+
+copy settings.py, manage.py
+  gsaa instead of marco user
+
+wsgi.py - add path to self
+vi /etc/apache2/sites-available/marco
+  change path to correct wsgi.py ref
+
+pip install querystring_parser
+
+//python manage.py schemamigration data_manager --auto
+
+createdb gsaa, connect to gsaa
+
+INSERT INTO spatial_ref_sys (srid) VALUES(99996);
+
+python manage.py syncdb
+python manage.py migrate
+python manage.py install_media
+
+restart apache
+
+}}}
+
+----
 
 = Data Provider notes = 
 
