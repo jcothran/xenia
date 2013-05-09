@@ -1,5 +1,11 @@
 """
 Revisions:
+Date: 2013-05-09
+Function:
+Revisions: We need to save the last entry date to the ini file. The real time database only has the last 2-3 weeks of data,
+  if a site goes down any longer than that we can't query the database to find the date to start at so we can
+  end up repreocessing data we don't need to.
+
 Date: 2013-01-02
 FUnction: xeniaCSVReader::next
 Changes:  MAke sure we have a real float value before passing it to the converter.
@@ -10,6 +16,8 @@ import simplejson as json
 import csv 
 import Queue
 import ConfigParser
+
+
 
 from xeniatools.xeniaSQLAlchemy import  multi_obs 
 from xeniatools.xenia import uomconversionFunctions
@@ -214,6 +222,7 @@ class csvDataIngestion(xeniaDataIngestion):
 
   def initialize(self, configFile=None):
     self.startFromLastDBEntry = False
+    self.lastEntryDate = None
     #COnnect to the xenia database.
     if(self.connect()):
       #Get the required config file settings.
@@ -233,10 +242,23 @@ class csvDataIngestion(xeniaDataIngestion):
       else:
         #Get optional parameters.
         try:
-          #If this is set, we query the database for the last date/time of data we put into the database and 
+          #If this is set, we query the ini for the last date/time of data we put into the database and 
           #add data that is from that date forward. Some csv datafiles append for a long time period so we
           #can ignore data we already have.
-          self.startFromLastDBEntry = self.config.getboolean(self.organizationId, 'processfromlatestdbrec')
+          #self.startFromLastDBEntry = self.config.getboolean(self.organizationId, 'processfromlatestdbrec')
+          #DWR 2013-05-09
+          #Use the ini file instead of the database since the platform can go down for a longer period that
+          #the data we retain in the real time database. Only last couple of weeks in real time database.
+          lastDate = self.config.get(self.organizationId, 'lastentrydate')
+          if(len(lastDate)):
+            self.lastEntryDate = datetime.datetime.strptime(lastDate, "%Y-%m-%dT%H:%M:%S")
+            if(self.logger):
+              self.logger.debug("Starting from date/time: %s" % (self.lastEntryDate))
+          else:
+            self.lastEntryDate = datetime.datetime.now()
+            if(self.logger):
+              self.logger.debug("lastentrydate does not exist, starting from current date/time: %s" % (self.lastEntryDate))
+            
         except ConfigParser.Error, e:  
           if(self.logger):
             self.logger.debug("Optional parameter: %s: %s does not exist. Using default setting." % (e.section,e.option))
@@ -252,47 +274,44 @@ class csvDataIngestion(xeniaDataIngestion):
     self.sensorMappings = {}
     #The date we use to time stamp the rows we add.
     self.rowDate = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
-    #We want to start ingesting the data from the last date/time we have in the database.
-    startDate = None
-    #startDate = datetime.datetime.strptime('2012-12-01T00:00:00', "%Y-%m-%dT%H:%M:%S")
-    if(self.startFromLastDBEntry):
-      platformHandle = self.csvDataFile.xeniaMapping.getPlatformDefaultHandle()
-      try:
-        obsRecs = self.xeniaDb.session.query(multi_obs.m_date)\
-          .filter(multi_obs.d_top_of_hour == 1)\
-          .filter(multi_obs.platform_handle == platformHandle)\
-          .order_by(multi_obs.m_date.desc())\
-          .limit(1)\
-          .all()
-        if(len(obsRecs)):
-          startDate = obsRecs[0][0]
-          if(self.logger):
-            self.logger.debug("Starting from date/time: %s" % (startDate.strftime("%Y-%m-%dT%H:%M:%S")))
-      except Exception,e:
-        if(logger):
-          logger.exception(e)
-        
+    
     try:    
-      lineCnt = 0
-      dataRecs = self.getData()
+      lineCnt = 0      
+      #DWR 2013-0509
+      lastRecDate = None
+      dataRecs = self.getData()      
       while(dataRecs):
         #if(self.logger):
         #  self.logger.debug("Line: %d m_date: %s" % (self.csvDataFile.line_num, dataRecs['m_date']))
         saveRec = True
-        if(startDate):
-          if(dataRecs['m_date'] < startDate):
+        #DWR 2013-05-09
+        #Use the self.lastEntryDate variable for the test.
+        if(self.lastEntryDate):
+          if(dataRecs['m_date'] < self.lastEntryDate):
             saveRec = False
-        if(saveRec):    
+            
+        if(saveRec):
+          #DWR 2013-05-09    
+          #Save the date, so when we hit the last data record, we have it saved and can then save it to the file.
+          lastRecDate = dataRecs['m_date']  
           self.saveData(dataRecs)
         dataRecs = self.getData()
         lineCnt += 1
+        
     except StopIteration,e:
       if(self.logger):
         self.logger.info("End of file reached.")        
     except Exception,e:
       if(self.logger):
         self.logger.exception(e)
-    
+        
+    #DWR 2013-05-09
+    #We need to save the last entry date to the ini file. The real time database only has the last 2-3 weeks of data,
+    #if a site goes down any longer than that we can't query the database to find the date to start at so we can
+    #end up repreocessing data we don't need to.
+    if(lastRecDate):
+      self.config.set(self.organizationId, lastRecDate.strftime("%Y-%m-%dT%H:%M:%S"))
+
     if(self.logger):
       self.logger.info("Processed %d lines in file." % (lineCnt))
     #Finished processing  
