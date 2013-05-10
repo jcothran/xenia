@@ -304,16 +304,23 @@ class csvDataIngestion(xeniaDataIngestion):
     except Exception,e:
       if(self.logger):
         self.logger.exception(e)
-        
-    #DWR 2013-05-09
-    #We need to save the last entry date to the ini file. The real time database only has the last 2-3 weeks of data,
-    #if a site goes down any longer than that we can't query the database to find the date to start at so we can
-    #end up repreocessing data we don't need to.
-    if(lastRecDate):
-      self.config.set(self.organizationId, lastRecDate.strftime("%Y-%m-%dT%H:%M:%S"))
+    #DWR 2013-05-10
+    #It's possible for the write to the ini file to throw an exception. Wrap in try,except so we are assured
+    #the cleanUp call is not skipped.
+    try:    
+      #DWR 2013-05-09
+      #We need to save the last entry date to the ini file. The real time database only has the last 2-3 weeks of data,
+      #if a site goes down any longer than that we can't query the database to find the date to start at so we can
+      #end up repreocessing data we don't need to.
+      if(lastRecDate):
+        self.config.set(self.organizationId, 'lastentrydate', lastRecDate.strftime("%Y-%m-%dT%H:%M:%S"))
+  
+      if(self.logger):
+        self.logger.info("Processed %d lines in file." % (lineCnt))
+    except Exception,e:
+      if(self.logger):
+        self.logger.exception(e)
 
-    if(self.logger):
-      self.logger.info("Processed %d lines in file." % (lineCnt))
     #Finished processing  
     self.cleanUp()
         
