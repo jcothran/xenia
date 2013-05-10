@@ -28,6 +28,8 @@
 ----
 = Delete, refresh data layers = 
 
+*Note: may need to save tables that support layer to learn lookups, restore after delete assuming layer id lookups remain the same*
+
 If need to delete just layers, without dropping database
 {{{
 delete from data_manager_layer_themes;
