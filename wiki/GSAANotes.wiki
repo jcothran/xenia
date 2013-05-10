@@ -105,7 +105,28 @@ restart apache
 }}}
 
 ----
+= diff compare prod to github =
 
+zipping prod files and comparing them to a github instance to check for missed files, etc
+
+{{{
+http://linuxcommando.blogspot.com/2008/05/compare-directories-using-diff-in-linux.html
+
+zip -r gsaa.zip gsaa
+mv gsaa.zip gsaa/marco/media
+
+wget http://gsaaportal.org/media/gsaa.zip
+
+unzip gsaa.zip
+cd gsaa
+find . -name *.pyc | xargs rm  
+diff -r marco-portal gsaa > out101
+cat out101 | grep "Only in marco" > out_only_marco
+cat out101 | grep "diff -r marco" > out_diff_marco
+cat out101 | grep -v "Only in" > out_diff_101
+}}}
+
+----
 = Data Provider notes = 
 
   * Link to the Rest endpoint.
