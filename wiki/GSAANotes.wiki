@@ -107,6 +107,28 @@ restart apache
 }}}
 
 ----
+= pull latest branch = 
+
+{{{
+mv marco-portal-master marco-portal-master-oldx
+optional: git checkout -b next-release origin/next-release
+optional: cp github -r next-release marco-portal-master
+
+cp ../../marco-portal-master-old2/marco/wsgi.py .
+cp ../../marco-portal-master-old2/marco/settings_local.py .
+
+python manage.py syncdb
+python manage.py migrate
+
+ignore step - error - python manage.py install_media
+from master/marco:  cp -r ../media .
+
+use firebug to check for missing files - get_sharing_groups
+
+use /admin to correct theme/layer issues
+}}}
+
+----
 = diff compare prod to github =
 
 zipping prod files and comparing them to a github instance to check for missed files, etc
