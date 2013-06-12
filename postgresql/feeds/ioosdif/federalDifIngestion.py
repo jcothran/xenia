@@ -1,5 +1,9 @@
 """
 Revisions
+Date: 2013-06-12 DWR
+Function: xeniaFedsInventory::outputRecords
+Changes: Add code to use new ini paramter: addnewobservationstodb to add new observations to the platform in the database if set.
+
 Date: 2013-02-28 DWR
 Function: fedsDataIngestion::getData
 Changes: Set default value to fix error of accessing unassigned variable.
@@ -255,7 +259,7 @@ class xeniaFedsInventory(platformInventory):
                 if(newRec):
                   newPlatforms.append(newRec)
               else:
-                missingObsRec = self.checkAvailableObs(id, station, platformRecs, self.xeniaDataMappings, self.uomConverter)
+                missingObsRec = self.checkAvailableObs(id, station, platformRecs, self.xeniaDataMappings, self.uomConverter, rowEntryDate)
                 if(missingObsRec):
                   platformsMissingObs.append(missingObsRec)                                                  
           except Exception, e:  
@@ -286,47 +290,71 @@ class xeniaFedsInventory(platformInventory):
     except ConfigParser.Error, e:  
       if(self.logger):
         self.logger.debug("addnewplatformstodb option does not exist, not adding new platforms to db.")
+    
+    #DWR 2013-06-12
+    #If we've got a new observation(in the mapping file) that isn't on the platform, add it.
+    addnewobservationstodb = True
+    try:
+      addnewobservationstodb = bool(int(self.config.get(self.organizationID, 'addnewobservationstodb')))
+    except ConfigParser.Error, e:  
+      if(self.logger):
+        self.logger.debug("addnewobservationstodb option does not exist, not adding new platforms to db.")
+
             
-    for newRec in newRecs:      
-      #Are we adding new platforms/sensors to the database?      
-      if(addnewplatformstodb):
-        try:
-          self.db.addPlatform(newRec, True)
-        except Exception,e:
-          if(self.logger):
-            self.logger.exception(e)
-            sys.exit(-1)  
-            
+    for newRec in newRecs:
       #Building a KML file?
       if(newPlatformsKML):
         sensors = ""
-        for sensor in newRec.sensors:
+        for sensorRec in newRec.sensors:
           if(len(sensors)):
             sensors += "\n"
-          sensors += sensor.short_name
+          sensors += sensorRec.short_name
         activeStatus = 'Inactive'
         if(newRec.active <= 3):
           activeStatus = "Active"
         pmDesc = "Active Status: %s\n\nDescription: %s\n\nSensors:\n\t%s" % (activeStatus, newRec.description, sensors)
         pm = newPlatformsKML.createPlacemark(newRec.platform_handle, newRec.fixed_latitude, newRec.fixed_longitude, pmDesc)
         placemarks.append(pm)
+
+      #Are we adding new platforms/sensors to the database?      
+      if(addnewplatformstodb):
+        try:
+          if(self.logger):
+            self.logger.info("New Platform: %s added to database with sensors: %s" % (rec.platform_handle, sensors))
+          
+          self.db.addPlatform(newRec, True)
+        except Exception,e:
+          if(self.logger):
+            self.logger.exception(e)
+            sys.exit(-1)  
+            
         
-    if(newPlatformsKML):
-      for rec in platsMissingObs:
-        sensors = ""
-        if(rec.sensors):
-          for sensor in rec.sensors:
-            if(len(sensors)):
-              sensors += "\n"
-            sensors += sensor.short_name
-          activeStatus = 'Inactive'
-          if(rec.active <= 3):
-            activeStatus = "Active"
+    for rec in platsMissingObs:
+      sensors = ""
+      if(rec.sensors):
+        for sensorRec in rec.sensors:
+          if(addnewobservationstodb):
+            try:
+              if(self.logger):
+                self.logger.info("Platform: %s(%d) adding new sensor m_type: %d to database." % (rec.platform_handle, sensorRec.platform_id, sensorRec.m_type_id))
+
+              self.db.addRec(sensor(platform_id = sensorRec.platform_id, row_entry_date = sensorRec.row_entry_date, active = sensorRec.active, m_type_id = sensorRec.m_type_id, s_order = sensorRec.s_order, short_name = sensorRec.short_name), True)
+              #self.db.addRec(sensorRec, True)              
+            except Exception,e:
+              if(self.logger):
+                self.logger.exception(e)
+                sys.exit(-1)  
+          if(len(sensors)):
+            sensors += "\n"
+          sensors += sensorRec.short_name
+        activeStatus = 'Inactive'
+        if(rec.active <= 3):
+          activeStatus = "Active"
+          
+        if(newPlatformsKML):
           pmDesc = "Active Status: %s\n\nDescription: %s\n\nSensors:\n\t%s" % (activeStatus, rec.description, sensors)
           pm = newPlatformsKML.createPlacemark(rec.platform_handle, rec.fixed_latitude, rec.fixed_longitude, pmDesc)
           platformsMissingObsPMs.append(pm)
-        else:
-          i = 0
     #Save the placemarks into the kmlfile.
     try:
       if(len(placemarks) and kmlFilename):
@@ -354,7 +382,7 @@ class xeniaFedsInventory(platformInventory):
         
     return(True)
 
-  def checkAvailableObs(self, id, stationProperty, platformRecs, sourceToXeniaMap, uomConverter):
+  def checkAvailableObs(self, id, stationProperty, platformRecs, sourceToXeniaMap, uomConverter, rowEntryDate):
     try:
       missingObsRec = None
       for platRec in platformRecs:
@@ -362,17 +390,22 @@ class xeniaFedsInventory(platformInventory):
           lcShortName = platRec.short_name.lower()
           lcplatformId = id.lower()          
           if(lcShortName == lcplatformId):
-            stationObs = self.difCap.getStationObservations(stationProperty, self.db, platRec.active, sourceToXeniaMap, uomConverter, "")
+            stationObs = self.difCap.getStationObservations(stationProperty, self.db, platRec.active, sourceToXeniaMap, uomConverter, rowEntryDate, platRec.row_id)
+            newObs = []
             for obs in stationObs:              
               sOrder = 1
+              sensorExists = False
               for platObs in platRec.sensors:
                 if(obs.m_type_id == platObs.m_type_id and 
                    obs.s_order == platObs.s_order):
-                  #Observation exists, so remove it from the list.
-                  stationObs.remove(obs)
+                  sensorExists = True
+                  #Observation exists, so remove it from the list.                  
+                  #stationObs.remove(obs)
                   break
+              if(sensorExists == False):
+                newObs.append(obs)
             #If we have obs left in the list, we'll create a record and attach those obs.
-            if(len(stationObs)):
+            if(len(newObs)):
               missingObsRec = platform()
               missingObsRec.short_name = platRec.short_name
               missingObsRec.platform_handle = platRec.platform_handle;
@@ -380,11 +413,13 @@ class xeniaFedsInventory(platformInventory):
               missingObsRec.fixed_longitude = platRec.fixed_longitude
               missingObsRec.organization_id = platRec.organization_id
               missingObsRec.description = desc = platRec.description
-              missingObsRec.sensors = stationObs
-              
-              for obs in stationObs:
+              for obs in newObs:
+                missingObsRec.sensors.append(obs)
                 if(self.logger):
                   self.logger.debug("Platform: %s does not currently contain sensor: %s" %(platRec.platform_handle,obs.short_name))        
+              
+            break
+          
     except Exception, e:  
       if(self.logger):
         self.logger.exception(e)
@@ -417,7 +452,7 @@ class xeniaFedsInventory(platformInventory):
         else:
           newRec.active = 3          
         if(newRec):
-          newRec.sensors = self.difCap.getStationObservations(stationProperty, self.db, newRec.active, self.xeniaDataMappings, self.uomConverter, rowEntryDate)
+          newRec.sensors = self.difCap.getStationObservations(stationProperty, self.db, newRec.active, self.xeniaDataMappings, self.uomConverter, rowEntryDate, None)
       else:
         if(self.logger):
           self.logger.debug("Description field indicates a glider, not adding.")
