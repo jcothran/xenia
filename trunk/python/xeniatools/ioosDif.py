@@ -1,3 +1,9 @@
+"""
+Revisions
+Date: 2013-06-12
+Function: difCapabilities::getStationObservations
+Changes: Added platform id function parameter.
+"""
 import sys
 import re
 import urllib
@@ -7,7 +13,7 @@ import logging
 
 from lxml import etree    
 from lxml import objectify
-from pykml import kml
+#from pykml import kml
 
 from xeniatools.xeniaSQLAlchemy import xeniaAlchemy, multi_obs, sensor 
 
@@ -129,7 +135,7 @@ class difCapabilities():
     timePeriod = stationProperty.time['{http://www.opengis.net/gml}TimePeriod']
     return(timePeriod)
   
-  def getStationObservations(self, stationProperty, dbObj, active, sourceToXeniaMap, uomConverter, rowEntryDate):
+  def getStationObservations(self, stationProperty, dbObj, active, sourceToXeniaMap, uomConverter, rowEntryDate, platformId):
     sensorRecs = []
     sensors = ""
     for obsProperty in stationProperty.observedProperty:
@@ -153,6 +159,10 @@ class difCapabilities():
             mType = dbObj.mTypeExists(xeniaOb, uom)
             if(mType):
               newSensor = sensor()
+              #DWR 2013-06-12
+              if(platformId):
+                #To add a new sensor to the DB, it's got to have a platform id.
+                newSensor.platform_id = platformId
               newSensor.row_entry_date = rowEntryDate
               newSensor.active = active
               newSensor.m_type_id = mType
