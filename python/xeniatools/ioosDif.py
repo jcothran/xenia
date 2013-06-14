@@ -150,7 +150,7 @@ class difCapabilities():
           #Get the dif column name from the xenia observation name.
           difObs = sourceToXeniaMap.getDifColNameFromXenia(xeniaOb)
           if(difObs):
-            obsParts = re.findall("^(\w*)\s\((.{1,})\)", difObs)
+            obsParts = re.findall("^(\w*)\s*\((.{1,})\)", difObs)
             #Get the xenia units. If we get None back, then we'll assume we're in the correct units.
             uom = uomConverter.getXeniaUOMName(obsParts[0][1].lower())
             if(uom == None):
@@ -220,6 +220,7 @@ class xeniaMappings(object):
           xeniaOb = difCol[xeniaKey] 
           if(len(xeniaOb)):
             obsParts = re.findall("^(\w*)\s\((.{1,})\)", xeniaKey)
+              
             #Get the xenia units. If we get None back, then we'll assume we're in the correct units.
             uom = uomConverter.getXeniaUOMName(obsParts[0][1].lower())
             if(uom == None):
