@@ -320,7 +320,7 @@ class xeniaFedsInventory(platformInventory):
       if(addnewplatformstodb):
         try:
           if(self.logger):
-            self.logger.info("New Platform: %s added to database with sensors: %s" % (rec.platform_handle, sensors))
+            self.logger.info("New Platform: %s added to database with sensors: %s" % (newRec.platform_handle, sensors))
           
           self.db.addPlatform(newRec, True)
         except Exception,e:
@@ -435,6 +435,9 @@ class xeniaFedsInventory(platformInventory):
       lon,lat = self.difCap.getFixedLonLat(stationProperty)
       if(self.logger):
         self.logger.info("New Platform found. Id: %s Lon: %s Lat: %s Desc: %s" % (id, lon, lat, desc))
+      if(id == '8736163'):
+        i=0
+
       if(desc != 'Glider'):
         newRec = platform()
         newRec.short_name = id
