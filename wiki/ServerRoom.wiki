@@ -46,7 +46,8 @@ esxi 139.198
 
   139.186 - cormp1
   139.199 - 52North
-  139.78  - madrona(old instance)
+  139.94  - madrona_scipy(scipy,etc python libraries, produces shapefiles for roffler)
+  139.152 - madrona_test(jcothran git updates)
 
 torino 37.86 crcoos mapserver
 
@@ -69,6 +70,7 @@ esxi 139.228
 esxi 139.184
   139.70 - thredds
   37.113 - (was 139.236) - madrona_dan(marco/gsaa site instance)
+  37.120 - madrona_dan2(placeholder for floridareefs project - copy mac address in vmx config)
   37.88 - nautilus
 
 #GSAA server - installed August 2012
