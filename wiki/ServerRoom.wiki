@@ -42,7 +42,7 @@ esxi 139.198
   139.139 - mapserver,tilecache engine,remotesensing image copying/db ref
   139.134 - projects
   139.169 - erddap
-  139.88  - geoportal
+  139.233  - geoportal
 
   139.186 - cormp1
   139.199 - 52North
