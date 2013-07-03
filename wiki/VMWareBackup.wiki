@@ -1,0 +1,7 @@
+#summary Process for backing up VMWare Images via ghettoVCB
+
+= Introduction =
+
+[ghettoVCB http://communities.vmware.com/docs/DOC-8760] is a script that resides in the ESXi host which can backup your VMWare images to a NAS devices.
+
+= Details =
