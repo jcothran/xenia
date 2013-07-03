@@ -7,5 +7,5 @@
 = Server setup =
 We're running a mixture of ESXi 4.0 and ESXi 5.0 host servers. To get ghettoVCB to work, you've got to get the ssh port open to have console access to the OS.
 == Enabling SSH Console Access ==
-  * ESXi 4.0, [here http://www.vm-help.com/esx40i/ESXi_enable_SSH.php] are the instructions I followed.
-  * ESXi 5.0, [here http://kb.vmware.com/selfservice/microsites/search.do?cmd=displayKC&docType=kc&docTypeID=DT_KB_1_1&externalId=2004746] are the instructions I followed.
+  * ESXi 4.0, [http://www.vm-help.com/esx40i/ESXi_enable_SSH.php here] are the instructions I followed.
+  * ESXi 5.0, [http://kb.vmware.com/selfservice/microsites/search.do?cmd=displayKC&docType=kc&docTypeID=DT_KB_1_1&externalId=2004746 here] are the instructions I followed.
