@@ -19,6 +19,6 @@ Although I did not specifically see this in the ghettoVCB documentation, many us
 There is no crontab editor such as crontab -e in ESXi, instead you directly edit the file: /var/spool/cron/crontabs/root . The setup is the same as a normal *Nix cron job.
 
 == Backup location ==
-Our .112 NAS is the location the VM images are copied to. The directory is:
+Our .112 NAS is the location the VM images are copied to. The directories are:
   * daily - /taurus/vmbackups/mnt_backup 
   * weekly - /taurus/vmbackups/weekly (not yet enabled)
