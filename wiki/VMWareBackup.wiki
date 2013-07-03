@@ -25,3 +25,6 @@ There is no crontab editor such as crontab -e in ESXi, instead you directly edit
 Our .112 NAS is the location the VM images are copied to. The directories are:
   * daily - /taurus/vmbackups/mnt_backup 
   * weekly - /taurus/vmbackups/weekly (not yet enabled)
+
+== To Do ==
+The .vmdk files are very large, finding a way to compress them would be very helpful in conserving drive space.
