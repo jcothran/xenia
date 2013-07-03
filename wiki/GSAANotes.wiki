@@ -167,6 +167,28 @@ cat out101 | grep -v "Only in" > out_diff_101
 }}}
 
 ----
+= git notes = 
+
+grabbing remote server csv file changes
+{{{
+scp user@remote_addr:/usr/local/userapps/gsaa/marco/general/management/controlFileMaster.csv .
+}}}
+
+{{{
+#cd to path
+git branch
+git pull
+
+#make changes
+git status
+
+git commit -am "some comment"
+git push
+
+#git user,pass
+}}}
+
+----
 = Data Provider notes = 
 
   * Link to the Rest endpoint.
