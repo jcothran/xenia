@@ -54,6 +54,7 @@ python manage.py createsuperuser - to add back superusers
 
 == Delete, refresh routine ==
 
+=== old directions ==
 from the main 'marco' folder where manage.py lives
 {{{
 python manage.py CSVToInitialJson /usr/local/userapps/marco-portal-master/marco/general/management/controlFileMaster.csv data_manager/fixtures/initial_data.json /usr/local/userapps/marco-portal-master/marco/media/marco/legends http://gsaaportal.org/media/marco/legends
@@ -67,6 +68,21 @@ cd ..
 
 {{{
 python manage.py migrate
+}}}
+
+=== new directions ===
+
+backup existing db in case any fubar
+{{{
+pg_dump gsaa > gsaa_pg_dump_x
+}}}
+
+{{{
+python manage.py CSVToInitialJson /usr/local/userapps/gsaa/marco/general/management/controlFileMaster.csv data_manager/fixtures/initial_data.json /tmp http://gsaaportal.org/media/marco/legends
+}}}
+
+{{{
+python manage.py loaddata data_manager/fixtures/initial_data.json
 }}}
 
 May need to restart apache to flush cache in some cases(such as theme layer changes)
