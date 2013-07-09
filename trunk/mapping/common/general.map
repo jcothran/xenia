@@ -24,6 +24,7 @@ MAP
     "init=epsg:4326"
     "init=epsg:4269"
     "init=epsg:900913"
+    "init=epsg:102100"
   END
   
   WEB
@@ -32,7 +33,7 @@ MAP
     METADATA   
      "wms_title" "RCOOS_Mapping"
      "wms_onlineresource" "http://129.252.139.124/cgi-bin/mapserv?map=/home/xeniaprod/mapping/common/general.map"
-     "wms_srs" "epsg:4326 EPSG:900913"
+     "wms_srs" "epsg:4326 EPSG:900913 EPSG:102100"
      "wms_feature_info_mime_type" "text/html"
      "wms_extent" "-90.5 24.5 -60.5 37.2"     
     END    
@@ -2129,7 +2130,7 @@ END
     TYPE POINT
     INCLUDE 'xenia_connection.map'  #This pulls in the file that has the connection information. This way we can check in the overall map file and hide the sensitive info.
     METADATA
-      "wms_srs" "EPSG:4269 EPSG:4326 EPSG:900913"
+      "wms_srs" "EPSG:4269 EPSG:4326 EPSG:900913i EPSG:102100"
       "wms_extent" "-180 -90 180 90"
       "wms_title" "In-situ wind speed and direction (hourly)"
       "wms_abstract" "TBD"
@@ -2142,6 +2143,7 @@ END
     PROJECTION 
       "init=epsg:4326"
       "init=epsg:900913"
+      "init=epsg:102100"
     END
 
     #LABELITEM "this_label_char"
@@ -2156,7 +2158,8 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
+        OUTLINEWIDTH 3
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2176,7 +2179,8 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
+        OUTLINEWIDTH 3
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2196,7 +2200,8 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
+        OUTLINEWIDTH 3
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2216,7 +2221,8 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINEWIDTH 3
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2236,7 +2242,8 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINEWIDTH 3
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2256,7 +2263,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2276,7 +2283,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2296,7 +2303,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2316,7 +2323,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2336,7 +2343,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2356,7 +2363,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2376,7 +2383,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2396,7 +2403,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2416,7 +2423,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2436,7 +2443,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2456,7 +2463,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2476,7 +2483,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2496,7 +2503,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2516,7 +2523,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2536,7 +2543,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2556,7 +2563,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2576,7 +2583,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2596,7 +2603,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2616,7 +2623,7 @@ END
         FONT 'weather'
         ANTIALIAS TRUE
         COLOR 0 0 0
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         POSITION CC
         OFFSET 2 -6
         BUFFER 0
@@ -2635,7 +2642,7 @@ END
         TYPE TRUETYPE
         FONT 'weather'
         ANTIALIAS TRUE
-        #OUTLINECOLOR 0 0 0
+        OUTLINECOLOR 150 150 150
         COLOR 0 0 0
         POSITION CC
         OFFSET 2 -6
@@ -2652,7 +2659,7 @@ END
       #END
       SIZE 5
       SYMBOL 'circle'
-      OUTLINECOLOR 0 0 0
+      OUTLINECOLOR 150 150 150
       COLOR 255 255 255
     END
   END  
@@ -2664,7 +2671,7 @@ LAYER
   STATUS OFF
   TYPE RASTER
   UNITS METERS
-  CONNECTION "http://129.252.139.124/ncWMS/wms?LAYERS=%OBSTYPE%&ELEVATION=0&TIME=%TIME%&TRANSPARENT=%TRANSPARENT%&STYLES=%NCWMS_STYLES%&COLORSCALERANGE=%COLORSCALERANGE%&NUMCOLORBANDS=%NUMCOLORBANDS%&LOGSCALE=false&SERVICE=%SERVICE%&VERSION=%VERSION%&REQUEST=%REQUEST%&EXCEPTIONS=%EXCEPTIONS%&FORMAT=%FORMAT%"
+  CONNECTION "http://129.252.139.124/ncWMS/wms?LAYERS=%OBSTYPE%&TIME=%TIME%&TRANSPARENT=%TRANSPARENT%&STYLES=%NCWMS_STYLES%&COLORSCALERANGE=%COLORSCALERANGE%&NUMCOLORBANDS=%NUMCOLORBANDS%&LOGSCALE=false&SERVICE=%SERVICE%&VERSION=%VERSION%&REQUEST=%REQUEST%&EXCEPTIONS=%EXCEPTIONS%&FORMAT=%FORMAT%"
   CONNECTIONTYPE WMS
   PROJECTION
   "init=epsg:4326"
