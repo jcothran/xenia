@@ -1,0 +1,116 @@
+#
+# MapServer map file uses the pound sign (#) to denote the start of a line
+# comment--each line that needs to be commented has to be prepended with a "#".
+#
+# Map files begin with MAP keyword to signify the start of the map object.
+# Well, the entire map file is THE map object.  Enclosed between MAP and END
+# at the very bottom of this map file, are keyword/value pairs and other
+# objects.
+MAP
+  NAME          "RCOOS_Mapping"
+  IMAGETYPE      PNG24
+  #EXTENT         -91.5 22 -71.5 36.5
+  EXTENT        -90.5 24.5 -60.5 37.2
+  SIZE           512 512
+  SHAPEPATH      "/home/xeniaprod/mapping/common/data/shapefiles"
+  IMAGECOLOR      204 255 255
+  SYMBOLSET      "./images/symbols.sym"
+  FONTSET        "./fonts/fonts.list"
+  MAXSIZE        4096
+
+  CONFIG "MS_ERRORFILE" "/tmp/ExternalWMSMapMapservError.log"
+
+  PROJECTION
+    "init=epsg:4326"
+    "init=epsg:4269"
+    "init=epsg:900913"
+    "init=epsg:102100"
+  END
+
+  WEB
+    IMAGEPATH '/usr2/data/xeniaprod/tmp/mapserver_tmp/'
+    IMAGEURL  'http://129.252.139.124/mapping/xenia/tmp/mapserver_tmp/'
+    METADATA
+     "wms_title" "RCOOS_Mapping"
+     "wms_onlineresource" "http://129.252.139.124/cgi-bin/mapserv?map=/home/xeniaprod/mapping/common/general.map"
+     "wms_srs" "epsg:4326 EPSG:900913 EPSG:102100"
+     "wms_feature_info_mime_type" "text/html"
+     "wms_extent" "-90.5 24.5 -60.5 37.2"
+    END
+  END
+
+  QUERYMAP
+    STATUS ON
+    STYLE NORMAL
+  END
+
+  OUTPUTFORMAT
+    NAME PNG
+    DRIVER "GD/PNG"
+    MIMETYPE "image/png"
+    IMAGEMODE RGB
+    EXTENSION "png"
+  END
+
+  OUTPUTFORMAT
+    NAME PNG
+    DRIVER "GD/PNG"
+    MIMETYPE "image/png1"
+    IMAGEMODE PC256
+    EXTENSION "png"
+  END
+
+  OUTPUTFORMAT
+    NAME gif
+    DRIVER "GD/GIF"
+    MIMETYPE "image/gif"
+    IMAGEMODE RGB
+    EXTENSION "gif"
+    TRANSPARENT ON
+  END
+  OUTPUTFORMAT
+    NAME GTiff
+    DRIVER "GDAL/GTiff"
+    MIMETYPE "image/tiff"
+    IMAGEMODE RGBA
+    EXTENSION "tif"
+  END
+  OUTPUTFORMAT
+    NAME jpeg
+    DRIVER "GD/JPEG"
+    MIMETYPE "image/jpeg"
+    IMAGEMODE RGB
+    EXTENSION "jpg"
+  END
+  # Layer objects are defined beneath the map object.  You need at least one
+  # layer defined in your map file before you can display a map...  You can
+  # define as many layers as you'd like although a limit is typically hard-coded
+  # in map.h in the MapServer source.  The default limit is set at 100.  You'd
+  # have to have a very specialized application to need more than 100 layers in
+  # your application.
+
+  # Start of LAYER DEFINITIONS ---------------------------------------------
+
+######################################################Base Maps######################################################
+LAYER
+  #DEBUG 4
+  NAME "noaa_rnc_charts"
+  STATUS OFF
+  TYPE RASTER
+  UNITS METERS
+  CONNECTION "http://egisws02.nos.noaa.gov/ArcGIS/services/RNC/NOAA_RNC/ImageServer/WMSServer?"
+  CONNECTIONTYPE WMS
+  PROJECTION
+  "init=epsg:4326"
+  "init=epsg:900913"
+  END
+  METADATA
+    "wms_srs" "EPSG:4326"
+    "wms_server_version" "1.1.1"
+    "wms_name" "RNC/NOAA_RNC"
+    "wms_format" "image/png"
+  END
+END
+
+
+END # All map files must come to an end just as all other things must come to...
