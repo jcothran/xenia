@@ -52,17 +52,17 @@ esxi 139.198
 torino 37.86 crcoos mapserver
 
 esxi 37.87 
-  neptune 37.90 main production, gomodp exchange software 
-  139.124 - squid forwarding(see /etc/squid/squid.conf), test/development, plone, old trident(formerly 139.178) - hfradar, dap
-  139.156 - archivalDB
-  139.229 - test server - drupal, wordpress-gsaa
-  37.114 - secoora asset inventory
+  37.90 - neptune - main production, gomodp exchange software 
+  139.124 - Squid - squid forwarding(see /etc/squid/squid.conf), test/development, plone, old trident(formerly 139.178) - hfradar, dap
+  139.156 - xeniaArchiveDB - archivalDB
+  139.229(off) - xeniavmNeptune201103_wide_drupal - test server - drupal, wordpress-gsaa
+  37.114 - secoinv2 - secoora asset inventory
 
 nautilus
   
 NWS Marine Weather Portal(MWP) project - Charlton Galvarino 
-  nwstwo(37.58 = 139.54 (routed via squid at 139.124), earlier 139.110 nile?)
-  nwsone(37.59 = 139.109 neo)
+  rh0 - nwstwo(37.58 = 139.54 (routed via squid at 139.124), earlier 139.110 nile?)
+  mwp_rho - nwsone(37.59 = 139.109 neo)
 
 #Secoora servers - installed August 2012
 esxi 139.228
