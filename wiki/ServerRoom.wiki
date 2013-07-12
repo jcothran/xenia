@@ -26,7 +26,8 @@ Rack 1 (top to bottom) <br />
 139.124 trident
 
 37.113 ?(webdev)newt (port 80,8080)
-37.114 ?nickel (port 80,8080)
+37.114 ?nickel (port 80,8080,22)
+37.120 port 80,8080,22
 
 #port 80(http)
 37.86
