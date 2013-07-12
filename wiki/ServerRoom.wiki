@@ -69,13 +69,13 @@ esxi 139.228
 
 esxi 139.184
   139.70 - thredds
-  37.113 - (was 139.236) - madrona_dan(marco/gsaa site instance)
-  37.120 - madrona_dan2(placeholder for floridareefs project - copy mac address in vmx config)
+  37.113 - GSAA_website - (was 139.236) - marco/gsaa site instance
+  37.120 - madrona_floridareefs_placeholder - placeholder for floridareefs project - copy mac address in vmx config for networking later
   37.88 - nautilus
 
 #GSAA server - installed August 2012
 esxi 139.238
-  139.110 gsaa arcgis server
+  139.110 - GSAA ArcServer - gsaa arcgis server
 
 }}}
 
