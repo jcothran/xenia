@@ -19,15 +19,23 @@ For our setups, I created a backup directory under /vmfs/volumes/datastore1/back
   * daily_list.txt - list of VM Images to backup on the daily cycle.
   * weekly_backup.conf - config file for the weekly backups.
   * weekly_list.txt - list of VM Images to backup on the weekly cycle.
+
+For transferring the files, you can do one of the following:
+  * ESXi 4.x use scp to transfer the files from another machine to the host.
+  * ESXi 5.x use SFTP(Filezilla for instance) to transfer the files.
+
 There is no crontab editor such as crontab -e in ESXi, instead you directly edit the file: /var/spool/cron/crontabs/root . The setup is the same as a normal *Nix cron job.
 
 == Backup location ==
-Our .112 NAS is the location the VM images are copied to. The directories are:
+Our .112 NAS is the location the VM images are copied to. For a new host, you'll need to have its IP address added to the hosts.allow file.
+The directories are:
   * daily - /taurus/vmbackups/mnt_backup 
   * weekly - /taurus/vmbackups/weekly (not yet enabled)
 
 == To Do ==
 The .vmdk files are very large, finding a way to compress them would be very helpful in conserving drive space.
+
+----
 
 == Current Image Backup List ==
 === ESXi Host .37.87 ===
