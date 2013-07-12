@@ -65,3 +65,9 @@ The .vmdk files are very large, finding a way to compress them would be very hel
   * Weekly
     # Projects
     # xeniavmMapping
+
+=== ESXi Host .139.184 ===
+  * Daily
+    # GSAA_website
+  * Weekly
+    # GSAA_website
