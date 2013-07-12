@@ -175,3 +175,9 @@ on source machine edit and re-run mount commands in file
 = Earlier links = 
 
 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JeremyCothranNotesServers
+
+----
+= Secoora Inventory =
+To get the inventory up and running:
+user: plonepi
+execute command: /opt/env/plone3/plone335/bin/instance start
