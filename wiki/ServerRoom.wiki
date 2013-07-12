@@ -181,3 +181,16 @@ http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JeremyCothranNotesServers
 To get the inventory up and running:
 user: plonepi
 execute command: /opt/env/plone3/plone335/bin/instance start
+
+----
+= Unexpected power failure = 
+
+server nws(57.58) has a small power button on the front panel which may need to be manually pressed to power-on
+
+needed to be manually rebooted due to a glitch during boot sequence
+  * nws(57.59)
+  * nautilus
+
+check database processes, remote mounts, /etc/rc.local settings
+
+----
