@@ -28,3 +28,20 @@ Our .112 NAS is the location the VM images are copied to. The directories are:
 
 == To Do ==
 The .vmdk files are very large, finding a way to compress them would be very helpful in conserving drive space.
+
+== Current Image Backup List ==
+=== ESXi Host .37.87 ===
+  * Daily
+    #  neptune
+  * Weekly
+    # neptune
+    # Squid
+    # secoinv2
+
+=== ESXi Host .139.198 ===
+  * Daily
+    # Projects
+    # xeniavmMapping 
+  * Weekly
+    # Projects
+    # xeniavmMapping
