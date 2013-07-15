@@ -1,6 +1,8 @@
 """
 Revisions:
 Date: 2013-05-09
+Function: processData
+Changes: To save any entries written to the log file, you have to re-write the log file.
 Function:
 Revisions: We need to save the last entry date to the ini file. The real time database only has the last 2-3 weeks of data,
   if a site goes down any longer than that we can't query the database to find the date to start at so we can
@@ -294,7 +296,7 @@ class csvDataIngestion(xeniaDataIngestion):
           #DWR 2013-05-09    
           #Save the date, so when we hit the last data record, we have it saved and can then save it to the file.
           lastRecDate = dataRecs['m_date']  
-          self.saveData(dataRecs)
+          #self.saveData(dataRecs)
         dataRecs = self.getData()
         lineCnt += 1
         
@@ -313,7 +315,17 @@ class csvDataIngestion(xeniaDataIngestion):
       #if a site goes down any longer than that we can't query the database to find the date to start at so we can
       #end up repreocessing data we don't need to.
       if(lastRecDate):
+        if(self.logger):
+          self.logger.info("Last record date: %s" % (lastRecDate.strftime("%Y-%m-%dT%H:%M:%S")))
         self.config.set(self.organizationId, 'lastentrydate', lastRecDate.strftime("%Y-%m-%dT%H:%M:%S"))
+        #DWR 2013-07-15
+        #You have to re-write the config file to save any changes.
+        try:
+          with open(self.configFilename, 'wb') as configfile:
+              self.config.write(configfile)
+        except Exception,e:
+          if(self.logger):
+            self.logger.exception(e)
   
       if(self.logger):
         self.logger.info("Processed %d lines in file." % (lineCnt))
