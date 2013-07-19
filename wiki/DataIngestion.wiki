@@ -213,6 +213,45 @@ netcdf files. The files are pulled down then processed into the database. Delete
 === NWS Processing ===
 *Script*: populate_xenia_nws <br/>
 *Directory*: /home/xeniaprod/cron <br/>
+*Description*: Now using the IOOS Dif web service, pulls in NWS data from the METAR feeds.  <br/>
+
+*Shell Script Makeup* <br/>
+  _Script_:nwsDataIngestion.py <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/nws <br/>
+  _Command line parameters_: <br/>
+  {{{
+  --ConfigFile=/home/xeniaprod/config/nwsDataIngest.ini  
+  }}}
+*Schedule*: Runs at 55 minutes after the hour. NWS docs specify they update the data at 50 minutes after the hour.
+
+==== INI File ====
+{{{
+[Database] - Section for the database parameters
+user =     - User name used to log onto the database
+password = - Password used
+host =     - Host address where the database server runs.
+name =     - Database name
+connectionstring = - SQLAlchemey database driver connection string.
+
+[settings] - Section for general settings
+uomconversionfile= - Path to the XML units conversion file.
+ 
+[logging] - Section for log file
+configfile = The fully qualified path to the logging config file.
+
+[area] - Section for the area of interest when checking for platforms in the bounding box given below.
+bbox= - Polygon defining our area of interest.
+
+[processing] 
+organizationlist = - Comma separated list of Organization IDs to process. For each entry here, there should be a corresponding section below. 
+
+[nws]
+jsonconfig - JSON config file that defines the mapping of observations available from the Dif service to the Xenia names of those observations.
+metarurl - URL where the METAR service resides. Use this in conjunction with the station name we want the data for.
+processingobject - Name of the object used to do the processing.
+
+
+== Old SOAP Perl script. Testing new METAR python processing ==
 *Description*: Pulls in NWS data directly from the NWS site. This is used in tandem with the NetCDF scout. Currently this is scheduled to run in crontab. <br/>
 *Shell Script Makeup* <br/>
   _Script_: mk_sql_for_xenia.pl <br/>
