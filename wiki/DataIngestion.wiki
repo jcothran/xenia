@@ -249,7 +249,7 @@ organizationlist = - Comma separated list of Organization IDs to process. For ea
 jsonconfig - JSON config file that defines the mapping of observations available from the Dif service to the Xenia names of those observations.
 metarurl - URL where the METAR service resides. Use this in conjunction with the station name we want the data for.
 processingobject - Name of the object used to do the processing.
-
+}}}
 
 == Old SOAP Perl script. Testing new METAR python processing ==
 *Description*: Pulls in NWS data directly from the NWS site. This is used in tandem with the NetCDF scout. Currently this is scheduled to run in crontab. <br/>
