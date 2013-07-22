@@ -222,7 +222,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
   {{{
   --ConfigFile=/home/xeniaprod/config/nwsDataIngest.ini  
   }}}
-*Schedule*: Runs at 55 minutes after the hour. NWS docs specify they update the data at 50 minutes after the hour.
+*Schedule*: Runs at 15,35,55 minutes after the hour. NWS docs specify they update the data at 50 minutes after the hour, however looking at the timestamps on the metar files, they seem to populate them around the times the stations telemeter their data.
 
 ==== INI File ====
 {{{
