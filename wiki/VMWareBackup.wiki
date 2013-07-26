@@ -26,7 +26,7 @@ For transferring the files, you can do one of the following:
   * ESXi 4.x use scp to transfer the files from another machine to the host.
   * ESXi 5.x use SFTP(Filezilla for instance) to transfer the files.
 
-Make sure to make the dailyBak, weeklyBak, and ghettoVCB files executable.
+*Make sure to make the dailyBak, weeklyBak, and ghettoVCB files executable.*
 
 There is no crontab editor such as crontab -e in ESXi, instead you directly edit the file: /var/spool/cron/crontabs/root . The setup is the same as a normal *Nix cron job. New ESXi version have differing entries in the root cron, so don't just overwrite the root file, add the following lines to the bottom.
 Sample cron entry:
@@ -71,3 +71,9 @@ The .vmdk files are very large, finding a way to compress them would be very hel
     # GSAA_website
   * Weekly
     # GSAA_website
+
+=== ESXi Host .139.238 ===
+  * Daily
+    # GSAA_ArcServer
+  * Weekly
+    # GSAA_ArcServer
