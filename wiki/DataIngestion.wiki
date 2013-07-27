@@ -213,7 +213,7 @@ netcdf files. The files are pulled down then processed into the database. Delete
 === NWS Processing ===
 *Script*: populate_xenia_nws <br/>
 *Directory*: /home/xeniaprod/cron <br/>
-*Description*: Now using the IOOS Dif web service, pulls in NWS data from the METAR feeds.  <br/>
+*Description*: Now using NWS data from the METAR feeds.  <br/>
 
 *Shell Script Makeup* <br/>
   _Script_:nwsDataIngestion.py <br/>
