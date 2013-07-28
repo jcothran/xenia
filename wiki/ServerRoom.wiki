@@ -194,9 +194,10 @@ needed to be manually rebooted due to a glitch during boot sequence
 
 check database processes, remote mounts, /etc/rc.local settings
 
-on 139.139(mapping) check/execute the following commands for remote mounts to other container servers
-root@mapping:/home/xeniaprod# mount 129.252.37.88:/usr2 /nautilus_usr2
-root@mapping:/home/xeniaprod# mount 129.252.37.90:/usr2/data/xeniaprod/shapefiles/all /neptune_shapefiles
+== NFS Mounts ==
+on 139.139(mapping) check/execute the following commands for remote mounts to other container servers:
+  * root@mapping:/home/xeniaprod# mount 129.252.37.88:/usr2 /nautilus_usr2
+  * root@mapping:/home/xeniaprod# mount 129.252.37.90:/usr2/data/xeniaprod/shapefiles/all /neptune_shapefiles
 
 on .139.134(projects) check the following mounts:
   * /mnt/eyeonearth should be 129.252.139.139:/home/xeniaprod/feeds/ioos/eoe /mnt/eyeonearth
