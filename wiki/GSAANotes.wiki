@@ -201,3 +201,8 @@ git push
   * A list of the Query Fields to be returned in a query.  Without a list, we query for all the fields, so there may be returned fields that aren't necessarily of interest to the user, such as the ESRI geometry fields(Shape_Length).
   * For layer files, the first legend line should have the units at the end of it in parenthesis. Here is an example of what we did with the DNR data: http://129.252.139.110/gsaa/rest/services/SCDNR/MapServer/legend
   * Topic assignment of the layers. Sediment or Habitat or both.
+
+----
+= ArcServer =
+  * License file will expire, so we have to contact the USC geography guys to get the new provisioning file. The file can be found in: C:\Users\Administrator\Documents\ArcGISforServerAdvancedEnterprise_server_209238.prvc
+  * Another issue is the C:\Program Files\ESRI\License10.1\sysgen\keycodes file. Even after using the new provision file, the services still would not work. I renamed the old keycodes file, re-ran the Software Authorization, rebooted the system and the services started working again. 
