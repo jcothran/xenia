@@ -17,10 +17,11 @@
 <img src="http://xenia.googlecode.com/files/model5.jpg" />
 
 ----
-
+6
 <img src="http://xenia.googlecode.com/files/model6.jpg" />
 
 ----
+7
 <img src="http://xenia.googlecode.com/files/model7.jpg" />
 
 ----
