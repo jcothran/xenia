@@ -10,6 +10,8 @@
 ----
 = Interactive map = 
 
+see also this [http://www.youtube.com/watch?v=N-eOz58mA-c video tutorial]
+
 <img src="http://xenia.googlecode.com/files/model4.jpg" />
 
 ----
