@@ -7,15 +7,17 @@
 
 The below circled links are the navigation points of interest for model data.
 
-  * Interactive map
+  * Explore Real-Time Data(Interactive map)
   * THREDDS server
-  * ncWMS server
+  * ncWMS/Godiva viewer
   * Data Download
 
 <img src="http://xenia.googlecode.com/files/model3.jpg" />
 
 ----
 = Interactive map = 
+
+The interactive map displays model output for the current hour and provides controls(the 'I' button next to the layer name) for changing the datetime of the layer displayed.
 
 See also this [http://www.youtube.com/watch?v=N-eOz58mA-c video tutorial] on using the interactive map with model outputs.
 
