@@ -14,7 +14,7 @@
 
 ----
 = ncWMS = 
-<img src="http://xenia.googlecode.com/files/model9.jpg" />
+<img src="http://xenia.googlecode.com/files/model5.jpg" />
 
 ----
 6
