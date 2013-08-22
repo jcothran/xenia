@@ -5,6 +5,13 @@
 ----
 = Navigation from website = 
 
+The below circled links are the navigation points of interest for model data.
+
+  * Interactive map
+  * THREDDS server
+  * ncWMS server
+  * Data Download
+
 <img src="http://xenia.googlecode.com/files/model3.jpg" />
 
 ----
