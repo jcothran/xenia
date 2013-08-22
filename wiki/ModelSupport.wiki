@@ -21,6 +21,11 @@ see also this [http://www.youtube.com/watch?v=N-eOz58mA-c video tutorial]
 
 ----
 = ncWMS = 
+
+See also this [http://www.youtube.com/watch?v=S5Dkp8PG0nM video tutorial] on using ncWMS/Godiva.
+
+See also this [http://www.youtube.com/watch?v=_nNpRwtFHX4 video tutorial] on using the online Unidata CDM/CF validator tool and configuring ncWMS.
+
 <img src="http://xenia.googlecode.com/files/model6.jpg" />
 
 ----
