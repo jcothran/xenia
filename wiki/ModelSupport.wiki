@@ -1,3 +1,15 @@
 #summary regional models and support work
 
+<img src="http://xenia.googlecode.com/files/model2.jpg" />
+
+<img src="http://xenia.googlecode.com/files/model3.jpg" />
+
+<img src="http://xenia.googlecode.com/files/model4.jpg" />
+
+<img src="http://xenia.googlecode.com/files/model5.jpg" />
+
+<img src="http://xenia.googlecode.com/files/model6.jpg" />
+
+<img src="http://xenia.googlecode.com/files/model7.jpg" />
+
 <img src="http://xenia.googlecode.com/files/model1.jpg" />
