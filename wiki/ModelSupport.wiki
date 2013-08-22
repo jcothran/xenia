@@ -1,15 +1,30 @@
 #summary regional models and support work
 
+<wiki:toc max_depth="4" />
+
+----
+= Navigation from website = 
+
 <img src="http://xenia.googlecode.com/files/model3.jpg" />
+
+----
+= Interactive map = 
 
 <img src="http://xenia.googlecode.com/files/model4.jpg" />
 
+----
 <img src="http://xenia.googlecode.com/files/model5.jpg" />
 
+----
 <img src="http://xenia.googlecode.com/files/model6.jpg" />
 
+----
 <img src="http://xenia.googlecode.com/files/model7.jpg" />
 
+----
+= Shapefile and GIS downloads = 
 <img src="http://xenia.googlecode.com/files/model1.jpg" />
+
+Model outputs are displayed by forecast date, depth
 
 <img src="http://xenia.googlecode.com/files/model2.jpg" />
