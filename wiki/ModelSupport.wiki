@@ -43,6 +43,8 @@ NCSU/CFDL forecasts a storm-surge model for the SECOORA region.
 
 [http://www.resc.rdg.ac.uk/trac/ncWMS/ ncWMS] is stand-alone software of the 'Godiva' functionality of THREDDS allowing WMS(Web Mapping Service) requests.  It allows for vector-styling and map image caching of THREDDS WMS requests.  Currently this is used as middleware between the interactive map and the remote model thredds servers.
 
+[http://129.252.139.124/ncWMS/godiva2.html SECOORA ncWMS]
+
 See also this [http://www.youtube.com/watch?v=S5Dkp8PG0nM video tutorial] on using ncWMS/Godiva.
 
 See also this [http://www.youtube.com/watch?v=_nNpRwtFHX4 video tutorial] on using the online Unidata CDM/CF validator tool and configuring ncWMS.
