@@ -63,7 +63,7 @@ Automated THREDDS/WMS [http://neptune.baruch.sc.edu/xenia/misc/link_check.html r
 
 For NCSU/MEAS, hourly forecast shapefiles are produced for several depths and made available for general download via website.  Shapefiles for USF are produced similarly for surface and bottom layers.
 
-Further development notes and source code on these steps is available at this [http://code.google.com/p/xenia/wiki/ROMSprocessing link]
+Further development notes and source code are available [http://code.google.com/p/xenia/wiki/ROMSprocessing here]
  
 <img src="http://xenia.googlecode.com/files/model1.jpg" />
 
