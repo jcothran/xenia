@@ -32,7 +32,7 @@ Model data is currently available via THREDDS servers set up at each of the belo
 
 The NCSU/MEAS and USF groups both run similar ROMS model circulation outputs for variables such temperature, salinity, elevation and surface currents although covering different locations and resolution.
 
-UF forecasts for 4 near-coastal areas providing elevation/storm-surge related data.
+UF forecasts for 4 near-coastal areas for Florida providing elevation/storm-surge related data.
 
 NCSU/CFDL forecasts a storm-surge model for the SECOORA region.
 
