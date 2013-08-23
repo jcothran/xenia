@@ -28,7 +28,7 @@ See also this [http://www.youtube.com/watch?v=N-eOz58mA-c video tutorial] on usi
 ----
 = THREDDS server - catalog reference = 
 
-Model data is currently available via [http://www.unidata.ucar.edu/projects/THREDDS/ THREDDS] servers set up at each of the below listed institutions.
+[http://129.252.139.124/thredds/catalog_models.html Model data] is currently available via [http://www.unidata.ucar.edu/projects/THREDDS/ THREDDS] servers set up at each of the below listed institutions.
 
 The NCSU/MEAS and USF groups both run similar ROMS model circulation outputs for variables such temperature, salinity, elevation and surface currents although covering different locations and resolution.
 
