@@ -52,7 +52,7 @@ See also this [http://www.youtube.com/watch?v=_nNpRwtFHX4 video tutorial] on usi
 ----
 = automatic checks and notification = 
 
-Automated THREDDS/WMS requests are made hourly to check if the model outputs are still available.  A datetime history of request success(Y)/fail(n) is kept.
+Automated THREDDS/WMS [http://neptune.baruch.sc.edu/xenia/misc/link_check.html requests] are made hourly to check if the model outputs are still available.  A datetime history of request success(Y)/fail(n) is kept.
 
 <img src="http://xenia.googlecode.com/files/model7.jpg" />
 
