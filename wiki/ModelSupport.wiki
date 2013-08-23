@@ -28,7 +28,7 @@ See also this [http://www.youtube.com/watch?v=N-eOz58mA-c video tutorial] on usi
 ----
 = THREDDS server - catalog reference = 
 
-Model data is currently available via THREDDS servers set up at each of the below listed institutions.
+Model data is currently available via [http://www.unidata.ucar.edu/projects/THREDDS/ THREDDS] servers set up at each of the below listed institutions.
 
 The NCSU/MEAS and USF groups both run similar ROMS model circulation outputs for variables such temperature, salinity, elevation and surface currents although covering different locations and resolution.
 
@@ -41,7 +41,7 @@ NCSU/CFDL forecasts a storm-surge model for the SECOORA region.
 ----
 = ncWMS = 
 
-ncWMS is stand-alone software of the 'Godiva' functionality of THREDDS allowing WMS(Web Mapping Service) requests.  It allows for vector-styling and map image caching of THREDDS WMS requests.  Currently this is used as middleware between the interactive map and the remote model thredds servers.
+[http://www.resc.rdg.ac.uk/trac/ncWMS/ ncWMS] is stand-alone software of the 'Godiva' functionality of THREDDS allowing WMS(Web Mapping Service) requests.  It allows for vector-styling and map image caching of THREDDS WMS requests.  Currently this is used as middleware between the interactive map and the remote model thredds servers.
 
 See also this [http://www.youtube.com/watch?v=S5Dkp8PG0nM video tutorial] on using ncWMS/Godiva.
 
