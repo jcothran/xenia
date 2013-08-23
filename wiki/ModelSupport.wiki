@@ -19,6 +19,8 @@ The below circled links are the navigation points of interest for model data.
 
 The interactive map displays model output for the current hour and provides controls(the 'I' button next to the layer name) for changing the datetime of the layer displayed.
 
+In addition to Secoora regional models, other global model forecast layers(at lower spatial resolution) are included also(via a THREDDS server at PacIOOS) for waves(WW3), water(NCOM) and air(NCEP).
+
 See also this [http://www.youtube.com/watch?v=N-eOz58mA-c video tutorial] on using the interactive map with model outputs.
 
 <img src="http://xenia.googlecode.com/files/model4.jpg" />
