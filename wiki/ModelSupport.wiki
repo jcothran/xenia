@@ -5,7 +5,7 @@
 ----
 = Navigation from website = 
 
-The below circled links are the navigation points of interest for model data.
+The below [http://secoora.org circled links] are the navigation points of interest for model data.
 
   * Explore Real-Time Data(Interactive map)
   * THREDDS server
