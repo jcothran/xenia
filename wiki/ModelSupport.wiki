@@ -67,6 +67,6 @@ Further development notes and source code on these steps is available at this [h
  
 <img src="http://xenia.googlecode.com/files/model1.jpg" />
 
-Zipped shapefiles for download generated daily with filenames by forecast date, depth
+[http://neptune.baruch.sc.edu/xenia/model_shapefiles/ Zipped shapefiles] for download generated daily with filenames by forecast date, depth
 
 <img src="http://xenia.googlecode.com/files/model2.jpg" />
