@@ -1,0 +1,17 @@
+
+  {
+    "Date"             : "Date/Time",
+    "Time"             : "Date/Time",
+    "Temp"             : "Temp",
+    "SpCond"           : "Sp Cond",
+    "Sal"              : "Sal",
+    "DO_pct"           : "ODOSat",
+    "DO_mgl"           : "ODO",
+    "Depth"            : "Depth",
+    "pH"               : "pH",
+    "Turb"             : "Turb+",
+    "ChlFluor"         : "Chlorophyll",
+    "BVolt"            : "Bat",
+    "GOESID"           : "",
+    "SWMPStation"      : ""
+  }
