@@ -63,6 +63,7 @@ nautilus
   
 NWS Marine Weather Portal(MWP) project - Charlton Galvarino 
   rh0 - nwstwo(37.58 = 139.54 (routed via squid at 139.124), earlier 139.110 nile?)
+  139.54 changed to 139.197
   mwp_rho - nwsone(37.59 = 139.109 neo)
 
 #Secoora servers - installed August 2012
