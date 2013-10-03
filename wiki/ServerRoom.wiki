@@ -47,7 +47,6 @@ esxi 139.198
 
   139.186 - xeniavmCormp1 - backup server for cormp (old, probably out of date)
   139.199 - 52North
-  139.94  - madrona_scipy(scipy,etc python libraries, produces shapefiles for roffler)
   139.152 - madrona_test(jcothran git updates)
 
 torino 37.86 crcoos mapserver
