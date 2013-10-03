@@ -67,7 +67,8 @@ NWS Marine Weather Portal(MWP) project - Charlton Galvarino
   mwp_rho - nwsone(37.59 = 139.109 neo)
 
 #Secoora servers - installed August 2012
-esxi 139.228
+esxi 139.233 
+  139.88  - madrona_scipy(scipy,etc python libraries, produces shapefiles for roffler)
 
 esxi 139.184
   139.70 - thredds
