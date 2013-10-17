@@ -48,6 +48,7 @@ esxi 139.198
   139.186 - xeniavmCormp1 - backup server for cormp (old, probably out of date)
   139.199 - 52North
   139.152 - madrona_test(jcothran git updates)
+  139.94  - madrona_scipy(scipy,etc python libraries, produces shapefiles for roffler)
 
 torino 37.86 crcoos mapserver
 
@@ -67,7 +68,7 @@ NWS Marine Weather Portal(MWP) project - Charlton Galvarino
 
 #Secoora servers - installed August 2012
 esxi 139.233 
-  139.88  - madrona_scipy(scipy,etc python libraries, produces shapefiles for roffler)
+  offline
 
 esxi 139.184
   139.70 - thredds
