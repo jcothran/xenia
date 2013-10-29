@@ -14,6 +14,7 @@ The pysqlite module for Python, does in fact support the 'load_extension' abilit
 Here is a sample to get it up and running, this is on my windows machine.
 *NOTE* On a Windows box, the DLLs are going to have to be in the system PATH, otherwise
 the spatialite dll will fail to load since there are dependencies on some other dlls.
+*NOTE* WHen building pysqlite, there is now a setup.cfg file to configure options such as paths. One of the options set by default is a define statement that disables the load extension: SQLITE_OMIT_LOAD_EXTENSION. This should be commented out.
 DLL List
 {{{
 libspatialite-2.dll
