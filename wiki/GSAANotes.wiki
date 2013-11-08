@@ -214,3 +214,9 @@ git push
 Ran into an issue where the Feedback popup wouldn't send the emails.
 Tracked it down to the Madrona instance not being able to resolve any host names. I found this out via the logs/app.log file where I kept seeing an exception dump. 
 I added a dns-nameservers entry into the /etc/networking/interfaces file and added the USC nameservers. Not sure why this is now needed, but it did fix the issue.
+
+= Printing =
+When building the printing for the Query Tool, the webshot used for printing the map just didn't provide a decent quality page.
+Installed the node-phantom module to be able to have control over the web rendering process.
+
+Also needed to have a link in /usr/local/bin to the phantomjs executable. I made a symbolic link.
