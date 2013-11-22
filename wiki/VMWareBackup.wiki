@@ -13,6 +13,8 @@ We're running a mixture of ESXi 4.0 and ESXi 5.0 host servers. To get ghettoVCB 
 == Setup on ESXi ==
 Although I did not specifically see this in the ghettoVCB documentation, many users had posted to the forum that directories not under /vmfs/volumes were deleted under a reboot. 
 I created a user: vmbackup to be able to have ssh access when needed. Initially, you need to have root ssh access to make changes, but once the cron is setup and everything seems to be work, it is worthwhile to disallow root access.
+ESXi 4.0, edit initd.conf, add a -w after -i in the group=shell -i -K60 line to disable root access.
+
 For our setups, I created a backup directory under /vmfs/volumes/datastore1/backup where I placed the various pieces:
   * ghettoVCB.sh - Backup shell script
   * dailyBak.sh - Shell script that runs the daily backup, called from the cron.
