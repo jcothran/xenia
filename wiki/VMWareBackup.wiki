@@ -82,5 +82,17 @@ The .vmdk files are very large, finding a way to compress them would be very hel
     # GSAA_ArcServer
 
 == Restore ==
+[https://communities.vmware.com/docs/DOC-10595 Backup Instructions]
+
+
 The ghetto restore does not seem to support getting the backups from a remote NAS where we put them. So I am copying to my local machine then will scp from the ESXI login to a backup directory.
 *NOTE* To copy the vmdk files from the NAS, need to sudo cp otherwise the permissions will not allow the copy.
+* Use gzip to compress the large vmdk image.
+* Create a directory in one of the datastores on the ESXi host to use as the staging area.
+* Use scp to copy the image onto the ESXi host directory just created.
+* Configure your restore control file to point to the backup host directory from above, add the target destination as well. Here is the sample for projects:
+{{{
+"/vmfs/volumes/4ae1a54c-247a0233-4e3e-002219013a6a/bak;/vmfs/volumes/4ae1a54c-247a0233-4e3e-002219013a6a;3;projects"
+}}}
+* Run the restore script.
+
