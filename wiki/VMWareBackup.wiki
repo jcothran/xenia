@@ -77,3 +77,7 @@ The .vmdk files are very large, finding a way to compress them would be very hel
     # GSAA_ArcServer
   * Weekly
     # GSAA_ArcServer
+
+== Restore ==
+The ghetto restore does not seem to support getting the backups from a remote NAS where we put them. So I am copying to my local machine then will scp from the ESXI login to a backup directory.
+*NOTE* To copy the vmdk files from the NAS, need to sudo cp otherwise the permissions will not allow the copy.
