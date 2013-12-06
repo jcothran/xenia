@@ -14,11 +14,11 @@ As postgres user, created gsaa_test postgis dbinstance on 37.90
 
 Had trouble getting ogr2ogr version on neptune to recognize kml file for conversion to postgis, but version on 139.139 worked for pushing kml to shapefile
 
-{{{
-ogr2ogr -f "ESRI Shapefile" grouper.shp doc.kml
+{{{ogr2ogr -f "ESRI Shapefile" grouper.shp doc.kml}}}
 
 zipped grouper files on 139.139, moved to 37.90 and unzipped
 
+{{{
 shp2pgsql -s 4326 -I -c -W UTF-8 grouper grouper > grouper.sql
 
 psql -U postgres -d gsaa_test -f grouper.sql
