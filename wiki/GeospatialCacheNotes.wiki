@@ -2,6 +2,8 @@
 
 From rest endpoint, can see the below type request using the 'query' method, giving the geometry= as a bounding box(-90,20,-65,37) for the overall region.  Substitute f=kmz to get kmz file back.  Selectiong 'gag grouper' below.
 
+Note, this query approach may be limited as query results may be limited to max 1,000 records, etc.  Test HTML return records for varying size.
+
 http://129.252.139.110/gsaa/rest/services/SCDNR/MapServer/50/query?where=&text=&objectIds=&time=&geometry=-90%2C20%2C-65%2C37&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&f=kmz
 
 Help links
