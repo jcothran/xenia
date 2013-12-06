@@ -28,7 +28,7 @@ shp2pgsql -s 4326 -I -c -W UTF-8 grouper grouper > grouper.sql
 psql -U postgres -d gsaa_test -f grouper.sql
 }}}
 
-Select smaller polygon/bbox near South Carolina <br>
+Select smaller polygon/bbox near South Carolina, presence for layer would be where given polygon and count > 0 <br>
 {{{
 gsaa_test=# SELECT count(*) from grouper where ST_AsText(ST_Intersection(ST_GeomFromText('SRID=4326;POLYGON((-75 31,-75 35,-82 35,-82 31,-75 31))'),the_geom)) <> 'GEOMETRYCOLLECTION EMPTY';
 }}}
