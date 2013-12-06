@@ -1,6 +1,6 @@
 #summary some notes on pulling ESRI services to Postgis table
 
-From rest endpoint, can see the below type request using the 'query' method, giving the geometry= as a bounding box for the overall region.  Substitute f=kmz to get kmz file back.  Selectiong 'gag grouper' below.
+From rest endpoint, can see the below type request using the 'query' method, giving the geometry= as a bounding box(-90,20,-65,37) for the overall region.  Substitute f=kmz to get kmz file back.  Selectiong 'gag grouper' below.
 
 http://129.252.139.110/gsaa/rest/services/SCDNR/MapServer/50/query?where=&text=&objectIds=&time=&geometry=-90%2C20%2C-65%2C37&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&f=kmz
 
@@ -26,6 +26,9 @@ zipped grouper files on 139.139, moved to 37.90 and unzipped
 shp2pgsql -s 4326 -I -c -W UTF-8 grouper grouper > grouper.sql
 
 psql -U postgres -d gsaa_test -f grouper.sql
+}}}
 
+Select smaller polygon/bbox near South Carolina <br>
+{{{
 gsaa_test=# SELECT count(*) from grouper where ST_AsText(ST_Intersection(ST_GeomFromText('SRID=4326;POLYGON((-75 31,-75 35,-82 35,-82 31,-75 31))'),the_geom)) <> 'GEOMETRYCOLLECTION EMPTY';
 }}}
