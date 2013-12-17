@@ -1,0 +1,145 @@
+{
+  "header" :
+  [
+    "TIMESTAMP",
+    "Insitu_temp",
+    "Insitu_sal",
+    "Oxygen_Sat",
+    "Insitu_DO_conc",
+    "Insitu_DO_sat",
+    "Insitu_chl_Conc",
+    "Insitu_turb",
+    "Insitu_Sigma_T",
+    "Insitu_Sound_SPD",
+    "WindDir",
+    "WindSpd",
+    "AirTemp",
+    "RhPct",
+    "BaroPress",
+    "RainIn",
+    "Compass",
+    "Par",
+    "GpsLatDeg",
+    "GpsLatMin",
+    "GpsLonDeg",
+    "GpsLonMin"
+  ],
+  "defaults" :
+  {
+    "platform" :
+    {
+      "default_value" : "fwri.otb.wq",
+      "organization" : "fwri",
+      "organization_url" : "http://comps.marine.usf.edu",
+      "type_name" : "Fixed Coastal Station",
+      "platform_url" : "http://comps.marine.usf.edu/index",
+      "description" : "Old Tampa Bay"
+    },
+    "fixed_latitude" :
+    {
+      "default_value" : "27.932003"
+    },
+    "fixed_longitude":
+    {
+      "default_value" : "-82.647455"
+    }
+  },
+  "TIMESTAMP" :
+  {
+    "timezone" : "GMT",
+    "format" : "%m/%d/%Y %I:%M:%S %p",
+    "standard_name" : "m_date",
+    "default_value" : ""
+  },
+  "Insitu_temp" :
+  {
+    "column_uom"  : "celsius",
+    "standard_name" : "water_temperature",
+    "uom"   : "celsius",
+    "s_order" : 1,
+    "m_z" : 0.8
+  },
+  "Insitu_sal" :
+  {
+    "column_uom"  : "psu",
+    "standard_name" : "salinity",
+    "uom"   : "psu",
+    "s_order" : 1,
+    "m_z" : 0.8
+  },
+  "Insitu_turb" :
+  {
+    "column_uom"  : "ntu",
+    "standard_name" : "turbidity",
+    "uom"   : "ntu",
+    "s_order" : 1,
+    "m_z" : 0.8
+  },
+  "Insitu_chl_Conc" :
+  {
+    "column_uom"  : "ug_L-1",
+    "standard_name" : "chl_concentration",
+    "uom"   : "ug_L-1",
+    "s_order" : 1,
+    "m_z" : 0.8
+  },
+  "Insitu_DO_conc" :
+  {
+    "column_uom"  : "mg_L-1",
+    "standard_name" : "oxygen_concentration",
+    "uom"   : "mg_L-1",
+    "s_order" : 1,
+    "m_z" : 0.8
+  },
+  "Insitu_DO_sat" :
+  {
+    "column_uom"  : "percent",
+    "standard_name" : "oxygen_concentration",
+    "uom"   : "percent",
+    "s_order" : 1,
+    "m_z" : 0.8
+  },
+
+  "WindSpd":
+  {
+    "column_uom"  : "m_s-1",
+    "standard_name" : "wind_speed",
+    "uom"   : "m_s-1",
+    "s_order" : 1
+  },
+  "WindDir":
+  {
+    "column_uom"  : "degrees_true",
+    "standard_name" : "wind_from_direction",
+    "uom"   : "degrees_true",
+    "s_order" : 1
+  },
+  "AirTemp":
+  {
+    "column_uom"  : "celsius",
+    "standard_name" : "air_temperature",
+    "uom"   : "celsius",
+    "s_order" : 1
+  },
+  "RhPct":
+  {
+    "column_uom"  : "percent",
+    "standard_name" : "relative_humidity",
+    "uom"   : "percent",
+    "s_order" : 1
+  },
+  "BaroPress":
+  {
+    "column_uom"  : "mmhg",
+    "standard_name" : "air_pressure",
+    "uom"   : "mb",
+    "s_order" : 1
+  },
+  "RainIn":
+  {
+    "column_uom"  : "mm",
+    "standard_name" : "precipitation",
+    "uom"   : "mm",
+    "s_order" : 1
+  }
+}
