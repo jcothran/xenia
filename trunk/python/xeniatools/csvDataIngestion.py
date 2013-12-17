@@ -1,9 +1,19 @@
 """
 Revisions:
+Date: 2013-12-17
+Function: processData
+Changes: Added use of the recursive defualtdict to fix issue of overwritting sensors with the same
+ name, but different s_orders on a given platform.
+
+Date: 2013-12-13
+Function: xeniaCSVReader::getPlatformData, xeniaCSVReader::getObsData
+Changes: Split apart the next function to use the getPlatformData and getObsData functions to allow
+  the user of custom ones in the csvDataIngestion object.
+
 Date: 2013-05-09
 Function: processData
 Changes: To save any entries written to the log file, you have to re-write the log file.
-Function:
+
 Revisions: We need to save the last entry date to the ini file. The real time database only has the last 2-3 weeks of data,
   if a site goes down any longer than that we can't query the database to find the date to start at so we can
   end up repreocessing data we don't need to.
@@ -22,8 +32,9 @@ import ConfigParser
 
 
 from xeniatools.xeniaSQLAlchemy import  multi_obs 
-from xeniatools.xenia import uomconversionFunctions
+from xeniatools.xenia import uomconversionFunctions, recursivedefaultdict
 from xeniatools.DataIngestion import xeniaDataIngestion, dataSaveWorker
+from collections import defaultdict
 
 
 """
@@ -85,6 +96,20 @@ class csvSrcToXeniaDataMapping(object):
     return(defaultMetaData)
 
   """
+  Function: getLatLon
+  Purpose: Looks up the fixed location parameters in the mapping file and returns
+    their index.
+  """
+  def getLatLon(self):
+    lon = None
+    lat = None
+    if 'location' in self.mappings:
+      location = self.mappings['location']
+      lon = location['m_lon']
+      lon = location['m_lat']
+    return(lon,lat)
+
+  """
   Function: getFixedLocation
   Purpose: Looks up the fixed location parameters in the mapping file and returns
     their index.
@@ -132,23 +157,17 @@ class xeniaCSVReader(csv.DictReader):
     self.logger = None
     if(logger):
       self.logger = logging.getLogger(type(self).__name__)
-    
+
+    self.logNoObsMapping = True
+
     headerFields = None
     if(hasattr(self.xeniaMapping, 'rowFieldNames')):
       headerFields = self.xeniaMapping.rowFieldNames
       
     csv.DictReader.__init__(self, fileObj, fieldnames=headerFields, restkey=restkey, restval=restval,
                  dialect=dialect, *args, **kwds)
-  """
-  Function: next
-  Purpose: We override the next function from the base class to do our specific processing. THe assumption is a row represents 
-    a time sample of a platform with one or more observations on the row. We return a single measurement row that is formatted
-    towards xenia entry. The observations are in a list, key of 'multi_obs', while static platform data such as time sample, lat, lon
-    are stored once in their respective fields.
-  """
-  def next(self):
-    row = csv.DictReader.next(self)
-    
+
+  def getPlatformData(self, row):
     #Get the platform column. If we don't have one, we use the default value.
     platformCol  = self.xeniaMapping.getPlatformColumn()
     if(platformCol == None):
@@ -156,14 +175,14 @@ class xeniaCSVReader(csv.DictReader):
     else:
       #THis will be the short name, we then need to look up the platform_handle
       platformHandle = row['platformCol']
-      
+
     #Get the date entry as we need it for each observation.
     dateCol, dateFormat, timezone = self.xeniaMapping.getDateColumn()
     #Get the data once for use in each observation.
     dateVal = row[dateCol]
     if(dateVal.isalnum() == False):
       dateVal = "".join(i for i in dateVal if ord(i)<128)
-    
+
     mDate = datetime.datetime.strptime(dateVal, dateFormat)
 
     #Get the longitude and latitude columns. If they don't exist, use the default values.
@@ -173,20 +192,23 @@ class xeniaCSVReader(csv.DictReader):
     else:
       lon = row[lonCol]
       lat = row[latCol]
-
-    dataRec = {}  
+    dataRec = {}
     dataRec['m_date'] = mDate
     dataRec['platform_handle'] = platformHandle
     dataRec['m_lon'] = lon
     dataRec['m_lat'] = lat
-    dataRec['multi_obs'] = []  
+
+    return(dataRec)
+
+  def getObsData(self, row):
+    multi_obs = []
     for col in row:
       mapping = self.xeniaMapping.getColumnMapping(col)
-      if(mapping):      
+      if(mapping):
         #Don't add a rec for the m_date as it is an attribute of the observations.
         if(mapping['standard_name'] != 'm_date'):
-          obsRec = {}  
-          obsRec['obs_standard_name'] = mapping['standard_name'] 
+          obsRec = {}
+          obsRec['obs_standard_name'] = mapping['standard_name']
           #obsRec['column_uom'] = mapping['column_uom']
           obsRec['uom'] = mapping['uom']
           obsRec['s_order'] = mapping['s_order']
@@ -196,8 +218,9 @@ class xeniaCSVReader(csv.DictReader):
             #MAke sure we have a real float value before passing it to the converter.
             try:
               dataVal = float(row[col])
-            except ValueError,e:
+            except (ValueError,Exception) as e:
               if(self.logger):
+                self.logger.error("Col: %s has invalid value: %s" % (col, row[col]))
                 self.logger.exception(e)
             else:
               val = self.uomConverter.measurementConvert(dataVal, mapping['column_uom'], mapping['uom'])
@@ -208,11 +231,27 @@ class xeniaCSVReader(csv.DictReader):
           else:
             val = row[col]
           obsRec['m_value'] = val
-          dataRec['multi_obs'].append(obsRec)
+          multi_obs.append(obsRec)
       else:
-        if(self.logger):
-          self.logger.error("No mapping for column name: %s" %(col))            
-   
+        #DWR 2013-12-16
+        #Only log out obs mapping errors on first pass.
+        if(self.logNoObsMapping and self.logger):
+          self.logger.error("No mapping for column name: %s" %(col))
+          self.logNoObsMapping = False
+
+    return(multi_obs)
+
+  """
+  Function: next
+  Purpose: We override the next function from the base class to do our specific processing. THe assumption is a row represents 
+    a time sample of a platform with one or more observations on the row. We return a single measurement row that is formatted
+    towards xenia entry. The observations are in a list, key of 'multi_obs', while static platform data such as time sample, lat, lon
+    are stored once in their respective fields.
+  """
+  def next(self):
+    row = csv.DictReader.next(self)
+    dataRec = self.getPlatformData(row)
+    dataRec['multi_obs'] = self.getObsData(row)
     return(dataRec)
   
   
@@ -222,7 +261,7 @@ class csvDataIngestion(xeniaDataIngestion):
     self.configFilename = configFile
     xeniaDataIngestion.__init__(self, organizationID, configFile, logger)
 
-  def initialize(self, configFile=None):
+  def initialize(self, **kwargs):
     self.startFromLastDBEntry = False
     self.lastEntryDate = None
     #COnnect to the xenia database.
@@ -260,7 +299,20 @@ class csvDataIngestion(xeniaDataIngestion):
             self.lastEntryDate = datetime.datetime.now()
             if(self.logger):
               self.logger.debug("lastentrydate does not exist, starting from current date/time: %s" % (self.lastEntryDate))
-            
+
+          #DWR 2013-12-13
+          #Added ability to pass in a custom csvREader object to use.
+          if('csvReader' in kwargs and kwargs['csvReader'] != None):
+            self.csvDataFile = kwargs['csvReader'](fileObj = open(self.csvFilepath, 'r'),
+                                     xeniaMappingFile = self.jsonMappingFile,
+                                     uomConverter = self.uomConverter,
+                                     logger = True)
+          else:
+            self.csvDataFile = xeniaCSVReader(fileObj = open(self.csvFilepath, 'r'),
+                                     xeniaMappingFile = self.jsonMappingFile,
+                                     uomConverter = self.uomConverter,
+                                     logger = True)
+
         except ConfigParser.Error, e:  
           if(self.logger):
             self.logger.debug("Optional parameter: %s: %s does not exist. Using default setting." % (e.section,e.option))
@@ -269,11 +321,12 @@ class csvDataIngestion(xeniaDataIngestion):
         
     return(False)
   
-  def processData(self):    
-    self.csvDataFile = xeniaCSVReader(open(self.csvFilepath, 'r'), 
-                             self.jsonMappingFile,
-                             self.uomConverter)
-    self.sensorMappings = {}
+  def processData(self):
+    #DWR 2013-12-17
+    #Use the recursive dictionary so we can store the m_type and sensor_ids by: <obs name><uom><sorder>
+    #Without doing this, platforms with multiples of the same sensors will not get each sensor represented
+    #and we ended up using incorrect sensor ids.
+    self.sensorMappings = recursivedefaultdict()
     #The date we use to time stamp the rows we add.
     self.rowDate = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
     
@@ -296,7 +349,7 @@ class csvDataIngestion(xeniaDataIngestion):
           #DWR 2013-05-09    
           #Save the date, so when we hit the last data record, we have it saved and can then save it to the file.
           lastRecDate = dataRecs['m_date']  
-          #self.saveData(dataRecs)
+          self.saveData(dataRecs)
         dataRecs = self.getData()
         lineCnt += 1
         
@@ -376,10 +429,11 @@ class csvDataIngestion(xeniaDataIngestion):
     if(platformId != None):
       try:
         for obs in dataRec['multi_obs']:
-          if(self.logger):
-            self.logger.debug("Sensor Exists check for %s(%s) sOrder: %d on platform: %s" % (obs['obs_standard_name'], obs['uom'], obs['s_order'], dataRec['platform_handle']))
           sensorId = self.xeniaDb.sensorExists(obs['obs_standard_name'], obs['uom'], dataRec['platform_handle'], obs['s_order'])
-          if(sensorId == None):        
+          if(self.logger):
+            if(sensorId):
+              self.logger.debug("Sensor: %s(%s) Id: %d sOrder: %d on platform: %s" % (obs['obs_standard_name'], obs['uom'], sensorId, obs['s_order'], dataRec['platform_handle']))
+          if(sensorId == None):
             sensorId = self.xeniaDb.newSensor(rowEntryDate = self.rowDate, 
                                               obsName = obs['obs_standard_name'], 
                                               uom = obs['uom'], 
@@ -393,8 +447,9 @@ class csvDataIngestion(xeniaDataIngestion):
           #m_type_id and sensor_id up each record, we build this mapping when the first row is read.  
           #Get the m_type_id as well.
           mTypeId = self.xeniaDb.mTypeExists(obs['obs_standard_name'], obs['uom'])
-          self.sensorMappings[obs['obs_standard_name']] = {'m_type_id' : mTypeId, 'sensor_id' : sensorId}
-            
+          #self.sensorMappings[obs['obs_standard_name']] = {'m_type_id' : mTypeId, 'sensor_id' : sensorId}
+          self.sensorMappings[obs['obs_standard_name']][obs['uom']][obs['s_order']] = {'m_type_id' : mTypeId, 'sensor_id' : sensorId}
+
       except Exception,e:
         if(self.logger):
           self.logger.exception(e)
@@ -408,10 +463,19 @@ class csvDataIngestion(xeniaDataIngestion):
   
   def saveData(self, recordList):
     for obs in recordList['multi_obs']:
+      if(self.logger):
+        """
+        self.logger.debug('Sensor: %s(%d) Datetime: %s Value: %s SOrder: %d' %
+                          (obs['obs_standard_name'],
+                           self.sensorMappings[obs['obs_standard_name']][obs['uom']][obs['s_order']]['sensor_id'],
+                          recordList['m_date'],
+                          obs['m_value'],
+                          obs['s_order']))
+        """
       multiObsRec = multi_obs(row_entry_date=self.rowDate,
                               platform_handle=recordList['platform_handle'],
-                              sensor_id=(self.sensorMappings[obs['obs_standard_name']]['sensor_id']),
-                              m_type_id=(self.sensorMappings[obs['obs_standard_name']]['m_type_id']),
+                              sensor_id=(self.sensorMappings[obs['obs_standard_name']][obs['uom']][obs['s_order']]['sensor_id']),
+                              m_type_id=(self.sensorMappings[obs['obs_standard_name']][obs['uom']][obs['s_order']]['m_type_id']),
                               m_date=recordList['m_date'],
                               m_lon=recordList['m_lon'],
                               m_lat=recordList['m_lat'],
