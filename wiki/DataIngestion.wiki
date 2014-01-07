@@ -1072,7 +1072,7 @@ These scripts run once an hour to help aggregate and check uptime for the Secoor
 
 The directory itself contains scripts for getting Savannah HF radar(get_latest_listing.pl,get_latest_data.pl,convert_latest.pl,cronNotify.pl)
 
-The Savannah script checks a remote http folder for the latest (downloaded as latest.txt) data file which gets converted into a seacoos/secoora netcdf grid file using a netcdf template/substitution file.
+The Savannah script checks http://carocoops.org/hfradar for the latest (downloaded as latest.txt) data file which gets converted into a seacoos/secoora netcdf grid file using a netcdf template/substitution file.  The ascii files are ftp'd directly from skidaway to hfradar folder on nautilus server(files pushed, no cron/pull).
 
 For Long Bay, SC, a similar set of scripts is under the 'seacoos2' folder.
 
