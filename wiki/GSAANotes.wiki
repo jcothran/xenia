@@ -208,10 +208,9 @@ git push
 
   * License file will expire, so we have to contact the USC geography guys to get the new provisioning file. The file can be found in: C:\Users\Administrator\Documents\ArcGISforServerAdvancedEnterprise_server_209238.prvc
   * Another issue is the C:\Program Files\ESRI\License10.1\sysgen\keycodes file. Even after using the new provision file, the services still would not work. I renamed the old keycodes file, re-ran the Software Authorization, rebooted the system and the services started working again. 
+  * Expires again in 29-jul-2014
   == Publishing Layers ==
   After a reboot, the Publishing service is not automatically restarted. It is necessary to go through the Arc Admin web front end to enable it.
-
-  * Expires again in 29-jul-2014
 
 = Feedback Dialog =
 Ran into an issue where the Feedback popup wouldn't send the emails.
