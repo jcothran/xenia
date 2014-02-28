@@ -259,3 +259,6 @@ $user = $config[$db_ref]['user'];
 $pass = $config[$db_ref]['pass'];
 $host = $config[$db_ref]['host'];
 }}}
+
+= Use USB stick under ESXi host =
+[http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=1036340 Enable USB Stick] 
