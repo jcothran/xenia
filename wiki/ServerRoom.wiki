@@ -95,27 +95,27 @@ torino(Charlton Galvarino - MWP project), old neptune(offline), nemo(offline)
 ----
 = Squid re-routing, server keywords = 
 
-requests routed through 129.252.139.124 use squid (see [SquidNotes]) to subroute based on server keyword like http://129.252.139.124/mapping/...
+requests routed through 139.124 use squid (see [SquidNotes]) to subroute based on server keyword like http://...139.124/mapping/...
 
-squid mapping (on 129.252.139.124, /etc/squid/squid.conf)
+squid mapping (on 139.124, /etc/squid/squid.conf)
 
 any changes run /etc/init.d/squid restart
 
 {{{
 
-cache_peer 129.252.139.139 parent 80 0 proxy-only name=mapServer
-cache_peer 129.252.139.144 parent 80 0 proxy-only name=cormp1Server
-#cache_peer 129.252.139.71 parent 80 0 proxy-only name=xenia2vmServer
-cache_peer 129.252.139.156 parent 80 0 proxy-only name=xenia2Server
-cache_peer 129.252.139.124 parent 80 0 proxy-only name=squidServer
-cache_peer 129.252.37.88 parent 80 0 proxy-only name=nautilusServer
-cache_peer 129.252.139.80 parent 80 0 proxy-only name=drupalServer
-cache_peer 129.252.139.124 parent 80 0 proxy-only name=tridentServer
+cache_peer 139.139 parent 80 0 proxy-only name=mapServer
+cache_peer 139.144 parent 80 0 proxy-only name=cormp1Server
+#cache_peer 139.71 parent 80 0 proxy-only name=xenia2vmServer
+cache_peer 139.156 parent 80 0 proxy-only name=xenia2Server
+cache_peer 139.124 parent 80 0 proxy-only name=squidServer
+cache_peer 37.88 parent 80 0 proxy-only name=nautilusServer
+cache_peer 139.80 parent 80 0 proxy-only name=drupalServer
+cache_peer 139.124 parent 80 0 proxy-only name=tridentServer
 
 
 ##
 acl mapserv_url url_regex -i mapserv
-#acl arch_url url_regex -i http://129.252.139.178/xenia
+#acl arch_url url_regex -i http:/...139.178/xenia
 http_access allow mapserv_url
 cache_peer_access mapServer allow mapserv_url
 
@@ -148,7 +148,7 @@ http_access allow drupal_url
 cache_peer_access drupalServer allow drupal_url
 
 ##
-acl trident_url dstdomain 129.252.139.124
+acl trident_url dstdomain 139.124
 http_access allow trident_url
 cache_peer_access tridentServer allow trident_url
 
@@ -200,12 +200,12 @@ check database processes, remote mounts, /etc/rc.local settings
 
 == NFS Mounts ==
 on 139.139(mapping) check/execute the following commands for remote mounts to other container servers:
-  * root@mapping:/home/xeniaprod# mount 129.252.37.88:/usr2 /nautilus_usr2
-  * root@mapping:/home/xeniaprod# mount 129.252.37.90:/usr2/data/xeniaprod/shapefiles/all /neptune_shapefiles
+  * root@mapping:/home/xeniaprod# mount ...37.88:/usr2 /nautilus_usr2
+  * root@mapping:/home/xeniaprod# mount ...37.90:/usr2/data/xeniaprod/shapefiles/all /neptune_shapefiles
 
 on .139.134(projects) check the following mounts:
-  * /mnt/eyeonearth should be 129.252.139.139:/home/xeniaprod/feeds/ioos/eoe /mnt/eyeonearth
-  * /mnt/dhec should be 129.252.139.139:/home/xeniaprod/feeds/dhec /mnt/dhec
+  * /mnt/eyeonearth should be ...139.139:/home/xeniaprod/feeds/ioos/eoe /mnt/eyeonearth
+  * /mnt/dhec should be ...139.139:/home/xeniaprod/feeds/dhec /mnt/dhec
 
 
 ----
