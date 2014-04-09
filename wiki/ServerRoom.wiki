@@ -1,0 +1,211 @@
+#summary internal reference to server setup
+
+<wiki:toc max_depth="6" />
+
+= Server room = 
+
+Server names,IP's from the door entrance toward the back of the room.
+
+<hr />
+Rack 1 (top to bottom) <br />
+<img src="http://xenia.googlecode.com/files/Img_2261.jpg" height="400" width="320" />
+<img src="http://xenia.googlecode.com/files/Img_2262.jpg" height="400" width="320" />
+<img src="http://xenia.googlecode.com/files/Img_2263.jpg" height="400" width="320" />
+
+{{{
+#dns baruch.sc.edu
+
+37.58 neo 
+37.59 nile
+
+37.86 torino
+37.87 nemo
+37.88 nautilus
+37.90 neptune
+
+139.124 trident
+
+37.113 ?(webdev)newt (port 80,8080)
+37.114 ?nickel (port 80,8080,22)
+37.120 port 80,8080,22
+
+#port 80(http)
+37.86
+37.88
+139.124 (squid/trident)
+
+139.109 (port 873/rsync also)
+139.110 (port 873/rsync also)
+}}}
+
+{{{
+esxi 139.198 
+  139.139 - xeniavmMapping - mapserver,tilecache engine,remotesensing image copying/db ref
+  139.134 - projects
+  139.169 - erddap
+  139.233  - geoportal
+
+  139.186 - xeniavmCormp1 - backup server for cormp (old, probably out of date)
+  139.199 - 52North
+  139.152 - madrona_test(jcothran git updates)
+  139.94  - madrona_scipy(off/moved to mwp)
+
+torino 37.86 crcoos mapserver
+
+esxi 37.87 
+  37.90 - neptune - main production, gomodp exchange software 
+  139.124 - Squid - squid forwarding(see /etc/squid/squid.conf), test/development, plone, old trident(formerly 139.178) - hfradar, dap
+  139.156 - xeniaArchiveDB - archivalDB
+  139.229(off) - xeniavmNeptune201103_wide_drupal - test server - drupal, wordpress-gsaa
+  37.114 - secoinv2 - secoora asset inventory
+
+nautilus
+  
+NWS Marine Weather Portal(MWP) project - Charlton Galvarino 
+  rh0 - nwstwo(37.58 = 139.54 (routed via squid at 139.124), earlier 139.110 nile?)
+  139.54 changed to 139.197
+
+  mwp_rho - nwsone(37.59 = 139.109 neo)
+    139.142  - madrona_scipy(scipy,etc python libraries, produces shapefiles for roffler)
+
+#Secoora servers - installed August 2012
+esxi 139.233 
+  offline
+
+esxi 139.184
+  139.70 - thredds
+  37.113 - GSAA_website - (was 139.236) - marco/gsaa site instance
+  37.120 - madrona_floridareefs_placeholder - placeholder for floridareefs project - copy mac address in vmx config for networking later
+  37.88 - nautilus
+
+#GSAA server - installed August 2012
+esxi 139.238
+  139.110 - GSAA_ArcServer - gsaa arcgis server
+
+}}}
+
+<hr />
+Rack 2 (top to bottom)<br />
+<img src="http://xenia.googlecode.com/files/Img_2264.JPG" height="400" width="320" />
+<img src="http://xenia.googlecode.com/files/Img_2265.jpg" height="400" width="320" />
+<img src="http://xenia.googlecode.com/files/Img_2266.jpg" height="400" width="320" />
+
+torino(Charlton Galvarino - MWP project), old neptune(offline), nemo(offline)
+
+----
+= Squid re-routing, server keywords = 
+
+requests routed through 139.124 use squid (see [SquidNotes]) to subroute based on server keyword like http://...139.124/mapping/...
+
+squid mapping (on 139.124, /etc/squid/squid.conf)
+
+any changes run /etc/init.d/squid restart
+
+{{{
+
+cache_peer 139.139 parent 80 0 proxy-only name=mapServer
+cache_peer 139.144 parent 80 0 proxy-only name=cormp1Server
+#cache_peer 139.71 parent 80 0 proxy-only name=xenia2vmServer
+cache_peer 139.156 parent 80 0 proxy-only name=xenia2Server
+cache_peer 139.124 parent 80 0 proxy-only name=squidServer
+cache_peer 37.88 parent 80 0 proxy-only name=nautilusServer
+cache_peer 139.80 parent 80 0 proxy-only name=drupalServer
+cache_peer 139.124 parent 80 0 proxy-only name=tridentServer
+
+
+##
+acl mapserv_url url_regex -i mapserv
+#acl arch_url url_regex -i http:/...139.178/xenia
+http_access allow mapserv_url
+cache_peer_access mapServer allow mapserv_url
+
+acl tilecache_url url_regex -i tilecache
+http_access allow tilecache_url
+cache_peer_access mapServer allow tilecache_url
+
+acl mapping_url url_regex -i mapping
+http_access allow mapping_url
+cache_peer_access mapServer allow mapping_url
+
+acl cormp1_url url_regex -i cormp1
+http_access allow cormp1_url
+cache_peer_access cormp1Server allow cormp1_url
+
+acl xenia2_url url_regex -i xenia2
+http_access allow xenia2_url
+cache_peer_access xenia2Server allow xenia2_url
+
+acl squid_url url_regex -i squid
+http_access allow squid_url
+cache_peer_access squidServer allow squid_url
+
+acl nautilus_url url_regex -i storm_surge_data/latest
+http_access allow nautilus_url
+cache_peer_access nautilusServer allow nautilus_url
+
+acl drupal_url url_regex -i drupal
+http_access allow drupal_url
+cache_peer_access drupalServer allow drupal_url
+
+##
+acl trident_url dstdomain 139.124
+http_access allow trident_url
+cache_peer_access tridentServer allow trident_url
+
+acl trident_url dstdomain trident.baruch.sc.edu
+http_access allow trident_url
+cache_peer_access tridentServer allow trident_url
+
+cache_peer_access tridentServer deny all
+
+}}}
+
+= Remounting changed IP's = 
+
+for NFS remotely mounted folders, use the following commands sudo as root
+
+on target machine edit file
+
+{{{/etc/exports}}}
+
+and run 
+
+{{{exportfs -ra}}}
+
+on source machine edit and re-run mount commands in file
+
+{{{/etc/rc.local}}}
+
+
+= Earlier links = 
+
+http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JeremyCothranNotesServers
+
+----
+= Secoora Inventory =
+To get the inventory up and running:
+user: plonepi
+execute command: /opt/env/plone3/plone335/bin/instance start
+
+----
+= Unexpected power failure = 
+
+server nws(57.58) has a small power button on the front panel which may need to be manually pressed to power-on
+
+needed to be manually rebooted due to a glitch during boot sequence
+  * nws(57.59)
+  * nautilus
+
+check database processes, remote mounts, /etc/rc.local settings
+
+== NFS Mounts ==
+on 139.139(mapping) check/execute the following commands for remote mounts to other container servers:
+  * root@mapping:/home/xeniaprod# mount ...37.88:/usr2 /nautilus_usr2
+  * root@mapping:/home/xeniaprod# mount ...37.90:/usr2/data/xeniaprod/shapefiles/all /neptune_shapefiles
+
+on .139.134(projects) check the following mounts:
+  * /mnt/eyeonearth should be ...139.139:/home/xeniaprod/feeds/ioos/eoe /mnt/eyeonearth
+  * /mnt/dhec should be ...139.139:/home/xeniaprod/feeds/dhec /mnt/dhec
+
+
+----
