@@ -8,6 +8,34 @@ A good intro for getting started with a Django project is [https://docs.djangopr
 == Prepping the Database ==
 A quick overview of creating a new database [http://www.cyberciti.biz/faq/howto-add-postgresql-user-account/ here].
 
-  # CREATE USER tom WITH PASSWORD 'myPassword';
-  # CREATE DATABASE jerry;
-  # GRANT ALL PRIVILEGES ON DATABASE jerry to tom;
+  # Create the database user and set the password to use. 
+  {{{
+  CREATE USER tom WITH PASSWORD 'myPassword';
+  }}}
+  # Create the database.
+  {{{ 
+  CREATE DATABASE jerry;
+  }}}
+  # Grant the necessary privileges for the user to operate on the database.
+  {{{ 
+  GRANT ALL PRIVILEGES ON DATABASE jerry to tom;
+  }}}
+
+In the Django settings_local.py(or local_settings.py), you configure your connection like:
+{{{
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'PORT': '5432',
+        'HOST': 'localhost',
+        'PASSWORD': 'myPassword',
+        'NAME': 'jerry',
+        'USER': 'tom',
+    }
+}
+
+}}}
+Once the database is created, setup the PostGIS tables.
+  {{{
+sudo -u postgres psql secoora_test -f /usr/share/postgresql/9.3/contrib/postgis-2.1/postgis.sql
+  }}}
