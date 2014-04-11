@@ -1,0 +1,13 @@
+#summary Steps to get the database setup and ready for use.
+
+= General =
+
+A good intro for getting started with a Django project is [https://docs.djangoproject.com/en/dev/intro/tutorial01/ here].
+
+
+== Prepping the Database ==
+A quick overview of creating a new database [http://www.cyberciti.biz/faq/howto-add-postgresql-user-account/ here].
+
+  # CREATE USER tom WITH PASSWORD 'myPassword';
+  # CREATE DATABASE jerry;
+  # GRANT ALL PRIVILEGES ON DATABASE jerry to tom;
