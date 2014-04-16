@@ -39,3 +39,19 @@ Once the database is created, setup the PostGIS tables.
   {{{
 sudo -u postgres psql secoora_test -f /usr/share/postgresql/9.3/contrib/postgis-2.1/postgis.sql
   }}}
+
+== Migrating a Model Change ==
+  Notes on using South to make model changes and migrate them to the database schema.
+  * Initial use.
+  {{{
+  python manage.py schemamigration <MYAPPNAME> --initial
+  }}}
+
+  * Subsequent Changes
+  {{{
+  python manage.py schemamigration <MYAPPNAME> --auto
+  }}}
+  If the above migration was successful:
+  {{{
+  python manage.py migrate <MYAPPNAME>
+  }}}
