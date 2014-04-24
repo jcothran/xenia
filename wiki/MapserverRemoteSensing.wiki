@@ -50,6 +50,15 @@ if ($this_layers =~ /modis_chl/) {
 }
     }}}
 
+  * rs
+  This makes the call to mapserver to process the request generated from the seacoos_rs script. It basically sets the mapfile to use and then calls mapserver.
+  {{{
+#!/bin/sh
+MS_MAPFILE=/xxxx/yyyyy/mapping/common/rs/rs.map
+export MS_MAPFILE
+/usr/lib/cgi-bin/mapserv
+
+  }}}
   * rs.map
   This is the mapfile that then processes the appropriate image file to then deliver the mapping client the WMS tiles. A new map layer entry would look like:
    {{{
