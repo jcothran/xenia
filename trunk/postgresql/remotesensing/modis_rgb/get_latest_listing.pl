@@ -61,9 +61,21 @@ sub get_index_match {
 
     # add libraries needed for this function
     use LWP::Simple;
+    use URI;
+
     
     # passed parameters
     my ($path, $pattern) = @_;
+    my $isFTP = 0;
+
+    #2014-04-22 DWR
+    #We need to check the URL to see if it is an FTP site or an HTML directory.
+    my $uriObj = URI->new($path);
+    print("Connection type: " . $uriObj->scheme . "\n");
+    if($uriObj->scheme eq 'ftp')
+    {
+      $isFTP = 1;
+    }
 
     # escape any regexp chars given by user 
     # (so $pattern can't be constructed regexp)
@@ -71,17 +83,41 @@ sub get_index_match {
 
     # (0) Get html document
     $doc = get($path);
+    print "$doc\n";
+    #2014-04-22 DWR
+    #We need to check the URL to see if it is an FTP site or an HTML directory.
+    if($isFTP)
+    {
+        print "Processing FTP listing.\n";
 
-    # some other possible html scrapes
-    # @all_href = $doc =~ m{href=(.*?)>}gi;
-    # @all_href = $doc =~ m{href\s*=\s*(.*?)>}gi;
+        my @fileLines = split('\n', $doc);
+        foreach $fileLine (@fileLines)
+        {
+          my @parts = split(" ", $fileLine);
+          my $fileName = $parts[-1];
+          print("$fileName\n");
+          push(@matched, $fileName);
+        }
+    }
+    else
+    {
+        print "Processing HTML listing.\n";
 
-    # (1) Screen scrape http for href lines
-    @all_href = $doc =~ m{href\s*=[\s|"]*(.*?)[\s|"]*>}gi;
+        # some other possible html scrapes
+        # @all_href = $doc =~ m{href=(.*?)>}gi;
+        # @all_href = $doc =~ m{href\s*=\s*(.*?)>}gi;
 
-    
-    # (2) further limit with users pattern
-    @matched = grep /$pattern$/, @all_href;
+        # (1) Screen scrape http for href lines
+        @all_href = $doc =~ m{href\s*=[\s|"]*(.*?)[\s|"]*>}gi;
+
+
+        # (2) further limit with users pattern
+        @matched = grep /$pattern$/, @all_href;
+    }
+    foreach(@matched)
+    {
+        print "Matched: $_\n";
+    }
 
     return @matched;
 
