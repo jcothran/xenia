@@ -1,4 +1,4 @@
-#!/usr/bin/perl 
+#!/usr/bin/perl
 
 use LWP::Simple;
 use POSIX qw(strftime);
@@ -11,8 +11,8 @@ my $title       = 'Advanced Very High Resolution Radiometer (AVHRR)';
 my $table_name  = 'timestamp_lkp';
 my $table_name_2  = 'raster_'.$layer_name;
 my $scratch_dir = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name;
-my $dest_dir    = '/home/xeniaprod/feeds/remotesensing/'.$layer_name;  
-my $dest_dir_2    = '/nautilus_usr2/maps/seacoos/data/usf/'.$layer_name;  
+my $dest_dir    = '/home/xeniaprod/feeds/remotesensing/'.$layer_name;
+my $dest_dir_2    = '/nautilus_usr2/maps/seacoos/data/usf/'.$layer_name;
 
 my $psql_command = '/usr/bin/psql -U xeniaprod -d xenia -h 129.252.37.90 -c';
 my $psql_command_2 = '/usr/bin/psql -U postgres -d sea_coos_obs -h nautilus.baruch.sc.edu -c';
@@ -33,7 +33,8 @@ my $two_weeks_ago = time - 60*60*24*14;
 $yyyy_dot_mm = strftime("%Y.%m",gmtime);
 
 @dir_urls = (
-  'http://www.imars.usf.edu/husf_avhrr/products/images/fullpass/'.$yyyy_dot_mm
+  #'http://www.imars.usf.edu/husf_avhrr/products/images/fullpass/'.$yyyy_dot_mm
+  'ftp://imars.marine.usf.edu/avhrr/imars/final/pass/1km/sst/seacoos/'.$yyyy_dot_mm
 );
 
 @final_dods_urls = (
@@ -182,7 +183,7 @@ foreach (@dir_urls) {
          ."timestamp without time zone '$this_date $this_time', "
          .'\''.$layer_name.'/'.$layer_name.'_'.$this_underline_timestamp.'.png\''
          . ');';
- 
+
          print( "$sql\n" );
          `$psql_command "$sql"`;
 	 ##local
