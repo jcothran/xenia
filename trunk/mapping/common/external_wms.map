@@ -112,5 +112,25 @@ LAYER
   END
 END
 
+LAYER
+  #DEBUG 4
+  NAME "modis_daily_avg_sst"
+  STATUS OFF
+  TYPE RASTER
+  UNITS METERS
+  CONNECTION "http://wms.gsfc.nasa.gov/cgi-bin/modis-wms.cgi?"
+  CONNECTIONTYPE WMS
+  PROJECTION
+  "init=epsg:4326"
+  "init=epsg:900913"
+  END
+  METADATA
+    "wms_srs" "EPSG:4326"
+    "wms_server_version" "1.1.1"
+    "wms_name" "modis"
+    "wms_format" "image/png"
+  END
+END
+
 
 END # All map files must come to an end just as all other things must come to...
