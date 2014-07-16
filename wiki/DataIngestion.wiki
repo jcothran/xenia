@@ -319,6 +319,8 @@ according to what is discovered in the getCapabilities query.
 
 addnewobservationstodb= Either 0 or 1. If checkfornewplatforms=1 and this is 1, any existing platforms are discovered to have new observations, this will add them to the database,
 
+newstationstoadd= A comma delimited list of stations to add. Used in conjunction with addnewplatformstodb and checkfornewplatforms. If set, only the stations in this list will be added.
+
 lastnhours= - The last N hours of data to request in a getObservation query.
 
 processingobject= - Name of the object used to do the processing.
