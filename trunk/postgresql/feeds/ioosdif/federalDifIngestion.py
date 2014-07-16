@@ -1,5 +1,10 @@
 """
 Revisions
+Date: 2014-07-16 DWR
+Function: findNew
+Changes: If we have a valid stationAddList, those are the only stations we;ll add if we are checking for new stations and
+adding new stations.
+
 Date: 2013-06-12 DWR
 Function: xeniaFedsInventory::outputRecords
 Changes: Add code to use new ini paramter: addnewobservationstodb to add new observations to the platform in the database if set.
@@ -253,8 +258,20 @@ class xeniaFedsInventory(platformInventory):
             if(stationPt.within(bboxPoly)):
               if(self.logger):
                 self.logger.debug("Station: %s Lon: %s Lat: %s in region" % (id,lat,lon))
+              #DWR 2014-07-16
+              #If we have stationAddList, those are the only stations we'll add.
               foundPlatform = self.platformInInventory(platformRecs, bboxPoly, id, lat, lon, desc)
-              if(foundPlatform == False or (stationAddList and (id in stationAddList))):
+              addRec = False
+              if stationAddList:
+                if id in stationAddList:
+                  addRec = True
+              #DWR 2014-07-16
+              #No specific stations to add, so is the current station one not in our database?
+              else:
+                if foundPlatform == False:
+                  addRec = True
+              if addRec:
+              #if(foundPlatform == False or (stationAddList and (id in stationAddList))):
                 newRec = self.processNewPlatform(station, rowEntryDate, platformRecs)
                 if(newRec):
                   newPlatforms.append(newRec)
@@ -577,6 +594,8 @@ class fedsDataIngestion(dataIngestion):
         #since they are contained in the single NDBC query.   
         if(self.logger):
            self.logger.info("Processing platform: %s" % (platRec.short_name))
+           if(platRec.short_name == '41004'):
+             i = 0
         obsCategory = []
         for sensor in platRec.sensors:
           obsName = sensor.m_type.scalar_type.obs_type.standard_name
