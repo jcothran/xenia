@@ -32,11 +32,11 @@
     },
     "fixed_latitude" :
     {
-      "default_value" : "27.33375"
+      "default_value" : "27.333752"
     },
     "fixed_longitude":
     {
-      "default_value" : "-82.57938"
+      "default_value" : "-82.579374"
     }
   },
   "Date/Time" :
@@ -88,9 +88,9 @@
   },
   "UpSondeBGAPC" :
   {
-    "column_uom"  : "cells_L-1",
+    "column_uom"  : "cells_mL-1",
     "standard_name" : "blue_green_algae",
-    "uom"   : "cells_L-1",
+    "uom"   : "cells_mL-1",
     "s_order" : 1,
     "m_z" : 0.5
   },
@@ -153,9 +153,9 @@
   },
   "LowSondeBGAPC" :
   {
-    "column_uom"  : "cells_L-1",
+    "column_uom"  : "cells_mL-1",
     "standard_name" : "blue_green_algae",
-    "uom"   : "cells_L-1",
+    "uom"   : "cells_mL-1",
     "s_order" : 2,
     "m_z" : 0.5
   },
