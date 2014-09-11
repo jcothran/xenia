@@ -128,7 +128,7 @@ class fwriCSVDataIngestion(xeniaDataIngestion):
           if(self.logger):
             self.logger.exception(e)
             self.logger.error("Cannot continue processing data. Shutting down.")
-          self.cleanUp()
+      self.cleanUp()
       
 def main():
   logger = None

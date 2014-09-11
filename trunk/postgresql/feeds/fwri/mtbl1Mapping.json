@@ -44,7 +44,7 @@
   },
   "SixAvgFlux":
   {
-    "column_uom"  : "w/m^2",
+    "column_uom"  : "w_m^2",
     "standard_name" : "photosynthetic_active_radiation",
     "uom"   : "w_m^2",
     "s_order" : 1
@@ -58,9 +58,9 @@
   },
   "SatAvgNitCon" :
   {
-    "column_uom"  : "uM_L-1",
+    "column_uom"  : "uM",
     "standard_name" : "nitrate",
-    "uom"   : "uM_L-1",
+    "uom"   : "uM",
     "s_order" : 1
   },
   "MvdYSIWTemp" :
@@ -121,9 +121,9 @@
   },
   "MvdYSBGACellsPerL" :
   {
-    "column_uom"  : "cells_L-1",
+    "column_uom"  : "cells_mL-1",
     "standard_name" : "blue_green_algae",
-    "uom"   : "cells_L-1",
+    "uom"   : "cells_mL-1",
     "s_order" : 1
   }
 }

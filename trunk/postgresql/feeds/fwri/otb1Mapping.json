@@ -50,11 +50,11 @@
     },
     "fixed_latitude" :
     {
-      "default_value" : "27.916921"
+      "default_value" : "27.932003"
     },
     "fixed_longitude":
     {
-      "default_value" : "-82.633568"
+      "default_value" : "-82.647455"
     }
   },
   "Date/Time" :
@@ -106,9 +106,9 @@
   },
   "UpSondeBGAPC" :
   {
-    "column_uom"  : "cells_L-1",
+    "column_uom"  : "cells_mL-1",
     "standard_name" : "blue_green_algae",
-    "uom"   : "cells_L-1",
+    "uom"   : "cells_mL-1",
     "s_order" : 1,
     "m_z" : 0.5
   },
@@ -171,9 +171,9 @@
   },
   "LowSondeBGAPC" :
   {
-    "column_uom"  : "cells_L-1",
+    "column_uom"  : "cells_mL-1",
     "standard_name" : "blue_green_algae",
-    "uom"   : "cells_L-1",
+    "uom"   : "cells_mL-1",
     "s_order" : 2,
     "m_z" : 0.5
   },
@@ -195,7 +195,7 @@
   },
   "HourlyPar_Avg":
   {
-    "column_uom"  : "w/m^2",
+    "column_uom"  : "w_m^2",
     "standard_name" : "photosynthetic_active_radiation",
     "uom"   : "w_m^2",
     "s_order" : 1
