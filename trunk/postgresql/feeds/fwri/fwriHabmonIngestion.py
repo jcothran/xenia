@@ -1,5 +1,9 @@
 """
 Revisions
+Date: DWR 2014-09-11
+Function: processData
+Changes: Always call cleanUp to make sure we don't leave the worker queue hanging.
+
 Date: 2013-12-17
 Function: processData
 Changes: Added the ability to specify specific csvReader object.
@@ -128,6 +132,8 @@ class fwriCSVDataIngestion(xeniaDataIngestion):
           if(self.logger):
             self.logger.exception(e)
             self.logger.error("Cannot continue processing data. Shutting down.")
+      #DWR 2014-09-11
+      #Always call cleanUp to make sure we don't leave the worker queue hanging.
       self.cleanUp()
       
 def main():
