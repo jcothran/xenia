@@ -1,3 +1,13 @@
+"""
+Revisions
+Date: 2014-10-03
+Function: webbGliderEmail:parseBody
+Changes: Make the collection run a member variable, once we have it, no need to keep hitting
+  the database. Make changes below to reference self.collectionRun and not collectionRun.
+  WRap the lat, lon, dataTime parsing in try/except.
+
+"""
+
 import sys
 from math import fabs 
 import optparse
@@ -11,7 +21,10 @@ import pymysql
 import poplib 
 import email
 from email import parser as emailParser
+from email.utils import mktime_tz, parsedate_tz
 import decimal
+import re
+import operator
 
 from xeniatools.DataIngestion import *
 from xeniatools.ioosDif import xeniaMappings
@@ -299,7 +312,7 @@ class webbGliders(xeniaDataIngestion):
 
   def processData(self):
     if(self.connect()): 
-      checkForNewPlats = bool(int(self.config.get(self.organizationId , 'checkfornewplatforms'))) 
+      checkForNewPlats = bool(int(self.config.get(self.organizationId , 'checkfornewplatforms')))
       if(checkForNewPlats):
         self.addGliders()                 
       self.getData()
@@ -351,7 +364,9 @@ class webbGliders(xeniaDataIngestion):
             #Get the xenia units. If we get None back, then we'll assume we're in the correct units.
             uom = self.uomConverter.getXeniaUOMName(obs['uom'])
             if(uom == None):
-              uom = obs['uom']     
+              uom = obs['uom']
+            if(xeniaObs[0] == 'location_epsg_4326'):
+              uom = 'undefined'
             if(xeniaObs and len(xeniaObs)):         
               #Determine if we have that measurement type.
               mType = self.xeniaDb.mTypeExists(xeniaObs[0], uom)
@@ -466,7 +481,10 @@ class webbGliders(xeniaDataIngestion):
         
       return(collectionRun)
     except NoResultFound:
-      pass                              
+      pass
+    except Exception, e:
+      if self.logger:
+        self.logger.exception(e)
     return(None)
       
   #def addCollectionEntry(self, glider, missionNfo, collectionRunRec=None):
@@ -596,7 +614,7 @@ class webbGliders(xeniaDataIngestion):
         uom = self.uomConverter.getXeniaUOMName(obsNfo['uom'])
         if(uom == None):
           uom = obsNfo['uom']
-      else: 
+      else:
         uom = 'undefined'
         isLocationData = True
         
@@ -765,21 +783,31 @@ class webbGliderEmail(webbGliders):
     webbGliders.__init__(self, organizationId, configFile, logger)
     
     self.pop3Obj = None
+    self.collectionRun = None
 
-  def connect(self):
+  def initialize(self):
+    try:
+      self.glidersList = self.config.get(self.organizationId, 'gliderlist').split(',')
+      self.validSenders = self.config.get('processing', 'validsenders').split(',')
+    except ConfigParser,e:
+      if(self.logger):
+        self.logger.exception(e)
+      return(False)
+    
     if(xeniaDataIngestion.connect(self)):
       try:
         self.checkfornewplatforms = self.config.get(self.organizationId, 'checkfornewplatforms')
         emailUser = self.config.get(self.organizationId, 'emailUser')
         emailPwd = self.config.get(self.organizationId, 'emailPwd')
+        emailHost = self.config.get(self.organizationId, 'emailHost')
       except ConfigParser,e:
         if(self.logger):
           self.logger.exception(e)
       else:
         try:
-          self.pop3Obj = poplib.POP3('inlet.geol.sc.edu')
-          self.pop3Obj.user('glideremail')
-          self.pop3Obj.pass_('dramage239')
+          self.pop3Obj = poplib.POP3(emailHost)
+          self.pop3Obj.user(emailUser)
+          self.pop3Obj.pass_(emailPwd)
           if(self.logger):
             self.logger.info("Successfully connected to email server.")
           
@@ -789,50 +817,107 @@ class webbGliderEmail(webbGliders):
     
         except Exception,e:
           if(self.logger):
-            self.logger.excetion(e)
+            self.logger.exception(e)
           
     return(False)
   
-  def disconnect(self):
-    self.pop3Obj.quit()
+  def cleanUp(self):
+    if(self.pop3Obj):
+      self.pop3Obj.quit()    
+    xeniaDataIngestion.disconnect(self)
   
   def processData(self):
-    if(self.connect()): 
+    if(self.logger):
+      self.logger.info("Organization: %s begin processing" % (self.organizationId))
+    
+    if(self.initialize()): 
       msgList = self.getData()
       self.saveData(msgList)
-      self.disconnect()
-      
+    self.cleanUp()
+
+    if(self.logger):
+      self.logger.info("Organization: %s end processing" % (self.organizationId))
+  
   def saveData(self, msgList):
     #The keys are the message Ids from the email server.
-    msgIds = msgList.keys()
-    msgIds.sort()
-    #for msgKey in msgList:
-    for msgKey in msgIds:
-      msg = msgList[msgKey]
+    #msgIds = msgList.keys()
+    for key in msgList:
+      print msgList[key]['Date']
+      
+    #Sort the msgIds in chronological order.
+    sortedMsgs = sorted(msgList.iteritems(), key=lambda(k,v): 
+                                            v['Date'])
+    print "Sorted"
+    for tupleRec in sortedMsgs:
+      print tupleRec[1]['Date']
+
+    #Regular expression search for glider name in the email subject.
+    gliderNameRE = re.compile('Glider:\s(?P<name>\w+)') 
+    
+    for msgTuple in sortedMsgs:
+      msgKey = msgTuple[0]
+      msg = msgTuple[1]
+      if(self.logger):
+        self.logger.info("Message: %d processing" % (msgKey))      
+      #msg = msgList[msgKey]
       if 'From' in msg:
         rcvdFrom = msg['From']
-        if(rcvdFrom == 'root@expose.webbresearch.com' or rcvdFrom == 'root@neptune.meas.ncsu.edu'):
+        try:
+          self.validSenders.index(rcvdFrom)
+        except ValueError,e:
+          if(self.logger):
+            self.logger.error("Message: %d from address: %s not in valid list." % (msgKey,rcvdFrom))
+        else:
           if 'Subject' in msg:
-            subject = msg['Subject']
-            if(subject.find('Glider:') != -1):        
-              body = msg.get_payload()
-              #Parse the body of the email to get the latest glider track info. If we
-              #successfully parse it, let's delete the email record from the server.
-              if(self.parseBody(body)):
-                #self.pop3Obj.dele(msgKey)
-                i = 0
+            res = gliderNameRE.search(msg['Subject'])
+            if(res):
+              gliderName = res.group('name')
+              #Check the glider name to see if it belongs to the current organization we are processing.
+              if(len(gliderName)):
+                try:
+                  self.glidersList.index(gliderName)
+                except ValueError,e:
+                  if(self.logger):
+                    self.logger.debug("Message: %d organization: %s does not have glider: %s, skipping."\
+                                       % (msgKey, self.organizationId, gliderName))
+                else:         
+                  body = msg.get_payload()
+                  """   
+                  if(msg.is_multipart()):
+                    body = body[0].get_payload()  
+                  """
+                  #Parse the body of the email to get the latest glider track info. If we
+                  #successfully parse it, let's delete the email record from the server.
+                  self.processMsg(msgKey, msg)
+                  if(self.parseBody(msgKey, body)):
+                    if(self.logger):
+                      self.logger.info("Message: %d deleting" % (msgKey))
+                    self.pop3Obj.dele(msgKey)
                 
     return
   
-  def parseBody(self, body):
-    import re
+  def processMsg(self, msgKey, msg):
+    if(isinstance(msg.get_payload(), basestring)):
+      if(self.logger):
+        self.logger.debug("Message: %d processing message." % (msgKey))
+      self.parseBody(msgKey, msg.get_payload())
+    else:
+      #Normally this is not the case, however a message could have attachements, if that is the case,
+      #we keep recursing until we get to the messsage.
+      for msgBody in msg.get_payload():
+        if(self.logger):
+          self.logger.debug("Message: %d recursion into attachment." % (msgKey))
+        self.processMsg(msgKey, msgBody)
+      
+  def parseBody(self, msgKey, body):
+    
     if(len(body)):
       #Example entry: Vehicle Name: salacia
       gliderName = re.findall('Vehicle Name:\s(.*)', body)
       if(len(gliderName)):
         if(self.logger):
-          self.logger.info("Processing glider: %s" % (gliderName[0]))
-        
+          self.logger.info("Message: %d processing glider: %s" % (msgKey, gliderName[0]))
+                  
         if(self.checkfornewplatforms):
           self.addPlatform(gliderName[0])
         #Example: Curr Time: Tue Mar 27 05:44:33 2012 MT:   58163
@@ -850,68 +935,89 @@ class webbGliderEmail(webbGliders):
         
         i = 0
         while(i < recCount):
-          if(len(curLoc[0]) == 4):            
-            lat = self.convertToDecimalDegrees(curLoc[i][0])
-            lon = self.convertToDecimalDegrees(curLoc[i][2])
-            dataTime = datetime.datetime.strptime(curTime[i], '%a %b %d %H:%M:%S %Y')
-            #Check to see if we have a collection entry. If not, we'll add one.
-            collectionRun = self.getCollectionEntry(gliderName[0], dataTime, None)
-            if(collectionRun == None):
-              collectionRun = self.addCollectionEntry(gliderName[0], dataTime, None, None, None)
-            
-            obsRec = glider_multi_obs()
-            obsRec.collection_id = collectionRun.row_id
-            obsRec.row_entry_date = self.rowEntryDate
-            obsRec.m_date = dataTime
-            obsRec.m_type_id = locMTypeId
-            obsRec.sensor_id = locSensorId
-            obsRec.platform_handle = platformHandle
-            obsRec.m_lat = lat
-            obsRec.m_lon = lon
-            obsRec.m_value = lon
-            obsRec.m_value_2 = lat
-            
-            try:              
-              self.xeniaDb.session.add(obsRec)
-              self.xeniaDb.session.commit()
-            #Trying to add record that already exists.
-            except exc.IntegrityError, e:
-              self.xeniaDb.session.rollback()
-              if(self.logger != None):
-                self.logger.exception(e)              
-            except Exception,e:
-              self.xeniaDb.session.rollback()
-              if(self.logger):
+          if(len(curLoc[0]) == 4):
+            """
+            2014-10-03 DWR
+            Wrap these in an exception, was getting an indexerror for some reason.
+            """
+            try:
+              lat = self.convertToDecimalDegrees(curLoc[i][0])
+              lon = self.convertToDecimalDegrees(curLoc[i][2])
+              dataTime = datetime.datetime.strptime(curTime[i], '%a %b %d %H:%M:%S %Y')
+            except IndexError, e:
+              if self.logger:
                 self.logger.exception(e)
             else:
-              if(self.logger):
-                self.logger.debug("Platform: %s Datetime: %s Lon: %f Lat: %f adding location record."\
-                                   % (obsRec.platform_handle, obsRec.m_date, obsRec.m_lon, obsRec.m_lat))
-              #Check to see if the location is a min or max
-              updatedExtents = False
-              if(lat < collectionRun.min_lat or collectionRun.min_lat == None):
-                collectionRun.min_lat = lat
-                updatedExtents = True
-              if(lat > collectionRun.max_lat or collectionRun.max_lat == None):
-                collectionRun.max_lat = lat
-                updatedExtents = True
-              if(lon < collectionRun.min_lon or collectionRun.min_lon == None):
-                collectionRun.min_lon = lon
-                updatedExtents = True
-              if(lon > collectionRun.max_lon or collectionRun.max_lon == None):
-                collectionRun.max_lon = lon
-                updatedExtents = True               
-              if(updatedExtents):
-                self.addCollectionEntry(gliderName[0], None, None, None, collectionRun)
-                                                           
+              if((lat <= 90 and lat >= -90) and (lon <= 180 and lon >= -180)):
+                #2014-10-03 DWR
+                #Make the collection run a member variable, once we have it, no need to keep hitting
+                #the database. Make changes below to reference self.collectionRun and not collectionRun.
+                #Check to see if we have a collection entry. If not, we'll add one.
+                if self.collectionRun is None:
+                  collectionRun = self.getCollectionEntry(gliderName[0], dataTime, None)
+                  if(collectionRun == None):
+                    collectionRun = self.addCollectionEntry(gliderName[0], dataTime, None, None, None)
+                  self.collectionRun = collectionRun
+                obsRec = glider_multi_obs()
+                obsRec.collection_id = self.collectionRun.row_id
+                obsRec.row_entry_date = self.rowEntryDate
+                obsRec.m_date = dataTime
+                obsRec.m_type_id = locMTypeId
+                obsRec.sensor_id = locSensorId
+                obsRec.platform_handle = platformHandle
+                obsRec.m_lat = lat
+                obsRec.m_lon = lon
+                obsRec.m_value = lon
+                obsRec.m_value_2 = lat
+
+                try:
+                  self.xeniaDb.session.add(obsRec)
+                  self.xeniaDb.session.commit()
+                #Trying to add record that already exists.
+                except exc.IntegrityError, e:
+                  self.xeniaDb.session.rollback()
+                  if(self.logger != None):
+                    self.logger.exception(e)
+                except Exception,e:
+                  self.xeniaDb.session.rollback()
+                  if(self.logger):
+                    self.logger.exception(e)
+                else:
+                  if(self.logger):
+                    self.logger.debug("Message: %d Platform: %s Datetime: %s Lon: %f Lat: %f adding location record."\
+                                       % (msgKey, obsRec.platform_handle, obsRec.m_date, obsRec.m_lon, obsRec.m_lat))
+                  #Check to see if the location is a min or max
+                  updatedExtents = False
+                  if(lat < self.collectionRun.min_lat or self.collectionRun.min_lat == None):
+                    self.collectionRun.min_lat = lat
+                    updatedExtents = True
+
+                  if(lat > self.collectionRun.max_lat or self.collectionRun.max_lat == None):
+                    self.collectionRun.max_lat = lat
+                    updatedExtents = True
+
+                  if(lon < self.collectionRun.min_lon or self.collectionRun.min_lon == None):
+                    self.collectionRun.min_lon = lon
+                    updatedExtents = True
+
+                  if(lon > self.collectionRun.max_lon or self.collectionRun.max_lon == None):
+                    self.collectionRun.max_lon = lon
+                    updatedExtents = True
+
+                  if(updatedExtents):
+                    self.addCollectionEntry(gliderName[0], None, None, None, self.collectionRun)
+              else:
+                if(self.logger):
+                  self.logger.error("Message: %d Datetime: %s had invalid location data: lon: %f lat: %f"\
+                                     % (msgKey, dataTime, lon, lat))
           else:
             if(self.logger):
-              self.logger.error("Current location: %s does not contain enough data for the latitude and longitude" % (curLoc[0]))
+              self.logger.error("Message: %d Current location: %s does not contain enough data for the latitude and longitude" % (msgKey, curLoc[0]))
               return(False)
           i += 1
       else:
         if(self.logger):
-          self.logger.error("Could not find the Vehicle Name identifier in the email address.")  
+          self.logger.error("Message: %d could not find the Vehicle Name identifier in the email address." % (msgKey))  
           return(False)
     return(True)
   
@@ -1009,8 +1115,8 @@ class gliderOutput(dataProduct):
 
   def getData(self):
     try:
-      self.exportCurrentMissions = bool(int(self.config.get(self.organizationId + '_kml', 'outputcurrentmissionsonly')))
-      gliders = self.config.get(self.organizationId, 'whitelist').split(',')
+      self.exportCurrentMissions = self.config.getboolean(self.organizationId + '_kml', 'outputcurrentmissionsonly')
+      gliders = self.config.get(self.organizationId, 'gliderlist').split(',')
     except ConfigParser.Error, e:  
       if(self.logger):
         self.logger.exception(e)
@@ -1027,10 +1133,9 @@ class gliderOutput(dataProduct):
             filter(platform.short_name.in_(gliders)).\
             filter(or_(and_(collection_run.min_date <= nowTime,collection_run.max_date == None),and_(collection_run.min_date <= nowTime,collection_run.max_date > nowTime))).all()
         else:  
-          runId = 55
-          gliderName = self.xeniaDb.session.query(platform,collection_run).\
+          collectionRuns = self.xeniaDb.session.query(platform,collection_run).\
             join((collection_run, collection_run.short_name == platform.short_name)).\
-            filter(collection_run.row_id == runId).one()
+            filter(collection_run.row_id == runId).all()
 
       except Exception,e:
         if(self.logger):
@@ -1085,8 +1190,6 @@ class gliderOutput(dataProduct):
   def createGliderTrackKML(self, platformRec, collectionRun, dataRecs):\
   
     try:  
-      #homeUrl = 'http://ooma.marine.usf.edu/CROW/'
-      #dataAttributionPage = 'http://secoora.org/maps/datalinks#usfgliders'
       kmlSection = self.organizationId + '_kml'
       homeUrl = self.config.get(kmlSection, 'projecturl')
       dataAttributionPage = self.config.get(kmlSection, 'attributeurl')
