@@ -11,3 +11,19 @@ To make the language trusted. Login to a DB adminstrative account, most likely t
   {{{
   UPDATE pg_language SET lanpltrusted=true WHERE lanname='plpythonu';
   }}}
+
+== Harvesting Metadata ==
+=== SOS ===
+The pycsw-admin.py command:
+  {{{
+   python bin/pycsw-admin.py -c post_xml -u <pycsw server addr:port> -x <path the the XML file which details the SOS server and schema>
+  }}}
+
+The format of the file for the -x parameter above is:
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<Harvest xmlns="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-publication.xsd" service="CSW" version="2.0.2">
+  <Source>http://sdf.ndbc.noaa.gov/sos/server.php</Source>
+  <ResourceType>http://www.opengis.net/sos/1.0</ResourceType>
+</Harvest>
+}}}
