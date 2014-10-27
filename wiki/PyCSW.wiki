@@ -1,0 +1,12 @@
+#summary Various notes on configuring and using PyCSW
+= Install =
+== PostGRES Notes ==
+  * Most likely you will need to add the plpythonu language to the database. It will need to be a trusted language as well. 
+To create the language:
+  {{{
+  CREATE LANGUAGE plpythonu;
+  }}}
+To make the language trusted. Login to a DB adminstrative account, most likely the postgres user:
+  {{{
+  UPDATE pg_language SET lanpltrusted=true WHERE lanname='plpythonu';
+  }}}
