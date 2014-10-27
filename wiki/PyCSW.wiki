@@ -27,3 +27,5 @@ The format of the file for the -x parameter above is:
   <ResourceType>http://www.opengis.net/sos/1.0</ResourceType>
 </Harvest>
 }}}
+Source: The base address for the SOS service.
+ResourceType: Address to schema declaration.
