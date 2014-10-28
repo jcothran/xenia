@@ -2,6 +2,14 @@
 = Install =
 == PostGRES Notes ==
   * When creating the database, make sure to GRANT permissions to the user you'll be running the pycsw-admin.py under.
+  * Grant ALL privileges to user:
+  {{{
+  GRANT ALL PRIVILEGES ON DATABASE <db_name> TO <user_name>
+  }}}
+  * Need to enable PostGIS on the db(PostGIS must already be installed):
+  {{{
+  CREATE EXTENSION postgis;
+  }}}
   * Most likely you will need to add the plpythonu language to the database. It will need to be a trusted language as well. 
 To create the language:
   {{{
