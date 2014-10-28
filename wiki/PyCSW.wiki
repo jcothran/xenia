@@ -2,7 +2,7 @@
 = Install =
 == PostGRES Notes ==
   * When creating the database, make sure to GRANT permissions to the user you'll be running the pycsw-admin.py under.
-  * Grant ALL privileges to user:
+  To do a blunt(INSERT/UPDATE/DELETE/...) granting of privileges to user:
   {{{
   GRANT ALL PRIVILEGES ON DATABASE <db_name> TO <user_name>
   }}}
