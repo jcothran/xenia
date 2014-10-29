@@ -38,3 +38,10 @@ The format of the file for the -x parameter above is:
 Source: The base address for the SOS service.
 
 ResourceType: Address to schema declaration.
+
+=== WAF ===
+  * Abstract
+  Pulls from the field:
+  {{{
+   <gmd:abstract><gco:CharacterString>
+  }}}
