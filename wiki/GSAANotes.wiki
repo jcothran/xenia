@@ -140,6 +140,7 @@ ignore step - error - python manage.py install_media
 from master/marco:  cp -r ../media .
 
 use firebug to check for missing files - get_sharing_groups
+If it doesn't exist: python manage.py enable_sharing
 
 use /admin to correct theme/layer issues
 }}}
