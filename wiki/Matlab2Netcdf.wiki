@@ -2,6 +2,28 @@
 
 Worked up the below example when converting from some SABGOM model output matlab files to netcdf files for use with thredds/WMS and other applications using the thredds services.
 
+For setup, downloaded anaconda to windows desktop http://continuum.io/downloads and only needed to install netcdf with the below command which installed no problems.
+
+{{{conda install netcdf4}}}
+
+Final output netcdf files can be downloaded at(click the 'HTTP' link in each of the below 4 netcdf file links
+http://129.252.139.124/thredds/catalog/sabgom_3_month_avg_files/catalog.html
+
+Main references
+http://www-pord.ucsd.edu/~cjiang/python.html
+http://netcdf4-python.googlecode.com/svn/trunk/docs/netCDF4-module.html
+
+Additional links of interest
+http://docs.scipy.org/doc/scipy/reference/tutorial/io.html
+http://docs.scipy.org/doc/scipy/reference/generated/scipy.io.loadmat.html
+http://wiki.scipy.org/NumPy_for_Matlab_Users
+
+http://mathesaurus.sourceforge.net/matlab-numpy.html
+http://sebastianraschka.com/Articles/2014_matlab_vs_numpy.html
+
+http://www.pyngl.ucar.edu/Nio.shtml
+http://oceanpython.org
+https://waterprogramming.wordpress.com/2014/04/28/converting-ascii-data-to-netcdf-python/
 
 
 {{{
