@@ -9,6 +9,29 @@ For setup, downloaded anaconda to windows desktop http://continuum.io/downloads 
 Final output netcdf files can be downloaded at - click the 'HTTP' link in each of the below 4 netcdf file links
 http://129.252.139.124/thredds/catalog/sabgom_3_month_avg_files/catalog.html
 
+The contents of the matlab file can be reviewed using octave http://www.gnu.org/software/octave/ as below and can also be exported as ascii,csv directly from octave 
+
+{{{
+user@host:~/sabgom$ octave
+
+octave:1> load sabgom.mat
+octave:2> whos
+
+*** local user variables:
+
+  Prot Name            Size                     Bytes  Class
+  ==== ====            ====                     =====  ===== 
+   rwd BS0             4x320x440              4505600  double
+   rwd BT0             4x320x440              4505600  double
+   rwd SSS0            4x320x440              4505600  double
+   rwd SST0            4x320x440              4505600  double
+   rw- __nargin__      1x1                          8  double
+   rwd lat           320x440                  1126400  double
+   rwd lon           320x440                  1126400  double
+
+Total is 2534401 elements using 20275208 bytes
+}}}
+
 Main references
 
 http://www-pord.ucsd.edu/~cjiang/python.html
