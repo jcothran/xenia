@@ -6,7 +6,7 @@ For setup, downloaded anaconda to windows desktop http://continuum.io/downloads 
 
 {{{conda install netcdf4}}}
 
-Final output netcdf files can be downloaded at - click the 'HTTP' link in each of the below 4 netcdf file links
+Final output netcdf files can be downloaded at - click the 'HTTPServer' link in each of the below 4 netcdf file links
 http://129.252.139.124/thredds/catalog/sabgom_3_month_avg_files/catalog.html
 
 The contents of the matlab file can be reviewed using octave http://www.gnu.org/software/octave/ as below and can also be exported as ascii,csv directly from octave 
