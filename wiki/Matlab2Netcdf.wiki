@@ -1,6 +1,6 @@
 #summary python code example converting from matlab(.mat) file to netcdf file
 
-Worked up the below example when converting from some SABGOM model output matlab files to netcdf files for use with thredds/WMS and other applications using the thredds services.
+Worked up the below example when converting from some SABGOM model output matlab files(7-year (2004-2010) SABGOM model hindcast 3 month average) to netcdf files for use with thredds/WMS and other applications using the thredds services.
 
 For setup, downloaded anaconda to windows desktop http://continuum.io/downloads and only needed to install netcdf with the below command which installed no problems.
 
