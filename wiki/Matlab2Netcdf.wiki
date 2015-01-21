@@ -1,0 +1,110 @@
+#python code example converting from matlab(.mat) file to netcdf file
+
+Worked up the below example when converting from some SABGOM model output matlab files to netcdf files for use with thredds/WMS and other applications using the thredds services.
+
+
+
+{{{
+import scipy.io as sio
+import numpy as np
+
+#mat_contents = sio.loadmat('sabgom.mat', struct_as_record=False, squeeze_me=True)
+mat_contents = sio.loadmat('sabgom.mat')
+#print mat_contents
+oct_struct_lat = mat_contents['lat']
+oct_struct_lon = mat_contents['lon']
+
+print oct_struct_lat.shape
+#print oct_struct_lat[0,0]
+lat = oct_struct_lat[0:320,0:440].flatten()
+lon = oct_struct_lon[0:320,0:440].flatten()
+
+#BS0 = bottom temperature, #SSS0 = surface temperature, #BT0 = bottom temp, #SST0 = surface temp
+oct_struct_obs = mat_contents['SST0'] #change obs dataset here as needed
+#print oct_struct_obs.shape
+#exit()
+
+#obs = oct_struct_obs[0,0:320,0:440].flatten()
+#obs = oct_struct_obs[0,:,:]
+obs = oct_struct_obs[:,:,:]
+
+#below line works if want to replace NaN with some other fill value
+#obs[np.isnan(sal)]=-999.0
+
+"""
+#experiments with replacing nan values
+t1 = oct_struct_BS0[0,0,0:3]
+#t1 = [t.replace('NaN','-999.0') for t in t1]
+#np.nan_to_num(t1)
+t1[np.isnan(t1)]=-999.0
+print t1
+"""
+
+print len(lat)
+print len(lon)
+print len(obs)
+print obs.shape
+#print oct_struct[0,0,0]
+
+#exit()
+
+
+
+from netCDF4 import Dataset
+
+
+root_grp = Dataset('temperature_surface.nc', 'w', format='NETCDF4') #change obs filename as needed
+root_grp.description = 'Example data'
+
+# dimensions
+root_grp.createDimension('time', None)
+
+root_grp.createDimension('ic', 440)
+root_grp.createDimension('jc', 320)  
+#440x320 = 140800 grid elements
+
+# variables
+times = root_grp.createVariable('time', 'f8', ('time',))
+times.standard_name = 'time'
+times.units = "months since 2018-03-01 00:00:00"
+times.axis = "T"
+
+lons = root_grp.createVariable('lon', 'f4', ('jc','ic'))
+lons.long_name = "longitude"
+lons.standard_name = "longitude"
+lons.units = "degrees_east"
+		
+lats = root_grp.createVariable('lat', 'f4', ('jc','ic'))
+lats.long_name = "latitude"
+lats.standard_name = "latitude"
+lats.units = "degrees_north"
+
+ics = root_grp.createVariable('ic', 'f4', ('ic',))
+ics.long_name = "x-coordinate in Cartesian system"
+ics.axis = "X"
+
+jcs = root_grp.createVariable('jc', 'f4', ('jc',))
+jcs.long_name = "y-coordinate in Cartesian system"
+jcs.axis = "Y"
+
+#change obs variable specifics as needed
+#temperature = root_grp.createVariable('temperature', 'f4', ('time', 'jc', 'ic',),fill_value=-999.0)
+temperature = root_grp.createVariable('temperature', 'f4', ('time', 'jc', 'ic',))
+temperature.standard_name = 'sea_water_temperature'
+temperature.coordinates = "lon lat"
+
+
+# data
+times[:] = np.arange(0,10,3)
+
+lons[:] = lon 
+lats[:] = lat
+
+ics[:] = np.arange(1,441,1)
+jcs[:] = np.arange(1,321,1)
+
+#change obs variable reference as needed
+temperature[:,:,:] = obs[:,:,:]
+
+root_grp.close()
+}}}
