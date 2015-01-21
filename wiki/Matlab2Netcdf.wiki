@@ -10,8 +10,8 @@ Final output netcdf files can be downloaded at(click the 'HTTP' link in each of 
 http://129.252.139.124/thredds/catalog/sabgom_3_month_avg_files/catalog.html
 
 Main references
-http://www-pord.ucsd.edu/~cjiang/python.html
-http://netcdf4-python.googlecode.com/svn/trunk/docs/netCDF4-module.html
+http://www-pord.ucsd.edu/~cjiang/python.html <br/>
+http://netcdf4-python.googlecode.com/svn/trunk/docs/netCDF4-module.html <br/>
 
 Additional links of interest
 http://docs.scipy.org/doc/scipy/reference/tutorial/io.html
@@ -25,6 +25,7 @@ http://www.pyngl.ucar.edu/Nio.shtml
 http://oceanpython.org
 https://waterprogramming.wordpress.com/2014/04/28/converting-ascii-data-to-netcdf-python/
 
+----
 
 {{{
 import scipy.io as sio
