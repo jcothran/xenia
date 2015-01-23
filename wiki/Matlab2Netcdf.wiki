@@ -56,6 +56,8 @@ http://oceanpython.org
 
 https://waterprogramming.wordpress.com/2014/04/28/converting-ascii-data-to-netcdf-python/
 
+note: 'time' in days from 0000-00-00 was added to the latest .mat sample file
+
 ----
 
 {{{
@@ -67,14 +69,18 @@ mat_contents = sio.loadmat('sabgom.mat')
 #print mat_contents
 oct_struct_lat = mat_contents['lat']
 oct_struct_lon = mat_contents['lon']
+oct_struct_time = mat_contents['time']
 
-print oct_struct_lat.shape
+#print oct_struct_lat.shape
 #print oct_struct_lat[0,0]
-lat = oct_struct_lat[0:320,0:440].flatten()
-lon = oct_struct_lon[0:320,0:440].flatten()
 
-#BS0 = bottom temperature, #SSS0 = surface temperature, #BT0 = bottom temp, #SST0 = surface temp
-oct_struct_obs = mat_contents['SST0'] #change obs dataset here as needed
+lat = oct_struct_lat[:,:].flatten()
+lon = oct_struct_lon[:,:].flatten()
+time = oct_struct_time[:].flatten()
+time[:] = [t - 1 for t in time] #subtract one day since netcdf doesn't understand 0000-00-00 only 0000-01-01
+
+#BS0 = bottom salinity, #SSS0 = surface salinity, #BT0 = bottom temp, #SST0 = surface temp
+oct_struct_obs = mat_contents['SSS0'] #change obs dataset here as needed
 #print oct_struct_obs.shape
 #exit()
 
@@ -96,19 +102,22 @@ print t1
 
 print len(lat)
 print len(lon)
+print len(time)
 print len(obs)
 print obs.shape
 #print oct_struct[0,0,0]
 
 #exit()
 
+#import datetime
+#(datetime.datetime(2012,04,01,0,0) - datetime.datetime(1970,1,1)).total_seconds()
 
 
 from netCDF4 import Dataset
 
 
-root_grp = Dataset('temperature_surface.nc', 'w', format='NETCDF4') #change obs filename as needed
-root_grp.description = 'Example data'
+root_grp = Dataset('salinity_surface.nc', 'w', format='NETCDF4') #change obs filename as needed
+root_grp.description = 'seasonal mean SST/SSS/Bottom Temperature/Bottom salinity data based on SABGOM hindcast results for each of the 7 years (2004-2010)'
 
 # dimensions
 root_grp.createDimension('time', None)
@@ -120,14 +129,14 @@ root_grp.createDimension('jc', 320)
 # variables
 times = root_grp.createVariable('time', 'f8', ('time',))
 times.standard_name = 'time'
-times.units = "months since 2018-03-01 00:00:00"
+times.units = "days since 0-0-0 00:00:00"
 times.axis = "T"
 
 lons = root_grp.createVariable('lon', 'f4', ('jc','ic'))
 lons.long_name = "longitude"
 lons.standard_name = "longitude"
 lons.units = "degrees_east"
-		
+                
 lats = root_grp.createVariable('lat', 'f4', ('jc','ic'))
 lats.long_name = "latitude"
 lats.standard_name = "latitude"
@@ -142,23 +151,23 @@ jcs.long_name = "y-coordinate in Cartesian system"
 jcs.axis = "Y"
 
 #change obs variable specifics as needed
-#temperature = root_grp.createVariable('temperature', 'f4', ('time', 'jc', 'ic',),fill_value=-999.0)
-temperature = root_grp.createVariable('temperature', 'f4', ('time', 'jc', 'ic',))
-temperature.standard_name = 'sea_water_temperature'
-temperature.coordinates = "lon lat"
+#nc_var = root_grp.createVariable('temperature', 'f4', ('time', 'jc', 'ic',),fill_value=-999.0)
+nc_var = root_grp.createVariable('salinity', 'f4', ('time', 'jc', 'ic',))
+nc_var.standard_name = 'sea_water_salinity'
+#nc_var.units = "celsius"
+nc_var.coordinates = "lon lat"
 
 
 # data
-times[:] = np.arange(0,10,3)
-
+#times[:] = np.arange(0,10,3)
+times[:] = time
 lons[:] = lon 
 lats[:] = lat
 
 ics[:] = np.arange(1,441,1)
 jcs[:] = np.arange(1,321,1)
 
-#change obs variable reference as needed
-temperature[:,:,:] = obs[:,:,:]
+nc_var[:,:,:] = obs[:,:,:]
 
 root_grp.close()
 }}}
