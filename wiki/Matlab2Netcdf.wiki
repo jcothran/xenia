@@ -178,11 +178,27 @@ root_grp.close()
 
 ----
 
-= simple time-series, plot = 
+= simple time-series = 
 
-matplotlib uses the matlab date convention of time sinse year 0 so plot_date works well for creating the datetime x label
+== create netcdf == 
+{{{
 
-create netcdf
+}}}
+
+== plot data from created netcdf == 
+
+http://matplotlib.org/api/dates_api.html
+
+matplotlib uses the matlab date convention of time since year 0 so plot_date works well for creating the datetime x label
+
+further example python/netcdf/matplotlib references, using maps,etc
+
+http://nbviewer.ipython.org/github/jonblower/python-viz-intro/blob/master/Lesson%203.%20Plotting%20data%20from%20NetCDF%20files/3.%20Plotting%20data%20from%20NetCDF%20files.ipynb
+
+http://schubert.atmos.colostate.edu/~cslocum/netcdf_example.html
+
+http://www.hydro.washington.edu/~jhamman/hydro-logic/blog/2013/10/12/plot-netcdf-data/
+
 {{{
 
 }}}
