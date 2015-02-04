@@ -175,3 +175,14 @@ nc_var[:,:,:] = obs[:,:,:]
 
 root_grp.close()
 }}}
+
+----
+
+= simple time-series, plot = 
+
+matplotlib uses the matlab date convention of time sinse year 0 so plot_date works well for creating the datetime x label
+
+create netcdf
+{{{
+
+}}}
