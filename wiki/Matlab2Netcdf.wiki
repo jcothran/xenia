@@ -66,7 +66,7 @@ note: 'time' in days from 0000-00-00 was added to the latest .mat sample file
 
 {{{
 import scipy.io as sio
-import numpy as np
+#import numpy as np
 
 #mat_contents = sio.loadmat('sabgom.mat', struct_as_record=False, squeeze_me=True)
 mat_contents = sio.loadmat('sabgom.mat')
@@ -182,7 +182,66 @@ root_grp.close()
 
 == create netcdf == 
 {{{
+import scipy.io as sio
+#import numpy as np
 
+mat_contents = sio.loadmat('QC_C10_Sal_join.mat')
+oct_time = mat_contents['tt']
+
+time = oct_time[:].flatten()
+
+time[:] = [t - 1 for t in time] #subtract one day since netcdf doesn't understand 0000-00-00 only 0000-01-01
+
+oct_obs_S_04 = mat_contents['S_04']
+obs_S04 = oct_obs_S_04[:]
+
+oct_obs_S_10 = mat_contents['S_10']
+obs_S10 = oct_obs_S_10[:]
+
+oct_obs_S_19 = mat_contents['S_19']
+obs_S19 = oct_obs_S_19[:]
+
+print len(time)
+print len(obs_S10)
+
+from netCDF4 import Dataset
+
+root_grp = Dataset('salinity_C10.nc', 'w', format='NETCDF4')
+root_grp.description = 'salinity at C10 various depths'
+
+# dimensions
+root_grp.createDimension('time', None)
+
+# variables
+times = root_grp.createVariable('time', 'f8', ('time',))
+times.standard_name = 'time'
+times.units = "days since 0000-01-01 00:00:00"
+times.axis = "T"
+
+nc_S04 = root_grp.createVariable('salinity_04', 'f4', ('time'))
+nc_S04.standard_name = 'sea_water_salinity'
+nc_S04.units = ""
+nc_S04.depth = "4"
+
+nc_S10 = root_grp.createVariable('salinity_10', 'f4', ('time'))
+nc_S10.standard_name = 'sea_water_salinity'
+nc_S10.units = ""
+nc_S10.depth = "10"
+
+nc_S19 = root_grp.createVariable('salinity_19', 'f4', ('time'))
+nc_S19.standard_name = 'sea_water_salinity'
+nc_S19.units = ""
+nc_S19.depth = "19"
+
+
+# data
+times[:] = time
+
+nc_S04[:] = obs_S04[:]
+nc_S10[:] = obs_S10[:]
+nc_S19[:] = obs_S19[:]
+
+root_grp.close()
 }}}
 
 == plot data from created netcdf == 
@@ -199,6 +258,32 @@ http://schubert.atmos.colostate.edu/~cslocum/netcdf_example.html
 
 http://www.hydro.washington.edu/~jhamman/hydro-logic/blog/2013/10/12/plot-netcdf-data/
 
+graphing time-series plot for salinity_S04 bin
 {{{
+import netCDF4
+
+nc = netCDF4.Dataset('./salinity_C10.nc')
+print nc.variables.keys()
+
+nc_time = nc.variables['time']
+times = nc_time[:]
+
+nc_S04 = nc.variables['salinity_04']
+S04 = nc_S04[:]
+
+import matplotlib.pyplot as plt
+
+#plt.plot(times,salinity)
+#matplotlib.dates.num2date(times, tz=None)
+
+#S04
+plt.plot_date(times,S04)
+
+plt.xlabel(nc_time.standard_name + ' (' + nc_time.units + ')')
+plt.ylabel(nc_S04.standard_name   + ' (' + nc_S04.units   + ')')
+plt.title('salinity_C10_04')
+
+#plt.show()
+plt.savefig('salinity_C10_04.png')
 
 }}}
