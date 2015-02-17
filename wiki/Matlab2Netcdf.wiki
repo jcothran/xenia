@@ -294,8 +294,8 @@ see sample code/library timedelta below or in article link
 
 from
 http://sociograph.blogspot.com/2011/04/how-to-avoid-gotcha-when-converting.html
-_
-I was recently confronted with the task of converting times stored in a matlab object into a python datetime object, and very nearly made a big mistake (366 days big, to be exact).  The matlab representation of time looks like this:
+
+_I was recently confronted with the task of converting times stored in a matlab object into a python datetime object, and very nearly made a big mistake (366 days big, to be exact).  The matlab representation of time looks like this:
 
     matlab_datenum = 731965.04835648148  
 
@@ -303,8 +303,8 @@ If you parse this using python's
 
     datetime.fromordinal(matlab_datenum) 
 
-then the result might look reasonable, but beware: you're off by 366 days! Matlab's datenum representation is the number of days since midnight on Jan 1st, 0 AD.  Python's datetime.fromordinal function assumes time is the number of days since midnight on Jan 1st, 1 AD.  So the duration of year 0 separates the time representation returned by python's fromordinal function and the time representation used by matlab.  Apparently, the year 0 AD had 366 days, (can anyone confirm this?) so one can convert a matlab datenum to a python datetime as follows:
-_
+then the result might look reasonable, but beware: you're off by 366 days! Matlab's datenum representation is the number of days since midnight on Jan 1st, 0 AD.  Python's datetime.fromordinal function assumes time is the number of days since midnight on Jan 1st, 1 AD.  So the duration of year 0 separates the time representation returned by python's fromordinal function and the time representation used by matlab.  Apparently, the year 0 AD had 366 days, (can anyone confirm this?) so one can convert a matlab datenum to a python datetime as follows:_
+
 
 {{{
 from datetime import datetime, timedelta
