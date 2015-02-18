@@ -311,3 +311,19 @@ from datetime import datetime, timedelta
 matlab_datenum = 731965.04835648148
 python_datetime = datetime.fromordinal(int(matlab_datenum)) + timedelta(days=matlab_datenum%1) - timedelta(days = 366)
 }}}
+
+{{{
+def datetime2matlabdn(dt):
+   mdn = dt + timedelta(days = 366)
+   frac_seconds = (dt-datetime(dt.year,dt.month,dt.day,0,0,0,0,timezone('UTC'))).seconds / (24.0 * 60.0 * 60.0)
+   frac_microseconds = dt.microsecond / (24.0 * 60.0 * 60.0 * 1000000.0)
+   return mdn.toordinal() + frac_seconds + frac_microseconds
+
+def matlabdntodatetime(matlab_dn):
+  #Get the fractional days from the matlab_dn
+  fract_days = Decimal(matlab_dn) % 1
+
+  py_dt = datetime.fromordinal(int(matlab_dn)) + timedelta(days=float(fract_days)) - timedelta(days=366)
+
+  return py_dt
+}}}
