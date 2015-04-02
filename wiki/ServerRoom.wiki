@@ -69,13 +69,13 @@ NWS Marine Weather Portal(MWP) project - Charlton Galvarino
     139.142  - madrona_scipy(scipy,etc python libraries, produces shapefiles for roffler)
 
 #Secoora servers - installed August 2012
-esxi 139.233 
-  offline
+esxi 139.151
+  37.120 secoora map/gsaa-style dev
 
 esxi 139.184
   139.70 - thredds
   37.113 - GSAA_website - (was 139.236) - marco/gsaa site instance
-  37.120 - madrona_floridareefs_placeholder - placeholder for floridareefs project - copy mac address in vmx config for networking later
+  //37.120 - madrona_floridareefs_placeholder - placeholder for floridareefs project - copy mac address in vmx config for networking later
   37.88 - nautilus
 
 #GSAA server - installed August 2012
