@@ -210,47 +210,6 @@ netcdf files. The files are pulled down then processed into the database. Delete
 ----
          
 
-=== NWS Processing ===
-*Script*: populate_xenia_nws <br/>
-*Directory*: /home/xeniaprod/cron <br/>
-*Description*: Now using NWS data from the METAR feeds.  <br/>
-
-*Shell Script Makeup* <br/>
-  _Script_:nwsDataIngestion.py <br/>
-  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/nws <br/>
-  _Command line parameters_: <br/>
-  {{{
-  --ConfigFile=/home/xeniaprod/config/nwsDataIngest.ini  
-  }}}
-*Schedule*: Runs at 15,35,55 minutes after the hour. NWS docs specify they update the data at 50 minutes after the hour, however looking at the timestamps on the metar files, they seem to populate them around the times the stations telemeter their data.
-
-==== INI File ====
-{{{
-[Database] - Section for the database parameters
-user =     - User name used to log onto the database
-password = - Password used
-host =     - Host address where the database server runs.
-name =     - Database name
-connectionstring = - SQLAlchemey database driver connection string.
-
-[settings] - Section for general settings
-uomconversionfile= - Path to the XML units conversion file.
- 
-[logging] - Section for log file
-configfile = The fully qualified path to the logging config file.
-
-[area] - Section for the area of interest when checking for platforms in the bounding box given below.
-bbox= - Polygon defining our area of interest.
-
-[processing] 
-organizationlist = - Comma separated list of Organization IDs to process. For each entry here, there should be a corresponding section below. 
-
-[nws]
-jsonconfig - JSON config file that defines the mapping of observations available from the Dif service to the Xenia names of those observations.
-metarurl - URL where the METAR service resides. Use this in conjunction with the station name we want the data for.
-processingobject - Name of the object used to do the processing.
-}}}
-
 == Old SOAP Perl script. Testing new METAR python processing ==
 *Description*: Pulls in NWS data directly from the NWS site. This is used in tandem with the NetCDF scout. Currently this is scheduled to run in crontab. <br/>
 *Shell Script Makeup* <br/>
@@ -272,215 +231,7 @@ processingobject - Name of the object used to do the processing.
 *Schedule*: Runs every 10 minutes. NWS stations have a fairly rapid update rate.
 ----
 
-=== NDBC Processing ===
-*Script*: populate_xenia_ndbc <br/>
-*Directory*: /home/xeniaprod/cron <br/>
-*Description*: Now using the IOOS Dif web service, pulls in NDBC data directly from the NDBC site.  <br/>
-*Non-NDBC Providers pulled from NDBC SOS*
-  * Everglades National Park
 
-*Shell Script Makeup* <br/>
-  _Script_:DataIngestion.py <br/>
-  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/ioosdif <br/>
-  _Command line parameters_: <br/>
-  {{{
-  --ConfigFile=/home/xeniaprod/config/ndbcDataIngest.ini  
-  }}}
-*Schedule*: Runs twice an hour.
-
-==== INI File ====
-{{{
-[Database] - Section for the database parameters
-user =     - User name used to log onto the database
-password = - Password used
-host =     - Host address where the database server runs.
-name =     - Database name
-connectionstring = - SQLAlchemey database driver connection string.
-
-[settings] - Section for general settings
-uomconversionfile= - Path to the XML units conversion file.
- 
-[logging] - Section for log file
-configfile = The fully qualified path to the logging config file.
-
-[area] - Section for the area of interest when checking for platforms in the bounding box given below.
-bbox= - Polygon defining our area of interest.
-
-[processing] 
-organizationlist = - Comma seperataed list of Organization IDs to process. For each entry here, there should be a corresponding section below. 
-
-[ndbc] - Organization from the organization list above.
-difurl= - Base URL for the dif service
-
-checkfornewplatforms= - Either 0 or 1. 1 will do a getCapabilities query to determine if there are any new platforms in the bbox defined above. Also checks the available observations against the observation defined on the platform in our database.
-
-addnewplatformstodb= Either 0 or 1. 1 will create new platforms/sensors 
-according to what is discovered in the getCapabilities query.
-
-addnewobservationstodb= Either 0 or 1. If checkfornewplatforms=1 and this is 1, any existing platforms are discovered to have new observations, this will add them to the database,
-
-newstationstoadd= A comma delimited list of stations to add. Used in conjunction with addnewplatformstodb and checkfornewplatforms. If set, only the stations in this list will be added.
-
-lastnhours= - The last N hours of data to request in a getObservation query.
-
-processingobject= - Name of the object used to do the processing.
-
-jsonconfig= - JSON config file that defines the mapping of observations available from the Dif service to the Xenia names of those observations.
-
-stationoffering= -  The provider specific URN portion needed in the getObservation query.
-
-newplatformkml= - If checkfornewplatforms is 1, the is the fully qualified path to write a kml file out containing new platforms found and observations found that do not exist on the database platforms.
-
-whitelist= If defined, this is a comma delimeted list of stations to pull data via getObservations. If not defined, the organization name in this section is used to pull all stations.
-
-}}}
-
-==== Xenia Mapping File ====
-For NDBC, we ask for the getObservation data to be returned in a CSV format. This file defines a mapping for those columns. At the head of the file are columns common across all the CSV data returns, then under the "observation_columns" area we define the Dif providers observation name which defines columns specific to that datum. The mapping from the CSV column to the Xenia observation are defined under "m_value_columns".
-Some observations(Winds, Waves, Currents) contain multiple datums, each having a mapping in the m_value_column. For multiple datums, the column order must be preserved in the "m_value_columns".
-{{{
-{
-  "platform_identifier" : "station_id",
-  "sensor_identifier" : "sensor_id",
-  "fixed_location" : 
-  {
-    "lat" : "latitude (degree)",
-    "lon" : "longitude (degree)"
-  },
-  "datetime" : "date_time",
-  "observation_columns" :
-  {
-    "air_pressure_at_sea_level": 
-    {
-      "depth" : "depth (m)",
-      "m_value_columns":
-      [
-        {"air_pressure_at_sea_level (hPa)": "air_pressure"}
-      ]
-    },
-    
-    "air_temperature": 
-    {
-      "depth" : "depth (m)",
-      "m_value_columns":
-      [
-        {"air_temperature (C)": "air_temperature"}
-      ]
-    }, 
-    "currents": 
-    {
-      "depth" : "depth (m)",
-      "bin (count)" : "s_order",
-      "m_value_columns":
-      [
-        {"direction_of_sea_water_velocity (degree)": "current_to_direction"}, 
-        {"sea_water_speed (cm/s)": "current_speed"}
-      ]
-    }, 
-    "sea_floor_depth_below_sea_surface": 
-    {
-      "m_value_columns":
-      [
-        {"sea_floor_depth_below_sea_surface (m)": "depth"}
-      ]
-    }, 
-    "sea_water_electrical_conductivity": 
-    {
-      "depth" : "depth (m)",
-      "m_value_columns":
-      [
-        {"sea_water_electrical_conductivity (mS/cm)": "water_conductivity"}
-      ]
-    }, 
-    "sea_water_salinity": 
-    {
-      "depth" : "depth (m)",    
-      "m_value_columns":
-      [
-        {"sea_water_salinity (psu)": "salinity"}
-      ]
-    }, 
-    "sea_water_temperature": 
-    {
-      "depth" : "depth (m)",    
-      "m_value_columns":
-      [
-        {"sea_water_temperature (C)": "water_temperature"}
-      ]
-    }, 
-    "waves": 
-    {
-      "m_value_columns":
-      [
-        {"mean_wave_direction (degree)": "mean_wave_direction_peak_period"}, 
-        {"principal_wave_direction (degree)": "principal_wave_direction"}, 
-        {"sea_surface_swell_wave_period (s)": "dominant_wave_period"}, 
-        {"sea_surface_swell_wave_significant_height (m)": "swell_height"}, 
-        {"sea_surface_swell_wave_to_direction (degree)": "swell_wave_direction"}, 
-        {"sea_surface_wave_mean_period (s)": "average_wave_period"}, 
-        {"sea_surface_wave_significant_height (m)": "significant_wave_height"}, 
-        {"sea_surface_wave_to_direction (degree)": "significant_wave_to_direction"}, 
-        {"sea_surface_wind_wave_period (s)": "wind_wave_period"}, 
-        {"sea_surface_wind_wave_significant_height (m)": "wind_wave_height"}, 
-        {"sea_surface_wind_wave_to_direction (degree)": "wind_wave_direction"}
-      ]
-    }, 
-    "winds": 
-    {
-      "depth" : "depth (m)",    
-      "m_value_columns":
-      [
-        {"wind_from_direction (degree)": "wind_from_direction"}, 
-        {"wind_speed (m/s)": "wind_speed"}, 
-        {"wind_speed_of_gust (m/s)": "wind_gust"}
-      ]
-    }
-  }
-}}}
-----
-
-
-=== NOS Processing ===
-*Script*: populate_xenia_nos <br/>
-*Directory*: /home/xeniaprod/cron <br/>
-*Description*: Now using the IOOS Dif web service, pulls in NOS data directly from the NOS site. Currently this is scheduled to run in crontab. <br/>
-*Shell Script Makeup* <br/>
-  _Script_:DataIngestion.py <br/>
-  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/ioosdif <br/>
-  _Command line parameters_: <br/>
-  {{{
-  --ConfigFile=/home/xeniaprod/config/nosDataIngest.ini  
-  }}}
-*Schedule*: Runs twice an hour.
-----
-
-=== USGS Processing ===
-*Script*: populate_xenia_usgs <br/>
-*Directory*: /home/xeniaprod/scripts/postgresql/feeds/federal/usgs<br/>
-*Description*: Pulls in USGS data directly from the USGS site.  Currently this is scheduled to run in crontab. Cleans up previous KML, KMZ, and SQL files.<br/>
-*Shell Script Makeup* <br/>
-  _Script_: gen_wq_obskml.pl <br/>
-  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/federal/usgs <br/>
-  _Command line parameters_: <br/>
-  {{{
-  Argument 1: Provider name – usgs 
-  Argument 2: Base output directory. Argument one is appended to complete the directory. 
-  Argument 3: XML platform list that details the platforms to query.
-  }}}
-  _Description_: Connects to the USGS webservice, pulls the data down into a KML file for importation into the database.<br/>
- _Script_: obskml_to_xenia_postgresql.pl
- _Directory_: /home/xeniaprod/scripts/postgresql/import_export <br/>
- _Command Line Parameters_: <br/>
- {{{
- Argument 1 - The URL to the KMZ file to process.
- Argument 2 - Path where the SQL file will be written.
- Argument 3 - Filename to use for the SQL file.
- Argument 4 - Database name to connect to.
- }}}
- _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
-
-*Schedule*: 45 minutes after the hour.
-----
 
 === FIT Processing ===
 *Script*: feed_fit.sh <br/>
@@ -1061,6 +812,259 @@ If the tilecache root directory is changed in the tilecache.cfg file, the direct
 
 
 ----
+
+= Machine: Projects =
+== Scripts ==
+=== NDBC Processing ===
+*Script*: populate_xenia_ndbc <br/>
+*Directory*: /home/xeniaprod/cron <br/>
+*Description*: Now using the IOOS Dif web service, pulls in NDBC data directly from the NDBC site.  <br/>
+*Non-NDBC Providers pulled from NDBC SOS*
+  * Everglades National Park
+
+*Shell Script Makeup* <br/>
+  _Script_:DataIngestion.py <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/ioosdif <br/>
+  _Command line parameters_: <br/>
+  {{{
+  --ConfigFile=/home/xeniaprod/config/ndbcDataIngest.ini  
+  }}}
+*Schedule*: Runs twice an hour.
+
+==== INI File ====
+{{{
+[Database] - Section for the database parameters
+user =     - User name used to log onto the database
+password = - Password used
+host =     - Host address where the database server runs.
+name =     - Database name
+connectionstring = - SQLAlchemey database driver connection string.
+
+[settings] - Section for general settings
+uomconversionfile= - Path to the XML units conversion file.
+ 
+[logging] - Section for log file
+configfile = The fully qualified path to the logging config file.
+
+[area] - Section for the area of interest when checking for platforms in the bounding box given below.
+bbox= - Polygon defining our area of interest.
+
+[processing] 
+organizationlist = - Comma seperataed list of Organization IDs to process. For each entry here, there should be a corresponding section below. 
+
+[ndbc] - Organization from the organization list above.
+difurl= - Base URL for the dif service
+
+checkfornewplatforms= - Either 0 or 1. 1 will do a getCapabilities query to determine if there are any new platforms in the bbox defined above. Also checks the available observations against the observation defined on the platform in our database.
+
+addnewplatformstodb= Either 0 or 1. 1 will create new platforms/sensors 
+according to what is discovered in the getCapabilities query.
+
+addnewobservationstodb= Either 0 or 1. If checkfornewplatforms=1 and this is 1, any existing platforms are discovered to have new observations, this will add them to the database,
+
+newstationstoadd= A comma delimited list of stations to add. Used in conjunction with addnewplatformstodb and checkfornewplatforms. If set, only the stations in this list will be added.
+
+lastnhours= - The last N hours of data to request in a getObservation query.
+
+processingobject= - Name of the object used to do the processing.
+
+jsonconfig= - JSON config file that defines the mapping of observations available from the Dif service to the Xenia names of those observations.
+
+stationoffering= -  The provider specific URN portion needed in the getObservation query.
+
+newplatformkml= - If checkfornewplatforms is 1, the is the fully qualified path to write a kml file out containing new platforms found and observations found that do not exist on the database platforms.
+
+whitelist= If defined, this is a comma delimeted list of stations to pull data via getObservations. If not defined, the organization name in this section is used to pull all stations.
+
+}}}
+
+==== Xenia Mapping File ====
+For NDBC, we ask for the getObservation data to be returned in a CSV format. This file defines a mapping for those columns. At the head of the file are columns common across all the CSV data returns, then under the "observation_columns" area we define the Dif providers observation name which defines columns specific to that datum. The mapping from the CSV column to the Xenia observation are defined under "m_value_columns".
+Some observations(Winds, Waves, Currents) contain multiple datums, each having a mapping in the m_value_column. For multiple datums, the column order must be preserved in the "m_value_columns".
+{{{
+{
+  "platform_identifier" : "station_id",
+  "sensor_identifier" : "sensor_id",
+  "fixed_location" : 
+  {
+    "lat" : "latitude (degree)",
+    "lon" : "longitude (degree)"
+  },
+  "datetime" : "date_time",
+  "observation_columns" :
+  {
+    "air_pressure_at_sea_level": 
+    {
+      "depth" : "depth (m)",
+      "m_value_columns":
+      [
+        {"air_pressure_at_sea_level (hPa)": "air_pressure"}
+      ]
+    },
+    
+    "air_temperature": 
+    {
+      "depth" : "depth (m)",
+      "m_value_columns":
+      [
+        {"air_temperature (C)": "air_temperature"}
+      ]
+    }, 
+    "currents": 
+    {
+      "depth" : "depth (m)",
+      "bin (count)" : "s_order",
+      "m_value_columns":
+      [
+        {"direction_of_sea_water_velocity (degree)": "current_to_direction"}, 
+        {"sea_water_speed (cm/s)": "current_speed"}
+      ]
+    }, 
+    "sea_floor_depth_below_sea_surface": 
+    {
+      "m_value_columns":
+      [
+        {"sea_floor_depth_below_sea_surface (m)": "depth"}
+      ]
+    }, 
+    "sea_water_electrical_conductivity": 
+    {
+      "depth" : "depth (m)",
+      "m_value_columns":
+      [
+        {"sea_water_electrical_conductivity (mS/cm)": "water_conductivity"}
+      ]
+    }, 
+    "sea_water_salinity": 
+    {
+      "depth" : "depth (m)",    
+      "m_value_columns":
+      [
+        {"sea_water_salinity (psu)": "salinity"}
+      ]
+    }, 
+    "sea_water_temperature": 
+    {
+      "depth" : "depth (m)",    
+      "m_value_columns":
+      [
+        {"sea_water_temperature (C)": "water_temperature"}
+      ]
+    }, 
+    "waves": 
+    {
+      "m_value_columns":
+      [
+        {"mean_wave_direction (degree)": "mean_wave_direction_peak_period"}, 
+        {"principal_wave_direction (degree)": "principal_wave_direction"}, 
+        {"sea_surface_swell_wave_period (s)": "dominant_wave_period"}, 
+        {"sea_surface_swell_wave_significant_height (m)": "swell_height"}, 
+        {"sea_surface_swell_wave_to_direction (degree)": "swell_wave_direction"}, 
+        {"sea_surface_wave_mean_period (s)": "average_wave_period"}, 
+        {"sea_surface_wave_significant_height (m)": "significant_wave_height"}, 
+        {"sea_surface_wave_to_direction (degree)": "significant_wave_to_direction"}, 
+        {"sea_surface_wind_wave_period (s)": "wind_wave_period"}, 
+        {"sea_surface_wind_wave_significant_height (m)": "wind_wave_height"}, 
+        {"sea_surface_wind_wave_to_direction (degree)": "wind_wave_direction"}
+      ]
+    }, 
+    "winds": 
+    {
+      "depth" : "depth (m)",    
+      "m_value_columns":
+      [
+        {"wind_from_direction (degree)": "wind_from_direction"}, 
+        {"wind_speed (m/s)": "wind_speed"}, 
+        {"wind_speed_of_gust (m/s)": "wind_gust"}
+      ]
+    }
+  }
+}}}
+----
+
+
+=== NOS Processing ===
+*Script*: populate_xenia_nos <br/>
+*Directory*: /home/xeniaprod/cron <br/>
+*Description*: Now using the IOOS Dif web service, pulls in NOS data directly from the NOS site. Currently this is scheduled to run in crontab. <br/>
+*Shell Script Makeup* <br/>
+  _Script_:DataIngestion.py <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/ioosdif <br/>
+  _Command line parameters_: <br/>
+  {{{
+  --ConfigFile=/home/xeniaprod/config/nosDataIngest.ini  
+  }}}
+*Schedule*: Runs twice an hour.
+----
+
+=== USGS Processing ===
+*Script*: populate_xenia_usgs <br/>
+*Directory*: /home/xeniaprod/scripts/postgresql/feeds/federal/usgs<br/>
+*Description*: Pulls in USGS data directly from the USGS site.  Currently this is scheduled to run in crontab. Cleans up previous KML, KMZ, and SQL files.<br/>
+*Shell Script Makeup* <br/>
+  _Script_: gen_wq_obskml.pl <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/federal/usgs <br/>
+  _Command line parameters_: <br/>
+  {{{
+  Argument 1: Provider name – usgs 
+  Argument 2: Base output directory. Argument one is appended to complete the directory. 
+  Argument 3: XML platform list that details the platforms to query.
+  }}}
+  _Description_: Connects to the USGS webservice, pulls the data down into a KML file for importation into the database.<br/>
+ _Script_: obskml_to_xenia_postgresql.pl
+ _Directory_: /home/xeniaprod/scripts/postgresql/import_export <br/>
+ _Command Line Parameters_: <br/>
+ {{{
+ Argument 1 - The URL to the KMZ file to process.
+ Argument 2 - Path where the SQL file will be written.
+ Argument 3 - Filename to use for the SQL file.
+ Argument 4 - Database name to connect to.
+ }}}
+ _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br/>
+
+*Schedule*: 45 minutes after the hour.
+----
+=== NWS Processing ===
+*Script*: populate_xenia_nws <br/>
+*Directory*: /home/xeniaprod/cron <br/>
+*Description*: Now using NWS data from the METAR feeds.  <br/>
+
+*Shell Script Makeup* <br/>
+  _Script_:nwsDataIngestion.py <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/nws <br/>
+  _Command line parameters_: <br/>
+  {{{
+  --ConfigFile=/home/xeniaprod/config/nwsDataIngest.ini  
+  }}}
+*Schedule*: Runs at 15,35,55 minutes after the hour. NWS docs specify they update the data at 50 minutes after the hour, however looking at the timestamps on the metar files, they seem to populate them around the times the stations telemeter their data.
+
+==== INI File ====
+{{{
+[Database] - Section for the database parameters
+user =     - User name used to log onto the database
+password = - Password used
+host =     - Host address where the database server runs.
+name =     - Database name
+connectionstring = - SQLAlchemey database driver connection string.
+
+[settings] - Section for general settings
+uomconversionfile= - Path to the XML units conversion file.
+ 
+[logging] - Section for log file
+configfile = The fully qualified path to the logging config file.
+
+[area] - Section for the area of interest when checking for platforms in the bounding box given below.
+bbox= - Polygon defining our area of interest.
+
+[processing] 
+organizationlist = - Comma separated list of Organization IDs to process. For each entry here, there should be a corresponding section below. 
+
+[nws]
+jsonconfig - JSON config file that defines the mapping of observations available from the Dif service to the Xenia names of those observations.
+metarurl - URL where the METAR service resides. Use this in conjunction with the station name we want the data for.
+processingobject - Name of the object used to do the processing.
+}}}
+
 = Machine: Squid =
 http://129.252.139.124/
 
