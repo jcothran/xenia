@@ -852,7 +852,9 @@ class webbGliderEmail(webbGliders):
       print tupleRec[1]['Date']
 
     #Regular expression search for glider name in the email subject.
-    gliderNameRE = re.compile('Glider:\s(?P<name>\w+)') 
+    #gliderNameRE = re.compile('Glider:\s(?P<name>\w+)')
+    gliderNameRE = re.compile('Glider:\s(?P<name>([A-Za-z0-9-]+))')
+
     
     for msgTuple in sortedMsgs:
       msgKey = msgTuple[0]
