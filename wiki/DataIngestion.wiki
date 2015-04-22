@@ -1099,28 +1099,6 @@ nautilus.baruch.sc.edu <br/>
 ----
 === CarolinasRCOOS(South Carolina - SUN2,CAP2,FRP2) Data feed ===
 
-Jeff Jefferson's telemetry and server pushes the most recent files to /usr2/carocoops_data
-
-There is a cron job which checks this folder every minute and processes these files to the following directory unchanged
-
-/usr2/prod/buoys/processed
-
-so if looking for files on a certain date, supply the wildcard(like `/usr2/prod/buoys/processed/*20120319*` ) for that date to see those records(there are many files in that directory so don't try to list all of them)
-
-The two primary scripts which process those files are similar, the first processes the data to the old carocoops database on nautilus, the second changes the website pages for the old carocoops website at http://carocoops.org  If there is a change in the telemetry feed in regards to the number or ordering of parameters, then these two scripts need to change accordingly.  The telemetry feed lines are split into sections(like FCAT,WXPAK,etc) and the indexes from these inline headers should be adjusted as needed.
-
-{{{
-#add to database
-/usr2/prod/buoys/processed/processBuoysDB.pl
-#change webpage
-/usr2/prod/buoys/processed/processBuoys.pl
-#process netcdf
-/usr2/prod/buoys/processed/process_netcdf.pl
-}}}
-
-----
-=== CaroCOOPS buoys(SUN2,CAP2,FRP2) ===
-
 The user 'buoy' crontab runs the following jobs:
 
 gets the latest buoy telemetry .dat files
@@ -1129,7 +1107,7 @@ gets the latest buoy telemetry .dat files
 0,5,10,15,20,25,30,35,40,45,50,55 * * * * cd /home/buoy/scripts/buoy_telemetry; perl get_latest_data.pl
 }}}
 
-shell job1.sh which kicks off two scripts under /usr2/prod/buoys/perl - processing the latest .dat files placed at /usr2/carocoops_data and moving the processed files to /usr2/prod/buoys/processed 
+The cron job1.sh kicks off two scripts under /usr2/prod/buoys/perl - processing the latest .dat files placed at /usr2/carocoops_data and moving the processed files to /usr2/prod/buoys/processed 
 
 {{{
 #get processBuoys.pl to display new buoy data, process to database which netcdf files are generated from
@@ -1137,9 +1115,20 @@ shell job1.sh which kicks off two scripts under /usr2/prod/buoys/perl - processi
 * * * * * /home/buoy/scripts/job1.sh >> /tmp/buoy.log 2>&1
 }}}
 
-processBuoysDB.pl processes the file to the carocoops database
+so if looking for files on a certain date, supply the wildcard(like `/usr2/prod/buoys/processed/*20120319*` ) for that date to see those records(there are many files in that directory so don't try to list all of them)
 
-processBuoys.pl which changes the carocoops website displays based on the latest data available from the carocoops database and calls process_netcdf_latest.pl used to generate the latest netcdf files for the data scout on neptune server
+The two primary scripts which process those files are similar, the first(processBuoysDB.pl) processes the data to the old carocoops database on nautilus, the second(processBuoys.pl) changes the website pages for the old carocoops website at http://carocoops.org based on the latest data available from the carocoops database and calls process_netcdf_latest.pl used to generate the latest netcdf files for the data scout on neptune server.
+
+If there is a change in the telemetry feed in regards to the number or ordering of parameters, then these two scripts need to change accordingly. The telemetry feed lines are split into sections(like FCAT,WXPAK,etc) and the indexes from these inline headers should be adjusted as needed.
+
+{{{
+#add to carocoops database on nautilus
+/usr2/prod/buoys/processed/processBuoysDB.pl
+#change webpage
+/usr2/prod/buoys/processed/processBuoys.pl
+#process netcdf - called from within processBuoys.pl using the latest database records on the carocoops database
+/usr2/prod/buoys/processed/process_netcdf.pl
+}}}
 
 If experiencing problems, check that the postgres database is up and running as it may be knocked offline by USC networking outages.  The simplest way is to reboot nautilus with
 
