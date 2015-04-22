@@ -1117,3 +1117,32 @@ The two primary scripts which process those files are similar, the first process
 #process netcdf
 /usr2/prod/buoys/processed/process_netcdf.pl
 }}}
+
+----
+=== CaroCOOPS buoys(SUN2,CAP2,FRP2) ===
+
+The user 'buoy' crontab runs the following jobs:
+
+gets the latest buoy telemetry .dat files
+{{{
+#crcoos buoy telemetry
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * cd /home/buoy/scripts/buoy_telemetry; perl get_latest_data.pl
+}}}
+
+shell job1.sh which kicks off two scripts under /usr2/prod/buoys/perl - processing the latest .dat files placed at /usr2/carocoops_data and moving the processed files to /usr2/prod/buoys/processed 
+
+{{{
+#get processBuoys.pl to display new buoy data, process to database which netcdf files are generated from
+#for speedy reprocessing(files run every minute)
+* * * * * /home/buoy/scripts/job1.sh >> /tmp/buoy.log 2>&1
+}}}
+
+processBuoysDB.pl processes the file to the carocoops database
+
+processBuoys.pl which changes the carocoops website displays based on the latest data available from the carocoops database and calls process_netcdf_latest.pl used to generate the latest netcdf files for the data scout on neptune server
+
+If experiencing problems, check that the postgres database is up and running as it may be knocked offline by USC networking outages.  The simplest way is to reboot nautilus with
+
+{{{/sbin/shutdown -r now}}}
+
+which should call the server setup commands(including postgres start) under /etc/rc.local
