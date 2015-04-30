@@ -594,15 +594,31 @@ csvFilepath=PortManateeLatest.csv
 
 == Drifters ==
 
-=== NEFSC Processing ===
+----
+
+=== Horizon ===
+
+*Description*: perl script that pulls in data from the Horizon Marine drifter website<br/>
+*Script Makeup* <br/>
+  _Script_: drifter_to_kml.pl <br/>
+  _Directory_: //home/xeniaprod/scripts/postgresql/feeds/drifter/nefsc <br/>
+{{{
+  Command line parameters: None
+  Note: There are hardcoded paths and other settings that control where the data is retrieved and saved.
+  wget: "wget -O test1.dat http://www.nefsc.noaa.gov/drifter/drift_X.xml;"
+  The text data is stored: "./test1.dat"
+  The kml generated: "./latest.kml"
+  The latest.kml file is copied to: "/home/xeniaprod/feeds/drifter/nefsc/latest.kml" which is read as a kml map layer 
+}}}
+
+=== NEFSC ===
 
 *Description*: perl script that pulls in data from the NEFSC drifter website<br/>
 *Script Makeup* <br/>
   _Script_: drifter_to_kml.pl <br/>
   _Directory_: //home/xeniaprod/scripts/postgresql/feeds/drifter/nefsc <br/>
-  _Command line parameters: <br/>
 {{{
-  None
+  Command line parameters: None
   Note: There are hardcoded paths and other settings that control where the data is retrieved and saved.
   wget: "wget -O test1.dat http://www.nefsc.noaa.gov/drifter/drift_X.xml;"
   The text data is stored: "./test1.dat"
@@ -612,7 +628,7 @@ csvFilepath=PortManateeLatest.csv
 
 ----
 = Machine: Mapping =
-http://129.252.139.139/
+139.139
 
 == Scripts: Mapping ==
 
@@ -1085,7 +1101,7 @@ processingobject - Name of the object used to do the processing.
 }}}
 
 = Machine: Squid =
-http://129.252.139.124/
+139.124
 
 == Scripts: Squid ==
 ----
