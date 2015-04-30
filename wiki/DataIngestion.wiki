@@ -601,13 +601,14 @@ csvFilepath=PortManateeLatest.csv
   _Script_: drifter_to_kml.pl <br/>
   _Directory_: //home/xeniaprod/scripts/postgresql/feeds/drifter/nefsc <br/>
   _Command line parameters: <br/>
-  {{{
+{{{
   None
   Note: There are hardcoded paths and other settings that control where the data is retrieved and saved.
   wget: "wget -O test1.dat http://www.nefsc.noaa.gov/drifter/drift_X.xml;"
   The text data is stored: "./test1.dat"
   The kml generated: "./latest.kml"
-  The latest.kml file is copied to: "/home/xeniaprod/feeds/drifter/nefsc/latest.kml" which is read as a kml map layer }}}
+  The latest.kml file is copied to: "/home/xeniaprod/feeds/drifter/nefsc/latest.kml" which is read as a kml map layer 
+}}}
 
 ----
 = Machine: Mapping =
