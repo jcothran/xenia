@@ -601,7 +601,7 @@ csvFilepath=PortManateeLatest.csv
 *Description*: perl script that pulls in data from the Horizon Marine drifter website<br/>
 *Script Makeup* <br/>
   _Script_: drifter_to_kml.pl <br/>
-  _Directory_: //home/xeniaprod/scripts/postgresql/feeds/drifter/horizon <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/drifter/horizon <br/>
 {{{
   Command line parameters: None
   Note: There are hardcoded paths and other settings that control where the data is retrieved and saved.
@@ -616,7 +616,7 @@ csvFilepath=PortManateeLatest.csv
 *Description*: perl script that pulls in data from the NEFSC drifter website<br/>
 *Script Makeup* <br/>
   _Script_: drifter_to_kml.pl <br/>
-  _Directory_: //home/xeniaprod/scripts/postgresql/feeds/drifter/nefsc <br/>
+  _Directory_: /home/xeniaprod/scripts/postgresql/feeds/drifter/nefsc <br/>
 {{{
   Command line parameters: None
   Note: There are hardcoded paths and other settings that control where the data is retrieved and saved.
