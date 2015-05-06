@@ -1170,3 +1170,9 @@ If experiencing problems, check that the postgres database is up and running as 
 {{{/sbin/shutdown -r now}}}
 
 which should call the server setup commands(including postgres start) under /etc/rc.local
+
+= Misc = 
+
+The NHC storm info is gathered from the below NHC storm kml link which should carry storm related info when storms are active.
+
+{{{http://www.nhc.noaa.gov/gis/kml/nhc_active.kml}}}
