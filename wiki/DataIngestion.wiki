@@ -1173,6 +1173,6 @@ which should call the server setup commands(including postgres start) under /etc
 
 = Misc = 
 
-The NHC storm info is gathered from the below NHC storm kml link which should carry storm related info when storms are active.
+The NHC storm info is gathered from the below NHC storm kml link which should carry storm related info when storms are active.  This file is processed into separate kml file layers and made available on the nwsone(marine weather portal) server.
 
 {{{http://www.nhc.noaa.gov/gis/kml/nhc_active.kml}}}
