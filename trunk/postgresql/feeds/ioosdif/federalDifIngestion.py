@@ -217,7 +217,9 @@ class xeniaFedsInventory(platformInventory):
     #Check to see if we have a list of stations we want to add. 
     stationAddList = None
     try:
-      stationAddList = self.config.get(self.organizationID, 'newstationstoadd').split(',')          
+      stations_list = self.config.get(self.organizationID, 'newstationstoadd')
+      if len(stations_list):
+        stationAddList = stations_list.split(',')
     except ConfigParser.Error, e:  
       if(self.logger):
         self.logger.debug("Config parameter: newstationstoadd not set, no specific stations will be added.")
