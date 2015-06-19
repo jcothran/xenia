@@ -41,7 +41,7 @@ Rack 1 (top to bottom) <br />
 {{{
 esxi 139.198 
   139.139 - xeniavmMapping - mapserver,tilecache engine,remotesensing image copying/db ref
-  139.134 - projects
+  139.163 - projects (was 139.134)
   139.169 - erddap
   139.233  - geoportal
 
