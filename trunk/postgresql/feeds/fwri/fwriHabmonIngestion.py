@@ -132,10 +132,11 @@ class fwriCSVDataIngestion(xeniaDataIngestion):
           if(self.logger):
             self.logger.exception(e)
             self.logger.error("Cannot continue processing data. Shutting down.")
-      #DWR 2014-09-11
+      #DWR 2015-07-27
       #Always call cleanUp to make sure we don't leave the worker queue hanging.
-      self.cleanUp()
-      
+      processObj.cleanUp()
+
+
 def main():
   logger = None
   try:    
