@@ -1,0 +1,178 @@
+#Notes from the Smart Sensor conference
+> ## 2-11-2009 ##
+  * Defining Interoperability
+    1. Benefits?
+      * Marketing edge? Why do it? Mostly for the users.
+
+  1. Create working group
+  1. Meaning of interoperability
+    * Plug it in and go
+    * Interface? Which type, electrical, mechanical, hardware, software.
+    * Sensor interoperability, System interoperability, what is the dividing line?
+    * Black box approach?
+    * Smart sensors? Only have a couple of settings.
+    * Is physical connection important? Environment dictates connector.
+    * Summary of meaning
+      * Driver position
+      * Roadmap
+      * Mechanical
+      * Electrical
+      * Metatable
+      * Driver information
+
+  1. MBARI
+    * Instruments are interoperable with each other if:
+      * Their data can be accessed through a common interface, processed and compared   with a common set if tools.
+      * They can be configured and operated though a common interface.
+    * Different mfgs implement their own protocols.
+    * Standard observatory protocol
+      * Command protocol to configure and interact with instrument: IEEE-1451, OGC Sensor Panning service
+      * Standard data format
+      * Standard metadata format
+    * Implement driver to sit between sensor and host.
+      * Driver on host, non-standard instrument firmware
+        * Advantages
+          * Can accommodate very diverse instruments
+          * Instrument firmware is immune to observatory protocol changes.
+        * Disadvantages
+> > > > > Driver devel is complex
+          * Driver must be installed and configured on instrument host
+          * Firmware may not conform to observatory standard.
+        * WHo writes the driver?
+        * Standard instrument firmware
+          * Instrument and its data/metadata automatically integrated into observatory without driver. Low cost to integrate
+          * Comprehensive standard spec can be complex.
+            * Implementers mst understand spec.
+            * Firmware implementation can be complex
+            * Reference implementation needed
+          * Observatory protocol standards are still evolving.
+            * Need to update firmware
+            * Embedded programming
+            * How to update on deployed instruments.
+        * PUCK
+          * Provides a [protocol](http://www.mbari.org/pw/puckProtocol_1_3.pdf) and container to store instrument-related info.
+          * No restrictions on payload content or format.
+            * Instrument driver code, calibration, metadata, ect
+          * Enables plug and work for RS-232 oceanographic instruments
+          * Simple, robust. 12 commands: Write, read, erase
+          * Steps to update
+            * Plug in instruments
+            * Operator tells host instrument plugged in
+            * Host applies power to port
+            * Host executes driver
+            * Driver handles client requests.
+            * Does not define ho wto acquire data, configure instrument
+            * Does not define instrument metadata beyond minimal PUCK header.
+            * Does not define sensor data structure
+            * 4 mfgs have implemented PUCK in firmware
+            * 2-4 weeks of implementation into sensor
+            * Does not change existing software
+            * Deployed on MOOS moored observatory, MARS cable to shore
+          * SIAM
+            * Drivers to provide standard network interface to diverse serial instruments through generic Java interface.
+            * Portable. Compatible with low power/low bandwidth moorings
+            * Integration with IEEE and OGC standards
+              * IEEE 1451.0 is HTTP based standard interface for interacting with instruments. Integrated into OGC sensor web enablement
+          * PUCK protocol patented. Royalty free license. Will be submitted as OGC standard.
+          * Website [PUCK](http://www.mbari.org/pw)
+          * Potential 3 modes
+            * Built into sensor
+            * Adapter for legacy instruments
+            * Offboard software PUCK interpreter.
+  1. Mfg update on sensors
+    * Seabird
+      * Implemented PUCK 2-3 years ago
+        * MBARI is only PUCK user
+      * Implement instrument XML format
+        * All in house format.
+      * Did not follow IEEE-1451 because of its treatment of sensors
+    * RDI
+      * No PUCK implementation
+      * Outputs are serial. Formats are standard.
+      * Data correlation
+      * Outputs metadata
+    * YSI
+      * No PUCK implementation
+      * Conforms to STI 12
+      * Who does hardware connectivity fall to? Mfg, user???
+      * Interface to provide PUCK to existing sensors.
+    * RBR
+      * 2008 Implemented PUCK
+      * 2-4 weeks development time
+      * Implemented in the instrument, uses 96 byte ID header, 128kb payload space
+      * Stock instrument, get RS232/485 ascii delimeted string.
+    1. IEEE 1451 Discussion (Khang Lee,Darold Wobschall)
+      * Trends
+      * Digital Comm, networking
+      * Use open standards solution
+      * Networking smart sensors
+      * Smart transducer, gives correct representation of data. Provides function beyond those necessary.
+      * Distributed Smart sensor
+        * Intelligence is in the node
+        * Intelligence distributed
+      * Migrate away from having an interface between the sensor and network to having the
+
+> > > > smarts on the sensor.
+      * Smart Transducer Standard
+        * Open standard
+        * Provides common interface between sensors and instruments and networks.
+        * Self describing sensor via TEDS data sheet
+        * Achieve PnP via common interface and TEDS
+        * Provides an infrastructure for open system distributed architecture.
+    1. Users
+      * Recreational
+      * Researchers
+      * Primary decision makes for public policy: Storm Warning, Beach advisory....
+    1. OOSTETHYS
+      * Info Models Schemas
+        * Sensor Model Language
+        * Obs and Measurements
+        * TransducerML
+        * SWE Common
+      * Web Services
+        * Sensor Observation Service(SOS)
+        * Sensor Planning Service(SPS)
+        * Sensor Alert Service(SAS)
+        * Sensor Registries
+
+## 2-12-2009 ##
+  1. Suggestions from Tom O'Reilly
+    * Meeting of Smart Sensors pay a nominal fee for time spent on group activities/meetings
+    * Members pledge to comply with group approved standards.
+    * Members agree to supply a UUID with each compliant instrument and will comply with a group-defined interface to retrieve the UUID from device's serial port. Could be the UUID supplied by PUCK protocol if PUCK adopted bt the group.
+    * Members agree to supply a SensorML description of each compliant instrument. The SensorML might be supplied in the PUCK payload. Alternatively SensorML could be obtained at a member's website or supplied on media.
+    * The working group will establish a standard driver model interface. Interface could be based on standards such as IEEE-1451, OGC Sensor Web Enablement or existing vendor model such as the vendor model of RBR. The driver could be stored as PUCK payload(if adopted) obtained at a member's website or on supplied media.
+  1. Example PUCK implementation
+    * PUCK header, must have
+    * In the payload:
+      1. SensorML describes instrument
+      1. XML command set
+      1. binary driver
+  1. First steps
+    * Members come to agreement on interoperability
+    * Discuss whether PUCK should be adopted as standard
+    * More important to get other mfgs and users on board to come to agreement on standard, then worry about OGC standard.
+
+
+
+```
+Attendees 
+Neil Cater: St Johns University
+Sherry Power: Conference Coordinator, Marine Institute
+David Murhpy: Seabird Electronics, R&D Manager
+Craig Johnson: RBR, Director of Engineer
+Gregg Dusett: NOAA, Marine Biotoxins
+Jim Fahey: Sales Manager, Teledyne
+Vadim: Teledyne
+Rob Ellison: YSI, Sensors & Sons
+Luis Bermudez: Soora
+Sam Walker: Secoora
+Dan Ramage: Baruch Institute
+Ed King: VP YSI R&D
+Tom O'Reily Software Engineer, Monterrey Bay
+Graham Jones: Tech Mgr, RBR, firmware
+Frank Ellison: RBR
+By phone:
+Khang Lee
+Darold Wobschall
+```

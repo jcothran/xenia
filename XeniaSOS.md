@@ -1,0 +1,167 @@
+
+
+# DIF SOS #
+
+Built a CGI based script based on earlier work with the [microWFS](XeniaPackageSqlite#MicroWFS.md) effort, substituting a xenia database schema specific sql query and associated [DIF](http://ioos.noaa.gov/program/DIFdocs.html) SOS response instead of the earlier more generic query and WFS response.
+
+The CGI based difSOS instance is available at
+
+http://carocoops.org/obskml/scripts/difSOS.html
+
+The above html script calls the cgi script documented at
+
+  * [sqlite version](http://code.google.com/p/xenia/source/browse/trunk/sqlite/sos/difSOS.cgi)
+  * [postgresql version](http://code.google.com/p/rcoos/source/browse/trunk/datastream/cgi/difSOS_postgres_wave.cgi)
+
+which runs queries against the earlier established xenia sqlite database(PostgreSQL adapation of this script by Xiaoyan Qi [here](http://code.google.com/p/rcoos/source/browse/#svn/trunk/datastream/cgi)).  **Note that the sql request statement of this script could be modified to provide a similar resultset/functionality from other relational database schemas or resultsets.**
+
+[difSOSConf.xml](http://code.google.com/p/xenia/source/browse/trunk/sqlite/sos/difSOSConf.xml) is the modified xml configuration support xml
+
+Note:
+
+  * data is across a variety of data providers nationally for the latest 3 day period(time window could be enlarged as needed) - archival julian weekly sqlite files are available at http://carocoops.org/seacoos_data/sqlite/weekly
+  * observation elevation datum is optional or assumed MSL(Mean Sea Level)
+  * the sensorID is related to an internal database/system frame of reference and not related to any developing or recognized community sensorID reference
+  * the OBSERVEDPROPERTY parameter assumes one sensor per platform (for now)
+  * the OBSERVEDPROPERTY parameter only specifies a single parameter (for now)
+  * the xml response is xml/text only (for now) and the response can be quite large depending on the query - would like to eventually provide a zipped response or file link for large responses ?
+
+## minimal dataflow setup ##
+
+  * Convert [raw data to obskml](http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate#Sample_cases)
+  * Convert [obskml to xenia schema(sql)](http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/obskml_to_xenia_sqlite.pl)
+  * Use [difSOS.cgi](http://code.google.com/p/xenia/source/browse/trunk/sqlite/sos) script to provide DIF SOS web service
+
+
+---
+
+
+## Related Links ##
+
+http://xi.nos.noaa.gov/dif/ (Draft webpage)
+
+http://carocoops.org/documents/IOOS_SOS_Implementations.ppt
+
+IOOS-DIF XML Schemas http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/
+
+IOOS WSDE (Web Services & Data
+Encoding) listserv http://www.pmel.noaa.gov/maillists/tmap/ioos_wsde/
+
+NDBC SOS http://sdf.ndbc.noaa.gov/sos
+
+CO-OPS SOS http://opendap.co-ops.nos.noaa.gov/ioos-dif-sos/
+
+
+---
+
+
+## Ongoing development requests ##
+
+In addition to sensor/SensorML/SWE metadata development I would also like to see development/support relating to service efficiencies for:
+
+  * **primitives**/subsetting as discussed earlier
+  * **collections**(give me some/all of your latest/time-range obs from a specified platform/bbox in one request instead of multiple specific/researched requests)
+    * under the offering category beyond the initial development pass of offering = specific platform, will also be interested in aggregate offering(s) that range from less-specific to more-specific like
+      * **all** observed properties for **latest** time for a given bounding box
+      * specific observed properties for **latest** time for a given bounding box
+      * **all** observed properties for time-range for a given bounding box
+      * specific observed properties for time-range for a given bounding box
+        * where the above type collection request might fail due to being too 'large' of a data request, provide an error response suggesting acceptable **limits/guidelines** on the request(size of bounding box,etc)
+    * These general method types could expose a range of data without having to necessarily know/process the multitude of individual web service addresses.   Web service providers could **cache** both specific and/or aggregate responses for common repeated requests to increase efficiency/response time.
+  * **zipped xml** as a possible request/return format(since the data bloat of xml is repetitous tags to begin with)
+
+In any technical case down the road it would be great to get audience/customer **feedback** on how these services/formats are being utilized(or not) to guide their development.
+
+Also of interest would be better
+  * service/schema **documentation** - particularly if the number of services/schemas could be **abstracted/minimized** and demonstrated as applied to the most common use cases
+  * **shared code** in a variety of source language implementations to help data providers implement the services/schemas
+  * a way/mechanism for identifying/resolving **redundant** metadata/data from several independent sources - which source is primary author or quality/timeliness of data sources
+
+## Usage examples - DIF SOS ##
+
+Firefox and IE browsers should support correct displaying of the following responses XML.
+
+### GetObservation - DIF SOS ###
+
+http://carocoops.org/cgi-bin/microwfs/difSOS.cgi?REQUEST=GetObservation&SERVICE=SOS&VERSION=1.0.0&RESPONSEFORMAT=text%2Fxml%3Bschema%3D%2522ioos%2F0.6.0%2522&OBSERVEDPROPERTY=windspeed&OFFERING=nerrs&BBOX=&EVENTTIME=
+
+
+---
+
+
+# Oostethys SOS #
+
+Worked through [Eric Bridger's perl RDB script](http://www.oostethys.org/downloads/sos-cookbook-perl/sos-server-cgi-cookbook-rdbms) (oostethys\_sos.cgi) with the Xenia database schema as the backend and have an Oostethys SOS service available for SECOORA at the following sample links listed [below](http://code.google.com/p/xenia/wiki/XeniaSOS#Usage_examples_-_Oostethys_SOS)
+
+## Source, differences ##
+
+The link to the revised **oostethys\_sos.cgi script** is
+  * [sqlite version](http://code.google.com/p/xenia/source/browse/trunk/sqlite/sos/oostethys/oostethys_sos.cgi)
+  * [postgresql version](http://code.google.com/p/rcoos/source/browse/trunk/datastream/cgi/oostethys_sos.cgi)
+
+with **differences from the original script** [here](http://code.google.com/p/xenia/source/diff?spec=svn826&r=826&format=side&path=/trunk/sqlite/sos/oostethys/oostethys_sos.cgi) and may be helpful as an example of reuse of the script against another RDB schema.
+
+## Issues ##
+
+I did have the following issues though in regards to the oostethys\_sos.cgi script:
+
+1)For DesribeSensor, the 'offering' values which are the platform names without the $platform\_uri prefix need to be used in DescribeSensor
+
+This relates back to how the hash %sensor\_list is populated, with the platform names given, not with the uri prefix.
+
+2)For GetObservation, the offering only accepts and requires a single known(as kept in %sensor\_list) platform - while this by itself is not an issue, it looks like there was an attempt to handle multiple platforms (ALL\_PLATFORMS), but that effort was incomplete.
+
+Because only a single offering is required, the BBOX funtion doesn't make sense within that context.
+
+Also it would be nice if the platform search was looser in allowing 'like' type lookups (show all platforms starting 'gomoos%' for example), relaxing the check on the known platforms in the earlier metadata lookup.
+
+3)For GetObservation, multiple parameters seem to return empty values, for example:
+
+http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi?request=GetObservation&service=SOS&version=1.0.0&responseFormat=text%2Fxml%3B%20subtype%3D%22om%2F1.0%22&offering=A01&observedProperty=http%3A%2F%2Fmmisw.org%2Fcf%23air_temperature,http%3A%2F%2Fmmisw.org%2Fcf%23sea_water_temperature
+
+_Correction, this is not an issue: the above result is correct, just null values at different depths for different parameters_
+
+## Other Caveats ##
+
+It would be good to see in addition to a service registry, a test script or service to validate the desired service functionality(service compliance test and feedback).  The pattern that I tend to see is that the 'usual' SOS service request path is available, but some of the extra features are not uniformly tested or implemented.
+
+Also I tried to register the GetCapabilites link above at http://score.itsc.uah.edu/MMI/, but it timed out with no result.  The number of platforms available is around 1,000 (most of which are federal backbone providers, many of which are on the existing application maps) which may be part of the time-out issue.
+
+Two other caveats with the SECOORA Oostethys SOS service is that the platform metadata regarding platform start\_dates are not currently populated, so for now it is constantly defaulted to '2009-01-01T00:00:00Z'.  Also the RDB that the oostethys\_sos.cgi script is running against is a smaller sqlite file database of the latest 3 days worth of observations with older observations pushed off into julian weekly sqlite files of the same schema.  Time ranges are always for the past 3 days until I implement further functionality to search earlier archive files.
+
+## Usage examples - Oostethys SOS ##
+
+Firefox and IE browsers should support correct displaying of the following responses XML.
+
+### GetCapabilities - Oostethys SOS ###
+
+http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi?request=GetCapabilities&service=SOS&version=1.0
+
+### DescribeSensor - Oostethys SOS ###
+
+Procedure shouldn't include prefix or should be offering instead of procedure below
+
+http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi?REQUEST=DescribeSensor&procedure=carocoops.FRP2.buoy
+
+### GetObservation - Oostethys SOS ###
+
+#### data latest - Oostethys SOS ####
+http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi?REQUEST=GetObservation&offering=carocoops.FRP2.buoy&observedProperty=wind_speed
+
+#### time instance - Oostethys SOS ####
+http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi?REQUEST=GetObservation&offering=carocoops.FRP2.buoy&observedProperty=wind_speed&eventTime=2009-04-06T19:00:00Z
+
+#### time start/end - Oostethys SOS ####
+http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi?REQUEST=GetObservation&offering=carocoops.FRP2.buoy&observedProperty=wind_speed&time=2009-04-06T16:00:00Z/2009-04-06T19:00:00Z
+
+#### bbox - Oostethys SOS ####
+
+Works but should allow no offering parameter(all within bbox) or maybe 'like' comparison "where offering like 'ndbc%'"
+
+http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi?REQUEST=GetObservation&offering=carocoops.FRP2.buoy&observedProperty=wind_speed&time=2009-04-06T16:00:00Z/2009-04-06T19:00:00Z&bbox=-81.50,0.0,-63.0,40.0
+
+#### multiple observedProperty - Oostethys SOS ####
+
+Only works with observedProperties at same elevation(height/depth), get blanks otherwise
+
+http://nautilus.baruch.sc.edu/cgi-bin/sos/oostethys_sos.cgi?REQUEST=GetObservation&offering=carocoops.FRP2.buoy&observedProperty=wind_speed,wind_gust,salinity&time=2009-04-06T16:00:00Z/2009-04-06T19:00:00Z

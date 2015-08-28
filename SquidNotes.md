@@ -1,0 +1,178 @@
+
+
+Wanted to document the steps I went through to get [Squid](http://www.squid-cache.org) up and going on one of our [virtual servers](http://code.google.com/p/xenia/wiki/VMwareHome).
+
+The problem that we were running into is that to open an IP port like port 80 (http) to the outside world from within our university network, there's a whole network administration process to open that or other ports up, which takes some time and overhead.    With the incorporation of virtual servers which make it very easy to spin up several 'new' server instances for testing or production, it would be easier to share(multiplex) a single existing open port with multiple servers and redirect the incoming requests based on some keyword in the URL address such as the server1,server2 differentiation in the below URL addresses:
+
+http://mysite.org/server1/...
+
+http://mysite.org/server2/...
+
+So instead of asking your network services admin for a new static IP and opening various ports and so on, you re-use your existing IP's and open ports across several servers and manage their assignments via server destination keywords in the URL address.
+
+On the target servers, symbolic links could represent the URL keywords to handle the address prefixing
+
+```
+cd /var/www
+ln -s /var/www server1
+```
+
+Squid allows this kind of URL string pattern-matching redirection via its configuration file 'squid.conf' settings.  Squid also supports web caching of requested server files to speed-up the performance response of server file/content requests, but this example does not concern that or other features of squid.
+
+Squid was installed as root user on a linux ubuntu based server.  There are several links at the page bottom which were used to gain an understanding of iptables, squid and the squid configuration(squid.conf) file changes needed to get the functionality wanted.
+
+Install squid
+```
+aptitude install squid squid-common
+```
+
+
+---
+
+Changes to the squid.conf file
+
+```
+http_access allow localhost
+
+#VM_CONFIG begin
+http_access allow all
+miss_access allow all
+#VM_CONFIG end
+
+# And finally deny all other access to this proxy
+http_access deny all
+```
+
+```
+# Squid normally listens to port 3128
+#VM_CONFIG
+http_port 3128 transparent
+```
+
+The below example will use the squid proxy server to remap requests to one of two destination servers depending on the URL arguments used.  URL requests with mapserv or tilecache in the address will be routed to the 'mapServer' IP while requests with the mydomainServer IP or domain name will be routed to a different server IP.
+
+You would configure your URL keyword arguments pattern-matching(url\_regex,dstdomain) here
+
+under TAG: cache\_peer section
+```
+#VM_CONFIG begin
+#apparently there is a dependent order listing in servers considered, so make sure the default server(mydomainServer in the below listing) is listed last in cache_peer listing below
+#also the rerouting will fail without error if the access/error logs on the target are full
+
+cache_peer 129.252.111.222 parent 80 0 proxy-only name=mapServer
+cache_peer 129.252.111.333 parent 80 0 proxy-only name=mydomainServer
+
+acl mapserv_url url_regex -i mapserv
+http_access allow mapserv_url
+cache_peer_access mapServer allow mapserv_url
+
+acl tilecache_url url_regex -i tilecache
+http_access allow tilecache_url
+cache_peer_access mapServer allow tilecache_url
+
+acl mydomain_url dstdomain 129.252.111.111
+http_access allow mydomain_url
+cache_peer_access mydomainServer allow mydomain_url
+
+acl mydomain_url dstdomain mydomain.edu
+http_access allow mydomain_url
+cache_peer_access mydomainServer allow mydomain_url
+
+cache_peer_access mydomainServer deny all
+#VM_CONFIG end
+```
+
+I commented out the following lines as they were preventing my query parameters from being successfully rerouted.  May be some security follow-up issues to look into here.
+```
+#We recommend you to use at least the following line.
+#VM_CONFIG
+#hierarchy_stoplist cgi-bin ?
+```
+
+```
+#VM_CONFIG begin
+#acl QUERY urlpath_regex cgi-bin \?
+#cache deny QUERY
+#VM_CONFIG end
+```
+
+Uncommented the following line
+```
+#VM_CONFIG
+cache_dir ufs /var/spool/squid 100 16 256
+```
+
+Ran into issues with using mod\_python where had to add alias line to apache httpd.conf routing server keyword path to local path without server keyword(like `alias projects/pesticide to pesticide`).  Also for POST and OPTIONS methods, had to add POST and never\_direct lines to squid.conf in below section
+
+```
+acl CONNECT method CONNECT
+
+acl POST method POST
+#have to use never_direct on POST or all, otherwise assumes DIRECT access to local squid server
+never_direct allow all
+```
+
+
+---
+
+
+Start/restart squid - rerun after any changes to squid.conf file
+```
+/etc/init.d/squid restart
+```
+
+
+---
+
+iptables command to redirect port 80 to squid(at port 3128) - substitute your IP address for xxx.xxx.xxx.xxx
+```
+iptables -t nat -A PREROUTING -d xxx.xxx.xxx.xxx -p tcp --dport 80 -j REDIRECT --to-ports 3128
+```
+
+iptables nat table list, clear commands - note that you won't see nat table listings or changes without using the '-t nat' parameters
+```
+#list nat table
+iptables -L -nv -t nat
+#clear nat table - you can restore any rules that are in /etc/iptables.rules using #iptables-restore command but any other rules will be cleared/deleted
+iptables -F -t nat 
+```
+
+on server reboot, the server uses the file /etc/iptables.rules to initialize the iptables settings
+
+to preserve your iptables changes, backup your existing iptables.rules file and overwrite the existing rules file with the [iptables-save](http://www.faqs.org/docs/iptables/iptables-save.html) command
+
+check squid's access log for testing or debug
+```
+tail -f /var/log/squid/access.log
+```
+
+
+---
+
+# Links #
+
+http://www.linuxhomenetworking.com/wiki/index.php/Quick_HOWTO_:_Ch14_:_Linux_Firewalls_Using_iptables
+
+http://www.lesismore.co.za/squid3.html
+
+http://gofedora.com/how-to-configure-squid-proxy-server/
+
+http://www.linuxjournal.com/article/4408?page=0,1
+
+http://www.cyberciti.biz/tips/linux-setup-transparent-proxy-squid-howto.html
+
+http://docs.huihoo.com/gnu_linux/squid/html/x2088.html
+
+http://www.deckle.co.za/squid-users-guide/Transparent_Caching/Proxy
+
+http://www.deckle.co.za/squid-users-guide/Accelerator_Mode
+
+http://www.deckle.co.za/squid-users-guide/Squid_Configuration_Basics
+
+http://magazine.redhat.com/2007/04/11/squid-in-5-minutes/
+
+Better usage examples with pattern-matching in the following links
+
+http://blog.spench.net/2010/02/24/tips-for-setting-up-squid-in-reverse-proxy-web-accelerator-accel-mode/
+
+http://mark.ossdl.de/2008/12/using-squid-to-replace-apache-mod_proxy-as-proxy-for-exchange-2007/

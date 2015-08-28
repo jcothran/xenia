@@ -1,0 +1,149 @@
+
+
+# Introduction #
+
+website http://neptune.baruch.sc.edu/xenia/status/platformStatus.php
+
+An overview of the platform and sensor status pages used for review and update of the real-time in-situ platform and sensor data or system checks collected and monitored by the Xenia database.
+
+Note that these status pages may fail to represent the **true** availability or status of recent data or other resources for a variety of reasons including:
+  * problems with servers or software at one or several points in the communication chain
+  * problems with networking between servers or telemetry of data from platforms
+
+These status pages are intended to help find problems in collection or sharing of data/resources and provide additional automated reporting metrics where helpful, to supplement the authoritative records and description of the data provider/operator.
+
+Note also that the concept of a 'platform' has been extended to a more generalized placeholder for any resource which we might want to monitor and notify on such as
+
+  * hf radar array system such as 'skio.array.radar'
+  * remotesensing hourly map images WMS such as 'usf.oi\_sst.rs'
+  * modeling image WMS such as 'nccoos.sabgom.model'
+
+## Status codes ##
+
+Automatically set, manual update
+  * 0 - **inactive** - no recent data in the past 2 weeks
+  * 1 - **active** - recent data available (within the past 4 hours)
+  * 2 - **technical difficulty** - recent data unavailable (no data in past 4 hours)
+
+Manually set/update
+  * 3 - **offline** - platform/sensor is expected to be offline for an extended period of time(several days or more)
+  * 4 - **archival** - platform/sensor has been permanently removed from service
+  * 5 - **delayed, non real-time** - platform/sensor does not collect data in real-time
+  * 6 - **planned** - platform/sensor is planned for a future deployment
+  * 7 - **suspect** (sensor only) sensor data is suspect, although may pass automated qa/qc tests
+  * 8 - **bad** (sensor only) sensor data is bad, although may pass automated qa/qc tests
+
+
+Where tables are presented in the webpages, rows are sortable by clicking on the associated column heading.
+
+
+---
+
+## Update pages ##
+
+### Login ###
+
+A login may be required to view and change the update pages - if an email notification is automatically sent, it should include a member id in the link to allow the login step to be skipped.
+
+![http://xenia.googlecode.com/files/status_6.jpg](http://xenia.googlecode.com/files/status_6.jpg)
+
+
+---
+
+
+### Platform update ###
+
+The status of platforms(the circled platform link) or sensors which are not 'active' are shown in this table.  Each platform row can have the following fields manually changed or populated
+  * Status - one of the status codes
+  * Expected Resume Date
+  * Comments - a free-form text field to describe technical issues,etc
+  * Updated By - the author of this update
+
+At the end of each platform row is an 'Update' button - clicking this updates the database only with the changes for that row.  If there are multiple rows which need to be updated, click the update button for each corresponding row.
+
+Clicking on an individual platform name(the circled platform name) will show the associated sensors for that platform(shown in the next shot).
+
+![http://xenia.googlecode.com/files/status_8.jpg](http://xenia.googlecode.com/files/status_8.jpg)
+
+
+---
+
+### Sensor update ###
+The status of a chosen platforms sensors(the circled sensor link) or sensors which are not 'active' are shown in this table.  Each platform row can have the following fields manually changed or populated
+  * Status - one of the status codes
+  * Expected Resume Date
+  * Comments - a free-form text field to describe technical issues,etc
+  * Updated By - the author of this update
+
+At the end of each platform row is an 'Update' button - clicking this updates the database only with the changes for that row.  If there are multiple rows which need to be updated, click the update button for each corresponding row.
+
+![http://xenia.googlecode.com/files/status_9.jpg](http://xenia.googlecode.com/files/status_9.jpg)
+
+
+---
+
+### Platform update(no issues) ###
+
+An example platform which is not currently having any reporting issues.  Note there is a select drop-down box in the upper right corner to choose a different data provider/operator and the 'all' status link to see 'all' platform status - active status as well as any other status
+
+![http://xenia.googlecode.com/files/status_7.jpg](http://xenia.googlecode.com/files/status_7.jpg)
+
+
+---
+
+## Status pages ##
+
+No login is required to view the status pages.
+
+### Platform status ###
+
+The left-hand side shows the query conditions for the right-hand resultset.  The 'Submit' button(circled) should be clicked to run the new query.  The condition selections available are
+
+  * Data Providers - also referred to as organization or operator
+  * Platforms Name - default 'ALL', may select one or several platforms of interest
+  * Tables - 'Platform Status' or 'Sensor Status' depending on whether interested in the higher platform level or more detailed sensor level
+  * Current Status - default 'All:"' may select one or several status codes of interest
+
+The link back to the Platform/Sensor Update pages is at page bottom left(circled)
+
+![http://xenia.googlecode.com/files/status_1.jpg](http://xenia.googlecode.com/files/status_1.jpg)
+
+The link to the platform history(next shot) is circled.
+
+
+---
+
+### Platform status - history ###
+
+A history of the platform is represented by the start and stop date of outages and associated status code and comments.
+
+![http://xenia.googlecode.com/files/status_2.jpg](http://xenia.googlecode.com/files/status_2.jpg)
+
+Clicking the 'Sensor Status'(circled) shows the sensors available for this platform shown in the following shot.
+
+
+---
+
+### Platform sensors ###
+
+Sensors available for this platform and their latest status.
+
+![http://xenia.googlecode.com/files/status_3.jpg](http://xenia.googlecode.com/files/status_3.jpg)
+
+
+---
+
+### Sensor status ###
+
+Choosing the 'Sensor Status'(circled) from the table selection and clicking 'Submit' shows a more detailed listing of the sensor status.
+
+![http://xenia.googlecode.com/files/status_4.jpg](http://xenia.googlecode.com/files/status_4.jpg)
+
+Clicking 'History'(circled) on a specific sensor shows the outage history for that sensor(shown in the following shot).
+
+
+---
+
+### Sensor status history ###
+
+![http://xenia.googlecode.com/files/status_5.jpg](http://xenia.googlecode.com/files/status_5.jpg)

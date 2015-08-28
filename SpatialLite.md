@@ -1,0 +1,118 @@
+# Overview #
+[SpatiaLite](http://http://www.gaia-gis.it/spatialite/) is an extension implementing OpenGIS on a SQLite database.
+
+## Programmatically Invoking SpatiaLite ##
+SQLite supports the ability to load external extensions via 'load\_extension'. You can construct an SQL statement 'SELECT load\_extension("libspatialite-2.dll")' to invoke the SpatiaLite extension. By default, however, 'load\_extension' is disabled in SQLite, you need to be able to call the C API routine 'sqlite3\_enable\_load\_extension' to enable it.
+When grabbing the code make sure you get the latest version, currently it is v2.2. There was an issue of negative values not being handled in previous versions, so I spent a day wondering why I could get nothing to work.
+
+## Perl ##
+The downside I found is the DBI driver for SQLite in Perl does not support load\_extension, nor does it have an interface to call the C routine 'sqlite3\_enable\_load\_extension' which enables the ability to use 'load\_extension'. So in short, there does not appear to be a way to use SpatiaLite via the DBD:SQLite driver in Perl. There are other SQLite DB interfaces in Perl, so one of those may have this ability.
+## Python ##
+The pysqlite module for Python, does in fact support the 'load\_extension' ability.
+Here is a sample to get it up and running, this is on my windows machine.
+**NOTE** On a Windows box, the DLLs are going to have to be in the system PATH, otherwise
+the spatialite dll will fail to load since there are dependencies on some other dlls.
+
+**NOTE** When building pysqlite, there is now a setup.cfg file to configure options such as paths. One of the options set by default is a define statement that disables the load extension: SQLITE\_OMIT\_LOAD\_EXTENSION. This should be commented out.
+setup.cfg example:
+```
+[build_ext]
+#define=
+include_dirs=/usr/local/include
+library_dirs=/usr/local/lib
+libraries=sqlite3
+#define=SQLITE_OMIT_LOAD_EXTENSION
+```
+
+
+DLL List
+```
+libspatialite-2.dll
+libsqlite3-1.dll
+libgeos-3-0-0.dll
+libgeos_c-1.dll
+libiconv2.dll
+libproj-0.dll
+```
+```
+  from pysqlite2 import dbapi2 as sqlite
+
+  DB = sqlite.connect( './html_content.db' )
+  DB.enable_load_extension(True)
+  DB.execute( 'SELECT load_extension("libspatialite-2.dll")' )
+  DBCursor = DB.cursor()
+```
+
+My database was a fairly simple using WKT geometry. Whole trying to determine why nothing would work, which in the end was due to old DLLs, I played around with testing to see if my WKT\_geometry column was valid. It was a simple POINT( x y ) data set. Here is a quick query to find out what the SpatiaLite sees:
+```
+strSQL = 'SELECT GeometryType( GeomFromText(wkt_geometry) ) FROM html_content'
+```
+Here is a SQL statement to find a point inside a polygon(Note the double parenthesis around the 'POLYGON'):
+```
+strSQL = 'SELECT wkt_geometry,platform_handle FROM html_content 
+          WHERE Contains( GeomFromText( \'POLYGON((-79.22 32.36,-78.97 32.36,-78.97                
+                32.63,-79.22 32.63,-79.22 32.36))\'), GeomFromText(wkt_geometry) )'
+
+        DBCursor.execute( strSQL )
+        for row in DBCursor:
+            print( row[0] + ' ' + row[1] )
+```
+
+## Xenia Database Query ##
+Your database doesn't have to be constructed using WKB or WKT columns. Playing around with the Xenia database to get platforms only in the Carolinas RCOOS region, I cobbled together this query that runs against the Xenia DB:
+```
+SELECT platform_handle, description, fixed_longitude, fixed_latitude,url 
+FROM platform 
+WHERE active = 1 AND
+Contains( GeomFromText( 'POLYGON((-82 31.65, -82 32.5, -74 37.5, -74 31.65, -82 31.65))'), GeomFromText( 'POINT(' || fixed_longitude || ' ' || fixed_latitude ||')' ) )
+ORDER BY platform_handle ASC
+```
+
+The area of interested is the 2nd GeomFromText, that's where I build the WKT POINT() from the existing longitude and latitude columns. Those columns are in  decimal degrees, but to use GeomFromText we need to build POINT( longitude, latitude ). So after some searching in teh SQL docs I see I can build the string on the fly using the concatenate "||" and roll my own WKT string.
+
+# Debian Build #
+
+---
+
+For version2.2
+To get SpatiaLite working under Debian, I had to make some changes in some of the makefiles. The SpatiaLite developer will be addressing these in a future release, however I am documenting just in case. Two libraries, libgeos and libproj4 had their directories hard coded to a /usr/lib type directory, whereas I had my own working copy in a different location. So I need the compiler to search in my locations.
+
+1) in /src/versioninfo/Makefile there are 2 areas where the wrong
+directory was being used: libspatialite\_la\_DEPENDENCIES and
+libspatialite\_la\_LIBADD
+
+
+2) in /src/shell/Makefile incorrect directories:
+spatialite\_DEPENDENCIES and LDADD
+
+
+3) also in /src/shell/Makefile added -liconv in the LDADD entry.
+
+---
+
+For version2.3, the build is a little easier, however the directories on the ./configure script are still not used. The changes are as follows:
+
+1) Replace the paths for the libgeos libraries
+
+2) Replace the paths for the libproj libraries
+
+3) Added -liconv onto the libspatialite\_la\_LIBADD  entry.
+
+---
+
+For latest version, the configure parameters appear to work. Since I grabbed the proj and geos libraries and put them in my local user directory, my config is:
+```
+./configure --prefix=$HOME/local --with-proj-include=$HOME/local/include --with-geos-include=$HOME/local/include  --with-proj-lib=$HOME/local/lib --with-geos-lib=$HOME/local/lib
+```
+Another issue I ran into after compilation, was when loading the extension, the libiconv library could not be found. spatialite.c has an include directive of "#include <iconv.h>." I think the system was not searching the proper include directories. I ended up editing the .c file and putting the path in as "/usr/include/iconv.h."
+
+To enable the use of external extensions in Sqlite, you have to make sure it has been configured(./configure) with --enable-dynamic-extensions.
+Then you have to rebuild and re-install Sqlite.
+One time wasting issue I ran into was the install program putting the libraries into /usr/local/lib, but the executable looking in /usr/lib.
+My solution was to use the "-R /usr/local/lib" directive on the LINK line.
+
+
+---
+
+For version 3.0.1 yet again there are issues.
+The library seems to look in /usr/lib for the needed .so files(libgeos, ect). I just copied the libgeos-3.3.2 file into /usr/lib and I'll see if anyone posts a response on the libspatialite google group.

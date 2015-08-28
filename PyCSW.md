@@ -1,0 +1,46 @@
+# Install #
+## PostGRES Notes ##
+  * When creating the database, make sure to GRANT permissions to the user you'll be running the pycsw-admin.py under.
+> To do a blunt(INSERT/UPDATE/DELETE/...) granting of privileges to user:
+```
+  GRANT ALL PRIVILEGES ON DATABASE <db_name> TO <user_name>
+```
+  * Need to enable PostGIS on the db(PostGIS must already be installed):
+```
+  CREATE EXTENSION postgis;
+```
+  * Most likely you will need to add the plpythonu language to the database. It will need to be a trusted language as well.
+> To create the language:
+```
+  CREATE LANGUAGE plpythonu;
+```
+> To make the language trusted. Login to a DB adminstrative account, most likely the postgres user:
+```
+  UPDATE pg_language SET lanpltrusted=true WHERE lanname='plpythonu';
+```
+
+## Harvesting Metadata ##
+### SOS ###
+The pycsw-admin.py command:
+```
+   python bin/pycsw-admin.py -c post_xml -u <pycsw server addr:port> -x <path the the XML file which details the SOS server and schema>
+```
+
+The format of the file for the -x parameter above is:
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<Harvest xmlns="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-publication.xsd" service="CSW" version="2.0.2">
+  <Source>http://sdf.ndbc.noaa.gov/sos/server.php</Source>
+  <ResourceType>http://www.opengis.net/sos/1.0</ResourceType>
+</Harvest>
+```
+Source: The base address for the SOS service.
+
+ResourceType: Address to schema declaration.
+
+### WAF ###
+  * Abstract
+> Pulls from the field:
+```
+   <gmd:abstract><gco:CharacterString>
+```

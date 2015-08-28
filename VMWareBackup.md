@@ -1,0 +1,101 @@
+# Introduction #
+
+[ghettoVCB](http://communities.vmware.com/docs/DOC-8760) is a script that resides in the ESXi host which can backup your VMWare images to a NAS devices.
+
+# Server setup #
+We're running a mixture of ESXi 4.0 and ESXi 5.0 host servers. To get ghettoVCB to work, the ssh port must be open to have console access to the OS.
+## Enabling SSH Console Access ##
+  * ESXi 4.0, [here](http://www.vm-help.com/esx40i/ESXi_enable_SSH.php) are the instructions I followed.
+  * ESXi 5.0, [here](http://kb.vmware.com/selfservice/microsites/search.do?cmd=displayKC&docType=kc&docTypeID=DT_KB_1_1&externalId=2004746) are the instructions I followed.
+### Enabling SSH Client Access ###
+Once logged into the ESXi machine, it is useful to be able to use scp to copy files. To do this, the sshClient in the firewall needs to be enabled.
+To do that in:
+ESXi 5.5: esxcli network firewall ruleset set --ruleset-id sshClient --enabled true
+
+
+
+## Setup on ESXi ##
+Although I did not specifically see this in the ghettoVCB documentation, many users had posted to the forum that directories not under /vmfs/volumes were deleted under a reboot.
+I created a user: vmbackup to be able to have ssh access when needed. Initially, you need to have root ssh access to make changes, but once the cron is setup and everything seems to be work, it is worthwhile to disallow root access.
+
+ESXi 4.0, edit initd.conf, add a -w after -i in the group=shell -i -K60 line to disable root access.
+
+For our setups, I created a backup directory under /vmfs/volumes/datastore1/backup where I placed the various pieces:
+  * ghettoVCB.sh - Backup shell script
+  * dailyBak.sh - Shell script that runs the daily backup, called from the cron.
+  * daily\_backup.conf - configuration file for the script that has settings specific for the daily backups
+  * daily\_list.txt - list of VM Images to backup on the daily cycle.
+  * weeklyBak.sh - Shell script that runs the weekly backup, called from the cron.
+  * weekly\_backup.conf - config file for the weekly backups.
+  * weekly\_list.txt - list of VM Images to backup on the weekly cycle.
+
+For transferring the files, you can do one of the following:
+  * ESXi 4.x use scp to transfer the files from another machine to the host.
+  * ESXi 5.x use SFTP(Filezilla for instance) to transfer the files.
+
+**Make sure to make the dailyBak, weeklyBak, and ghettoVCB files executable.**
+
+There is no crontab editor such as crontab -e in ESXi, instead you directly edit the file: /var/spool/cron/crontabs/root . The setup is the same as a normal **Nix cron job. New ESXi version have differing entries in the root cron, so don't just overwrite the root file, add the following lines to the bottom.
+Sample cron entry:
+```
+#Daily backup cron job
+0    0    *   *   0-4,6 /vmfs/volumes/datastore1/backup/dailyBak.sh
+#Weekly backup cron job
+0    0    *   *   5 /vmfs/volumes/datastore1/backup/weeklyBak.sh
+```
+Another gotcha is when the host reboots, it appears to overwrite the root cron file, so make sure to make a backup and store it in the /vmfs/volumes/datastore1/backup directory.**
+
+## Backup location ##
+Our .112 NAS is the location the VM images are copied to. For a new host, you'll need to have its IP address added to the hosts.allow file.
+The directories are:
+  * daily - /taurus/vmbackups/mnt\_backup
+  * weekly - /taurus/vmbackups/weekly (not yet enabled)
+
+## To Do ##
+The .vmdk files are very large, finding a way to compress them would be very helpful in conserving drive space.
+
+
+---
+
+
+## Current Image Backup List ##
+### ESXi Host .37.87 ###
+  * Daily
+    1. neptune
+  * Weekly
+    1. neptune
+    1. Squid
+    1. secoinv2
+
+### ESXi Host .139.198 ###
+  * Daily
+    1. Projects
+    1. xeniavmMapping
+  * Weekly
+    1. Projects
+    1. xeniavmMapping
+
+### ESXi Host .139.184 ###
+  * Daily
+    1. GSAA\_website
+  * Weekly
+    1. GSAA\_website
+
+### ESXi Host .139.238 ###
+  * Daily
+    1. GSAA\_ArcServer
+  * Weekly
+    1. GSAA\_ArcServer
+
+## Restore ##
+[Backup Instructions](https://communities.vmware.com/docs/DOC-10595)
+
+
+The ghetto restore does not seem to support getting the backups from a remote NAS where we put them. So I am copying to my local machine then will scp from the ESXI login to a backup directory.
+**NOTE** To copy the vmdk files from the NAS, need to sudo cp otherwise the permissions will not allow the copy.
+**Use gzip to compress the large vmdk image.** Create a directory in one of the datastores on the ESXi host to use as the staging area.
+**Use scp to copy the image onto the ESXi host directory just created.** Configure your restore control file to point to the backup host directory from above, add the target destination as well. Here is the sample for projects, the format is <from directory>;<to directory>;<disk format type>;<display name>
+```
+"/vmfs/volumes/4ae1a54c-247a0233-4e3e-002219013a6a/bak;/vmfs/volumes/4ae1a54c-247a0233-4e3e-002219013a6a;3;projects"
+```
+**NOTE** If you add a <display name>, when the restore starts it will take the <to directory> and create a directory with the <display name>.

@@ -1,0 +1,34 @@
+Goal is to recreate geospatial boundaries for a catalog of layers to a local postgis lookup/cache table.  ESRI Geoportal does this, but on the maximum extents, not down to the fine grain point/polygon level.
+
+From rest endpoint, can see the below type request using the 'query' method, giving the geometry= as a bounding box(-90,20,-65,37) for the overall region.  Substitute f=kmz to get kmz file back.  Selectiong 'gag grouper' below.
+
+Note, this query approach may be limited as query results may be limited to max 1,000 records, etc.  See MaxRecordCount in layer description.  Could work around this by issuing and testing multiple queries, but no immediate good solutions.
+
+http://129.252.139.110/gsaa/rest/services/SCDNR/MapServer/50/query?where=&text=&objectIds=&time=&geometry=-90%2C20%2C-65%2C37&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&f=kmz
+
+Help links
+http://help.arcgis.com/en/arcgisserver/10.0/apis/rest/query.html <br>
+<a href='http://www.kindle-maps.com/blog/how-to-create-a-postgis-database-on-ubuntu.html'>http://www.kindle-maps.com/blog/how-to-create-a-postgis-database-on-ubuntu.html</a> <br>
+<a href='http://www.wildsong.biz/index.php/Loading_data_into_PostGIS#Loading_data_from_KMZ_files'>http://www.wildsong.biz/index.php/Loading_data_into_PostGIS#Loading_data_from_KMZ_files</a> <br>
+<a href='http://www.bigfastblog.com/landsliding-into-postgis-with-kml-files'>http://www.bigfastblog.com/landsliding-into-postgis-with-kml-files</a>
+
+As postgres user, created gsaa_test postgis dbinstance on 37.90<br>
+<br>
+Had trouble getting ogr2ogr version on neptune to recognize kml file for conversion to postgis, but version on 139.139 worked for pushing kml to shapefile<br>
+<br>
+Did not work on 37.90 <br>
+<code> ogr2ogr -f PostgreSQL PG:"user=postgres dbname=gsaa_test" doc.kml  'gag grouper' </code>
+
+Did work on 139.139 <br>
+<code>ogr2ogr -f "ESRI Shapefile" grouper.shp doc.kml</code>
+
+zipped grouper files on 139.139, moved to 37.90 and unzipped<br>
+<br>
+<pre><code>shp2pgsql -s 4326 -I -c -W UTF-8 grouper grouper &gt; grouper.sql<br>
+<br>
+psql -U postgres -d gsaa_test -f grouper.sql<br>
+</code></pre>
+
+Select smaller polygon/bbox near South Carolina, presence for layer would be where given polygon and count > 0 <br>
+<pre><code>gsaa_test=# SELECT count(*) from grouper where ST_AsText(ST_Intersection(ST_GeomFromText('SRID=4326;POLYGON((-75 31,-75 35,-82 35,-82 31,-75 31))'),the_geom)) &lt;&gt; 'GEOMETRYCOLLECTION EMPTY';<br>
+</code></pre>

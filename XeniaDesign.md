@@ -1,0 +1,218 @@
+This is an earlier documentation [webpage](http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaDesign) to list some Xenia design considerations, benchmarks, and tips as related to the relational database schema.
+
+
+
+# Similar observation schemas #
+
+
+---
+
+
+## Hydrology efforts ##
+
+CUAHSI http://his.cuahsi.org
+
+WaterML OGC spec http://xml.coverpages.org/OGC-07-041r1-CUAHSI-WaterML.pdf
+
+REST data access http://www7.ncdc.noaa.gov/rest
+
+
+---
+
+from http://www.clemson.edu/restoration/events/past_events/sc_water_resources/t5_proceedings_presentations/t5_zip/goodall_ppt.pdf
+
+Summary
+  * How can we integrate measurements and models from various sources into a single description of the environment?
+  1. By decoupling the system into autonomous components and defining standard interfaces between the components
+  1. By developing algorithms that define the communication between system components (feedback loops, semantic mediation, space/time rescaling of exchanges, etc.)
+
+Remaining Challenges
+  * Computational Efficiency
+    * How does the “loose-coupling” paradigm scale as systems become more complex?
+  * Granularity
+    * What level of granularity is necessary and appropriate for modeling a watershed?
+  * Semantic mediation
+    * How can we match exchanges between multidisciplinary components (semantic mediation,space/time rescaling)?
+
+
+---
+
+
+### OpenMI ###
+
+OpenMI (Open Model Integration environment)
+  * http://www.openmi.org
+  * http://www.crwr.utexas.edu/gis/gishydro06/GISandHIS/GISHydro06_Goodall.htm
+  * http://code.google.com/u/jon.goodall/
+
+from http://www.crwr.utexas.edu/gis/gishydro06/GISandHIS/GISHydro06_Goodall.htm
+
+The Big Picture: Why use OpenMI?
+
+It’s easy to get lost in the details of creating an OpenMI component, so let me first start with a big picture view.  One way to think of OpenMI is as a flexible, extensible modeling engine.  It’s flexible and extensible because developers can make their databases, text files, spreadsheets, FORTRAN models, C models, etc Open-MI compliant.  This basically means that developers tell OpenMI what the values the data source or model is capable of supplying and how to extract these values from the source or model.  OpenMI handles all of the coordination issues between different data source and models (i.e. if a groundwater model needs recharge from a watershed model, OpenMI knows when and how to get the value from the watershed model).  As you would imagine, one of the most difficult issues of model and data integration is misalignment in space and time.  The computational mesh for a watershed, for example, may not match up with the computational mesh for a groundwater model.  OpenMI is designed to handle these misalignments through user defined linkages (watershed node 1 links to groundwater node 2) or spatial linkages (linkages are derived by the spatial overlap and intersection of features).
+
+
+The issues that arise in model and data integration can become quite complex and OpenMI is a valiant attempt to create a system capable of facilitating the integration of heterogeneous data sources and models.  That said, it still requires a fairly significant amount of work for a model developer to make his or her model “OpenMI compliant”.  The most significant change that needs to be made to make a model OpenMI-compliant is “stripping out” the time looping component of the model so that OpenMI can run the model more interactively through time. Depending on the complexity of your model, this process could take weeks to months to complete (as estimated by the OpenMI group themselves).  Thus, OpenMI might not be the way to go for all modeling activities, but as we become more interdisciplinary and need to integrate models capable of computing different components of the water and biochemical cycles, the applicability of a modeling framework like OpenMI becomes more attractive.
+
+OpenMI and WaterML https://lists.sdsc.edu/pipermail/his/2008-August/000251.html
+
+
+---
+
+
+### Brief Xenia/Cuahsi-ODM schema comparison ###
+
+[A Data Model for Environmental Observations](ftp://ftp.research.microsoft.com/pub/tr/TR-2008-92.pdf) [pdf](http://www.carocoops.org/documents/ODM_data_model.pdf)
+
+Reviewed the links and schema and here's some initial comparison and feedback between the ODM and Xenia schemas.
+
+As a general summary I would say the schemas are very similar with both schemas revolving around a central observations table (in ODM, the 'observations values' block - in Xenia, the 'multi\_obs' table) with the ODM schema supplying a greater level of attribute detail on its support tables.
+
+Here's a mapping between the ODM block sections in Figure 2 at http://water.usu.edu/cuahsi/odm/files/ODM1.pdf
+
+and the Xenia schema shown at http://code.google.com/p/xenia/wiki/XeniaPackageV2#Xenia_Table_Schema_Diagram
+
+ODM -> Xenia:
+
+observation values -> multi\_obs
+
+monitoring site locations -> platform
+
+data sources -> organization
+
+variables -> 'data dictionary' block
+
+data qualifiers -> quality control
+
+data collection methods -> none, maybe qc url, links
+
+
+---
+
+
+no mapping:
+
+value grouping
+
+categorical data
+
+series catalog
+
+
+---
+
+
+For Xenia I'm taking a less detailed approach with reference to geospatial and time datums. Spatial references are WGS84 and elevation is reference to MSL(Mean Sea Level) with positive indicating meters height above the surface and negative indicating meters depth below the surface.
+
+
+Things which are in Xenia but not similarly in ODM are as follows:
+
+1)To support vector representations like wind, currents, etc I added a scalar to vector type mapping in my data dictionary. So every observation type is by default a vector of at least one scalar component.
+
+2)Also added a generic 'collection' table which serves to provide a grouping type functionality and metadata to a set of observations, platforms or sensors.
+
+3)The '_attr' tables can also function in a similar generic user defined manner, although I haven't really utilized them._
+
+4)There is a specific articulation for Xenia of organizations->platforms->sensors->observations. There isn't a 'sensor' specific table that I see in ODM. Xenia uses the concept of sensors which are associated with a specific observation type (m\_type\_id) and s\_order (1,2,3,...) to differentiate between redundant sensors or profiling sensors of the same observation type.
+
+The separate articulation of the sensor table also serves summary observation type discovery purposes similar to the ODM observation lookup tables.
+
+
+---
+
+
+Also found the following quote parallels my caveat at http://code.google.com/p/xenia/wiki/XeniaHome#Description in regards to the use cases for this type relational database.
+
+
+---
+
+
+From the pdf p.2
+
+This approach carries the burden of record level metadata, so it is not appropriate for all variables that might be observed. For example, individual pixel values in large remotely sensed images or grids are inappropriate for this model.
+
+
+---
+
+
+I would add that I am also looking towards performance enhancing query responses on Xenia databases by having multiple databases which are structured the same but contain only data relevant to a given manageable time-window (the most recent few days of data versus say monthly or yearly archival databases). Similar 'divide and conquer' approaches could be applied based on region or area to manage response similar to image tiling based solutions.
+
+A common problem that I see to both databases is outside referential identification integrity and provenance of transient metadata. For Xenia I have begin/end dates associated with parent type record id's but what I need to do is associate metadata attributes which may change on say a monthly or yearly basis to a child lookup table(like say sensor->sensor\_metadata) which is associated with a fixed parent record (for long term identification purposes) while some of the more transient attributes can change on the child table with associated begin/end dates.
+
+
+---
+
+
+In regards to exchange between the Xenia and ODM, the path I provide is ObsKML which is the default XML import/export format for Xenia.
+
+---
+
+## EPA Exchange Network ##
+
+http://www.exchangenetwork.net/index.htm
+
+http://www.epa.gov/storet/wqx_downloads.html
+
+Water Quality Exchange Entity Relationship Diagram version 2.0
+http://www.epa.gov/storet/wqx_products/WQX_ERD_v2.11.pdf
+
+
+---
+
+## Seamonster ##
+
+http://robfatland.net/seamonster/index.php?title=Main_Page
+
+---
+
+# Performance issues #
+
+>Do you have any metrics on the number of Xenia users, or
+aggregate # of total obs/hour across Xenia instance available?
+
+The general figure that I use is 10,000 obs/hour(see data flow graph [here](http://code.google.com/p/xenia/wiki/XeniaUpdates#flow_monitor)) on a generic Dell Poweredge 2850(old 2006 model dual-core with 2  GB memory) which is what I have tested here - the processing time could be divided between:
+
+  * time required to process raw->ObsKML->SQL
+  * time required to process SQL against database(s)
+  * time required to pregenerate output products (variable depending on number and complexity of output products, could be workload balanced against other servers)
+
+The storage space that this translates into at 10K obs/day (with some 'wasted' space for convenience since fields such as multi\_obs.platform\_handle could be an integer reference instead of a string) is about 40-50 MB/day or a little over 300 MB per julian week.
+
+The place where I'd like to optimize further is in running the SQL against the sqlite database, would like to use transaction level SQL(begin/commit blocks) to greatly speed this step up, but haven't had time to program in catching SQL insert problems for logging and reprocessing.  And running inserts individually I've had to write a wrapper script around also as the default process tends to drop data rows silently http://code.google.com/p/xenia/wiki/XeniaUpdates#batch_insert.pl .
+
+# sensor\_id concept #
+
+Thought some more about the concern regarding the fixed single hierarchy regarding one platform per sensor and was thinking of the possible compromise solution.
+
+Right now when I define a sensor row it is usually only in the fields row\_id,platform\_id, m\_type\_id,s\_order and sometimes fixed\_z and active.  The active field for the platform and sensor table should be defined as an int instead of boolean (need to update latest schemas with that).  The wider intent with the active field is to provide status lookup codes which would correlate as to whether the platform or sensor was functioning/reporting and associated report/display.
+
+But where I'm planning to define the rest of the sensor was in a metadata table entry/id  which would point to all the specific metadata details about the sensor as exists in another referenced platform/sensor specific table/xml.
+
+For individual cruises/transects with the same sensor metadata, one could point the 'new' sensor\_id to the 'old' metadata\_id record and lookups.  With the metadata table I essentially wanted to build in links/references, effective dates and a metadata.active field which would help provide a shortcut to the latest record(instead of sorting through the effective dates).
+
+So it would be a waste of a repeated row for each new cruise/platform of the new sensor\_id pointing to possibly the same old effective metadata record, but it should be possible if necessary to link the same physical sensor/data across cruises via the same referenced metadata\_id record.
+
+Maybe a bit contorted, but first thing that came to mind.  Essentially the metadata table, in addition to a history/provenance function, could provide a grouping function across multiple sensor\_id's where the main table hierarchy fails.
+
+The sensor table and issuance of new sensor\_id's is mainly utilized to group or associate a collection of measurements on the multi\_obs table that might be later referenced or visualized/graphed as a single sensor\_id collection (one sensor\_id for an ongoing water\_temperature collection at the same platform or multiple sensor\_id's for water\_temperature depending on cruise/downcast/upcast for CTD case for example).
+
+The metadata\_id also would provide an additionally system specific level of reference for association or alias lookups.
+
+  * platform\_handle=organization.platform.package or platform.metadata\_id
+  * sensor\_id or sensor.metadata\_id
+
+# platform,etc aliases #
+
+The same platform might be referenced under multiple platform handle names currently such as carocoops.CAP2.buoy and ndbc.41024.met
+
+To reduce redundant observation data being collected/referenced/queried, the metadata table could also be utilized to cross-reference aliased platforms or sensors.
+
+As data is collected by the data scout, the sensor\_id could be cross-referenced with the metadata alias to insure that data is only collected/referenced/queried by a single preferred alias(multiple preferences might be available depending on a server config and/or passed URL token argument on reference/query).  An alias table report could also be generated for manual cross-referencing.  Platforms might be partially overlapping in regards to which sensor\_id's are referenced by the full org.platform.package handle.
+
+# string identifiers mixed case, lowercase #
+
+As the scripts have been setup, mixed case (carocoops.CAP2.buoy) are allowed, while a few of the output styling scripts (like those which generate latest html\_tables) force the platform\_handle to all lowercase via
+
+`$platform_id = lc($platform_id);`
+
+A more consistent solution for new xenia setups might be to force all imported data string identifiers to lowercase.

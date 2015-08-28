@@ -1,0 +1,227 @@
+see also [VMwareHome](VMwareHome.md) [VMwareDownload](VMwareDownload.md)
+
+The below notes assume installation on a server running **VMware ESXi 4.0**, for further notes on ESXi, other VMware or virtualization products see earlier notes at [VMwareInstall](VMwareInstall.md)
+
+
+
+# Setup #
+
+## ip setting ##
+
+The `ifconfig` command will tell you which ethernet device the server is trying to communicate on(`ifconfig -a` will show all available devices).  For mine the host server was running 'eth0' and the virtual was running 'eth5'
+
+from http://forums.techarena.in/operating-systems/1106661.htm
+
+### static ip ###
+
+for the host the static IP is 129.252.37.90
+
+In host file /etc/network/interfaces
+```
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 129.252.37.90
+netmask 255.255.255.0
+gateway 129.252.37.1
+```
+
+Then restart network with
+```
+sudo /etc/init.d/networking restart
+```
+
+Running 'ifconfig' command from virtual host listed ethernet as 'eth5' which is substituted for the 'eth0' and run in the same steps listed above for configuring the static IP for the host except now on the virtual server.
+
+I did not have to modify the defaulted dns file settings for host or virtual server files under /etc/resolv.conf
+
+### dynamic ip (dhcp) ###
+
+Discover the ethernet device that the server is trying to communicate on using the `ifconfig` command as detailed above(device is eth0 in the example below).
+
+In host file /etc/network/interfaces
+```
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+```
+
+Then restart network with
+```
+sudo /etc/init.d/networking restart
+```
+
+
+
+---
+
+## openssh ##
+
+**required section if ssh access from other networks/IP's is needed**
+
+The initial image runs an openssh daemon which accepts no outside connects via the /etc/hosts.allow file below.  Modify the hosts.allow,hosts.deny files as necessary for access/security purposes.  The VMware vSphere desktop application provices a server command-line window(console) for initial login.
+
+file /etc/hosts.allow
+```
+#uncomment below line and add substitute your http ip below for ssh access
+#sshd : xxx.xxx.xxx.xxx : allow
+sshd : ALL : deny
+```
+
+
+---
+
+## image default users, passwords ##
+
+**required section for security purposes**
+
+#reset user passwds to public defaults - user,root,xeniaprod,postgres - as root, passwd 
+
+&lt;username&gt;
+
+
+
+The **root** user has password **root!99**.  Modify this password as needed.
+
+The **postgres** user has password **postgres!99**.  Modify this password as needed.
+
+The username associated with the xenia development is **xeniaprod** with password **xeniaprod!99**  Modify this password as needed.
+
+The username **user** has password **user!99** although this user account is not utilized.  Modify this password as needed.
+
+Both users **xeniaprod** and **user** are part of the **admin** group (`sudo vi /etc/group`) which is a 'sudo' (`sudo vi /etc/sudoers`) enabled group.
+
+
+---
+
+## host substitutions, configuration ##
+
+**Required section for configuring image to use local IP,system/database passwords and understanding data flow**
+
+_By default as a test, on initial image startup this image will begin trying to hourly access over the web a few data feeds(ndbc,nos) for aggregation to the xenia database and production of several output formats and services.  Check 'flow**' output graphs(.png) under http://localhost/xenia/feeds or http://xxx.xxx.xxx.xxx/xenia/feeds after a few hours to verify feed processing/population.**_
+
+If you plan to run a production xenia vmware instance accessible by others on the web, search the xeniaprod code from the following directory to see the necessary localhost substitutions(for your production machine http address) or other configuration options.
+
+see also http://code.google.com/p/xenia/wiki/VMwareDesign#Checklist , http://code.google.com/p/xenia/wiki/VMwareDesign##VM_CONFIG_notes
+
+All of the end-specific configuration/security settings should be set in .ini,.xml,... type files under **`/home/xeniaprod/config`**  This is not currently quite the case as some user/passwords are passed into various scripts as cron parameters and so on.
+
+**`/home/xeniaprod/config/site.ini`** is the main .ini file which should be used for tracking the server IP or other server global initialization settings from product scripts.
+
+replace the sample IP of 129.252.139.71 in the below line commands with your IP (xxx.xxx.xxx.xxx)
+```
+cd /home/xeniaprod
+find . -name "*" -exec grep -H "VM_CONFIG" {} \; 
+perl -p -i -e 's/129.252.139.71/xxx.xxx.xxx.xxx/g' `find ./ -name "*.pl"`
+perl -p -i -e 's/129.252.139.71/xxx.xxx.xxx.xxx/g' `find ./ -name "*.html"`
+perl -p -i -e 's/129.252.139.71/xxx.xxx.xxx.xxx/g' `find ./ -name "*.xml"`
+```
+
+Repeat this search-term/substitute process for the following other two development-specific folders.
+
+Development folders
+```
+cd /var/xenia
+cd /usr/lib/cgi-bin
+```
+
+find/substitute usage example
+```
+perl -p -i -e 's/xxx.xxx.xxx.xxx/129.252.139.71/g' `find . -type f \( -name "*.pl" -o -name "*.php" -o -name "*.xml" -o -name "*.html" -o -name "*.ini" -o -name "*.txt" -o -name "*.conf"\)`
+```
+
+To help mark/denote where a new server setup should consider changing the scripts or settings depending on their installation, the main search keywork is **`VM_CONFIG`**
+
+```
+search for #VM_CONFIG in effected files
+
+/etc/hosts.allow  #ssh ip access
+/etc/exports #nfs remote mount access
+
+=
+#postgres
+optional - database size on /usr2, delete old records - vacuum
+
+user passwds - postgres,xeniaprod
+psql -U postgres -h xxx.xxx.xxx.xxx
+alter user postgres with password 'xxx';
+alter user xeniaprod with password 'xxx';
+
+#enable #VM_CONFIG ip addresses
+sudo vi /usr2/pg_data/pg_hba.conf
+
+#postgres auto-authentication
+vi /home/xeniaprod/.pgpass
+
+cd /home/xeniaprod/config #database user/password
+  dbConfig.ini
+  environment_xenia_default.xml
+
+#enable feeds as needed(crontab feeds currently commented out with '#QQ ')
+
+search for #VM_CONFIG in effected crons (as user 'xeniaprod', crontab -e)
+#start crons - root, xeniaprod
+
+check output graphs(.png) under http://xxx.xxx.xxx.xxx/xenia/feeds after a few hours to verify feed processing/population
+
+```
+
+### additional search terms ###
+
+The below search terms may be present and need replacement(possible lower/upper/mixed case) - particularly in the configuration files under `home\xeniaprod\config` or cron files under `home\xeniaprod\cron`
+
+```
+xeniaprod,xeniaprod!99 - user/password settings
+gmail - used in the email notification listings
+secoora
+129.252.37.90
+neptune.baruch.sc.edu
+neptune
+
+google analytics code - like UA-xxxxxx-x
+google maps key
+```
+
+### crontabs ###
+The two crontabs utilized are for users **root** and **xeniaprod**
+
+**root** crontab is utilized to clear temporary or other system files and may have some lines commented out(#QQ ) initially since they are system checks that provide email notification.  These can be uncommented once the system check settings are reviewed and email server and email send list defined.
+
+**xeniaprod** crontab should cover everything else.  It's main subshell script that it calls half-hourly is xeniaflow\_postgresql.sh  Many data feeds and possibly some products are commented out(#QQ ) initially and should be reviewed before uncommenting/enabling.
+
+The shell scripts referenced by cron are all placed at **`/home/xeniaprod/cron`**
+
+
+---
+
+## miscellaneous ##
+
+**informational section**
+
+**sudo** all commands that need root access.
+
+To sudo between users, use the first user password(user99 in the below example) not the target user password
+```
+user@gisvm:~$ sudo su - xeniaprod
+[sudo] password for user:
+xeniaprod@gisvm:~$ 
+```
+
+The **two crontabs** which are active are **root** which performs a nightly cleanup of files under directory /home/xeniaprod/tmp\_web and **xeniaprod** which also performs file cleanup but more importantly runs the following main job hourly.
+
+The file **/home/xeniaprod/cron/xeniaflow.sh** creates all the subsequent related products and should be referenced to understand the product creation flow.
+
+Xenia related log files are at /home/xeniaprod/tmp and cleared nightly.
+
+Apache user(www-data) created related temporary files are at /home/xeniaprod/tmp\_web and cleared nightly.
+
+## ObsKML ##
+
+**optional section**
+
+If you are ready to start pulling new data into your system, see
+http://code.google.com/p/xenia/wiki/VMwareTest#Adding_a_new_ObsKML_feed

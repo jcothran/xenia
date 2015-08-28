@@ -1,0 +1,694 @@
+
+
+# Introduction #
+
+The Secoora Interactive map is a JavaScript driven mapping engine using [OpenLayers](http://www.openlayers.org), [GeoEXT](http://www.geoext.org), and [ExtJS](http://www.extjs.com) JavaScript libraries.
+The [Highcharts](http://highcharts.com/) library provides the graphing capability used on the observation popup windows.
+
+
+# Setup #
+The files and directory are structured as follows:
+```
+|
+-interactive_map.html
+-lib
+ |-ExtJS-3.3.0
+ |-GeoExt-1.0
+ |-OpenLayers-2.10
+ |-Highcharts
+ |-secoora_interactive.js
+ |-olMap1.0.js
+ |-ComparisonFilterEx.js
+ |-adapter-extjs.js
+ |-Ext.ux.HighChart.js
+ |-units_conversion.js
+-resources
+ |-css
+  |-ext-all-3-3-0.css
+  |-popup.css
+  |-mappanel.css
+  |-style.css
+  |-layout_objects.css
+ |-images
+   |-data_age
+   |-default
+   |-help
+   |-legend
+   |-openlayers
+```
+
+## File descriptions ##
+  * ExtJS-3.3.0 is the directory where the ExtJs files are stored. The files are extracted in the preserving directory hierarchy.
+
+  * GeoExt-1.0 is the parent directory of the GeoExt library.
+
+  * OpenLayers-2.10 is the parent directory of the Openlayers library.
+
+  * Highcharts is the parent directory of the Highcharts library.
+
+  * interactive\_map.html
+> This is the html file that kicks off the creation of the map.
+
+  * secoora\_interactive.js
+> This is the JavaScript file that creates and manages the map.
+> It extends the olMap class found in olMap1.0.js. The addLayers() function is where the WMS layers are added.
+
+  * olMap1.0.js
+> Contains the base class olMap. This class contains basic mapping setup.
+
+  * adapter-extjs.js
+> The adapter code needed to get the Highcharts graphing library to work with the ExtJS framework. The original source for the adapter is provided [here](http://www.sencha.com/forum/showthread.php?93669-Highcharts-adapter-and-plugin-for-ExtJS&highlight=highchartpaneljson).
+  * Ext.ux.HighChart.js
+> The Highchart graphing class wrapper. The original source for the wrapper class is provided [here](http://www.sencha.com/forum/showthread.php?93669-Highcharts-adapter-and-plugin-for-ExtJS&highlight=highchartpaneljson).
+
+  * ComparisonFilterEx.js
+> Class ComparisonEx overrides OpenLayers.Filter.Comparison to create the filters used on the map that allow filtering by observations and/or organization. Our platform data comes from a json file, and alot of the attributes are in a hierarchical structure. To filter on some of the properties, such as observation, a function was needed to traverse down to the particular property. The base implementation of Openlayers did not provide this. The function of interest is the recursive function: getAttribute.
+
+  * units\_conversion.js
+> Natively the observation data is in metric. The unitConverter class allows the on the fly conversion from metric to Impertial. The initial implementation is found on [Stack Overflow](http://stackoverflow.com/questions/865590/javascript-unit-of-measure-conversion-library). Modifications were made to hand Celsius to Fahrenheit conversions.
+
+## Data Sources ##
+The map uses a combination of WMS and [Vector Features](http://dev.openlayers.org/releases/OpenLayers-2.10/doc/apidocs/files/OpenLayers/Feature/Vector-js.html) to display data.
+
+### Layer Configuration File ###
+The configuration file is a JSON file containing general data in the header section, then a "tabs" section that defines individual maps on separate tabs.
+
+  * Header Config
+```
+map_config_callback({      
+  "serverSettings" : 
+  {
+    "mapserverIP" : "",    
+    "tilecacheIP" : "",    
+    "proxyHost" : "AjaxProxy.php?url="
+  },
+  "googleAnalyticsKey" : "UA-xxxxxx", 
+
+  "tabs" :
+  [
+    {
+      "name" : "Realtime Observations",
+      "layerTreeName" : "Real Time Layers",
+      "toolbarGroupName" : "rtmap",
+      "mapConfig" : 
+      {
+        "mapExtents" : 
+        {
+          "lowerLeft" :
+          {
+            "lon" : -90.5,
+            "lat" : 24.5
+          },
+          "upperRight" :
+          {
+            "lon" : -60.5,
+            "lat" : 37.2
+          },
+          "centerMapOn" :
+          {
+            "lon" : -82.376,
+            "lat" : 30.50
+          }
+        },
+        "numZoomLevels": 9,
+        "maxResolution": 2445.984904688, 
+
+        "resolutions": 
+[2445.984904688,1222.992452344,611.496226172,305.748113086,152.874056543,76.437028271,38.218514136,19.109257068,9.554628534,4.777314267,2.388657133,1.194328567,0.59716428337097171575,0.298582142],
+
+        "projection": "EPSG:900913",
+        "displayProjection": "EPSG:4326",
+        "units": "degrees",
+        "layers" : 
+        [
+          {
+            "folder" : "BaseLayers" ,
+            "children" :
+            {
+              "Google Terrain" :
+              {
+                "type" : "OpenLayers.Layer.Google",
+                "options": 
+                {
+                  "sphericalMercator": true,
+                  "type": "G_PHYSICAL_MAP",
+                  "MIN_ZOOM_LEVEL": 6, 
+                  "MAX_ZOOM_LEVEL": 15,
+                  "displayInLayerSwitcher":
+                  "GROUP" : "BaseMap"
+                }
+              }              
+            }
+          },
+          {
+            "folder": "InSitu",
+            "children":
+            {
+              "Sea Surface Temperature":
+              {
+                "type" : "OpenLayers.Layer.WMSEx",
+                "url" : "http://129.252.139.124/tilecache/tilecache.py?",
+                "params":
+                {
+                  "LAYERS": "sst_obs_hourly_recent",
+                  "SRS": "epsg:4326",
+                  "FORMAT": "image/png",
+                  "TRANSPARENT": true,
+                  "TIME_OFFSET_HOURS": 2          
+                },
+                "options":
+                {
+                  "displayInLayerSwitcher": true,
+                  "visibility": false,
+                  "GROUP" : "InSitu",
+                  "QUERYABLE": false,
+                  "visibility": false,
+                  "alwaysRefresh": true                  
+                },
+                "EnableGetFeatureInfo": false,
+                "zIndexDelta" : 2                
+              },
+              "Real Time Observations":
+              {
+                "type" : "rcoosmapping.platformVectorLayer",
+                "url" : "http://129.252.139.124/cgi-bin/mapserv?",
+                "options":
+                {
+                  "displayInLayerSwitcher": true,
+                  "visibility": false,
+                  "GROUP" : "InSitu",
+                  "QUERYABLE": true,
+                  "visibility": true,
+                  "multiple" : true,
+                  "rendererOptions": 
+                  {
+                    "zIndexing": true
+                  } 
+                },
+                "featuresUrl": "http://neptune.baruch.sc.edu/xenia/feeds/obsjson/mapmeta/platform_callback.json",
+                "EnableGetFeatureInfo": true,
+                "active" : true
+              }
+            }
+          },
+          {
+            "folder": "Model(NCSU)",
+            "expanded" : false,
+            "children":
+            {
+
+              "Wind(NCEP)":
+              {
+                "type" : "OpenLayers.Layer.WMS",
+                "url": "http://129.252.139.124/cgi-bin/mapserv_model_wrapper?",
+                "params":
+                {
+                  "map" : "/home/xeniaprod/mapping/common/general.map",
+                  "LAYERS": "ncep_global/wind",
+                  "NCWMS_STYLES": "vector/rainbow",
+                  "COLORSCALERANGE": "0,30",
+                  "NUMCOLORBANDS": "20",
+                  "SRS": "epsg:4326",
+                  "FORMAT": "image/png",
+                  "TRANSPARENT": true,
+                },
+                "options":
+                {
+                  "singleTile": true,
+                  "ratio": 1,
+                  "GROUP" : "Model(NCEP)",
+                  "visibility": false,
+                  "QUERYABLE": true,
+                  "opacitySlider": true
+                },
+                "extendedOptions": 
+                {
+                  "attribution" :
+                  {
+                    "infoUrl" : "http://secoora.org/maps/datalinks#"
+                  },
+                  "legend" :
+                  {
+                    "imageUrl" : "http://129.252.139.124/ncWMS/wms?LAYER=ncep_global%2Fwind&COLORSCALERANGE=-1.6532156%2C34.71753&NUMCOLORBANDS=254&LOGSCALE=false&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_inimage&FORMAT=image%2Fpng&WIDTH=20&HEIGHT=100"
+                  },
+                  "opacity" :
+                  {
+                    "slider" : true,
+                    "initOpacity" : 50
+                  },
+                  "getfeatureinfo" :
+                  {
+                    "type" : "rcoosmapping.WMSThreddsXMLGetFeatureInfo",
+                    "vendorParams" :
+                    {
+                      "gfiUrl" : "http://omglnx1.meas.ncsu.edu/thredds/wms/fmrc/sabgom/SABGOM_Forecast_Model_Run_Collection_best.ncd",
+                      "obsType" : "Winds",
+                      "uomType" : "M/S",
+                      "srs" : "EPSG:4326",
+                      "query_layers": "ncep_global/tmp2m"
+                    }
+                  },
+                  "timeParams" :
+                  {
+                    "forecastHoursCount" : 48,
+                    "hindcastHoursCount" : 48,
+                    "hourlyUpdateInterval" : 3 
+                  }                  
+                }
+              }
+          }
+        ]
+      }
+    }
+  ]
+```
+#### map\_config\_callback ####
+Javascript callback function. Must be defined as "map\_config\_callback".
+##### serverSettings #####
+  * mapserverIP - Currently not used.
+  * tilecacheIP - Currently not used.
+  * proxyHost   - Many data sources are retrieved using Ajax queries, however the data sources do not reside on the server hosting the map. Ajax imposes a security restriction that no 3rd party servers can be accessed via an Ajax call. We use a proxy to get retrieve the data from the data servers. The format is: path to proxy?url=. OpenLayers populates the url portion with the destination url.
+
+googleAnalyticsKey -If provided, will use Google Analytics to track page hits.
+
+##### tabs #####
+> An array of tab objects, each containing a map.
+  * **Tab Configuration**
+  * _name_  - Name given to the tab.
+  * _layerTreeName_ - Name given to the layer tree panel.
+  * _toolbarGroupName_ - Unique identifier for the tool bar at the top of the map window.
+  * **mapConfig** -  Configuration parameters specific to the map layout.
+    * _mapExtents_ - Defines the bounding box used for the map.
+      * _lowerLeft_ - Lower left latitude and longitude point for the bounding box. Consists of a "lon" and "lat" entry.
+      * _upperRight_ - Upper right latitude and longitude point for the bounding box. Consists of a "lon" and "lat" entry.
+      * _centerMapOn_ - The point which the map will attempt to center the map on. Consists of a "lon" and "lat" entry.
+    * _numZoomLevels_  - Number of zoom levels the map will use. Option used in OpenLayers Map object.
+    * _maxResolution_  - The maximum resolution of the map. Option used in OpenLayers Map object.
+    * _resolutions_  - The list of resolutions the map will use. Option used in OpenLayers Map object. For a base layer like Google Maps, those resolutions are fixed and defined by google.
+    * _projection_  - The internal projection the base map uses. Option used in OpenLayers Map object.
+    * _displayProjection_ - The projection used for displaying information. Option used in OpenLayers Map object.
+    * _units_ - Default display units. Option used in OpenLayers Map object.
+    * _layers_ - Section defines the layers this map tab will contain.
+      * _folder_ - For future use which will defines the name of the group the layers under the "children" attribute will fall under.
+      * _children_ - The layers the folder group contains.
+        * "Layer Name" - Define the name of the layer.
+          * "type" - The OpenLayers layer object to create. In addition to the standard OpenLayers objects, there are a few custom ones as well listed in the [Custom Layers](#Custom_Layers.md) entry below.
+          * "params" - Attribute is for OpenLayers layer objects that have a "params" configuration.
+          * "options" - The attribute mimics the OpenLayers options field for the layer. Each setting, unless otherwise noted, is defined in the appropriate OpenLayers class.
+          * "extended\_options" - This are is completely unique to our map configuration file. Although the do affect the layer, they are not OpenLayers parameters. This section will be in a state of flux as we refine various parameters.
+```
+                  "attribution" - This section is where we give credit to the data provider.                  
+                    "infoUrl" - URL with anchor tag to the Secoora page that has a short blurb about the data provider.
+                  
+                  "legend" - Section where legend parameters are set.
+                  
+                    "imageUrl" - Url of the image to use in the Legend Panel.
+
+                  "opacity" - Layer Opacity section.
+                  
+                    "slider" - True flag will add a opacity slider to the layer info popup box for the layer.
+                    "initOpacity" - Initial opacity of the layer. PLaceholder, need to implement.
+                  
+                  "getfeatureinfo" - WMS layer GetFeatureInfo setup area.
+                  
+                    "type" : GetFeatureInfo object type. Can be rcoosmapping.WMSThreddsXMLGetFeatureInfo
+                    "vendorParams" - Options appended to the POST url. These are specific to the type above. The ones listed below are unique to our wrapper which interfaces with a Thredds WMS server.
+                    
+                      "gfiUrl" : "http://omglnx1.meas.ncsu.edu/thredds/wms/fmrc/sabgom/SABGOM_Forecast_Model_Run_Collection_best.ncd",
+                      "obsType" : "Winds",
+                      "uomType" : "M/S",
+                      "srs" : "EPSG:4326",
+                      "query_layers": "ncep_global/tmp2m"
+                    
+                  "timeParams" - Section dealing with the time ranges a layer may have.
+                  
+                    "forecastHoursCount" - Some model layers have a forecast ability, this details the number of hours ahead we can request.
+                    "hindcastHoursCount"  - Some model layers have a hindcast ability, this details the number of hours behind we can request.
+                    "hourlyUpdateInterval" - How often the model generates data.
+```
+
+
+#### Custom Layers ####
+ Custom Options **These are "options" that are not standard to OpenLayers layer objects but used in our custom maps.
+  * _displayInLayerSwitcher_ - A bool to indicate whether a layer is to be shown in the layer tree.
+  * _GROUP_ -String for the layer tree folder to place this layer. In the future, the "folder" option above will supersede this.
+  * _QUERYABLE_ - Bool, set to true if user can click on layer data to get information, like GetFeatureInfo request for WMS layers.
+  * _opacitySlider_ true to add an opacity slider to the layer in the layer tree.
+  * _initialOpacityValue_ - Integer that defines initial opacity value of the opacity slider.
+  * _attributionLink_ - Optional URL that will enable a link on the layer in the layer tree which when clicked takes the user to a page further detailing the layer and layer provider.**
+
+  * "OpenLayers.Layer.WMSEx" - Re-queries the server each time a scroll action or enable/disable layer is performed. This is useful for layers whose underlying data can change periodically. Setup is the same for normal WMS OpenLayers layer.
+
+  * "rcoosmapping.platformVectorLayer" - The stationary observing platforms are encapsulated here. Each platform is an OpenLayers Vector feature. Example:
+```
+"Real Time Platforms" :
+{
+  "type" : "rcoosmapping.platformVectorLayer",
+  "url" : "http://129.252.139.124/cgi-bin/mapserv?",
+  "options":
+  {
+    "displayInLayerSwitcher": true,
+    "visibility": false,
+    "GROUP" : "InSitu",
+    "QUERYABLE": true,
+    "visibility": true,
+    "multiple" : true,
+    "rendererOptions": 
+    {
+      "zIndexing": true
+    } 
+  },
+  "featuresUrl": "http://neptune.baruch.sc.edu/xenia/feeds/obsjson/mapmeta/platform_callback.json",
+  "EnableGetFeatureInfo": true,
+  "active" : true to turn 
+}
+```
+    * featuresUrl - URL to the JSON file containing the platform data. File described below in [Observing Platforms](#Observing_Platforms.md)
+    * EnableGetFeatureInfo - Not used.
+    * active - true to enable user to click on a platform to get the data in a popup.
+
+  * "rcoosmapping.kmlLayer" - Wrapper for KML layers. Defines a click handle to query data points in the layer.
+```
+"Katia Cone":
+{
+  "type" : "rcoosmapping.kmlLayer",
+  "options":
+  {
+    "strategies" : "Fixed",                  
+    "GROUP" : "Hurricanes",
+    "visibility": false,
+    "QUERYABLE": false,
+    "projection": "EPSG:4326",
+    "protocol": {
+      "url": "http://129.252.139.124/mapping/xenia/feeds/noaa/hurricane/Katia_Latest_CONE.kml",
+      "format": {
+          "extractStyles": true, 
+          "extractAttributes": true,
+          "maxDepth": 3
+      }
+    }                 
+  }
+}
+```
+
+  * "rcoosmapping.earthNCCharts" - Wrapper for the Earth NC NOAA navigation maps. Needed since the layer is a XYZ type layer and needs a specific function to determine the tiles to query.
+```
+"EarthNC Charts" :
+{
+  "type" : "rcoosmapping.earthNCCharts",
+  "url" : "http://earthncseamless.s3.amazonaws.com/${z}/${x}/${y}.png",
+  "options":
+  { 
+    "isBaseLayer": false,
+    "sphericalMercator": true,
+    "displayInLayerSwitcher": true,
+    "GROUP": "Map Overlay",
+    "visibility":false,
+    "TRANSPARENT" : true,
+    "QUERYABLE": false,
+    "opacitySlider": true,                    
+    "initialOpacityValue": 50,
+    "attributionLink": "http://carolinasrcoos.org/DataServices.php#earthnc"
+  }
+}
+```
+### Observing Platforms ###
+For the platforms, we use a collection of Vector Features to plot on the map. The Vector Features are contained within a [Vector Layer](http://dev.openlayers.org/releases/OpenLayers-2.10/doc/apidocs/files/OpenLayers/Layer/Vector-js.html).
+#### Platform Vector Data Source ####
+The Vector Features are supplied through an JSON [file](http://neptune.baruch.sc.edu/xenia/feeds/obsjson/mapmeta/platform_callback.json). The file is broken up into two main bodies, a lookup table and the platform data. The lookup table is used to reduce the overall file size by having frequently used strings stored only in one place. They are referenced in the platform data through integer indexes.
+##### Platform  Sample Entry #####
+  * Platform Entry Sample:
+```
+{
+  "type": "Feature",
+  "geometry": {
+      "coordinates": [-79.620000000000005, 32.799999999999997],
+      "type": "Point"
+  },
+  "properties": {
+      "links": {
+          "dataQuery": {
+              "iconId": 9,
+              "id": "carocoops.CAP2.buoy",
+              "urlId": 2
+          },
+          "emailAlert": {
+              "iconId": 8,
+              "id": "carocoops.CAP2.buoy",
+              "urlId": 1
+          },
+          "geoRSS": {
+              "iconId": 10,
+              "id": "carocoops_cap2_buoy_GeoRSS_latest.xml",
+              "urlId": 3
+          },
+          "twitter": {
+              "iconId": 7,
+              "id": "cap2rcoos",
+              "urlId": 0
+          }
+      },
+      "orgName": 39,
+      "staDataFile": "carocoops:cap2:buoy_data.json",
+      "staDataURL": 4,
+      "staDesc": "CAROCOOPS CAP2, Capers Island Nearshore, SC",
+      "staID": "carocoops.CAP2.buoy",
+      "staObs": [{
+          "Properties": {
+              "obsDisOrd": 1,
+              "obsTypeDesc": 5,
+              "sorder": 1,
+              "uomID": 3
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 2,
+              "obsTypeDesc": 3,
+              "sorder": 1,
+              "uomID": 2
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 3,
+              "obsTypeDesc": 1,
+              "sorder": 1,
+              "uomID": 1
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 4,
+              "obsTypeDesc": 2,
+              "sorder": 1,
+              "uomID": 1
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 5,
+              "obsTypeDesc": 4,
+              "sorder": 1,
+              "uomID": 4
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 6,
+              "obsTypeDesc": 22,
+              "sorder": 1,
+              "uomID": 11
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 25,
+              "obsTypeDesc": 6,
+              "sorder": 1,
+              "uomID": 3
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 30,
+              "obsTypeDesc": 28,
+              "sorder": 1,
+              "uomID": 10
+          },
+          "type": "feature"
+      }, {
+          "Properties": {
+              "obsDisOrd": 33,
+              "obsTypeDesc": 10,
+              "sorder": 1,
+              "uomID": 13
+          },
+          "type": "feature"
+      }],
+      "staTypeImage": 0,
+      "staTypeName": "buoy",
+      "staURL": "http://nautilus.baruch.sc.edu/carocoops_website/buoy_detail.php?buoy=buoy4"
+  }
+}
+```
+  * Lookup Table
+> Lookup data that originates from the Xenia DB have entries that mimic the database structure. The database table name is used for a lookup key. Then the row id is used as the identifier in the platform data above. Finally column names are used as a key to point to the data value.
+> For example the observation names:
+```
+"obs_type": 
+{
+  "1": {
+    "display": "Wind Speed",
+    "standard_name": "wind_speed"
+  }
+```
+##### File Creation Script #####
+Script: buildPlatformMetadata.sh<br />
+Server: Neptune
+Directory: /home/xeniaprod/cron<br />
+Description: Shell script that launches the python script that builds the platform metadata JSON file.<br />
+Shell Script Makeup<br />
+
+> Script: buildPlatformMetadata.py <br />
+> Directory: <br />
+> Command Line Parameters:<br />
+> --dbName - The name of the xenia database to connect to.<br />
+> --dbHost - The xenia database host address to connect to.<br />
+> --dbUser - The xenia database user name to connect with.<br />
+> --dbPwd - The xenia database password name to connect with.<br />
+> --Polygon - The polygon we want to use to select the platforms.   Format is: long lat, long lat....<br />
+> --JsonPlatformFilepath - The output directory to write the JSON file.<br />
+> --ConversionFile - The XML file with the units conversion formulas.<br />
+> --PlaformSettingsFile - This is the XML file that has various  settings for platforms. A sample of the file can be found Sample can be found [here](http://code.google.com/p/xenia/source/browse/trunk/postgresql/mapping/platformSettings-template.xml).<br />
+> --UseJSONCallbackFunc - Set this flag to wrap the JSON in a callback function.<br />
+
+
+
+
+Schedule: Every 2 hours. <br />
+#### Observation Data Source ####
+The observation data is available in JSON files, broken down per platform [here](http://neptune.baruch.sc.edu/xenia/feeds/obsjson/all/latest_hours_24/).
+
+##### Observation Sample Entry #####
+```
+{"type": "Feature",
+            "geometry": {
+                "type": "MultiPoint",
+                "coordinates": [[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3],[-79.62,32.8,3]] 
+            },
+         "properties": {
+            "obsTypeDesc": "air pressure",
+            "obsType": "air_pressure",
+            "uomType": "mb",
+            "sorder": "1",
+            "time": ["2011-02-15 16:00:00Z","2011-02-15 17:00:00Z","2011-02-15 18:00:00Z","2011-02-15 19:00:00Z","2011-02-15 20:00:00Z","2011-02-15 21:00:00Z","2011-02-15 22:00:00Z","2011-02-15 23:00:00Z","2011-02-16 00:00:00Z","2011-02-16 01:00:00Z","2011-02-16 02:00:00Z","2011-02-16 03:00:00Z","2011-02-16 04:00:00Z","2011-02-16 05:00:00Z","2011-02-16 06:00:00Z","2011-02-16 07:00:00Z","2011-02-16 08:00:00Z","2011-02-16 09:00:00Z","2011-02-16 10:00:00Z","2011-02-16 11:00:00Z","2011-02-16 12:00:00Z","2011-02-16 13:00:00Z","2011-02-16 14:00:00Z","2011-02-16 15:00:00Z","2011-02-16 16:00:00Z","2011-02-16 17:00:00Z","2011-02-16 18:00:00Z","2011-02-16 19:00:00Z"],
+            "value": ["1024.1","1024.4","1024.1","1023.7","1023.6","1023.8","1024.2","1024.4","1024.3","1024.5","1024.4","1024.8","1024.9","1024.6","1024.4","1024.4","1024","1023.6","1023.8","1024.1","1024.3","1024.8","1025.2","1025.5","1025.3","1024.8","1024.2","1023.3"]
+        }},
+
+```
+##### File Creation Script #####
+Script: xenia\_to\_json.pl<br />
+Server: Neptune<br />
+Directory: /home/xeniaprod/scripts/postgresql/import\_export<br />
+Description: Script creates the observation JSON files. Each platform has a seperate file. The last 24 hours of observations for the platform are saved. The file naming convention is: organization:platform short name:platform type\_data.json<br />
+Command Line Parameters: No command line parameters, however there are hardcoded paths to note.
+  * $target\_dir = '/home/xeniaprod/feeds/obsjson/all/latest\_hours\_24/';
+> This is the output directory where the JSON files will be written.
+  * my $cfg=Config::IniFiles->new( -file => '/home/xeniaprod/config/dbConfig.ini');
+> This is the file containing the connection information for the database.
+
+### WMS Data Sources ###
+A combination of both local and remote WMS layers are used on the map. Locally, [Mapserver](http://mapserver.org) is the mapping engine used to host and serve up the WMS data. Both USC and Chapel Hill host local layers using Mapserver.
+#### Layers ####
+This section will detail the local mapfiles used, as well as any wrapper scripts used during the WMS query.
+##### HF Radar #####
+  * HF Radar Currents
+> _Script:_ [currents\_rs\_wrapper\_tst](http://trac.secoora.org/visual/browser/mapping/trunk/mapserver/wrappers/currents_rs_wrapper_tst) <br />
+> _Machine:_ Maury<br />
+> _Directory_: /usr/local/apache2/cgi-bin<br />
+> _Description:_ The HF Radar data is stored in a shapefile. This wrapper is used to created the appropriate file name to pass onto the Mapserver for serving out the tiles. The file naming convention is: year\_month\_day\_hour\_00\_00.shp. The WMS query provides a layer specific variable, TIME\_OFFSET\_HOURS which is used in determining the file to use. An offset of 3 hours is used in the map. <br />
+
+> _Mapfile:_ [currents\_rs\_tst.map](http://trac.secoora.org/visual/browser/mapping/trunk/mapserver/mapfiles/currents_rs_tst.map)<br />
+> _Directory_: /opt/secoora\_ogc/maps/<br />
+> _URL Parameters:_ <br />
+> > Normal WMS parameters, plus the following layer specific params:<br />
+> > TIME\_OFFSET\_HOURS - Offset in hours. <br />
+> > MAP\_SCALEBAR\_STATUS - ON or OFF. Used to query scalebar for layer.<br />
+
+##### Drifters #####
+  * Drifters
+
+> _Script:_ [drifter\_wrapper](http://trac.secoora.org/visual/browser/mapping/trunk/mapserver/wrappers/drifter_wrapper)<br />
+> _Machine:_ Maury<br />
+> _Directory_: /usr/local/apache2/cgi-bin<br />
+> _Description:_ The drifter positions are stored in a database. This wrapper is used to create the current head position of the drifter, then use the TAIL parameter to create the trailing points that show previous drifter positions.<br />
+
+> _Mapfile:_ [drifter.map](http://trac.secoora.org/visual/browser/mapping/trunk/mapserver/mapfiles/drifter.map)<br />
+> _Directory_: /opt/secoora\_ogc/maps/<br />
+> _URL Parameters:_ <br />
+> > Normal WMS parameters, plus the following layer specific params:<br />
+> > TIME\_OFFSET\_HOURS - Offset in hours. Used for time offset in the SQL done in the drifter.map file. This offset is used to query for the latest drifter position(head).<br />
+> > TAIL - Specifies the number of days previous to query for to draw the trailing dots on the map behind the head.<br />
+
+##### Interpolated Sea Surface Temperature #####
+
+> _Mapfile:_ [general.map](http://code.google.com/p/xenia/source/browse/trunk/mapping/mapserv/general.map)<br />
+> _Directory_: /home/xeniaprod/mapping/common<br />
+> _Machine:_ Neptune<br />
+> _URL Parameters_:<br />
+> > Normal WMS parameters, in addition:<br />
+> > TIME\_OFFSET\_HOURS - Sets the hour to look up in the database.<br />
+##### MODIS SST #####
+
+> _Mapfile:_ [general.map](http://code.google.com/p/xenia/source/browse/trunk/mapping/mapserv/general.map)<br />
+> _Directory_: /home/xeniaprod/mapping/common<br />
+> _Machine:_ Neptune<br />
+> _URL Parameters_:<br />
+> > Normal WMS parameters, in addition:<br />
+> > TIME\_OFFSET\_HOURS - Sets the hour to look up in the database.<br />
+##### Sea Surface Temperature #####
+
+> _Mapfile:_ [general.map](http://code.google.com/p/xenia/source/browse/trunk/mapping/mapserv/general.map)<br />
+> _Directory_: /home/xeniaprod/mapping/common<br />
+> _Machine:_ Neptune<br />
+> _URL Parameters_:<br />
+> > Normal WMS parameters, in addition:<br />
+> > TIME\_OFFSET\_HOURS - Sets the hour to look up in the database.<br />
+##### Water Level #####
+
+> _Mapfile:_ [general.map](http://code.google.com/p/xenia/source/browse/trunk/mapping/mapserv/general.map)<br />
+> _Directory_: /home/xeniaprod/mapping/common<br />
+> _Machine:_ Neptune<br />
+> _URL Parameters_:<br />
+> > Normal WMS parameters, in addition:<br />
+> > TIME\_OFFSET\_HOURS - Sets the hour to look up in the database.<br />
+##### In-Situ Winds #####
+
+> _Mapfile:_ [general.map](http://code.google.com/p/xenia/source/browse/trunk/mapping/mapserv/general.map)<br />
+> _Directory_: /home/xeniaprod/mapping/common<br />
+> _Machine:_ Neptune<br />
+> _URL Parameters_:
+> > Normal WMS parameters, in addition:<br />
+> > TIME\_OFFSET\_HOURS - Used to query the winds from now -   TIME\_OFFSET\_HOURS
+
+#### Tilecached Layers ####
+Layers that use tilecache have some special considerations if you make changes to the bounding box for the map. In the tilecache.cfg, you'll need to change the BBOX paramter for all the tilecache layers used to match the new extent.
+Sample tilecache entry:
+```
+[Bathy]
+type=WMSLayer
+url=http://129.252.139.139/cgi-bin/mapserv?MAP=/home/xeniaprod/mapping/common/general.map&transparent=true
+layers=Bathymetry
+levels=20
+maxResolution=156543.0339
+size=256,256
+bbox=-10074413.915389,2814454.731918,-6734829.1920556,4467020.9930062
+srs=EPSG:900913
+extension=png
+extent_type=loose
+```
+Tilecache.cfg lives on the Mapping instance under /var/www/tilecache.
+
+Once this change is made, you'll also need to clean the tilecache image directories so the tiles with the new extents can be generated.
+Those directories are here: base=/usr2/data/xeniaprod/tmp/mapserver\_tmp/tilecache. The directories can be deleted. They will be regenerated once a new tilecache request comes in for the given layer.

@@ -1,0 +1,110 @@
+==52North
+
+apt-get install maven2
+
+#missing build.properties file
+wget https://svn.52north.org/svn/swe/main/SOS/Service/trunk/SOS/52n-sos/build.properties --no-check-certificate
+
+> modify password in build.properties
+
+[INFO](INFO.md) [install:install {execution: default-install}]
+[INFO](INFO.md) Installing /home/bitnami/52n-sensorweb-sos-3.2.1/52n-sos-service/target/52nSOSv3.2.1.war to /root/.m2/repository/org/n52/sensorweb/sos/52n-sos-service/3.2.1/52n-sos-service-3.2.1.war
+
+
+http://52north.org/downloads/sensor-web/sos
+http://blog.52north.org/2012/06/04/sensor-observation-service-installer-and-back-end/
+https://wiki.52north.org/bin/view/Sensornet/SosEclipseJavaProject
+https://wiki.52north.org/bin/view/Sensornet/SosTutorial#Configuration_of_the_build_prope
+https://svn.52north.org/svn/swe/main/SOS/Service/trunk/SOS/52n-sos/build.properties
+http://52north.org/communities/sensorweb/
+https://wiki.52north.org/bin/view/Sensornet/GetResult
+https://wiki.52north.org/bin/view/Sensornet/SosDataModeling
+http://www.techrepublic.com/article/customize-database-queries-using-views-in-postgresql/6032031
+
+https://help.ubuntu.com/community/PostgreSQL
+http://linuxpoison.blogspot.com/2012/01/how-to-install-configure-postgresql.html
+
+##  ##
+
+#vi 52n-sos-service/src/main/webapp/WEB-INF/conf/dssos.config
+
+```
+#tablenames
+TNFOI=feature_of_interest
+TNOBS=observation
+TNPHEN=phenomenon
+TNCOMPPHEN=composite_phenomenon
+TNPROC=procedure
+TNPROCPHEN=proc_phen
+TNOFF=offering
+TNREQPHEN=request_phenomenon
+TNREQCOMPPHEN=request_composite_phenomenon
+TNOBSTEMP=observation_template
+TNREQ=request
+TNPHENOFF=phen_off
+TNCOMPPHENOFF=com_phen_off
+TNPROCPHEN=proc_phen
+TNPROCFOI=proc_foi
+TNPROCOFF=proc_off
+TNFOIOFF=foi_off
+TNDFOFF=df_off
+TNQUALITY=quality
+
+#columnnames of feature of interest table
+FOIID=feature_of_interest_id
+FOINAME=feature_of_interest_name
+FOIDESC=feature_of_interest_description
+GEOM=geom
+FEATURETYPE=feature_type
+SCHEMALINK=schema_link
+
+
+#column names of observation table
+TIMESTAMP=time_stamp
+TEXTVALUE=text_value
+NUMERICVALUE=numeric_value
+SPATIALVALUE=spatial_value
+MIMETYPE=mime_type
+OBSID=observation_id
+
+#column names of quality table
+QUALITYNAME=quality_name
+QUALITYVALUE=quality_value
+QUALITYUNIT=quality_unit
+QUALITYTYPE=quality_type
+
+#column names of phenomenon table
+PHENID=phenomenon_id
+PHENDESC=phenomenon_description
+UNIT=unit
+OMASLINK=om_application_schema_link
+VALUETYPE=valuetype
+
+#column names of phenomenon table
+COMPPHENID=composite_phenomenon_id
+COMPPHENDESC=composite_phenomenon_description
+
+#column names of procedure table
+PROCID=procedure_id
+DESCURL=description_url
+DESCTYPE=description_type
+SMLFILE=sml_file
+
+#column names of offering table
+OFFERINGID=offering_id
+OFFNAME=offering_name
+MINTIME=min_time
+MAXTIME=max_time
+
+#column names of request table
+REQID=request_id
+REQUEST=request
+BEGINLEASE=begin_lease
+ENDLEASE=end_lease
+
+#column names of observation_template
+OBSTEMPID=obs_template_id
+OBSTEMP=observation_template
+```
+
+##  ##

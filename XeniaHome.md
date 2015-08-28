@@ -1,0 +1,209 @@
+for further information or discussion regarding **Xenia** or **ObsKML** send email to jeremy.cothran 'at' gmail.com
+
+See also [VMwareHome](VMwareHome.md) regarding a vmware .vmdk image for testing/development purposes.<br />
+See also [AmazonWebServices](AmazonWebServices.md) regarding a Amazon Machine Image(AMI) for test/development purposes.
+
+
+
+# Presentation materials #
+
+[browser/flash presentation](http://www.carocoops.org/documents/sccc/kiosk/cothran-usc-sc08-Kiosk-audio/)
+
+[Powerpoint poster](http://carocoops.org/documents/sccc_poster_JCothran.ppt)
+
+[Powerpoint presentation](http://carocoops.org/documents/sccc_presentation_JCothran.ppt) [presentation slides mp3 audio](http://carocoops.org/documents/sccc)
+
+[YouTube video](http://www.youtube.com/watch?v=_CO9o2DyVV0&fmt=6)
+
+[white paper](http://xenia.googlecode.com/files/xenia_geo.doc)
+
+# Projects utilizing Xenia RDB schema #
+
+CarolinasRCOOS (openlayers **beta/experimental**) http://carolinasrcoos.org
+  * http://code.google.com/p/rcoos/wiki/RCOOSHome
+
+NWS Marine Weather Portal http://forecast.weather.gov/mwp/
+
+Intelligent River http://www.intelligentriver.org/data-products (Clemson University, Xenia RDB)
+
+Great Lakes Information Network (GLIN) http://gis.glin.net (Xenia RDB)
+
+Northwest Association of Networked Ocean Observing Systems (NANOOS) [NANOOSXenia](NANOOSXenia.md)
+
+
+---
+
+
+# Description #
+I've been trying to reduce and simplify what we're doing in terms of data collection and sharing for ocean observations down to a single set of relational database tables and scripts.  The name I'm choosing for this effort is '**Xenia**' which is a kind of coral found in many marine aquarium coral collections which waves through the water with many palms or hands.
+
+The general issue which we run into is that data is collected to a data 'logger' in tabular format and it involves a lot of manual work to get data from these individual sensor datalogger formats into a more standardized forms which can be more easily aggregated and used.
+
+The initial goal is to develop a good general relational table schema which we can push most all of our aggregated in situ observation data into and pull various products and web services from.  The secondary goal is the sharing of scripts which leverage this schema both to aggregate data and to provide output products and web services.
+
+Again the Xenia problem/product I'm trying to address is the common datalogger/filesystem which collects 10-20 obs per hour at 1 to 1000 platforms (**say less than 100,000 records total/hour**) and tying that back into our system of systems(CAROCOOPS, SECOORA, IOOS, GEOSS) with a common relational database driven schema infrastructure to develop products up from.
+
+For high-volume data problems(very homogenous, image/gridded type data) with **millions of records per hour(model outputs, hf radar, etc)**, this is not something which I think Xenia should address at this time except for possibly in terms of metadata tables describing these products.  High-volume data problems can continue being addressed as [file/directory based](http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/OGR_example), batch I/O processing bound problems with discussions more directed towards the organization of the data metadata files for **descriptive** (common visual legends for image overlay needs, common agreements on quality control application) and **archival** needs.
+
+---
+
+# Links #
+
+This site is in the initial stages of being setup and materials (documentation and code) will be ported over as time permits.
+
+The source documentation and code for this project currently lives at
+
+version 1
+
+http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackage
+
+version 2
+
+XeniaPackageV2
+
+Table Diagram http://code.google.com/p/xenia/wiki/XeniaPackageV2#Xenia_Table_Schema_Diagram
+
+version 2 - sqlite
+
+XeniaPackageSqlite
+
+ObsKML (the default xml import/export format for a Xenia instance)
+
+http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML
+
+
+---
+
+XeniaFlow
+
+XeniaSetup
+
+XeniaFeeds
+
+XeniaProducts
+
+XeniaDevelopmentIdeas
+
+XeniaUpdates
+
+XeniaDesign
+
+
+---
+
+
+http://code.google.com/p/xenia/wiki/JCBroadNotes
+
+http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
+
+
+---
+
+# Notes #
+
+Would recommend using the [\*version 3.1\* schema](http://code.google.com/p/xenia/source/browse/trunk/postgresql/sql/db_xenia_v3.1_postgresql.sql), I have listed the earlier versions(including sqlite) as a point of historical reference but am not developing any more against it.
+
+Although I'm no longer developing against the **sqlite** version, it may be of interest to folks running more compact, single-user embedded systems.
+
+
+For notes on using **subversion** for this project, see the notes at http://code.google.com/p/rcoos/wiki/SubversionNotes which should apply the same for this project except that the project name is 'xenia' instead of 'rcoos'
+
+A google groups has been setup for discussion at http://groups.google.com/group/xeniavm
+
+To be added as a **project member** to this site send your **google account id** to jeremy.cothran 'at' gmail.com
+
+A suggested **IRC channel** for developer chat would be [irc://irc.freenode.net/#xeniavm](irc://irc.freenode.net/#xeniavm)
+
+Would like to facilitate any additional ideas, discussion or code developments/branches at this site as it might be useful to others as time and opportunity permit.
+
+
+---
+
+
+# Related technical links #
+
+http://mapserver.gis.umn.edu <br />
+http://geoserver.org <br />
+http://openlayers.org <br />
+http://tilecache.org <br />
+http://www.opengeospatial.org/standards <br />
+http://postgresql.org <br />
+http://postgis.refractions.net <br />
+http://sqlite.org
+
+#ArgoUML,ArchGenXML,Plone<br />
+http://agility.jpl.nasa.gov/documents/uml-to-portal-in-a-few-easy-steps
+
+
+---
+
+# Related efforts #
+
+http://ioos.noaa.gov/program/ <br />
+http://www.csc.noaa.gov/cir <br />
+http://trac.secoora.org
+
+
+---
+
+# Related projects #
+
+http://www.ndbc.noaa.gov <br />
+http://tidesandcurrents.noaa.gov <br />
+http://nationalmap.gov <br />
+http://www.iobis.org
+
+https://ecowatch.ncddc.noaa.gov <br />
+http://nowcoast.noaa.gov <br />
+http://www.osmc.noaa.gov <br />
+ERDDAP http://coastwatch.pfeg.noaa.gov/erddap/index.html <br />
+http://madis.noaa.gov
+
+http://obsregistry.org <br />
+
+http://openioos.org <br />
+http://oostethys.org http://code.google.com/p/oostethys/<br />
+http://www.gomoos.org/gm/index.html http://www.gomodp.org/projects/ODP_IE
+http://www.gomodp.org/projects/exchange-network-project <br />
+http://q2o.whoi.edu
+
+http://forecast.weather.gov/mwp/ <br />
+http://secoora.org/maps http://secoora.org/data <br />
+http://carolinasrcoos.org
+
+## marinemap ##
+website http://marinemap.org/ <br />
+tour http://marinemap.org/tour.html <br />
+GIS http://marinemap.org/marinemap/
+FAQ http://marinemap.org/faq.html
+technology http://marinemap.org/poster.pdf
+code project site http://code.google.com/p/marinemap/
+
+## sciscope ##
+http://www.sciscope.org/ <br />
+http://sciscope.codeplex.com/
+
+## Unidata ##
+http://motherlode.ucar.edu:8080/thredds/catalog/station/metar/catalog.html <br />
+http://www.unidata.ucar.edu/software/idd/ <br />
+http://www.unidata.ucar.edu/software/ldm/ <br />
+http://ernie.tamu.edu/repository <br />
+http://motherlode.ucar.edu/repository
+
+## Calit2 ##
+
+http://sosa.ucsd.edu
+
+[Projects](http://sosa.ucsd.edu/index.php?menu=Project)
+  * [Ocean Observing Initiative(OOI) project](http://sosa.ucsd.edu/index.php?menu=Projects&section=On-going#OOI)
+[Publications](http://sosa.ucsd.edu/index.php?menu=Publications)
+  * [Cyberinfrastructure for the US Ocean Observatories Initiative: Enabling Interactive Observation in the Ocean](http://sosa.ucsd.edu/ResearchCentral/download.jsp?id=174)
+  * [Integrating Data Distribution and Data Assimilation Between the OOI CI and the NOAA DIF](http://sosa.ucsd.edu/ResearchCentral/download.jsp?id=169)
+
+
+---
+
+
+geonetwork http://geonetwork-opensource.org
+
+FOSS4G 2009 projects http://groups.google.com/group/xeniavm/t/b7358b9348b276d

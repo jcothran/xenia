@@ -1,0 +1,219 @@
+
+
+# Related projects #
+
+Carocoops http://carocoops.org
+
+Secoora
+  * maps http://secoora.org/maps
+  * maps (openlayers) http://secoora.org/maps/dynamic
+  * files and feeds http://secoora.org/data
+
+# Projects utilizing Xenia RDB schema #
+
+CarolinasRCOOS (openlayers **beta/experimental**) http://carolinasrcoos.org
+  * http://code.google.com/p/rcoos/wiki/RCOOSHome
+
+NWS Marine Weather Portal http://forecast.weather.gov/mwp/
+
+Intelligent River http://www.intelligentriver.org/data-products (Clemson University, Xenia RDB)
+
+Great Lakes Information Network (GLIN) http://gis.glin.net (Xenia RDB)
+
+
+---
+
+# presentation materials #
+[browser/flash presentation](http://www.carocoops.org/documents/sccc/kiosk/cothran-usc-sc08-Kiosk-audio/)
+
+[Powerpoint poster](http://carocoops.org/documents/sccc_poster_JCothran.ppt)
+
+[Powerpoint presentation](http://carocoops.org/documents/sccc_presentation_JCothran.ppt) [presentation slides mp3 audio](http://carocoops.org/documents/sccc)
+
+---
+
+
+# miscellaneous topics/links #
+
+zope/plone(CMS (Content Management System) python based) http://en.wikipedia.org/wiki/Plone_(content_management_system)
+
+google project hosting(subversion,wiki,issue ticket) http://www.oss-watch.ac.uk/resources/googlecode.xml
+
+web hosting - http://hostmonster.com - perl,php,postgres
+
+
+
+perl (packages 'DBI' for RDB(Relational DataBase) interaction,'XML::LibXML' for XML interaction)
+
+php (webpages only)
+
+javascript (openlayers/ajax, simple animation)
+
+
+RDB/Xenia/sqlite approach in regards to relatively sparse but disorganized in-situ obs http://code.google.com/p/xenia/wiki/XeniaHome
+http://code.google.com/p/xenia/wiki/XeniaPackageSqlite
+
+XML approach to sharing low-volume in-situ hourly data via ObsKML http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML
+
+XML approach to organization, metadata referencing data file format specific - png,netCDF,etc
+
+DSI(Dynamic Sensor Inventory) - associated organizatiom/platform/sensor/obs metadata file - under development
+
+see schemas for ObsKML,obs/sensor vocabs,DSI at http://trac.secoora.org/datamgmt/browser/docs/usc/docs/schemas
+
+  * obskml http://trac.secoora.org/datamgmt/browser/docs/usc/docs/schemas/obskml.xml.txt
+  * obsTypes http://trac.secoora.org/datamgmt/browser/docs/usc/docs/schemas/obs_types.xsd
+  * uomTypes http://trac.secoora.org/datamgmt/browser/docs/usc/docs/schemas/uom_types.xsd
+  * dsi(draft) http://trac.secoora.org/datamgmt/browser/docs/usc/docs/schemas/secoora_dsi_1.0.xml.txt
+
+secoora netcdf+qc(high-level,low-level flags, qartod) 
+
+&lt;-&gt;
+
+ obskml(data) + dsi(metadata)
+
+  * base http://trac.secoora.org/datamgmt/browser/docs/cdl/trunk/seacoos-netcdf-standard.doc
+  * qc http://trac.secoora.org/datamgmt/browser/docs/sprints/july2006
+  * data dictionary(draft) http://carocoops.org/twiki_dmcc/pub/Main/WebHome/seacoos_data_dictionary_small.csv
+
+data scout: obskml + dsi -> xenia sqlite db
+
+  * raster images(png,etc) - remote sensing, etc
+  * shapefiles - hourly model?, etc
+
+  * ogr/sql queryable - shapefiles, sqlite xenia db/html
+
+
+mapserver (wms/gfi,wfs) , ogr
+http://code.google.com/p/rcoos/wiki/MapserverNotes
+
+tilecache http://tilecache.org - great client performance speed-up(fast map loads on the client) by pregenerating/caching tiled map content - both tilecache and openlayers are developed/maintained by Chris Schmidt
+
+http://code.google.com/p/rcoos/wiki/TileCacheNotes
+
+XeniaProducts
+  * gnuplot (time series, vector) http://en.wikipedia.org/wiki/Gnuplot
+  * instrument/event metrics/notification
+    * Percentage uptime
+      * http://carocoops.org/~dramage_prod/secoora/PlatformUptimePercentages.html
+      * http://trac.secoora.org/datamgmt/wiki/PercentageUptime
+    * Range tests
+      * http://carocoops.org/~dramage_prod/seacoos/test_results.html
+      * http://trac.secoora.org/datamgmt/wiki/RangeTests
+
+
+---
+
+
+openlayers http://openlayers.org
+  * exposed - interface controls, map layers
+  * permalink
+
+data feeds/formats http://secoora.org/data
+  * CSV,XML(GeoRSS,ObsKML,styled KML),shapefile,sqlite
+
+  * WMS(map image overlays)/WFS(feature info XML)
+  * OGC SOS, DIF (feature info XML) [XeniaSOS](XeniaSOS.md)
+  * OPeNDAP(netCDF,RDB)
+
+obsregistry http://obsregistry.org
+  * additional discovery - fgdc,gcmd,etc
+
+web/apache throttling (mod\_cband ?)
+  * http://www.uno-code.com/?q=node/64
+  * http://www.montanalinux.org/mod_cband.html
+
+google analytics, custom log analysis
+  * http://trac.secoora.org/datamgmt/wiki/JCothranGAProxy
+
+
+firebug - firefox client browser performance analysis, layer optimization
+
+jmeter - simulated load testing
+
+
+personnel,hardware,software redundancy
+
+community engagement,third-party re-use/development
+
+data buffet, data/product format/service catalog, mix-and-match
+
+desktop tools
+  * Google Earth/Maps,etc(KML,ObsKML,GeoRSS) http://earth.google.com
+  * MapWindows(shapefile/GIS) http://www.mapwindow.com
+  * ncBrowse(netCDF) http://www.epic.noaa.gov/java/ncBrowse
+  * ODV(ctd/csv) http://odv.awi.de
+  * Excel(CSV)
+
+earlier technical notes http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
+
+updates XeniaUpdates
+
+
+---
+
+# Devolution - technology changes, lessons learned #
+
+_Simplify, simplify - Thoreau_
+
+  * Move/Utilize common third party infrastructure at server and client level
+    * Self hosted to third party hosted: third party website hosting for static content/context, common processing/storage.  Google code/analytics for basic shared development support/documentation.
+      * in-house custom server -> vmware image/appliance server -> cloud (like EC2)?
+    * Web GIS interface - server-side to client/browser side: php/mapscript -> OpenLayers/Javascript/AJAX, TileCache for improved WMS response time
+      * Google Maps/Earth type Javascript/AJAX API's
+
+  * Find/Utilize a data model/schema which is simple enough to capture important aspects but not so complex that it becomes difficult to maintain
+    * Latest in-situ obs: RDB – sensor/obs hard-coded/table approach -> obs non-specific infrastructure(xenia,obskml)
+    * Sensor/observation specific metadata: loosely link(database system id to URL/file handle) a variety of more specific metadata files/schemas to common rdb infrastructure
+
+  * Move/Utilize data storage/access from in-house custom complex software/application dependencies to simpler common file formats, web links and web services broadly accessible by a variety of third party analysis/visualization tools
+    * Hourly dense/gridded data: RDB quickscat, model layers -> shapefiles which are queryable via ogr+sql
+    * Full RDB to file-based RDB: postgresql+postgis -> sqlite+ogr, sqlitegeo?
+    * ROA(Resource Oriented Architecture)/REST style simpler declarative alternatives to complex query SOA(Service Oriented Architecture)
+
+  * General concerns
+    * content-standards for popular, well-utilized formats and web services
+    * continued focus for wider general IT audience usage on
+      * SQL type tools/queries against table/shapefile/RDB type data sources
+      * XPath(libXML) processing against XML file formats
+      * associated limitations or niches for various technical approaches
+    * need more, better quantitative(e.g. web server stats) and qualitative(e.g. user feedback and surveys) feedback broadly shared especially with data and product participants to better guide and encourage data and product development
+    * the ongoing in-situ instrumentation deployment, maintenance and telemetry cost limits the amount of data to process making the near real-time data management aspects of a limited or finite scope as contrasted with the constant drop in data processing or storage costs
+
+see also http://code.google.com/p/xenia/wiki/XeniaDesign
+
+
+---
+
+# General technical discussions #
+  * ROA vs SOA
+    * http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML#Related_Links
+    * OpenSearch
+      * common search/request method http://www.opensearch.org
+      * http://www.xml.com/pub/a/2007/07/20/introducing-opensearch.html
+      * http://groups.google.com/group/geo-web-rest/browse_thread/thread/3e0a51cb7ef13866?pli=1
+    * format+convention/data model vs service/software
+    * report vs query
+  * real-time vs model/archive
+  * utility/grid/cloud computing by Google, Amazon, etc
+    * http://blog.wired.com/wiredscience/2008/01/google-to-provi.html
+    * http://research.google.com/university/
+
+
+---
+
+# Upcoming development #
+
+VMWare - improved sharable/portable/redundant open source server/appliance stack via vmware
+  * https://help.ubuntu.com/community/VMware/Player
+  * GISVM http://gisvm.com GISVM is a free and ready to use anywhere Geographic Information System Virtual Machine - GISVM is intended to be a full-feature GIS Workstation based exclusively on free GIS software: PostgreSQL, PostGIS, GeoServer, Mapserver, FWTools, QGIS, GRASS, gvSIG, uDIG, Kosmo and OpenJump, on Ubuntu Desktop - there is also an image which includes 'R' see http://gisvm.com/forum/index.php?topic=11.0
+
+Geoserver - http://geoserver.org
+  * variety of supported geospatial formats and web services
+  * supports response caching (tiles,etc) for better efficiencies
+
+Python - (shares common scripting language with ESRI GIS, variety of useful numeric and geospatial processing libraries)
+
+R - http://en.wikipedia.org/wiki/R_(programming_language)
+  * possible application in QA/QC algorithms/analysis
+  * has python, sqlite interfaces

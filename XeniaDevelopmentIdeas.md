@@ -1,0 +1,70 @@
+A listing of Xenia development ideas in no particular priority order
+
+see also [VMwareDevelopmentIdeas](VMwareDevelopmentIdeas.md)
+
+
+
+# 1. Sqlite Xenia + Geoserver #
+
+Currently Geoserver (http://geoserver.com) can connect directly to several popular databases, but not Sqlite that I have seen documented.  Having this path would allow the usual array of formats/products available via Geoserver to also be available via a Sqlite Xenia db instance.
+
+Currently one path might be sqlite -> jdbc -> geoserver , but haven't had a chance to experiment or document this.
+
+sqlite -> jdbc http://www.ch-werner.de/javasqlite/
+
+jdbc -> geoserver http://jira.codehaus.org/browse/GEOT-241
+
+**Update April 11, 2008**  After reading this [post](http://www.epot.org/blog/?tag=sqlite) saying that using sqlite in combination with jdbc is extremely slow, am considering doing an H2 (java embedded database http://www.h2database.com/ ) Xenia version which should have better jdbc perfomance, etc.
+
+# 2. Sqlite in-memory performance benchmarking #
+
+Sqlite allows the amount of memory utilized to be set via the 'PRAGMA default\_cache\_size' command.  Compare some 'typical' query response times with the db in memory (db size say around 200-500 MB) against a file(disk) based version.
+
+# 3. ~~conversion script - Seacoos netCDF to obskml~~ #
+
+**Update** Dan Ramage completed this task documented at http://code.google.com/p/xenia/source/browse/trunk/obskml/NetCDFToObsKML/scout
+
+This would provide a path for existing, future Seacoos netCDF feeds to be available via ObsKML/Xenia also.
+
+# 3.a conversion script - CarolinasCoast aggregation to obskml #
+
+Charlton Galvorino did some earlier aggregations of NWS, NDBC, USGS, etc to a hash and then to a Xenia db instance in getting the CarolinasCoast project going.  Instead of going to a hash, send this data to ObsKML making it available as part of a community of feeds.
+
+If an 'IOOS' xml encoding is used at some future date by several federal backbone providers, that common xml encoding could also be used as a conversion source to obskml or just converted directly to sql for populating a xenia instance.
+
+# 4. ~~Convert PostgreSQL 'top\_of\_hour' trigger to Sqlite~~ #
+
+**Update** This issue has been [addressed](http://code.google.com/p/xenia/wiki/XeniaUpdates#top_of_the_hour_trigger)
+
+This would allow the same observation labeling functionality given by the trigger described at http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageV2#d_top_of_hour_integer_d_report_h to the Xenia Sqlite version
+
+# 5. conversion script - obskml to obsregistry xml #
+
+The observation registry effort http://obsregistry.org utilizes a xml formatted feed/harvest.  A conversion script would help supply that feed type and support that effort.
+
+# 6. ~~conversion script - obskml to georss~~ #
+
+**Update** Dan Ramage completed this task documented at http://code.google.com/p/xenia/source/browse/trunk/obskml/products/georss
+
+GeoRSS associates a description (perhaps changing with time like a weather feed) with an associated latitude, longitude and elevation.  Should be straightforward to convert hourly KML placemarks with table content into separate GeoRSS location feeds.
+
+# 7. ~~documentation of enabling an OGC SOS feed utilizing pySOS + Xenia (sqlite, postgres)~~ #
+
+**Update** this issue has been addressed at http://code.google.com/p/xenia/wiki/XeniaSOS
+
+Bill Howe has developed a python script and configuration files to OGC SOS enable relational databases with 'view' queries configured appropriately http://www.oostethys.org/downloads/sos-cookbook-python
+
+Haven't gone through the Xenia specific steps to enable this type of service but want to and provide documentation.
+
+# 8. ~~conversion script - obskml to 'IOOS' XML encoding~~ #
+
+**Update** this issue has been addressed at http://code.google.com/p/xenia/wiki/XeniaSOS
+
+
+An IOOS program office http://ioos.noaa.gov/program effort is underway to define an initial XML encoding for observations which can be agreed upon and utilized to share data nationally.  A conversion script would help supply that feed type and support that effort.
+
+# 9. ~~Xenia 'package' or build~~ #
+
+**Update Feb 12, 2009** this issue has been address at [VMwareHome](VMwareHome.md)
+
+Same as the earlier idea at http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageImage this would be to have a 'build' version which might utilize some configuration xml files, but otherwise outputs/products/services are already setup to go with whatever data is imported into it.  Something like a knoppix/debian distribution that might live on an embedded device like a gumstix http://www.gumstix.com

@@ -1,0 +1,41 @@
+
+
+Check [here](http://code.google.com/p/xenia/wiki/XeniaSqliteNotes) for more SQL notes with the xenia SQLite database as well.
+
+# SELECT dates from one sensor that are the same dates from another sensor #
+Recently I wanted to do some correlation testing for our platforms against some known good NDBC platforms. Correlation requires the list of values to be the same length, however we might miss an update throughout the day so we'd have a hole in our data. This query is useful to make sure the dates in the outer select match the dates in the sbuquery select, thereby giving us the data points for the same time periods. You have to execute this twice, swapping the sensor ID's.
+In this example I am grabbing wind speed sensors.
+
+```
+SELECT m_date,sensor_id,m_value,d_report_hour
+FROM multi_obs mo 
+WHERE m_date >= '2011-03-23T00:00:00' and 
+m_date < '2011-03-23T24:00:00' and
+sensor_id = 518 and
+EXISTS 
+(SELECT d_report_hour 
+FROM multi_obs 
+WHERE m_date >= '2011-03-23T00:00:00' and
+m_date < '2011-03-23T24:00:00' and
+sensor_id=4644 and 
+mo.d_report_hour=d_report_hour) 
+ORDER BY sensor_id ASC, d_report_hour ASC;
+```
+
+---
+
+# Auto Increment Field #
+If you need to set a field to be an autoincrement field after the table has been created, here are the steps:
+
+  1. Create sequence table
+```
+  CREATE SEQUENCE tablename_id_seq;
+```
+> 2 If a field does not already exist in the table we want to use the autoincrement field in, create it.
+```
+  ALTER TABLE tablename_products ADD id INT UNIQUE;
+```
+> 3 Now modify existing table we want to use the sequence table.
+```
+  ALTER TABLE tablename ALTER COLUMN id SET DEFAULT NEXTVAL(‘tablename_id_seq’);
+```

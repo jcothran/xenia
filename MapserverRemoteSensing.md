@@ -1,0 +1,82 @@
+# Files #
+
+  * general.map
+> > This is the mapfile to point a client map WMS service. From here, the request gets relayed to the seacoos\_rs CGI script. To add a new layer, do something similar:
+```
+LAYER
+  NAME "modis_chl"
+  STATUS OFF
+  TYPE RASTER
+  UNITS METERS
+  CONNECTION "http://127.0.0.1/cgi-bin/wms/rs/seacoos_rs?&time_offset_hours=%TIME_OFFSET_HOURS%"
+  CONNECTIONTYPE WMS
+  PROJECTION
+  "init=epsg:4269"
+  END
+  METADATA
+    "wms_srs" "EPSG:4269 epsg:4326 EPSG:900913"
+    "wms_name" "modis_chl"
+    "wms_server_version" "1.1.1"
+    "wms_format" "image/png"
+    "wms_extent" "-90.5 24.5 -60.5 37.2"
+  END
+END
+```
+
+  * seacoos\_rs
+> > This CGI script is a hold over from the seacoos days. The remote sensing images get processed, then their file location is stored in the xenia databaes in a timestamp\_lkp table. This script queries that table for the given product id, then returns the file. The script then makes a redirect to nnn.nnn.nnn.nnn/cgi-bin/wms/rs/rs? with the appropriate paramters.
+> > To add a new layer add an entry similar to:
+```
+if ($this_layers =~ /modis_chl/) {
+  #Refactor this SQL to something more sane.
+  $querystr = "select filepath from timestamp_lkp"
+    ." where product_id=11 AND abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+   ." = (select min(abs((extract(epoch from timestamp without time zone '$this_time_stamp'))"
+   ." - extract(epoch from pass_timestamp)))"
+    ." from timestamp_lkp WHERE product_id=11)"
+    ." and abs(extract(epoch from timestamp without time zone '$this_time_stamp')"
+    ." - extract(epoch from pass_timestamp))"
+    ." <= 60*60*24*2";
+  my $sth = $dbh->prepare($querystr);
+  $sth->execute();
+  $sth->bind_columns(undef,\$this_path);
+  $sth->fetch();
+  $sth->finish;
+  $raster_file_params .= '&modis_chl_file='.$this_path;
+  log_layer('modis_chl',$querystr,$this_path);
+}
+```
+
+  * rs
+
+> This makes the call to mapserver to process the request generated from the seacoos\_rs script. It basically sets the mapfile to use and then calls mapserver.
+```
+#!/bin/sh
+MS_MAPFILE=/xxxx/yyyyy/mapping/common/rs/rs.map
+export MS_MAPFILE
+/usr/lib/cgi-bin/mapserv
+
+```
+  * rs.map
+> This is the mapfile that then processes the appropriate image file to then deliver the mapping client the WMS tiles. A new map layer entry would look like:
+```
+  LAYER
+    NAME "modis_chl"
+    STATUS ON
+    DATA "/usr2/maps/seacoos/data/usf/%modis_chl_file%"
+    TYPE RASTER
+    UNITS METERS
+    PROJECTION
+      "init=epsg:4269"
+    END
+    METADATA
+      "wms_srs" "EPSG:4269 EPSG:4326"
+      "wms_extent" "-125 -5 -45 55"
+      "wms_title" "MODIS Chl-A, courtesy USF Institute for Marine Remote Sensing (http://imars.usf.edu/)"
+      "wms_abstract" "TBA DISPLAY NOTE : A land mask cover should be placed over this layer."
+      "wms_keywordlist" "TBA"
+    END
+  END
+
+```

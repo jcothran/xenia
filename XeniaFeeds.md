@@ -1,0 +1,50 @@
+
+---
+
+# Feed methods #
+
+Currently there are three methods for feeding (or populating) your Xenia database with a population of organizations, platforms, sensors and observation measurements.
+
+
+---
+
+## Create direct feeds ##
+
+The first method is to create scripts which directly converts the raw data feed into SQL which you would populate your xenia instance with.  This is the most direct method, but I'd recommend the second method of creating an intermediate ObsKML file which could be shared as part of a community of shared feeds.
+
+---
+
+## Use an existing ObsKML feeds ##
+
+The second method is to utilize existing or add to the existing list of ObsKML (ObsKML is XML) feeds which might be utilized in a shared observations community.
+
+### Creating an ObsKML feed ###
+
+see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate
+
+see also Dan Ramage's library to create ObsKML using a set of function calls
+
+ObsKML subroutine library
+
+http://code.google.com/p/xenia/source/browse/trunk/obskml/TelemetryToObsKML/obsKMLSubRoutines.lib
+
+Sample case demonstrating conversion of raw telemetry data to ObsKML using subroutine calls.
+
+http://code.google.com/p/xenia/source/browse/trunk/obskml/TelemetryToObsKML/BuoyTelemetryDataToObsKML.pl
+
+### Feed list ###
+
+see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate#Sample_cases
+
+or the folders with file names like ..._metadata\_latest.kmz at http://www.carocoops.org/obskml/feeds/_
+
+
+---
+
+## Use an existing SQL feed ##
+
+The third method is to consume just say the hourly output of an existing Xenia instance with SQL directly from the source database instance.  This allows data to be duplicated at  the database level without the need for reprocessing either the raw data or ObsKML source data feeds.
+
+I have repurposed some earlier code to provide an hourly data 'feed' of .sql files which others should be able to utilize to populate additional xenia database instances(postgresql or sqlite) similar to the database which I'm running at USC.
+
+There is some beginning documentation at http://code.google.com/p/xenia/wiki/XeniaPackageSqlite#Replication

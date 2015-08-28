@@ -1,0 +1,13 @@
+# Purpose #
+
+Just some general notes on various Python tasks I constantly forget and will now document.
+
+
+# Pip #
+## Install ##
+If you need to pass include or library directories along to the setup.py during pip install, --global-install is your huckleberry.
+AN example of passing pymssql the directories where I had installed FreeTDS:
+```
+pip install pymssql --global-option=build_ext --global-option="--include-dirs=/Users/.../local/freetds/include" --global-option="--library-dirs=/Users/.../local/freetds/lib"
+
+```

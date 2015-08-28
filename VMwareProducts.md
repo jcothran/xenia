@@ -1,0 +1,368 @@
+[VMwareHome](VMwareHome.md)
+
+for a virtualized server image download that produces the below listed products
+  * see [VMwareDownload](VMwareDownload.md) for a VMware .vmdk server image download
+  * see [AmazonWebServices](AmazonWebServices.md) for a Amazon Web Services .ami server image download
+
+**In the below URL's for running/testing a local xenia vmware instance, replace http://neptune.baruch.sc.edu with your IP/DNS or http://localhost (if directly on the server) to see the locally produced results.**
+
+
+
+
+---
+
+# Data Ingestion Scripts #
+Follow the link to the wiki page detailing the scripts used to process the data into the Xenia database.
+[Documentation](http://code.google.com/p/xenia/wiki/DataIngestion)
+
+---
+
+# Interactive Map #
+
+http://secoora.org/maps/interactive_map.html A Javascript/JSON schema-driven GIS(openlayers,extjs,geoext,etc) - more documentation links available
+
+
+---
+
+# Google Earth/Maps, Latest ObsKML, Styled KML #
+
+[original documentation ](http://code.google.com/p/xenia/wiki/XeniaProducts#Google_Earth_and_Maps)
+
+
+A script runs once an hour to take the latest observations and create a
+  * Combined
+    * ObsKML latest [KML](http://neptune.baruch.sc.edu/xenia/feeds/xenia_obskml_latest.kml) and [KMZ](http://neptune.baruch.sc.edu/xenia/feeds/xenia_obskml_latest.kmz) files for resharing
+    * A [styled KMZ](http://neptune.baruch.sc.edu/xenia/feeds/latest_placemarks.kmz) version of these combined observations for display in Google Earth/Maps,etc
+    * An [archive](http://neptune.baruch.sc.edu/xenia/feeds/archive/) of the last 24 hours of styled KMZ files is available also
+  * By Organization
+    * A [styled KMZ](http://neptune.baruch.sc.edu/xenia/feeds/wq/wq_latest_placemarks.kmz) version of each organizations observations for display in Google Earth/Maps,etc
+    * An [archive](http://neptune.baruch.sc.edu/xenia/feeds/wq/archive/) of the last 24 hours of styled KMZ files is available also
+
+Note the above KML/KMZ styling has the following features:
+
+  * **layer folders toggle on/off by operator**(visualize individual operator/data provider status)
+    * platform styling highlights non-reporting platforms as shaded red - platform link information still available.  Don't want platforms or observation to disappear from the map if they are intermittently reporting.
+  * **by 'operator' layer** listing **all** the latest observations available at each platform
+  * **by 'observation' layer** listing observations of the same obs\_type.uom\_type for **all** associated platforms
+    * acts as a observation type 'inventory'
+    * optional style.xml to provide basic default blue/green/red color scale for obs\_type.uom\_type measurement value range limit
+  * **naming/reference hierarchy**
+    * platform = operator.platform<.package> where operator and platform names are controlled vocabularies and package name is optional unique string
+    * sensor = sensor\_id (an integer id) = obs\_type.uom\_type.s\_order  s\_order is an integer counter to help distinguish between redundant or profiling sensor arrays of the same obs\_type.uom\_type
+  * a feature which I would like to implement is use of **regions** to help break the entire layer into more manageable data blocks/levels of detail for **better download/display** concerns similar in concept to the Google Maps implementation at http://tidesandcurrents.noaa.gov/gmap3 or using some automated solution possibly like http://www.mapeed.com
+
+
+---
+
+Note that the time window control can be manipulated (moved, increased, decreased) - see the following documentation
+
+http://earth.google.com/userguide/v4/ug_gps.html#timeline
+
+ObsKML can be merged and revisualized as shown in the following image
+
+![http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/ObsKMLGenerate/obskml_all_latest.jpg](http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/ObsKMLGenerate/obskml_all_latest.jpg)
+
+
+---
+
+# time-series graphs #
+
+![http://xenia.googlecode.com/files/time_series.jpg](http://xenia.googlecode.com/files/time_series.jpg)
+
+Simple time-series graphs of the previous days observations are available as web links embedded within the KML and HTML table stub displays <br />
+http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastLite#a_description_of_the_graph_xml_f
+
+
+---
+
+# GeoRSS #
+
+http://neptune.baruch.sc.edu/xenia/feeds/georss
+
+![http://xenia.googlecode.com/files/georss.jpg](http://xenia.googlecode.com/files/georss.jpg)
+
+GeoRSS provides a simple geospatially referenced RSS feed for simple harvesting/redisplay of latest observations for each platform as a data feed.  Above feed displays correctly in Firefox browser.
+
+## Script Details ##
+**Script**: ObsKMLToGeoRSS.pl <br />
+**Command line parameters**: <br />
+```
+--ObsKMLFeed is the full path to the KML file to process to create the RSS files
+--FeedDir the directory to output the RSS files to.
+```
+<br />
+**Directory**: /home/xeniaprod/scripts/obskml/products/georss<br />
+**Description**: Processes obsKML files to create geoRSS files for each platform in the KML file.<br />
+**Schedule**: Runs twice an hour.
+
+
+---
+
+# GeoJSON #
+
+JSON provides
+  * dynamic Javascript performance-oriented
+  * cross-browser compatible
+  * site-proxy workaround
+
+method for presenting data to websites similar to traditional AJAX methods.  [GeoJSON](http://geojson.org/geojson-spec.html) provides a geospatial markup for associated data.
+
+see http://code.google.com/p/xenia/wiki/ObsJSON
+
+http://neptune.baruch.sc.edu/xenia/feeds/obsjson/all/latest_hours_24
+
+## Script Details ##
+**Script**: xenia\_to\_json.pl <br />
+**Command line parameters**: <br />
+```
+There are no command line parameters, however there is a hard coded configuration file
+that is used for the database connection parameters, dbConfig.ini. The output directory 
+is also hardcoded: my $target_dir = '/home/xeniaprod/feeds/obsjson/all/latest_hours_24/'
+
+```
+<br />
+**Directory**: /home/xeniaprod/scripts/postgresql/import\_export<br />
+**Description**: Queries the latest 24 hours of data for each observation on each <br />
+active platform then creates the json file. These are not pure JSON files, they <br />
+are wrapped with a callback function.<br />
+**Schedule**: 0,10,20,30,40,50 after the hour
+
+
+---
+
+# html table styling for AJAX,etc #
+
+http://neptune.baruch.sc.edu/xenia/feeds/html_tables
+
+![http://xenia.googlecode.com/files/html_table.jpg](http://xenia.googlecode.com/files/html_table.jpg)
+
+HTML platform table stubs are suitable for dynamic webpage popups via AJAX type calls
+
+[html\_content.db sqlite table](http://neptune.baruch.sc.edu/xenia/feeds/html_tables/html_content.db) also populated available for use.
+
+see http://code.google.com/p/xenia/source/browse/trunk/obskml/products/html_tables, http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/CarolinasCoastNotesAjax
+
+
+---
+
+# convert from ObsKML to other formats (CSV,shapefile) #
+
+Currently just all the latest observations combined, will add 'by obs' and shapefile later
+
+http://neptune.baruch.sc.edu/xenia/feeds/all_latest.csv
+
+http://neptune.baruch.sc.edu/xenia/feeds/all_latest.csv.zip
+
+Most recent CSV, Shapefiles split out 'by observation type' <br />
+http://neptune.baruch.sc.edu/xenia/feeds/by_obs
+
+Past 24 hours timestamped CSV, Shapefiles split out 'by observation type' <br />
+http://neptune.baruch.sc.edu/xenia/feeds/by_obs_recent
+
+see also see http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKMLGenerate#Convert_from_ObsKML_to_other_for
+
+
+---
+
+# SOS #
+
+## ongoing SOS/SWE community discusssion and work ##
+
+http://groups.google.com/group/ioostech_dev
+
+NDBC http://code.google.com/p/ioostech/wiki/NDBC_SWE_Implementation
+
+CO-OPS/NOS http://opendap.co-ops.nos.noaa.gov/ioos-dif-sos-test/
+
+## Xenia implementations ##
+
+note also earlier development with WFS at http://code.google.com/p/xenia/wiki/XeniaPackageSqlite#MicroWFS
+
+### DIF ###
+
+documentation http://code.google.com/p/xenia/wiki/XeniaSOS
+
+Query page http://neptune.baruch.sc.edu/xenia/sos/difSOS.php
+
+http://neptune.baruch.sc.edu/cgi-bin/difSOS.cgi?REQUEST=GetObservation&SERVICE=SOS&VERSION=1.0.0&RESPONSEFORMAT=text/xml;schema%3D%2522ioos/0.6.0%2522&OBSERVEDPROPERTY=wind_speed&OFFERING=carocoops&BBOX=&EVENTTIME=
+
+XML responses should display correctly within Firefox, IE browsers
+
+An OGC SOS(OpenGeospatial Consortium [Sensor Observation Service](http://www.opengeospatial.org/standards/sos)) web service method supports queries on the database
+
+
+### Oostethys ###
+
+documentation http://code.google.com/p/xenia/wiki/XeniaSOS#Oostethys_SOS
+
+#GetCapabilities
+All http://neptune.baruch.sc.edu/cgi-bin/oostethys_sos.cgi?request=GetCapabilities&service=SOS&version=1.0
+
+Non-federal http://neptune.baruch.sc.edu/cgi-bin/ioos_sos.cgi?request=GetCapabilities&service=SOS&version=1.0
+
+NERRS only http://neptune.baruch.sc.edu/cgi-bin/nerrs_sos.cgi?request=GetCapabilities&service=SOS&version=1.0
+
+#DescribeSensor
+http://neptune.baruch.sc.edu/cgi-bin/oostethys_sos.cgi?REQUEST=DescribeSensor&procedure=carocoops.FRP2.buoy
+
+#GetObservation
+http://neptune.baruch.sc.edu/cgi-bin/oostethys_sos.cgi?REQUEST=GetObservation&offering=carocoops.FRP2.buoy&observedProperty=wind_speed
+
+
+---
+
+# Flow/Feed status and notification #
+
+[original documentation](http://code.google.com/p/xenia/wiki/XeniaUpdates#flow_monitor)
+
+A script is run once an hour
+  * to check that the data feeds have not dropped below threshold levels(if so an email notification is sent)
+  * to generate a graph(past several days) of
+    * recent observation flow
+    * low count magnified flow
+    * archival database flow
+
+Recent observation flow<br />
+<a href='Hidden comment: http://carocoops.org/obskml/scripts/flow_microwfs.png'></a>
+![http://neptune.baruch.sc.edu/xenia/feeds/flow_xenia_postgres_archive.png](http://neptune.baruch.sc.edu/xenia/feeds/flow_xenia_postgres_archive.png)
+
+Low count magnified flow<br />
+<a href='Hidden comment: http://carocoops.org/obskml/scripts/flow_low.png'></a>
+![http://neptune.baruch.sc.edu/xenia/feeds/flow_xenia_postgres_low_archive.png](http://neptune.baruch.sc.edu/xenia/feeds/flow_xenia_postgres_low_archive.png)
+
+Archival database flow<br />
+<a href='Hidden comment: http://carocoops.org/obskml/scripts/flow_archive.png'></a>
+![http://129.252.139.124/xenia2/xenia/feeds/flow_xenia_postgres_archive.png](http://129.252.139.124/xenia2/xenia/feeds/flow_xenia_postgres_archive.png)
+
+
+---
+
+# Platform/Sensor Status/Query #
+
+http://code.google.com/p/xenia/wiki/StatusPages
+
+
+---
+
+# Observation range/condition email alerts #
+
+http://secoora.org/pages/alertpage.php?platform=nos.8670870.WL
+
+
+---
+
+# Mobile/Location based platform reports #
+
+http://www.carolinasrcoos.org/mobileBuoy.html
+
+---
+
+# Database Query, Comparison #
+
+Within application maps, database query links can be referenced and compared by their platform handle
+
+http://secoora.org/pages/queryStation.php?platform=ndbc.41004.met
+
+
+---
+
+# Quality Control (QC) reports #
+
+http://neptune.baruch.sc.edu/xenia/feeds/qaqc/
+
+basic quality control webpage reports:
+
+Geared by xml control file <br />
+http://neptune.baruch.sc.edu/xenia/feeds/qaqc/test_profiles.xml
+
+range-test http://neptune.baruch.sc.edu/xenia/feeds/qaqc/test_results.html <br />
+earlier documentation see http://trac.secoora.org/datamgmt/wiki/RangeTests <br />
+
+uptime http://neptune.baruch.sc.edu/xenia/feeds/qaqc/PlatformUptimePercentages.html <br />
+documentation http://code.google.com/p/xenia/wiki/PlatformUptime
+earlier documentation http://trac.secoora.org/datamgmt/wiki/PercentageUptime
+
+
+---
+
+# Support Tables, columns, triggers #
+
+An optional set of support tables to support display products, display listing order(m\_type\_display\_order) or keeping track timestamps(timestamp\_lkp) for remote sensing products or other irregularly timed products.
+
+_more documentation later_
+
+## multi\_obs ##
+
+The following support columns have been added to the multi\_obs table to support some common display needs. They are prefixed with 'd_' for 'display'._
+
+**Note** These columns are included with the version 2 schema, but if you are upgrading from something earlier and are missing these columns, the following [alter sql statements](http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/XeniaPackageV2/alter_multi_obs_display.sql) should create the necessary columns.
+
+### d\_label\_theta integer ###
+
+For MapServer? directional font libraries, the direction is negative of the true direction(degrees from North), so 90 (degrees) becomes -90 for display purposes.
+
+### set\_top\_of\_hour trigger ###
+
+fields used: d\_top\_of\_hour integer, d\_report\_hour timestamp without time zone
+
+**Note** You must apply this database [insert trigger and index](http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/XeniaPackageV2/top_report_hour.sql) for these columns to be active.
+
+These two columns work together to label new observations as they are inserted with their d\_report\_hour and whether the new observation should be used for a top of the hour report(d\_top\_of\_hour). The d\_report\_hour is associated with all observations a half hour before and after a given hour. So a d\_report\_hour of 12:00 would apply to all observations between 11:31 and 12:30. The d\_top\_of\_hour indicator of '1' indicates that an observation is closest to the top of the hour among a group of observations for the same d\_report\_hour. Time comparisons between observations for the top of hour designation are made at the minute level, so 11:01:18 might be ignored for d\_top\_of\_hour against an earlier 11:01:28.
+
+The d\_report\_hour label can be used to group observations within the same corresponding hour period.  Within a d\_report\_hour grouping the d\_top\_of\_hour flag can be used to identify a single measurement point closest to the top of hour for all given sensor\_id's. This can be utilized to produce an hourly 'top of hour' product such as a shapefile/map of sst, etc.
+
+If querying the database for d\_report\_hour and d\_top\_of\_hour, try to use the same column-order as the table index(d\_report\_hour,d\_top\_of\_hour) to invoke the index usage by the query.
+
+`"i_multi_obs_top_hour" btree (d_report_hour, d_top_of_hour)`
+
+### mk\_the\_geom trigger ###
+
+mk\_the\_geom trigger is used to automatically populate PostGIS multi\_obs.the\_geom column for a given lat/long pair.
+
+If you've PostGIS enabled your multi\_obs table with a geometry column(the\_geom) similar to the below
+
+```
+select addgeometrycolumn('your_database_name_here','multi_obs','the_geom',-1,'POINT',2);
+```
+
+Apply the following [after insert trigger](http://nautilus.baruch.sc.edu/twiki_dmcc/pub/Main/XeniaPackageV2/mk_the_geom.sql)
+
+on table multi\_obs
+```
+Indexes:
+    "multi_obs_pkey" PRIMARY KEY, btree (row_id)
+    "i_multi_obs" UNIQUE, btree (m_date, m_type_id, sensor_id)
+    "i_multi_obs_top_hour" btree (d_report_hour, d_top_of_hour)
+Check constraints:
+    "enforce_dims_the_geom" CHECK (ndims(the_geom) = 2)
+    "enforce_geotype_the_geom" CHECK (geometrytype(the_geom) = 'POINT'::text OR the_geom IS NULL)
+    "enforce_srid_the_geom" CHECK (srid(the_geom) = (-1))
+Foreign-key constraints:
+    "multi_obs_m_type_id_fkey" FOREIGN KEY (m_type_id) REFERENCES m_type(row_id)
+    "multi_obs_sensor_id_fkey" FOREIGN KEY (sensor_id) REFERENCES sensor(row_id)
+Triggers:
+    mk_the_geom BEFORE INSERT ON multi_obs FOR EACH ROW EXECUTE PROCEDURE mk_the_geom()
+    set_top_of_hour AFTER INSERT ON multi_obs FOR EACH ROW EXECUTE PROCEDURE set_top_of_hour()
+```
+
+# Earlier products #
+
+The below products were developed earlier and may not be active or maintained
+
+## vector graphs (ADCP) ##
+
+see [ADCPProfilerNotes](http://code.google.com/p/xenia/wiki/ADCPProfilerNotes)
+
+
+---
+
+## Latest 3 day database and julian weekly archive databases ##
+
+Sqlite file download for priming, analysis, etc of the latest 3 day time window [database](http://neptune.baruch.sc.edu/xenia/archive_db/latest.db) and [folder](http://neptune.baruch.sc.edu/xenia/archive_db/weekly/) containing the julian-weekly-split archive of sqlite databases.
+
+
+---
+
+## Data source files - zipped ObsKML and SQL ##
+
+A [zip file](http://neptune.baruch.sc.edu/xenia/feeds/all_metadata_latest.zip) of all the ObsKML imported to the database and a [SQL file](http://neptune.baruch.sc.edu/xenia/feeds/latest_raw.sql) of the ObsKML as converted to SQL INSERT statements.  Either source could be used to populate other copy xenia instances.

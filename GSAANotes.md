@@ -1,0 +1,238 @@
+
+
+# Manage.py Utilities #
+  1. CSVToInitialJson
+> > This script reads a CSV and generates the initial\_data.json file to prime the system. It will also create the legend files as well.
+    * Command Line Parameters
+      * Arg 0 <input CSV File>: This is the full path to the CSV file that drives the initial\_data.json creation.
+      * Arg 1 <output JSON file>: This is the full filename to create the initial\_data.json file
+      * Arg 2 <Legend File Directory>: This is the directory to store the legend files. Needs to be web accessible.
+      * Arg 3 <Legend Base URL>: The URL to the web directory the legend files will be accessed.
+
+  1. buildMetadataHTML
+> > This script reads the CSV control file looking at the "source metadata url" column to pull the XML metadata file then convert it to an FGDC HTML version of the metadata. Outputs a file in the same directory as the input CSV file named controlFile.csv. This file will have the 'local metadata url' column populated.
+    * Command Line Parameters
+      * Arg 0 <input CSV File>: This is the full path to the CSV file that drives the initial\_data.json creation.
+      * Arg 1 <xsl file>: This is the file used to convert the XML to HTML in our case.
+      * Arg 2 <Source Metadata>: The directory to store the XML metadata records. Even if there is no entry in the CSV column "source metadata url", the script will process and convert any XML files in this directory.
+      * Arg 3 <Destination HTML>: This is the file path to store the converted file. Needs to be web accessible.
+      * Arg 4 <URL To Metadata>: The URL to use to create the link to get to the metadata files.
+
+  1. buildRestLegends
+> > This script connects to the Django application database and queries the data\_manager\_layer table for all the REST layers. It will then attempt to query the REST endpoint for the legend. Depending on the server version either a REST Legend request(v 10.0 and higher) or a SOAP request.
+    * Command Line Parameters
+      * Arg 0 <legend directory>: Local directory to save the legend files.
+
+
+---
+
+# Delete, refresh data layers #
+
+**Note: may need to save tables that support layer to learn lookups, restore after delete assuming layer id lookups remain the same**
+
+If need to delete just layers, without dropping database
+```
+delete from data_manager_layer_themes;
+delete from data_manager_layer_topics;
+delete from data_manager_layer_sublayers;
+delete from data_manager_attributeinfo;
+delete from data_manager_layer_attribute_fields;
+delete from data_manager_layer;
+```
+
+
+If dropping database, then below also
+```
+INSERT INTO spatial_ref_sys (srid) VALUES(99996);
+```
+
+```
+python manage.py loaddata fixtures/flatblocks.json
+
+python manage.py createsuperuser - to add back superusers
+```
+
+## Delete, refresh routine ##
+
+### old directions ###
+from the main 'marco' folder where manage.py lives
+```
+python manage.py CSVToInitialJson /usr/local/userapps/marco-portal-master/marco/general/management/controlFileMaster.csv data_manager/fixtures/initial_data.json /usr/local/userapps/marco-portal-master/marco/media/marco/legends http://gsaaportal.org/media/marco/legends
+```
+
+```
+cd sql
+bash reset.sh
+cd ..
+```
+
+```
+python manage.py migrate
+```
+
+### new directions ###
+
+backup existing db in case any fubar
+```
+pg_dump gsaa > gsaa_pg_dump_x
+```
+
+```
+python manage.py CSVToInitialJson /usr/local/userapps/gsaa/marco/general/management/controlFileMaster.csv data_manager/fixtures/initial_data.json /tmp http://gsaaportal.org/media/marco/legends
+```
+
+```
+python manage.py loaddata data_manager/fixtures/initial_data.json
+```
+
+May need to restart apache to flush cache in some cases(such as theme layer changes)
+
+
+---
+
+# initial install from git over madrona notes #
+
+```
+git clone https://github.com/gsaaportal/marco-portal.git
+
+git checkout --track origin/topic-maps-and-catalog
+
+dan - settings_local.py
+  settings.py add 
+  UNDER_MAINTENANCE_TEMPLATE=False
+
+copy settings.py, manage.py
+  gsaa instead of marco user
+
+wsgi.py - add path to self
+vi /etc/apache2/sites-available/marco
+  change path to correct wsgi.py ref
+
+pip install querystring_parser
+
+//python manage.py schemamigration data_manager --auto
+
+createdb gsaa, connect to gsaa
+
+INSERT INTO spatial_ref_sys (srid) VALUES(99996);
+
+python manage.py syncdb
+python manage.py migrate
+python manage.py install_media
+
+restart apache
+
+```
+
+
+---
+
+# pull latest branch #
+
+```
+mv marco-portal-master marco-portal-master-oldx
+optional: git checkout -b next-release origin/next-release
+optional: cp github -r next-release marco-portal-master
+
+cp ../../marco-portal-master-old2/marco/wsgi.py .
+cp ../../marco-portal-master-old2/marco/settings_local.py .
+
+python manage.py syncdb
+python manage.py migrate
+
+ignore step - error - python manage.py install_media
+from master/marco:  cp -r ../media .
+
+use firebug to check for missing files - get_sharing_groups
+If it doesn't exist: python manage.py enable_sharing
+
+use /admin to correct theme/layer issues
+```
+
+
+---
+
+# diff compare prod to github #
+
+zipping prod files and comparing them to a github instance to check for missed files, etc
+
+```
+http://linuxcommando.blogspot.com/2008/05/compare-directories-using-diff-in-linux.html
+
+zip -r gsaa.zip gsaa
+mv gsaa.zip gsaa/marco/media
+
+wget http://gsaaportal.org/media/gsaa.zip
+
+unzip gsaa.zip
+cd gsaa
+find . -name *.pyc | xargs rm  
+diff -r marco-portal gsaa > out101
+cat out101 | grep "Only in marco" > out_only_marco
+cat out101 | grep "diff -r marco" > out_diff_marco
+cat out101 | grep -v "Only in" > out_diff_101
+```
+
+
+---
+
+# git notes #
+
+grabbing remote server csv file changes
+```
+scp user@remote_addr:/usr/local/userapps/gsaa/marco/general/management/controlFileMaster.csv .
+```
+
+```
+#cd to path
+git branch
+git pull
+
+#make changes
+git status
+
+git commit -am "some comment"
+git push
+
+#git user,pass
+```
+
+
+---
+
+# Data Provider notes #
+
+  * Link to the Rest endpoint.
+  * Metadata file that is fully populated and the URL to it.
+  * A URL to the raw datafile for users to download.
+  * URL for a data source attribution.
+  * Hover description. This is a short 2-3 line description of the data layer that is used on the catalog page when you hover over the layer name.
+  * In-depth description. This is the description we use on the Visualize page when you click the "I" button on the layer and it brings up the info window at the bottom of the map. Also used on the Learn page when you click on the "description" link on the catalog page.  If the metadata description would fit, that one is normally what we'd use.
+  * Query Fields with aliases for human readable terms.  When the user wants to identify a feature by clicking on it, wequery the ESRI endpoint and display the query fields returned. In ArcMap you can assign aliases to the field names to make the field more understandable.
+  * A list of the Query Fields to be returned in a query.  Without a list, we query for all the fields, so there may be returned fields that aren't necessarily of interest to the user, such as the ESRI geometry fields(Shape\_Length).
+  * For layer files, the first legend line should have the units at the end of it in parenthesis. Here is an example of what we did with the DNR data: http://129.252.139.110/gsaa/rest/services/SCDNR/MapServer/legend
+  * Topic assignment of the layers. Sediment or Habitat or both.
+
+
+---
+
+
+# Arc-Server #
+
+  * License file will expire, so we have to contact the USC geography guys to get the new provisioning file. The file can be found in: C:\Users\Administrator\Documents\ArcGISforServerAdvancedEnterprise\_server\_209238.prvc
+  * Another issue is the C:\Program Files\ESRI\License10.1\sysgen\keycodes file. Even after using the new provision file, the services still would not work. I renamed the old keycodes file, re-ran the Software Authorization, rebooted the system and the services started working again.
+  * Expires again in 29-jul-2014
+
+> ## Publishing Layers ##
+> After a reboot, the Publishing service is not automatically restarted. It is necessary to go through the Arc Admin web front end to enable it.
+
+# Feedback Dialog #
+Ran into an issue where the Feedback popup wouldn't send the emails.
+Tracked it down to the Madrona instance not being able to resolve any host names. I found this out via the logs/app.log file where I kept seeing an exception dump.
+I added a dns-nameservers entry into the /etc/networking/interfaces file and added the USC nameservers. Not sure why this is now needed, but it did fix the issue.
+
+# Printing #
+When building the printing for the Query Tool, the webshot used for printing the map just didn't provide a decent quality page.
+Installed the node-phantom module to be able to have control over the web rendering process.
+
+Also needed to have a link in /usr/local/bin to the phantomjs executable. I made a symbolic link.

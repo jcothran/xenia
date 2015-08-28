@@ -1,0 +1,331 @@
+
+
+# anaconda install, time/lat/lon dimensions #
+
+Worked up the below example when converting from some SABGOM model output matlab files(7-year (2004-2010) SABGOM model hindcast 3 month average) to netcdf files for use with thredds/WMS and other applications using the thredds services.
+
+For setup, downloaded anaconda to windows desktop http://continuum.io/downloads and only needed to install netcdf with the below command which installed no problems.
+
+`conda install netcdf4`
+
+Final output netcdf files can be downloaded at - click the 'HTTPServer' link in each of the below 4 netcdf file links
+http://129.252.139.124/thredds/catalog/sabgom_3_month_avg_files/catalog.html
+
+The contents of the matlab file can be reviewed using octave http://www.gnu.org/software/octave/ as below and can also be exported as ascii,csv directly from octave
+
+```
+user@host:~/sabgom$ octave
+
+octave:1> load sabgom.mat
+octave:2> whos
+
+*** local user variables:
+
+  Prot Name            Size                     Bytes  Class
+  ==== ====            ====                     =====  ===== 
+   rwd BS0             4x320x440              4505600  double
+   rwd BT0             4x320x440              4505600  double
+   rwd SSS0            4x320x440              4505600  double
+   rwd SST0            4x320x440              4505600  double
+   rw- __nargin__      1x1                          8  double
+   rwd lat           320x440                  1126400  double
+   rwd lon           320x440                  1126400  double
+
+Total is 2534401 elements using 20275208 bytes
+```
+
+Main references
+
+http://www-pord.ucsd.edu/~cjiang/python.html
+
+http://netcdf4-python.googlecode.com/svn/trunk/docs/netCDF4-module.html
+
+Additional links of interest
+
+http://docs.scipy.org/doc/scipy/reference/tutorial/io.html
+
+http://docs.scipy.org/doc/scipy/reference/generated/scipy.io.loadmat.html
+
+http://wiki.scipy.org/NumPy_for_Matlab_Users
+
+http://mathesaurus.sourceforge.net/matlab-numpy.html
+
+http://sebastianraschka.com/Articles/2014_matlab_vs_numpy.html
+
+http://www.pyngl.ucar.edu/Nio.shtml
+
+http://oceanpython.org
+
+https://waterprogramming.wordpress.com/2014/04/28/converting-ascii-data-to-netcdf-python/
+
+note: 'time' in days from 0000-00-00 was added to the latest .mat sample file
+
+
+---
+
+
+```
+import scipy.io as sio
+#import numpy as np
+
+#mat_contents = sio.loadmat('sabgom.mat', struct_as_record=False, squeeze_me=True)
+mat_contents = sio.loadmat('sabgom.mat')
+#print mat_contents
+oct_struct_lat = mat_contents['lat']
+oct_struct_lon = mat_contents['lon']
+oct_struct_time = mat_contents['time']
+
+#print oct_struct_lat.shape
+#print oct_struct_lat[0,0]
+
+lat = oct_struct_lat[:,:].flatten()
+lon = oct_struct_lon[:,:].flatten()
+time = oct_struct_time[:].flatten()
+time[:] = [t - 1 for t in time] #subtract one day since netcdf doesn't understand 0000-00-00 only 0000-01-01
+
+#BS0 = bottom salinity, #SSS0 = surface salinity, #BT0 = bottom temp, #SST0 = surface temp
+oct_struct_obs = mat_contents['SSS0'] #change obs dataset here as needed
+#print oct_struct_obs.shape
+#exit()
+
+#obs = oct_struct_obs[0,0:320,0:440].flatten()
+#obs = oct_struct_obs[0,:,:]
+obs = oct_struct_obs[:,:,:]
+
+#below line works if want to replace NaN with some other fill value
+#obs[np.isnan(sal)]=-999.0
+
+"""
+#experiments with replacing nan values
+t1 = oct_struct_BS0[0,0,0:3]
+#t1 = [t.replace('NaN','-999.0') for t in t1]
+#np.nan_to_num(t1)
+t1[np.isnan(t1)]=-999.0
+print t1
+"""
+
+print len(lat)
+print len(lon)
+print len(time)
+print len(obs)
+print obs.shape
+#print oct_struct[0,0,0]
+
+#exit()
+
+#import datetime
+#(datetime.datetime(2012,04,01,0,0) - datetime.datetime(1970,1,1)).total_seconds()
+
+
+from netCDF4 import Dataset
+
+
+root_grp = Dataset('salinity_surface.nc', 'w', format='NETCDF4') #change obs filename as needed
+root_grp.description = 'seasonal mean SST/SSS/Bottom Temperature/Bottom salinity data based on SABGOM hindcast results for each of the 7 years (2004-2010)'
+
+# dimensions
+root_grp.createDimension('time', None)
+
+root_grp.createDimension('ic', 440)
+root_grp.createDimension('jc', 320)  
+#440x320 = 140800 grid elements
+
+# variables
+times = root_grp.createVariable('time', 'f8', ('time',))
+times.standard_name = 'time'
+times.units = "days since 0000-01-01 00:00:00"
+times.axis = "T"
+
+lons = root_grp.createVariable('lon', 'f4', ('jc','ic'))
+lons.long_name = "longitude"
+lons.standard_name = "longitude"
+lons.units = "degrees_east"
+                
+lats = root_grp.createVariable('lat', 'f4', ('jc','ic'))
+lats.long_name = "latitude"
+lats.standard_name = "latitude"
+lats.units = "degrees_north"
+
+ics = root_grp.createVariable('ic', 'f4', ('ic',))
+ics.long_name = "x-coordinate in Cartesian system"
+ics.axis = "X"
+
+jcs = root_grp.createVariable('jc', 'f4', ('jc',))
+jcs.long_name = "y-coordinate in Cartesian system"
+jcs.axis = "Y"
+
+#change obs variable specifics as needed
+#nc_var = root_grp.createVariable('temperature', 'f4', ('time', 'jc', 'ic',),fill_value=-999.0)
+nc_var = root_grp.createVariable('salinity', 'f4', ('time', 'jc', 'ic',))
+nc_var.standard_name = 'sea_water_salinity'
+#nc_var.units = "celsius"
+nc_var.coordinates = "lon lat"
+
+
+# data
+#times[:] = np.arange(0,10,3)
+times[:] = time
+lons[:] = lon 
+lats[:] = lat
+
+ics[:] = np.arange(1,441,1)
+jcs[:] = np.arange(1,321,1)
+
+nc_var[:,:,:] = obs[:,:,:]
+
+root_grp.close()
+```
+
+
+---
+
+
+# simple time-series #
+
+## create netcdf ##
+```
+import scipy.io as sio
+#import numpy as np
+
+mat_contents = sio.loadmat('QC_C10_Sal_join.mat')
+oct_time = mat_contents['tt']
+
+time = oct_time[:].flatten()
+
+time[:] = [t - 1 for t in time] #subtract one day since netcdf doesn't understand 0000-00-00 only 0000-01-01
+
+oct_obs_S_04 = mat_contents['S_04']
+obs_S04 = oct_obs_S_04[:]
+
+oct_obs_S_10 = mat_contents['S_10']
+obs_S10 = oct_obs_S_10[:]
+
+oct_obs_S_19 = mat_contents['S_19']
+obs_S19 = oct_obs_S_19[:]
+
+print len(time)
+print len(obs_S10)
+
+from netCDF4 import Dataset
+
+root_grp = Dataset('salinity_C10.nc', 'w', format='NETCDF4')
+root_grp.description = 'salinity at C10 various depths'
+
+# dimensions
+root_grp.createDimension('time', None)
+
+# variables
+times = root_grp.createVariable('time', 'f8', ('time',))
+times.standard_name = 'time'
+times.units = "days since 0000-01-01 00:00:00"
+times.axis = "T"
+
+nc_S04 = root_grp.createVariable('salinity_04', 'f4', ('time'))
+nc_S04.standard_name = 'sea_water_salinity'
+nc_S04.units = ""
+nc_S04.depth = "4"
+
+nc_S10 = root_grp.createVariable('salinity_10', 'f4', ('time'))
+nc_S10.standard_name = 'sea_water_salinity'
+nc_S10.units = ""
+nc_S10.depth = "10"
+
+nc_S19 = root_grp.createVariable('salinity_19', 'f4', ('time'))
+nc_S19.standard_name = 'sea_water_salinity'
+nc_S19.units = ""
+nc_S19.depth = "19"
+
+
+# data
+times[:] = time
+
+nc_S04[:] = obs_S04[:]
+nc_S10[:] = obs_S10[:]
+nc_S19[:] = obs_S19[:]
+
+root_grp.close()
+```
+
+## plot data from created netcdf ##
+
+http://matplotlib.org/api/dates_api.html
+
+matplotlib uses the matlab date convention of time since year 0 so plot\_date works well for creating the datetime x label
+
+further example python/netcdf/matplotlib references, using maps,etc
+
+http://nbviewer.ipython.org/github/jonblower/python-viz-intro/blob/master/Lesson%203.%20Plotting%20data%20from%20NetCDF%20files/3.%20Plotting%20data%20from%20NetCDF%20files.ipynb
+
+http://schubert.atmos.colostate.edu/~cslocum/netcdf_example.html
+
+http://www.hydro.washington.edu/~jhamman/hydro-logic/blog/2013/10/12/plot-netcdf-data/
+
+graphing time-series plot for salinity\_S04 bin
+```
+import netCDF4
+
+nc = netCDF4.Dataset('./salinity_C10.nc')
+print nc.variables.keys()
+
+nc_time = nc.variables['time']
+times = nc_time[:]
+
+nc_S04 = nc.variables['salinity_04']
+S04 = nc_S04[:]
+
+import matplotlib.pyplot as plt
+
+#plt.plot(times,salinity)
+#matplotlib.dates.num2date(times, tz=None)
+
+#S04
+plt.plot_date(times,S04)
+
+plt.xlabel(nc_time.standard_name + ' (' + nc_time.units + ')')
+plt.ylabel(nc_S04.standard_name   + ' (' + nc_S04.units   + ')')
+plt.title('salinity_C10_04')
+
+#plt.show()
+plt.savefig('salinity_C10_04.png')
+
+```
+
+## handling datentime.fromordinal conversion error and fractional days ##
+
+see sample code/library timedelta below or in article link
+
+from
+http://sociograph.blogspot.com/2011/04/how-to-avoid-gotcha-when-converting.html
+
+I was recently confronted with the task of converting times stored in a matlab object into a python datetime object, and very nearly made a big mistake (366 days big, to be exact).  The matlab representation of time looks like this:
+
+> matlab\_datenum = 731965.04835648148
+
+If you parse this using python's
+
+> datetime.fromordinal(matlab\_datenum)
+
+then the result might look reasonable, but beware: you're off by 366 days! Matlab's datenum representation is the number of days since midnight on Jan 1st, 0 AD.  Python's datetime.fromordinal function assumes time is the number of days since midnight on Jan 1st, 1 AD.  So the duration of year 0 separates the time representation returned by python's fromordinal function and the time representation used by matlab.  Apparently, the year 0 AD had 366 days, (can anyone confirm this?) so one can convert a matlab datenum to a python datetime as follows:
+
+```
+from datetime import datetime, timedelta
+ 
+matlab_datenum = 731965.04835648148
+python_datetime = datetime.fromordinal(int(matlab_datenum)) + timedelta(days=matlab_datenum%1) - timedelta(days = 366)
+```
+
+```
+def datetime2matlabdn(dt):
+   mdn = dt + timedelta(days = 366)
+   frac_seconds = (dt-datetime(dt.year,dt.month,dt.day,0,0,0,0,timezone('UTC'))).seconds / (24.0 * 60.0 * 60.0)
+   frac_microseconds = dt.microsecond / (24.0 * 60.0 * 60.0 * 1000000.0)
+   return mdn.toordinal() + frac_seconds + frac_microseconds
+
+def matlabdntodatetime(matlab_dn):
+  #Get the fractional days from the matlab_dn
+  fract_days = Decimal(matlab_dn) % 1
+
+  py_dt = datetime.fromordinal(int(matlab_dn)) + timedelta(days=float(fract_days)) - timedelta(days=366)
+
+  return py_dt
+```

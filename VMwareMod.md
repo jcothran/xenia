@@ -1,0 +1,248 @@
+
+
+# Mod list #
+
+This is a list of the wmware image modifications/installs which I added to the original http://gisvm.com vmware image (geostatistics version, includes 'R') listed in their install order.  The server is the primary production 'neptune' instance unless noted in a subsection(like 'Squid',etc)
+
+
+---
+
+
+file /etc/hosts.allow
+```
+#uncomment below line and add substitute your http ip below for ssh access
+#sshd : xxx.xxx.xxx.xxx : allow
+sshd : ALL : deny
+```
+
+other installs
+
+```
+#controlling ssh access via hosts.allow
+sudo apt-get install openssh-server
+
+sudo apt-get install nmap
+sudo apt-get install subversion
+#svn not currently in sync with latest vmware image so skip following step for now
+svn checkout http://xenia.googlecode.com/svn/trunk/ /home/xeniaprod/scripts
+
+#For imageprocessing, use the Imagemagick package.
+sudo apt-get install imagemagick
+
+#nfs remote mount
+#see http://www.daryl.mu/2009/03/02/howto-set-up-nfs-remote-file-shariing-and-mounting-in-ubuntu
+sudo apt-get install nfs-kernel-server nfs-common portmap
+
+#install cpan
+perl -MCPAN -e install "Bundle::CPAN"
+
+#install XML::LibXML
+sudo apt-get install libxml2-dev
+sudo cpan -i "XML::LibXML"
+
+sudo cpan -i "DBD::SQLite"
+sudo cpan -i DBD::Pg             #PostGres DBD. NOTE: Don't use "DBD::Pg", odd fail.
+sudo apt-get install gnuplot-nox #no X11 windows support
+sudo cpan -i "XML::XPath"
+sudo cpan -i "Config::IniFiles"
+sudo cpan -i Geo::WeatherNWS    #Package for retrieving NWS data.
+sudo cpan -i SOAP::Lite
+
+sudo aptitude install squid squid-common
+```
+
+```
+#Vembu additional perl packages
+sudo cpan -i "Date::Manip"
+sudo cpan -i "Date::Pcalc"
+```
+
+## crosstab query ##
+```
+#postgresql crosstab function
+#as root
+apt-get install postgresql-contrib-8.3
+#as superuser postgres
+postgres@neptune:/var/www/xenia/pages/test$ psql -U postgres -d xenia -f /usr/share/postgresql/8.3/contrib/tablefunc.sql
+```
+
+```
+######################################
+#ec2 ami command tools - begin
+#mainly interested in ec2-bundle-image for converting/uploading vmware image
+#see http://developer.amazonwebservices.com/connect/entry.jspa?externalID=368&categoryID=88
+
+#amazon ec2 command tools, xen kernel, rsync downloaded to /root/tools
+
+#download and unzipped
+ec2-ami-tools.zip
+
+#see http://developer.amazonwebservices.com/connect/message.jspa?messageID=76635
+sudo apt-get install libruby1.8-extras
+
+sudo apt-get install curl
+
+#purge begin ?
+sudo apt-get install ruby
+sudo apt-get install rpm
+#purge end ?
+
+#download,unzipped,installed
+rsync-3.0.6.tar
+#download, unzipped from http://www.philchen.com/wp-content/uploads/2009/05/kernel-modules2616-xenu.tgz
+kernel-modules-261633-xenu.tar
+
+#ec2 ami command tools - end
+######################################
+
+```
+
+GOMODP Exchange Service
+
+The compiling and installing of these files consumed a large amount of storage that I did not expect - around 1 Gigabyte.
+
+```
+3) WSO2-WSF-C Library
+This C library requires zlib and libiconv.  zlib is pretty standard on Linux
+installations.  libiconv was not installed on this Linux.  (not sure why this was not installed)
+
+a) Download tarball libiconv01.13 from GNU Web site at: http://www.gnu.org/software/libiconv/#downloading
+Put in: /home/src/libiconv/
+cd /home/src/libiconv
+as su
+./configure
+make
+make install
+
+b) Download tarball  wso2-wsf-c-src-1.3.0.tar. Put in /home/src/wso2/
+http://dist.wso2.org/products/wsf/c/1.3.0/wso2-wsf-c-src-1.3.0.tar.gz
+gzip -d wso2-wsf-c-src-1.3.0.tar.gz
+tar -xvf wso2-wsf-c-src-1.3.0.tar
+cd /home/src/wso2/wso2-wsf-c-src-1.3.0
+
+WSFC_HOME=/opt/wso2/wsf_c
+export WSFC_HOME  (this is the default so probably not needed)
+./configure
+make
+make install
+make samples
+
+
+perl -MCPAN -e 'install Error'
+apt-get install libperl-dev
+perl -MCPAN -e 'install WSO2::WSF'
+```
+
+#NetCDf Perl
+```
+For NetCDF, download the perl source [http://www.unidata.ucar.edu/downloads/netcdf-perl/index.jsp Here]
+A prerequisite is the netCDF dev package: sudo apt-get install sudo apt-get install libnetcdf-dev
+Once libnetcdf-dev is installed, edit the CUSTOMIZE file in the perl NetCDF directory and verify/modify the CPP_NETCDF, LD_NETCDF, and PERL_MANDIR flags.
+
+For UDUNITS, to instead of having to install yacc, you can move the UDUNITS.pm and udunits.dat (conversions data file) to /usr/local/lib/perl/5.8.8
+Then move the contents of the auto/UDUNITS directory into /usr/local/lib/perl/5.8.8/auto/UDUNITS. The contents of the directory should be: UDUNITS.so, UDUNITS.bs, and autosplit.ix.
+```
+
+ncgen/ncdump
+```
+apt-get install netcdf-bin
+```
+
+#Python packages
+```
+sudo apt-get install python-setuptools #Used to install the easy_install package manager
+sudo apt-get install python-pysqlite2  #SQLite python DB package.
+sudo apt-get install python2.5-psycopg2#PostGres python DB package.
+sudo apt-get install python2.5-lxml    #XML parser.
+sudo easy_install simplejson           #JSON parser used by the python-twitter package
+sudo easy_install python-twitter
+sudo easy_install virtualenv           #Used for setting up virtual python environments.
+
+Created direction: /usr/lib/python2.5/site-packages/xeniatools where all of our python libraries go.
+```
+
+
+```
+installed google earth to desktop, but slow display with only OpenGL
+== GE uses OpenGL so slow unless optimized for particular graphics card
+https://help.ubuntu.com/community/GoogleEarth
+http://ohioloco.ubuntuforums.org/showthread.php?t=1067377
+
+ Re: Installing Google Earth
+from http://www.google.com/support/forum/...77b9b982&hl=en
+
+1. find the libcrypto.so.0.9.8 file in the google-earth install directory
+2. rename it to libcrypto-old or whatever
+3. then symlink to the system libcrypto (while in the google-earth directory)
+
+Code:
+
+sudo ln -sv /usr/lib/libcrypto.so.0.9.8 ./
+```
+
+```
+sudo cpan -i "Number::Bytes::Human"
+```
+
+```
+sudo apt-get install gparted
+sudo apt-get install rdate
+```
+
+#support platform query pages
+```
+sudo apt-get install php5-cli
+sudo apt-get install php5-pgsql
+```
+
+gnuplot 4.4
+
+## Squid ##
+
+  * hf radar(/home/xeniaprod/scripts/radar) and email alerts
+    * opendap/netcdf(/home/xeniaprod/scripts/dap)
+    * curl
+
+  * remotesensing imagery for Chapel Hill(home/xeniaprod/scripts/scscout)
+    * imagemagick(mogrify command)
+
+## Mapping ##
+
+ran into issues with mysql dependencies with other packages
+```
+dpkg -l | grep mysql
+apt-get --purge remove libdbd-mysql-perl
+
+under /home/user
+rm -rf udig
+rm -rf gvSIG
+rm -rf Kosmo-1.2.1
+
+under /home/xeniaprod
+
+clean src expands, leave .tar
+rm -rf scripts/sqlite
+
+```
+
+# Distribution checklist #
+
+see [VMwareDesign](VMwareDesign.md)
+
+  * Organization
+    * include any image application type installs to mod list
+    * include any script/database changes to project svn
+  * Storage
+    * remove all large sized testing datasets, logs, files (`du -h --max-depth=1`)
+    * clear any browser, application caches
+    * clear user histories (history -c) or profile changes, info
+    * as sudo/root, apt-get clean , to remove packages at /var/cache/apt/archives
+  * Security
+    * return user/passwords to initial test spec or common suggested/known distribution value
+    * remove any personal/institution specific information or addresses which should not be circulated
+    * return hosts.allow, hosts.deny, iptables or other security related files to clean distribution state
+  * Misc
+    * disable automated crons as necessary, document to user how to re-enable and expectations
+    * check/shutdown any unnecessary or stalled processes (`ps -auxf`)
+    * document user setup of any user id's, crontab, file linkages, config files/search labels
+    * create a backup image and version release name/number

@@ -1,0 +1,108 @@
+see also TileCache
+
+# Overview #
+For the new CarolinasRCOOS site, we decided to use [MapFish](http://mapfish.org) since it rolls [OpenLayers](http://openlayers.org), [ExtJS](http://extjs.com) and [GeoExt](http://geoext.org) all into one package.
+Google Maps are projected in Spherical Mercator and you cannot request any other projection, therefore you are stuck making your map work with that projection. Luckily OpenLayers and !Mapserver use !Proj4s to handle the projection conversions for you, however you've got to do some setup to get it working.
+
+
+## Using Google Map Overlays ##
+Getting Google Maps to work inside of OpenLayers take a few tweaks to the OL javascript as well as the MapServer map file so WMS layers can be overlayed on the Google map and the Tilecache configuration file.
+
+### MapServer ###
+  * MapFile
+> > In the global PROJECTION section of the mapfile, you'll need to add "init=epsg:900913" to tell MapServer it can host up layers and re-project them into Spherical Mercator. The following is an example of my mapfile section:
+```
+  PROJECTION
+    "init=epsg:4326"
+    "init=epsg:4269"
+    "init=epsg:900913"
+  END
+```
+  * epsg File
+
+> The epsg is the project file used by the PROJ4 projection library. You'll need to "locate" your working epsg file. For instance I have installed the PROJ4 into my home directory, so my epsg file is located /home/dramage/src/proj-4.6.0/nad/epsg. Note that the file has no extension.
+```
+# For Google maps
+<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs
+```
+
+
+### Tilecache ###
+  * Tilecache.cfg
+> > We have to make a couple of changes to the layers hosted up by Tilecache to reflect the Spherical Mercator projection. The following is a sample layer from my config file:
+```
+[WMSBathymetryRev2]
+type=WMSLayer
+url=http://129.252.37.86/cgi-bin/mapserv?MAP=/home/rcoos/mapserver/RCOOSRev2.map&transparent=true
+layers=Bathymetry
+levels=20
+maxResolution=156543.0339
+size=512,512
+bbox=-10074413.915389,2814454.731918,-6734829.1920556,4467020.9930062
+srs=EPSG:900913
+extension=png
+extent_type=loose
+```
+
+> The config parameters of note are levels, maxResolution, bbox and srs.
+    * levels are the number of zoom levels to support. 20 appears to be the max Google Supports from what I can tell.
+    * maxResolution is the maximum resolution for the map. As an FYI as of now the following are all the resolutions for a Google Map overlay:
+```
+156543.033900000,78271.516950000,39135.758475000,19567.879237500,9783.939618750,4891.969809375,2445.984904688,1222.992452344,611.496226172,305.748113086,152.874056543,76.437028271,38.218514136,19.109257068,9.554628534,4.777314267,2.388657133,1.194328567,0.59716428337097171575,0.298582142
+```
+    * bbox is the bounding box. I needed to convert from lats/longs into Spherical Mercator coordinates.
+    * srs is the source projection Tilecache will ask Mapserver to render when Tilecache builds its cache.
+
+### OpenLayers ###
+  * Javascript
+> When setting up the initial Map object, I set the following configurations:
+```
+      var option= {
+                    maxExtent: new OpenLayers.Bounds(melrLL.lon,melrLL.lat, melrUR.lon,melrUR.lat),          
+                    restrictedExtent: new OpenLayers.Bounds(relrLL.lon,relrLL.lat, relrUR.lon,relrUR.lat),
+                    numZoomLevels: 20,
+                    maxResolution: 156543.0339,
+                    projection: new OpenLayers.Projection("EPSG:900913"),
+                    displayProjection: new OpenLayers.Projection("EPSG:4326"),
+                    tileSize: new OpenLayers.Size(512,512),
+                    units: "degrees",           
+                    controls: [new OpenLayers.Control.MouseDefaults(),
+                               new OpenLayers.Control.MousePosition({numdigits:2}),                
+                               new OpenLayers.Control.PanZoomBar(),
+                               new OpenLayers.Control.Permalink('permalink'),                         
+                               new OpenLayers.Control.ScaleLine()
+                               ]
+                  };
+```
+    * maxResolution and restrictedExtent
+> > Since my area of interest is confined to a small portion of the East Coast, I set the mexExtent and a restrictedExtent parameters to keep the user from moving out of the area. These values must be converted from EPSG:4326(lat/longs) into EPSG:900913(Spherical Mercator). Luckily OpenLayers has some functions that will do this for you:
+```
+      proj900913 = new OpenLayers.Projection("EPSG:900913"); //Spherical mercator used for google maps
+      proj4326 = new OpenLayers.Projection("EPSG:4326"); 
+      var melrLL = new OpenLayers.LonLat(-90.5,24.5);
+      melrLL.transform( proj4326, proj900913 );
+```
+
+> To reduce code, I could just do all the conversions in the OpenLayers.Bounds() calls, but for debugging/clarity  I've pulled them out.
+    * maxResolution
+> > I've also set the maxResolution for the map using the largest resolution for Google overlays.
+    * projection
+> > This sets the default projection for the map. If I did not set this parameter for the Map object, I would need to call it out on for each map layer.
+    * displayProjection
+> > This sets how data is displayed, for this project we want to show the user coordinates in lats/longs.
+  * Sample Google layer
+
+> OpenLayers provides an object to deal specifically with the Google map overlays. Here is a snippet to configure the Google Terrain overlay:
+```
+      var googlet = new OpenLayers.Layer.Google
+                        (
+                          "Google Terrain", 
+                          { 
+                            'sphericalMercator': true,
+                            'type': G_PHYSICAL_MAP,
+                          },
+                          {
+                            displayInLayerSwitcher: true,
+                          }
+                        );
+```

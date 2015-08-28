@@ -1,0 +1,44 @@
+Note that this VMware .vmdk server image is also available for running on Amazon Web Services as an AMI(Amazon Machine Instance) as documented at [AmazonWebServices](AmazonWebServices.md)
+
+
+
+
+---
+
+# Download vmware image (xeniavm) #
+
+The current download location for the associated files for the latest xeniavm vmware image are at
+
+http://129.252.37.86/vmware/
+
+Due to the large filesize of the .vmdk image (~4 Gigabyte compressed, 16 Gigabyte uncompressed), this file has been split into smaller files(multiaa,multiab) which can be rejoined after downloading using the Unix 'cat' command like below:
+
+`cat multi* > xeniavmNeptune20110321_wide.vmdk`
+
+The 'cat' command for the Windows environment can be downloaded from http://unxutils.sourceforge.net/UnxUtils.zip
+
+Or optionally on Windows, as suggested by Ricardo Pinho(thanks Ricardo!) use the copy command instead of cat. From a DOS command prompt: `copy /b multiaa+multiab xeniavmNeptune20110321_wide.vmdk`
+
+On a side note, apache can be configured to display/share file links larger than 2 Gigabytes but must be compiled with that option(CFLAGS="-D\_LARGEFILE\_SOURCE -D\_FILE\_OFFSET\_BITS=64" ./configure --prefix=/usr/local/www) see http://yoebaik.blogspot.com/2007/11/large-file-support-for-apache.html
+
+The unix **[split](http://www.techiecorner.com/107/how-to-split-large-file-into-several-smaller-files-linux/)** command(shown below) was used to generate the smaller sized files<br />
+`split --bytes=2000m xeniavmNeptune20110321_wide.vmdk multi`
+
+The vmware appliance page reference for this download is http://www.vmware.com/appliances/directory/233143
+
+
+---
+
+# Next Steps #
+
+[VMwareInstallShort](VMwareInstallShort.md) describes image setup and configuration info depending on your vmware version
+
+[VMwareProducts](VMwareProducts.md) describes the output formats and services which should be available from the vmware server image
+
+[ObsKML](http://code.google.com/p/xenia/wiki/VMwareTest#Adding_a_new_ObsKML_feed) describes adding new in-situ data to the Xenia database for aggregation and sharing via the output formats and services
+
+A google groups has been setup for questions/discussion at http://groups.google.com/group/xeniavm
+
+see also
+  * http://code.google.com/p/xenia/wiki/XeniaHome
+  * http://code.google.com/p/xenia/wiki/VMwareHome

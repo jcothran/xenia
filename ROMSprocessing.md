@@ -1,0 +1,82 @@
+
+
+# Introduction #
+
+A follow-on to this initial [discussion thread](https://groups.google.com/group/ioos_tech/browse_thread/thread/5ed3ac7665346455), our task was to run some matlab scripts against model forecast output to provide shapefiles.  I don't have matlab on hand for our servers so wanted to see if I could run [octave](http://www.gnu.org/software/octave/) (an open-source matlab substitute, [matlab differences](http://www.ece.ucdavis.edu/~bbaas/6/notes/notes.diffs.octave.matlab.html)) instead.
+
+The main issue I ran into was that there isn't an open source equivalent to the mexcdf(`nc_*`) function calls for interacting with netcdf files via octave.  I tried looking into 'octcdf' but it had its own unique netcdf functions and dependencies that didn't seem a workable substitute for mexcdf calls.  The solution I ended up using was pre-processing the netcdf to matlab data files(.mat files) and replacing the matlab netcdf references with references to the same .mat file data.
+
+This worked fine for the most part.  The only problem I ran into that I had to work around(which could be something fixable in my code) was that the scipy.savemat function seemed to trash my matrix values unless I 'wrapped' them in a 'singleton' matrix (like matrix shape 320x440 to 1x320x440) and then 'unwrapped' them in matlab or numpy via the 'squeeze' function.
+
+Wanted to share my below python scripts with others as helpful in taking a similar matlab/netcdf substitution approach or other workflow tools or bits as interested.
+
+Links
+
+scipy savemat, loadmat examples
+http://docs.scipy.org/doc/scipy/reference/tutorial/io.html
+
+CSV to shapefile with shapely and fiona - fiona uses gdal
+http://macwright.org/2012/10/31/gis-with-python-shapely-fiona.html
+
+
+---
+
+# modify model matlab scripts to load variables from .mat file instead of nc\_varget #
+
+Here's my link to the modified initial matlab script [roms\_zslice.m](https://code.google.com/p/xenia/source/browse/trunk/model/roms/roms_zslice.m) which is called to get an isometric depth in meters slice/layer from the model which has varying layer depths according to the variable s\_rho
+
+'%' is the line comment symbol in the examples below
+
+The main lines to follow here are the call to
+
+```
+grd = roms_get_grid(grd,file);
+```
+
+the .mat load and squeeze of the data to get rid of the singleton wrapper
+```
+% get the data to be zsliced
+% data = nc_varget(file,var,[time-1 0 0 0],[1 -1 -1 -1]);
+
+data = load('sabgom.mat', var);
+data = data.(var);
+data = squeeze(data);
+```
+
+and the conversion of the file to csv at the end
+```
+csvwrite(strcat(var, ".csv"),data)
+```
+
+In [roms\_get\_grid.m](https://code.google.com/p/xenia/source/browse/trunk/model/roms/roms_get_grid.m) the line changes of interest are the substitution of the .mat variable 'load' for the earlier nc\_varget
+
+```
+varlist = ...
+    { 'mask_rho','mask_psi','mask_u','mask_v','h','pm','pn','f','angle'};
+  for v = varlist
+    vname = char(v);
+    try
+      % tmp = nc_varget(grd_file,vname);
+
+      grd.(vname) = load('sabgom_grd.mat',vname);
+      grd.(vname) = grd.(vname).(vname);
+      grd.(vname) = squeeze(grd.(vname));
+```
+
+
+---
+
+# convert local netcdf grid(grd) file to .mat file #
+
+This [script](https://code.google.com/p/xenia/source/browse/trunk/model/roms/mk_sabgom_grd.py) does a one-time conversion of some static grid lookup values from netcdf to .mat  There is a probably a way to refactor this code better to apply the same code against an var/object list.
+
+# daily process #
+
+This [script](https://code.google.com/p/xenia/source/browse/trunk/model/roms/mk_sabgom.py) performs the below several steps to create a shapefile output from a given forecast hour and depth request.
+
+  * pydap for various vars -> .mat file
+  * matlab/octave scripts -> var.csv
+  * merge lon/lat matrix with var.csv
+  * convert combined csv to shapefile via shapely/fiona
+
+This request [script](https://code.google.com/p/xenia/source/browse/trunk/model/roms/mk_all.py) is the script kicked off daily which supplies the forecast time and depth parameters to be daily created.

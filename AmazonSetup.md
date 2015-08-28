@@ -1,0 +1,27 @@
+These steps mostly follow the same as the earlier documentation for the VMware .vmdk server image setup steps documented earlier at
+
+http://code.google.com/p/xenia/wiki/VMwareInstall#Setup
+
+With the differences being:
+  * skip the initial sections regarding network bridge,static ip(amazon uses loopback method),iptables
+  * for openssh, all lines have been commented out for /etc/hosts.allow - set this file for IP based access as needed - alternatively Amazon lists the recommended method of using security keys only [here](http://developer.amazonwebservices.com/connect/entry.jspa?externalID=1233)
+
+# Image size limit, Elastic Block Storage #
+
+Be aware that the initial server image is 6.8 Gigabytes in size, leaving a little over 2 Gigabytes of space on a maximum 10 Gigabyte Amazon image limit.  Note that any changes or data gathered to the image will not persist on a reboot of the image.  It should be possible if needed to take a snapshot of a changed live image using the **ec2-bundle-vol** command as the root user and storing the generated server image to a mounted Elastic Block Storage(EBS).  The ec2 commands are under /root/tools and documented earlier [here](http://code.google.com/p/xenia/wiki/VMwareInstall#Update_2009-11-18)
+
+The initial image is also setup with the '/usr2' directory being the 'data' directory where the postgres database and any log or data files should be stored.  The instance is configured to immediately begin aggregating data to the database when started and you will need to either:
+  * 'comment out' the existing feed requests so they will not be pulled(the database won't grow in size)
+  * limit the time-window of observations gathered (delete(and vacuum/reindex) observations(multi\_obs table) older than a few days or weeks depending on the amount of data)
+  * move or copy the existing '/usr2' directory(see command below) to an Amazon Elastic Block Storage(EBS) which is Amazon's persistent storage solution.  To move or copy the database data directory, shutdown the existing postgres daemon `pg_ctl stop`, move or copy the data directory and restart the postgres daemon (-D option) pointing to the correct data directory.
+
+```
+#copy data dir recursively, preserving symbolic links and ownership
+cp -r -d -p /usr2 /usr3
+```
+
+Elastic Block Storage links <br />
+http://deadprogrammersociety.blogspot.com/2009/08/postgresql-on-ubuntu-on-ec2.html <br />
+http://deadprogrammersociety.blogspot.com/2009/10/postgresql-on-ubuntu-on-ec2-backing-it.html
+
+see also Elastic IP http://alestic.com/2009/06/ec2-elastic-ip-internal in regards to providing a more permanent IP address to mask changing instances.

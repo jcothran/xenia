@@ -1,0 +1,199 @@
+
+
+# Introduction #
+
+The QAQC processing is based around the QAQC documentation that came out of QARTOD meetings and distilled into a [paper](http://trac.secoora.org/datamgmt/browser/docs/whitepapers/trunk/SEACOOS%20QA-QC%20Standards%20and%20Procedures%20Whitepaper.doc) by Sara Haines.
+I've implemented the algorithms in a set of python scripts.
+
+For data stored in a [Xenia](http://code.google.com/p/xenia/wiki/XeniaPackageV2) schema database, the  script will test observations to determine if they fall within defined limits. The script will then populate the qc\_level and qc\_flag columns in the multi\_obs table.  Currently there are four tests run on an observation. The tests are listed in execution order, if one of them fails, the testing does not continue.
+  * **Data Available Test**
+> Checks to see if a data point is available for testing.
+  * **Sensor Range Test**
+> Check if the output of the sensor corresponds with its dynamic range. for example, if a sensor ouputs a "short int" the range would be 32765 to -32765.
+  * **Gross Range Test**
+> Check if the measured value is valid for the type of measurement being sampled with the sensor. For example, we are measuring Air Temperature and given the geographic location we expect the range to be from 0 to 100 Fahrenheit.
+  * **Climatological Range Test**
+> Similar to the Gross Range Test, however it allows a finer granularity of the test ranges based on the start and end month. For example, even thought the Gross Range for our Air Temperature sensor is 0-100, we know that Jun-Aug the range is going to be 90-100. With this finer range control, we would be able to catch an errant reading that fell within the Gross Range and would normally be flagged as good data.
+  * **Rate of Change/Time Continuity Test**
+> Flags an observation if it deviates over a certain amount from the previous measurement. The algorithm was taken from the NDBC QAQC manual ["Improved Real-Time Quality Control of NDBC Measurements"](http://www.ndbc.noaa.gov/realtime.pdf).
+  * **Nearest Neighbor Test**
+> This is currently under review and currently a failure of the test does not result in the data point being flagged as questionable. Each observation can be assigned a neighbor platform that has the same observation. The test retrieves the neighbor observation closest to the sample time of the observation we are testing. If the delta between the observation exceeds the standard deviation value, the test fails.
+**NOTE** The wind direction test needs refinement since we can experience compass rollover. In other words a value of 350 is very close to 10 direction wise, however the delta is quite large and will fail the test.
+## Files ##
+> ### qaqcChecks.py ###
+
+> This file is a wrapper script that has various command line parameters that control how/what QAQC is processed.
+> #### Dependencies ####
+  * [rangeCheck.py](http://code.google.com/p/xenia/wiki/PythonXeniatools#rangeCheck.py)
+> #### Command Line Parameters ####
+```
+  -c, --XMLConfigFile The xml file containing the configuration information.
+  -n, --LastNHours The Last N Hours to query data for.
+  -b, --BeginDateTime The date to begin the data query for.
+  -e, --EndDateTime The date to end the data query for.
+  -s, --SQLOutputFileName Overrides the sql output file provided in the config file. This is the file the QAQC SQL UPDATE statements are saved.
+  -q, --IgnoreQAQCFlags Flag allows us to restamp records that have already been quality controlled.
+  -t, --TestRun   Flag allows us to run the QAQC with no committing into the database.
+```
+> ### Config Files ###
+> #### XMLConfigFile ####
+> This is the configuration file used for the --XMLConfigFile parameter in the qaqcChecks.py script.
+```
+<environment>
+  <database> 
+    <db>
+      <type></type> 
+      <name></name> 
+      <user></user> 
+      <pwd></pwd> 
+      <host></host> 
+    </db>
+    <sqlAlchemyLog>0</sqlAlchemyLog>
+  </database>
+  <emailSettings> 
+    <server></server>
+    <from></from>
+    <pwd></pwd>
+    <emailList>
+      <email></email>
+    </emailList>
+  </emailSettings>
+  
+  <qcLimits>
+    <fileType>test_profiles</fileType>
+    <file>test_profiles.xml</file>
+  </qcLimits>
+  <unitsCoversion>
+    <file>UnitsConversionPython.xml</file>
+  </unitsCoversion>
+  <logging>    
+    <configFile>qaqcLog.conf</configFile>  
+  </logging>  
+</environment>
+```
+  * `<database>`
+> Details the xml tags dealing with the database connection.
+    * `<type>` - Type of the database: postgres is the default and currently only one supported.
+    * `<name>` - The name of the database to connect to.
+    * `<user>` - The user name to connect to the database with.
+    * `<pwd>` - Password for the database connection.
+    * `<host>` - IP address of the database host.
+  * `<emailSettings>`
+> Details the xml tags dealing with the email settings. Emails are sent out whenever we have a QAQC failure.
+    * `<server>` - The SMTP server that is to be used to send the emails.
+    * `<from>` - The user on the SMTP server that the email is from.
+    * `<pwd>` - The user password to connect to the SMTP server.
+    * `<emailList>` - A list of `<email>` entries that contain the email addresses of who we want to send the email to.
+  * `<qcLimits>`
+> qcLimits defines the section where the information about where/how the qc limits are stored. Currently we only use a test\_profiles xml file.
+    * `<fileType>` - Specifies the type of file the limits are stored in. Currently only test\_profiles is used.
+    * `<file>` The fully qualified path to the xml file to use.
+  * `<unitsCoversion>`
+> Start of the section dealing with units conversion.
+    * `<file>`
+> > The fully qualified filepath to the XML file to use for the units conversion.
+  * `<logging>`
+
+> Start of the section dealing with the logging system
+    * `<configFile>`
+> > This is the fully qualified filepath to the configuration file for the Python logging.
+
+
+> #### test\_profiles.xml ####
+> > The following is an example of a simple test\_profiles.xml file which contains only one platform with one sensor for QC validation:
+```
+ <xml>
+  <standardDeviations>
+    <air_pressure>
+      <stdDev>21.0</stdDev>
+      <units>mb</units>
+    </air_pressure>
+  </standardDeviations>
+
+  <testProfileList>
+   <testProfile>
+    <id>CaroCoopsBuoys</id>
+    <platformList>
+     <platform>carocoops.CAP3.buoy</platform>
+    </platformList>
+    <obsList>
+     <obs>
+      <obsHandle>wind_speed.m_s-1</obsHandle>
+      <UpdateInterval>24</UpdateInterval>
+      <rangeHigh>32565</rangeHigh>
+      <rangeLow>-32565</rangeLow>
+      <grossRangeHigh>30</grossRangeHigh>
+      <grossRangeLo>0</grossRangeLo>
+      <climatologicalRangeList> 
+        <climateRange>
+          <startMonth>Jan</startMonth>
+          <endMonth>Mar</endMonth>
+          <rangeLow>30</rangeLow>
+          <rangeHigh>27</rangeHigh>
+        </climateRange>  
+      </climatologicalRangeList>
+     </obs>
+      <nearestNeighborList>
+        <neighbor>
+          <platformHandle>ndbc.41004.met</platformHandle>
+          <standardDeviation>6</standardDeviation>          
+        </neighbor>
+      </nearestNeighborList>
+    </obsList>
+    <notify>
+     <timeLagLimit>14400</timeLagLimit>
+     <wait>10</wait>
+     <emailGroup>1</emailGroup>
+     <emailMessage>5</emailMessage>
+    </notify>
+   </testProfile>
+  </testProfileList>
+ </xml>
+```
+
+> A file may contain multiple test profiles, each of which can be used to group like platforms together. Like platforms would be platforms that have
+> the same sensor array on board.
+  * `<standardDeviations>`
+> This tag denotes the start of one or more entries for standard deviation information. These are used in the rate of change/time continuity test from NDBC. Each standard deviation section uses the observation name as the tag.
+    * `<air_pressure>`
+> > Start of the std dev information for the air pressure observation. The tags must use the observation name defined in the Xenia database's obs\_type table.
+      * `<stdDev>`
+> > > The standard deviation value to be used in the rate of change/time continuity test.
+      * `<units>`
+> > > The units of measurement the stdDev value is in.
+
+  * `<testProfileList>`
+
+> This tag denotes the start of a list of one or more `<testProfile>` entries.
+  * `<testProfile>`
+    * `<id>`
+> > Names the test profile grouping that follows.
+    * `<platformList>`
+> > The `<platformList>` can contain one or more `<platform>` child tags which provide the name of the platform to be tested in the `<testProfile>`.
+    * `<obsList>`
+> > Begins the list of each observation type the `<testProfile>` will run data range checks on.
+      * `<obs>` is the starting tag for an individual observation type definition.
+        * `<obsHandle>` defines the observation type. The format for an `<obsHandle>` entry is "sensor name.unit of measurement", for example: "air\_temperature.farenheit".   The sensor name must be defined in the databases sensor table. The unit of measurement must be defined in the uom\_type table.
+        * `<UpdateInterval>` defines how many times a day a sensor transmits its data from the platform to the outside world. The sample above shows an interval of 24, which would be every hour. This could be considered more of a platform configuration.
+        * `<rangeHigh>` defines the upper acceptable range of a sensor. This is given as a floating point number.
+        * `<rangeLow>` defines the lower acceptable range of a sensor. This is given as a floating point number.
+        * `<grossRangeHigh>` defines the upper range the measurement the sensor makes can be.
+        * `<grossRangeLo>` defines the lower range the measurement the sensor makes can be.
+        * `<climatologicalRangeList>`
+> > > > Begins a section defining climatological ranges. Can have up to 12, 1 per month.
+          * `<climateRange>`
+> > > > > Section will contain a range limit over a given month timeperiod.
+            * `<startMonth>` the month, abbreviate unix style, the range begins on.
+            * `<endMonth>` the month, abbreviate unix style, the range ends on.
+            * `<rangeLow>` the low climatological test range.
+            * `<rangeHigh>` the high climatological test range.
+        * `<nearestNeighborList>`
+
+> > > > Begins the one or more entries for nearest neighbor platforms to use for the nearest neighbor check.
+          * `<neighbor>`
+> > > > > Entry for a nearest neighbor.
+            * `<platformHandle>`
+> > > > > > The platform handle, from the Xenia platform table, to use as the nearest neighbor. We query the platform for the observation we are interested in.
+            * `<standardDeviation>`
+> > > > > > Standard deviation value to use for the test.
+      * `<notify>` Currently this section is not used.

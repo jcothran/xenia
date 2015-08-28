@@ -1,0 +1,40 @@
+#Information about the Pesticide Project setup.
+
+
+
+## Blue Host Configurations ##
+### Programming Environment Requirements ###
+> #### File layout ####
+> > Home directory is: /home2/sccoasta
+> > Added directories:
+```
+    $HOME/config
+    $HOME/cron
+    $HOME/scripts
+```
+
+> #### Python ####
+> > From source, built and installed Python v 2.7.2
+> > Modified .bashrc to use the local Python installation by adding:
+```
+    export PYTHONPATH=$HOME/.local/lib/python/site-packages:$PYTHONPATH
+    export PYTHONPATH=$HOME/.local/lib/python2.7/site-    packages:$PYTHONPATH
+    export PATH=$HOME/.local/bin:$PATH
+```
+    * Libs
+      * SQLAlachemy
+> > > > easy\_install worked for this one.
+
+  * psycopg2-2.4.4
+
+> > Installed from source, easy\_install resulted in various errors.
+
+  * pytz-2011n
+> > Installed from source, easy\_install resulted in various errors.
+
+  * simplejson-2.3.2
+> > Installed from source, easy\_install resulted in various errors.
+
+### PostGres Details ###
+  * Database Name: pesticides
+

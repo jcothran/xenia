@@ -1,0 +1,1242 @@
+
+
+# Introduction #
+
+These are the scripts currently running that retrieve the data from various sources and import that data into the Xenia database.<br />
+
+
+# Machine: Neptune #
+neptune.baruch.sc.edu <br />
+
+
+## Scripts Neptune ##
+
+---
+
+### NetCDF Scout ###
+**Script**: populate\_xenia\_netcdfscout.sh<br />
+**Command line parameters**:<br />
+**Directory**: /home/xeniaprod/cron<br />
+**Description**: Shell script for processing netcdf files that aren't handled through the other RA specific processing scripts below. The files are pulled down then processed into the database. Deletes the previous KML, ZIP and KMZ files.<br />
+**Shell Script Makeup** <br />
+> _Script_: GetLatestData.pl <br />
+> _Directory_: /home/xeniaprod/scripts/scout/trunk <br />
+> _Command Line Parameters_:  <br />
+```
+  --URLControlFile=./URLList.xml 
+  --DirForObsKml=/home/xeniaprod/feeds/scout/general 
+  --NetCDFDir=/home/xeniaprod/tmp/netcdf/scout 
+  --FetchLogDir=/home/xeniaprod/tmp/netcdf/scout/fetch_logs
+  --UseLastNTimeStamps=10 --UseLastNTimeStampsForOrg="nos;60,nws;20" > /home/xeniaprod/tmp/log/scout_netcdf.log
+
+  --URLControlFile is the XML file with the URL list the script will download the files from.
+  --FileFilter is the filter to apply to the file listings to allow the script to download the files we really want. Optional.
+  --DirForObsKml provides the path to the store the ObsKML files created. This is an optional argument, if not provided no ObsKML files are written.
+  --Delete specifies we delete the netcdf files after we write the ObsKML files. This is an optional argument.
+  --NetCDFDir is the directory to store the downloaded files. Optional, default is ./latest_netcdf_files.
+  --FetchLogDir is the directory were the file time stamps are stored. The script uses these files to determine which files are really the latest. Optional, default is ./fetch_logs
+  --UseLastNTimeStamps Integer representing the last N time entries to use when converting the data to obsKML. Optional.
+  --UseLastNTimeStampsForOrg Optional. List specifing orginization and the last N time entries to use for them. Whereas the UseLastNTimeStamps is applied to every organization, this can tailor to the specific. If not provided and UseLastNTimeStamps is provided, it is used.
+  --SkipZipObsKmlDirs Optional. A value of 1 will skip the zipping of the directories under the DirForObsKml option.
+
+```
+> _Description_: Processes the netCDF files into obsKML files.<br />
+
+**Schedule**: Twice an hour
+
+---
+
+
+### Carocoops NetCDF Scout ###
+**Script**: populate\_xenia\_carocoops.sh<br />
+**Command line parameters**:<br />
+**Directory**: /home/xeniaprod/cron<br />
+**Description**: Shell script for processing the Carocoops netcdf files. This script incoporates the NetCDF scout above, but only handles the Carocoops
+netcdf files. The files are pulled down then processed into the database. Deletes the previous KML, ZIP and KMZ files.<br />
+**Shell Script Makeup** <br />
+> _Script_: GetLatestData.pl <br />
+> _Directory_: /home/xeniaprod/scripts/scout/trunk <br />
+> _Command Line Parameters_: See NetCDF section above. <br />
+```
+  --URLControlFile=./CarocoopsURLList.xml 
+  --DirForObsKml=/home/xeniaprod/feeds/scout/carocoops 
+  --NetCDFDir=/home/xeniaprod/tmp/netcdf/scout 
+  --FetchLogDir=/home/xeniaprod/tmp/netcdf/scout/fetch_logs
+  --UseLastNTimeStamps=10
+```
+> _Description_: Processes the netCDF files into obsKML files.<br />
+
+> _Script_: obskml\_to\_xenia\_postgresql.pl <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/import\_export <br />
+> _Command Line Parameters_: <br />
+```
+  Argument 1 - The URL to the KMZ file to process.<br/>
+  Argument 2 - Path where the SQL file will be written.<br/>
+  Argument 3 - Filename to use for the SQL file.<br/>
+  Argument 4 - Database name to connect to.<br/>
+
+  http://localhost/xenia/feeds/carocoops/carocoops_metadata_latest.kmz 
+  /home/xeniaprod/tmp/sqlfiles
+  "latest_carocoops"
+  "xenia"
+```
+> > <br />
+
+> _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br />
+**Schedule**: Runs every quarter hour. We run it this way since the dial up times for the platforms occur throughout the hour, one may be dialed at
+5 past the hour and another at 20 past.
+
+---
+
+
+
+### CORMP NetCDF Scout ###
+**Script**: populate\_xenia\_cormp.sh<br />
+**Command line parameters**:<br />
+**Directory**: /home/xeniaprod/cron<br />
+**Description**: Shell script for processing the CORMP netcdf files. This script incoporates the NetCDF scout above, but only handles the CORMP
+netcdf files. The files are pulled down then processed into the database. Deletes the previous KML, ZIP and KMZ files.<br />
+**Shell Script Makeup** <br />
+> _Script_: GetLatestData.pl <br />
+> _Directory_: /home/xeniaprod/scripts/scout/trunk <br />
+> _Command Line Parameters_: See NetCDF section above. <br />
+```
+  --URLControlFile=./CormpURLList.xml
+  --DirForObsKml=/home/xeniaprod/feeds/scout/cormp 
+  --NetCDFDir=/home/xeniaprod/tmp/netcdf/scout 
+  --FetchLogDir=/home/xeniaprod/tmp/netcdf/scout/fetch_logs
+  --UseLastNTimeStamps=10
+```
+> _Description_: Processes the netCDF files into obsKML files.<br />
+
+> _Script_: obskml\_to\_xenia\_postgresql.pl
+> _Directory_: /home/xeniaprod/scripts/postgresql/import\_export <br />
+> _Command Line Parameters_: <br />
+```
+  Argument 1 - The URL to the KMZ file to process.<br/>
+  Argument 2 - Path where the SQL file will be written.<br/>
+  Argument 3 - Filename to use for the SQL file.<br/>
+  Argument 4 - Database name to connect to.<br/>
+  
+  http://localhost/xenia/feeds/cormp/cormp_metadata_latest.kmz
+  /home/xeniaprod/tmp/sqlfiles
+  "latest_cormp"
+  "xenia"
+```
+> _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br />
+**Schedule**: Runs every quarter hour. We run it this way since the dial up times for the platforms occur throughout the hour, one may be dialed at
+5 past the hour and another at 20 past.
+
+---
+
+
+### CORMP2 ObsKML Scout ###
+**Script**: populate\_xenia\_cormp2.sh<br />
+**Command line parameters**:<br />
+**Directory**: /home/xeniaprod/cron<br />
+**Description**: Shell script for processing the CORMP obskml files(currently just SUN2WAVE for some wave and current observation types).<br />
+
+**Shell Script Makeup** <br />
+> _Script_: get\_latest\_data.pl <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/feeds/cormp2 <br />
+
+> _Script_: obskml\_to\_xenia\_postgresql.pl
+> _Directory_: /home/xeniaprod/scripts/postgresql/import\_export <br />
+> _Command Line Parameters_: <br />
+```
+  Argument 1 - The URL to the KMZ file to process.<br/>
+  Argument 2 - Path where the SQL file will be written.<br/>
+  Argument 3 - Filename to use for the SQL file.<br/>
+  Argument 4 - Database name to connect to.<br/>
+  
+  http://localhost/xenia/feeds/cormp/cormp2_metadata_latest.kmz
+  /home/xeniaprod/tmp/sqlfiles
+  "latest_cormp2"
+  "xenia"
+```
+> _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br />
+**Schedule**: 15,45 minute marks every hour.
+
+---
+
+
+### USF NetCDF Scout ###
+**Script**: populate\_xenia\_usf.sh<br />
+**Command line parameters**:<br />
+**Directory**: /home/xeniaprod/cron<br />
+**Description**: Shell script for processing the USF. This script incoporates the NetCDF scout above, but only handles the USF
+netcdf files. The files are pulled down then processed into the database. Deletes the previous KML, ZIP and KMZ files.<br />
+**NOTE** NDBC netcdf processing stopped. See [here](#NDBC_Processing.md) for new NDBC ingestion.<br />
+**Shell Script Makeup** <br />
+> _Script_: GetLatestData.pl <br />
+> _Directory_: /home/xeniaprod/scripts/scout/trunk <br />
+> _Command Line Parameters_: See NetCDF section above. <br />
+```
+  --URLControlFile=./UsfURLList.xml
+  --DirForObsKml=/home/xeniaprod/feeds/scout/usf 
+  --NetCDFDir=/home/xeniaprod/tmp/netcdf/scout 
+  --FetchLogDir=/home/xeniaprod/tmp/netcdf/scout/fetch_logs 
+  --UseLastNTimeStamps=10
+```
+> _Description_: Processes the netCDF files into obsKML files.<br />
+
+> _Script_: obskml\_to\_xenia\_postgresql.pl
+> _Directory_: /home/xeniaprod/scripts/postgresql/import\_export <br />
+> _Command Line Parameters_: <br />
+```
+  Argument 1 - The URL to the KMZ file to process.<br/>
+  Argument 2 - Path where the SQL file will be written.<br/>
+  Argument 3 - Filename to use for the SQL file.<br/>
+  Argument 4 - Database name to connect to.<br/>
+  
+  For USF:
+  http://localhost/xenia/feeds/usf/usf_metadata_latest.kmz
+  /home/xeniaprod/tmp/sqlfiles
+  "latest_usf"
+  "xenia"
+
+```
+> > <br />
+
+> _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br />
+**Schedule**: Runs every quarter hour. We run it this way since the dial up times for the platforms occur throughout the hour, one may be dialed at
+5 past the hour and another at 20 past.
+
+
+---
+
+#### Gliders ####
+**Script**: populate\_gliders\_usf.sh<br />
+**Command line parameters**:<br />
+**Directory**: /home/xeniaprod/cron<br />
+**Description**: Shell script for processing the USF Webb gliders data.<br />
+
+**Shell Script Makeup** <br />
+> _Script_: WebbGlider.py <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/feeds/gliders/webb <br />
+> _Command Line Parameters_:  <br />
+```
+  --ConfigFile=/home/xeniaprod/config/usfWebbGliderDataIngest.ini
+```
+> _Description_: Connects to the glider database at USF to process currentmissions. Since these are not constantly on going, we schedule the cron job manually when one is occurring.<br />
+
+
+---
+
+
+
+### Old SOAP Perl script. Testing new METAR python processing ###
+**Description**: Pulls in NWS data directly from the NWS site. This is used in tandem with the NetCDF scout. Currently this is scheduled to run in crontab. <br />
+**Shell Script Makeup** <br />
+> _Script_: mk\_sql\_for\_xenia.pl <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/feeds/federal <br />
+> _Command line parameters_: <br />
+```
+  Argument 1: Provider name – nos, nws, etc <br/>
+  Argument 2: Not used <br/>
+  Argument 3: Fully qualified path to SQL output file <br/>
+  Argument 4: Value of 'debug' will enable logging of some print   statements
+
+  nws 
+  24 
+  /home/xeniaprod/tmp/sqlfiles/nws.sql
+  debug
+```
+> _Description_: Connects to the NWS webservice, pulls the data down into a SQL file for importation into the database. Next psql is executed to import the SQL 	file.<br />
+**Schedule**: Runs every 10 minutes. NWS stations have a fairly rapid update rate.
+
+---
+
+
+
+
+### FIT Processing ###
+**Script**: feed\_fit.sh <br />
+**Directory**: /home/xeniaprod/cron <br />
+**Description**: Shell script that pulls in data from the Florida Institute of Technology<br />
+**Shell Script Makeup** <br />
+> _Script_: fit\_to\_obskml.pl <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/feeds/fit <br />
+> _Command line parameters:_<br />
+```
+  None
+  Note: There are hardcoded paths and other settings that control where the data is retrieved and saved.
+  URL: my $url = 'http://my.fit.edu/coastal/DATA.HTM';
+  The text data is stored: "./latest.txt"
+  The obsKml is stored: "./fit.kml"
+  The kml file is then zipped and copied to: "/var/www/xenia/feeds/fit/fit_metadata_latest.kmz"
+```
+> _Description_: Process the FIT data. <br />
+
+> _Script_: obskml\_to\_xenia\_postgresql.pl <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/import\_export <br />
+> _Command_ line parameters: <br />
+```
+  Argument 1 - The URL to the KMZ file to process.
+  Argument 2 - Path where the SQL file will be written.
+  Argument 3 - Filename to use for the SQL file.
+  Argument 4 - Database name to connect to.
+
+  http://localhost/xenia/feeds/fit/fit_metadata_latest.kmz 
+  ""
+  "latest_in_situ" 
+  "xenia"
+```
+> _Description_: Takes the obsKML and writes it into the database. <br />
+**Schedule**: Runs every quarter hour.
+
+---
+
+
+
+### SCCF Processing ###
+**Script**: feed\_sccf.sh <br />
+**Directory**: /home/xeniaprod/cron <br />
+**Description**: Shell script that pulls in data from  Sanibel-Captiva Conservation Foundation River,Estuary and Coastal Observing Network in Florida. <br />
+**Shell Script Makeup** <br />
+> _Script_: sccf\_to\_obskml.pl <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/feeds/sccf <br />
+> _Command line parameters:_<br />
+```
+  None
+  Note: There are hardcoded paths and other settings that control where the data is retrieved and saved.
+  URL: my $url = 'http://recon.sccf.org/latest.kml';
+  The text data is stored: "./latest.txt"
+  The obsKml is stored: "./sccf.kml"
+  The kml file is then zipped and copied to: "/var/www/xenia/feeds/sccf/sccf_metadata_latest.kmz"
+```
+> _Description_: Process the SCCF data. <br />
+
+> _Script_: obskml\_to\_xenia\_postgresql.pl <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/import\_export <br />
+> _Command_ line parameters: <br />
+```
+  Argument 1 - The URL to the KMZ file to process.
+  Argument 2 - Path where the SQL file will be written.
+  Argument 3 - Filename to use for the SQL file.
+  Argument 4 - Database name to connect to.
+
+  http://localhost/xenia/feeds/fit/fit_metadata_latest.kmz 
+  ""
+  "latest_in_situ" 
+  "xenia"
+```
+> _Description_: Takes the obsKML and writes it into the database. <br />
+**Schedule**: Runs every quarter hour.
+
+---
+
+
+### FLDEP Processing ###
+**Script**: feed\_fldep.sh <br />
+**Directory**: /home/xeniaprod/cron <br />
+**Description**: Shell script that pulls in data from the Florida Department of Environmental Protection <br />
+**Shell Script Makeup** <br />
+> _Script_: fldep\_to\_obskml.pl <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/feeds/fldep <br />
+> _Command line parameters:_<br />
+```
+  None
+  Note: There are hardcoded paths and other settings that control where the data is retrieved and saved.
+  URL: my $url = 'http://www.fldep-stevens.com/...';
+  The text data is stored: "./latest.txt"
+  The obsKml is stored: "./fldep.kml"
+  The kml file is then zipped and copied to: "/var/www/xenia/feeds/fldep/fldep_metadata_latest.kmz"
+```
+> _Description_: Process the FLDEP data. <br />
+
+> _Script_: obskml\_to\_xenia\_postgresql.pl <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/import\_export <br />
+> _Command_ line parameters: <br />
+```
+  Argument 1 - The URL to the KMZ file to process.
+  Argument 2 - Path where the SQL file will be written.
+  Argument 3 - Filename to use for the SQL file.
+  Argument 4 - Database name to connect to.
+
+  http://localhost/xenia/feeds/fldep/fldep_metadata_latest.kmz 
+  ""
+  "latest_in_situ" 
+  "xenia"
+```
+> _Description_: Takes the obsKML and writes it into the database. <br />
+**Schedule**: Runs every 20 minutes.
+
+---
+
+
+
+### YSI LBHMC Pier Processing ###
+**Script**: getYSIData.py <br />
+**Directory**: /home/xeniaprod/scripts/postgresql/feeds/ysi <br />
+**Command line parameters**:
+```
+  Argument 1: Fullpath to the XML configuration file.
+
+  /home/xeniaprod/config/ysiParseConfig.xml
+```
+**Description**: Pulls in the data for the YSI site which is described in the configuration file
+provided  on the command line. This script pulls in the data for the Apache Pier, 2nd Ave North Pier and Cherry Grove Pier. <br />
+These piers are part of the Long Bay Hypoxia Monitoring Consortium.<br />
+**Schedule**: Runs twice an hour.
+
+---
+
+### NERRS Processing ###
+**Script**: populate\_xenia\_nerrs<br />
+**Directory**: /home/xeniaprod/cron <br />
+**Description**: Pulls in NERRS data directly from the NERRS site. This script has a command line parameter to call out how many records to request. This is needed since once a day a backfill request of 96(15 minute interval between records, so last 24 hours) as there is a downtime each time for the NERRS data telemytry.<br />
+**Shell Script Makeup** <br />
+> _Script_: filter\_CDMO\_Soap.pl <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/feeds/nerrs<br />
+> _Command line parameters_: <br />
+```
+  Argument 1: Number of records to request 
+
+  Hourly data:
+  4
+  Backfill:
+  96
+```
+> _Description_: Connects to the NERRS SOAP webservice requesting the observation data as XML. Each station has an xml file created.<br />
+
+> _Script_: gen\_nerrs\_obskml.pl <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/feeds/nerrs<br />
+> _Command line parameters_: <br />
+```
+  Argument 1: Provider Name, nerrs  
+  Argument 2: Output directory. Argument 1 is appended to it to form the complete path.  
+  Argument 3: Platform list xml file.  
+  Argument 4: Input file directory, should point to the location of the XML files created by the filter_CDMO_Soap.pl script above. 
+
+  nerrs 
+  /home/xeniaprod/feeds/scout 
+  ./nerrs_platform_list.xml  
+  /home/xeniaprod/feeds/scout/nerrs/soap 
+```
+> _Description_: Creates the obsKML files by parsing the XML files created by filter\_CDMO\_Soap.pl. <br />
+
+> _Script_: obskml\_to\_xenia\_postgresql.pl <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/import\_export <br />
+> _Command Line Parameters_: <br />
+```
+  Argument 1 - The URL to the KMZ file to process.
+  Argument 2 - Path where the SQL file will be written.
+  Argument 3 - Filename to use for the SQL file.
+  Argument 4 - Database name to connect to.
+
+  http://localhost/xenia/feeds/nerrs/nerrs_metadata_latest.kmz 
+  /home/xeniaprod/tmp/sqlfiles 
+  "latest_nerrs" 
+  "xenia"
+```
+> _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br />
+
+**Schedule**: Runs twice an hour.
+
+---
+
+### YSI Nerrs Processing ###
+**Script**: getYSIData.py <br />
+**Directory**: /home/xeniaprod/scripts/postgresql/feeds/ysi <br />
+**Command line parameters**:
+```
+  Argument 1: Fullpath to the XML configuration file.
+
+  /home/xeniaprod/config/nerrsYSIConfigLinux.xml
+```
+**Directory**: /home/xeniaprod/ /scripts/postgresql/feeds/ysi <br />
+**Description**: Pulls in the data for the YSI site which is described in the configuration file
+provided  on the command line. This script pulls in the data for the some NERRS water quality sites. <br />
+**Schedule**: Runs twice an hour.
+
+---
+
+### NCSU ###
+#### Gliders ####
+**Script**: populate\_gliders\_ncsu.sh<br />
+**Command line parameters**:<br />
+**Directory**: /home/xeniaprod/cron<br />
+**Description**: Shell script for processing the NCSU Webb gliders data.<br />
+
+**Shell Script Makeup** <br />
+> _Script_: WebbGlider.py <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/feeds/gliders/webb <br />
+> _Command Line Parameters_:  <br />
+```
+  --ConfigFile=/home/xeniaprod/config/ncsuWebbEmailDataIngest.ini
+```
+> _Description_: This setup processes emails that the Webb glider service sends. We have an email account setup to receive the emails.<br />
+
+---
+
+### FWRI Processing ###
+**Script**:  <br />
+**Directory**: /home/xeniaprod/cron <br />
+**Description**: Downloads the latest file(s) from the web accessible FTP directory, then processes the observations. Currently only Port Manatee station is available.<br />
+**Shell Script Makeup** <br />
+> _Script_: fwriHabmonIngestion.py <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/feeds/fwri <br />
+> _Command line parameters_: <br />
+```
+  --ConfigFile=/home/xeniaprod/config/fwriDataIngest.ini  
+```
+**Schedule**: Will run once an hour.
+
+#### INI File ####
+```
+[Database]
+user = 
+password = 
+host = 
+name = 
+connectionstring =
+
+[settings]
+uomconversionfile=UnitsConversionPython.xml
+
+[logging]
+configfile = fwriDataIngestion.conf
+
+
+[processing]
+organizationlist = fwri
+
+
+[fwri]
+processingobject=fwriCSVDataIngestion
+jsonconfig=fwriMapping.json
+csvURL=
+csvFilepath=PortManateeLatest.csv
+
+```
+
+#### Xenia Mapping File ####
+```
+{
+  "defaults" :
+  {
+    "platform" :
+    {
+      "default_value" : "fwri.MTBF1.wq",
+      "organization" : "fwri",
+      "organization_url" : "",
+      "type_name" : "Fixed Coastal Station",
+      "plaform_url" : "",
+      "description" : "Middle Tampa Bay"
+    },
+    "fixed_latitude" :
+    {
+      "default_value" : "27.661"
+    },
+    "fixed_longitude":
+    {
+      "default_value" : "-82.594"
+    }
+  },
+  "Time (GMT)" :
+  { 
+    "timezone" : "GMT",
+    "format" : "%m/%d/%y %H:%M",
+    "standard_name" : "m_date",
+    "default_value" : ""
+  },
+  "Temp":
+  {
+    "column_uom"  : "celsius",
+    "standard_name" : "water_temperature",
+    "uom"   : "celsius",
+    "s_order" : 1
+  },
+  "Sp Cond" :
+  {
+    "column_uom"  : "mS_cm-1",
+    "standard_name" : "water_conductivity",
+    "uom"   : "mS_cm-1",
+    "s_order" : 1
+  },
+  "Sal" :
+  {
+    "column_uom"  : "psu",
+    "standard_name" : "salinity",
+    "uom"   : "psu",
+    "s_order" : 1
+  },
+  "Depth" :
+  {
+    "column_uom"  : "m",
+    "standard_name" : "depth",
+    "uom"   : "m",
+    "s_order" : 1
+  },
+  "Ph" :
+  {
+    "column_uom"  : "units",
+    "standard_name" : "ph",
+    "uom"   : "units",
+    "s_order" : 1
+  },
+  "Turb" :
+  {
+    "column_uom"  : "ntu",
+    "standard_name" : "turbidity",
+    "uom"   : "ntu",
+    "s_order" : 1
+  },
+  "Chl" :
+  {
+    "column_uom"  : "ug_L-1",
+    "standard_name" : "chl_concentration",
+    "uom"   : "ug_L-1",
+    "s_order" : 1
+  },
+  "DO %" :
+  {
+    "column_uom"  : "percent",
+    "standard_name" : "oxygen_concentration",
+    "uom"   : "percent",
+    "s_order" : 1
+  },
+  "DO mg" :
+  {
+    "column_uom"  : "mg_L-1",
+    "standard_name" : "oxygen_concentration",
+    "uom"   : "mg_L-1",
+    "s_order" : 1
+  },
+  "BGA cells" :
+  {
+    "column_uom"  : "cells_L-1",
+    "standard_name" : "blue_green_algae",
+    "uom"   : "cells_L-1",
+    "s_order" : 1
+  },
+  "Nitrate" :
+  {
+    "column_uom"  : "uM_L-1",
+    "standard_name" : "nitrate",
+    "uom"   : "uM_L-1",
+    "s_order" : 1
+  }
+}
+```
+
+---
+
+
+### Drifters ###
+
+
+---
+
+
+#### Horizon ####
+
+**Description**: perl script that pulls in data from the Horizon Marine drifter website<br />
+**Script Makeup** <br />
+> _Script_: drifter\_to\_kml.pl <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/feeds/drifter/horizon <br />
+```
+  Command line parameters: None
+  Note: There are hardcoded paths and other settings that control where the data is retrieved and saved.
+  wget: "wget -O test1.dat http://www.horizonmarine.com/ioos/seacoora.txt;"
+  The text data is stored: "./test1.dat"
+  The kml generated: "./latest.kml"
+  The latest.kml file is copied to: "/home/xeniaprod/feeds/drifter/horizon/latest.kml" which is read as a kml map layer 
+```
+
+#### NEFSC ####
+
+**Description**: perl script that pulls in data from the NEFSC drifter website<br />
+**Script Makeup** <br />
+> _Script_: drifter\_to\_kml.pl <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/feeds/drifter/nefsc <br />
+```
+  Command line parameters: None
+  Note: There are hardcoded paths and other settings that control where the data is retrieved and saved.
+  wget: "wget -O test1.dat http://www.nefsc.noaa.gov/drifter/drift_X.xml;"
+  The text data is stored: "./test1.dat"
+  The kml generated: "./latest.kml"
+  The latest.kml file is copied to: "/home/xeniaprod/feeds/drifter/nefsc/latest.kml" which is read as a kml map layer 
+```
+
+
+---
+
+# Machine: Mapping #
+139.139
+
+## Scripts: Mapping ##
+
+
+---
+
+
+
+### MODIS Sea Surface Temperature ###
+**Script**: get\_usf\_modis\_sst.sh<br />
+**Directory**:  /home/xeniaprod/cron<br />
+**Description**:  Gets the latest modis file and updates the Xenia database on neptune.<br />
+**Shell Script Makeup** <br />
+> _Script_:  get\_latest\_data.pl<br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/remotesensing/modis\_sst <br />
+> _Command line parameters_:
+```
+  None. 
+  NOTE: There are a number of hardcoded settings in the script, such as working directorys and the URLs to connect to for the data.       
+```
+> The following are the hardcoded working directories:
+```
+  my $scratch_dir = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name;
+  my $dest_dir    = '/home/xeniaprod/feeds/remotesensing/'.$layer_name;  
+  my $fetch_logs   = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name.'/fetch_logs';    
+```
+> The following are the hardcoded URLS:
+```
+  @dir_urls = (
+    "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$yesterdayJulian/1km/pass/intermediate/",
+    "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$yesterdayJulian/1km/pass/final/",
+    "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$todayJulian/1km/pass/intermediate/",
+    "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$todayJulian/1km/pass/final/"
+  );    
+```
+> The $product\_id variable is hardcoded to the value from the product\_type table for the data we want. See the _Description_ below.
+
+> The $psql\_command is also hardcoded to connect to the database to import the SQL statement.<br />
+
+> _Description_: Gets the modis file and updates the Xenia database on neptune. The files are downloaded then the file name modified to the format of modis\_sst\_year\_month\_day\_hour\_minute.png then moved to the $dest\_dir described above. This is done to have a consistent file naming scheme across the products. The database table used is "timestamp\_lkp" which is a generalized table for the remote sensing products. For a given data layer, a mappping product would query the database for the specific product id's(layer's) most recent time entry. The database would return the timestamp which would then be appended to the layer name to then get access to the most recent file. The table column layout is as follows:
+```
+  row_id - Autoincrementing integer as the primary key
+  row_entry_date - Date when the row was added to the table
+  row_update_date - Date the row was modified last.
+  product_id - Integer that specifies what product the row is for.  These are described in the product_type table. Modis is id 1.
+  pass_timestamp - the products date, the time the date was taken.
+  filepath - the child path to the file. The user would have to know the parent directory, such as /home/xeniaprod/feeds/remotesensing, then the filepath would be appended to that to then get the requested file.
+```
+
+**Schedule**: Top of each hour
+
+---
+
+### Interpolated Remote Sea Surface Temperature ###
+**Script**: get\_usf\_modis\_sst.sh<br />
+**Directory**:  /home/xeniaprod/cron<br />
+**Description**:  Gets the latest interpolated SST file and updates the Xenia database on neptune.<br />
+**Shell Script Makeup** <br />
+> _Script_:  get\_latest\_data.pl<br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/remotesensing/modis\_sst <br />
+> _Command line parameters_:
+```
+  None. 
+  NOTE: There are a number of hardcoded settings in the script, such as working directorys and the URLs to connect to for the data.       
+```
+> The following are the hardcoded working directories: <br />
+```
+    my $scratch_dir = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name;
+    my $dest_dir    = '/home/xeniaprod/feeds/remotesensing/'.$layer_name;  
+    my $fetch_logs   = '/home/xeniaprod/tmp/remotesensing/usf/oi_sst/fetch_logs';
+```
+> The following are the hardcoded URLS: <br />
+```
+  @dir_urls = (
+    'http://ocgweb.marine.usf.edu/Products/OI/oidat/'
+  );    
+```
+> The $product\_id variable is hardcoded to the value from the product\_type table for the data we want. See the _Description_ below.
+
+> The $psql\_command is also hardcoded to connect to the database to import the SQL statement.
+> _Description_: Gets the modis file and updates the Xenia database on neptune. The files are downloaded then the file name modified to the format of oi\_sst\_year\_month\_day\_hour\_minute.png then moved to the $dest\_dir described above. This is done to have a consistent file naming scheme across the products. The database table used is "timestamp\_lkp" which is a generalized table for the remote sensing products. For a given data layer, a mappping product would query the database for the specific product id's(layer's) most recent time entry. The database would return the timestamp which would then be appended to the layer name to then get access to the most recent file.
+The database would return the timestamp which would then be appended to the layer name to then get access to the most recent file. The table column layout is as follows:
+```
+  row_id - Autoincrementing integer as the primary key
+  row_entry_date - Date when the row was added to the table
+  row_update_date - Date the row was modified last.
+  product_id - Integer that specifies what product the row is for. These are described in the product_type table. Modis is id 1.
+  pass_timestamp - the products date, the time the date was taken.
+  filepath - the child path to the file. The user would have to know the parent directory, such as /home/xeniaprod/feeds/remotesensing, then the filepath would be appended to that to then get the requested file.
+```
+
+**Schedule**: Top of each hour
+
+
+---
+
+### Advanced Very High Resolution Radiometer Sea Surface Temperature ###
+**Script**: get\_usf\_avhrr\_sst.sh.sh<br />
+**Directory**:  /home/xeniaprod/cron<br />
+**Description**:  Gets the latest AVHRR SST file and updates the Xenia database on neptune. Also updates the old schema database to feed
+the static maps for SECOORA generated at Chapel Hill.<br />
+**Shell Script Makeup** <br />
+> _Script_:  get\_latest\_data.pl<br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/remotesensing/avhrr\_sst <br />
+> _Command line parameters_:
+```
+  None. 
+  NOTE: There are a number of hardcoded settings in the script, such as working directorys and the URLs to connect to for the data.       
+```
+> The following are the hardcoded working directories: <br />
+```
+    my $scratch_dir = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name;
+    my $dest_dir    = '/home/xeniaprod/feeds/remotesensing/'.$layer_name;  
+    my $dest_dir_2    = '/nautilus_usr2/maps/seacoos/data/usf/'.$layer_name;  
+```
+> The following are the hardcoded URLS: <br />
+```
+    @dir_urls = (
+      'http://www.imars.usf.edu/husf_avhrr/products/images/fullpass/'.$yyyy_dot_mm
+    );
+
+    @final_dods_urls = (
+      'http://www.imars.usf.edu/dods-bin/nph-dods/husf_avhrr/FULL_PASS_HDF_SST/'.$yyyy_dot_mm
+    );
+    $final_suffix = 'usf.sst.hdf.html';
+
+    @auto_dods_urls = (
+      'http://www.imars.usf.edu/dods-bin/nph-dods/husf_avhrr/FULL_PASS_HDF_SST/auto/'.$yyyy_dot_mm
+    );
+  );    
+```
+> The $product\_id variable is hardcoded to the value from the product\_type table for the data we want. See the _Description_ below.
+
+> The $psql\_command is also hardcoded to connect to the database to import the SQL statement.
+> _Description_: Gets the modis file and updates the Xenia database on neptune. The files are downloaded then the file name modified to the format of oi\_sst\_year\_month\_day\_hour\_minute.png then moved to the $dest\_dir described above. This is done to have a consistent file naming scheme across the products. The database table used is "timestamp\_lkp" which is a generalized table for the remote sensing products. For a given data layer, a mappping product would query the database for the specific product id's(layer's) most recent time entry. The database would return the timestamp which would then be appended to the layer name to then get access to the most recent file.
+The database would return the timestamp which would then be appended to the layer name to then get access to the most recent file. The table column layout is as follows:
+```
+  row_id - Autoincrementing integer as the primary key
+  row_entry_date - Date when the row was added to the table
+  row_update_date - Date the row was modified last.
+  product_id - Integer that specifies what product the row is for. These are described in the product_type table. Modis is id 1.
+  pass_timestamp - the products date, the time the date was taken.
+  filepath - the child path to the file. The user would have to know the parent directory, such as /home/xeniaprod/feeds/remotesensing, then the filepath would be appended to that to then get the requested file.
+```
+> This script also feeds entries to the old schema database. In that database there is a table per remote sensing product.
+**Schedule**: 30 minutes after the hour
+
+
+---
+
+### MODIS RGB True Color ###
+**Script**: get\_usf\_modis\_rgb.sh<br />
+**Directory**:  /home/xeniaprod/cron<br />
+**Description**:  Gets the latest MODIS RGB file and updates the Xenia database on neptune. Also updates the old schema database to feed
+the static maps for SECOORA generated at Chapel Hill.<br />
+**Shell Script Makeup** <br />
+> _Script_:  get\_latest\_data.pl<br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/remotesensing/modis\_rgb <br />
+> _Command line parameters_:
+```
+  None. 
+  NOTE: There are a number of hardcoded settings in the script, such as working directorys and the URLs to connect to for the data.       
+```
+> The following are the hardcoded working directories: <br />
+```
+    my $scratch_dir = '/home/xeniaprod/tmp/remotesensing/usf/'.$layer_name;
+    my $dest_dir    = '/home/xeniaprod/feeds/remotesensing/'.$layer_name;  
+    my $dest_dir_2    = '/nautilus_usr2/maps/seacoos/data/usf/'.$layer_name;  
+```
+> The following are the hardcoded URLS: <br />
+```
+  @dir_urls = (
+    "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$yesterdayJulian/1km/pass/intermediate/",
+    "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$yesterdayJulian/1km/pass/final/",
+    "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$todayJulian/1km/pass/intermediate/",
+    "http://cyclops.marine.usf.edu/modis/level3/husf/fullpass/$currentYear/$todayJulian/1km/pass/final/"
+    #'http://modis.marine.usf.edu/products/fullpass/rgb/'
+  );
+```
+> The $product\_id variable is hardcoded to the value from the product\_type table for the data we want. See the _Description_ below.
+
+> The $psql\_command is also hardcoded to connect to the database to import the SQL statement.
+> _Description_: Gets the modis file and updates the Xenia database on neptune. The files are downloaded then the file name modified to the format of oi\_sst\_year\_month\_day\_hour\_minute.png then moved to the $dest\_dir described above. This is done to have a consistent file naming scheme across the products. The database table used is "timestamp\_lkp" which is a generalized table for the remote sensing products. For a given data layer, a mappping product would query the database for the specific product id's(layer's) most recent time entry. The database would return the timestamp which would then be appended to the layer name to then get access to the most recent file.
+The database would return the timestamp which would then be appended to the layer name to then get access to the most recent file. The table column layout is as follows:
+```
+  row_id - Autoincrementing integer as the primary key
+  row_entry_date - Date when the row was added to the table
+  row_update_date - Date the row was modified last.
+  product_id - Integer that specifies what product the row is for. These are described in the product_type table. Modis is id 1.
+  pass_timestamp - the products date, the time the date was taken.
+  filepath - the child path to the file. The user would have to know the parent directory, such as /home/xeniaprod/feeds/remotesensing, then the filepath would be appended to that to then get the requested file.
+```
+> This script also feeds entries to the old schema database. In that database there is a table per remote sensing product.
+**Schedule**: 35 minutes after the hour
+
+
+---
+
+### Remote Sensing Cache Reseed ###
+**Script**: rs\_clean\_reseed.sh<br />
+**Directory**:  /home/xeniaprod/cron<br />
+**Description**: Uses the tilecache scripts tilecache\_clean.py and tilecache\_seed.py to flush the tile cache then reseed the primary zoom level(the view a user first sees on the map). Tilecaching the remote sensing layers allows us to serve up the layers quicker than constantly hitting mapserver. <br />
+NOTE: This jobs runs under the www-data cron tab since the incoming layer requests are handled by this users. Otherwise we'd run into file/directory permission issues. <br />
+If the tilecache root directory is changed in the tilecache.cfg file, the directory for the clean and seed scripts would need to be changed in the shell script as well. Currently the root directory is: /usr2/data/xeniaprod/tmp/mapserver\_tmp/tilecache/<br />
+
+**Command line parameters**: None <br />
+**Schedule**: 30 minutes after the hour. We could refine this by having the recaching done whenever we actually get new remote sensing layers.
+
+
+---
+
+### Hourly Observation Cache Reseed ###
+**Script**: hourly\_obs\_clean\_reseed.sh<br />
+**Directory**:  /home/xeniaprod/cron<br />
+**Description**: Uses the tilecache scripts tilecache\_clean.py and tilecache\_seed.py to flush the tile cache then reseed the primary zoom level(the view a user first sees on the map). Tilecaching the hourly observation visualization layers allows us to serve up the layers quicker than constantly hitting mapserver.
+NOTE: This jobs runs under the www-data cron tab since the incoming layer requests are handled by this users. Otherwise we'd run into file/directory permission issues. <br />
+If the tilecache root directory is changed in the tilecache.cfg file, the directory for the clean and seed scripts would need to be changed in the shell script as well. Currently the root directory is: /usr2/data/xeniaprod/tmp/mapserver\_tmp/tilecache/<br />
+
+**Command line parameters**: None <br />
+**Schedule**: 10&50 minutes after the hour.
+
+
+---
+
+### HF Radar ###
+
+
+**mapfiles/wrappers**
+
+
+
+
+---
+
+
+# Machine: Projects #
+## Scripts ##
+### NDBC Processing ###
+**Script**: populate\_xenia\_ndbc <br />
+**Directory**: /home/xeniaprod/cron <br />
+**Description**: Now using the IOOS Dif web service, pulls in NDBC data directly from the NDBC site.  <br />
+**Non-NDBC Providers pulled from NDBC SOS**
+  * Everglades National Park
+
+**Shell Script Makeup** <br />
+> _Script_:DataIngestion.py <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/feeds/ioosdif <br />
+> _Command line parameters_: <br />
+```
+  --ConfigFile=/home/xeniaprod/config/ndbcDataIngest.ini  
+```
+**Schedule**: Runs twice an hour.
+
+#### INI File ####
+```
+[Database] - Section for the database parameters
+user =     - User name used to log onto the database
+password = - Password used
+host =     - Host address where the database server runs.
+name =     - Database name
+connectionstring = - SQLAlchemey database driver connection string.
+
+[settings] - Section for general settings
+uomconversionfile= - Path to the XML units conversion file.
+ 
+[logging] - Section for log file
+configfile = The fully qualified path to the logging config file.
+
+[area] - Section for the area of interest when checking for platforms in the bounding box given below.
+bbox= - Polygon defining our area of interest.
+
+[processing] 
+organizationlist = - Comma seperataed list of Organization IDs to process. For each entry here, there should be a corresponding section below. 
+
+[ndbc] - Organization from the organization list above.
+difurl= - Base URL for the dif service
+
+checkfornewplatforms= - Either 0 or 1. 1 will do a getCapabilities query to determine if there are any new platforms in the bbox defined above. Also checks the available observations against the observation defined on the platform in our database.
+
+addnewplatformstodb= Either 0 or 1. 1 will create new platforms/sensors 
+according to what is discovered in the getCapabilities query.
+
+addnewobservationstodb= Either 0 or 1. If checkfornewplatforms=1 and this is 1, any existing platforms are discovered to have new observations, this will add them to the database,
+
+newstationstoadd= A comma delimited list of stations to add. Used in conjunction with addnewplatformstodb and checkfornewplatforms. If set, only the stations in this list will be added.
+
+lastnhours= - The last N hours of data to request in a getObservation query.
+
+processingobject= - Name of the object used to do the processing.
+
+jsonconfig= - JSON config file that defines the mapping of observations available from the Dif service to the Xenia names of those observations.
+
+stationoffering= -  The provider specific URN portion needed in the getObservation query.
+
+newplatformkml= - If checkfornewplatforms is 1, the is the fully qualified path to write a kml file out containing new platforms found and observations found that do not exist on the database platforms.
+
+whitelist= If defined, this is a comma delimeted list of stations to pull data via getObservations. If not defined, the organization name in this section is used to pull all stations.
+
+```
+
+#### Xenia Mapping File ####
+For NDBC, we ask for the getObservation data to be returned in a CSV format. This file defines a mapping for those columns. At the head of the file are columns common across all the CSV data returns, then under the "observation\_columns" area we define the Dif providers observation name which defines columns specific to that datum. The mapping from the CSV column to the Xenia observation are defined under "m\_value\_columns".
+Some observations(Winds, Waves, Currents) contain multiple datums, each having a mapping in the m\_value\_column. For multiple datums, the column order must be preserved in the "m\_value\_columns".
+```
+{
+  "platform_identifier" : "station_id",
+  "sensor_identifier" : "sensor_id",
+  "fixed_location" : 
+  {
+    "lat" : "latitude (degree)",
+    "lon" : "longitude (degree)"
+  },
+  "datetime" : "date_time",
+  "observation_columns" :
+  {
+    "air_pressure_at_sea_level": 
+    {
+      "depth" : "depth (m)",
+      "m_value_columns":
+      [
+        {"air_pressure_at_sea_level (hPa)": "air_pressure"}
+      ]
+    },
+    
+    "air_temperature": 
+    {
+      "depth" : "depth (m)",
+      "m_value_columns":
+      [
+        {"air_temperature (C)": "air_temperature"}
+      ]
+    }, 
+    "currents": 
+    {
+      "depth" : "depth (m)",
+      "bin (count)" : "s_order",
+      "m_value_columns":
+      [
+        {"direction_of_sea_water_velocity (degree)": "current_to_direction"}, 
+        {"sea_water_speed (cm/s)": "current_speed"}
+      ]
+    }, 
+    "sea_floor_depth_below_sea_surface": 
+    {
+      "m_value_columns":
+      [
+        {"sea_floor_depth_below_sea_surface (m)": "depth"}
+      ]
+    }, 
+    "sea_water_electrical_conductivity": 
+    {
+      "depth" : "depth (m)",
+      "m_value_columns":
+      [
+        {"sea_water_electrical_conductivity (mS/cm)": "water_conductivity"}
+      ]
+    }, 
+    "sea_water_salinity": 
+    {
+      "depth" : "depth (m)",    
+      "m_value_columns":
+      [
+        {"sea_water_salinity (psu)": "salinity"}
+      ]
+    }, 
+    "sea_water_temperature": 
+    {
+      "depth" : "depth (m)",    
+      "m_value_columns":
+      [
+        {"sea_water_temperature (C)": "water_temperature"}
+      ]
+    }, 
+    "waves": 
+    {
+      "m_value_columns":
+      [
+        {"mean_wave_direction (degree)": "mean_wave_direction_peak_period"}, 
+        {"principal_wave_direction (degree)": "principal_wave_direction"}, 
+        {"sea_surface_swell_wave_period (s)": "dominant_wave_period"}, 
+        {"sea_surface_swell_wave_significant_height (m)": "swell_height"}, 
+        {"sea_surface_swell_wave_to_direction (degree)": "swell_wave_direction"}, 
+        {"sea_surface_wave_mean_period (s)": "average_wave_period"}, 
+        {"sea_surface_wave_significant_height (m)": "significant_wave_height"}, 
+        {"sea_surface_wave_to_direction (degree)": "significant_wave_to_direction"}, 
+        {"sea_surface_wind_wave_period (s)": "wind_wave_period"}, 
+        {"sea_surface_wind_wave_significant_height (m)": "wind_wave_height"}, 
+        {"sea_surface_wind_wave_to_direction (degree)": "wind_wave_direction"}
+      ]
+    }, 
+    "winds": 
+    {
+      "depth" : "depth (m)",    
+      "m_value_columns":
+      [
+        {"wind_from_direction (degree)": "wind_from_direction"}, 
+        {"wind_speed (m/s)": "wind_speed"}, 
+        {"wind_speed_of_gust (m/s)": "wind_gust"}
+      ]
+    }
+  }
+```
+
+---
+
+
+
+### NOS Processing ###
+**Script**: populate\_xenia\_nos <br />
+**Directory**: /home/xeniaprod/cron <br />
+**Description**: Now using the IOOS Dif web service, pulls in NOS data directly from the NOS site. Currently this is scheduled to run in crontab. <br />
+**Shell Script Makeup** <br />
+> _Script_:DataIngestion.py <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/feeds/ioosdif <br />
+> _Command line parameters_: <br />
+```
+  --ConfigFile=/home/xeniaprod/config/nosDataIngest.ini  
+```
+**Schedule**: Runs twice an hour.
+
+---
+
+
+### USGS Processing ###
+**Script**: populate\_xenia\_usgs <br />
+**Directory**: /home/xeniaprod/scripts/postgresql/feeds/federal/usgs<br />
+**Description**: Pulls in USGS data directly from the USGS site.  Currently this is scheduled to run in crontab. Cleans up previous KML, KMZ, and SQL files.<br />
+**Shell Script Makeup** <br />
+> _Script_: gen\_wq\_obskml.pl <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/feeds/federal/usgs <br />
+> _Command line parameters_: <br />
+```
+  Argument 1: Provider name – usgs 
+  Argument 2: Base output directory. Argument one is appended to complete the directory. 
+  Argument 3: XML platform list that details the platforms to query.
+```
+> _Description_: Connects to the USGS webservice, pulls the data down into a KML file for importation into the database.<br />
+> _Script_: obskml\_to\_xenia\_postgresql.pl
+> _Directory_: /home/xeniaprod/scripts/postgresql/import\_export <br />
+> _Command Line Parameters_: <br />
+```
+ Argument 1 - The URL to the KMZ file to process.
+ Argument 2 - Path where the SQL file will be written.
+ Argument 3 - Filename to use for the SQL file.
+ Argument 4 - Database name to connect to.
+```
+> _Description_: Processes the obsKML files writing them into a sql file that is then imported into the database.<br />
+
+**Schedule**: 45 minutes after the hour.
+
+---
+
+### NWS Processing ###
+**Script**: populate\_xenia\_nws <br />
+**Directory**: /home/xeniaprod/cron <br />
+**Description**: Now using NWS data from the METAR feeds.  <br />
+
+**Shell Script Makeup** <br />
+> _Script_:nwsDataIngestion.py <br />
+> _Directory_: /home/xeniaprod/scripts/postgresql/feeds/nws <br />
+> _Command line parameters_: <br />
+```
+  --ConfigFile=/home/xeniaprod/config/nwsDataIngest.ini  
+```
+**Schedule**: Runs at 15,35,55 minutes after the hour. NWS docs specify they update the data at 50 minutes after the hour, however looking at the timestamps on the metar files, they seem to populate them around the times the stations telemeter their data.
+
+#### INI File ####
+```
+[Database] - Section for the database parameters
+user =     - User name used to log onto the database
+password = - Password used
+host =     - Host address where the database server runs.
+name =     - Database name
+connectionstring = - SQLAlchemey database driver connection string.
+
+[settings] - Section for general settings
+uomconversionfile= - Path to the XML units conversion file.
+ 
+[logging] - Section for log file
+configfile = The fully qualified path to the logging config file.
+
+[area] - Section for the area of interest when checking for platforms in the bounding box given below.
+bbox= - Polygon defining our area of interest.
+
+[processing] 
+organizationlist = - Comma separated list of Organization IDs to process. For each entry here, there should be a corresponding section below. 
+
+[nws]
+jsonconfig - JSON config file that defines the mapping of observations available from the Dif service to the Xenia names of those observations.
+metarurl - URL where the METAR service resides. Use this in conjunction with the station name we want the data for.
+processingobject - Name of the object used to do the processing.
+```
+
+# Machine: Squid #
+139.124
+
+## Scripts: Squid ##
+
+---
+
+### HF Radar ###
+
+These scripts run once an hour to help aggregate and check uptime for the Secoora HF Radar stations.  The final rendering of these hf radar netcdf files is currently handled by servers at NC-Chapel Hill.
+
+**directory** /home/xeniaprod/scripts/radar
+
+The directory itself contains scripts for getting Savannah HF radar(get\_latest\_listing.pl,get\_latest\_data.pl,convert\_latest.pl,cronNotify.pl)
+
+The Savannah script checks http://carocoops.org/hfradar for the latest (downloaded as latest.txt) data file which gets converted into a seacoos/secoora netcdf grid file using a netcdf template/substitution file.  The ascii files are ftp'd directly from skidaway to hfradar folder on nautilus server(files pushed, no cron/pull).
+
+For Long Bay, SC, a similar set of scripts is under the 'seacoos2' folder.
+
+For Tampa/West Florida Shelf(WFS), a similar set of scripts is under the 'tampa' folder.
+
+For Miami, a similar set of scripts is under 'miami'.
+
+For NC Outer banks, a similar set of scripts is under 'banks' - for 'banks' no data is collected or converted, just uptime/notification checks.
+
+
+
+---
+
+
+# Machine: Nautilus #
+nautilus.baruch.sc.edu <br />
+
+
+## Scripts Nautilus ##
+
+---
+
+### CarolinasRCOOS(South Carolina - SUN2,CAP2,FRP2) Data feed ###
+
+The user 'buoy' crontab runs the following jobs:
+
+gets the latest buoy telemetry .dat files
+```
+#crcoos buoy telemetry
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * cd /home/buoy/scripts/buoy_telemetry; perl get_latest_data.pl
+```
+
+The cron job1.sh kicks off two scripts under /usr2/prod/buoys/perl - processing the latest .dat files placed at /usr2/carocoops\_data and moving the processed files to /usr2/prod/buoys/processed
+
+```
+#get processBuoys.pl to display new buoy data, process to database which netcdf files are generated from
+#for speedy reprocessing(files run every minute)
+* * * * * /home/buoy/scripts/job1.sh >> /tmp/buoy.log 2>&1
+```
+
+so if looking for files on a certain date, supply the wildcard(like `/usr2/prod/buoys/processed/*20120319*` ) for that date to see those records(there are many files in that directory so don't try to list all of them)
+
+The two primary scripts which process those files are similar, the first(processBuoysDB.pl) processes the data to the old carocoops database on nautilus, the second(processBuoys.pl) changes the website pages for the old carocoops website at http://carocoops.org based on the latest data available from the carocoops database and calls process\_netcdf\_latest.pl used to generate the latest netcdf files for the data scout on neptune server.
+
+If there is a change in the telemetry feed in regards to the number or ordering of parameters, then these two scripts need to change accordingly. The telemetry feed lines are split into sections(like FCAT,WXPAK,etc) and the indexes from these inline headers should be adjusted as needed.
+
+```
+#add to carocoops database on nautilus
+/usr2/prod/buoys/processed/processBuoysDB.pl
+#change webpage
+/usr2/prod/buoys/processed/processBuoys.pl
+#process netcdf - called from within processBuoys.pl using the latest database records on the carocoops database
+/usr2/prod/buoys/processed/process_netcdf.pl
+```
+
+If experiencing problems, check that the postgres database is up and running as it may be knocked offline by USC networking outages.  The simplest way is to reboot nautilus with
+
+`/sbin/shutdown -r now`
+
+which should call the server setup commands(including postgres start) under /etc/rc.local
+
+# Misc #
+
+The NHC storm info is gathered from the below NHC storm kml link which should carry storm related info when storms are active.  This file is processed into separate kml file layers and made available on the nwsone(marine weather portal) server.
+
+`http://www.nhc.noaa.gov/gis/kml/nhc_active.kml`

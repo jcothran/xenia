@@ -1,0 +1,18 @@
+The below sections describe the basic 'flow' of **inputs** (see XeniaFeeds )into a Xenia database instance(see XeniaSetup) and **outputs** (see XeniaProducts) derived from this database.
+
+
+A simple description of the general flow is:
+
+**Raw data feeds -> ObsKML -> Xenia RDB -> ObsKML -> various products/formats, services**
+
+I'm using my in-house developed [ObsKML](http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML) as an intermediate XML staging format/layer between the relational database and other inputs/outputs.
+
+Source code http://code.google.com/p/xenia/source/browse/trunk
+
+A diagram of the above description is shown below (also available with dynamic links at http://www.gliffy.com/publish/1329032/)
+
+![http://www.gliffy.com/pubdoc/1329032/L.jpg](http://www.gliffy.com/pubdoc/1329032/L.jpg)
+
+A more generalized data flow description is shown below (also available at http://www.gliffy.com/publish/1396351/)
+
+![http://www.gliffy.com/pubdoc/1396351/L.jpg](http://www.gliffy.com/pubdoc/1396351/L.jpg)

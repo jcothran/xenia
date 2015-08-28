@@ -1,0 +1,421 @@
+see also
+  * http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML#Schema_simple
+  * http://trac.secoora.org/datamgmt/browser/docs/usc/docs/schemas (adcp,glider,hf radar)
+  * http://code.google.com/p/xenia/wiki/XeniaDesign#sensor_id_concept
+  * http://code.google.com/p/xenia/wiki/XeniaDesign#platform,etc_aliases
+
+The below kml examples are contained as a zip [here](http://xenia.googlecode.com/files/obskml_examples.zip) and populating a sample xenia database [here](http://xenia.googlecode.com/files/xenia_examples.db)
+
+
+
+# common xml header #
+
+below is a common xml header/description for kml files
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- more documentation at http://carocoops.org/twiki_dmcc/bin/view/Main/ObsKML#Schema_simple  -->
+
+<!-- obskml 'complex' schema elements can be seen in the associated metadata dsi(dynamic sensor inventory) schema -->
+
+<!-- qc_level and qc_flag elements could be added with each obs to satisfy current qc reuirements -->
+
+<!-- key id fields form a unique named key to a platform_id and/or sensor_id collection of measurments on the database, in an associated obsKML file or elsewhere.
+ 	a string concatenation of platform fields(organization.platform.package) and sensor fields(obsType.uomType.sOrder) like
+ 	carocoops.FRP2.buoy.water_temperature.celsius.1
+ 	
+     If sOrder is not specified it is defaulted to '1' so the full sensor path to the below two id's would be:
+     
+     carocoops.CAP1.buoy.air_temperature.celsius.1
+     carocoops.CAP1.buoy.water_temperature.celsius.1
+     
+     sOrder (sensor Order) allows for redundant or profiling sensors(ADCP's,etc) of the same obsType.uomType to be articulated
+-->
+
+<!-- metadata_id elements would be xml referenced as follows
+
+Note:
+
+platform_metadata_id is an alias/substitute for organization.platform.package platform_handle and sensor_metadata_id is a alias/substitute for sensor_id or obsType.uomType.sOrder
+
+platform_metadata_id = platform.metadata_id
+sensor_metadata_id = sensor.metadata_id
+obs_metadata_id = multi_obs.metadata_id
+
+<obsList>
+<platform_metadata_id>
+  <obs>
+    <sensor_metadata_id>
+    <obs_metadata_id>
+  <obs>
+</obsList>
+
+-->
+```
+
+# ADCP(Acoustic Doppler Current Profiler) #
+
+A fixed number/depth of ADCP bins track current velocity and direction.
+
+A platform entry(platform.row\_id, platform.platform\_handle) may be setup independently for ADCP measurements (like scnms.smps1.adcp) or as part of an existing platform (like carocoops.cap2.buoy).
+
+Sensor entries(sensor.row\_id,sensor.m\_type\_id,sensor.s\_order) are created for the corresponding sensor types (where m\_type\_id corresponds to current\_speed, current\_to\_direction)
+
+## conventions ##
+
+s\_order should reflect depth/height order from water surface(mean sea level) - so the bin closest to the surface has the lowest bin number and the deepest bin has the highest s\_order.
+
+s\_order also plays a role in establishing the sensor\_id as a collection entity for a time-series set of related measurements(all measurements from the same bin over time) independent of tidal changes.  To support this role the number of bins reported and their orientation should be consistent.  Missing values should be used for bins which might be invalid.
+
+The field multi\_obs.m\_z will carry the repeated unvarying negative z value associated bin depth in meters for each sensor\_id.  Tidal changes in depth will be captured by associated but separate water pressure or depth sensor\_id.
+
+Optionally the negative z value associated bin depth may be carried in the field sensor.fixed\_z and the bin label like 'bin\_0,bin\_1,etc' carried in sensor.short\_name
+
+## tracking extended metadata or setup changes ##
+
+If the bin depth configuration were to change, this would be tracked by additions to the metadata table which would point to the associated sensor\_id(s) with an effective begin and end date and associated file/url references to free-form documents or related xml schemas.  See http://code.google.com/p/xenia/wiki/XeniaUpdates 'sqlite version 3'
+
+```
+<!-- for this adcp example (fixed-profiler), a new placemark is generated for each change in timestamp.  Repeated obsType.uomType bins are differentiated by their sOrder and elev(depth).  Preference is for sOrder to be listed in increasing order(1,2,3,...) from MSL surface downward(depth) or upward(height) -->
+
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Document>
+  <name>Obskml sample</name>
+  <open>1</open>
+  <Placemark id="carocoops.CAP2.adcp">
+    <name>carocoops.CAP2.adcp</name>  <!-- the name field is the preferred element for capturing the platform_id (organization.platform.package) related key id fields -->
+    <description>An html table derived from the obs kml metadata tags might be displayed here</description>
+    <Point>
+      <coordinates>-79.68,32.86</coordinates>
+    </Point>
+    <TimeStamp><when>2007-01-15T14:00:00</when></TimeStamp>
+
+    <Metadata>
+    <obsList xmlns="http://carocoops.org/obskml/1.0.0/obskml_simple.xsd" >
+
+    <!-- adcp bin closest to MSL surface, bins/sOrder listed in order from surface -->
+    <obs>
+      <obsType>current_speed</obsType> <!-- key id field -->
+      <uomType>cm_s-1</uomType> <!-- key id field -->
+      <value>55</value>
+      <elev>-1</elev> <!-- elevation assumed unit meters above height(+) or below depth(-) MSL, this would also be the 'average' height/depth for tidally influenced sources -->
+      <sOrder>1</sOrder>
+    </obs>
+
+    <obs>
+      <obsType>current_to_direction</obsType> <!-- key id field -->
+      <uomType>degrees_true</uomType> <!-- key id field -->
+      <value>264</value>
+      <elev>-1</elev>
+      <sOrder>1</sOrder>      
+    </obs>
+
+    <obs>
+      <obsType>current_speed</obsType> <!-- key id field -->
+      <uomType>cm_s-1</uomType> <!-- key id field -->
+      <value>49</value>
+      <elev>-3</elev> <!-- elevation assumed unit meters above height(+) or below depth(-) MSL, this would also be the 'average' height/depth for tidally influenced sources -->
+      <sOrder>2</sOrder>
+    </obs>
+
+    <obs>
+      <obsType>current_to_direction</obsType> <!-- key id field -->
+      <uomType>degrees_true</uomType> <!-- key id field -->
+      <value>271</value>
+      <elev>-3</elev>
+      <sOrder>2</sOrder>
+    </obs>
+    
+    <obs>
+      <obsType>current_speed</obsType> <!-- key id field -->
+      <uomType>cm_s-1</uomType> <!-- key id field -->
+      <value>47</value>
+      <elev>-5</elev> <!-- elevation assumed unit meters above height(+) or below depth(-) MSL, this would also be the 'average' height/depth for tidally influenced sources -->
+      <sOrder>3</sOrder>
+    </obs>
+
+    <obs>
+      <obsType>current_to_direction</obsType> <!-- key id field -->
+      <uomType>degrees_true</uomType> <!-- key id field -->
+      <value>253</value>
+      <elev>-5</elev>
+      <sOrder>3</sOrder>      
+    </obs>    
+
+    </obsList>
+    </Metadata>
+  </Placemark>
+</Document>
+</kml>
+```
+
+# Glider #
+
+```
+<!-- for this glider example (moving-point-3D), a new placemark is generated for each change in timestamp/position.  This would also work the similarly for moving-point-2D -->
+
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Document>
+  <name>Obskml sample</name>
+  <open>1</open>
+  <Placemark id="nccoos.ramses.glider">
+    <name>nccoos.ramses.glider</name>  <!-- the name field is the preferred element for capturing the platform_id (organization.platform.package) related key id fields -->
+    <description>An html table derived from the obs kml metadata tags might be displayed here</description>
+    <Point>
+      <coordinates>-79.68,32.86</coordinates>
+    </Point>
+    <TimeStamp><when>2007-01-15T14:00:00</when></TimeStamp>
+
+    <Metadata>
+    <obsList xmlns="http://carocoops.org/obskml/1.0.0/obskml_simple.xsd" >
+
+    <obs>
+      <obsType>salinity</obsType> <!-- key id field -->
+      <uomType>psu</uomType> <!-- key id field -->
+      <value>34.5</value>
+      
+      <elev>-6.1</elev> <!-- elevation assumed unit meters above height(+) or below depth(-) MSL, this would also be the 'average' height/depth for tidally influenced sources -->
+    </obs>
+
+    <obs>
+      <obsType>water_temperature</obsType> <!-- key id field -->
+      <uomType>celsius</uomType> <!-- key id field -->
+      <value>16</value>
+      <elev>-6.1</elev>
+    </obs>
+
+    </obsList>
+    </Metadata>
+  </Placemark>
+    <Placemark id="nccoos.ramses.glider">
+      <name>nccoos.ramses.glider</name>  <!-- the name field is the preferred element for capturing the platform_id (organization.platform.package) related key id fields -->
+      <description>An html table derived from the obs kml metadata tags might be displayed here</description>
+      <Point>
+        <coordinates>-79.68,33.86</coordinates>
+      </Point>
+      <TimeStamp><when>2007-01-16T15:00:00</when></TimeStamp>
+  
+      <Metadata>
+      <obsList xmlns="http://carocoops.org/obskml/1.0.0/obskml_simple.xsd" >
+  
+      <obs>
+        <obsType>salinity</obsType> <!-- key id field -->
+        <uomType>psu</uomType> <!-- key id field -->
+        <value>33.2</value>
+        
+        <elev>-15.5</elev> <!-- elevation assumed unit meters above height(+) or below depth(-) MSL, this would also be the 'average' height/depth for tidally influenced sources -->
+      </obs>
+  
+      <obs>
+        <obsType>water_temperature</obsType> <!-- key id field -->
+        <uomType>celsius</uomType> <!-- key id field -->
+        <value>15.4</value>
+        <elev>-15.5</elev>
+      </obs>
+  
+      </obsList>
+      </Metadata>
+  </Placemark>
+    <Placemark id="nccoos.ramses.glider">
+      <name>nccoos.ramses.glider</name>  <!-- the name field is the preferred element for capturing the platform_id (organization.platform.package) related key id fields -->
+      <description>An html table derived from the obs kml metadata tags might be displayed here</description>
+      <Point>
+        <coordinates>-78.89,34.86</coordinates>
+      </Point>
+      <TimeStamp><when>2007-01-17T16:00:00</when></TimeStamp>
+  
+      <Metadata>
+      <obsList xmlns="http://carocoops.org/obskml/1.0.0/obskml_simple.xsd" >
+  
+      <obs>
+        <obsType>salinity</obsType> <!-- key id field -->
+        <uomType>psu</uomType> <!-- key id field -->
+        <value>36.3</value>
+        
+        <elev>-4.3</elev> <!-- elevation assumed unit meters above height(+) or below depth(-) MSL, this would also be the 'average' height/depth for tidally influenced sources -->
+      </obs>
+  
+      <obs>
+        <obsType>water_temperature</obsType> <!-- key id field -->
+        <uomType>celsius</uomType> <!-- key id field -->
+        <value>17.2</value>
+        <elev>-4.3</elev>
+      </obs>
+  
+      </obsList>
+      </Metadata>
+  </Placemark>
+</Document>
+</kml>
+```
+
+# CTD Bottle #
+```
+<!-- 
+This is an example of one of several ship cruises/transects running bottled CTD casts.
+Each cruise/transect would change by the 'package' part of the platform handle to identify a separate moving platform_id for the cruise/transect.  The 'platform' name could also change to identify another vessel,etc.
+
+So for example:
+organization = acme
+ship = alvin
+cruise = 1 (any unique string here)
+
+Cruise#1
+platform_handle = acme.alvin.1
+Cruise#2
+platform_handle = acme.alvin.2
+
+The field platform.metadata_id could provide an associated record id (custom rdb table or custom xml schema via the metadata table mechanism) with the lon/lat path of the cruise captured as a WKT formatted POLYLINE.
+
+In regards to the CTD bottle casts, each bottle if needed could have bottle specific metadata associated with the particular location(xyz),time(t) measurement on the multi_obs table via the multi_obs.metadata_id field reference(custom rdb table or custom xml schema via the metadata table mechanism).  At this time, the multi_obs.metadata_id is not built into the obskml<->SQL import/export script, but in regards to the obskml schema, the metadata_id field would be paralleled by a 'obs_metadata_id' element associated with each observation.
+
+Also in regards to the CTD bottle casts, would propose that a new sOrder (which would trigger a new sensor_id) be issued for each CTD cast of the same measurement type(m_type = obsType.uomType).  This would allow time series graph plots for each cast/measurement type based on the unique sOrder/sensor_id.
+
+-->
+
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Document>
+  <name>Obskml sample</name>
+  <open>1</open>
+```
+```
+  <!-- location #1, cast#1, depth#1 -->
+  <Placemark id="acme.alvin.1">
+    <name>acme.alvin.1</name>  <!-- the name field is the preferred element for capturing the platform_id (organization.platform.package) related key id fields -->
+    <description>An html table derived from the obs kml metadata tags might be displayed here</description>
+    <Point>
+      <coordinates>-79.68,32.86</coordinates>
+    </Point>
+    <TimeStamp><when>2007-01-15T14:00:00</when></TimeStamp>
+
+    <Metadata>
+    <obsList xmlns="http://carocoops.org/obskml/1.0.0/obskml_simple.xsd" >
+    <metadata_id>42</metadata_id> <!-- optional platform metadata reference, include in further placemarks -->
+    <obs>
+      <obsType>salinity</obsType> <!-- key id field -->
+      <uomType>psu</uomType> <!-- key id field -->
+      <value>34.5</value>
+    
+      <elev>-1.0</elev> <!-- elevation assumed unit meters above height(+) or below depth(-) MSL, this would also be the 'average' height/depth for tidally influenced sources -->
+      <sOrder>1</sOrder>
+      <metadata_id>43</metadata_id> <!-- optional bottle metadata if reference, include in further placemarks -->
+    </obs>
+
+    <obs>
+      <obsType>water_temperature</obsType> <!-- key id field -->
+      <uomType>celsius</uomType> <!-- key id field -->
+      <value>16</value>
+      <elev>-1.0</elev>
+      <sOrder>1</sOrder>
+      <metadata_id>43</metadata_id> <!-- optional bottle metadata reference, include in further placemarks -->
+    </obs>
+
+    </obsList>
+    </Metadata>
+  </Placemark>
+```
+```
+  <!-- location #1, cast#1, depth#2, changes in time(+5 sec), depth/elev(-1 m) -->
+  <Placemark id="acme.alvin.1">
+    <name>acme.alvin.1</name>
+    <description>An html table derived from the obs kml metadata tags might be displayed here</description>
+    <Point>
+      <coordinates>-79.68,32.86</coordinates>
+    </Point>
+    <TimeStamp><when>2007-01-15T14:00:05</when></TimeStamp>
+
+    <Metadata>
+    <obsList xmlns="http://carocoops.org/obskml/1.0.0/obskml_simple.xsd" >
+
+    <obs>
+      <obsType>salinity</obsType>
+      <uomType>psu</uomType>
+      <value>33.5</value>
+      <elev>-2.0</elev>
+      <sOrder>1</sOrder>
+    </obs>
+
+    <obs>
+      <obsType>water_temperature</obsType>
+      <uomType>celsius</uomType>
+      <value>15</value>
+      <elev>-2.0</elev>
+      <sOrder>1</sOrder>      
+    </obs>
+
+    </obsList>
+    </Metadata>
+  </Placemark>  
+```
+```
+  <!-- location #2, cast#2, depth#1, changes in time(+1 hour),latitude(+0.1 deg),sOrder -->
+  <Placemark id="acme.alvin.1">
+    <name>acme.alvin.1</name>
+    <description>An html table derived from the obs kml metadata tags might be displayed here</description>
+    <Point>
+      <coordinates>-79.68,32.96</coordinates>
+    </Point>
+    <TimeStamp><when>2007-01-15T15:00:00</when></TimeStamp>
+
+    <Metadata>
+    <obsList xmlns="http://carocoops.org/obskml/1.0.0/obskml_simple.xsd" >
+
+    <obs>
+      <obsType>salinity</obsType>
+      <uomType>psu</uomType>
+      <value>33.2</value>
+      <elev>-1.0</elev>
+      <sOrder>2</sOrder>
+    </obs>
+
+    <obs>
+      <obsType>water_temperature</obsType>
+      <uomType>celsius</uomType>
+      <value>15.2</value>
+      <elev>-1.0</elev>
+      <sOrder>2</sOrder>      
+    </obs>
+
+    </obsList>
+    </Metadata>
+  </Placemark>  
+```
+```
+  <!-- location #2, cast#2, depth#2, changes in time(+5 sec), depth/elev(-1 m) -->  <Placemark id="acme.alvin.1">
+    <name>acme.alvin.1</name>
+    <description>An html table derived from the obs kml metadata tags might be displayed here</description>
+    <Point>
+      <coordinates>-79.68,32.96</coordinates>
+    </Point>
+    <TimeStamp><when>2007-01-15T15:00:05</when></TimeStamp>
+
+    <Metadata>
+    <obsList xmlns="http://carocoops.org/obskml/1.0.0/obskml_simple.xsd" >
+
+    <obs>
+      <obsType>salinity</obsType>
+      <uomType>psu</uomType>
+      <value>31.2</value>
+      <elev>-2.0</elev>
+      <sOrder>2</sOrder>
+    </obs>
+
+    <obs>
+      <obsType>water_temperature</obsType>
+      <uomType>celsius</uomType>
+      <value>14.2</value>
+      <elev>-2.0</elev>
+      <sOrder>2</sOrder>      
+    </obs>
+
+    </obsList>
+    </Metadata>
+  </Placemark>  
+```
+```
+</Document>
+</kml>
+```</Document>
+</kml>
+}}}```

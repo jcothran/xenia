@@ -1,0 +1,28 @@
+rename x test.grb
+
+wgrib2.exe test.grb
+
+wgrib2 -v test.grb
+
+wgrib2.exe -grid test.grb
+
+#lon displayed as negative, temperature in Kelvin
+./wgrib2 test.grb -d 1 -small\_grib -90:-65 23:40 small.grb
+
+./wgrib2 small.grb -d 1 -csv hey2.csv
+
+
+---
+
+
+The grib stuff so far seems to have about a 100 to 1 compression ratio for binary to text, so be careful converting a 8 MB grib file to 800 MB text/csv file.  wgrib2(on linux/ubuntu - 300-400 MB install, had problems with windows version) is the command line tool I'm using to go from grib to text/csv
+
+http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/
+
+http://polar.ncep.noaa.gov/ofs/about_aofs.shtml?  says this forecast is based on HYCOM http://hycom.org
+
+NOMADS  http://nomads.ncep.noaa.gov/
+
+There's PyGrib also but PyNIO seemed to cover more formats with grib,netcdf,hdf
+
+http://www.pyngl.ucar.edu/Nio.shtml

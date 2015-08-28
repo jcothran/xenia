@@ -1,0 +1,420 @@
+See also [VMwareHome](VMwareHome.md) regarding a vmware image for testing/development purposes.
+
+See also SqliteTutorial and XeniaSqliteNotes for in-house simple examples
+
+
+
+# Sample database #
+A sample Xenia sqlite database file of the past 3 days worth of collected observations can be copied from here http://carocoops.org/microwfs/microwfs.db
+
+# Sample database support tables(organization, platform, sensor and data dictionary) #
+
+A sample Xenia sqlite database which has been purged of all but a few example observation records (but has a fully populated organization, platform, sensor and data dictionary tables) can be copied from here http://carocoops.org/microwfs/data_dictionary.db (3.5 MB) and a sql query for the [data dictionary listing](http://carocoops.org/microwfs/data_dictionary_listing.txt) is below
+
+```
+-- scalar data dictionary listing for simple scalar obs (standard listing)
+-- Xenia version 3
+-- select t0.row_id,t2.standard_name,t3.standard_name from m_type t0,m_scalar_type t1,obs_type t2,uom_type t3 where t0.m_scalar_type_id = t1.row_id and t0.num_types = 1 and t1.obs_type_id = t2.row_id and t1.uom_type_id = t3.row_id;
+```
+
+# Simplified schema #
+
+Below is a simplified schema display reduced from an earlier schema - the exact table columns are listed in the source sql.
+
+Main features
+  * organizations->platforms->sensors->observations  The observations table contains the bulk of the database dynamic observation data
+  * data dictionary tables support a measurement type(m\_type) composed of 1-8 scalar components(m\_scalar\_type) with each m\_scalar\_type composed of a observation\_type(obs\_type) and unit of measure(uom\_type)
+  * more detailed metadata are loosely linked documents referenced via a generic metadata table which details common abstract details like metadata document location and effective dates
+
+![http://carocoops.org/documents/xenia/xenia_schema_small.jpg](http://carocoops.org/documents/xenia/xenia_schema_small.jpg)
+
+
+---
+
+
+Sqlite Manager - A simple Firefox add-on to view/query a sqlite database from Firefox
+
+https://addons.mozilla.org/en-US/firefox/addon/5817
+
+see also XeniaPackageV2 (database table schema diagram) and [ObsKML](http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/ObsKML) and [JCNotes](http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes)
+
+## Introduction ##
+
+**UPDATE: April 8, 2008** There is a geospatially enabled version of Sqilte labeled **SQLiteGeo** available at http://www.gaia-gis.it/spatialite  Would recommend reviewing this version of sqlite for its geospatial and shapefile support.  See SpatialLite
+
+from http://sqlite.org
+
+_SQLite is a software library that implements a self-contained, serverless, zero-configuration, transactional SQL database engine._
+
+_SQLite is the most widely deployed SQL database engine in the world. It is used in countless desktop computer applications as well as consumer electronic devices including cellphones, PDAs, and MP3 players. The source code for SQLite is in the public domain._
+
+This webpage describes the conversion of the XeniaPackageV2 schema relational database and associated product/service scripts from its initial PostgreSQL version to a Sqlite one.
+
+The initial motivation for developing a sqlite version of the Xenia schema was to support a microWFS service experiment being done by the Coastal Services Center's Data Transport Lab (CSC DTL) detailed at http://www.csc.noaa.gov/DTL/dtl_proj4_gmlsfp_wfs.html  The original perl scripts utilized by this project are available at [ftp://www.csc.noaa.gov/pub/DTL/Proj4_WFS_GMLSFP_TimeSeries](ftp://www.csc.noaa.gov/pub/DTL/Proj4_WFS_GMLSFP_TimeSeries)
+
+The issue that I was trying to get around is that I didn't want to point the cgi scripts which utilize a database view directly against my production PostgreSQL relational database, but was trying to incorporate a simpler path from latest in-situ observations formatted as ObsKML into a Sqlite RDB which the DTL cgi script could then query.
+
+The resulting Sqlite RDB based solution provides a much lower-complexity/profile (setup and maintenance) RDB which can support the earlier developed import/export, products/services associated with the earlier Xenia database schema and ObsKML observation data sharing format in addition to the microWFS.
+
+## Helpful links ##
+
+### Perl package name ###
+
+Under perl for Linux Debian Ubuntu, the following package was installed for sqlite
+```
+sudo cpan -i "DBD::SQLite"
+```
+
+
+---
+
+
+Under Windows ActiveState Perl, the following command is used to search for the necessary package
+```
+ppm search dbd
+```
+
+and following command to install sqlite package(may be more recent packages available, but the below seems to work)
+```
+ppm install dbd-sqlite
+```
+
+### Sqlite Homepage ###
+
+From http://sqlite.org
+
+Well-Known Users of SQLite
+
+http://www.sqlite.org/famous.html
+
+FAQ
+
+http://www.sqlite.org/faq.html
+
+Appropriate Uses For SQLite
+
+http://www.sqlite.org/whentouse.html
+
+SQL Features That SQLite Does Not Implement
+
+http://www.sqlite.org/omitted.html
+
+### Other websites ###
+
+http://books.google.com/books?id=VsZ5bUh0XAkC&printsec=frontcover
+
+#### Tutorials ####
+SqliteTutorial
+
+XeniaSqliteNotes
+
+http://souptonuts.sourceforge.net/readme_sqlite_tutorial.html
+
+Interestingly, sqlite does support an **ATTACH** command which allows query over multiple sqlite file databases(see http://souptonuts.sourceforge.net/readme_sqlite_tutorial.html  ) so maybe that would be a way of still having a 'file' archive that still is fairly sql accessible.
+
+http://www.shokhirev.com/nikolai/abc/sql/sql.html
+
+#### Optimization ####
+http://web.utk.edu/~jplyon/sqlite/SQLite_optimization_FAQ.html
+
+http://article.gmane.org/gmane.comp.db.sqlite.general/35422
+
+http://www.sqlite.org/cvstrac/wiki?p=QueryPlans
+
+http://www.sqlite.org/optoverview.html
+
+http://www.sqlite.org/cvstrac/wiki?p=PerformanceTuning
+
+#### Virtual tables ####
+
+http://www.ddj.com/database/202802959
+
+#### Perl DBI and Sqlite ####
+http://www.perl.com/pub/a/2003/09/03/perlcookbook.html
+
+http://search.cpan.org/~msergeant/DBD-SQLite-0.31/lib/DBD/SQLite.pm
+
+#### OGR Sqlite ####
+http://www.gdal.org/ogr/drv_sqlite.html
+
+#### Spatial searches ####
+http://www.mail-archive.com/sqlite-users@sqlite.org/msg27225.html
+
+#### Performance review(unsure of article date) ####
+http://theopensourcery.com/sqlite2.htm
+
+#sqlite vs mysql performance
+
+http://confluence.slac.stanford.edu/display/IEPM/MySQL+vs+SQLite+performance+testing
+
+#### GUI db tools ####
+http://www.sqlite.org/cvstrac/wiki?p=ManagementTools
+
+#### Firefox add-on - Sqlite Manager ####
+https://addons.mozilla.org/en-US/firefox/addon/5817
+
+#### Questions ####
+
+#sqlite schema/data dumping
+
+http://www.nabble.com/Dump-w-o-Schema-td14852144.html
+
+---
+
+# [Geospatial enabling Sqlite - SQLiteGeo](XeniaPackageSqlite#Geospatial_enabling_Sqlite.md) #
+
+See SpatialLite
+
+copied from http://www.gaia-gis.it/spatialite
+
+SpatiaLite - VirtualShape
+Quick intro
+
+  * SQLite is a popular DBMS, simple, robust, easy to use and really lightweight
+  * each SQLite database is simply a file; you can freely copy it, compress it, send it on a LAN or WEB with no complication at all
+> > They are also portables; the same database file will work on Windows, Linux, MacOs etc
+  * the SpatiaLite extension enables SQLite to support spatial data too [GEOMETRY](aka.md), in a way conformant to OpenGis specifications
+    * supports standard WKT and WKB formats
+    * implements SQL spatial functions such as AsText(), GeomFromText(), Area(), PointN() and alike
+> > > Not all OpenGis functions are supported, but the main core is available
+    * supports importing and exporting from / to shapefiles
+    * supports coordinate reprojection via PROJ.4 and EPSG geodetic parameters dataset
+  * the VirtualShape extension enables SQLite to access shapefiles as VIRTUAL TABLEs
+    * you can then perform standard SQL queries on external shapefiles, with no need for importing or converting them
+  * both SpatiaLite and VirtualShape are distibuted in the form of shared libraries [on Windows](DLLs.md)
+    * integration with standard sqlite3 front end is allowed via .load 'extension' or SELECT load\_extension('extension') mechanism
+    * old versions of sqlite3 didn't support extensions; some up to date distribution disables them for security reasons
+    * so, if you wish, you can alternatively use **SQLiteGeo**, a derivative sqlite3 3.5.7 [sources](same.md) slightly modified in order to automatically load both SpatiaLite and VirtualShape
+
+
+---
+
+# Setup #
+
+The sqlite version which I downloaded and built the converted Xenia scripts for was the Linux version 3.5.4 at http://www.sqlite.org/sqlite3-3.5.4.bin.gz
+
+Sqlite is very simple, its just running a binary (like a .exe in Windows) against a file.  I moved my unzipped sqlite binary over to /usr/bin/sqlite3-3.5.4.bin and gave it executable permissions chmod +x sqlite3-3.5.4.bin ).
+
+You'll also need to install the perl DBI Sqlite package if not already installed ( see http://search.cpan.org/~msergeant/DBD-SQLite-0.31/lib/DBD/SQLite.pm )
+
+# Source #
+
+The source SQL files to download for the Sqlite version of the Xenia schema are the [main schema](http://code.google.com/p/xenia/source/browse/trunk/sqlite/sql/db_xenia_v3.1_sqlite.sql) , [observation data dictionary lookups](http://code.google.com/p/xenia/source/browse/trunk/sqlite/sql/obs.sql) and [display order lookups](http://code.google.com/p/xenia/source/browse/trunk/sqlite/sql/display_order.sql)
+
+To setup a xenia schema database(like one we can use in a the further example [below](http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageSqlite#MicroWFS)) do the following commands in the directory where you would like the database file to reside(assuming the SQL source files also reside local to the same directory).
+
+```
+/usr/bin/sqlite3-3.5.4.bin microwfs.db < db_xenia_v2_sqlite.sql
+/usr/bin/sqlite3-3.5.4.bin microwfs.db < obs.sql
+/usr/bin/sqlite3-3.5.4.bin microwfs.db < display_order.sql
+```
+
+Now the database is setup and you can run queries against it using the utility command line
+```
+/usr/bin/sqlite3-3.5.4.bin microwfs.db
+```
+or with SQL piped from a file
+```
+/usr/bin/sqlite3-3.5.4.bin microwfs.db < query.sql
+```
+
+# SQL Changes from earlier PostgreSQL version #
+
+  * since sqlite is file based and doesn't support roles and grant permissions - removed grants/owner sql and associated comment lines
+  * since sqlite does not directly support foreign keys - removed foreign key constraints.  This functionality can be accomplished using triggers if needed.
+  * converted row\_id 'serial' to 'integer PRIMARY KEY'- removed earlier separate PRIMARY KEY sql statements
+  * converted datatypes to simple varchar, timestamp
+  * removed 'USING btree' from observation sql population
+  * removed row\_entry\_date,row\_update\_date columns from ...`_`type tables
+  * remaining row\_entry,row\_update to just 'timestamp', remove 'not null' constraint
+
+
+---
+
+# Scripts for database import/export and replication #
+
+see http://code.google.com/p/xenia/source/browse/trunk/sqlite
+
+## Import - ObsKML to Xenia(Sqlite) ##
+
+the following cron jobs are called
+
+  * [obskml\_to\_xenia\_sqlite.pl](http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/obskml_to_xenia_sqlite.pl) called once an hour to load the latest ObsKML in-situ observations into a Xenia(sqlite) RDB
+  * [maintain.pl](http://code.google.com/p/xenia/source/browse/trunk/sqlite/replication/maintain.pl) once a day to delete observations older than 3 days and vacuum the database file(compact the database file).
+
+```
+0 * * * * cd /var/www/cgi-bin/microwfs; perl obskml_to_xenia_sqlite.pl http://carocoops.org/obskml/feeds/seacoos_all_latest.zip >/tmp/microwfs.log 2>&1
+
+30 00 * * * cd /var/www/cgi-bin/microwfs; perl maintain.pl >/tmp/microwfs.log 2>&1
+```
+
+## Export - Xenia(Sqlite) to ObsKML ##
+
+see http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/xenia_sqlite_to_obskml.pl
+
+---
+
+## [Replication](XeniaPackageSqlite#Replication.md) ##
+
+**Update October 14, 2008** JTC - I've had problems with the replicated database and sql stream not populating correctly so I suggest the following two links be substituted for the latest sqlite file database and sql stream.
+
+Latest database http://carocoops.org/microwfs/microwfs.db
+Latest hourly SQL http://carocoops.org/microwfs/latest.sql
+
+
+---
+
+
+There is some original documentation regarding PostgreSQL replication at http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaReplication
+
+These scripts have been repurposed with sqlite in mind and the source is available at http://code.google.com/p/xenia/source/browse/trunk/sqlite/replication
+
+The upshot of the above development is that an hourly 'latest.sql' file is available at http://carocoops.org/seacoos_data/sqlite/recent/latest.sql (should be updated once an hour at a few minutes past the top of the hour) which should be downloadable by consuming/shadowing databases elsewhere(either sqlite or postgresql instances) and allow those databases to have a snapshot of hourly added table data which they can be used to populate those databases also.
+
+This directory also contains the hourly .csv and .sql files of the represented tables for the past 24 hours.
+
+The above feed is all of the hourly observation which we are currently aggregating.  It provides a convenience in that shadow databases are able to skip the redundant aggregation steps of pulling in and processing multiple data feeds(see XeniaFeeds ) to the database and only get the final processed table data resultant of the various data feeds.  Ideally it would be good to have a redundant source of this 'latest.sql' feed.
+
+To get a secondary sqlite instance going, copy the latest 'starter' database at http://carocoops.org/seacoos_data/sqlite/latest.db and then hourly populate with the hourly refreshed 'latest.sql' at http://carocoops.org/seacoos_data/sqlite/recent/latest.sql
+
+# [monthly/latest db replication script (April 10, 2008)](XeniaPackageSqlite#monthly_latest_db_replication_script.md) #
+
+This [source code](http://code.google.com/p/xenia/source/browse/trunk/sqlite/archive) shows how I'm using my [latest.sql](http://carocoops.org/seacoos_data/sqlite/recent/latest.sql) hourly feed to create/populate [monthly archive file db's and a latest db](http://carocoops.org/seacoos_data/sqlite).  The amount total amount of observation data currently collected is around 20 MB per day, so a month file should be around 20 MB\*30 days = 600 MB
+
+
+---
+
+# Scripts for database products/services #
+
+## MicroWFS ##
+
+Referencing again the microWFS service experiment being done by the Coastal Services Center's Data Transport Lab (CSC DTL) detailed at http://www.csc.noaa.gov/DTL/dtl_proj4_gmlsfp_wfs.html  The original perl scripts utilized by that project are available at [ftp://www.csc.noaa.gov/pub/DTL/Proj4_WFS_GMLSFP_TimeSeries](ftp://www.csc.noaa.gov/pub/DTL/Proj4_WFS_GMLSFP_TimeSeries)
+
+My CGI based microWFS instance is available at
+
+http://carocoops.org/obskml/microwfs/index_microwfs.html
+
+The scripts which enable this service are at http://carocoops.org/obskml/microwfs and run queries against the earlier example established xenia sqlite database detailed on this webpage
+
+[microWFS.cgi](http://www.carocoops.org/obskml/microwfs/microWFS.cgi) is the modified cgi script called by [index\_microwfs.html](http://www.carocoops.org/obskml/microwfs/index_microwfs.html)
+
+[microWFSConf.xml](http://www.carocoops.org/obskml/microwfs/microWFSConf.xml) is the modified xml configuration support xml
+
+Note:
+
+  * data is across a variety of data providers nationally for the latest 3 day period(time window could be enlarged as needed)
+  * observation elevation datum is not present and elevations are optional
+  * the observations available via the service could be easily expanded to what the larger range of observation types available from the sqlite RDB
+
+## Earlier ObsKML based scripts ##
+
+The perl scripts earlier documented at http://www.gliffy.com/publish/1329032/ and http://carocoops.org/twiki_dmcc/bin/view/Main/ObsKMLGenerate for aggregating, visualizing,reformatting (CSV,shapefile,etc) and reservicing(oostethys,etc) ObsKML based data are applicable as before with the latest ObsKML generated from the Sqlite RDB [perl script](http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/xenia_sqlite_to_obskml.pl) .
+
+---
+
+# Gotchas #
+
+## undef $sth ##
+
+Usually with perl DBI when finished with the statement handler ($sth) there's the command line
+
+```
+$sth->finish();
+```
+
+but to keep the perl script from producing an error(see http://rt.cpan.org/Ticket/Display.html?id=22688), you'll also need to add an additional undef statement like
+
+```
+$sth->finish();
+undef $sth; # to stop "closing dbh with active statement handles"
+            # http://rt.cpan.org/Ticket/Display.html?id=22688
+```
+
+## CGI user/directory permissions against sqlite database file ##
+
+When testing at the command line, I was able to connect to the database fine, but via browser CGI script I kept getting a 500 code error which was difficult to debug - the issue was that I was referencing a sqlite database which the CGI script could not access due to the permissions associated with the remote directory/file - when I moved the sqlite database file to the same directory as the cgi script then it was able to connect successfully.
+
+## datetime processing ##
+
+Sqlite does contain datetime functions like "select datetime('now')" or like "select datetime('2008-01-01T23:59:00','+5 minutes')" - see the tutorial at http://souptonuts.sourceforge.net/readme_sqlite_tutorial.html
+
+sqlite also treats all fields like strings so I believe fields declared 'timestamp' are still essentially compared as strings - which shouldn't be a problem for ISO 8601 style notation (YYYY-MM-DDTHH:MM:SS) but may create problems for other time format comparisons.
+
+## error handling ##
+
+With PostgreSQL, inserted rows which were duplicates rejected by the unique index did not stop the program from continuing.  Sqlite generated an error like below which I couldn't figure out how to continue from within the program (tried using 'eval' blocks, but still problems)
+```
+[root@nautilus microwfs]# DBD::SQLite::st execute failed: columns m_type_id, m_date, sensor_id are not unique(19) at dbdimp.c line 403 at obskml_to_xenia_sqlite.pl line 193.
+```
+
+The solution was to just write the offending insert statements out to a sql file and then pipe as a batch job against the sqlite like 'sqlite mytest.db < batched\_inserts.sql'
+
+## Be sure to populate table m\_type\_display\_order ##
+
+Be sure to [populate](http://code.google.com/p/xenia/source/browse/trunk/sqlite/sql/display_order.sql) the lookup table m\_type\_display\_order as mentioned in the setup steps, otherwise your hash population in the [xenia\_sqlite\_to\_obskml.pl](http://code.google.com/p/xenia/source/browse/trunk/sqlite/import_export/xenia_sqlite_to_obskml.pl) script will only populate one variable per platform.
+
+
+---
+
+# Potential issues #
+
+## Concurrency of queries ##
+
+The sqlite database is geared for the individual user and process (as used in cell phones or embedded devices for example) and there may be concurrency issues which need to be addressed in relation to the type and load of potential concurrent queries against a singular file if the database is used in that manner.  Ideally this database would be used more in a backend server mode to produce pregenerated content than directly accessible by public query.  There is the potential to run the database 'in memory' which may speed up the response time to an adequate level also depending on the load and frequency of queries.
+
+## Spatial enabling ##
+
+**UPDATE: April 8, 2008** There is a geospatially enabled version of Sqilte labeled **SQLiteGeo** available at http://www.gaia-gis.it/spatialite  Would recommend using this version of sqlite for its geospatial and shapefile support.
+
+Sqlite doesn't have spatial enablement by default, but here also it may not be needed for the limited amount of time window data contained using more bounding box type functionalities against latitude and longitude attribute fields.
+
+Did the below php code as an idea of how to get the closest point for a given bounding box set of points.
+
+The parts that would be changed below for the final function would be that the chosen lon/lat and max\_distance might be passed in and run against a sql query for the platform\_id, lon, lat of interest:
+
+```
+select platform_id, fixed_longitude, fixed_latitude from platform
+    where fixed_longitude > chosen_lon - max_distance
+     and fixed_longitude < chosen_lon + max_distance
+     and fixed_latitude > chosen_lon + max_distance
+     and fixed_latitude < chosen_lon - max_distance;
+ 
+ 
+<?
+echo "hello \n";
+ 
+$chosen_lon = 36;
+$chosen_lat = 15;
+$max_distance = 30;
+$shortest_distance = $max_distance;
+ 
+#represents selected platform_id,lon,lat based on above chosen point/max_distance
+$platform_array = array(1,10,20,2,30,40,3,50,80);
+ 
+while ($platform_array) {
+$platform_id = array_shift($platform_array);
+$platform_lon = array_shift($platform_array);
+$platform_lat = array_shift($platform_array);
+ 
+echo "$platform_id $platform_lon $platform_lat\n";
+ 
+$distance_lon = $chosen_lon - $platform_lon;
+//echo "$distance_lon \n";
+$distance_lat = $chosen_lat - $platform_lat;
+//echo "$distance_lat \n";
+ 
+// hypotenuse^2 = x^2 + y^2
+$distance = sqrt($distance_lon*$distance_lon + $distance_lat*$distance_lat);
+echo "$distance \n\n";
+ 
+if ($distance < $shortest_distance) {
+        $shortest_distance = $distance;
+        $closest_platform_id = $platform_id;
+}
+ 
+}
+ 
+print "closest platform is $closest_platform_id at $shortest_distance units \n";
+ 
+?>
+```

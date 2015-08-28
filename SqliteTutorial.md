@@ -1,0 +1,132 @@
+Don't know if the below file based database will be useful or not, thanks for taking a look and letting me know if you've got an existing method/tool similar or if it seems too complex or involved for the task at hand.
+
+Took the zipped csv files , reformatted slightly and moved them into a same structured sqlite database single table(table structure/columns shown at bottom of this message) which you can download(small file around 1 MB) at http://carocoops.org/resources/dhec.db
+
+What you'll need to query the database on a windows platform (that's my assumption of what your working environment is - let me know if not, I query it on a linux server using a linux executable file) is the following download at http://www.sqlite.org/sqlite-3_6_7.zip
+
+Create a folder, say for example 'c:\dhec' and place the unzipped sqlite executable 'sqlite3.exe' in there and also the dhec.db file.
+
+Now from a windows command line window (start->run->enter 'cmd') you should be able to navigate to the c:\dhec folder and run the following command to start an interactive sqlite session
+
+```
+sqlite3.exe dhec.db
+```
+
+The screen should give you a sqlite prompt and you can try the following SQL command for example:
+```
+select * from dhec_beach where etcoc > 20 order by insp_date desc limit 30;
+```
+Which means select all columns from the dhec\_beach table where the etcoc value is greater than 20 ordering the results by insp\_date descending limiting the resultset to the initial top 30 results.
+
+To show just say the columns station,insp\_date,etcoc for the above query
+```
+select station,insp_date,etcoc from dhec_beach where etcoc > 20 order by insp_date desc limit 30;
+```
+To limit the results to just station 'WAC-015' add the following condition to the where clause
+```
+select station,insp_date,etcoc from dhec_beach where etcoc > 20 and station = 'WAC-015' order by insp_date desc limit 30;
+```
+  * note that 'text' fields need to be surrounded by single quotes
+To limit the result to just the year 2006 add the following condition to the where clause
+```
+select station,insp_date,etcoc from dhec_beach where etcoc > 20 and station = 'WAC-015' and insp_date >= '2006-01-01' and insp_date < '2007-01-01' order by insp_date desc limit 30;
+```
+  * note that the insp\_date field is a text field and the comparison works because of the YYYY-MM-DD format order of the date
+For additional command line help
+```
+.help
+```
+To exit back to the command line
+```
+.exit
+```
+
+One of the nice features is that we can create a command/query file and tell sqlite to run that so that if there's some small condition or value that needs to be adjusted automated ) we can change the file and rerun the command/query file against the database.  Running the queries via a command file also opens a path to automating the query process.  Sqlite also supports SQL queries via various scripting languages(perl,python,php,etc) also.
+
+Create the following sample\_query.txt file with the following commands
+
+```
+.mode csv
+
+.output query1.txt
+select * from dhec_beach where etcoc > 20 order by insp_date desc limit 30;
+
+.output query2.txt
+select station,insp_date,etcoc from dhec_beach where etcoc > 20 order by insp_date desc limit 30;
+```
+
+This file contains just the same two initial queries mentioned earlier but sent to their own output files.  The line '.mode csv' sets the field separator to comma separated, but there are several other separators and output types available (see the .help command line listing)
+
+To run this file against the database enter the following at the command line
+```
+sqlite3.exe dhec.db < sample_query.txt
+```
+And it will produce the output files query1.txt and query2.txt
+
+That should be enough to give an idea of what's initially possible.  Additional information at http://www.sqlite.org/sqlite.html http://www.sqlite.org/lang_select.html http://www.sqlite.org/lang.html
+
+
+---
+
+#table structure
+```
+create table dhec_beach (
+lims_number text,
+station text,
+insp_date text,
+insp_time text,
+lab_number text,
+insp_type text,
+e_sign text,
+etcoc int,
+salinity int,
+rainfall real,
+tide text,
+wind_curr int,
+weather int
+);
+```
+
+---
+
+# Sample SQL statements #
+```
+select count(distinct name) from survey;
+
+select count(distinct name) from survey where purpose = 'research';
+ 
+SELECT name, COUNT(*)
+    FROM survey
+    GROUP BY name
+    HAVING COUNT(*) > 1
+    ORDER BY COUNT(*) DESC;
+
+select distinct email from survey where email like '%@%';
+```
+
+---
+
+
+---
+
+```
+Another useful example to sus out duplicates:
+SELECT *,
+COUNT(date) AS NumOccurrences
+FROM daily_tide_range
+GROUP BY date
+HAVING ( COUNT(date) > 1 )
+```
+
+---
+
+
+---
+
+For concatenating strings when building, for example, an on the fly wkt\_geometry statement:
+SELECT 'POINT(' | fixed\_latitude | ' ' | fixed\_longitude || ')',platform\_handle FROM platform;|
+|:----------------|:----|:-----------------|
+
+The '||' is the concatenate operator.
+
+---

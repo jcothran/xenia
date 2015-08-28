@@ -1,0 +1,81 @@
+# Overview #
+Observations from various platforms and various provider feeds are written into our [Xenia](http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackage) schema database, currently running under SQLite3.
+For each platform we know to expect N updates per day. The analysis scripts use a control file to determine what platforms and observations to query information for as well as how often the platform should be reporting the data. We can then use these percentages to gauge how well our infrastructure is working. If we begin seeing low yields, we can begin looking for problems somewhere in our collection chain.
+
+# Scripts #
+
+> ## CalcPlatformUptimePercentage.pl ##
+
+> This script, found [here](http://code.google.com/p/xenia/source/browse/trunk/postgresql/qaqc/platformuptime/CalcPlatformUptimePercentage.pl), runs against a [Xenia](http://code.google.com/p/xenia/wiki/XeniaPackageV2) schema database, either running on a PostGres or SQLite instance, to generate our percentage uptime calculations. As an input, the script uses an http feed for a test\_profiles.xml file. The test\_profiles.xml file is described [here](http://trac.secoora.org/datamgmt/wiki/RangeTests) in section 1.1.  The output of this file is a .csv file with the percentages. Optionally, as described below, the Xenia database can also be updated to contain the percentages found.
+
+  * Inputs
+    * Command Line Parameters
+      * --WorkingDir provides the directory used to store the results file, PlatformUptimePercentages.csv Should provide a unique name, such as carocoops to denote where the data originated.
+      * --TstProfFeed provides the url where the test\_profiles.xml file resides. For example, [test\_profiles.xml](http://www.carocoops.org/~dramage_prod/seacoos/test_profiles.xml).
+      * --UpdateDatabase specifies if the metrics table in the database is to be updated. Values are "yes" to update, or "no". This value is optional, default is "no".
+      * --Date specifies the day, in YYYY-MM-DD format, to get the stats for, this is optional and if not provided the default is the last full day( date '1 day ago')
+      * --XMLConfigFile optional parameter that specifies an XML configuration file. If not provided, the default assumption is we are connecting to a SQLite xenia database. See the [section](http://code.google.com/p/xenia/wiki/PlatformUptime#XMLConfigFile)
+    * test\_profiles.xml
+> > The tag which drives our percentage calculations is `<UpdateInterval>`. The script uses this tag to determine the maximum updates in an 24 hour period an observation from a platform is expected. Currently platforms report all observations together in one telemetry data stream, however it is conceivable that individual observations may report independently in the future. The interval is simple a count of how many times during a 24 hour period the database should have entries for the observations of a given platform. It is important to have the correct update interval otherwise the percentages will be skewed.
+    * XMLConfigFile
+```
+<Environment>
+  <Database>
+    <DB>
+      <type></type>
+      <name></name>
+      <user></user>
+      <pwd></pwd>
+      <host></host>
+    </DB>
+    <Settings>
+      <tmpdir></tmpdir>
+      <sensorplotphp></sensorplotphp>
+    </Settings>    
+  </Database>
+</Environment>
+```
+      * `<Environment><Database><DB>` Configuration tags
+        * `<type>` defines the type of database engine the Xenia database is hosted on. Can be either, sqlite or postgres currently.
+        * `<name>` for a SQLite database, this is the path to the database file. For PostGres this is the database name to connect to.
+        * `<user>` is not used in SQLite. For PostGres, this is the user name used to login to the database.
+        * `<pwd>` is not used in SQLite. For PostGres, this is the password for the user.
+        * `<host>` is not used in SQLite. For PostGres, this is the IP address the database engine is hosted on.
+      * `<Environment><Database><Settings>` Configuration tags
+        * `<tmpdir>` is the directory used to store the file outputs.
+        * `<senorplotphp>` if this is provided, during the generation of the [[HTML](http://code.google.com/p/xenia/wiki/PlatformUptime#GenPlatformUptimeWebpage_Outputs) page the url provided here will be encoded into the sensor report results. When clicked, the PHP script generates a plot showing the updates. [Example](http://xenia.googlecode.com/files/uptimeplot.JPG)
+  * Outputs
+
+> There are two outputs of this script, the PlatformUptimePercentages.csv and optionally entries into the metric\_sensor\_daily table of the database.
+    * PlatformUptimePercentages.csv
+> > For each `<testProfile>` group in the test\_profiles.xml file, there will be a header denoting the PlatformID, URL, Date, then a column per observation defined in the test\_profiles.xml file. The observation headers have the name of the observation as well as the `<UpdateInterval>` value. The data for each observation is the percentage calculated. The script is currently run once a day and queries the previous days data.    Here is a sample file snippet:
+```
+PlatformID,URL,Date,air_pressure-UpdateInterval %12,air_temperature-UpdateInterval %12,current_speed-UpdateInterval %12,current_to_direction-UpdateInterval %12,salinity-UpdateInterval %12,water_temperature-UpdateInterval %12,wind_from_direction-UpdateInterval %12,wind_speed-UpdateInterval %12
+carocoops.FRP2.buoy,,2008-02-19,100.00,100.00,100.00,100.00,100.00,100.00,91.67,91.67
+PlatformID,URL,Date,air_pressure-UpdateInterval %24,air_temperature-UpdateInterval %24,water_level-UpdateInterval %24,water_temperature-UpdateInterval %24,wind_from_direction-UpdateInterval %24,wind_speed-UpdateInterval %24
+carocoops.SUN1.wls,,2008-02-19,0.00,0.00,0.00,0.00,0.00,0.00
+```
+
+> Currently this file is used as the source for our script that generates the webpage to display the data. The idea behind generating a .csv file is that it could be post-processed easily.
+
+  * Database table, metric\_sensor\_daily
+> This table is a new entry into the Xenia schema. The purpose is to create a repository of the data and then be able to trend the data. This could be useful in determining if there are certain time periods more apt to have data losses or to find certain observations which are chronically low yielding. As we expand the functionality, implementing the use of the Secoora QAQC flags, ythe user will be able to drill down into the data to determine what the percentage represents. For instance, if you have a sensor reporting at 75%, you could drill down and see that the platform was not reporting the data. This would also be tied into our dnamic inventory to allow the type of sensor on the platform to be determined. One might see that manufacturer XYZ has sensors which have 100% uptime where manufacturer ABC's sensors fail routinely.
+> To populate this table when running the script, the command line parameter, --UpdateDatabase, must be present and set to "yes".
+> The structure is:
+> ''app\_day'', type DATETIME. This represents the day the percentage was calculated, for example an entry could look like 2008-03-17. There is not time portion of the date.<br>
+<blockquote>''sensor_id'', type INTEGER. This represents the sensor_id from a specific platform.<br>
+''percentage_uptime'', type FLOAT. This is the calculated uptime percentage for the sensor.<br></blockquote>
+
+<blockquote><h2>GenPlatformUptimeWebpage.pl</h2>
+This script builds an html webpage to display the uptime results. The script uses the PlatformUptimePercentages.csv as the source data and creates an html file <a href='http://carocoops.org/~dramage_prod/seacoos/PlatformUptimePercentages.html'>PlatformUptimePercentages.html</a>.<br>
+<ul><li>GenPlatformUptimeWebpage_Inputs<br>
+<ul><li>Command Line Parameters<br>
+<ul><li>--WorkingDir provides the path to the directory where the PlatformUptimePercentages.csv resides for a given data provider. The HTML file, PlatformUptimePercentages.html,  created will be created here as well.<br>
+</li></ul></li></ul></li><li>PlatformUptimePercentages.csv<br>
+</li></ul><blockquote>This file is the output of the CalcPlatformUptimePercentage.pl. The script uses this file for the data source to generated the HTML table.<br>
+</blockquote><ul><li>GenPlatformUptimeWebpage_Outputs<br>
+</li></ul><blockquote>The sole output of this script is the PlatformUptimePercentages.html file. This file is an HTML table representation of our percentage data. A live feed can be seen <a href='http://carocoops.org/~dramage_prod/secoora/PlatformUptimePercentages.html'>here</a>. Currently this file is produced once per day and represents the previous days results. The data is categorized by color as follows:<br>
+</blockquote><ul><li>Green represents 90% and up.<br>
+</li><li>Yellow represents 70% to 90%.<br>
+</li><li>Red represents 0% to 70%.</li></ul></blockquote>
+

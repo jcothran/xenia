@@ -1,0 +1,382 @@
+this is a continuation of earlier developer notes at http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
+
+see also [VMwareUpdates](VMwareUpdates.md)
+
+
+
+# SQLiteGeo (April 8, 2008) #
+
+There is a geospatially enabled version of Sqilte labeled SQLiteGeo available at http://www.gaia-gis.it/spatialite Would recommend using this version of sqlite for its geospatial and shapefile support.  OGR also supports sqlite access, see http://www.jasonbirch.com/nodes/2008/05/06/184/sqlite-for-fdo-with-sugar-free-ogr/
+
+
+---
+
+# monthly/latest file db replication script (April 10, 2008) #
+
+This [source code](http://code.google.com/p/xenia/source/browse/trunk/sqlite/monthly_latest_copy) shows how I'm using my [latest.sql](http://www.carocoops.org/obskml/feeds/xenia/archive/latest.sql) hourly feed to create/populate [monthly archive file db's and a latest db](http://carocoops.org/seacoos_data/sqlite).  The amount total amount of observation data currently collected is around 20 MB per day, so a month file should be around 20 MB\*30 days = 600 MB
+
+
+---
+
+# sqlite version 3 (May 31, 2008) #
+
+Simplified the sqlite schema [main schema](http://www.carocoops.org/obskml/microwfs/db_xenia_v3_sqlite.sql) by removing tables which have been unutilized thus far (quality\_control, collection) and adding a 'metadata' table which provides a simple xml file lookup mechanism associated with various table row\_id's.  On the pro-side this means that platform, sensor, qc, etc configs can change independently of the basic RDB schema, on the con side I'll be depending on a limited set of xml schema conventions and hardcoding to these various schemas(as opposed to hardtabling I guess).
+
+The metadata table is just a simple file pointer to supporting descriptive xml files of certain useful xml schema conventions.  The same metadata\_id could appear on several rows as a way of providing an archival trail of changes to the same type file using the fields 'begin\_date' and 'end\_date' to determine the effective date range and 'active' to determine the latest (and only) active metadata record.  By this way, the database reference integrity is preserved while allowing simpler files and their attributes to change over time.
+
+For example, sensor.row\_id = 739 might represent a salinity sensor.  It might have metadata\_id = 456 which would be described by one or more metadata table records distinguished by their effective dates(metadata.begin\_date,metadata.end\_date) and active = 1 for the 'active' latest record.  Each of these metadata records would contain further pointers to either free-form and/or xml schema files that are local and/or url referenced.
+
+My current thinking regarding the metadata xml files is to combine metadata for platforms,sensors, qc to one file although this is somewhat inefficient as one change would effect the entire file, one file per platform seems to be the usual convention thus far.  Also thinking to use a filename convention of filename\_begindate\_enddate.xml
+
+The earlier 'collection' table could be referenced as a sub element schema structure within each of these other parent schemas.
+
+Also removed 'm\_desc' from the multi\_obs table.
+
+
+---
+
+# code [revision 238](https://code.google.com/p/xenia/source/detail?r=238) (August 26, 2008) #
+
+Adding/changing several things with this revision detailed below - all of these changes are in relation to the sqlite database version of the xenia code.
+
+## sqlite\_query.pl ##
+
+http://code.google.com/p/xenia/source/browse/trunk/sqlite/misc/sqlite_query.pl
+
+This is a general use query script for performing many queries in a batch manner using a [query.txt](http://code.google.com/p/xenia/source/browse/trunk/sqlite/misc/query.txt) file which specifies in tab separated fields:filename\_out dbname sql\_query
+
+## batch\_insert.pl ##
+
+http://code.google.com/p/xenia/source/browse/trunk/sqlite/misc/batch_insert.pl
+
+After noticing gaps in the data and investigating the insert process for the sqlite xenia database, it was seen that the sqlite database would become 'locked' and inserts to the database during this locked period were missed/unperformed resulting in gaps in the database data.
+
+While sqlite allows multiple concurrent readers to the same file, only one process is allowed to write to the database at a time.  A writer process can be made to 'wait' for a specified timeout period via either the meta commands (.timeout 30000 would be a 30 second timeout) or via a similar type request in the perl dbh (database handler) setup commands.
+
+A bug with running sqlite in a batch mode is that the meta command (.timeout 30000) seemed to always be ignored whereas the dbh setup command was respected.  This resulted in changing the existing database write commands in several of the perl scripts from something like
+
+`$path_sqlite $dbname < $sql_file`
+
+to
+
+`perl batch_insert.pl $dbname $sql_file`
+
+The batch\_insert.pl script runs each sql file INSERT command one at a time in a non-transaction mode against the database with a wait/timeout condition(60 seconds) and will continue to retry the INSERT command until the the database is no longer returning a 'locked' status in the error code.
+
+By passing the earlier sql batch files through the batch\_insert.pl script, this is having the desired effect of insuring that all data INSERT requests are handled properly.  I would like to also nest these sql batches as a sql transaction (begin transaction; commit; ) but the gain in speed doesn't offset the advantage of having a few individual INSERT commands fail where there might be bad data versus the whole transaction being rejected.
+
+## microwfsFlow.sh ##
+
+http://code.google.com/p/xenia/source/browse/trunk/sqlite/crontab/microwfsFlow.sh
+
+This shell script is called by the crontab at 50 minutes past each hour and details the various subscripts called and products generated.
+
+The name 'microwfs' is somewhat of a misnomer - the sqlite version of things started in the context of the MicroWFS experiment and the naming convention is sticking with it for now.
+
+## top of the hour trigger ##
+
+http://code.google.com/p/xenia/source/browse/trunk/sqlite/sql/top_report_hour.sql
+
+Spent a while trying to develop a sqlite version of the [postgres version](http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/XeniaPackageV2#d_top_of_hour_integer_d_report_h) of this trigger, but was very difficult to do as sqlite does not currently support variables or if/then conditions in triggers similar to postgres triggers.  Tried breaking everything into conditional update statements and while I got a working version, it became very verbose and **SLOW** so not implemented.  If I take another try at this will either implement as a C compiled function called from the trigger or push data to a separate 'top of hour only' database.
+
+## flow monitor ##
+
+Initial sqlite version
+http://code.google.com/p/xenia/source/browse/trunk/sqlite/flow_monitor
+
+Updated better version(sqlite or postgresql, config file) by Dan Ramage
+http://code.google.com/p/rcoos/source/browse/#svn/trunk/datastream/flowmonitor
+
+The shell script [checkStatus.sh](http://code.google.com/p/xenia/source/browse/trunk/sqlite/flow_monitor/checkStatus.sh) is called every 10 minutes past the hour and the script [check\_status.pl](http://code.google.com/p/xenia/source/browse/trunk/sqlite/flow_monitor/check_status.pl) uses the command line parameters to perform a database query on the latest sensor counts per organization.  The query results are sent to a column-oriented text file which is used to produce an hourly updated graph of the results using gnuplot ( [status.lib](http://code.google.com/p/xenia/source/browse/trunk/sqlite/flow_monitor/status.lib) [graphCommon.lib](http://code.google.com/p/xenia/source/browse/trunk/sqlite/flow_monitor/graphCommon.lib)) and an email notification is sent to staff if the sensor counts are critically low(zero for any organization with exceptions for those which are chronically low).
+
+The three status graphs are currently:
+
+Latest aggregated observations
+
+![http://carocoops.org/obskml/scripts/flow_microwfs.png](http://carocoops.org/obskml/scripts/flow_microwfs.png)
+
+Latest aggregated observation for counts 0-100 (a magnification of the above graph at the bottom where organizations may only be providing a handful of observations each)
+
+![http://carocoops.org/obskml/scripts/flow_low.png](http://carocoops.org/obskml/scripts/flow_low.png)
+
+A 10 hour delayed offset(graph should be the same as the flow\_microwfs.png graph except 10 hours lagging) of the latest observations aggregated to the julian weekly and monthly databases at http://www.carocoops.org/seacoos_data/sqlite/
+
+![http://carocoops.org/obskml/scripts/flow_archive.png](http://carocoops.org/obskml/scripts/flow_archive.png)
+
+## YouTube demo video ##
+
+Put together an initial [YouTube tech demo video](http://www.youtube.com/watch?v=_CO9o2DyVV0) - captured the screen/audio using freeware 'CamStudio' but in trying to convert this to 640x480 screen size for youtube the detailed readouts are blurry/unreadable and the audio kept lagging behind the video becoming further out of sync as the video progresses.  Will probably do a retake of this with my initial screen resolution at 800x600 (instead of 1280x1024) to get more legible results.
+
+**Update** Also discovered that if you add '&fmt=6' to a youtube link it will display at a better resolution - at 800x600 initial capture my smaller text becomes readable.
+
+
+---
+
+# Xenia Sqlite Notes (September 24, 2008) #
+
+Added the following wiki page to detail Xenia Sqlite, SQL notes(sql usage, optimization, etc) http://code.google.com/p/xenia/wiki/XeniaSqliteNotes
+
+
+---
+
+# December 2, 2008 #
+
+## Sqlite problems ##
+
+Tried running several read/write processes against the main observation sqlite db, but seem to be running into problems with my process threads hanging - not sure if its related to my 'wrapper' batch\_insert.pl script which waits for lockout to be released so as not to lose data or something else.  Also running into similar issue with automated 'delete' scripts which are meant to trim the database to a recent time window - they fail to run resulting in the sqlite database file growing several times larger than intended until I run the delete script manually.
+
+## Javascript, XSLT - multidimensional hashes and sorting ##
+
+see also http://www.pmel.noaa.gov/maillists/tmap/ioos_wsde/msg00430.html
+
+Was continuing to look for additional information regarding javascript as it might be applicable in conjunction with or in place of XSLT and found the following links
+http://code.google.com/p/ajaxslt/
+
+AJAXSLT is an implementation of XSLT in JavaScript. Because XSLT uses XPath, it is also an implementation of XPath that can be used independently of XSLT. This implementation has the advantange that it makes XSLT uniformly available on more browsers than natively provide it, and that it can be extended to yet more browsers if necessary.
+
+The lead developer on this project works for Google on Google Maps.
+
+Was also thinking about server-side automated conversions between XML documents which would require their own XSLT or Javascript implementations.  For Javascript there is Spidermonkey http://www.mozilla.org/js/spidermonkey/ which is a C implementation for processing Javascript.  A corresponding perl package is http://search.cpan.org/~tbusch/JavaScript-SpiderMonkey-0.19/SpiderMonkey.pm
+
+Thought that I might be able to convert some of my perl scripts which convert ObsKML to styled KML/KMZ scripts to javascript, but while javascript provides a more traditional programming language, it lacks hashes except at a very basic level - my mulidimensional hashes could be faked using a single concatenated string, but would be difficult to separate and sort hash elements as I do in perl.
+
+Possible solution might still be using XSLT sort functionality assuming could cross-reference between higher level metadata and associated low level data.
+
+## Javascript Frameworks ##
+
+Also looked into Javascript Frameworks http://en.wikipedia.org/wiki/Comparison_of_JavaScript_frameworks to simplify some of the javascript development efforts, in particular jquery http://en.wikipedia.org/wiki/JQuery
+
+## Arduino + computer + Pachube ##
+
+I've mentioned Pachube http://pachube.com earlier, primarily in the context of EEML http://www.eeml.org having a similar minimal XML schema for observation measurements to ObsKML.  In addition, instrumentation folks may want to take a look at Arduino(processing board) and Firmata(firmware) which are on the initial data measurement end of things.
+
+http://community.pachube.com/?q=node/11
+
+## custom fields/columns for observation data ##
+
+One issue which I'm grappling with is how to extend or tag rows of data with additional custom fields in a generic way.  The main use case of this is say a researcher runs a custom quality control analysis and adds a good/bad/suspect flag to certain rows of data.  I don't want to add a database column to my multi\_obs table every time this happens as it might only effect a subset of rows.
+
+What I'm currently thinking of is something like a '**custom\_fields**' table with the following columns:
+
+  * row\_id
+  * row\_entry\_date
+  * row\_update\_date
+  * metadata\_id - integer id pointing to metadata table lookup info on custom\_value, might also think of this as the custom 'type' id
+  * ref\_table
+  * ref\_row\_id
+  * ref\_date
+  * custom\_value - float
+  * custom\_string - string
+
+The first 3 'row...' columns are generic to most tables.
+
+The metadata\_id provides a link to the metadata table which further describes what table these values/strings might be referencing and their usage/meaning.
+
+The ref\_table, ref\_row\_id and ref\_date are linking mechanisms to the referenced table (like multi\_obs) - row\_id may be sufficient alone, but wanted to include ref\_date where there might be issues with the row\_id rollover possibly causing duplicate row references - I figure that the combination of ref\_row\_id and ref\_date better gaurantees a correct row reference.  The ref\_date field alone could also be used for query purposes.  A database view might be established dynamically recombining say the multi\_obs row with the custom\_fields referenced/appended fields.
+
+The custom\_value and/or custom\_string fields would contain the additional custom column info.
+
+## Hadoop ##
+
+Hadoop seems interesting in utility based computing against large(terabyte/petabyte) amounts of unstructured data (like image processing).
+
+from http://en.wikipedia.org/wiki/Hadoop
+
+Apache Hadoop is a free Java software framework that supports data intensive distributed applications.[1](1.md) It enables applications to work with thousands of nodes and petabytes of data. Hadoop was inspired by Google's MapReduce and Google File System (GFS) papers.
+Hadoop is a top level Apache project, being built and used by a community of contributors from all over the world[2](2.md). Yahoo! has been the largest contributor[3](3.md) to the project and uses Hadoop extensively in its Web Search and Advertising businesses.[4](4.md) IBM and Google have announced a major initiative to use Hadoop to support University courses in Distributed Computer Programming.
+
+## R ##
+
+"R" is popular FOSS (Free Open Source Software) library of package for statistics analysis, graphing, etc similar to the proprietary statistics software "S".  I'd like to start using it for QA/QC purposes against the Xenia sqlite schema http://carocoops.org/seacoos_data/sqlite/weekly/ .  R supports a database interface (DBI) including sqlite.  QA/QC routines could be R scripts running against and updating a common RDB schema.
+
+http://developers.slashdot.org/article.pl?sid=09/01/07/2316227
+
+from http://www.nytimes.com/2009/01/07/technology/business-computing/07program.html
+
+R is similar to other programming languages, like C, Java and Perl, in that it helps people perform a wide variety of computing tasks by giving them access to various commands. For statisticians, however, R is particularly useful because it contains a number of built-in mechanisms for organizing data, running calculations on the information and creating graphical representations of data sets.
+
+Some people familiar with R describe it as a supercharged version of Microsoft’s Excel spreadsheet software that can help illuminate data trends more clearly than is possible by entering information into rows and columns.
+
+What makes R so useful — and helps explain its quick acceptance — is that statisticians, engineers and scientists can improve the software’s code or write variations for specific tasks. Packages written for R add advanced algorithms, colored and textured graphs and mining techniques to dig deeper into databases.
+
+Close to 1,600 different packages reside on just one of the many Web sites devoted to R, and the number of packages has grown exponentially. One package, called BiodiversityR, offers a graphical interface aimed at making calculations of environmental trends easier.
+
+Another package, called Emu, analyzes speech patterns, while GenABEL is used to study the human genome.
+
+The financial services community has demonstrated a particular affinity for R; dozens of packages exist for derivatives analysis alone.
+
+“The great beauty of R is that you can modify it to do all sorts of things,” said Hal Varian, chief economist at Google. “And you have a lot of prepackaged stuff that’s already available, so you’re standing on the shoulders of giants.”
+
+
+---
+
+# January 15, 2009 #
+
+## WebStats ##
+
+see http://code.google.com/p/xenia/wiki/WebStats
+
+Set of perl scripts and sqlite database for apache web log analysis.
+
+Developed these scripts out of frustration with other freely available web analysis packages including Google Analytics lately which has been having problems lately with how statistics are reported.  Mainly I am looking for more than just total hits, but also to filter and cross reference content with its users and references.
+
+
+---
+
+# January 20, 2009 #
+
+## GISVM ##
+
+from http://gisvm.com
+
+GISVM is a free and ready to use anywhere Geographic Information System Virtual Machine.
+
+GISVM is intended to be a full-feature GIS Workstation based exclusively on free GIS software: PostgreSQL, PostGIS, GeoServer, Mapserver, FWTools, QGIS, GRASS, gvSIG, uDIG, Kosmo and OpenJump, on Ubuntu Desktop.
+
+It also aims to be a hassle-free installation option for anyone that needs a ready to use GIS solution.
+
+Based on the amazing Virtualization technology it can be used on almost any operating system environment.
+
+GISVM only requires you to previously install the Free VMWare Player, VirtualBox or any other product that can run a VMWare image.
+
+there is also an image which includes 'R' see http://gisvm.com/forum/index.php?topic=11.0
+
+
+---
+
+# January 22, 2009 #
+
+## VMWare ##
+
+Had a chance to experiment some with vmware http://www.vmware.com via the free vmware 'player' utility this week on both Windows desktop and Linux server.  Would have to say that it was all fairly straightforward and interesting and am looking towards trying to utilize this server virtualization as a means to help standardardize and maintain our in-house server setups.  Additionally since the server is virtualized as a file image, it is possible to share and reproduce this server and associated tools/development wherever the vmware file image is supported (including other 'players' or cloud type services).  The following article link describes how this concept is helpful to IT shops
+
+http://rwhiffen.wordpress.com/2006/07/13/the-genius-of-free-vmware/
+
+And the below link talks about vmware images as 'appliances'
+
+http://fettig.net/weblog/2006/02/27/the-vmware-image-is-the-new-appliance/
+
+which is how vmware also describes their community collection of them at their site http://www.vmware.com/appliances/
+
+Other associated file links are at
+
+http://delicious.com/giraclarc/vmware
+http://delicious.com/giraclarc/cloud
+
+### Windows install ###
+
+Started with downloading on my Windows XP Pro desktop side of things with downloading the free vmware player(version 2.5.1) for windows at
+
+http://www.vmware.com/download/player/download.html
+
+No problems with the install and downloaded the gisvm image (geostatistics version which includes 'R', around 1.3 GB) from http://gisvm.com/download.html
+
+The downloaded image is a .rar compressed file, used windows unrar utility to decompress image and support files to 5.5 GB size.
+
+In the vmware player opened the associated .vmx file for the gisvm image (the .vmdk file image) and was able to work with this virtual ubuntu server and GIS toolset within my Windows host desktop without problems.  Neat!
+
+### Linux install ###
+
+For the Linux server install, I had an existing Gentoo system which I wanted to include a new Ubuntu system onto the same server.  If you are booting to a brand new server with no previous system, then you can skip the following paragraph as it only describes using the Gparted partition management utility to help redistribute existing server disk partitions.
+
+The existing Gentoo system had a single root partition with the full 64 GB drive space allocated, with the existing '/' root folder partition only using 16 GB(system also included existing boot and swap partitions which were unmodified and utilized by both systems).  Was able to use Gparted http://gparted.sourceforge.net/download.php utility which is a .iso file which after burned to CD, used (rebooted system from Gparted CD) to to resize the working Gentoo partition to a little bigger than 16 GB and create a new root ('/')partition with the remaining 48 GB for an Ubuntu server install to run the vmware player on.  Downloaded the latest version of Ubuntu (version 8.10) as .iso and burned to CD.  CD boot installed Ubuntu 8.10 specifying the newly created partition as root ('/') folder.  After completing Ubuntu install, removed boot CD and 'grub' correctly allows me to boot to either the previous existing Gentoo system or the new Ubuntu system.
+
+After booting into new Ubuntu system, went back to the vmware player download page http://www.vmware.com/download/player/download.html and downloaded the Linux version 2.5.1(the  32-bit, not 64-bit) .bundle file
+
+Used the instructions at https://help.ubuntu.com/community/VMware/Player for guidance, only had to run the following line
+
+```
+gksudo bash ./VMware-Player-2.5.1-126130.i386.bundle
+```
+
+Again downloaded the gisvm geostatistics (1.3 GB) image from http://gisvm.com/download.html and utilized the ubuntu desktop 'File Browser' file right-click option to extract/decompress the .rar file
+
+In the vmware player opened the associated .vmx file for the gisvm image (the .vmdk file image) and was able to work with this virtual ubuntu server and GIS toolset within my Ubuntu host desktop without problems.  Neat again!
+
+### Additional server notes - static IP, network bridge, iptables ###
+
+Wanted to bridge the 'virtual' vmware player server across the 'host' server.  Established my static IP on the host using the following steps.
+
+The 'ifconfig' command will tell you which ethernet device the server is trying to communicate on.  For mine the host server was running 'eth0' and the virtual was running 'eth5'
+
+from http://forums.techarena.in/operating-systems/1106661.htm
+
+for the host the static IP is 129.252.37.90
+
+In host file /etc/networking/interfaces
+```
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 129.252.37.90
+netmask 255.255.255.0
+gateway 192.252.37.1
+```
+
+Then restart network with
+```
+sudo /etc/init.d/networking restart
+```
+
+For the 'virtual' server on the vmplayer menu at screen top, changed the 'Devices->Network Adapter' setting to 'Bridged' which establishes network communication between the virtual server and host.
+
+Running 'ifconfig' command from virtual host listed ethernet as 'eth5' which is substituted for the 'eth0' and run in the same steps listed above for configuring the static IP for the host except now on the virtual server.
+
+I did not have to modify the defaulted dns file settings for host or virtual server files under /etc/resolv.conf
+
+
+---
+
+
+With the network 'bridge' setting in the vmware player, any ports on the virtual server are bridged over the host server (use 'nmap' command to see open ports).  So with the gisvm image opened on the vmplayer I was able to see the apache web server sample webpage running on port 80 and J2EE/tomcat server sample webpage running on port 8080 from other machines.
+
+Currently only have port 80 open to machines outside the university network and wanted to show the geoserver demo applications running on port 8080 so used the following iptables commands (on the virtual server) to port forward 80 to 8080.
+
+from http://www.klawitter.de/tomcat80.html
+```
+iptables -t nat -A OUTPUT -d localhost -p tcp --dport 80 -j REDIRECT --to-ports 8080
+iptables -t nat -A OUTPUT -d 129.252.37.90 -p tcp --dport 80 -j REDIRECT --to-ports 8080
+iptables -t nat -A PREROUTING -d 129.252.37.90 -p tcp --dport 80 -j REDIRECT --to-ports 8080
+```
+
+The geoserver demo applications can be seen at
+http://129.252.37.90/geoserver/demo.do
+
+Note that a few of the demos include google images which need a new certificate and won't load until that is swapped also.  But it is interesting to see the virtual server/application communicating across the host to the outside.  Follow-up steps will be to see what performance or other virtualization related issues there might be.
+
+As a test, I also modified some files on my Windows vmplayer instance and transferred the image to the Linux vmplayer and ran the image with no problems - so would like to be able to run and test virtual development images on the desktop and promote and share final images to other developers and production servers.
+
+I have received several comments from others that they are utilizing VirtualBox http://www.virtualbox.org as a better performing vmware image player and will have to try that also.
+
+
+---
+
+# February 13, 2009 Xenia vmware image #
+
+Wanted to relay that I've been experimenting with vmware http://www.vmware.com and the vmware player and have created a virtual instance/image/appliance of the 'Xenia' development and associated scripts and database (xeniavm).
+
+The 1.5 GB rar-compressed(6 GB uncompressed) vmware image/appliance is available for download at http://neptune.baruch.sc.edu/xenia/vmware_dist/xeniavm20090213.rar
+
+This vmware image was developed on top of the FOSS geospatial vmware image(geostatistics package which includes 'R') available at http://gisvm.com (appliance description) - thanks to Ricardo Pinho.
+
+While the Xenia scripts do not directly utilize/interact those included applications in the gisvm image at this time, I thought they represent the best existing collection of FOSS geospatial software for future development.
+
+I've created wiki documentation relating to the vmware instance with the starting link at http://code.google.com/p/xenia/wiki/VMwareHome
+
+The documentation at http://code.google.com/p/xenia/wiki/VMwareTest details some getting started info and how to add your own imported data files formatted as ObsKML and get the immediate benefit of your observation data aggregated, restyled and reformatted into a variety of formats and services listed below.
+
+from http://code.google.com/p/xenia/wiki/VMwareProducts
+
+  * Google Earth/Maps, Latest ObsKML, Styled KML
+  * time-series graphs
+  * GeoRSS
+  * html table styling
+  * convert from ObsKML to other formats (CSV,shapefile)
+  * Data source files - zipped ObsKML and SQL
+  * Latest 3 day database and julian weekly archive databases
+  * DIF SOS
+  * Flow/Feed status and notification
+
+Anyone interested in providing feedback or contributions(development or data) regarding the image/development please contact me at jeremy.cothran@gmail.com

@@ -1,0 +1,97 @@
+These notes are in part a continuation of earlier developer notes at
+  * 2008 http://code.google.com/p/xenia/wiki/XeniaUpdates
+  * 2004-2007 http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/JCNotes
+
+---
+
+Table of contents
+
+
+# February 13, 2009 Xenia VMware version 1.0 #
+
+Initial release.
+
+# March 2, 2009 #
+
+## documentation updates ##
+
+Added more instrumentation example ObsKML and SQL at [InstrumentationExamples](InstrumentationExamples.md)
+
+Added discussion of some performance/design issues at [XeniaDesign](XeniaDesign.md)
+
+## Pachube ##
+Pachube http://www.pachube.com/ is an example type website/service that parallels(translating from urban to natural environments) a lot of the same ideas regarding simpler, minimalist schemas(EEML http://www.eeml.org/ like ObsKML/Xenia http://tinyurl.com/a9q8wf ) that support observation type maps/services.  Like twitter http://en.wikipedia.org/wiki/Twitter , its not only long, full-status emails, but short and simple status messages that can be useful.
+
+Pachube ties into a sensor board project called 'Arduino' http://www.arduino.cc/ which reflects similarly on the smart sensor type projects in regards to providing open source sensor firmware which support further software efforts.
+
+The pachube project from what I can tell is still very small and mainly just an idea/pitch man(Usman Haque) and a few developers running a private site/service.  But conceptually in terms of trying to make simpler things scale more broadly I think there may be some potential.
+
+http://www.ugotrade.com/2009/01/28/pachube-patching-the-planet-interview-with-usman-haque/
+
+# March 3, 2009 #
+
+Google groups discussion has been added at http://groups.google.com/group/xeniavm
+
+IRC channel at #xeniavm
+
+# March 23, 2009 #
+
+## index, query optimizations ##
+
+Doing some performance tests with some of the sqlite queries/database via Firefox browser [GUI plug-in Sqlite Manager](https://addons.mozilla.org/en-US/firefox/addon/5817) which reports the time spent performing the query, we noticed some queries were taking on the order of several seconds to complete(most simple queries usually should complete within a few hundred milliseconds).
+
+It turns out that the way I declared the unique index for the multi\_obs table should be changed to better match the column order in most WHERE statements so that the m\_date column is specified first.
+
+**Previous index, slow - m\_type declared first**
+```
+create unique index i_multi_obs on multi_obs(m_type,m_date,sensor_id);
+```
+
+**Current index, fast - m\_date declared first**
+```
+create unique index i_multi_obs on multi_obs(m_date,m_type,sensor_id);
+```
+
+Generally speaking the index order declared should match the order of columns stated in the WHERE clause(or vice versa) with the first column being critical to invoking the index.  Better documentation regarding this is at http://www.sqlite.org/optoverview.html under the 'WHERE clause analysis' section.
+
+For PostgreSQL, the column order match importance is stated similarly at [this link](http://archives.postgresql.org/pgsql-sql/2002-04/msg00318.php) under item 'Index 3'
+
+Also noticed that queries in the xenia\_to\_obskml export script and time\_series graph where incorrectly string comparing the results of a 'datetime' function which returns datetime **with** a space to the multi\_obs.m\_date field which uses a **T** instead of **space** as the date/time separator character.  Queries should be structured similar to below using the **strftime** function(instead of datetime function) for a correct comparison.
+```
+select m_date FROM multi_obs where m_date >= strftime('%Y-%m-%dT%H:%M:%S','now','-6 hours')
+```
+
+# March 27, 2009 #
+
+## Google spreadsheets - HTTP based Data API ##
+
+I've been experimenting some with Google spreadsheets lately and I did not realize that it includes a back-end data API for gathering spreadsheet data.
+
+A common issue from an IT perspective is that we are constantly trying to move and reformat Excel spreadsheet data (both data and metadata) from research projects/instrumentation logs into relational databases or other formats that are easier to work with and manage.
+
+Turns out that google spreadsheets could be shared among a list of collaborators with a Google account(which can be aliased against an existing non-gmail email address).  Spreadsheet info could be published for public viewing/access or kept private to the group of document collaborators.
+
+Spreadsheets include a revision history so that if someone accidentally messed up the wrong sheet/tow/cell, we could correct using the earlier revision.
+
+Best of all spreadsheets include an easy to use developer data API(supporting a variety of languages) that includes data access/edit and some visualization capabilities via community-contributed 'gadgets'.
+
+http://code.google.com/apis/spreadsheets/overview.html
+
+http://code.google.com/apis/spreadsheets/docs/2.0/reference.html
+
+http://code.google.com/apis/spreadsheets/spreadsheet_gadgets.html
+
+
+I really like this approach as I think it would allow people to contribute easily on the front-end using a familiar approach (spreadsheets) while also allowing us automated access and display/report capabilities on the back-end.  Might also allow us to bypass relational databases/sqlite altogether in regards to diverse but relatively low-volume metadata with the focus being on finding spreadsheet content layouts and visualizations/reports that are commonly useful.
+
+# May 6, 2009 #
+
+## MapServer/OGR vs table views ##
+
+On a development note, Dan Ramage was working with HF Radar datasets recently and was pushing the data to a sqlite database table and mapping via MapServer/OGR and OpenLayers.
+
+Dan was collecting a days worth of data in the same table, but only wanted to map the most recent data.  The performance issue we ran into for this case is that as MapServer/OGR **does not support general database indexes for query** (like an index on the time column) only supporting spatial indexes or attribute indexes for shapefiles.  This results in a slow performing query/map render as MapServer/OGR was performing a full table scan(reading all table rows).
+
+The solution to getting around this issue is to utilize a **database view** which represents an indexed subselect on the table data which is of interest - in this case the table rows which had been flagged 'recent' by an indexed column field/attribute.  MapServer/OGR references the view resulting in greatly improved performance.  In the past we have also generated separate tables(map tables) or hourly shapefiles, but the view approach allows us to achieve that subset query performance without having to physically split data out from the initial tables.
+
+In addition to indexes on time columns, crude spatial indexes on longitude and latitude, or observation/measurement type columns could also be specified and utilized in a database view to support faster MapServer/OGR subset query/render.

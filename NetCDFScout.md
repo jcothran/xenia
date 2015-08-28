@@ -1,0 +1,102 @@
+# Scout Perl Scripts #
+The scout consists of a number of perl scripts that can parse various types of netCDF files ranging from fixed points to adcp profilers. Recently we've been moving the scout away from creating SQL insert statements and into creating obsKML files. Currently the fixed point and adcp profiler scripts can do the obsKML creation. The original SQL insert statements are targeted to a no longer used database schema. This document will discuss only the use of the scout to create obsKML even though we still carry forward the other scripts that can create the SQL insert statements.
+The Scout files can be found [here](http://code.google.com/p/xenia/source/browse/#svn/trunk/scout).
+## Required Perl Packages ##
+These packages are used in the Scout scripts and are available through CPAN:
+```
+LWP::Simple
+Getopt::Long
+XML::LibXML
+Time::Local
+Math::Trig
+```
+These packages are found at [/software.html#Perl Unidata](http://www.unidata.ucar.edu/software/netcdf) or maybe they can be found in CPAN I am not sure. Getting these running gave me the biggest issue.
+```
+NetCDF
+UDUNITS
+```
+A couple of notes I scribbled down of dependencies for NetCDF are Exporter, AutoLoader and DynaLoader.
+Also, for UDUNITS apparently for a Debian build I added:
+```
+CPPFLAGS        = -I../port/misc -I../port/cfortran -Df2cFortran $(cpp_path)
+```
+None of this might be required if a real package can be pulled instead of building from source.
+These packages are homegrown and are found in the Xenia code repository [here](http://code.google.com/p/xenia/source/browse/trunk/obskml/General/obsKMLSubRoutines.pm). It has expanded to have other subroutines that are not specific to obsKML stuff, such as units conversions.
+```
+obsKMLSubRoutines
+```
+## Script Suite ##
+File list:
+  * GetLatestData.pl
+> > This script uses the URLList.xml file to determine what sites to try and connect to for downloading the netCDF files.  Before downloading a netCDF file, the script uses a similarly named log file to check the last modified time. If the log files date/time stamp is older than the remote file, the script will download the file then execute the master data processing script cdl\_0master.pl. The log file date/time stamp is updated and the next file is tested.
+> > The current cron setup to run this script is:
+```
+0,10,20,30,40,50 * * * * cd /home/dramage/netcdf; /usr/bin/perl /home/dramage/netcdf/GetLatestData.pl --URLControlFile=./URLList.xml  
+--DirForObsKml=/home/dramage/public_html/html/obskml/feeds 
+--UseLastNTimeStamps=10 
+--UseLastNTimeStampsForOrg="nos;60,nws;20" > /home/dramage/log/GetLatestData.log 2>&1
+```
+> > Here are some other cron jobs that help keep the file count down since we aren't archiving netcdfs:
+```
+#Cleanup netcdf files older than 3days/4320minutes.
+0 0 * * * /usr/bin/find /home/dramage/netcdf/latest_netcdf_files -path *.nc -maxdepth 1 -cmin +4320 -exec rm -f {} \;
+0 0 * * * /usr/bin/find /home/dramage/netcdf/fetch_logs -path *.nc -maxdepth 1 -cmin +4320 -exec rm -f {} \;
+#Cleanup obsKML files older than 4 hours
+0 0,4,8,12,16,20 * * * /usr/bin/find /home/dramage/public_html/obskml/feeds/* -path *.kml -cmin +240 -exec rm -f {} \;
+
+#Cleanup the log files older than 2 days.
+0 0 * * * /usr/bin/find /home/dramage/log -path *.log -maxdepth 1 -cmin +1440 -exec rm -f {} \;
+
+```
+> > It is recommend to pipe the output to a log file as shown above as the scripts do print quite a bit of information. In the next pass through them, I really need to add a log switch to toggle this behavior. The log files won't grow from run to run as the script deletes them before continuing. So basically you get a log of the last run. The other log file created is cdl\_0master.log which is where GetLatestData.pl pipes the output from its call to cdl\_0master.pl. Running the Scout every 10 minutes is porbably overkill with having the flag --UseLastNTimeStamps=10. However some netCDF files only have the most current data, where others have the last 48 hours. My thinking was I wanted to make sure I got the most recent data and was always up to date.
+> > Command line parameters are detailed out below:
+```
+--URLControlFile is the XML file with the URL list the script will download the files from.
+--FileFilter is the filter to apply to the file listings to allow the script to download the files we really want. Optional.
+--DirForObsKml provides the path to the store the ObsKML files created. This is an optional argument, if not provided no ObsKML files are written.
+--Delete specifies we delete the netcdf files after we write the ObsKML files. This is an optional argument.
+--DownloadDir is the directory to store the downloaded files. Optional, default is ./latest_netcdf_files.
+--FetchLogDir is the directory were the file time stamps are stored. The script uses these files to determine which files are really the latest. Optional, default is ./fetch_logs.
+--UseLastNTimeStamps Integer representing the last N time entries to use when converting the data to obsKML. Optional.
+--UseLastNTimeStampsForOrg Optional. List specifing orginization and the last N time entries to use for them. Whereas the UseLastNTimeStamps is applied to every organization, this can tailor to the specific. If not provided and UseLastNTimeStamps is provided, it is used.
+```
+> > If --DownloadDir and --FetchLogDir are not specified, the defaults are used, however you must insure the directories exist, otherwise the script will error out with a missing directory message.
+
+  * cdl\_0master.pl
+
+> This script takes the passed in netCDF file, opens it and determines what type of platform the file represents. A fixed point system such as a buoy, a moving point such as a boat, an adcp profiler, ect. The only two types of platforms we currently create obsKML files for are fixed point and adcp profiler. This script is called from the GetLatestDate.pl script. For debugging(which seems to always be needed), you can execute this script without running GetLatestData.pl on a single netCDF file as well. The organization field in the netCDF file is used to create a named directory in the obsKML parent directory if one does not exist. For instance if we processed a netCDF file with the organization field set as CaroCoops, the script would check in the obsKML parent directory to see if the directory existed and if it did not, one would be created. Then the obsKML file would be saved there. This organizes all the output files into organization specific subdirectories.
+> > The command line parameters are(this script still uses ARGV command line structure):
+```
+ARGV 0 is the netcdf filename to process.
+ARGV 1 is an optional parameter. Valid values are: 0 Write only SQL files, 1 Write only obsKML file, or 2 Write both SQL files and obsKML file. Default value is 0.
+ARGV 2 is the directory where the obsKML file is stored. If not provided the default directory is the current directory.
+ARGV 3 is the optional number of last N time stamps to use.
+ARGV 4 is the option organization/last N time stamps to use for organization. Format is \"Org1;NTimes,Org2,NTimes\"
+```
+
+> Make sure the path to initialize the UDUNITS  package is set correctly. Currently the setting is:
+```
+UDUNITS::init("/usr/local/lib/perl/5.8.8/udunits/udunits-1.12.4/etc/udunits.dat")
+```
+  * cdl\_fixed\_point.pl
+> Creates the obsKML file from a fixed point obsKML file.
+  * cdl\_profiler\_adcp.pl
+> Creates the obsKML file from a fixed adcp profiler. In this script, I tried to remedy alot of the issues I noticed in the cdl\_fixed\_point.pl script. The approach is completely different and in the future I hope to use this as the model to re-work the cdl\_fixed\_point script as well as any others we need. This script has some generic netCDF I/O subroutines that should be re-usable.
+  * UnitsConversion.xml
+> This XML file contains our units conversion from-to functions. The main use of this is to translate various unit strings into the standard ones used in the Xenia schema. for example, some netCDF files have a velocity as m s-1, the Xenia representation is m\_s-1, so we must fix that up before writing out the obsKML files.
+  * URLList.xml
+> This file contains the list of sites to connect to to download the netCDF files.
+  * cdl\_fixed\_map.pl
+  * cdl\_grid.pl
+  * cdl\_grid\_jpl.pl
+  * cdl\_moving\_point.pl
+## Directory Structure ##
+This is a suggested directory setup for the Scout scripts.
+```
+-ScoutParentDir: Contains the files for the Scout script suite.
+ |
+ --fetch_logs: Contains the log files for the various netCDF files that get downloaded.
+ |
+ --latest_netcdf: Contains the netCDF files for processing.
+ 
+```

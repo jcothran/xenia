@@ -1,0 +1,33 @@
+
+
+# ascii totals to netcdf #
+
+The perl scripts to convert from wera ascii total files(the final total current speed/direction of the combined radial data) to seacoos grid netcdf are at the following link
+
+http://code.google.com/p/xenia/source/browse/#svn%2Ftrunk%2Fscout%2Ftrunk%2Fhfradar
+
+**latest.txt** is a sample latest ascii total file received.
+
+**convert\_latest.pl** reads through the ascii file and pushes the values into arrays which are then printed back out into variables which are substituted into the netcdf file template(**template\_radar.txt**) substituting on the file macros like `<EASTWARD_CURRENT>`,etc.  ncgen converts from the ascii netcdf to the binary netcdf.
+
+There are a few initial setup steps with the netcdf template file - the provider/file name(or metadata like contact info,etc) should be substituted as needed.  Also to place the longitude/latitude of the grid points correctly, the upper/left corner point,grid size and spacing(distance in kilometers) is referenced from the ascii total file and used in the script **lat\_long.pl** to generate the latitude and longitude points manually substituted into the netcdf template file.
+
+# general processing outline #
+
+## existing ##
+
+see also notes at http://code.google.com/p/xenia/wiki/DataIngestion
+
+Server **squid** acts as the data scout for hfradar files and also does notification when files have been missing for an extended period of time.
+
+squid:/home/xeniaprod/scripts/radar
+
+Server **mapping** acts to filter interactive map requests for various parameters like 'time', pointing a given hour offset to a specific file reference.
+
+mapping:/usr/lib/cgi-bin/mapserv\_currents\_rs\_wrapper
+mapping:/home/xeniaprod/mapping/common/general.map
+
+## proposed ##
+
+
+

@@ -1,0 +1,162 @@
+# Range Tests
+# Scripts #
+## rangeTests.py ##
+For data stored in a [Xenia](http://code.google.com/p/xenia/wiki/XeniaPackageV2) schema database, the [rangeTest.py](http://code.google.com/p/xenia/source/browse/trunk/postgresql/qaqc/rangetests/rangeCheck.py) script will test observations to determine if they fall within defined limits. The script will then populate the qc\_level and qc\_flag columns in the multi\_obs table.  Currently there are four tests run on an observation. The tests are listed in execution order, if one of them fails, the testing does not continue.
+  1. Data Available Test checks to see if a data point is available for testing.
+  1. Sensor Range Test determines if the output of the sensor corresponds with its dynamic range. For example, if a sensor ouputs a "short int" the range would be 32765 to -32765.
+  1. Gross Range Test determines if the measured value is valid for the type of measurement being sampled with the sensor. For example, we are measuring Air Temperature and given the geographic location we expect the range to be from 0 to 100 Fahrenheit.
+  1. Climatological Range Test is similar to the Gross Range Test, however it allows a finer granularity of the test ranges based on the start and end month. For example, even thought the Gross Range for our Air Temperature sensor is 0-100, we know that Jun-Aug the range is going to be 90-100. With this finer range control, we would be able to catch an errant reading that fell within the Gross Range and would normally be flagged as good data.
+> ### Input ###
+> > #### Command Line Parameters ####
+> > The script uses an XML configuration file to set the required working parameters. The full path to the xml config file must be given as a command line argument.
+> > For example: rangeTests.py "path\to\XMLConfigFile.xml"
+> > #### XML Configuration File ####
+> > The following is an example of the XML file, with tag explanations below.
+```
+<environment>
+  <database>
+    <db>
+      <type></type>
+      <name></name>
+      <user></user>
+      <pwd></pwd>
+      <host></host>
+    </db>
+    <sqlQCUpdateFile></sqlQCUpdateFile>
+  </database>
+  <qcLimits>
+    <fileType></fileType>
+    <file></file>
+  </qcLimits>
+  <unitsCoversion>
+    <file></file>
+  </unitsCoversion>
+  <logging>    
+    <logMsgs></logMsgs>
+    <maxBytes></maxBytes>
+    <backupCount></backupCount>       
+    <logDir></logDir>
+  </logging> 
+  <outputs>
+    <qcResultsTable></qcResultsTable>
+  </outputs>
+</environment>
+```
+    * `<environment>`
+      * `<database>`
+        * `<db>`
+          * `<type>` defines the type of database engine the Xenia database is hosted on. Can be either, sqlite or postgres currently.
+          * `<name>` for a SQLite database, this is the path to the database file. For PostGres this is the database name to connect to.
+          * `<user>` is not used in SQLite. For PostGres, this is the user name used to login to the database.
+          * `<pwd>` is not used in SQLite. For PostGres, this is the password for the user.
+          * `<host>` is not used in SQLite. For PostGres, this is the IP address the database engine is hosted on.
+        * `<sqlQCUpdateFile>` the full path to the SQL file the scripts creates upon execution. A sample can be seen [here](here.md)
+      * `<qcLimits>`
+        * `<fileType>` defines the format the range limits are stored in. Currently the only valid entry is test\_profiles. The idea behind this setting is to allow different sources for the range limits, perhaps in a database or spreadsheet.
+        * `<file>` is the full filepath to the limits file. Current used is the test\_profiles.xml type file.
+      * `<unitsCoversion>`
+        * `<file>` full filepath to the xml file that contains the units conversion formulas used.
+      * `<logging>`
+> > > > This section defines various logging parameters.
+        * `<logMsgs>` flag, 0 or 1, to specify whether or not to log to file.
+        * `<maxBytes>` the size a log file is allowed to grow until it is closed and a new one begun.
+        * `<backupCount>` the number of backup log files to keep. A backup file is created each time its size exceeds the amount in `<maxBytes>`.
+        * `<logDir>` the path to store the log files in.
+      * `<outputs>`
+
+> > > Deals with the various outputs from the script.
+        * `<qcResultsTable>` the path to an HTML file which shows the results, grouped by platform, of the range tests. A live example can be found [here](http://129.252.37.90/xenia/feeds/qaqc/test_results.html). Each platform row will have a column for a measurement tested, defined in the test\_profiles.xml file.
+
+
+> #### test\_profiles.xml ####
+> The following is an example of a simple test\_profiles.xml file which contains only one platform with one sensor for QC validation:
+```
+ <xml>
+  <testProfileList>
+   <testProfile>
+    <id>CaroCoopsBuoys</id>
+    <platformList>
+     <platform>carocoops.CAP3.buoy</platform>
+    </platformList>
+    <obsList>
+     <obs>
+      <obsHandle>wind_speed.m_s-1</obsHandle>
+      <UpdateInterval>24</UpdateInterval>
+      <rangeHigh>32565</rangeHigh>
+      <rangeLow>-32565</rangeLow>
+      <grossRangeHigh>30</grossRangeHigh>
+      <grossRangeLo>0</grossRangeLo>
+      <climatologicalRangeList> 
+        <climateRange>
+          <startMonth>Jan</startMonth>
+          <endMonth>Mar</endMonth>
+          <rangeLow>30</rangeLow>
+          <rangeHigh>27</rangeHigh>
+        </climateRange>  
+      </climatologicalRangeList>
+     </obs>
+    </obsList>
+    <notify>
+     <timeLagLimit>14400</timeLagLimit>
+     <wait>10</wait>
+     <emailGroup>1</emailGroup>
+     <emailMessage>5</emailMessage>
+    </notify>
+   </testProfile>
+  </testProfileList>
+ </xml>
+```
+> A file may contain multiple test profiles, each of which can be used to group like platforms together. Like platforms would be platforms that have
+> the same sensor array on board.
+  * `<testProfileList>`
+> This tag denotes the start of a list of one or more `<testProfile>` entries.
+  * `<testProfile>`
+    * `<id>`
+> > Names the test profile grouping that follows.
+    * `<platformList>`
+> > The `<platformList>` can contain one or more `<platform>` child tags which provide the name of the platform to be tested in the `<testProfile>`.
+    * `<obsList>`
+> > Begins the list of each observation type the `<testProfile>` will run data range checks on.
+      * `<obs>` is the starting tag for an individual observation type definition.
+        * `<obsHandle>` defines the observation type. The format for an `<obsHandle>` entry is "sensor name.unit of measurement", for example: "air\_temperature.farenheit".   The sensor name must be defined in the databases sensor table. The unit of measurement must be defined in the uom\_type table.
+        * `<UpdateInterval>` defines how many times a day a sensor transmits its data from the platform to the outside world. The sample above shows an interval of 24, which would be every hour. This could be considered more of a platform configuration.
+        * `<rangeHigh>` defines the upper acceptable range of a sensor. This is given as a floating point number.
+        * `<rangeLow>` defines the lower acceptable range of a sensor. This is given as a floating point number.
+        * `<grossRangeHigh>` defines the upper range the measurement the sensor makes can be.
+        * `<grossRangeLo>` defines the lower range the measurement the sensor makes can be.
+        * `<climatologicalRangeList>`
+> > > > Begins a section defining climatological ranges. Can have up to 12, 1 per month.
+          * `<climateRange>`
+> > > > > Section will contain a range limit over a given month timeperiod.
+            * `<startMonth>` the month, abbreviate unix style, the range begins on.
+            * `<endMonth>` the month, abbreviate unix style, the range ends on.
+            * `<rangeLow>` the low climatological test range.
+            * `<rangeHigh>` the high climatological test range.
+
+  * `<timeLagLimit>` tag sets the number of seconds deviation allowed from the current time of the system compared to the measurement time in the database before the data is flagged as lagging.
+
+
+> ### Output ###
+> #### SQL File ####
+  * From the configuration file, we defined `<sqlQCUpdateFile>` which defines the SQL file to write the SQL UPDATE statements into. These UPDATES set the qc\_level and qc\_flag columns in the multi\_obs table.
+> The following is a sample row from the SQL file:
+```
+  SQL line is: "UPDATE multi_obs SET qc_flag='222200',qc_level=3 WHERE  m_date='2009-03-23T01:36:00' AND sensor_id=4099"
+```
+    * qc\_flag
+> > The leftmost byte is the first test, which is the data available test, each preceding byte is another test of lesser importance. We store the values in a string which is will always contain the same number of bytes for consistency. The flags from left to right: Data available, sensor range check, gross range check, climate range check, rate of change, nearest neighbor. Currently rate of change and nearest neighbor are not implemented. The values can be: 0 = No test, 1 = Test Failed, 2 = Test Passed.
+> > Some examples:
+```
+      "000000" would represent no tests were done
+      "200000" represents the data available test was done and passed(0 = no test, 1 = failed, 2 = passed)
+      "220000" data available, sensor range tests performed.
+```
+    * qc\_level
+> > This is an integer which represents the aggregate of the range tests done which produce the qc\_flag result. The following table shows the valid values for qc\_level.
+| Value | Definition                                  |
+|:------|:--------------------------------------------|
+| -9    | the data field is missing a value           |
+| 0     | the data quality is not evaluated           |
+| 1     | the data quality is bad                     |
+| 2     | the data quality is questionable or suspect |
+| 3     |  the data quality is good                   |
